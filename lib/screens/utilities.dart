@@ -14,6 +14,8 @@ import '../utils/themes.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 
+import '../widgets/list.dart';
+
 
 
 
@@ -125,16 +127,16 @@ class _UtilitiesState extends State<Utilities> {
   // }
 
 
-  var linkText =TextStyle(color: Colors.red,);
-
-  var defaultText =TextStyle(color: Colors.blue,);
+  // var linkText =TextStyle(color: Colors.red,);
+  //
+  // var defaultText =TextStyle(color: Colors.blue,);
 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      body: Center(child: Text("Utilities"),),
       // body:
-
       // Column(
       //   children: [
       //     SizedBox(height: 100,),
@@ -282,8 +284,9 @@ class _UtilitiesState extends State<Utilities> {
       //   ],
       // ),
 
-    );
+      );
   }
+
 }
 
 // import 'package:fl_chart/fl_chart.dart';

@@ -10,6 +10,7 @@ import 'package:percent_indicator/percent_indicator.dart';
 import 'package:intl/intl.dart';
 import 'package:threems/utils/dummy.dart';
 import '../model/usermodel.dart';
+import '../screens/home_screen.dart';
 import '../utils/themes.dart';
 
 class VerifiedCharityWidget extends StatefulWidget {
@@ -21,31 +22,12 @@ class VerifiedCharityWidget extends StatefulWidget {
 }
 
 class _VerifiedCharityWidgetState extends State<VerifiedCharityWidget> {
-  List <CharityModel> verifiedcharity=[];
-
-  getVerifiedCharity(){
-    FirebaseFirestore.instance
-        .collection('charity').where('userId',isNotEqualTo: currentuser?.userId).snapshots().listen((event) {
-          verifiedcharity=[];
-
-          for(DocumentSnapshot <Map<String,dynamic>> doc in event.docs){
-            verifiedcharity.add(CharityModel.fromJson(doc.data()!));
-          }
-        });
-    print(verifiedcharity.length);
-    print(dropdownValue);
-    print("----------------------------------------------------------------------------");
-    print("----------------------------------------------------------------------------");
-    print("----------------------------------------------------------------------------");
-    print("----------------------------------------------------------------------------");
-    if (mounted) {
-      setState(() {});
-    }
-        }
-        @override
+  @override
   void initState() {
+          print("hiiiiiiiiiiiiiiiiiiii");
+          print(verifiedcharity);
     super.initState();
-    getVerifiedCharity();
+
   }
     var currencyConvert = NumberFormat.currency(
     locale: 'HI',

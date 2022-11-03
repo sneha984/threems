@@ -1,17 +1,13 @@
-import 'dart:math';
 
-import 'package:badges/badges.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
-import 'package:multi_select_item/multi_select_item.dart';
-import 'package:threems/kuri/add_members_kuri.dart';
 
 import '../customPackage/date_picker.dart';
 import '../screens/splash_screen.dart';
 import '../utils/themes.dart';
-import 'multipleselection.dart';
+import '../widgets/list.dart';
 
 class CreateKuriPage extends StatefulWidget {
   const CreateKuriPage({Key? key}) : super(key: key);
@@ -21,6 +17,29 @@ class CreateKuriPage extends StatefulWidget {
 }
 
 class _CreateKuriPageState extends State<CreateKuriPage> {
+  List<MultiSelect> multiselect=[
+    MultiSelect(
+        image: "assets/pay/googlepaysvg.svg",
+        payname: "Google Pay",
+        isSelected:false
+    ),
+    MultiSelect(image: "assets/pay/whatsappapysvg.svg",
+      payname: "Whatsapp Pay",
+      isSelected:false,
+    ),
+    MultiSelect(image: "assets/pay/paytmpaysvg.svg",
+      payname: "Paytm",
+      isSelected:false,
+    ), MultiSelect(image: "assets/pay/phonepesvg.svg",
+      payname: "Phonepe",
+      isSelected:false,
+    ), MultiSelect(image: "assets/pay/amazonepaysvg.svg",
+      payname: "Amazon Pay",
+      isSelected:false,
+    ),
+
+  ];
+  List<MultiSelect> selectedPayments=[];
 
   int kuriTabBarIndex = 0;
   int selectedIndex=0;
@@ -624,7 +643,15 @@ class _CreateKuriPageState extends State<CreateKuriPage> {
                         ),
                         Container(
                           height:90,
-                            child: Kuri()),
+                            child:ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: multiselect.length,
+                                itemBuilder: (BuildContext context,int index){
+                                  return PayItem(multiselect[index].image,
+                                    multiselect[index].payname,
+                                    multiselect[index].isSelected,index,);
+
+                                })),
 
                         Padding(
                           padding:  EdgeInsets.only(right: scrWidth*0.65,top: scrHeight*0.026,bottom: scrHeight*0.01),
@@ -894,7 +921,678 @@ class _CreateKuriPageState extends State<CreateKuriPage> {
                           ),
                         ),],
                     ),
-                    Text("Page Two"),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          height: textFormFieldHeight45,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: scrWidth * 0.015,
+                            vertical: scrHeight*0.002,
+                          ),
+                          decoration: BoxDecoration(
+                            color: textFormFieldFillColor,
+                            borderRadius:
+                            BorderRadius.circular(scrWidth * 0.026),
+                          ),
+                          child: TextFormField(
+                            focusNode: kuriNameFocus,
+                            cursorHeight: scrWidth * 0.055,
+                            cursorWidth: 1,
+                            cursorColor: Colors.black,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w600,
+                              fontSize: FontSize15,
+                              fontFamily: 'Urbanist',
+                            ),
+                            decoration: InputDecoration(
+                              labelText: 'Kuri Name',
+                              labelStyle: TextStyle(
+                                color: kuriNameFocus.hasFocus
+                                    ? primarycolor
+                                    : Color(0xffB0B0B0),
+                                fontWeight: FontWeight.w600,
+                                fontSize: FontSize15,
+                                fontFamily: 'Urbanist',
+                              ),
+                              prefixIcon: Container(
+                                height: scrWidth * 0.045,
+                                width: 10,
+                                padding: EdgeInsets.all(
+                                    scrWidth * 0.033),
+                                child: SvgPicture.asset(
+                                  'assets/icons/chitname.svg',
+                                  fit: BoxFit.contain,
+                                  color: kuriNameFocus.hasFocus
+                                      ? primarycolor
+                                      : Color(0xffB0B0B0),
+                                ),
+                              ),
+                              fillColor: textFormFieldFillColor,
+                              filled: true,
+                              contentPadding: EdgeInsets.only(
+                                  top: 5, bottom: scrWidth * 0.033),
+                              disabledBorder: InputBorder.none,
+                              enabledBorder: InputBorder.none,
+                              errorBorder: InputBorder.none,
+                              border: InputBorder.none,
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: primarycolor,
+                                  width: 2,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: scrWidth * 0.04,
+                        ),
+                        Container(
+                          height: textFormFieldHeight45,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: scrWidth * 0.015,
+                            vertical: 2,
+                          ),
+                          decoration: BoxDecoration(
+                            color: textFormFieldFillColor,
+                            borderRadius:
+                            BorderRadius.circular(scrWidth * 0.026),
+                          ),
+                          child: TextFormField(
+                            focusNode: valueAmountFocus,
+                            cursorHeight: scrWidth * 0.055,
+                            cursorWidth: 1,
+                            cursorColor: Colors.black,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w600,
+                              fontSize: FontSize15,
+                              fontFamily: 'Urbanist',
+                            ),
+                            decoration: InputDecoration(
+                              labelText: 'Value Amount',
+                              labelStyle: TextStyle(
+                                color: valueAmountFocus.hasFocus
+                                    ? primarycolor
+                                    : Color(0xffB0B0B0),
+                                fontWeight: FontWeight.w600,
+                                fontSize: FontSize15,
+                                fontFamily: 'Urbanist',
+                              ),
+                              prefixIcon: Container(
+                                height: scrWidth * 0.045,
+                                width: 10,
+                                padding: EdgeInsets.all(scrWidth * 0.033),
+                                child: SvgPicture.asset(
+                                  'assets/icons/value.svg',
+                                  fit: BoxFit.contain,
+                                  color: valueAmountFocus.hasFocus
+                                      ? primarycolor
+                                      : Color(0xffB0B0B0),
+                                ),
+                              ),
+                              fillColor: textFormFieldFillColor,
+                              filled: true,
+                              contentPadding: EdgeInsets.only(
+                                  top: 5, bottom: scrWidth * 0.033),
+                              disabledBorder: InputBorder.none,
+                              enabledBorder: InputBorder.none,
+                              errorBorder: InputBorder.none,
+                              border: InputBorder.none,
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: primarycolor,
+                                  width: 2,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: scrWidth * 0.04,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            GestureDetector(
+                              onTap: (){
+                                // _selectedDate(context);
+
+                              },
+                              child: Container(
+                                  width:scrWidth*0.7,
+                                  height: textFormFieldHeight45,
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: scrWidth * 0.015,
+                                    // vertical: scrHeight*0.01,
+                                  ),
+                                  decoration: BoxDecoration(
+                                      color: textFormFieldFillColor,
+                                      borderRadius: BorderRadius.circular(
+                                          scrWidth * 0.026)),
+                                  child: Row(
+                                    children: [
+                                      SizedBox(width: scrWidth*0.03,),
+                                      SvgPicture.asset(
+                                          'assets/icons/durationiconsvg.svg',
+                                          fit: BoxFit.contain,
+                                          color:Color(0xffB0B0B0)
+                                      ),
+                                      SizedBox(width: scrWidth*0.03,),
+
+                                      Text(
+                                        selectedate == null
+                                            ? "Fixed Deadline"
+                                            : DateFormat.yMMMd()
+                                            .format(
+                                            selectedate!),style: TextStyle(
+                                        color: selectedate == null
+                                            ? Color(0xffB0B0B0)
+                                            : Colors.black,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: FontSize15,
+                                        fontFamily: 'Urbanist',
+                                      ),),
+                                    ],
+                                  )
+
+                              ),
+                            ),
+                            SizedBox(width: 10,),
+                            GestureDetector(
+                              onTap: (){
+                                print("hiii");
+                                _selectedDate(context);
+                              },
+                              child: Container(
+                                height: scrHeight*0.055,
+                                width: scrWidth*0.16,
+                                decoration: BoxDecoration(
+                                    color: primarycolor,
+                                    borderRadius: BorderRadius.circular(scrWidth*0.03)
+                                ),
+                                child: Padding(
+                                  padding:  EdgeInsets.only(top: scrHeight*0.01,bottom: scrHeight*0.01),
+                                  child: SvgPicture.asset("assets/icons/calenderimage.svg"),
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: scrWidth*0.0009,),
+                          ],
+                        ),
+                        SizedBox(
+                          height: scrWidth * 0.05,
+                        ),
+                        Padding(
+                          padding:  EdgeInsets.only(right: scrWidth*0.5,bottom: scrHeight*0.017),
+                          child: Text("Choose your purpose",style: TextStyle(
+                              fontFamily: 'Urbanist',fontSize: 14,fontWeight: FontWeight.w600
+                          ),
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            InkWell(
+                              onTap: (){
+                                setState((){
+                                  selectedIndex = 1;
+                                });
+                              },
+                              child: Column(
+                                children: [
+                                  Container(
+                                      width: scrWidth * 0.18,
+                                      height: scrHeight * 0.08,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,color: Colors.grey.shade100,
+                                        border:selectedIndex == 1?Border.all(color: primarycolor,width: 3,):Border.all(color: Colors.transparent),),
+                                      child:SvgPicture.asset("assets/pay/marriagesvg.svg")
+                                  ),
+                                  SizedBox(
+                                    height: scrHeight * 0.01,
+                                  ),
+                                  Text(
+                                      "Marriage",
+                                      style: TextStyle(
+                                          color: Color(0xffB0B0B0),
+                                          fontFamily: 'Urbanist',
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 10)),
+                                ],
+                              ),
+                            ),
+                            SizedBox(width: 8,),
+                            InkWell(
+                              onTap: (){
+                                setState((){
+                                  selectedIndex=0;
+                                });
+
+                              },
+                              child: Column(
+                                children: [
+                                  Container(
+                                    width: scrWidth * 0.18,
+                                    height: scrHeight * 0.08,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.grey.shade100,
+                                      border:selectedIndex == 0?Border.all(
+                                        color: primarycolor,width: 3,):Border.all(color: Colors.transparent),),
+                                    child:SvgPicture.asset("assets/pay/hospitalsvg.svg"),
+
+                                  ),
+                                  SizedBox(
+                                    height: scrHeight * 0.01,
+                                  ),
+                                  Text(
+                                      "Hospital",
+                                      style: TextStyle(
+                                          color: Color(0xffB0B0B0),
+                                          fontFamily: 'Urbanist',
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 10)),
+                                ],
+                              ),
+                            ),
+                            SizedBox(width: 8,),
+                            InkWell(
+                              onTap: (){
+                                setState((){
+                                  selectedIndex=2;
+                                });
+                              },
+                              child:Column(
+                                children: [
+                                  Container(
+                                    width: scrWidth * 0.18,
+                                    height: scrHeight * 0.08,
+                                    decoration: BoxDecoration(shape: BoxShape.circle,
+                                      color: Colors.grey.shade100,
+                                      border:selectedIndex == 2?Border.all(color: primarycolor,width: 3,):Border.all(color: Colors.transparent),),
+                                    child: SvgPicture.asset("assets/pay/othersvg.svg"),
+                                  ),
+                                  SizedBox(
+                                    height: scrHeight * 0.01,
+                                  ),
+                                  Text(
+                                      "Other",
+                                      style: TextStyle(
+                                          color: Color(0xffB0B0B0),
+                                          fontFamily: 'Urbanist',
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 10)),
+                                ],
+                              ),
+
+                            )
+                          ],
+                        ),
+                        Padding(
+                          padding:  EdgeInsets.only(right: scrWidth*0.7,top: scrHeight*0.016,bottom: scrHeight*0.01),
+                          child: Text("Payment",style: TextStyle(
+                              fontFamily: 'Urbanist',fontSize: 14,fontWeight: FontWeight.w600
+                          ),
+                          ),
+                        ),
+                        Container(
+                          height: textFormFieldHeight45,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: scrWidth * 0.015,
+                            vertical: scrHeight*0.002,
+                          ),
+                          decoration: BoxDecoration(
+                            color: textFormFieldFillColor,
+                            borderRadius:
+                            BorderRadius.circular(scrWidth * 0.026),
+                          ),
+                          child: TextFormField(
+                            focusNode: phonenumberfocus,
+                            cursorHeight: scrWidth * 0.055,
+                            cursorWidth: 1,
+                            cursorColor: Colors.black,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w600,
+                              fontSize: FontSize15,
+                              fontFamily: 'Urbanist',
+                            ),
+                            decoration: InputDecoration(
+                              prefixIcon: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  SvgPicture.asset(
+                                    'assets/icons/indflag.svg',
+                                    height: scrHeight*0.03,
+                                    width: scrWidth*0.02,
+                                  ),
+                                  SizedBox(
+                                    width: scrWidth*0.02,
+                                  ),
+                                  Text(
+                                    "+91",
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: FontSize17,
+                                      fontFamily: 'Outfit',
+                                    ),
+                                  ),
+                                  VerticalDivider(
+                                    endIndent: 6,
+                                    indent: 6,
+                                    color: Color(0xffDADADA),
+                                    thickness: 1,
+                                  ),
+                                ],
+                              ),
+                              fillColor: textFormFieldFillColor,
+                              filled: true,
+                              contentPadding: EdgeInsets.only(
+                                  top: 5, bottom: scrWidth * 0.033),
+                              disabledBorder: InputBorder.none,
+                              enabledBorder: InputBorder.none,
+                              errorBorder: InputBorder.none,
+                              border: InputBorder.none,
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: primarycolor,
+                                  width: 2,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding:  EdgeInsets.only(right: scrWidth*0.6,top: scrHeight*0.025,bottom: scrHeight*0.02),
+                          child: Text("Choose UPI apps",style: TextStyle(
+                              color: Color(0xffB0B0B0),
+                              fontFamily: 'Urbanist',fontSize: 14,fontWeight: FontWeight.w600
+                          ),
+                          ),
+                        ),
+                        Container(
+                            height:90,
+                            child:ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: multiselect.length,
+                                itemBuilder: (BuildContext context,int index){
+                                  return PayItem(multiselect[index].image,
+                                    multiselect[index].payname,
+                                    multiselect[index].isSelected,index,);
+
+                                })),
+
+                        Padding(
+                          padding:  EdgeInsets.only(right: scrWidth*0.65,top: scrHeight*0.026,bottom: scrHeight*0.01),
+                          child: Text("Bank Details",style: TextStyle(
+                              color: Color(0xffB0B0B0),
+                              fontFamily: 'Urbanist',fontSize: 14,fontWeight: FontWeight.w600
+                          ),
+                          ),
+                        ),
+                        SizedBox(height: 14,),
+                        Container(
+                          height: textFormFieldHeight45,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: scrWidth * 0.015,
+                            vertical: scrHeight*0.002,
+                          ),
+                          decoration: BoxDecoration(
+                            color: textFormFieldFillColor,
+                            borderRadius:
+                            BorderRadius.circular(scrWidth * 0.026),
+                          ),
+                          child: TextFormField(
+                            focusNode: accountnumberfocus,
+                            cursorHeight: scrWidth * 0.055,
+                            cursorWidth: 1,
+                            cursorColor: Colors.black,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w600,
+                              fontSize: FontSize15,
+                              fontFamily: 'Urbanist',
+                            ),
+                            decoration: InputDecoration(
+                              labelText: 'Account Number',
+                              labelStyle: TextStyle(
+                                color: accountnumberfocus.hasFocus
+                                    ? primarycolor
+                                    : Color(0xffB0B0B0),
+                                fontWeight: FontWeight.w600,
+                                fontSize: FontSize15,
+                                fontFamily: 'Urbanist',
+                              ),
+
+                              fillColor: textFormFieldFillColor,
+                              filled: true,
+                              contentPadding: EdgeInsets.only(
+                                  top: 5, bottom: scrWidth * 0.033),
+                              disabledBorder: InputBorder.none,
+                              enabledBorder: InputBorder.none,
+                              errorBorder: InputBorder.none,
+                              border: InputBorder.none,
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: primarycolor,
+                                  width: 2,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 14,),
+
+                        Container(
+                          height: textFormFieldHeight45,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: scrWidth * 0.015,
+                            vertical: scrHeight*0.002,
+                          ),
+                          decoration: BoxDecoration(
+                            color: textFormFieldFillColor,
+                            borderRadius:
+                            BorderRadius.circular(scrWidth * 0.026),
+                          ),
+                          child: TextFormField(
+                            focusNode: confirmaccountnumberfocus,
+                            cursorHeight: scrWidth * 0.055,
+                            cursorWidth: 1,
+                            cursorColor: Colors.black,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w600,
+                              fontSize: FontSize15,
+                              fontFamily: 'Urbanist',
+                            ),
+                            decoration: InputDecoration(
+                              labelText: 'Confirm Account Number',
+                              labelStyle: TextStyle(
+                                color: confirmaccountnumberfocus.hasFocus
+                                    ? primarycolor
+                                    : Color(0xffB0B0B0),
+                                fontWeight: FontWeight.w600,
+                                fontSize: FontSize15,
+                                fontFamily: 'Urbanist',
+                              ),
+
+                              fillColor: textFormFieldFillColor,
+                              filled: true,
+                              contentPadding: EdgeInsets.only(
+                                  top: 5, bottom: scrWidth * 0.033),
+                              disabledBorder: InputBorder.none,
+                              enabledBorder: InputBorder.none,
+                              errorBorder: InputBorder.none,
+                              border: InputBorder.none,
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: primarycolor,
+                                  width: 2,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 14,),
+
+                        Container(
+                          height: textFormFieldHeight45,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: scrWidth * 0.015,
+                            vertical: scrHeight*0.002,
+                          ),
+                          decoration: BoxDecoration(
+                            color: textFormFieldFillColor,
+                            borderRadius:
+                            BorderRadius.circular(scrWidth * 0.026),
+                          ),
+                          child: TextFormField(
+                            focusNode: accountholdernamefocus,
+                            cursorHeight: scrWidth * 0.055,
+                            cursorWidth: 1,
+                            cursorColor: Colors.black,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w600,
+                              fontSize: FontSize15,
+                              fontFamily: 'Urbanist',
+                            ),
+                            decoration: InputDecoration(
+                              labelText: 'Account Holder Name',
+                              labelStyle: TextStyle(
+                                color: accountholdernamefocus.hasFocus
+                                    ? primarycolor
+                                    : Color(0xffB0B0B0),
+                                fontWeight: FontWeight.w600,
+                                fontSize: FontSize15,
+                                fontFamily: 'Urbanist',
+                              ),
+
+                              fillColor: textFormFieldFillColor,
+                              filled: true,
+                              contentPadding: EdgeInsets.only(
+                                  top: 5, bottom: scrWidth * 0.033),
+                              disabledBorder: InputBorder.none,
+                              enabledBorder: InputBorder.none,
+                              errorBorder: InputBorder.none,
+                              border: InputBorder.none,
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: primarycolor,
+                                  width: 2,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 14,),
+
+                        Container(
+                          height: textFormFieldHeight45,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: scrWidth * 0.015,
+                            vertical: scrHeight*0.002,
+                          ),
+                          decoration: BoxDecoration(
+                            color: textFormFieldFillColor,
+                            borderRadius:
+                            BorderRadius.circular(scrWidth * 0.026),
+                          ),
+                          child: TextFormField(
+                            focusNode: banknamefocus,
+                            cursorHeight: scrWidth * 0.055,
+                            cursorWidth: 1,
+                            cursorColor: Colors.black,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w600,
+                              fontSize: FontSize15,
+                              fontFamily: 'Urbanist',
+                            ),
+                            decoration: InputDecoration(
+                              labelText: 'Bank Name',
+                              labelStyle: TextStyle(
+                                color: banknamefocus.hasFocus
+                                    ? primarycolor
+                                    : Color(0xffB0B0B0),
+                                fontWeight: FontWeight.w600,
+                                fontSize: FontSize15,
+                                fontFamily: 'Urbanist',
+                              ),
+
+                              fillColor: textFormFieldFillColor,
+                              filled: true,
+                              contentPadding: EdgeInsets.only(
+                                  top: 5, bottom: scrWidth * 0.033),
+                              disabledBorder: InputBorder.none,
+                              enabledBorder: InputBorder.none,
+                              errorBorder: InputBorder.none,
+                              border: InputBorder.none,
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: primarycolor,
+                                  width: 2,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 14,),
+
+                        Container(
+                          height: textFormFieldHeight45,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: scrWidth * 0.015,
+                            vertical: scrHeight*0.002,
+                          ),
+                          decoration: BoxDecoration(
+                            color: textFormFieldFillColor,
+                            borderRadius:
+                            BorderRadius.circular(scrWidth * 0.026),
+                          ),
+                          child: TextFormField(
+                            focusNode: ifsccodefocus,
+                            cursorHeight: scrWidth * 0.055,
+                            cursorWidth: 1,
+                            cursorColor: Colors.black,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w600,
+                              fontSize: FontSize15,
+                              fontFamily: 'Urbanist',
+                            ),
+                            decoration: InputDecoration(
+                              labelText: 'IFSC Code',
+                              labelStyle: TextStyle(
+                                color: ifsccodefocus.hasFocus
+                                    ? primarycolor
+                                    : Color(0xffB0B0B0),
+                                fontWeight: FontWeight.w600,
+                                fontSize: FontSize15,
+                                fontFamily: 'Urbanist',
+                              ),
+
+                              fillColor: textFormFieldFillColor,
+                              filled: true,
+                              contentPadding: EdgeInsets.only(
+                                  top: 5, bottom: scrWidth * 0.033),
+                              disabledBorder: InputBorder.none,
+                              enabledBorder: InputBorder.none,
+                              errorBorder: InputBorder.none,
+                              border: InputBorder.none,
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: primarycolor,
+                                  width: 2,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),],
+                    ),
                   ],
                 ),
               ),
@@ -903,12 +1601,13 @@ class _CreateKuriPageState extends State<CreateKuriPage> {
         ),
       ),
       floatingActionButton: GestureDetector(
-        onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>Kuri(),
-            )),
-        child: Container(
+        onTap: () {},
+            // Navigator.push(
+            // context,
+            // MaterialPageRoute(
+            //   builder: (context) =>Kuri(),
+            // )
+          child: Container(
             width: 285,
             height: 47,
             decoration: BoxDecoration(
@@ -930,6 +1629,50 @@ class _CreateKuriPageState extends State<CreateKuriPage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
 
 
+    );
+  }
+  Widget PayItem(String image,String payname,bool isSelected,int index){
+    return GestureDetector(
+      onTap: (){
+        setState(() {
+          multiselect[index].isSelected=!multiselect[index].isSelected;
+          if(multiselect[index].isSelected==true){
+            selectedPayments.add(MultiSelect(image: image, payname: payname, isSelected: true));
+          }else if(multiselect[index].isSelected== false){
+            selectedPayments.removeWhere((element) => element.image==multiselect[index].image);
+          }
+        });
+      },
+      child: Row(
+        children: [
+          SizedBox(width: 3,),
+          Column(
+            children: [
+              Container(
+                width: scrWidth * 0.17,
+                height: scrHeight * 0.07,
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color:Colors.grey.shade200,
+                    border: isSelected==true?
+                    Border.all(color: primarycolor,width: 1.5):
+                    Border.all(color: Colors.transparent)
+                ),
+                child: SvgPicture.asset(multiselect[index].image),
+
+
+              ),
+              SizedBox(height: 5,),
+              Text(payname,
+                style: TextStyle(
+                    color: Color(0xffB0B0B0),
+                    fontFamily: 'Urbanist',
+                    fontWeight: FontWeight.w500,
+                    fontSize: 10),)
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

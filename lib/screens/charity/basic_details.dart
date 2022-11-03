@@ -390,7 +390,7 @@ class _BasicDetailsState extends State<BasicDetails> {
                 height: textFormFieldHeight45,
                 padding: EdgeInsets.symmetric(
                   horizontal: scrWidth * 0.015,
-                  vertical: scrWidth*0.002,                ),
+                  vertical: scrWidth*0.001,                ),
                 decoration: BoxDecoration(
                   border: Border.all(
                     color: Color(0xffDADADA),
@@ -423,7 +423,7 @@ class _BasicDetailsState extends State<BasicDetails> {
                     fillColor: textFormFieldFillColor,
                     filled: true,
                     contentPadding: EdgeInsets.only(
-                        left: scrWidth*0.03, top: scrHeight*0.006, bottom: scrWidth * 0.033),
+                        left: scrWidth*0.03, top: scrHeight*0.001, bottom: scrWidth * 0.033),
                     disabledBorder: InputBorder.none,
                     enabledBorder: InputBorder.none,
                     errorBorder: InputBorder.none,

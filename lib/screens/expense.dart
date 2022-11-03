@@ -21,7 +21,6 @@ class Expense extends StatefulWidget {
 class _ExpenseState extends State<Expense> {
   TextEditingController controller = TextEditingController();
 
-
   // final List<String> items = [
   //   "Kirana Store,Grocery",
   //   "Fashion Apparels,Garments,CLothing",
@@ -59,99 +58,100 @@ class _ExpenseState extends State<Expense> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:Column(
-        children: [
-          Padding(
-            padding:  EdgeInsets.only(left: 30,top: 40),
-            child: AnotherStepper(
-              titleTextStyle: TextStyle(
-                fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: 'Urbanist',
-                  color: Color(0xff232323),
-              ),
-              subtitleTextStyle: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-                fontFamily: 'Urbanist',
-                color: Color(0xff8B8B8B),
-              ),
-              dotWidget: Container(
-                height: 35,
-                width: 35,
-                decoration: BoxDecoration(
-                    color: Color(0xff30CF7C),
-                    borderRadius: BorderRadius.circular(30),
-                  border: Border.all(color: primarycolor,width: 2)
-                ),
-              ),
-              stepperList: [
-                StepperData(
-                  title: "Create online store",
-                  subtitle: "Congratulations on opening your new \nonline store!",
-                ),
-                StepperData(
-                  title: "Add Product",
-                  subtitle: "Create your first product by adding the \nproduct name and images.",
-                ),
-              ],
-              horizontalStepperHeight:300,
-              stepperDirection: Axis.vertical,
-              inActiveBarColor: Colors.grey,
-              activeIndex: 1,
-              barThickness: 2,
-              activeBarColor: primarycolor,
-            ),
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Center(
-                child: Text(
-                  'Enter Youtube Link',
-                  style: TextStyle(
-                    fontSize: 26,
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 20),
-                child: TextFormField(
-                  controller: controller,
-                  decoration: InputDecoration(
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              ElevatedButton.icon(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => Simple(
-                              youtubeLink: controller.text.trim(),
-                            )));
-                  },
-                  icon: Icon(Icons.ondemand_video),
-                  label: Text(
-                    'Play',
-                    style: TextStyle(fontSize: 16),
-                  ))
-            ],
-          ),
-        ],
-      ),
+      body: Center(child: Text("Expense"),),
+      // body:Column(
+      //   children: [
+      //     Padding(
+      //       padding:  EdgeInsets.only(left: 30,top: 40),
+      //       child: AnotherStepper(
+      //         titleTextStyle: TextStyle(
+      //           fontSize: 16,
+      //             fontWeight: FontWeight.w600,
+      //             fontFamily: 'Urbanist',
+      //             color: Color(0xff232323),
+      //         ),
+      //         subtitleTextStyle: TextStyle(
+      //           fontSize: 12,
+      //           fontWeight: FontWeight.w600,
+      //           fontFamily: 'Urbanist',
+      //           color: Color(0xff8B8B8B),
+      //         ),
+      //         dotWidget: Container(
+      //           height: 35,
+      //           width: 35,
+      //           decoration: BoxDecoration(
+      //               color: Color(0xff30CF7C),
+      //               borderRadius: BorderRadius.circular(30),
+      //             border: Border.all(color: primarycolor,width: 2)
+      //           ),
+      //         ),
+      //         stepperList: [
+      //           StepperData(
+      //             title: "Create online store",
+      //             subtitle: "Congratulations on opening your new \nonline store!",
+      //           ),
+      //           StepperData(
+      //             title: "Add Product",
+      //             subtitle: "Create your first product by adding the \nproduct name and images.",
+      //           ),
+      //         ],
+      //         horizontalStepperHeight:300,
+      //         stepperDirection: Axis.vertical,
+      //         inActiveBarColor: Colors.grey,
+      //         activeIndex: 1,
+      //         barThickness: 2,
+      //         activeBarColor: primarycolor,
+      //       ),
+      //     ),
+      //     Column(
+      //       mainAxisAlignment: MainAxisAlignment.center,
+      //       children: [
+      //         Center(
+      //           child: Text(
+      //             'Enter Youtube Link',
+      //             style: TextStyle(
+      //               fontSize: 26,
+      //             ),
+      //           ),
+      //         ),
+      //         SizedBox(
+      //           height: 20,
+      //         ),
+      //         Container(
+      //           margin: EdgeInsets.symmetric(horizontal: 20),
+      //           child: TextFormField(
+      //             controller: controller,
+      //             decoration: InputDecoration(
+      //               enabledBorder: OutlineInputBorder(
+      //                 borderRadius: BorderRadius.circular(5),
+      //               ),
+      //               focusedBorder: OutlineInputBorder(
+      //                 borderRadius: BorderRadius.circular(5),
+      //               ),
+      //             ),
+      //           ),
+      //         ),
+      //         SizedBox(
+      //           height: 20,
+      //         ),
+      //         ElevatedButton.icon(
+      //             onPressed: () {
+      //               Navigator.push(
+      //                   context,
+      //                   MaterialPageRoute(
+      //                       builder: (context) => Simple(
+      //                         youtubeLink: controller.text.trim(),
+      //                       )));
+      //             },
+      //             icon: Icon(Icons.ondemand_video),
+      //             label: Text(
+      //               'Play',
+      //               style: TextStyle(fontSize: 16),
+      //             ))
+      //       ],
+      //     ),
+      //   ],
+      // ),
       // Stepper(
       //   currentStep: _activeStepIndex,
       //     steps: stepList(),

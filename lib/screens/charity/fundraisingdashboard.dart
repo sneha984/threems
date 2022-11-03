@@ -192,7 +192,7 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
                                     padding:  EdgeInsets.only(left: scrWidth*0.05),
                                     child: GestureDetector(
                                       onTap: (){
-                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>FundRisingdashboardtwo()));
+                                        // Navigator.push(context, MaterialPageRoute(builder: (context)=>FundRisingdashboardtwo()));
                                       },
                                       child: Container(
                                         width: scrWidth*0.2,
@@ -595,11 +595,14 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
                               SizedBox(height: scrHeight*0.013,),
                               Padding(
                                 padding:  EdgeInsets.only(left: scrWidth*0.05),
-                                child: Text(widget.charity.charityDetailes.toString(),style: TextStyle(
-                                    fontSize: scrWidth*0.033,
-                                    color: Colors.black,
-                                    fontFamily: 'Urbanist',
-                                    fontWeight: FontWeight.w600),),
+                                child: Container(
+                                  width: scrWidth*0.5,
+                                  child: Text(widget.charity.charityDetailes.toString(),style: TextStyle(
+                                      fontSize: scrWidth*0.033,
+                                      color: Colors.black,
+                                      fontFamily: 'Urbanist',
+                                      fontWeight: FontWeight.w600),),
+                                ),
                               ),
                               SizedBox(height: scrHeight*0.03,),
                               Row(
@@ -609,7 +612,7 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
                                     padding:  EdgeInsets.only(left: scrWidth*0.05),
                                     child: GestureDetector(
                                       onTap: (){
-                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>FundRisingdashboardtwo()));
+                                        // Navigator.push(context, MaterialPageRoute(builder: (context)=>FundRisingdashboardtwo()));
                                       },
                                       child: Container(
                                         width: scrWidth*0.2,

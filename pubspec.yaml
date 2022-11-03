@@ -49,7 +49,6 @@ dependencies:
   flutter_typeahead: ^4.1.0
   cr_calendar: ^0.0.10
   sleek_circular_slider: ^2.0.1
-  flutter_circular_slider: ^2.5.0
   currency_text_input_formatter: ^2.1.7
   fl_chart: ^0.55.1
   cool_dropdown: ^1.4.2
@@ -62,7 +61,6 @@ dependencies:
   firebase_core: ^2.1.0
   firebase_auth: ^4.0.2
   google_sign_in: ^5.4.1
-  multi_select_item: ^1.0.3
   image_picker: ^0.8.5+3
   file_picker: ^5.2.2
   dropdown_button2: ^1.8.9

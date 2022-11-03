@@ -45,6 +45,10 @@ class _DonatePageState extends State<DonatePage>with TickerProviderStateMixin {
             : doc['cause']==2?charityList3.add(CharityModel.fromJson(doc!.data()!)):
         charityList4.add(CharityModel.fromJson(doc!.data()!));
       }
+
+      if (mounted) {
+        setState(() {});
+      }
         });
     print(charityList1.length);
     print(charityList2.length);
@@ -52,9 +56,6 @@ class _DonatePageState extends State<DonatePage>with TickerProviderStateMixin {
     print(charityList4.length);
 
 
-    if (mounted) {
-      setState(() {});
-    }
   }
   late  TabController _tabController;
   var currencyConvert = NumberFormat.currency(

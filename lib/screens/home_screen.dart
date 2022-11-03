@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:threems/kuri/kuripage.dart';
+import 'package:threems/model/usermodel.dart';
 import 'package:threems/screens/charity/basic_details.dart';
 import 'package:threems/screens/chits/hostedchits.dart';
 import 'package:threems/screens/flgraph.dart';
@@ -14,9 +16,10 @@ import 'package:threems/widgets/funding_widget.dart';
 import 'package:threems/widgets/upcomming_card_widget.dart';
 
 import '../Authentication/auth.dart';
+import '../model/charitymodel.dart';
 import 'charity/donatepage.dart';
 import 'charity/seemorecharities.dart';
-
+List <CharityModel> verifiedcharity=[];
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key? key}) : super(key: key);
 
@@ -26,6 +29,32 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   double selectedIndex = 0;
+
+  getVerifiedCharity(){
+    FirebaseFirestore.instance
+        .collection('charity').where('userId',isNotEqualTo: currentuser?.userId).snapshots().listen((event) {
+      verifiedcharity=[];
+      for(DocumentSnapshot <Map<String,dynamic>> doc in event.docs){
+        verifiedcharity.add(CharityModel.fromJson(doc.data()!));
+      }
+      if (mounted) {
+        setState(() {});
+      }
+    });
+    print(verifiedcharity.length);
+    print(dropdownValue);
+    print("----------------------------------------------------------------------------");
+    print("----------------------------------------------------------------------------");
+    print("----------------------------------------------------------------------------");
+    print("----------------------------------------------------------------------------");
+
+  }
+
+  @override
+  void initState() {
+    getVerifiedCharity();
+    super.initState();
+  }
 
   // void pay() {
   //   showDialog(

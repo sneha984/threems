@@ -14,3 +14,9 @@ class Listitems{
     required this.days});
 
 }
+class MultiSelect{
+ final String image;
+ final String payname;
+   bool isSelected;
+  MultiSelect({required this.image,required this.payname,required this.isSelected});
+}
