@@ -28,17 +28,7 @@ class _StoreDetailsState extends State<StoreDetails> {
     "Books & Stationery"
   ];
   String? selectedValue;
-  // String? dropdownValue;
-  // List dropDownList = [
-  //                       "Kirana Store,Grocery",
-  //                       "Fashion Apparels,Garments,CLothing",
-  //                       "Home Decoration,Electronics",
-  //                       "Mobile,Computers & Accessories",
-  //                       "Fruits,Vegetables & Agricultural Products",
-  //                       "Pharmacy & Medical Care",
-  //                       "Pann Shop",
-  //                       "Books & Stationery"
-  //                       ];
+
   final FocusNode storeNameFocus = FocusNode();
   final  TextEditingController storeNameController =TextEditingController();
   final  TextEditingController storeAddressController =TextEditingController();
@@ -293,7 +283,7 @@ class _StoreDetailsState extends State<StoreDetails> {
                       iconDisabledColor: Colors.blue,
                       buttonHeight: 50,
                       buttonWidth:247,
-                      buttonPadding: const EdgeInsets.only(right: 10),
+                      // buttonPadding: const EdgeInsets.only(),
                       buttonDecoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(14),
                         color: textFormFieldFillColor,
@@ -309,7 +299,6 @@ class _StoreDetailsState extends State<StoreDetails> {
                         color: Colors.white,
                       ),
                       dropdownElevation: 0,
-
                       scrollbarRadius:  Radius.circular(10),
                       scrollbarThickness: 3,
                       scrollbarAlwaysShow: true,

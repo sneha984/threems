@@ -17,7 +17,7 @@ class BuyAndSell extends StatefulWidget {
 
 class _BuyAndSellState extends State<BuyAndSell>with TickerProviderStateMixin {
   late TabController _tabController;
-  bool isShopCreated=false;
+  bool isShopCreated=true;
 
   @override
   void initState() {
@@ -101,17 +101,17 @@ class _BuyAndSellState extends State<BuyAndSell>with TickerProviderStateMixin {
             children: [
               Column(
                 children: [
-                  SizedBox(height: 10,),
+                  SizedBox(height: scrHeight*0.02,),
                   Container(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(width: 10,),
+                        SizedBox(width: scrWidth*0.03,),
                         SvgPicture.asset("assets/icons/staricon.svg"),
-                        SizedBox(width: 5,),
+                        SizedBox(width: scrWidth*0.03,),
                         Text("Sponsered Product",style: TextStyle(
-                            fontFamily: 'Urbanist',fontSize: 14,fontWeight: FontWeight.w600
+                            fontFamily: 'Urbanist',fontSize: scrWidth*0.04,fontWeight: FontWeight.w600
                         ),)
                       ],
                     ),
@@ -120,7 +120,7 @@ class _BuyAndSellState extends State<BuyAndSell>with TickerProviderStateMixin {
               ),
               isShopCreated?Column(
                 children: [
-                  SizedBox(height: 21,),
+                  SizedBox(height: scrHeight*0.03,),
                       DottedBorder(
                       borderType: BorderType.Circle,
                         radius: Radius.circular(12),
@@ -128,11 +128,11 @@ class _BuyAndSellState extends State<BuyAndSell>with TickerProviderStateMixin {
                         dashPattern: [3,2],
                         child: SvgPicture.asset("assets/icons/shop.svg")
                       ),
-                  SizedBox(height: 6,),
+                  SizedBox(height: scrHeight*0.01,),
                   Text("Build your own online store \nhassle free!",textAlign: TextAlign.center,
-                  style: TextStyle(fontFamily: 'Urbanist',fontSize: 12,fontWeight: FontWeight.w600,
+                  style: TextStyle(fontFamily: 'Urbanist',fontSize: scrWidth*0.03,fontWeight: FontWeight.w600,
                       color: Color(0xff615C5C)),),
-                  SizedBox(height: 10,),
+                  SizedBox(height: scrHeight*0.02,),
                   DottedBorder(
                       borderType: BorderType.Circle,
                       radius: Radius.circular(12),
@@ -140,11 +140,11 @@ class _BuyAndSellState extends State<BuyAndSell>with TickerProviderStateMixin {
                       dashPattern: [3,2],
                       child: SvgPicture.asset("assets/icons/lens.svg")
                   ),
-                  SizedBox(height: 6,),
+                  SizedBox(height: scrHeight*0.01,),
                   Text("Manage orders and track your \nbusiness on the go!",textAlign: TextAlign.center,
-                    style: TextStyle(fontFamily: 'Urbanist',fontSize: 12,fontWeight: FontWeight.w600,
+                    style: TextStyle(fontFamily: 'Urbanist',fontSize: scrWidth*0.03,fontWeight: FontWeight.w600,
                         color: Color(0xff615C5C)),),
-                  SizedBox(height: 10,),
+                  SizedBox(height: scrHeight*0.02,),
                   DottedBorder(
                       borderType: BorderType.Circle,
                       radius: Radius.circular(12),
@@ -152,19 +152,19 @@ class _BuyAndSellState extends State<BuyAndSell>with TickerProviderStateMixin {
                       dashPattern: [3,2],
                       child: SvgPicture.asset("assets/icons/featuresicon.svg")
                   ),
-                  SizedBox(height: 6,),
+                  SizedBox(height: scrHeight*0.01,),
                   Text("Get all the features to grow \nyour online business",textAlign: TextAlign.center,
                     style: TextStyle(fontFamily: 'Urbanist',fontSize: 12,fontWeight: FontWeight.w600,
                         color: Color(0xff615C5C)),),
-                  SizedBox(height: 20,),
+                  SizedBox(height: scrHeight*0.03,),
 
                   GestureDetector(
                     onTap: (){
                       Navigator.push(context, MaterialPageRoute(builder: (context)=>StoreDetails()));
                     },
                     child: Container(
-                      height: 47,
-                      width: 243,
+                      height: scrHeight*0.05,
+                      width: scrWidth*0.6,
                       decoration: BoxDecoration(
                           color: primarycolor,
                           borderRadius: BorderRadius.circular(21.5)
@@ -172,9 +172,9 @@ class _BuyAndSellState extends State<BuyAndSell>with TickerProviderStateMixin {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.add,size: 17,color: Colors.white,),
+                          Icon(Icons.add,size: scrWidth*0.045,color: Colors.white,),
                           Text("Create Store",textAlign: TextAlign.center,
-                            style: TextStyle(fontFamily: 'Urbanist',fontSize: 16,fontWeight: FontWeight.w700,
+                            style: TextStyle(fontFamily: 'Urbanist',fontSize: scrWidth*0.045,fontWeight: FontWeight.w700,
                                 color: Colors.white),),
                         ],
                       ),
@@ -186,7 +186,7 @@ class _BuyAndSellState extends State<BuyAndSell>with TickerProviderStateMixin {
                 children: [
                   SizedBox(height: scrHeight*0.02,),
                   Container(
-                    width: 310,
+                    width: scrWidth*0.8,
                     height: scrHeight*0.15,
                     padding: EdgeInsets.symmetric(
                       horizontal: scrWidth * 0.015,
@@ -202,7 +202,7 @@ class _BuyAndSellState extends State<BuyAndSell>with TickerProviderStateMixin {
                       children: [
                         SizedBox(height: scrHeight*0.02,),
                         Text("50%",textAlign: TextAlign.center,
-                          style: TextStyle(fontFamily: 'Urbanist',fontSize: 25,fontWeight: FontWeight.w600,
+                          style: TextStyle(fontFamily: 'Urbanist',fontSize: scrWidth*0.07,fontWeight: FontWeight.w600,
                               color: Colors.black),),
                         SizedBox(height: scrHeight*0.009,),
 
@@ -211,7 +211,7 @@ class _BuyAndSellState extends State<BuyAndSell>with TickerProviderStateMixin {
                           animation: true,
                           animationDuration: 1000,
                           lineHeight: scrHeight*0.021,
-                          width: scrWidth*0.8,
+                          width: scrWidth*0.77,
                           percent: 0.5,
                           alignment: MainAxisAlignment.start,
                           barRadius: Radius.circular(scrWidth*0.2),
@@ -221,7 +221,7 @@ class _BuyAndSellState extends State<BuyAndSell>with TickerProviderStateMixin {
                         SizedBox(height: scrHeight*0.02,),
 
                         Text("Store setup is completed",textAlign: TextAlign.center,
-                          style: TextStyle(fontFamily: 'Urbanist',fontSize: 16,fontWeight: FontWeight.w600,
+                          style: TextStyle(fontFamily: 'Urbanist',fontSize: scrWidth*0.04,fontWeight: FontWeight.w600,
                               color: Colors.black),),
                       ],
                     ),
@@ -232,8 +232,8 @@ class _BuyAndSellState extends State<BuyAndSell>with TickerProviderStateMixin {
                        Navigator.push(context, MaterialPageRoute(builder: (context)=>StoreDetailsFill2()));
                     },
                     child: Container(
-                      height: 47,
-                      width: 243,
+                      height: scrHeight*0.055,
+                      width: scrWidth*0.55,
                       decoration: BoxDecoration(
                           color: primarycolor,
                           borderRadius: BorderRadius.circular(21.5)
@@ -241,9 +241,9 @@ class _BuyAndSellState extends State<BuyAndSell>with TickerProviderStateMixin {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.add,size: 17,color: Colors.white,),
+                          Icon(Icons.add,size: scrWidth*0.045,color: Colors.white,),
                           Text("Add Product",textAlign: TextAlign.center,
-                            style: TextStyle(fontFamily: 'Urbanist',fontSize: 16,fontWeight: FontWeight.w700,
+                            style: TextStyle(fontFamily: 'Urbanist',fontSize: scrWidth*0.04,fontWeight: FontWeight.w700,
                                 color: Colors.white),),
                         ],
                       ),

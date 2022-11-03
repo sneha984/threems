@@ -5,7 +5,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:threems/screens/charity/payment.dart';
+import 'package:threems/simple.dart';
 
 import '../../model/charitymodel.dart';
 import '../../utils/themes.dart';
@@ -513,6 +515,83 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                         padding:EdgeInsets.only(),
                         child: Image(image: AssetImage("assets/icons/card 2.png")),
                       ),
+                      // Stack(
+                      //   children: [
+                      //     Container(
+                      //       width: scrWidth*1,
+                      //       height: scrHeight*0.3,
+                      //       decoration: BoxDecoration(
+                      //         image: DecorationImage(image: AssetImage("assets/images/card desigbn.png"),fit: BoxFit.fill)
+                      //       ),
+                      //     ),
+                      //     Positioned(
+                      //       top: 45,
+                      //         left: 30,
+                      //         child: Column(
+                      //           children: [
+                      //             Padding(
+                      //               padding:  EdgeInsets.only(left: 160),
+                      //               child: Column(
+                      //                 crossAxisAlignment: CrossAxisAlignment.end,
+                      //                 children: [
+                      //                   Text("STATE BANK OF INDIA",style: TextStyle(
+                      //                       fontSize: 16,
+                      //                       fontFamily: 'Urbanist',
+                      //                       fontWeight: FontWeight.w700,
+                      //                       color: Colors.white
+                      //                   ),),
+                      //                   Text("IFSC : SBIN0070422",style: TextStyle(
+                      //                       fontSize: 14,
+                      //                       fontFamily: 'Urbanist',
+                      //                       fontWeight: FontWeight.w700,
+                      //                       color: Colors.white
+                      //                   ),),
+                      //
+                      //                 ],
+                      //               ),
+                      //             ),
+                      //             SizedBox(height: 55,),
+                      //             Padding(
+                      //               padding:  EdgeInsets.only(right: scrWidth*0.4),
+                      //               child: Column(
+                      //                 crossAxisAlignment: CrossAxisAlignment.start,
+                      //                 children: [
+                      //
+                      //                   Text("Banking Name",style: TextStyle(
+                      //                       fontSize: 10,
+                      //                       fontFamily: 'Urbanist',
+                      //                       fontWeight: FontWeight.w700,
+                      //                       color: Colors.white
+                      //                   ),),
+                      //                   Text("ASIF ALI HUSSAIN",style: TextStyle(
+                      //                       fontSize: 16,
+                      //                       fontFamily: 'Urbanist',
+                      //                       fontWeight: FontWeight.w700,
+                      //                       color: Colors.white
+                      //                   ),),
+                      //                   Text("Account Number",style: TextStyle(
+                      //                       fontSize: 10,
+                      //                       fontFamily: 'Urbanist',
+                      //                       fontWeight: FontWeight.w700,
+                      //                       color: Colors.white
+                      //                   ),),
+                      //                   Text("67236588268",style: TextStyle(
+                      //                       fontSize: 16,
+                      //                       fontFamily: 'Urbanist',
+                      //                       fontWeight: FontWeight.w700,
+                      //                       color: Colors.white
+                      //                   ),),
+                      //
+                      //                 ],
+                      //               ),
+                      //             )
+                      //
+                      //
+                      //           ],
+                      //         )
+                      //     ),
+                      //   ],
+                      // ),
 
                       // SizedBox(height: scrHeight*0.0,),
                       Padding(
@@ -577,6 +656,12 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                           ),
                         ),
                       ),
+                      // GestureDetector(
+                      //   onTap: (){
+                      //
+                      //   },
+                      //     child:SfPdfViewer.network(widget.charities.documents!)),
+
                       SizedBox(height: scrHeight*0.02,),
 
                       Padding(
@@ -588,35 +673,47 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                         ),),
                       ),
                       SizedBox(height: scrHeight*0.02,),
-                      Padding(
-                        padding:  EdgeInsets.only(left: scrWidth*0.05),
-                        child: Container(
-                          width: scrWidth*0.9,
-                          height: scrHeight*0.2,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: NetworkImage(
-                                    "https://ichef.bbci.co.uk/news/976/cpsprodpb/920A/production/_103068373_048715246-1.jpg"),
-                                fit: BoxFit.fill
-                            ),
-                            boxShadow: const [
-                              BoxShadow(
-                                  color: Color.fromRGBO(0, 0, 0, 0.20), // shadow color
-                                  blurRadius: 15, // shadow radius
-                                  offset: Offset(5, 10), // shadow offset
-                                  spreadRadius:
-                                  0.4, // The amount the box should be inflated prior to applying the blur
-                                  blurStyle: BlurStyle.normal // set blur style
-                              ),
-                            ],
-                          ),
-                          child: Center(
-                              child:SvgPicture.asset("assets/icons/youtubeicon.svg")
+                      GestureDetector(
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(
+                              builder: (context)=>Simple(
+                                  youtubeLink: widget.charities.youTubeLink!)));
+                        },
+                          child: Padding(
+                            padding:  EdgeInsets.only(left: scrWidth*0.055),
+                            child: Text(widget.charities.youTubeLink!,
+                              style: TextStyle(color:Colors.blue,fontSize: scrWidth*0.04),),
+                          )),
 
-                          ),
-
-                        ),
-                      ),
+                      // Padding(
+                      //   padding:  EdgeInsets.only(left: scrWidth*0.05),
+                      //   child: Container(
+                      //     width: scrWidth*0.9,
+                      //     height: scrHeight*0.2,
+                      //     decoration: BoxDecoration(
+                      //       image: DecorationImage(
+                      //           image: NetworkImage(
+                      //               "https://ichef.bbci.co.uk/news/976/cpsprodpb/920A/production/_103068373_048715246-1.jpg"),
+                      //           fit: BoxFit.fill
+                      //       ),
+                      //       boxShadow: const [
+                      //         BoxShadow(
+                      //             color: Color.fromRGBO(0, 0, 0, 0.20), // shadow color
+                      //             blurRadius: 15, // shadow radius
+                      //             offset: Offset(5, 10), // shadow offset
+                      //             spreadRadius:
+                      //             0.4, // The amount the box should be inflated prior to applying the blur
+                      //             blurStyle: BlurStyle.normal // set blur style
+                      //         ),
+                      //       ],
+                      //     ),
+                      //     child: Center(
+                      //         child:SvgPicture.asset("assets/icons/youtubeicon.svg")
+                      //
+                      //     ),
+                      //
+                      //   ),
+                      // ),
                       SizedBox(height: scrHeight*0.02,),
 
                       Row(

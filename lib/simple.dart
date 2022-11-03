@@ -53,6 +53,7 @@ class _SimpleState extends State<Simple> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       body:  Center(
         child: YoutubePlayer(
           controller: _controller,
