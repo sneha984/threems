@@ -105,6 +105,13 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
   );
   @override
   Widget build(BuildContext context) {
+    double sum=0;
+    List payAmount=[];
+    for(int i=0;i<widget.charities.payments!.length;i++){
+      double x=widget.charities.payments![i].amount!;
+      payAmount.add(x);
+      sum=sum+x;
+    }
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -146,7 +153,7 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
               ),
               child: Center(
                 child: Text(
-                  "${widget.charities.payments!.length} Supporters",
+                  "${widget.charities.payments?.length??0} Supporters",
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: scrWidth*0.036,
@@ -433,7 +440,7 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                                     fontWeight: FontWeight.w500),),
                                 SizedBox(height: scrHeight*0.006,),
 
-                                Text("₹15,45,390",style: TextStyle(
+                                Text('₹$sum',style: TextStyle(
                                     fontSize: scrWidth*0.05,
                                     color: primarycolor,
                                     fontFamily: 'Urbanist',
@@ -720,29 +727,31 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                       SizedBox(height: scrHeight*0.02,),
                       GestureDetector(
                         onTap: (){
-                         setState(() {
-                            onclick;
-                         });
+                         // setState(() {
+                         //    onclick;
+                         // });
                         },
-                          child: onclick==false?Padding(
+                          child:Padding(
                             padding:  EdgeInsets.only(left: scrWidth*0.055),
                             child: Text(widget.charities.youTubeLink!,
                               style: TextStyle(color:Colors.blue,fontSize: scrWidth*0.04,decoration: TextDecoration.underline),),
-                          ): Padding(
-                            padding:  EdgeInsets.only(left: 15,right: 15),
-                            child: YoutubePlayer(
-                              controller: _controllers,
-                              aspectRatio: 16 / 9,
-                              showVideoProgressIndicator: true,
-                              progressColors: ProgressBarColors(
-                                playedColor: Colors.white,
-                                handleColor: Colors.white,
-                              ),
-                              onReady: () {
-                                _controller.addListener(listener);
-                              },
-                            ),
-                          ),),
+                          ),
+                          // Padding(
+                          //   padding:  EdgeInsets.only(left: 15,right: 15),
+                          //   child: YoutubePlayer(
+                          //     controller: _controllers,
+                          //     aspectRatio: 16 / 9,
+                          //     showVideoProgressIndicator: true,
+                          //     progressColors: ProgressBarColors(
+                          //       playedColor: Colors.white,
+                          //       handleColor: Colors.white,
+                          //     ),
+                          //     onReady: () {
+                          //       _controller.addListener(listener);
+                          //     },
+                          //   ),
+                          // ),
+                      ),
 
                       // Padding(
                       //   padding:  EdgeInsets.only(left: scrWidth*0.05),
@@ -810,7 +819,7 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                       ),
                       SizedBox(height: scrHeight*0.025,),
                       ListView.separated(
-                          itemCount: widget.charities.payments!.length,
+                          itemCount: widget.charities.payments?.length??0,
                           shrinkWrap: true,
                           itemBuilder: (context,index){
                             print(widget.charities.payments![index].amount);
@@ -864,7 +873,7 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
 
                                       ],
                                     ),
-                                    SizedBox(width: scrWidth*0.2,),
+                                    SizedBox(width: scrWidth*0.1,),
                                     Expanded(
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.end,
@@ -875,7 +884,8 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                                               fontWeight: FontWeight.w700,
                                               color: primarycolor),),
                                           SizedBox(width: scrWidth*0.01,),
-                                          (widget.charities.userId==currentuser!.userId)?SvgPicture.asset("assets/icons/Frame (1).svg"):
+                                          (data.verified==true)
+                                              ?SvgPicture.asset("assets/icons/Frame (1).svg"):
                                           InkWell(
                                             onTap: (){
                                               bottomsheets(context);
@@ -890,7 +900,6 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                                             ),
                                           ),
                                           SizedBox(width: scrWidth*0.02,)
-
                                         ],
                                       ),
                                     ),
@@ -1001,6 +1010,7 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
 
                     GestureDetector(
                       onTap: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>DonateNowPage(charities: widget.charities)));
                         CharityModel chrt=widget.charities;
                         FirebaseFirestore.instance.collection('charityReport').add(chrt.toJson()).then((value) => value.update({
                           "reportDate":DateFormat.yMMMd().format(DateTime.now()),

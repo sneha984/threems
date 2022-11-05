@@ -124,7 +124,7 @@ class _DonatePageState extends State<DonatePage>with TickerProviderStateMixin {
 
                           Row(
                             children: [
-                              Text(charities.beneficiaryName!,style: TextStyle(
+                              Text(charities.userName!,style: TextStyle(
                                   fontSize:scrWidth*0.036,
                                   color: Color(0xff827E7E),
                                   fontFamily: 'Urbanist',
@@ -149,7 +149,7 @@ class _DonatePageState extends State<DonatePage>with TickerProviderStateMixin {
                                     fontFamily: 'Urbanist',
                                     fontWeight: FontWeight.w600),
                               ),
-                              SizedBox(width: scrWidth*0.17,),
+                              SizedBox(width: scrWidth*0.1,),
                               Text("30 days left",style: TextStyle(
                                   fontSize:scrWidth*0.03,
                                   color: Color(0xff827E7E),

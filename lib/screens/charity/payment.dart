@@ -466,8 +466,10 @@ class _PaymentPageState extends State<PaymentPage> {
         InkWell(
           onTap: (){
             _pickImage();
+            print(imgUrl);
             },
-              child: imgFile==null?DottedBorder(
+              child: imgFile==null?
+              DottedBorder(
                 padding: EdgeInsets.all(0),
                 borderType: BorderType.RRect,
                 radius: Radius.circular(8),
@@ -507,7 +509,7 @@ class _PaymentPageState extends State<PaymentPage> {
                 width: scrWidth*0.85,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: FileImage(imgFile!) as ImageProvider,fit: BoxFit.fill),
+                      image: FileImage(imgFile) as ImageProvider,fit: BoxFit.fill),
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(
                     color: Color(0xffDADADA),

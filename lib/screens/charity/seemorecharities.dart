@@ -81,7 +81,7 @@ class _SeeMoreCharitiesState extends State<SeeMoreCharities>
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(30),
                               image: DecorationImage(
-                                  image: NetworkImage(charity.image!),
+                                  image: NetworkImage(charity.image??''),
                                   fit: BoxFit.fill)),
                         ),
                         SizedBox(
@@ -94,7 +94,7 @@ class _SeeMoreCharitiesState extends State<SeeMoreCharities>
                           children: [
                             Container(
                               width: scrWidth*0.6,
-                              child: Text(charity.charityDetailes.toString(),
+                              child: Text(charity.charityDetailes??'',
                                   maxLines: 5,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
@@ -124,7 +124,7 @@ class _SeeMoreCharitiesState extends State<SeeMoreCharities>
 
                                 Text(
                                   currencyConvert
-                                      .format(charity.valueAmount)
+                                      .format(charity.valueAmount??0)
                                       .toString(),
                                   style: TextStyle(
                                       fontSize: scrWidth * 0.039,

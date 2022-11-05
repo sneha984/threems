@@ -78,6 +78,13 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
   );
   @override
   Widget build(BuildContext context) {
+    double sum=0;
+    List payAmount=[];
+    for(int i=0;i<widget.charity.payments!.length;i++){
+      double x=widget.charity.payments![i].amount!;
+      payAmount.add(x);
+      sum=sum+x;
+    }
     return Scaffold(
       backgroundColor: Colors.white,
       body: (widget.charity.status==0)?Column(
@@ -741,7 +748,9 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
                                   fontWeight: FontWeight.w500),),
                               SizedBox(height: scrHeight*0.006,),
 
-                              Text("₹15,23,340",style: TextStyle(
+                              Text('₹$sum',
+                                // "₹15,23,340",
+                                style: TextStyle(
                                   fontSize: scrWidth*0.05,
                                   color: primarycolor,
                                   fontFamily: 'Urbanist',
@@ -889,7 +898,7 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
               ],
             ),
             ListView.separated(
-              itemCount: widget.charity.payments!.length,
+              itemCount: widget.charity.payments?.length??0,
                 shrinkWrap: true,
                 itemBuilder: (context,index){
                 final datas=widget.charity.payments![index];
@@ -943,8 +952,8 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
 
                             ],
                           ),
-                          SizedBox(width: scrWidth*0.01,),
-                          Text(currencyConvert.format(datas.amount).toString(),style: TextStyle(
+                          SizedBox(width: scrWidth*0.1,),
+                          Text(currencyConvert.format(datas.amount!).toString(),style: TextStyle(
                               fontSize: scrWidth*0.046,
                               fontFamily: 'Urbanist',
                               fontWeight: FontWeight.w700,

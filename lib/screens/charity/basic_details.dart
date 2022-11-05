@@ -110,6 +110,8 @@ class _BasicDetailsState extends State<BasicDetails> {
       }
 
       print(dropdownItems);
+      print(dropdownValue);
+
       if(mounted){
         setState(() {
 
@@ -267,7 +269,7 @@ class _BasicDetailsState extends State<BasicDetails> {
                         dropdownItemReverse: true,
                         dropdownItemTopGap: 2,
                         isTriangle: false,
-                        defaultValue: dropdownItems[0]??'',
+                        defaultValue: dropdownItems[0],
                         resultIconRotation: false,
                         dropdownItemPadding: EdgeInsets.all(0),
                         dropdownItemMainAxis: MainAxisAlignment.spaceEvenly,
@@ -317,6 +319,7 @@ class _BasicDetailsState extends State<BasicDetails> {
                           var x = dropItem['value'];
                           causeId=dropItem['causeId'];
                           dropdownValue=x;
+                          print(dropdownValue);
                           // var y=dropItem['image']+dropItem['value'];
                           // dropdown=y;
                         }
@@ -643,6 +646,8 @@ class _BasicDetailsState extends State<BasicDetails> {
                         }
                      );
                      print(charityDetails.toString());
+                     print(dropdownValue);
+                     print(causeId);
                    }
                    Navigator.push(
                       context,

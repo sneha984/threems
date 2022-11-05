@@ -46,7 +46,7 @@ class _VerifiedCharityWidgetState extends State<VerifiedCharityWidget> {
         physics: BouncingScrollPhysics(),
         primary: true,
         scrollDirection: Axis.horizontal,
-          itemCount: verifiedcharity.length,
+          itemCount: verifiedcharity?.length??0,
         itemBuilder: (context, index) {
           final vcharity=verifiedcharity[index];
           print(verifiedcharity[0].charityDetailes);
@@ -86,7 +86,7 @@ class _VerifiedCharityWidgetState extends State<VerifiedCharityWidget> {
                         topLeft: Radius.circular(scrWidth * 0.07),
                       ),
                       child: CachedNetworkImage(
-                        imageUrl: vcharity.image!,
+                        imageUrl: vcharity?.image??'',
                         fit: BoxFit.fill,
                       ),
                     ),
@@ -103,7 +103,7 @@ class _VerifiedCharityWidgetState extends State<VerifiedCharityWidget> {
                           padding:
                           EdgeInsets.symmetric(horizontal: scrWidth * 0.035),
                           child: Text(
-                            vcharity.charityDetailes!,
+                            vcharity?.charityDetailes??'',
                             style: TextStyle(
                               fontWeight: FontWeight.w600,
                               fontSize: FontSize13,
@@ -133,8 +133,8 @@ class _VerifiedCharityWidgetState extends State<VerifiedCharityWidget> {
                                 horizontal: scrWidth * 0.035),
                             child: Text(
                               currencyConvert.format(
-                                vcharity.valueAmount,
-                              ),
+                                vcharity?.valueAmount??0,
+                              ).toString(),
                               style: TextStyle(
                                 color: primarycolor,
                                 fontWeight: FontWeight.w600,

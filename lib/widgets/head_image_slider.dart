@@ -42,7 +42,7 @@ class _CarouselWidgetState extends State<CarouselWidget> {
       children: [
         Container(
           // color: Colors.red,
-          height: scrWidth * 0.34,
+          height: scrWidth * 0.3,
           width: scrWidth * 1,
           // width: 334,
           // height: 125,

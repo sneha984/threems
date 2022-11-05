@@ -57,9 +57,7 @@ class _KuriViewPageState extends State<KuriViewPage> {
     final DateTime deadLine = widget.kuri.deadLine!;
     final DateFormat formatter = DateFormat('dd MMMM yyyy');
     final String formatted = formatter.format(deadLine);
-
     final double percentage = widget.kuri.totalReceived! / widget.kuri.amount!;
-
     return Padding(
       padding: EdgeInsets.only(top: scrHeight * 0.01),
       child: GestureDetector(

@@ -504,6 +504,7 @@ class _VerificationDetailsState extends State<VerificationDetails> {
                     }
 
                   );
+                  print(fileUrl);
                   print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
                   print(charityDetails);
                   print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
