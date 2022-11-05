@@ -538,11 +538,10 @@ class _PaymentPageState extends State<PaymentPage> {
               'payments':FieldValue.arrayUnion(
               [
                 {
-                  'amount':valueAmountController.text,
+                  'amount':double.tryParse(valueAmountController.text),
                   'screenShotUrl':imgUrl,
                   'userId':currentuser!.userId,
                   'userName':currentuser!.userName,
-                  'location':"Perinthalmanna",
                   'verified':false,
                   'date':DateFormat.yMMMd().format(DateTime.now()),
                 }

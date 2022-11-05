@@ -933,13 +933,7 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
                                 fontFamily: 'Urbanist',
                                 fontWeight: FontWeight.w600,
                               ),),
-                              Text(datas.location!,style: TextStyle(
-                                  fontSize: scrWidth*0.03,
-                                  fontFamily: 'Urbanist',
-                                  fontWeight: FontWeight.w500,
-                                  color: Color(0xff8B8B8B)
-                              ),),
-                              Text("12 june 2022",style: TextStyle(
+                              Text("huhuhuhuh",style: TextStyle(
                                   fontSize: scrWidth*0.03,
                                   fontFamily: 'Urbanist',
                                   fontWeight: FontWeight.w500,
@@ -949,14 +943,12 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
 
                             ],
                           ),
-                          SizedBox(width: scrWidth*0.24,),
-
-                          Text(datas.amount.toString(),style: TextStyle(
-                              fontSize: scrWidth*0.05,
+                          SizedBox(width: scrWidth*0.01,),
+                          Text(currencyConvert.format(datas.amount).toString(),style: TextStyle(
+                              fontSize: scrWidth*0.046,
                               fontFamily: 'Urbanist',
                               fontWeight: FontWeight.w700,
-                              color: primarycolor
-                          ),),
+                              color: primarycolor),),
 
                         ],
                       ),

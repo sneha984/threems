@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -6,10 +7,13 @@ import 'package:intl/intl.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
+import 'package:threems/Authentication/auth.dart';
+import 'package:threems/model/usermodel.dart';
 import 'package:threems/screens/charity/payment.dart';
 import 'package:threems/screens/charity/pdfviewpage.dart';
 import 'package:threems/screens/charity/verification_details.dart';
 import 'package:threems/simple.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import '../../model/charitymodel.dart';
 import '../../utils/themes.dart';
@@ -26,6 +30,13 @@ class DonateNowPage extends StatefulWidget {
 }
 
 class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMixin {
+  late YoutubePlayerController _controllers;
+  late YoutubeMetaData _videoMetaData;
+  bool _isPlayerReady = false;
+   bool onclick=true;
+  var videoId;
+  late PlayerState _playerState;
+
   final ScrollController _controller = ScrollController();
   final double _height = 100.0;
   void _animateToIndex(int index) {
@@ -48,17 +59,43 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
   late  TabController _tabControllerr;
   @override
   void initState() {
+
     _tabControllerr = TabController(length: 4, vsync: this);
     _tabControllerr.addListener(_handleTabSelection);
 
     super.initState();
+    _controllers = YoutubePlayerController(
+      initialVideoId:videoId=YoutubePlayer.convertUrlToId(widget.charities.youTubeLink!).toString(),
+      flags: YoutubePlayerFlags(
+        mute: false,
+        autoPlay: true,
+        loop: false,
+        isLive: false,
+        forceHD: false,
+      ),
+    );
   }
   void _handleTabSelection() {
     setState(() {
     });
   }
+  void listener() {
+    if (_isPlayerReady && mounted && !_controllers.value.isFullScreen) {
+      setState(() {
+        _playerState = _controllers.value.playerState;
+        _videoMetaData = _controllers.metadata;
+      });
+    }
+  }
+  @override
+  void deactivate() {
+    _controllers.pause();
+    super.deactivate();
+  }
   @override
   void dispose() {
+    _controllers.dispose();
+
     super.dispose();
     _tabControllerr.dispose();
   }
@@ -569,8 +606,6 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                                             color: Colors.white
                                         ),),
                                         SizedBox(height: scrHeight*0.002,),
-
-
                                         Text(widget.charities.accountHolderName!,style: TextStyle(
                                             fontSize: 16,
                                             fontFamily: 'Urbanist',
@@ -578,7 +613,6 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                                             color: Colors.white
                                         ),),
                                         SizedBox(height: scrHeight*0.005,),
-
                                         Text("Account Number",style: TextStyle(
                                             fontSize: 10,
                                             fontFamily: 'Urbanist',
@@ -686,15 +720,29 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                       SizedBox(height: scrHeight*0.02,),
                       GestureDetector(
                         onTap: (){
-                          Navigator.push(context, MaterialPageRoute(
-                              builder: (context)=>Simple(
-                                  youtubeLink: widget.charities.youTubeLink!)));
+                         setState(() {
+                            onclick;
+                         });
                         },
-                          child: Padding(
+                          child: onclick==false?Padding(
                             padding:  EdgeInsets.only(left: scrWidth*0.055),
                             child: Text(widget.charities.youTubeLink!,
                               style: TextStyle(color:Colors.blue,fontSize: scrWidth*0.04,decoration: TextDecoration.underline),),
-                          )),
+                          ): Padding(
+                            padding:  EdgeInsets.only(left: 15,right: 15),
+                            child: YoutubePlayer(
+                              controller: _controllers,
+                              aspectRatio: 16 / 9,
+                              showVideoProgressIndicator: true,
+                              progressColors: ProgressBarColors(
+                                playedColor: Colors.white,
+                                handleColor: Colors.white,
+                              ),
+                              onReady: () {
+                                _controller.addListener(listener);
+                              },
+                            ),
+                          ),),
 
                       // Padding(
                       //   padding:  EdgeInsets.only(left: scrWidth*0.05),
@@ -805,13 +853,8 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                                           fontFamily: 'Urbanist',
                                           fontWeight: FontWeight.w600,
                                         ),),
-                                        Text(data.location!,style: TextStyle(
-                                          fontSize: scrWidth*0.025,
-                                          fontFamily: 'Urbanist',
-                                          fontWeight: FontWeight.w500,
-                                          color: Color(0xff8B8B8B)
-                                        ),),
-                                        Text("12 june 2022",style: TextStyle(
+
+                                        Text("12 june 22",style: TextStyle(
                                             fontSize: scrWidth*0.025,
                                             fontFamily: 'Urbanist',
                                             fontWeight: FontWeight.w500,
@@ -821,21 +864,36 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
 
                                       ],
                                     ),
-                                    SizedBox(width: scrWidth*0.35,),
+                                    SizedBox(width: scrWidth*0.2,),
+                                    Expanded(
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        children: [
+                                          Text(currencyConvert.format(data.amount).toString(),style: TextStyle(
+                                              fontSize: scrWidth*0.046,
+                                              fontFamily: 'Urbanist',
+                                              fontWeight: FontWeight.w700,
+                                              color: primarycolor),),
+                                          SizedBox(width: scrWidth*0.01,),
+                                          (widget.charities.userId==currentuser!.userId)?SvgPicture.asset("assets/icons/Frame (1).svg"):
+                                          InkWell(
+                                            onTap: (){
+                                              bottomsheets(context);
+                                              },
+                                            child: Container(
+                                              height:25,
+                                              width: 25,
+                                              decoration: BoxDecoration(
+                                                image: DecorationImage(image:AssetImage("assets/icons/warning.png"),fit: BoxFit.fill),
+                                              ),
 
-                                    // Text(data.amount!.toString(),style: TextStyle(
-                                    //     fontSize: scrWidth*0.046,
-                                    //     fontFamily: 'Urbanist',
-                                    //     fontWeight: FontWeight.w700,
-                                    //     color: primarycolor
-                                    // ),),
-                                    Text(data.amount
-                                        .toString(),style: TextStyle(
-                                        fontSize: scrWidth*0.034,
-                                        color: Colors.black,
-                                        fontFamily: 'Urbanist',
-                                        fontWeight: FontWeight.w600),),
+                                            ),
+                                          ),
+                                          SizedBox(width: scrWidth*0.02,)
 
+                                        ],
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),
@@ -899,5 +957,76 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
       ),
 
     );
+  }
+  void bottomsheets(context) {
+    showModalBottomSheet(
+        context: context,
+        backgroundColor: Colors.transparent,
+        builder: (context) => Container(
+          height: scrHeight*0.3,
+            decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30),
+                  topRight: Radius.circular(30),
+                )),
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 20,
+                ),
+                const Center(
+                    child: Text(
+                      "Please Report to Admin ",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.black,fontSize: 20),
+                    )),
+                SizedBox(height: scrHeight*0.07,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Container(
+                      height: 45,
+                      width: 100,
+                      decoration: BoxDecoration(
+                        color: primarycolor,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child:  Center(child: Text("Cancel",style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 19,
+                          fontWeight: FontWeight.w400,
+                          fontFamily: 'Urbanist'),),),
+                    ),
+
+                    GestureDetector(
+                      onTap: (){
+                        CharityModel chrt=widget.charities;
+                        FirebaseFirestore.instance.collection('charityReport').add(chrt.toJson()).then((value) => value.update({
+                          "reportDate":DateFormat.yMMMd().format(DateTime.now()),
+                        }));
+                        },
+                      child: Container(
+                        height: 45,
+                        width: 100,
+                        decoration: BoxDecoration(
+                          color: primarycolor,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Center(child: Text("Ok",style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 19,
+                            fontWeight: FontWeight.w400,
+                            fontFamily: 'Urbanist'),),),
+
+                      ),
+                    )
+                  ],
+                )
+
+
+
+              ],
+            )));
   }
 }

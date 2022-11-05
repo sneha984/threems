@@ -87,7 +87,6 @@ class CharityModel {
       });
     }
   }
-
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['accountHolderName'] = this.accountHolderName;
@@ -125,24 +124,25 @@ class Payments {
   String? userName;
   String? userId;
   double? amount;
-  String? location;
   String? screenShotUrl;
+  String? date;
 
   Payments(
       {this.verified,
         this.userName,
         this.userId,
         this.amount,
-        this.location,
-        this.screenShotUrl});
+        this.screenShotUrl,
+        this.date
+      });
 
   Payments.fromJson(Map<String, dynamic> json) {
     verified = json['verified'];
     userName = json['userName'];
     userId = json['userId'];
     amount = json['amount'];
-    location = json['location'];
     screenShotUrl = json['screenShotUrl'];
+    date=json['date'];
   }
 
   Map<String, dynamic> toJson() {
@@ -151,8 +151,8 @@ class Payments {
     data['userName'] = this.userName;
     data['userId'] = this.userId;
     data['amount'] = this.amount;
-    data['location'] = this.location;
     data['screenShotUrl'] = this.screenShotUrl;
+    data['date']=this.date;
     return data;
   }
 }
