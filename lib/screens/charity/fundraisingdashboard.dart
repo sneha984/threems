@@ -951,7 +951,7 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
                           ),
                           SizedBox(width: scrWidth*0.24,),
 
-                          Text(datas.amount!.toString(),style: TextStyle(
+                          Text(datas.amount.toString(),style: TextStyle(
                               fontSize: scrWidth*0.05,
                               fontFamily: 'Urbanist',
                               fontWeight: FontWeight.w700,
