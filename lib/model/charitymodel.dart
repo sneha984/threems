@@ -25,7 +25,7 @@ class CharityModel {
   String? userId;
   String? userName;
   bool? block;
-
+  List<Payments>? payments;
   CharityModel(
       {this.accountHolderName,
         this.accountNumber,
@@ -51,6 +51,7 @@ class CharityModel {
         this.userId,
         this.userName,
         required this.block,
+        this.payments
 
       });
 
@@ -79,8 +80,12 @@ class CharityModel {
     userId=json['userId'];
     userName=json['userName'];
     block=json['block'];
-
-
+    if (json['payments'] != null) {
+      payments = <Payments>[];
+      json['payments'].forEach((v) {
+        payments!.add(Payments.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -109,6 +114,45 @@ class CharityModel {
     data['userId']=this.userId;
     data['userName']=this.userName;
     data['block']=this.block;
+    if (this.payments != null) {
+      data['payments'] = this.payments!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+class Payments {
+  bool? verified;
+  String? userName;
+  String? userId;
+  double? amount;
+  String? location;
+  String? screenShotUrl;
+
+  Payments(
+      {this.verified,
+        this.userName,
+        this.userId,
+        this.amount,
+        this.location,
+        this.screenShotUrl});
+
+  Payments.fromJson(Map<String, dynamic> json) {
+    verified = json['verified'];
+    userName = json['userName'];
+    userId = json['userId'];
+    amount = json['amount'];
+    location = json['location'];
+    screenShotUrl = json['screenShotUrl'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['verified'] = this.verified;
+    data['userName'] = this.userName;
+    data['userId'] = this.userId;
+    data['amount'] = this.amount;
+    data['location'] = this.location;
+    data['screenShotUrl'] = this.screenShotUrl;
     return data;
   }
 }

@@ -18,6 +18,8 @@ import '../splash_screen.dart';
 import 'dart:io';
 import 'basic_details.dart';
 List userdetails=[];
+var fileName;
+
 
 
 class VerificationDetails extends StatefulWidget {
@@ -40,7 +42,6 @@ class _VerificationDetailsState extends State<VerificationDetails> {
   var imgFile;
   var uploadTask;
   var fileUrl;
-  var fileName;
   Future uploadImageToFirebase(BuildContext context) async {
     Reference firebaseStorageRef =
     FirebaseStorage.instance.ref().child('deposits/${imgFile.path}');
@@ -349,6 +350,7 @@ class _VerificationDetailsState extends State<VerificationDetails> {
               InkWell(
                 onTap: (){
                   _pickFile();
+
                 },
                 child: pickFile==null?  Container(
                   width: scrWidth,
@@ -399,7 +401,7 @@ class _VerificationDetailsState extends State<VerificationDetails> {
                     ),
                     borderRadius: BorderRadius.circular(scrWidth * 0.026),
                   ),
-                  child: Text(fileName,style: TextStyle(
+                  child: Text(fileName!,style: TextStyle(
                     color: Color(0xff8391A1),
                     fontWeight: FontWeight.w500,
                     fontSize: FontSize15,
@@ -506,7 +508,7 @@ class _VerificationDetailsState extends State<VerificationDetails> {
                   print(charityDetails);
                   print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
                   var char=CharityModel(
-                      orgName: charityDetails[0]['orgName'],
+                    orgName: charityDetails[0]['orgName'],
                     charityDetailes: charityDetails[0]['charityDetailes'],
                     emailId: charityDetails[0]['emailId'],
                     phoneNumber: charityDetails[0]['phoneNumber'],
@@ -575,16 +577,6 @@ class _VerificationDetailsState extends State<VerificationDetails> {
   //     setState(() {});
   //   }
   // }
-  showSnackbar() {
-    final snackBar = SnackBar(
-      behavior: SnackBarBehavior.floating,
-      content: Text("Plz Enter All Details",
-        style: TextStyle(fontWeight: FontWeight.bold),
-      ),
-      backgroundColor: Colors.grey,
-    );
 
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
 
 }

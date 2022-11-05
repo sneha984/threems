@@ -91,19 +91,24 @@ class _BasicDetailsState extends State<BasicDetails> {
   getReasons() async {
     FirebaseFirestore.instance.collection('dropdown').snapshots().listen((event) {
       dropdownItemList = [];
+
       for( DocumentSnapshot <Map<String ,dynamic>> doc in event.docs){
         dropdownItemList.add(doc);
       }
       dropdownItems=[];
-      for(int i=0;i< dropdownItemList.length; i++){
+      if(dropdownItemList!=null){
+        for(int i=0;i< dropdownItemList.length; i++){
         dropdownItems.add({
           'causeId':dropdownItemList[i]['causeId'],
           'label':dropdownItemList[i]['label'],
           'value':dropdownItemList[i]['value'],
           'image':Image(image:NetworkImage(dropdownItemList[i]['image'])),
-
         });
       }
+      }else{
+        return;
+      }
+
       print(dropdownItems);
       if(mounted){
         setState(() {
@@ -256,7 +261,7 @@ class _BasicDetailsState extends State<BasicDetails> {
                         resultReverse: false,
                         isAnimation: false,
                         dropdownItemAlign: Alignment.center,
-                        dropdownHeight: scrHeight*0.26,
+                        dropdownHeight: scrHeight*0.35,
                         dropdownWidth: scrWidth*0.3,
                         dropdownItemGap: 2,
                         dropdownItemReverse: true,

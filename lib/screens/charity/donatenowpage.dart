@@ -7,6 +7,8 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:threems/screens/charity/payment.dart';
+import 'package:threems/screens/charity/pdfviewpage.dart';
+import 'package:threems/screens/charity/verification_details.dart';
 import 'package:threems/simple.dart';
 
 import '../../model/charitymodel.dart';
@@ -33,6 +35,8 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
        curve: Curves.linear,
     );
   }
+
+
   List <String> _items=[
     "https://templatelab.com/wp-content/uploads/2016/03/Company-Letterhead-Template-1-TemplateLab-Exclusive-e1487297202368-790x1022.jpg",
     "https://templatelab.com/wp-content/uploads/2016/03/Company-Letterhead-Template-1-TemplateLab-Exclusive-e1487297202368-790x1022.jpg",
@@ -78,7 +82,7 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
           child:  Padding(
             padding: EdgeInsets.only(
                   top: scrHeight*0.01,
-                 left: scrWidth*0.07,
+                 left: scrWidth*0.06,
                  // bottom: scrHeight*0.02,
                   right: scrWidth*0.05
             ),
@@ -95,7 +99,7 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
         ),
         actions: [
           Padding(
-            padding: EdgeInsets.only(top: scrHeight*0.025,bottom: scrHeight*0.02,right: scrWidth*0.03),
+            padding: EdgeInsets.only(top: scrHeight*0.023,bottom: scrHeight*0.015,right: scrWidth*0.03),
             child: Container(
               height: scrHeight*0.07,
               width: scrWidth * 0.34,
@@ -105,7 +109,7 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
               ),
               child: Center(
                 child: Text(
-                  "720 Supporters",
+                  "${widget.charities.payments!.length} Supporters",
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: scrWidth*0.036,
@@ -282,6 +286,7 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                                 ),),
                                 SizedBox(height: scrHeight*0.015,),
                                 Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                                   children: [
                                     Text(widget.charities.beneficiaryName!,style: TextStyle(
                                         fontSize: scrWidth*0.045,
@@ -289,8 +294,8 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                                         fontWeight: FontWeight.w500,
                                         color: Color(0xff353333)
                                     ),),
-                                    SizedBox(width:scrWidth*0.5,),
-                                    SvgPicture.asset("assets/icons/whatsapp_icon.svg")
+                                    // SizedBox(width:scrWidth*0.5,),
+                                    // SvgPicture.asset("assets/icons/whatsapp_icon.svg")
                                   ],
                                 ),
                                 SizedBox(height: scrHeight*0.002,),
@@ -421,86 +426,86 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
 
                         ],
                       ),
-                      SizedBox(height: scrHeight*0.02,),
-                      Padding(
-                        padding:  EdgeInsets.only(left: scrWidth*0.05),
-                        child: Text("Analytics",style: TextStyle(
-                            fontSize: scrHeight*0.02,
-                            fontFamily: 'Urbanist',
-                            fontWeight: FontWeight.w500,
-
-                        ),),
-                      ),
-                      SizedBox(height: scrHeight*0.025,),
-                  Container(
-                    height: scrHeight*0.042,
-                    width: scrWidth*0.92,
-                    child: TabBar(
-                        labelPadding: EdgeInsets.only(left: scrWidth*0.019,right: scrWidth*0.019),
-                        unselectedLabelStyle: TextStyle(
-                          fontFamily: 'Poppins',fontSize: scrWidth*0.04,fontWeight: FontWeight.w400
-                      ),
-                        unselectedLabelColor: Color.fromRGBO(0, 0, 0, 0.3),
-                        indicatorSize: TabBarIndicatorSize.label,
-                        labelColor: Colors.white,
-                        labelStyle: TextStyle(
-                            fontFamily: 'Poppins',fontSize: scrWidth*0.04,fontWeight: FontWeight.w400
-                        ),
-                        indicator: BoxDecoration(
-                            borderRadius: BorderRadius.circular(60),
-                            color: primarycolor
-                        ),
-                      isScrollable: true,
-                      controller: _tabControllerr,
-                        tabs: [
-                      Container(
-                        height: scrHeight*0.047,
-                        width:scrWidth*0.23,
-                        decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(60),
-                            color: Color.fromRGBO(0, 0, 0, 0.05)
-                        ),
-                        child: Center(child: Text("Day",)),),
-                          Container(
-                            height: scrHeight*0.047,
-                            width:scrWidth*0.23,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(60),
-
-                                color: Color.fromRGBO(0, 0, 0, 0.05)
-                            ),
-                            child: Center(child: Text("Week",)),),
-                          Container(
-                            height: scrHeight*0.047,
-                            width:scrWidth*0.23,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(60),
-                                color: Color.fromRGBO(0, 0, 0, 0.05)
-                            ),
-                            child: Center(child: Text("Month",)),),
-                          Container(
-                            height: scrHeight*0.047,
-                            width:scrWidth*0.23,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(60),
-                                color: Color.fromRGBO(0, 0, 0, 0.05)
-                            ),
-                            child: Center(child: Text("Year",)),),
-                    ]),
-                  ),
-                  Expanded(
-                    child: TabBarView(
-                      controller: _tabControllerr,
-                        children: [
-                          Container(),
-                          Container(),
-                          Padding(
-                            padding:  EdgeInsets.only(left: scrWidth*0.04,right: scrWidth*0.04),
-                            child: Flchartpage(),),
-                          Container(),
-                        ]
-                    ),
-                  ),
+                      // SizedBox(height: scrHeight*0.02,),
+                  //     Padding(
+                  //       padding:  EdgeInsets.only(left: scrWidth*0.05),
+                  //       child: Text("Analytics",style: TextStyle(
+                  //           fontSize: scrHeight*0.02,
+                  //           fontFamily: 'Urbanist',
+                  //           fontWeight: FontWeight.w500,
+                  //
+                  //       ),),
+                  //     ),
+                  //     SizedBox(height: scrHeight*0.025,),
+                  // Container(
+                  //   height: scrHeight*0.042,
+                  //   width: scrWidth*0.92,
+                  //   child: TabBar(
+                  //       labelPadding: EdgeInsets.only(left: scrWidth*0.019,right: scrWidth*0.019),
+                  //       unselectedLabelStyle: TextStyle(
+                  //         fontFamily: 'Poppins',fontSize: scrWidth*0.04,fontWeight: FontWeight.w400
+                  //     ),
+                  //       unselectedLabelColor: Color.fromRGBO(0, 0, 0, 0.3),
+                  //       indicatorSize: TabBarIndicatorSize.label,
+                  //       labelColor: Colors.white,
+                  //       labelStyle: TextStyle(
+                  //           fontFamily: 'Poppins',fontSize: scrWidth*0.04,fontWeight: FontWeight.w400
+                  //       ),
+                  //       indicator: BoxDecoration(
+                  //           borderRadius: BorderRadius.circular(60),
+                  //           color: primarycolor
+                  //       ),
+                  //     isScrollable: true,
+                  //     controller: _tabControllerr,
+                  //       tabs: [
+                  //     Container(
+                  //       height: scrHeight*0.047,
+                  //       width:scrWidth*0.23,
+                  //       decoration: BoxDecoration(
+                  //     borderRadius: BorderRadius.circular(60),
+                  //           color: Color.fromRGBO(0, 0, 0, 0.05)
+                  //       ),
+                  //       child: Center(child: Text("Day",)),),
+                  //         Container(
+                  //           height: scrHeight*0.047,
+                  //           width:scrWidth*0.23,
+                  //           decoration: BoxDecoration(
+                  //               borderRadius: BorderRadius.circular(60),
+                  //
+                  //               color: Color.fromRGBO(0, 0, 0, 0.05)
+                  //           ),
+                  //           child: Center(child: Text("Week",)),),
+                  //         Container(
+                  //           height: scrHeight*0.047,
+                  //           width:scrWidth*0.23,
+                  //           decoration: BoxDecoration(
+                  //               borderRadius: BorderRadius.circular(60),
+                  //               color: Color.fromRGBO(0, 0, 0, 0.05)
+                  //           ),
+                  //           child: Center(child: Text("Month",)),),
+                  //         Container(
+                  //           height: scrHeight*0.047,
+                  //           width:scrWidth*0.23,
+                  //           decoration: BoxDecoration(
+                  //               borderRadius: BorderRadius.circular(60),
+                  //               color: Color.fromRGBO(0, 0, 0, 0.05)
+                  //           ),
+                  //           child: Center(child: Text("Year",)),),
+                  //   ]),
+                  // ),
+                  // Expanded(
+                  //   child: TabBarView(
+                  //     controller: _tabControllerr,
+                  //       children: [
+                  //         Container(),
+                  //         Container(),
+                  //         Padding(
+                  //           padding:  EdgeInsets.only(left: scrWidth*0.04,right: scrWidth*0.04),
+                  //           child: Flchartpage(),),
+                  //         Container(),
+                  //       ]
+                  //   ),
+                  // ),
                       // SizedBox(height: scrHeight*0.01,),
                       Padding(
                         padding:  EdgeInsets.only(left: scrWidth*0.05),
@@ -511,89 +516,92 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                         ),),
                       ),
                       SizedBox(height: scrHeight*0.03,),
-                      Padding(
-                        padding:EdgeInsets.only(),
-                        child: Image(image: AssetImage("assets/icons/card 2.png")),
-                      ),
-                      // Stack(
-                      //   children: [
-                      //     Container(
-                      //       width: scrWidth*1,
-                      //       height: scrHeight*0.3,
-                      //       decoration: BoxDecoration(
-                      //         image: DecorationImage(image: AssetImage("assets/images/card desigbn.png"),fit: BoxFit.fill)
-                      //       ),
-                      //     ),
-                      //     Positioned(
-                      //       top: 45,
-                      //         left: 30,
-                      //         child: Column(
-                      //           children: [
-                      //             Padding(
-                      //               padding:  EdgeInsets.only(left: 160),
-                      //               child: Column(
-                      //                 crossAxisAlignment: CrossAxisAlignment.end,
-                      //                 children: [
-                      //                   Text("STATE BANK OF INDIA",style: TextStyle(
-                      //                       fontSize: 16,
-                      //                       fontFamily: 'Urbanist',
-                      //                       fontWeight: FontWeight.w700,
-                      //                       color: Colors.white
-                      //                   ),),
-                      //                   Text("IFSC : SBIN0070422",style: TextStyle(
-                      //                       fontSize: 14,
-                      //                       fontFamily: 'Urbanist',
-                      //                       fontWeight: FontWeight.w700,
-                      //                       color: Colors.white
-                      //                   ),),
-                      //
-                      //                 ],
-                      //               ),
-                      //             ),
-                      //             SizedBox(height: 55,),
-                      //             Padding(
-                      //               padding:  EdgeInsets.only(right: scrWidth*0.4),
-                      //               child: Column(
-                      //                 crossAxisAlignment: CrossAxisAlignment.start,
-                      //                 children: [
-                      //
-                      //                   Text("Banking Name",style: TextStyle(
-                      //                       fontSize: 10,
-                      //                       fontFamily: 'Urbanist',
-                      //                       fontWeight: FontWeight.w700,
-                      //                       color: Colors.white
-                      //                   ),),
-                      //                   Text("ASIF ALI HUSSAIN",style: TextStyle(
-                      //                       fontSize: 16,
-                      //                       fontFamily: 'Urbanist',
-                      //                       fontWeight: FontWeight.w700,
-                      //                       color: Colors.white
-                      //                   ),),
-                      //                   Text("Account Number",style: TextStyle(
-                      //                       fontSize: 10,
-                      //                       fontFamily: 'Urbanist',
-                      //                       fontWeight: FontWeight.w700,
-                      //                       color: Colors.white
-                      //                   ),),
-                      //                   Text("67236588268",style: TextStyle(
-                      //                       fontSize: 16,
-                      //                       fontFamily: 'Urbanist',
-                      //                       fontWeight: FontWeight.w700,
-                      //                       color: Colors.white
-                      //                   ),),
-                      //
-                      //                 ],
-                      //               ),
-                      //             )
-                      //
-                      //
-                      //           ],
-                      //         )
-                      //     ),
-                      //   ],
+                      // Padding(
+                      //   padding:EdgeInsets.only(),
+                      //   child: Image(image: AssetImage("assets/icons/card 2.png")),
                       // ),
+                      Stack(
+                        children: [
+                          Container(
+                            width: scrWidth*1,
+                            height: scrHeight*0.3,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(image: AssetImage("assets/images/card desigbn.png"),fit: BoxFit.fill)
+                            ),
+                          ),
+                          Positioned(
+                            top: scrHeight*0.04,
+                              left: scrWidth*0.15,
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding:  EdgeInsets.only(left: scrWidth*0.3),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                      children: [
+                                        Text(widget.charities.bankName!,style: TextStyle(
+                                            fontSize: 16,
+                                            fontFamily: 'Urbanist',
+                                            fontWeight: FontWeight.w700,
+                                            color: Colors.white
+                                        ),),
+                                        SizedBox(height: scrHeight*0.005,),
+                                        Text("IFSC : ${widget.charities.ifscCode}",style: TextStyle(
+                                            fontSize: 14,
+                                            fontFamily: 'Urbanist',
+                                            fontWeight: FontWeight.w700,
+                                            color: Colors.white
+                                        ),),
 
-                      // SizedBox(height: scrHeight*0.0,),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(height: scrHeight*0.05,),
+                                  Padding(
+                                    padding:  EdgeInsets.only(right: scrWidth*0.6),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text("Banking Name",style: TextStyle(
+                                            fontSize: 10,
+                                            fontFamily: 'Urbanist',
+                                            fontWeight: FontWeight.w700,
+                                            color: Colors.white
+                                        ),),
+                                        SizedBox(height: scrHeight*0.002,),
+
+
+                                        Text(widget.charities.accountHolderName!,style: TextStyle(
+                                            fontSize: 16,
+                                            fontFamily: 'Urbanist',
+                                            fontWeight: FontWeight.w700,
+                                            color: Colors.white
+                                        ),),
+                                        SizedBox(height: scrHeight*0.005,),
+
+                                        Text("Account Number",style: TextStyle(
+                                            fontSize: 10,
+                                            fontFamily: 'Urbanist',
+                                            fontWeight: FontWeight.w700,
+                                            color: Colors.white
+                                        ),),
+                                        SizedBox(height: scrHeight*0.002,),
+
+                                        Text(widget.charities.accountNumber!,style: TextStyle(
+                                            fontSize: 16,
+                                            fontFamily: 'Urbanist',
+                                            fontWeight: FontWeight.w700,
+                                            color: Colors.white
+                                        ),),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              )
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: scrHeight*0.0,),
                       Padding(
                         padding:  EdgeInsets.only(left: scrWidth*0.05),
                         child: Text("Supporting Documents",style: TextStyle(
@@ -617,7 +625,6 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                             ),
                             scrollDirection: Axis.horizontal,
                             itemCount: _items.length,
-
                             itemBuilder: (context, index) {
                               return Container(
                                 child: Row(
@@ -656,14 +663,18 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                           ),
                         ),
                       ),
-                      // GestureDetector(
-                      //   onTap: (){
-                      //
-                      //   },
-                      //     child:SfPdfViewer.network(widget.charities.documents!)),
-
+                       // Padding(
+                       //   padding:  EdgeInsets.only(left: scrWidth*0.05),
+                       //   child: GestureDetector(
+                       //     onTap: (){
+                       //       Navigator.push(context, MaterialPageRoute(
+                       //           builder: (context)=>PdfViewPage(charity:widget.charities,)
+                       //       ));
+                       //     },
+                       //     child: Text("rokeorfoejogjoergj"),
+                       //   ),
+                       // ),
                       SizedBox(height: scrHeight*0.02,),
-
                       Padding(
                         padding:  EdgeInsets.only(left: scrWidth*0.05),
                         child: Text("Videos",style: TextStyle(
@@ -682,7 +693,7 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                           child: Padding(
                             padding:  EdgeInsets.only(left: scrWidth*0.055),
                             child: Text(widget.charities.youTubeLink!,
-                              style: TextStyle(color:Colors.blue,fontSize: scrWidth*0.04),),
+                              style: TextStyle(color:Colors.blue,fontSize: scrWidth*0.04,decoration: TextDecoration.underline),),
                           )),
 
                       // Padding(
@@ -751,8 +762,11 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                       ),
                       SizedBox(height: scrHeight*0.025,),
                       ListView.separated(
-                        shrinkWrap: true,
+                          itemCount: widget.charities.payments!.length,
+                          shrinkWrap: true,
                           itemBuilder: (context,index){
+                            print(widget.charities.payments![index].amount);
+                            final data=widget.charities.payments![index];
                             return Padding(
                               padding:  EdgeInsets.only(left: scrWidth*0.05,right: scrWidth*0.04),
                               child: Container(
@@ -777,7 +791,8 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                                     SizedBox(width: scrWidth*0.03,),
                                     CircleAvatar(
                                       radius: 19,
-                                      backgroundImage: NetworkImage("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyvDOjrrjjIN5kd3-8A4R-ByYkSnGSzbFHzg&usqp=CAU"),
+                                      backgroundImage:
+                                      NetworkImage("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyvDOjrrjjIN5kd3-8A4R-ByYkSnGSzbFHzg&usqp=CAU"),
                                     ),
                                     SizedBox(width: scrWidth*0.055,),
 
@@ -785,12 +800,12 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         SizedBox(height: scrHeight*0.018,),
-                                        Text("Anonymus",style: TextStyle(
+                                        Text(data.userName!,style: TextStyle(
                                           fontSize: scrWidth*0.035,
                                           fontFamily: 'Urbanist',
                                           fontWeight: FontWeight.w600,
                                         ),),
-                                        Text("Perinthalmanna",style: TextStyle(
+                                        Text(data.location!,style: TextStyle(
                                           fontSize: scrWidth*0.025,
                                           fontFamily: 'Urbanist',
                                           fontWeight: FontWeight.w500,
@@ -808,12 +823,18 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                                     ),
                                     SizedBox(width: scrWidth*0.35,),
 
-                                    Text("₹1,500",style: TextStyle(
-                                        fontSize: scrWidth*0.046,
+                                    // Text(data.amount!.toString(),style: TextStyle(
+                                    //     fontSize: scrWidth*0.046,
+                                    //     fontFamily: 'Urbanist',
+                                    //     fontWeight: FontWeight.w700,
+                                    //     color: primarycolor
+                                    // ),),
+                                    Text(data.amount
+                                        .toString(),style: TextStyle(
+                                        fontSize: scrWidth*0.034,
+                                        color: Colors.black,
                                         fontFamily: 'Urbanist',
-                                        fontWeight: FontWeight.w700,
-                                        color: primarycolor
-                                    ),),
+                                        fontWeight: FontWeight.w600),),
 
                                   ],
                                 ),
@@ -823,9 +844,7 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                           separatorBuilder: (context, index) => SizedBox(
                             height: scrHeight*0.015,
                           ),
-                          itemCount: 3
                       ),
-                      SizedBox(height: scrHeight*0.03,),
                     ],
                   ),
                 ),

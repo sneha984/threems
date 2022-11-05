@@ -1,4 +1,5 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -6,9 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:threems/screens/charity/sucess.dart';
 
 import '../../model/charitymodel.dart';
+import '../../model/usermodel.dart';
 import '../../utils/themes.dart';
 import '../splash_screen.dart';
 import 'dart:io';
@@ -25,8 +28,10 @@ class PaymentPage extends StatefulWidget {
 class _PaymentPageState extends State<PaymentPage> {
   final FocusNode valueAmountFocus = FocusNode();
   final  TextEditingController valueAmountController =TextEditingController();
+  String? imgUrl;
   var imgFile;
-  String? imgeUrl;
+  var uploadTask;
+  var fileUrl;
   Future uploadImageToFirebase(BuildContext context) async {
     Reference firebaseStorageRef =
     FirebaseStorage.instance.ref().child('deposits/${imgFile.path}');
@@ -38,11 +43,15 @@ class _PaymentPageState extends State<PaymentPage> {
     //   imageList.add(value);
     // }
     setState(() {
-      imgeUrl = value;
+      imgUrl = value;
+      print("----=========-============-===============-=============");
+      print(imgUrl);
+      print("----=========-============-===============-=============");
+
 
     });
   }
-  _pickImg() async {
+  _pickImage() async {
     final imageFile = await ImagePicker.platform.pickImage(
         source: ImageSource.gallery);
     setState(() {
@@ -50,6 +59,24 @@ class _PaymentPageState extends State<PaymentPage> {
       uploadImageToFirebase(context);
     });
   }
+  @override
+  void initState() {
+
+    // image = null;
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+  bool loading=false;
+  refreshPage() {
+    setState(() {
+      loading = false;
+    });
+  }
+
 
 
   @override
@@ -194,14 +221,15 @@ class _PaymentPageState extends State<PaymentPage> {
                     children: [
                      SvgPicture.asset("assets/icons/₹.svg"),
                       Padding(
-                        padding:  EdgeInsets.only(bottom: scrHeight*0.011,left: scrWidth*0.03),
+                        padding:  EdgeInsets.only(bottom: scrHeight*0.014,left: scrWidth*0.03),
                         child: Container(
                           height: scrHeight*0.05,
                           width: scrWidth*0.4,
                           child: TextFormField(
+                            keyboardType: TextInputType.number,
                             controller: valueAmountController,
                             focusNode: valueAmountFocus,
-                            cursorHeight: scrWidth * 0.055,
+                            cursorHeight: scrWidth * 0.06,
                             cursorWidth: 1,
                             cursorColor: Colors.black,
                             style: TextStyle(
@@ -210,7 +238,6 @@ class _PaymentPageState extends State<PaymentPage> {
                               fontSize: scrWidth*0.05,
                               fontFamily: 'Urbanist',
                             ),
-                            keyboardType: TextInputType.number,
                             decoration: InputDecoration(
                               fillColor: textFormFieldFillColor,
                               filled: true,
@@ -355,20 +382,91 @@ class _PaymentPageState extends State<PaymentPage> {
               ],
             ),
             SizedBox(height: scrHeight*0.01,),
-            Container(
-              height: scrHeight*0.2,
-              width: scrWidth*0.88,
-              decoration: BoxDecoration(
-                color: Colors.green,
-                borderRadius: BorderRadius.circular(20),
-              ),
-            ),
-            SizedBox(height: scrHeight*0.03,),
+            Stack(
+              children: [
+                Container(
+                  width: scrWidth*1,
+                  height: scrHeight*0.3,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(image: AssetImage("assets/images/card desigbn.png"),fit: BoxFit.fill)
+                  ),
+                ),
+                Positioned(
+                    top: scrHeight*0.04,
+                    left: scrWidth*0.15,
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding:  EdgeInsets.only(left: scrWidth*0.3),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Text(widget.charitymodel.bankName!,style: TextStyle(
+                                  fontSize: 16,
+                                  fontFamily: 'Urbanist',
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.white
+                              ),),
+                              SizedBox(height: scrHeight*0.005,),
+                              Text("IFSC : ${widget.charitymodel.ifscCode}",style: TextStyle(
+                                  fontSize: 14,
+                                  fontFamily: 'Urbanist',
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.white
+                              ),),
 
-        GestureDetector(
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: scrHeight*0.05,),
+                        Padding(
+                          padding:  EdgeInsets.only(right: scrWidth*0.6),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("Banking Name",style: TextStyle(
+                                  fontSize: 10,
+                                  fontFamily: 'Urbanist',
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.white
+                              ),),
+                              SizedBox(height: scrHeight*0.002,),
+
+
+                              Text(widget.charitymodel.accountHolderName!,style: TextStyle(
+                                  fontSize: 16,
+                                  fontFamily: 'Urbanist',
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.white
+                              ),),
+                              SizedBox(height: scrHeight*0.005,),
+
+                              Text("Account Number",style: TextStyle(
+                                  fontSize: 10,
+                                  fontFamily: 'Urbanist',
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.white
+                              ),),
+                              SizedBox(height: scrHeight*0.002,),
+                              Text(widget.charitymodel.accountNumber!,style: TextStyle(
+                                  fontSize: 16,
+                                  fontFamily: 'Urbanist',
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.white
+                              ),),
+                            ],
+                          ),
+                        ),
+                      ],
+                    )
+                ),
+              ],
+            ),
+
+        InkWell(
           onTap: (){
-            _pickImg();
-          },
+            _pickImage();
+            },
               child: imgFile==null?DottedBorder(
                 padding: EdgeInsets.all(0),
                 borderType: BorderType.RRect,
@@ -405,7 +503,7 @@ class _PaymentPageState extends State<PaymentPage> {
                   ),
                 ),
               ):Container(
-                height: scrHeight*0.08,
+                height: scrHeight*0.5,
                 width: scrWidth*0.85,
                 decoration: BoxDecoration(
                   image: DecorationImage(
@@ -427,35 +525,57 @@ class _PaymentPageState extends State<PaymentPage> {
                 fontWeight: FontWeight.w500,
               ),
             ),
-            SizedBox(height: scrHeight*0.05,),
+            SizedBox(height: scrHeight*0.02,),
 
-            GestureDetector(
-              onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>Sucesspage()));
-              },
-              child: Container(
-          height: scrHeight*0.055,
-          width: scrWidth*0.85,
-          decoration: BoxDecoration(
-              color: primarycolor,
-              borderRadius: BorderRadius.circular(8),
-          ),
-                child: Center(
-                  child: Text(
-                    "DONATE NOW",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: scrWidth*0.04,
-                      fontFamily: 'Urbanist',
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                ),
-              ),
-            ),
+
           ],
         ),
       ),
+      floatingActionButton: GestureDetector(
+          onTap: (){
+            FirebaseFirestore.instance.collection('charity').doc(widget.charitymodel.charityId).update({
+
+              'payments':FieldValue.arrayUnion(
+              [
+                {
+                  'amount':valueAmountController.text,
+                  'screenShotUrl':imgUrl,
+                  'userId':currentuser!.userId,
+                  'userName':currentuser!.userName,
+                  'location':"Perinthalmanna",
+                  'verified':false,
+                  'date':DateFormat.yMMMd().format(DateTime.now()),
+                }
+              ]
+              ),
+            }
+
+            );
+            print(imgUrl);
+            print(imgFile);
+
+             Navigator.push(context, MaterialPageRoute(builder: (context)=>Sucesspage()));
+          },
+          child: Container(
+      height: scrHeight*0.055,
+      width: scrWidth*0.85,
+      decoration: BoxDecoration(
+          color: primarycolor,
+          borderRadius: BorderRadius.circular(8),
+      ),
+            child: Center(
+              child: Text(
+                "DONATE NOW",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: scrWidth*0.04,
+                  fontFamily: 'Urbanist',
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+            ),
+          ),
+        ),
     );
   }
 }

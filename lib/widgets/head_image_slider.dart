@@ -42,7 +42,7 @@ class _CarouselWidgetState extends State<CarouselWidget> {
       children: [
         Container(
           // color: Colors.red,
-          height: scrWidth * 0.345,
+          height: scrWidth * 0.34,
           width: scrWidth * 1,
           // width: 334,
           // height: 125,
@@ -54,8 +54,8 @@ class _CarouselWidgetState extends State<CarouselWidget> {
               return Container(
                 margin: EdgeInsets.symmetric(horizontal: scrWidth * 0.005),
 
-                height: scrWidth * 0.345,
-                width: scrWidth * 0.915,
+                height: scrWidth * 0.3,
+                width: scrWidth * 0.91,
                 // width : 326,
                 // height: 125,
 

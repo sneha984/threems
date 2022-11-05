@@ -217,7 +217,6 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
                                     padding:  EdgeInsets.only(left: scrWidth*0.2),
                                     child: SvgPicture.asset("assets/icons/shareicon.svg",),
                                   ),
-
                                 ],
                               )
                             ],
@@ -351,14 +350,14 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
 
                       ],
                     ),
-                    Padding(
-                      padding:  EdgeInsets.only(top: scrHeight*0.02,right: scrWidth*0.7),
-                      child: Text("Analytics",style: TextStyle(
-                          fontSize: scrWidth*0.04,
-                          color: Colors.black,
-                          fontFamily: 'Urbanist',
-                          fontWeight: FontWeight.w500),),
-                    ),
+                    // Padding(
+                    //   padding:  EdgeInsets.only(top: scrHeight*0.02,right: scrWidth*0.7),
+                    //   child: Text("Analytics",style: TextStyle(
+                    //       fontSize: scrWidth*0.04,
+                    //       color: Colors.black,
+                    //       fontFamily: 'Urbanist',
+                    //       fontWeight: FontWeight.w500),),
+                    // ),
                   ],
                 ),
 
@@ -366,99 +365,99 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
             ],
           ),
           SizedBox(height: scrHeight*0.025,),
-          Padding(
-            padding: EdgeInsets.only(left: scrWidth*0.05,right: scrWidth*0.05),
-            child: TabBar(
-                labelPadding: EdgeInsets.only(left: scrWidth*0.023,right: scrWidth*0.019),
-                unselectedLabelStyle: TextStyle(
-                    fontFamily: 'Poppins',fontSize: scrWidth*0.039,fontWeight: FontWeight.w400
-                ),
-                unselectedLabelColor: Color.fromRGBO(0, 0, 0, 0.3),
-                indicatorSize: TabBarIndicatorSize.label,
-                labelColor: Colors.white,
-                labelStyle: TextStyle(
-                    fontFamily: 'Poppins',fontSize: scrWidth*0.039,fontWeight: FontWeight.w400
-                ),
-                indicator: BoxDecoration(
-                    borderRadius: BorderRadius.circular(60),
-                    color: primarycolor
-                ),
-                isScrollable: true,
-                controller: _tabControllerrs,
-                tabs: [
-                  Container(
-                    height: scrHeight*0.043,
-                    width:scrWidth*0.22,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(60),
-                        color: Color.fromRGBO(0, 0, 0, 0.05)
-                    ),
-                    child: Center(child: Text("Day",)),),
-                  Container(
-                    height: scrHeight*0.043,
-                    width:scrWidth*0.22,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(60),
-
-                        color: Color.fromRGBO(0, 0, 0, 0.05)
-                    ),
-                    child: Center(child: Text("Week",)),),
-                  Container(
-                    height: scrHeight*0.043,
-                    width:scrWidth*0.22,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(60),
-                        color: Color.fromRGBO(0, 0, 0, 0.05)
-                    ),
-                    child: Center(child: Text("Month",)),),
-                  Container(
-                    height: scrHeight*0.043,
-                    width:scrWidth*0.22,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(60),
-                        color: Color.fromRGBO(0, 0, 0, 0.05)
-                    ),
-                    child: Center(child: Text("Year",)),),
-                ]),
-          ),
-          Expanded(
-            child: TabBarView(
-                controller: _tabControllerrs,
-                children: [
-                  Center(
-                    child: Text("No Analytics Here",style: TextStyle(
-                      fontSize: scrWidth*0.03,
-                      fontWeight: FontWeight.w600,
-                      fontFamily: 'Urbanist',
-                      color: Color(0xffA8A8A8)
-                    ),),
-                  ),
-                  Center(
-                    child: Text("No Analytics Here",style: TextStyle(
-                        fontSize: scrWidth*0.03,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: 'Urbanist',
-                        color: Color(0xffA8A8A8)
-                    ),),
-                  ),
-                  Center(
-                    child: Text("No Analytics Here",style: TextStyle(
-                        fontSize: scrWidth*0.03,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: 'Urbanist',
-                        color: Color(0xffA8A8A8)
-                    ),),
-                  ),
-                  Center(
-                    child: Text("No Analytics Here",style: TextStyle(
-                        fontSize: scrWidth*0.03,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: 'Urbanist',
-                        color: Color(0xffA8A8A8)
-                    ),),
-                  ),                ]
-            ),
-          ),
+          // Padding(
+          //   padding: EdgeInsets.only(left: scrWidth*0.05,right: scrWidth*0.05),
+          //   child: TabBar(
+          //       labelPadding: EdgeInsets.only(left: scrWidth*0.023,right: scrWidth*0.019),
+          //       unselectedLabelStyle: TextStyle(
+          //           fontFamily: 'Poppins',fontSize: scrWidth*0.039,fontWeight: FontWeight.w400
+          //       ),
+          //       unselectedLabelColor: Color.fromRGBO(0, 0, 0, 0.3),
+          //       indicatorSize: TabBarIndicatorSize.label,
+          //       labelColor: Colors.white,
+          //       labelStyle: TextStyle(
+          //           fontFamily: 'Poppins',fontSize: scrWidth*0.039,fontWeight: FontWeight.w400
+          //       ),
+          //       indicator: BoxDecoration(
+          //           borderRadius: BorderRadius.circular(60),
+          //           color: primarycolor
+          //       ),
+          //       isScrollable: true,
+          //       controller: _tabControllerrs,
+          //       tabs: [
+          //         Container(
+          //           height: scrHeight*0.043,
+          //           width:scrWidth*0.22,
+          //           decoration: BoxDecoration(
+          //               borderRadius: BorderRadius.circular(60),
+          //               color: Color.fromRGBO(0, 0, 0, 0.05)
+          //           ),
+          //           child: Center(child: Text("Day",)),),
+          //         Container(
+          //           height: scrHeight*0.043,
+          //           width:scrWidth*0.22,
+          //           decoration: BoxDecoration(
+          //               borderRadius: BorderRadius.circular(60),
+          //
+          //               color: Color.fromRGBO(0, 0, 0, 0.05)
+          //           ),
+          //           child: Center(child: Text("Week",)),),
+          //         Container(
+          //           height: scrHeight*0.043,
+          //           width:scrWidth*0.22,
+          //           decoration: BoxDecoration(
+          //               borderRadius: BorderRadius.circular(60),
+          //               color: Color.fromRGBO(0, 0, 0, 0.05)
+          //           ),
+          //           child: Center(child: Text("Month",)),),
+          //         Container(
+          //           height: scrHeight*0.043,
+          //           width:scrWidth*0.22,
+          //           decoration: BoxDecoration(
+          //               borderRadius: BorderRadius.circular(60),
+          //               color: Color.fromRGBO(0, 0, 0, 0.05)
+          //           ),
+          //           child: Center(child: Text("Year",)),),
+          //       ]),
+          // ),
+          // Expanded(
+          //   child: TabBarView(
+          //       controller: _tabControllerrs,
+          //       children: [
+          //         Center(
+          //           child: Text("No Analytics Here",style: TextStyle(
+          //             fontSize: scrWidth*0.03,
+          //             fontWeight: FontWeight.w600,
+          //             fontFamily: 'Urbanist',
+          //             color: Color(0xffA8A8A8)
+          //           ),),
+          //         ),
+          //         Center(
+          //           child: Text("No Analytics Here",style: TextStyle(
+          //               fontSize: scrWidth*0.03,
+          //               fontWeight: FontWeight.w600,
+          //               fontFamily: 'Urbanist',
+          //               color: Color(0xffA8A8A8)
+          //           ),),
+          //         ),
+          //         Center(
+          //           child: Text("No Analytics Here",style: TextStyle(
+          //               fontSize: scrWidth*0.03,
+          //               fontWeight: FontWeight.w600,
+          //               fontFamily: 'Urbanist',
+          //               color: Color(0xffA8A8A8)
+          //           ),),
+          //         ),
+          //         Center(
+          //           child: Text("No Analytics Here",style: TextStyle(
+          //               fontSize: scrWidth*0.03,
+          //               fontWeight: FontWeight.w600,
+          //               fontFamily: 'Urbanist',
+          //               color: Color(0xffA8A8A8)
+          //           ),),
+          //         ),                ]
+          //   ),
+          // ),
         ],
       )
           :SingleChildScrollView(
@@ -773,91 +772,90 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
                       ],
                     ),
 
-                    Padding(
-                      padding:  EdgeInsets.only(right: scrWidth*0.7,top: scrHeight*0.013),
-                      child: Text("Analytics",style: TextStyle(
-                          fontSize: scrWidth*0.04,
-                          color: Colors.black,
-                          fontFamily: 'Urbanist',
-                          fontWeight: FontWeight.w500),),
-                    ),
+                    // Padding(
+                    //   padding:  EdgeInsets.only(right: scrWidth*0.7,top: scrHeight*0.013),
+                    //   child: Text("Analytics",style: TextStyle(
+                    //       fontSize: scrWidth*0.04,
+                    //       color: Colors.black,
+                    //       fontFamily: 'Urbanist',
+                    //       fontWeight: FontWeight.w500),),
+                    // ),
                   ],
                 ),
 
 
               ],
             ),
-            SizedBox(height: scrHeight*0.025,),
-            Padding(
-              padding:  EdgeInsets.only(left: scrWidth*0.05,right: scrWidth*0.05),
-              child: TabBar(
-                  labelPadding: EdgeInsets.only(left: scrWidth*0.023,right: scrWidth*0.019),
-                  unselectedLabelStyle: TextStyle(
-                      fontFamily: 'Poppins',fontSize: scrWidth*0.039,fontWeight: FontWeight.w400
-                  ),
-                  unselectedLabelColor: Color.fromRGBO(0, 0, 0, 0.3),
-                  indicatorSize: TabBarIndicatorSize.label,
-                  labelColor: Colors.white,
-                  labelStyle: TextStyle(
-                      fontFamily: 'Poppins',fontSize: scrWidth*0.039,fontWeight: FontWeight.w400
-                  ),
-                  indicator: BoxDecoration(
-                      borderRadius: BorderRadius.circular(60),
-                      color: primarycolor
-                  ),
-                  isScrollable: true,
-                  controller: _tabController,
-                  tabs: [
-                    Container(
-                      height: scrHeight*0.043,
-                      width:scrWidth*0.22,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(60),
-                          color: Color.fromRGBO(0, 0, 0, 0.05)
-                      ),
-                      child: Center(child: Text("Day",)),),
-                    Container(
-                      height: scrHeight*0.043,
-                      width:scrWidth*0.22,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(60),
-
-                          color: Color.fromRGBO(0, 0, 0, 0.05)
-                      ),
-                      child: Center(child: Text("Week",)),),
-                    Container(
-                      height: scrHeight*0.043,
-                      width:scrWidth*0.22,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(60),
-                          color: Color.fromRGBO(0, 0, 0, 0.05)
-                      ),
-                      child: Center(child: Text("Month",)),),
-                    Container(
-                      height: scrHeight*0.043,
-                      width:scrWidth*0.22,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(60),
-                          color: Color.fromRGBO(0, 0, 0, 0.05)
-                      ),
-                      child: Center(child: Text("Year",)),),
-                  ]),
-            ),
-            SizedBox(height: scrHeight*0.02,),
-            SizedBox(
-              height: scrHeight*0.3,
-              child: TabBarView(
-                  controller: _tabController,
-                  children: [
-
-                    Container(),
-                    Container(),
-                    Padding(
-                      padding:  EdgeInsets.only(left: scrWidth*0.04,right: scrWidth*0.04),
-                      child: Flchartpage(),),
-                    Container(),
-                  ]),
-            ),
+            // Padding(
+            //   padding:  EdgeInsets.only(left: scrWidth*0.05,right: scrWidth*0.05),
+            //   child: TabBar(
+            //       labelPadding: EdgeInsets.only(left: scrWidth*0.023,right: scrWidth*0.019),
+            //       unselectedLabelStyle: TextStyle(
+            //           fontFamily: 'Poppins',fontSize: scrWidth*0.039,fontWeight: FontWeight.w400
+            //       ),
+            //       unselectedLabelColor: Color.fromRGBO(0, 0, 0, 0.3),
+            //       indicatorSize: TabBarIndicatorSize.label,
+            //       labelColor: Colors.white,
+            //       labelStyle: TextStyle(
+            //           fontFamily: 'Poppins',fontSize: scrWidth*0.039,fontWeight: FontWeight.w400
+            //       ),
+            //       indicator: BoxDecoration(
+            //           borderRadius: BorderRadius.circular(60),
+            //           color: primarycolor
+            //       ),
+            //       isScrollable: true,
+            //       controller: _tabController,
+            //       tabs: [
+            //         Container(
+            //           height: scrHeight*0.043,
+            //           width:scrWidth*0.22,
+            //           decoration: BoxDecoration(
+            //               borderRadius: BorderRadius.circular(60),
+            //               color: Color.fromRGBO(0, 0, 0, 0.05)
+            //           ),
+            //           child: Center(child: Text("Day",)),),
+            //         Container(
+            //           height: scrHeight*0.043,
+            //           width:scrWidth*0.22,
+            //           decoration: BoxDecoration(
+            //               borderRadius: BorderRadius.circular(60),
+            //
+            //               color: Color.fromRGBO(0, 0, 0, 0.05)
+            //           ),
+            //           child: Center(child: Text("Week",)),),
+            //         Container(
+            //           height: scrHeight*0.043,
+            //           width:scrWidth*0.22,
+            //           decoration: BoxDecoration(
+            //               borderRadius: BorderRadius.circular(60),
+            //               color: Color.fromRGBO(0, 0, 0, 0.05)
+            //           ),
+            //           child: Center(child: Text("Month",)),),
+            //         Container(
+            //           height: scrHeight*0.043,
+            //           width:scrWidth*0.22,
+            //           decoration: BoxDecoration(
+            //               borderRadius: BorderRadius.circular(60),
+            //               color: Color.fromRGBO(0, 0, 0, 0.05)
+            //           ),
+            //           child: Center(child: Text("Year",)),),
+            //       ]),
+            // ),
+            // SizedBox(height: scrHeight*0.02,),
+            // SizedBox(
+            //   height: scrHeight*0.3,
+            //   child: TabBarView(
+            //       controller: _tabController,
+            //       children: [
+            //
+            //         Container(),
+            //         Container(),
+            //         Padding(
+            //           padding:  EdgeInsets.only(left: scrWidth*0.04,right: scrWidth*0.04),
+            //           child: Flchartpage(),),
+            //         Container(),
+            //       ]),
+            // ),
 
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -891,8 +889,10 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
               ],
             ),
             ListView.separated(
+              itemCount: widget.charity.payments!.length,
                 shrinkWrap: true,
                 itemBuilder: (context,index){
+                final datas=widget.charity.payments![index];
                   return Padding(
                     padding:  EdgeInsets.only(left: scrWidth*0.05,right: scrWidth*0.05),
                     child: Container(
@@ -928,12 +928,12 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
                               SizedBox(height: scrHeight*0.025,),
 
 
-                              Text("Akhil George",style: TextStyle(
+                              Text(datas.userName!,style: TextStyle(
                                 fontSize: scrWidth*0.043,
                                 fontFamily: 'Urbanist',
                                 fontWeight: FontWeight.w600,
                               ),),
-                              Text("Perinthalmanna",style: TextStyle(
+                              Text(datas.location!,style: TextStyle(
                                   fontSize: scrWidth*0.03,
                                   fontFamily: 'Urbanist',
                                   fontWeight: FontWeight.w500,
@@ -951,7 +951,7 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
                           ),
                           SizedBox(width: scrWidth*0.24,),
 
-                          Text("₹1,500",style: TextStyle(
+                          Text(datas.amount!.toString(),style: TextStyle(
                               fontSize: scrWidth*0.05,
                               fontFamily: 'Urbanist',
                               fontWeight: FontWeight.w700,
@@ -966,7 +966,6 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
                 separatorBuilder: (context, index) => SizedBox(
                   height: scrHeight*0.015,
                 ),
-                itemCount: 3
             ),
             SizedBox(height: scrHeight*0.04,),
             //         // Text("the uhdufhn wneufhwufhn  eijwfhefuhwef uefbwuefburbfurfucgeugfrgferugfur",overflow: TextOverflow.ellipsis,maxLines: 1,softWrap: false,)

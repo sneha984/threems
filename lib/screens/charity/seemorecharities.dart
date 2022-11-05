@@ -13,6 +13,7 @@ import '../../model/charitymodel.dart';
 import '../../utils/themes.dart';
 import '../splash_screen.dart';
 import 'basic_details.dart';
+import 'donatenowpage.dart';
 import 'fundraisingdashboard.dart';
 
 class SeeMoreCharities extends StatefulWidget {
@@ -25,49 +26,221 @@ class SeeMoreCharities extends StatefulWidget {
 class _SeeMoreCharitiesState extends State<SeeMoreCharities>
     with TickerProviderStateMixin {
   late TabController _tabController;
-  List<CharityModel> charityDetailsList1 = [];
-  List<CharityModel> charityDetailsList2 = [];
-  List<CharityModel> charityDetailsList3 = [];
-  List<CharityModel> charityDetailsList4 = [];
+  List<Widget> tabs=[];
+  List<Widget> tabView=[];
+  Map<String,dynamic> causes={};
+  Map<String,dynamic> charityLengthMaps={};
+  List<String> causeDetails=[];
+  getdropdowns(){
+    FirebaseFirestore.instance.collection('dropdown').snapshots().listen((event) {
+      causeDetails=[];
+      tabs=[];
+      tabView=[];
+      int i=0;
+      _tabController = TabController(length: event.docs.length, vsync: this);
+      for(DocumentSnapshot <Map<String,dynamic>> doc in event.docs){
+        causes[doc.get('value')]=doc.data();
+        causeDetails.add(doc.get('value'));
+        tabView.add(StreamBuilder<QuerySnapshot<Map<String,dynamic>>>(
+            stream: FirebaseFirestore
+                .instance
+                .collection('charity')
+                .where('userId',isEqualTo: currentuser!.userId)
+                .where('cause' ,isEqualTo: doc.get('causeId')).snapshots(),
+            builder: (context,snapshot){
+              List<CharityModel> charityList=[];
+              if(snapshot.data==null){
+                return Center(child: Text("nkfnceknfe"),);
+              }
+              for(DocumentSnapshot<Map<String,dynamic>> doc in snapshot.data!.docs){
+                charityList.add(CharityModel.fromJson(doc.data()!));
+              }
+              charityLengthMaps[doc.get('value')]=charityList.length;
+              return ListView.separated(
+                itemCount: charityList.length,
+                shrinkWrap: true,
+                scrollDirection: Axis.vertical,
+                physics: BouncingScrollPhysics(),
+                itemBuilder: (context, index) {
+                  final charity=charityList[index];
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => FundRaisingDashboard(charity: charity,)));
+                    },
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: scrWidth * 0.05,
+                        ),
+                        Container(
+                          height: scrHeight * 0.135,
+                          width: scrWidth * 0.285,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30),
+                              image: DecorationImage(
+                                  image: NetworkImage(charity.image!),
+                                  fit: BoxFit.fill)),
+                        ),
+                        SizedBox(
+                          width: scrWidth * 0.05,
+                        ),
+                        Column(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: scrWidth*0.6,
+                              child: Text(charity.charityDetailes.toString(),
+                                  maxLines: 5,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                      fontSize: scrWidth * 0.036,
+                                      fontFamily: 'Urbanist',
+                                      fontWeight: FontWeight.w600)),
+                            ),
+                            SizedBox(
+                              height: scrHeight * 0.02,
+                            ),
+                            Row(
+                              children: [
+                                Text("0000000",
+                                  style: TextStyle(
+                                      fontSize: scrWidth * 0.039,
+                                      color: primarycolor,
+                                      fontFamily: 'Urbanist',
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                Text("/",
+                                  style: TextStyle(
+                                      fontSize: scrWidth * 0.039,
+                                      color: primarycolor,
+                                      fontFamily: 'Urbanist',
+                                      fontWeight: FontWeight.w600),
+                                ),
+
+                                Text(
+                                  currencyConvert
+                                      .format(charity.valueAmount)
+                                      .toString(),
+                                  style: TextStyle(
+                                      fontSize: scrWidth * 0.039,
+                                      color: primarycolor,
+                                      fontFamily: 'Urbanist',
+                                      fontWeight: FontWeight.w600),
+                                ),
 
 
-  getCharity() {
-    print("test ${currentuser!.userId}");
-    FirebaseFirestore.instance
-        .collection('charity')
-        .where('userId', isEqualTo: currentuser!.userId)
-        .snapshots()
-        .listen((event) {
-          charityDetailsList1=[];
-          charityDetailsList2=[];
-          charityDetailsList3=[];
-          charityDetailsList4=[];
+                              ],
+                            ),
+                            SizedBox(height: scrHeight*0.02,),
+                          ],
+                        )
+                      ],
+                    ),
+                  );
+                },
+                separatorBuilder: (BuildContext context, int index) {
+                  return SizedBox(
+                    height: scrHeight * 0.025,
+                  );
+                },
+              );
+            }));
+        tabs.add(
+            Tab(
+              child: Container(
+                height: scrHeight*0.038,
+                width: scrWidth*0.3,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(17.5),
+                    border: Border.all(color: Color.fromRGBO(0, 0, 0, 0.06), width: scrWidth*0.003)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                     SizedBox(width: scrWidth*0.02,),
+                    Text(doc.get('value')),
+                    // SizedBox(width: scrWidth*0.025,),
+                    Padding(
+                      padding:  EdgeInsets.only(bottom: scrHeight*0.0035,top: scrHeight*0.0035,right: 5),
+                      child: CircleAvatar(
+                        radius: 11,
+                        backgroundColor:(_tabController.index==i)? Colors.white:const Color(0xffD4D4D4),
+                        child: StreamBuilder<QuerySnapshot>(
+                            stream: FirebaseFirestore.instance
+                                .collection('charity')
+                                .where('userId',isEqualTo :currentuser!.userId)
+                                .where('cause',isEqualTo:doc.get('causeId'))
+                                .snapshots(),
+                            builder: (context, snapshot) {
+                              if(!snapshot.hasData){
+                                return CircularProgressIndicator();
+                              }
+                              return Text(snapshot.data!.docs.length.toString() ,style: tababrnumberFont);
+                            }
+                        ),
 
-          for (DocumentSnapshot<Map<String, dynamic>> doc in event.docs) {
-        // if(doc['cause']==1){
-        //   charityDetailsList1.add(CharityModel.fromJson(doc!.data()!));
-        //
-        // }else if(doc['cause']==2){
-        //
-        // }
-        doc['cause'] == 0
-            ? charityDetailsList1.add(CharityModel.fromJson(doc!.data()!))
-            : doc['cause'] == 1
-                ? charityDetailsList2.add(CharityModel.fromJson(doc!.data()!))
-                : doc['cause']==2?charityDetailsList3.add(CharityModel.fromJson(doc!.data()!)):
-                        charityDetailsList4.add(CharityModel.fromJson(doc!.data()!));
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            )
+        );
+        i++;
       }
-      print(charityDetailsList1.length);
-      print(charityDetailsList2.length);
-      print(charityDetailsList3.length);
-      print(charityDetailsList4.length);
+      if(mounted){
+        setState(() {
 
-
-          if (mounted) {
-        setState(() {});
+        });
       }
     });
   }
+  // List<CharityModel> charityDetailsList1 = [];
+  // List<CharityModel> charityDetailsList2 = [];
+  // List<CharityModel> charityDetailsList3 = [];
+  // List<CharityModel> charityDetailsList4 = [];
+
+
+  // getCharity() {
+  //   print("test ${currentuser!.userId}");
+  //   FirebaseFirestore.instance
+  //       .collection('charity')
+  //       .where('userId', isEqualTo: currentuser!.userId)
+  //       .snapshots()
+  //       .listen((event) {
+  //         charityDetailsList1=[];
+  //         charityDetailsList2=[];
+  //         charityDetailsList3=[];
+  //         charityDetailsList4=[];
+  //         for (DocumentSnapshot<Map<String, dynamic>> doc in event.docs) {
+  //       // if(doc['cause']==1){
+  //       //   charityDetailsList1.add(CharityModel.fromJson(doc!.data()!));
+  //       //
+  //       // }else if(doc['cause']==2){
+  //       //
+  //       // }
+  //       doc['cause'] == 0
+  //           ? charityDetailsList1.add(CharityModel.fromJson(doc!.data()!))
+  //           : doc['cause'] == 1
+  //               ? charityDetailsList2.add(CharityModel.fromJson(doc!.data()!))
+  //               : doc['cause']==2?charityDetailsList3.add(CharityModel.fromJson(doc!.data()!)):
+  //                       charityDetailsList4.add(CharityModel.fromJson(doc!.data()!));
+  //     }
+  //     print(charityDetailsList1.length);
+  //     print(charityDetailsList2.length);
+  //     print(charityDetailsList3.length);
+  //     print(charityDetailsList4.length);
+  //
+  //
+  //         if (mounted) {
+  //       setState(() {});
+  //     }
+  //   });
+  // }
 
   var currencyConvert = NumberFormat.currency(
     locale: 'HI',
@@ -76,10 +249,10 @@ class _SeeMoreCharitiesState extends State<SeeMoreCharities>
 
   @override
   void initState() {
-    getCharity();
-    _tabController = TabController(length: 4, vsync: this);
+    // getCharity();
+    _tabController = TabController(length: 0, vsync: this);
     _tabController.addListener(_handleTabSelection);
-
+    getdropdowns();
     super.initState();
   }
 
@@ -248,7 +421,7 @@ class _SeeMoreCharitiesState extends State<SeeMoreCharities>
               ),
               Expanded(
                 child: Container(
-                  height: scrHeight * 0.037,
+                  height: scrHeight * 0.039,
                   child: TabBar(
                       isScrollable: true,
                       indicatorWeight: 0.05,
@@ -273,182 +446,183 @@ class _SeeMoreCharitiesState extends State<SeeMoreCharities>
                       labelPadding: EdgeInsets.only(
                           left: scrWidth * 0.023, right: scrWidth * 0.019),
                       //  indicatorWeight: 1,
-                      tabs: [
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _tabController.index = 0;
-                            });
-                          },
-                          child: Tab(
-                            child: Container(
-                              height: scrHeight * 0.038,
-                              width: scrWidth * 0.27,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(17.5),
-                                  border: Border.all(
-                                      color: Color.fromRGBO(0, 0, 0, 0.06),
-                                      width: scrWidth * 0.003)),
-                              child: Row(
-                                children: [
-                                  SizedBox(
-                                    width: scrWidth * 0.03,
-                                  ),
-                                  Text(
-                                    "Medical",
-                                  ),
-                                  SizedBox(
-                                    width: scrWidth * 0.025,
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        bottom: scrHeight * 0.0035,
-                                        top: scrHeight * 0.0035),
-                                    child: CircleAvatar(
-                                      radius: 11,
-                                      child:
-                                          Text(charityDetailsList1.length.toString(), style: tababrnumberFont),
-                                      backgroundColor:
-                                          (_tabController.index == 0)
-                                              ? Colors.white
-                                              : Color(0xffD4D4D4),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _tabController.index = 1;
-                            });
-                          },
-                          child: Tab(
-                            child: Container(
-                              height: scrHeight * 0.038,
-                              width: scrWidth * 0.27,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(17.5),
-                                  border: Border.all(
-                                      color: Color.fromRGBO(0, 0, 0, 0.06),
-                                      width: scrWidth * 0.003)),
-                              child: Row(
-                                children: [
-                                  SizedBox(
-                                    width: scrWidth * 0.02,
-                                  ),
-                                  Text("Education"),
-                                  SizedBox(
-                                    width: scrWidth * 0.004,
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        bottom: scrHeight * 0.0035,
-                                        top: scrHeight * 0.0035),
-                                    child: CircleAvatar(
-                                      radius: 11,
-                                      child: Text(charityDetailsList2.length.toString(), style: tababrnumberFont),
-                                      backgroundColor:
-                                          (_tabController.index == 1)
-                                              ? Colors.white
-                                              : Color(0xffD4D4D4),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _tabController.index = 2;
-                            });
-                          },
-                          child: Tab(
-                            child: Container(
-                              height: scrHeight * 0.038,
-                              width: scrWidth * 0.27,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(17.5),
-                                  border: Border.all(
-                                      color: Color.fromRGBO(0, 0, 0, 0.06),
-                                      width: scrWidth * 0.003)),
-                              child: Row(
-                                children: [
-                                  SizedBox(
-                                    width: scrWidth * 0.03,
-                                  ),
-                                  Text("Disaster"),
-                                  SizedBox(
-                                    width: scrWidth * 0.02,
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        bottom: scrHeight * 0.0035,
-                                        top: scrHeight * 0.0035),
-                                    child: CircleAvatar(
-                                      radius: 11,
-                                      child:
-                                          Text(charityDetailsList3.length.toString(), style: tababrnumberFont),
-                                      backgroundColor:
-                                          (_tabController.index == 2)
-                                              ? Colors.white
-                                              : Color(0xffD4D4D4),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _tabController.index = 3;
-                            });
-                          },
-                          child: Tab(
-                            child: Container(
-                              height: scrHeight * 0.038,
-                              width: scrWidth * 0.27,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(17.5),
-                                  border: Border.all(
-                                      color: Color.fromRGBO(0, 0, 0, 0.06),
-                                      width: scrWidth * 0.003)),
-                              child: Row(
-                                children: [
-                                  SizedBox(
-                                    width: scrWidth * 0.05,
-                                  ),
-                                  Text("Others"),
-                                  SizedBox(
-                                    width: scrWidth * 0.025,
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        bottom: scrHeight * 0.0035,
-                                        top: scrHeight * 0.0035),
-                                    child: CircleAvatar(
-                                      radius: 11,
-                                      child:
-                                      Text(charityDetailsList4.length.toString(), style: tababrnumberFont),
-                                      backgroundColor:
-                                      (_tabController.index == 3)
-                                          ? Colors.white
-                                          : Color(0xffD4D4D4),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
+                      tabs:tabs,
+                        // GestureDetector(
+                        //   onTap: () {
+                        //     setState(() {
+                        //       _tabController.index = 0;
+                        //     });
+                        //   },
+                        //   child: Tab(
+                        //     child: Container(
+                        //       height: scrHeight * 0.038,
+                        //       width: scrWidth * 0.27,
+                        //       decoration: BoxDecoration(
+                        //           borderRadius: BorderRadius.circular(17.5),
+                        //           border: Border.all(
+                        //               color: Color.fromRGBO(0, 0, 0, 0.06),
+                        //               width: scrWidth * 0.003)),
+                        //       child: Row(
+                        //         children: [
+                        //           SizedBox(
+                        //             width: scrWidth * 0.03,
+                        //           ),
+                        //           Text(
+                        //             "Medical",
+                        //           ),
+                        //           SizedBox(
+                        //             width: scrWidth * 0.025,
+                        //           ),
+                        //           Padding(
+                        //             padding: EdgeInsets.only(
+                        //                 bottom: scrHeight * 0.0035,
+                        //                 top: scrHeight * 0.0035),
+                        //             child: CircleAvatar(
+                        //               radius: 11,
+                        //               child:
+                        //                   Text(charityDetailsList1.length.toString(), style: tababrnumberFont),
+                        //               backgroundColor:
+                        //                   (_tabController.index == 0)
+                        //                       ? Colors.white
+                        //                       : Color(0xffD4D4D4),
+                        //             ),
+                        //           )
+                        //         ],
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
+                        // GestureDetector(
+                        //   onTap: () {
+                        //     setState(() {
+                        //       _tabController.index = 1;
+                        //     });
+                        //   },
+                        //   child: Tab(
+                        //     child: Container(
+                        //       height: scrHeight * 0.038,
+                        //       width: scrWidth * 0.27,
+                        //       decoration: BoxDecoration(
+                        //           borderRadius: BorderRadius.circular(17.5),
+                        //           border: Border.all(
+                        //               color: Color.fromRGBO(0, 0, 0, 0.06),
+                        //               width: scrWidth * 0.003)),
+                        //       child: Row(
+                        //         children: [
+                        //           SizedBox(
+                        //             width: scrWidth * 0.02,
+                        //           ),
+                        //           Text("Education"),
+                        //           SizedBox(
+                        //             width: scrWidth * 0.004,
+                        //           ),
+                        //           Padding(
+                        //             padding: EdgeInsets.only(
+                        //                 bottom: scrHeight * 0.0035,
+                        //                 top: scrHeight * 0.0035),
+                        //             child: CircleAvatar(
+                        //               radius: 11,
+                        //               child: Text(charityDetailsList2.length.toString(), style: tababrnumberFont),
+                        //               backgroundColor:
+                        //                   (_tabController.index == 1)
+                        //                       ? Colors.white
+                        //                       : Color(0xffD4D4D4),
+                        //             ),
+                        //           )
+                        //         ],
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
+                        // GestureDetector(
+                        //   onTap: () {
+                        //     setState(() {
+                        //       _tabController.index = 2;
+                        //     });
+                        //   },
+                        //   child: Tab(
+                        //     child: Container(
+                        //       height: scrHeight * 0.038,
+                        //       width: scrWidth * 0.27,
+                        //       decoration: BoxDecoration(
+                        //           borderRadius: BorderRadius.circular(17.5),
+                        //           border: Border.all(
+                        //               color: Color.fromRGBO(0, 0, 0, 0.06),
+                        //               width: scrWidth * 0.003)),
+                        //       child: Row(
+                        //         children: [
+                        //           SizedBox(
+                        //             width: scrWidth * 0.03,
+                        //           ),
+                        //           Text("Disaster"),
+                        //           SizedBox(
+                        //             width: scrWidth * 0.02,
+                        //           ),
+                        //           Padding(
+                        //             padding: EdgeInsets.only(
+                        //                 bottom: scrHeight * 0.0035,
+                        //                 top: scrHeight * 0.0035),
+                        //             child: CircleAvatar(
+                        //               radius: 11,
+                        //               child:
+                        //                   Text(charityDetailsList3.length.toString(), style: tababrnumberFont),
+                        //               backgroundColor:
+                        //                   (_tabController.index == 2)
+                        //                       ? Colors.white
+                        //                       : Color(0xffD4D4D4),
+                        //             ),
+                        //           )
+                        //         ],
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
+                        // GestureDetector(
+                        //   onTap: () {
+                        //     setState(() {
+                        //       _tabController.index = 3;
+                        //     });
+                        //   },
+                        //   child: Tab(
+                        //     child: Container(
+                        //       height: scrHeight * 0.038,
+                        //       width: scrWidth * 0.27,
+                        //       decoration: BoxDecoration(
+                        //           borderRadius: BorderRadius.circular(17.5),
+                        //           border: Border.all(
+                        //               color: Color.fromRGBO(0, 0, 0, 0.06),
+                        //               width: scrWidth * 0.003)),
+                        //       child: Row(
+                        //         children: [
+                        //           SizedBox(
+                        //             width: scrWidth * 0.05,
+                        //           ),
+                        //           Text("Others"),
+                        //           SizedBox(
+                        //             width: scrWidth * 0.025,
+                        //           ),
+                        //           Padding(
+                        //             padding: EdgeInsets.only(
+                        //                 bottom: scrHeight * 0.0035,
+                        //                 top: scrHeight * 0.0035),
+                        //             child: CircleAvatar(
+                        //               radius: 11,
+                        //               child:
+                        //               Text(charityDetailsList4.length.toString(), style: tababrnumberFont),
+                        //               backgroundColor:
+                        //               (_tabController.index == 3)
+                        //                   ? Colors.white
+                        //                   : Color(0xffD4D4D4),
+                        //             ),
+                        //           )
+                        //         ],
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
 
-                      ]),
+
+                  ),
                 ),
               ),
             ],
@@ -459,427 +633,427 @@ class _SeeMoreCharitiesState extends State<SeeMoreCharities>
           Expanded(
             child: TabBarView(
               controller: _tabController,
-              children: [
-                ListView.separated(
-                  itemCount: charityDetailsList1.length,
-                  shrinkWrap: true,
-                  scrollDirection: Axis.vertical,
-                  physics: BouncingScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    final charity=charityDetailsList1[index];
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => FundRaisingDashboard(charity: charity,)));
-                      },
-                      child: Row(
-                        children: [
-                          SizedBox(
-                            width: scrWidth * 0.05,
-                          ),
-                          Container(
-                            height: scrHeight * 0.135,
-                            width: scrWidth * 0.285,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(30),
-                                image: DecorationImage(
-                                    image: NetworkImage(charity.image!),
-                                    fit: BoxFit.fill)),
-                          ),
-                          SizedBox(
-                            width: scrWidth * 0.05,
-                          ),
-                          Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                width: scrWidth*0.6,
-                                child: Text(charity.charityDetailes.toString(),
-                                    maxLines: 5,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        fontSize: scrWidth * 0.036,
-                                        fontFamily: 'Urbanist',
-                                        fontWeight: FontWeight.w600)),
-                              ),
-                              SizedBox(
-                                height: scrHeight * 0.02,
-                              ),
-                              // Container(
-                              //     height: scrHeight * 0.004,
-                              //     width: scrWidth * 0.55,
-                              //     child: LinearPercentIndicator(
-                              //       animation: true,
-                              //       animationDuration: 1000,
-                              //       percent: _items[index].value,
-                              //       backgroundColor: Color(0xffE9F6FF),
-                              //       progressColor: Color(0xff343434),
-                              //     )),
+              children: tabView,
+                // ListView.separated(
+                //   itemCount: charityDetailsList1.length,
+                //   shrinkWrap: true,
+                //   scrollDirection: Axis.vertical,
+                //   physics: BouncingScrollPhysics(),
+                //   itemBuilder: (context, index) {
+                //     final charity=charityDetailsList1[index];
+                //     return GestureDetector(
+                //       onTap: () {
+                //         Navigator.push(
+                //             context,
+                //             MaterialPageRoute(
+                //                 builder: (context) => FundRaisingDashboard(charity: charity,)));
+                //       },
+                //       child: Row(
+                //         children: [
+                //           SizedBox(
+                //             width: scrWidth * 0.05,
+                //           ),
+                //           Container(
+                //             height: scrHeight * 0.135,
+                //             width: scrWidth * 0.285,
+                //             decoration: BoxDecoration(
+                //                 borderRadius: BorderRadius.circular(30),
+                //                 image: DecorationImage(
+                //                     image: NetworkImage(charity.image!),
+                //                     fit: BoxFit.fill)),
+                //           ),
+                //           SizedBox(
+                //             width: scrWidth * 0.05,
+                //           ),
+                //           Column(
+                //             mainAxisSize: MainAxisSize.max,
+                //             mainAxisAlignment: MainAxisAlignment.start,
+                //             crossAxisAlignment: CrossAxisAlignment.start,
+                //             children: [
+                //               Container(
+                //                 width: scrWidth*0.6,
+                //                 child: Text(charity.charityDetailes.toString(),
+                //                     maxLines: 5,
+                //                     overflow: TextOverflow.ellipsis,
+                //                     style: TextStyle(
+                //                         fontSize: scrWidth * 0.036,
+                //                         fontFamily: 'Urbanist',
+                //                         fontWeight: FontWeight.w600)),
+                //               ),
+                //               SizedBox(
+                //                 height: scrHeight * 0.02,
+                //               ),
+                //               // Container(
+                //               //     height: scrHeight * 0.004,
+                //               //     width: scrWidth * 0.55,
+                //               //     child: LinearPercentIndicator(
+                //               //       animation: true,
+                //               //       animationDuration: 1000,
+                //               //       percent: _items[index].value,
+                //               //       backgroundColor: Color(0xffE9F6FF),
+                //               //       progressColor: Color(0xff343434),
+                //               //     )),
+                //
+                //               Row(
+                //                 children: [
+                //                   Text("0000000",
+                //                     style: TextStyle(
+                //                         fontSize: scrWidth * 0.039,
+                //                         color: primarycolor,
+                //                         fontFamily: 'Urbanist',
+                //                         fontWeight: FontWeight.w600),
+                //                   ),
+                //                   Text("/",
+                //                     style: TextStyle(
+                //                         fontSize: scrWidth * 0.039,
+                //                         color: primarycolor,
+                //                         fontFamily: 'Urbanist',
+                //                         fontWeight: FontWeight.w600),
+                //                   ),
+                //
+                //                   Text(
+                //                     currencyConvert
+                //                         .format(charity.valueAmount)
+                //                         .toString(),
+                //                     style: TextStyle(
+                //                         fontSize: scrWidth * 0.039,
+                //                         color: primarycolor,
+                //                         fontFamily: 'Urbanist',
+                //                         fontWeight: FontWeight.w600),
+                //                   ),
+                //
+                //
+                //                 ],
+                //               ),
+                //               SizedBox(height: scrHeight*0.02,),
+                //             ],
+                //           )
+                //         ],
+                //       ),
+                //     );
+                //   },
+                //   separatorBuilder: (BuildContext context, int index) {
+                //     return SizedBox(
+                //       height: scrHeight * 0.025,
+                //     );
+                //   },
+                // ),
+                // ListView.separated(
+                //   itemCount: charityDetailsList2.length,
+                //   shrinkWrap: true,
+                //   scrollDirection: Axis.vertical,
+                //   physics: BouncingScrollPhysics(),
+                //   itemBuilder: (context, index) {
+                //     final charity=charityDetailsList2[index];
+                //     return GestureDetector(
+                //       onTap: () {
+                //         Navigator.push(
+                //             context,
+                //             MaterialPageRoute(
+                //                 builder: (context) => FundRaisingDashboard(charity: charity,)));
+                //       },
+                //       child: Row(
+                //         children: [
+                //           SizedBox(
+                //             width: scrWidth * 0.05,
+                //           ),
+                //           Container(
+                //             height: scrHeight * 0.135,
+                //             width: scrWidth * 0.285,
+                //             decoration: BoxDecoration(
+                //                 borderRadius: BorderRadius.circular(30),
+                //                 image: DecorationImage(
+                //                     image: NetworkImage(charity.image!),
+                //                     fit: BoxFit.fill)),
+                //           ),
+                //           SizedBox(
+                //             width: scrWidth * 0.05,
+                //           ),
+                //           Column(
+                //             mainAxisSize: MainAxisSize.max,
+                //             mainAxisAlignment: MainAxisAlignment.start,
+                //             crossAxisAlignment: CrossAxisAlignment.start,
+                //             children: [
+                //               Container(
+                //                 width:scrWidth*0.6,
+                //                 child: Text(charity.charityDetailes!,
+                //                     maxLines: 5,
+                //                     overflow: TextOverflow.ellipsis,
+                //                     style: TextStyle(
+                //                         fontSize: scrWidth * 0.036,
+                //                         fontFamily: 'Urbanist',
+                //                         fontWeight: FontWeight.w600)),
+                //               ),
+                //               SizedBox(
+                //                 height: scrHeight * 0.02,
+                //               ),
+                //               // Container(
+                //               //     height: scrHeight * 0.004,
+                //               //     width: scrWidth * 0.55,
+                //               //     child: LinearPercentIndicator(
+                //               //       animation: true,
+                //               //       animationDuration: 1000,
+                //               //       percent: _items[index].value,
+                //               //       backgroundColor: Color(0xffE9F6FF),
+                //               //       progressColor: Color(0xff343434),
+                //               //     )),
+                //
+                //               Row(
+                //                 children: [
+                //                   Text("0000000",
+                //                     style: TextStyle(
+                //                         fontSize: scrWidth * 0.039,
+                //                         color: primarycolor,
+                //                         fontFamily: 'Urbanist',
+                //                         fontWeight: FontWeight.w600),
+                //                   ),
+                //                   Text("/",
+                //                     style: TextStyle(
+                //                         fontSize: scrWidth * 0.039,
+                //                         color: primarycolor,
+                //                         fontFamily: 'Urbanist',
+                //                         fontWeight: FontWeight.w600),
+                //                   ),
+                //
+                //                   Text(
+                //                     currencyConvert
+                //                         .format(charity.valueAmount)
+                //                         .toString(),
+                //                     style: TextStyle(
+                //                         fontSize: scrWidth * 0.039,
+                //                         color: primarycolor,
+                //                         fontFamily: 'Urbanist',
+                //                         fontWeight: FontWeight.w600),
+                //                   ),
+                //
+                //
+                //                 ],
+                //               ),
+                //               SizedBox(height: scrHeight*0.02,),
+                //
+                //             ],
+                //           )
+                //         ],
+                //       ),
+                //     );
+                //   },
+                //   separatorBuilder: (BuildContext context, int index) {
+                //     return SizedBox(
+                //       height: scrHeight * 0.025,
+                //     );
+                //   },
+                // ),
+                // ListView.separated(
+                //   itemCount: charityDetailsList3.length,
+                //   shrinkWrap: true,
+                //   scrollDirection: Axis.vertical,
+                //   physics: BouncingScrollPhysics(),
+                //   itemBuilder: (context, index) {
+                //     final charity=charityDetailsList3[index];
+                //     return GestureDetector(
+                //       onTap: () {
+                //         Navigator.push(
+                //             context,
+                //             MaterialPageRoute(
+                //                 builder: (context) => FundRaisingDashboard(charity: charity,)));
+                //       },
+                //       child: Row(
+                //         children: [
+                //           SizedBox(
+                //             width: scrWidth * 0.05,
+                //           ),
+                //           Container(
+                //             height: scrHeight * 0.135,
+                //             width: scrWidth * 0.285,
+                //             decoration: BoxDecoration(
+                //                 borderRadius: BorderRadius.circular(30),
+                //                 image: DecorationImage(
+                //                     image: NetworkImage(charity.image!),
+                //                     fit: BoxFit.fill)),
+                //           ),
+                //           SizedBox(
+                //             width: scrWidth * 0.05,
+                //           ),
+                //           Column(
+                //             mainAxisSize: MainAxisSize.max,
+                //             mainAxisAlignment: MainAxisAlignment.start,
+                //             crossAxisAlignment: CrossAxisAlignment.start,
+                //             children: [
+                //               Container(
+                //                 width: scrWidth*0.6,
+                //                 child: Text(charity.charityDetailes!,
+                //                     maxLines: 5,
+                //                     overflow: TextOverflow.ellipsis,
+                //                     style: TextStyle(
+                //                         fontSize: scrWidth * 0.036,
+                //                         fontFamily: 'Urbanist',
+                //                         fontWeight: FontWeight.w600)),
+                //               ),
+                //               SizedBox(
+                //                 height: scrHeight * 0.02,
+                //               ),
+                //               // Container(
+                //               //     height: scrHeight * 0.004,
+                //               //     width: scrWidth * 0.55,
+                //               //     child: LinearPercentIndicator(
+                //               //       animation: true,
+                //               //       animationDuration: 1000,
+                //               //       percent: _items[index].value,
+                //               //       backgroundColor: Color(0xffE9F6FF),
+                //               //       progressColor: Color(0xff343434),
+                //               //     )),
+                //
+                //               Row(
+                //                 children: [
+                //                   Text("0000000",
+                //                     style: TextStyle(
+                //                         fontSize: scrWidth * 0.039,
+                //                         color: primarycolor,
+                //                         fontFamily: 'Urbanist',
+                //                         fontWeight: FontWeight.w600),
+                //                   ),
+                //                   Text("/",
+                //                     style: TextStyle(
+                //                         fontSize: scrWidth * 0.039,
+                //                         color: primarycolor,
+                //                         fontFamily: 'Urbanist',
+                //                         fontWeight: FontWeight.w600),
+                //                   ),
+                //
+                //                   Text(
+                //                     currencyConvert
+                //                         .format(charity.valueAmount)
+                //                         .toString(),
+                //                     style: TextStyle(
+                //                         fontSize: scrWidth * 0.039,
+                //                         color: primarycolor,
+                //                         fontFamily: 'Urbanist',
+                //                         fontWeight: FontWeight.w600),
+                //                   ),
+                //
+                //
+                //                 ],
+                //               ),
+                //               SizedBox(height: scrHeight*0.02,),
+                //
+                //             ],
+                //           )
+                //         ],
+                //       ),
+                //     );
+                //   },
+                //   separatorBuilder: (BuildContext context, int index) {
+                //     return SizedBox(
+                //       height: scrHeight * 0.025,
+                //     );
+                //   },
+                // ),
+                // ListView.separated(
+                //   itemCount: charityDetailsList4.length,
+                //   shrinkWrap: true,
+                //   scrollDirection: Axis.vertical,
+                //   physics: BouncingScrollPhysics(),
+                //   itemBuilder: (context, index) {
+                //     final charity=charityDetailsList4[index];
+                //     return GestureDetector(
+                //       onTap: () {
+                //         Navigator.push(
+                //             context,
+                //             MaterialPageRoute(
+                //                 builder: (context) => FundRaisingDashboard(charity: charity,)));
+                //       },
+                //       child: Row(
+                //         children: [
+                //           SizedBox(
+                //             width: scrWidth * 0.05,
+                //           ),
+                //           Container(
+                //             height: scrHeight * 0.135,
+                //             width: scrWidth * 0.285,
+                //             decoration: BoxDecoration(
+                //                 borderRadius: BorderRadius.circular(30),
+                //                 image: DecorationImage(
+                //                     image: NetworkImage(charity.image!),
+                //                     fit: BoxFit.fill)),
+                //           ),
+                //           SizedBox(
+                //             width: scrWidth * 0.05,
+                //           ),
+                //           Column(
+                //             mainAxisSize: MainAxisSize.max,
+                //             mainAxisAlignment: MainAxisAlignment.start,
+                //             crossAxisAlignment: CrossAxisAlignment.start,
+                //             children: [
+                //               Container(
+                //                 width: scrWidth*0.6,
+                //                 child: Text(charity.charityDetailes!,
+                //                     maxLines: 5,
+                //                     overflow: TextOverflow.ellipsis,
+                //                     style: TextStyle(
+                //                         fontSize: scrWidth * 0.036,
+                //                         fontFamily: 'Urbanist',
+                //                         fontWeight: FontWeight.w600)),
+                //               ),
+                //               SizedBox(
+                //                 height: scrHeight * 0.02,
+                //               ),
+                //               // Container(
+                //               //     height: scrHeight * 0.004,
+                //               //     width: scrWidth * 0.55,
+                //               //     child: LinearPercentIndicator(
+                //               //       animation: true,
+                //               //       animationDuration: 1000,
+                //               //       percent: _items[index].value,
+                //               //       backgroundColor: Color(0xffE9F6FF),
+                //               //       progressColor: Color(0xff343434),
+                //               //     )),
+                //
+                //               Row(
+                //                 children: [
+                //                   Text("0000000",
+                //                     style: TextStyle(
+                //                         fontSize: scrWidth * 0.039,
+                //                         color: primarycolor,
+                //                         fontFamily: 'Urbanist',
+                //                         fontWeight: FontWeight.w600),
+                //                   ),
+                //                   Text("/",
+                //                     style: TextStyle(
+                //                         fontSize: scrWidth * 0.039,
+                //                         color: primarycolor,
+                //                         fontFamily: 'Urbanist',
+                //                         fontWeight: FontWeight.w600),
+                //                   ),
+                //
+                //                   Text(
+                //                     currencyConvert
+                //                         .format(charity.valueAmount)
+                //                         .toString(),
+                //                     style: TextStyle(
+                //                         fontSize: scrWidth * 0.039,
+                //                         color: primarycolor,
+                //                         fontFamily: 'Urbanist',
+                //                         fontWeight: FontWeight.w600),
+                //                   ),
+                //
+                //
+                //                 ],
+                //               ),
+                //               SizedBox(height: scrHeight*0.02,),
+                //
+                //             ],
+                //           )
+                //         ],
+                //       ),
+                //     );
+                //   },
+                //   separatorBuilder: (BuildContext context, int index) {
+                //     return SizedBox(
+                //       height: scrHeight * 0.025,
+                //     );
+                //   },
+                // ),
 
-                              Row(
-                                children: [
-                                  Text("0000000",
-                                    style: TextStyle(
-                                        fontSize: scrWidth * 0.039,
-                                        color: primarycolor,
-                                        fontFamily: 'Urbanist',
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                  Text("/",
-                                    style: TextStyle(
-                                        fontSize: scrWidth * 0.039,
-                                        color: primarycolor,
-                                        fontFamily: 'Urbanist',
-                                        fontWeight: FontWeight.w600),
-                                  ),
-
-                                  Text(
-                                    currencyConvert
-                                        .format(charity.valueAmount)
-                                        .toString(),
-                                    style: TextStyle(
-                                        fontSize: scrWidth * 0.039,
-                                        color: primarycolor,
-                                        fontFamily: 'Urbanist',
-                                        fontWeight: FontWeight.w600),
-                                  ),
-
-
-                                ],
-                              ),
-                              SizedBox(height: scrHeight*0.02,),
-                            ],
-                          )
-                        ],
-                      ),
-                    );
-                  },
-                  separatorBuilder: (BuildContext context, int index) {
-                    return SizedBox(
-                      height: scrHeight * 0.025,
-                    );
-                  },
-                ),
-                ListView.separated(
-                  itemCount: charityDetailsList2.length,
-                  shrinkWrap: true,
-                  scrollDirection: Axis.vertical,
-                  physics: BouncingScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    final charity=charityDetailsList2[index];
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => FundRaisingDashboard(charity: charity,)));
-                      },
-                      child: Row(
-                        children: [
-                          SizedBox(
-                            width: scrWidth * 0.05,
-                          ),
-                          Container(
-                            height: scrHeight * 0.135,
-                            width: scrWidth * 0.285,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(30),
-                                image: DecorationImage(
-                                    image: NetworkImage(charity.image!),
-                                    fit: BoxFit.fill)),
-                          ),
-                          SizedBox(
-                            width: scrWidth * 0.05,
-                          ),
-                          Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                width:scrWidth*0.6,
-                                child: Text(charity.charityDetailes!,
-                                    maxLines: 5,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        fontSize: scrWidth * 0.036,
-                                        fontFamily: 'Urbanist',
-                                        fontWeight: FontWeight.w600)),
-                              ),
-                              SizedBox(
-                                height: scrHeight * 0.02,
-                              ),
-                              // Container(
-                              //     height: scrHeight * 0.004,
-                              //     width: scrWidth * 0.55,
-                              //     child: LinearPercentIndicator(
-                              //       animation: true,
-                              //       animationDuration: 1000,
-                              //       percent: _items[index].value,
-                              //       backgroundColor: Color(0xffE9F6FF),
-                              //       progressColor: Color(0xff343434),
-                              //     )),
-
-                              Row(
-                                children: [
-                                  Text("0000000",
-                                    style: TextStyle(
-                                        fontSize: scrWidth * 0.039,
-                                        color: primarycolor,
-                                        fontFamily: 'Urbanist',
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                  Text("/",
-                                    style: TextStyle(
-                                        fontSize: scrWidth * 0.039,
-                                        color: primarycolor,
-                                        fontFamily: 'Urbanist',
-                                        fontWeight: FontWeight.w600),
-                                  ),
-
-                                  Text(
-                                    currencyConvert
-                                        .format(charity.valueAmount)
-                                        .toString(),
-                                    style: TextStyle(
-                                        fontSize: scrWidth * 0.039,
-                                        color: primarycolor,
-                                        fontFamily: 'Urbanist',
-                                        fontWeight: FontWeight.w600),
-                                  ),
-
-
-                                ],
-                              ),
-                              SizedBox(height: scrHeight*0.02,),
-
-                            ],
-                          )
-                        ],
-                      ),
-                    );
-                  },
-                  separatorBuilder: (BuildContext context, int index) {
-                    return SizedBox(
-                      height: scrHeight * 0.025,
-                    );
-                  },
-                ),
-                ListView.separated(
-                  itemCount: charityDetailsList3.length,
-                  shrinkWrap: true,
-                  scrollDirection: Axis.vertical,
-                  physics: BouncingScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    final charity=charityDetailsList3[index];
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => FundRaisingDashboard(charity: charity,)));
-                      },
-                      child: Row(
-                        children: [
-                          SizedBox(
-                            width: scrWidth * 0.05,
-                          ),
-                          Container(
-                            height: scrHeight * 0.135,
-                            width: scrWidth * 0.285,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(30),
-                                image: DecorationImage(
-                                    image: NetworkImage(charity.image!),
-                                    fit: BoxFit.fill)),
-                          ),
-                          SizedBox(
-                            width: scrWidth * 0.05,
-                          ),
-                          Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                width: scrWidth*0.6,
-                                child: Text(charity.charityDetailes!,
-                                    maxLines: 5,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        fontSize: scrWidth * 0.036,
-                                        fontFamily: 'Urbanist',
-                                        fontWeight: FontWeight.w600)),
-                              ),
-                              SizedBox(
-                                height: scrHeight * 0.02,
-                              ),
-                              // Container(
-                              //     height: scrHeight * 0.004,
-                              //     width: scrWidth * 0.55,
-                              //     child: LinearPercentIndicator(
-                              //       animation: true,
-                              //       animationDuration: 1000,
-                              //       percent: _items[index].value,
-                              //       backgroundColor: Color(0xffE9F6FF),
-                              //       progressColor: Color(0xff343434),
-                              //     )),
-
-                              Row(
-                                children: [
-                                  Text("0000000",
-                                    style: TextStyle(
-                                        fontSize: scrWidth * 0.039,
-                                        color: primarycolor,
-                                        fontFamily: 'Urbanist',
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                  Text("/",
-                                    style: TextStyle(
-                                        fontSize: scrWidth * 0.039,
-                                        color: primarycolor,
-                                        fontFamily: 'Urbanist',
-                                        fontWeight: FontWeight.w600),
-                                  ),
-
-                                  Text(
-                                    currencyConvert
-                                        .format(charity.valueAmount)
-                                        .toString(),
-                                    style: TextStyle(
-                                        fontSize: scrWidth * 0.039,
-                                        color: primarycolor,
-                                        fontFamily: 'Urbanist',
-                                        fontWeight: FontWeight.w600),
-                                  ),
-
-
-                                ],
-                              ),
-                              SizedBox(height: scrHeight*0.02,),
-
-                            ],
-                          )
-                        ],
-                      ),
-                    );
-                  },
-                  separatorBuilder: (BuildContext context, int index) {
-                    return SizedBox(
-                      height: scrHeight * 0.025,
-                    );
-                  },
-                ),
-                ListView.separated(
-                  itemCount: charityDetailsList4.length,
-                  shrinkWrap: true,
-                  scrollDirection: Axis.vertical,
-                  physics: BouncingScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    final charity=charityDetailsList4[index];
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => FundRaisingDashboard(charity: charity,)));
-                      },
-                      child: Row(
-                        children: [
-                          SizedBox(
-                            width: scrWidth * 0.05,
-                          ),
-                          Container(
-                            height: scrHeight * 0.135,
-                            width: scrWidth * 0.285,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(30),
-                                image: DecorationImage(
-                                    image: NetworkImage(charity.image!),
-                                    fit: BoxFit.fill)),
-                          ),
-                          SizedBox(
-                            width: scrWidth * 0.05,
-                          ),
-                          Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                width: scrWidth*0.6,
-                                child: Text(charity.charityDetailes!,
-                                    maxLines: 5,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        fontSize: scrWidth * 0.036,
-                                        fontFamily: 'Urbanist',
-                                        fontWeight: FontWeight.w600)),
-                              ),
-                              SizedBox(
-                                height: scrHeight * 0.02,
-                              ),
-                              // Container(
-                              //     height: scrHeight * 0.004,
-                              //     width: scrWidth * 0.55,
-                              //     child: LinearPercentIndicator(
-                              //       animation: true,
-                              //       animationDuration: 1000,
-                              //       percent: _items[index].value,
-                              //       backgroundColor: Color(0xffE9F6FF),
-                              //       progressColor: Color(0xff343434),
-                              //     )),
-
-                              Row(
-                                children: [
-                                  Text("0000000",
-                                    style: TextStyle(
-                                        fontSize: scrWidth * 0.039,
-                                        color: primarycolor,
-                                        fontFamily: 'Urbanist',
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                  Text("/",
-                                    style: TextStyle(
-                                        fontSize: scrWidth * 0.039,
-                                        color: primarycolor,
-                                        fontFamily: 'Urbanist',
-                                        fontWeight: FontWeight.w600),
-                                  ),
-
-                                  Text(
-                                    currencyConvert
-                                        .format(charity.valueAmount)
-                                        .toString(),
-                                    style: TextStyle(
-                                        fontSize: scrWidth * 0.039,
-                                        color: primarycolor,
-                                        fontFamily: 'Urbanist',
-                                        fontWeight: FontWeight.w600),
-                                  ),
-
-
-                                ],
-                              ),
-                              SizedBox(height: scrHeight*0.02,),
-
-                            ],
-                          )
-                        ],
-                      ),
-                    );
-                  },
-                  separatorBuilder: (BuildContext context, int index) {
-                    return SizedBox(
-                      height: scrHeight * 0.025,
-                    );
-                  },
-                ),
-              ],
             ),
           )
         ],

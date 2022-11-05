@@ -7,6 +7,7 @@ import 'package:threems/pagess/onboardingpage.dart';
 var userName;
 var userImage;
 var userEmail;
+var phone;
 String? userDoc;
 class Authentication {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -22,6 +23,7 @@ class Authentication {
     userImage = userCredential.user?.photoURL;
     userEmail = userCredential.user?.email;
     userDoc = userCredential.user?.uid;
+    phone=userCredential.user?.phoneNumber??'';
     print("chugfg ggggggg$userDoc");
 
     FirebaseFirestore.instance.collection('users').doc(userDoc).set({
@@ -29,6 +31,7 @@ class Authentication {
       "userName": userName,
       "userEmail": userEmail,
       "userImage": userImage,
+      "phone":phone,
     });
 
     //     .then((value) {
