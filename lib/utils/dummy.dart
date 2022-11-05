@@ -45,7 +45,7 @@ class Users {
 List addMem = [];
 
 List<String> addFriends = [];
-//
+
 class User {
   static final List<String> userss = [
     'akhilgeorge',
@@ -60,7 +60,7 @@ class User {
     List<String> matches = [];
     matches.addAll(userss);
     matches.retainWhere(
-            (users) => users.toLowerCase().contains(query.toLowerCase()));
+        (users) => users.toLowerCase().contains(query.toLowerCase()));
     return matches;
   }
 }
@@ -68,10 +68,9 @@ class User {
 List addMember = [];
 
 List<String> addFriend = [];
-class  Item{
+
+class Item {
   String payname;
   String pic;
-  Item({
-   required this.pic,required this.payname
-});
+  Item({required this.pic, required this.payname});
 }

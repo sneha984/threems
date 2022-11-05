@@ -1,20 +1,40 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../model/Kuri/kuriModel.dart';
 import '../screens/splash_screen.dart';
 import '../utils/dummy.dart';
 import '../utils/themes.dart';
 
 class AddMembersearch extends StatefulWidget {
-  const AddMembersearch({Key? key}) : super(key: key);
+  final List<Contact> contacts;
+  final List savedUsers;
+
+  const AddMembersearch({
+    Key? key,
+    required this.contacts,
+    required this.savedUsers,
+  }) : super(key: key);
 
   @override
   State<AddMembersearch> createState() => _AddMembersearchState();
 }
 
 class _AddMembersearchState extends State<AddMembersearch> {
+  List<Contact> totalContacts = [];
+  List savedContacts = [];
+  @override
+  void initState() {
+    totalContacts = widget.contacts;
+    savedContacts = widget.savedUsers;
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,17 +52,21 @@ class _AddMembersearchState extends State<AddMembersearch> {
             elevation: 0,
             backgroundColor: Colors.white,
             leading: GestureDetector(
-              onTap: (){
+              onTap: () {
                 Navigator.pop(context);
               },
-              child:  Padding(
-                padding: EdgeInsets.only(top: scrHeight*0.04,
-                    left: scrWidth*0.07,right: scrWidth*0.05),
-                child:SvgPicture.asset("assets/icons/arrow.svg",),
+              child: Padding(
+                padding: EdgeInsets.only(
+                    top: scrHeight * 0.04,
+                    left: scrWidth * 0.07,
+                    right: scrWidth * 0.05),
+                child: SvgPicture.asset(
+                  "assets/icons/arrow.svg",
+                ),
               ),
             ),
             title: Padding(
-              padding:  EdgeInsets.only(top: 30),
+              padding: EdgeInsets.only(top: 30),
               child: Text(
                 "Add Member Friend List",
                 style: TextStyle(
@@ -52,7 +76,6 @@ class _AddMembersearchState extends State<AddMembersearch> {
                     color: Colors.black),
               ),
             ),
-
             bottom: PreferredSize(
               preferredSize: Size.fromHeight(100),
               child: Container(
@@ -120,96 +143,124 @@ class _AddMembersearchState extends State<AddMembersearch> {
       ),
       body: Padding(
         padding:
-        EdgeInsets.symmetric(horizontal: scrWidth * 0.059, vertical: 5),
+            EdgeInsets.symmetric(horizontal: scrWidth * 0.059, vertical: 5),
         child: ListView.separated(
           separatorBuilder: (context, index) => SizedBox(
             height: scrWidth * 0.02,
           ),
           physics: BouncingScrollPhysics(),
-          itemCount: User.userss.length,
+          itemCount: totalContacts.length,
           shrinkWrap: true,
-          itemBuilder: (context, index) => Container(
-            width: 328,
-            height: textFormFieldHeight45,
-            padding: EdgeInsets.symmetric(
-              horizontal: scrWidth * 0.015,
-              vertical: 2,
-            ),
-            decoration: BoxDecoration(
-                border: Border.all(
-                  color: Color(0xffDADADA),
-                  width: 1,
-                ),
-                borderRadius: BorderRadius.circular(scrWidth * 0.026)),
-            child: Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(left: 8),
-                      child: CircleAvatar(
-                        radius: 15,
-                        backgroundColor: Colors.grey,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(15),
-                          child: CachedNetworkImage(
-                            imageUrl:
-                            'https://pbs.twimg.com/profile_images/1392793006877540352/ytVYaEBZ_400x400.jpg',
-                          ),
+          itemBuilder: (context, index) {
+            return Container(
+              width: 328,
+              height: textFormFieldHeight45,
+              padding: EdgeInsets.symmetric(
+                horizontal: scrWidth * 0.015,
+                vertical: 2,
+              ),
+              decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Color(0xffDADADA),
+                    width: 1,
+                  ),
+                  borderRadius: BorderRadius.circular(scrWidth * 0.026)),
+              child: Center(
+                  child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(left: 8),
+                    child: CircleAvatar(
+                      radius: 15,
+                      backgroundColor: Colors.grey,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(15),
+                        child: CachedNetworkImage(
+                          imageUrl:
+                              'https://pbs.twimg.com/profile_images/1392793006877540352/ytVYaEBZ_400x400.jpg',
                         ),
                       ),
                     ),
-                    Center(
-                      child: Text(
-                        User.userss[index],
-                        style: TextStyle(
-                            fontSize: FontSize16,
-                            fontFamily: 'Urbanist',
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black),
-                      ),
+                  ),
+                  Center(
+                    child: Text(
+                      totalContacts[index].displayName!,
+                      style: TextStyle(
+                          fontSize: FontSize16,
+                          fontFamily: 'Urbanist',
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black),
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        if (addFriend.contains(User.userss[index])) {
-                          setState(() {
-                            addFriend.remove(User.userss[index]);
-                            print("hi: $addFriend");
-                          });
-                        } else {
-                          setState(() {
-                            addFriend.add(User.userss[index]);
-                            print("hi: $addFriend");
-                          });
-                        }
-                      },
-                      child: Container(
-                        // width: 50,
-                        height: 27,
-                        margin: EdgeInsets.only(right: 8),
-                        padding: EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                            color: addFriend.contains(User.userss[index])
-                                ? Color(0xff8391A1)
-                                : primarycolor,
-                            borderRadius: BorderRadius.circular(8)),
-                        child: Center(
-                          child: Text(
-                            addFriend.contains(User.userss[index])
-                                ? "Added"
-                                : "+ Add",
-                            style: TextStyle(
-                                fontSize: FontSize14,
-                                fontFamily: 'Urbanist',
-                                fontWeight: FontWeight.w700,
-                                color: Colors.white),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                )),
-          ),
+                  ),
+                  totalContacts[index].phones!.isEmpty
+                      ? SizedBox()
+                      : StreamBuilder<QuerySnapshot>(
+                          stream: FirebaseFirestore.instance
+                              .collection('users')
+                              .where('phone',
+                                  isEqualTo: totalContacts[index]
+                                      .phones!
+                                      .first
+                                      .value!
+                                      .trim()
+                                      .replaceAll(' ', ''))
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                            String value = '';
+                            if (snapshot.hasData) {
+                              value = '+ Add';
+                            } else {
+                              value = 'Invite';
+                            }
+                            return GestureDetector(
+                              onTap: () {
+                                if (addFriend.contains(
+                                    totalContacts[index].displayName)) {
+                                  setState(() {
+                                    addFriend.remove(
+                                        totalContacts[index].displayName);
+                                    print("hi: $addFriend");
+                                  });
+                                } else {
+                                  setState(() {
+                                    addFriend
+                                        .add(totalContacts[index].displayName!);
+                                    print("hi: $addFriend");
+                                  });
+                                }
+                              },
+                              child: Container(
+                                // width: 50,
+                                height: 27,
+                                margin: EdgeInsets.only(right: 8),
+                                padding: EdgeInsets.all(5),
+                                decoration: BoxDecoration(
+                                    color: addFriend.contains(
+                                            totalContacts[index].displayName)
+                                        ? Color(0xff8391A1)
+                                        : primarycolor,
+                                    borderRadius: BorderRadius.circular(8)),
+                                child: Center(
+                                  child: Text(
+                                    addFriend.contains(
+                                            totalContacts[index].displayName)
+                                        ? "Added"
+                                        : value,
+                                    style: TextStyle(
+                                        fontSize: FontSize14,
+                                        fontFamily: 'Urbanist',
+                                        fontWeight: FontWeight.w700,
+                                        color: Colors.white),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }),
+                ],
+              )),
+            );
+          },
         ),
       ),
       bottomNavigationBar: Container(
@@ -220,9 +271,13 @@ class _AddMembersearchState extends State<AddMembersearch> {
         margin: EdgeInsets.symmetric(vertical: 10, horizontal: 50),
         child: Center(
             child: Text(
-              "Add Members",
-              style: TextStyle(fontWeight: FontWeight.w500,fontSize: 15,fontFamily: 'Outfit',color: Colors.white),
-            )),
+          "Add Members",
+          style: TextStyle(
+              fontWeight: FontWeight.w500,
+              fontSize: 15,
+              fontFamily: 'Outfit',
+              color: Colors.white),
+        )),
       ),
     );
   }

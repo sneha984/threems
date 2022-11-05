@@ -2,11 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
+import 'package:threems/Authentication/root.dart';
 
 import '../customPackage/date_picker.dart';
+import '../model/Kuri/kuriModel.dart';
 import '../screens/splash_screen.dart';
 import '../utils/themes.dart';
 import '../widgets/list.dart';
+import 'add_member_search_kuri.dart';
+import 'add_members_kuri.dart';
 
 class CreateKuriPage extends StatefulWidget {
   const CreateKuriPage({Key? key}) : super(key: key);
@@ -361,16 +365,7 @@ class _CreateKuriPageState extends State<CreateKuriPage> {
                             focusNode: valueAmountFocus,
                             cursorHeight: scrWidth * 0.055,
                             cursorWidth: 1,
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return "Enter Kuri Amount";
-                              } else if (!RegExp(r'(^\d{0,8}(\.\d{1,4})?$)')
-                                  .hasMatch(value)) {
-                                return "Enter only numbers";
-                              } else {
-                                return null;
-                              }
-                            },
+                            keyboardType: TextInputType.number,
                             cursorColor: Colors.black,
                             style: TextStyle(
                               color: Colors.black,
@@ -660,6 +655,8 @@ class _CreateKuriPageState extends State<CreateKuriPage> {
                           child: TextFormField(
                             controller: phone,
                             focusNode: phonenumberfocus,
+                            keyboardType: TextInputType.number,
+                            // maxLength: 10,
                             cursorHeight: scrWidth * 0.055,
                             cursorWidth: 1,
                             cursorColor: Colors.black,
@@ -1764,11 +1761,46 @@ class _CreateKuriPageState extends State<CreateKuriPage> {
               phone.text != '' &&
               upiApps.length != 0 &&
               accountNumber.text != '' &&
-              confirmAccountNumber.text == accountNumber.text &&
-              accountHolderName.text != '' &&
-              bankName.text != '' &&
-              ifsc.text != '') {
-          } else {}
+              confirmAccountNumber.text == accountNumber.text) {
+            final kuri = KuriModel(
+                accountNumber: accountNumber.text,
+                amount: double.tryParse(amount.text),
+                bankName: bankName.text,
+                deadLine: selectedDate,
+                holderName: accountHolderName.text,
+                iFSC: ifsc.text,
+                kuriName: kuriName.text,
+                phone: phone.text,
+                private: private,
+                purpose: purpose,
+                upiApps: upiApps,
+                userID: currentuserid);
+
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AddMembersKuri(
+                    kuri: kuri,
+                  ),
+                ));
+          } else {
+            kuriName.text == ''
+                ? showSnackbar(context, 'Please Enter Kuri Name')
+                : amount.text == ''
+                    ? showSnackbar(context, 'Please Enter amount')
+                    : selectedDate == null
+                        ? showSnackbar(context, 'Please Choose Date')
+                        : phone.text == ''
+                            ? showSnackbar(context, 'Please Enter Phone Number')
+                            : upiApps.length == 0
+                                ? showSnackbar(
+                                    context, 'Please Choose Available UPI Apps')
+                                : accountNumber.text == ''
+                                    ? showSnackbar(
+                                        context, 'Please Enter Account Number')
+                                    : showSnackbar(context,
+                                        ' Confirm Account Number is must be same as account number');
+          }
         },
         child: Container(
             width: 285,

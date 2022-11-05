@@ -4,21 +4,22 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../Authentication/root.dart';
 
-
 UserModel? currentuser;
+
 class UserModel {
   String? userName;
   String? userEmail;
   String? userImage;
   String? userId;
   String? phone;
-  UserModel({this.userName, this.userEmail, this.userImage, this.userId,this.phone});
+  UserModel(
+      {this.userName, this.userEmail, this.userImage, this.userId, this.phone});
   UserModel.fromJson(Map<String, dynamic> json) {
     userName = json['userName'];
     userEmail = json['userEmail'];
     userImage = json['userImage'];
     userId = json['userId'];
-    phone=json['phone'];
+    phone = json['phone'] ?? '';
   }
 
   Map<String, dynamic> toJson() {
@@ -27,10 +28,11 @@ class UserModel {
     data['userEmail'] = this.userEmail;
     data['userImage'] = this.userImage;
     data['userId'] = this.userId;
-    data['phone']=this.phone;
+    data['phone'] = this.phone;
     return data;
   }
 }
+
 StreamSubscription? listenUserSub;
 getcurrentuser() {
   listenUserSub = FirebaseFirestore.instance
@@ -39,6 +41,5 @@ getcurrentuser() {
       .snapshots()
       .listen((event) {
     currentuser = UserModel.fromJson(event.data()!);
-      });
+  });
 }
-
