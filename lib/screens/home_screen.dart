@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:contacts_service/contacts_service.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:threems/kuri/kuripage.dart';
 import 'package:threems/model/usermodel.dart';
@@ -16,10 +19,15 @@ import 'package:threems/widgets/funding_widget.dart';
 import 'package:threems/widgets/upcomming_card_widget.dart';
 
 import '../Authentication/auth.dart';
+import '../kuri/createkuri.dart';
 import '../model/charitymodel.dart';
 import 'charity/donatepage.dart';
 import 'charity/seemorecharities.dart';
-List <CharityModel> verifiedcharity=[];
+
+List<Contact> contacts = [];
+
+List<CharityModel> verifiedcharity = [];
+
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key? key}) : super(key: key);
 
@@ -28,13 +36,55 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  askPermissions() async {
+    PermissionStatus permission = await getContactPermission();
+    if (permission == PermissionStatus.granted) {
+      getContacts();
+    } else {
+      handleInvalidPermission(permission);
+    }
+  }
+
+  handleInvalidPermission(PermissionStatus permission) {
+    if (permission == PermissionStatus.denied) {
+      showSnackbar(context, 'Permission denied by user');
+    } else if (permission == PermissionStatus.permanentlyDenied) {
+      showSnackbar(context, 'Permission denied by user');
+    }
+  }
+
+  getContactPermission() async {
+    PermissionStatus permission = await Permission.contacts.status;
+    if (permission != PermissionStatus.granted &&
+        permission != PermissionStatus.permanentlyDenied) {
+      PermissionStatus permissionStatus = await Permission.contacts.request();
+      return permissionStatus;
+    } else {
+      return permission;
+    }
+  }
+
+  getContacts() async {
+    List<Contact> _contacts = await ContactsService.getContacts();
+
+    setState(() {
+      contacts = _contacts;
+
+      print('================ContactLength=================');
+      print(contacts.length);
+    });
+  }
+
   double selectedIndex = 0;
 
-  getVerifiedCharity(){
+  getVerifiedCharity() {
     FirebaseFirestore.instance
-        .collection('charity').where('userId',isNotEqualTo: currentuser?.userId).snapshots().listen((event) {
-      verifiedcharity=[];
-      for(DocumentSnapshot <Map<String,dynamic>> doc in event.docs){
+        .collection('charity')
+        .where('userId', isNotEqualTo: currentuser?.userId)
+        .snapshots()
+        .listen((event) {
+      verifiedcharity = [];
+      for (DocumentSnapshot<Map<String, dynamic>> doc in event.docs) {
         verifiedcharity.add(CharityModel.fromJson(doc.data()!));
       }
       if (mounted) {
@@ -43,15 +93,19 @@ class _HomeScreenState extends State<HomeScreen> {
     });
     print(verifiedcharity.length);
     print(dropdownValue);
-    print("----------------------------------------------------------------------------");
-    print("----------------------------------------------------------------------------");
-    print("----------------------------------------------------------------------------");
-    print("----------------------------------------------------------------------------");
-
+    print(
+        "----------------------------------------------------------------------------");
+    print(
+        "----------------------------------------------------------------------------");
+    print(
+        "----------------------------------------------------------------------------");
+    print(
+        "----------------------------------------------------------------------------");
   }
 
   @override
   void initState() {
+    askPermissions();
     getVerifiedCharity();
     super.initState();
   }
@@ -711,14 +765,12 @@ class _HomeScreenState extends State<HomeScreen> {
             centerTitle: false,
             leadingWidth: 0,
             title: Padding(
-              padding:  EdgeInsets.only(top: scrHeight*0.009),
+              padding: EdgeInsets.only(top: scrHeight * 0.009),
               child: SvgPicture.asset("assets/icons/3ms.svg"),
             ),
             actions: [
               GestureDetector(
-                onTap: (){
-
-                  },
+                onTap: () {},
                 child: Container(
                   child: SvgPicture.asset(
                     "assets/icons/notifications.svg",
@@ -746,7 +798,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 width: scrWidth * 0.045,
               ),
               GestureDetector(
-                onTap: ()async{
+                onTap: () async {
                   _authentication.signOut(context);
                 },
                 child: Container(
@@ -857,8 +909,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 onTap: () => Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) =>HostedChitPage(),
-                                          // CreateNewChitScreen(),
+                                      builder: (context) => HostedChitPage(),
+                                      // CreateNewChitScreen(),
                                     )),
                                 child: FundingWidget(
                                     title: "Chit Funds",
@@ -870,8 +922,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                 indent: scrWidth * 0.06,
                               ),
                               GestureDetector(
-                                onTap: (){
-                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>Kuripage()));
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Kuripage()));
                                 },
                                 child: FundingWidget(
                                     title: "Kuri Funds",
@@ -906,9 +961,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       GestureDetector(
-                        onTap: (){
-                        },
-                          child: VerifiedCharityWidget()),
+                          onTap: () {}, child: VerifiedCharityWidget()),
                     ],
                   ),
                 ),
@@ -932,9 +985,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) =>DonatePage()
-                                        // FlGraph()
-                                ));
+                                    builder: (context) => DonatePage()
+                                    // FlGraph()
+                                    ));
                           },
                           child: FundraiseAndCharityWidget(
                             icon: 'assets/icons/don.svg',

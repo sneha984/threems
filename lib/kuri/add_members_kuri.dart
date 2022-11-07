@@ -11,9 +11,14 @@ import 'package:threems/kuri/createkuri.dart';
 import '../Authentication/root.dart';
 import '../model/Kuri/kuriModel.dart';
 import '../model/usermodel.dart';
+import '../screens/home_screen.dart';
 import '../screens/splash_screen.dart';
 import '../utils/dummy.dart';
 import '../utils/themes.dart';
+
+Map<String, dynamic> useridByPhone = {};
+Map<String, dynamic> userPhoneById = {};
+Map<String, dynamic> userNameById = {};
 
 class AddMembersKuri extends StatefulWidget {
   final KuriModel kuri;
@@ -29,66 +34,36 @@ class _AddMembersKuriState extends State<AddMembersKuri> {
   TextEditingController userNameController = TextEditingController();
 
   bool loading = false;
-  List<Contact> contacts = [];
+
   List<UserModel> savedContacts = [];
   List<UserModel> userList = [];
-  Map<String, dynamic> userNameById = {};
-  askPermissions() async {
-    PermissionStatus permission = await getContactPermission();
-    if (permission == PermissionStatus.granted) {
-      getContacts();
-    } else {
-      handleInvalidPermission(permission);
+  List<String> userNumberList = [];
+
+  addMembers() {
+    addMember = [];
+    for (int i = 0; i < addFriend.length; i++) {
+      addMember.add(useridByPhone[addFriend[i]]);
     }
-  }
-
-  handleInvalidPermission(PermissionStatus permission) {
-    if (permission == PermissionStatus.denied) {
-      showSnackbar(context, 'Permission denied by user');
-    } else if (permission == PermissionStatus.permanentlyDenied) {
-      showSnackbar(context, 'Permission denied by user');
-    }
-  }
-
-  getContactPermission() async {
-    PermissionStatus permission = await Permission.contacts.status;
-    if (permission != PermissionStatus.granted &&
-        permission != PermissionStatus.permanentlyDenied) {
-      PermissionStatus permissionStatus = await Permission.contacts.request();
-      return permissionStatus;
-    } else {
-      return permission;
-    }
-  }
-
-  getContacts() async {
-    List<Contact> _contacts = await ContactsService.getContacts();
-
-    setState(() {
-      contacts = _contacts;
-      getUsers();
-      print('================ContactLength=================');
-      print(contacts.length);
-    });
-  }
-
-  getSavedContacts() {
-    savedContacts = [];
-    for (int i = 0; i < contacts.length; i++) {
-      if (contacts[i].phones!.isNotEmpty) {
-        for (int j = 0; j < userList.length; j++) {
-          if (contacts[i].phones!.first.value == userList[j].phone) {
-            savedContacts.add(userList[j]);
-          }
-        }
-        // print(contacts[i].phones!.first.value);
-        print(userList.length);
-      }
-    }
-    print('================Saved Contact Length=================');
-    print(savedContacts.length);
     setState(() {});
   }
+
+  // getSavedContacts() {
+  //   savedContacts = [];
+  //   for (int i = 0; i < contacts.length; i++) {
+  //     if (contacts[i].phones!.isNotEmpty) {
+  //       for (int j = 0; j < userList.length; j++) {
+  //         if (contacts[i].phones!.first.value == userList[j].phone) {
+  //           savedContacts.add(userList[j]);
+  //         }
+  //       }
+  //       // print(contacts[i].phones!.first.value);
+  //       print(userList.length);
+  //     }
+  //   }
+  //   print('================Saved Contact Length=================');
+  //   print(savedContacts.length);
+  //   setState(() {});
+  // }
 
   getUsers() {
     FirebaseFirestore.instance.collection('users').snapshots().listen((event) {
@@ -96,11 +71,16 @@ class _AddMembersKuriState extends State<AddMembersKuri> {
       savedContacts = [];
       for (var doc in event.docs) {
         userList.add(UserModel.fromJson(doc.data()));
+        useridByPhone[doc['phone'].toString().trim().replaceAll(' ', '')] =
+            doc.id;
+        userPhoneById[doc.id] =
+            doc['phone'].toString().trim().replaceAll(' ', '');
         userNameById[doc.id] = doc['userName'];
+        userNumberList.add(doc['phone'].toString().trim().replaceAll(' ', ''));
       }
       if (mounted) {
         setState(() {
-          getSavedContacts();
+          // getSavedContacts();
         });
       }
     });
@@ -108,7 +88,8 @@ class _AddMembersKuriState extends State<AddMembersKuri> {
 
   @override
   void initState() {
-    askPermissions();
+    getUsers();
+    addMembers();
     userNameFocus.addListener(() {
       setState(() {});
     });
@@ -160,12 +141,17 @@ class _AddMembersKuriState extends State<AddMembersKuri> {
         actions: [
           GestureDetector(
             onTap: () {
+              addFriend = [];
+              for (int i = 0; i < addMember.length; i++) {
+                addFriend.add(userPhoneById[addMember[i]]);
+              }
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => AddMembersearch(
                             contacts: contacts,
-                            savedUsers: savedContacts,
+                            numberList: userNumberList,
+                            kuri: widget.kuri,
                           )));
             },
             child: Padding(
@@ -307,7 +293,7 @@ class _AddMembersKuriState extends State<AddMembersKuri> {
                               ),
                               Center(
                                 child: Text(
-                                  addMember[index],
+                                  userNameById[addMember[index]],
                                   style: TextStyle(
                                       fontSize: FontSize16,
                                       fontFamily: 'Urbanist',
@@ -554,7 +540,7 @@ class _AddMembersKuriState extends State<AddMembersKuri> {
                           bankName: local.bankName,
                           amount: local.amount,
                           accountNumber: local.accountNumber,
-                          members: [],
+                          members: addMember,
                           payments: [],
                           totalReceived: 0);
 

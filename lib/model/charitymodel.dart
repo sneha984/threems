@@ -9,7 +9,7 @@ class CharityModel {
   int? cause;
   String? charityDetailes;
   String? confirmAccountNumber;
-  String? documents;//----------------------------------------
+  String? documents; //----------------------------------------
   String? emailId;
   Timestamp? endDate;
   String? ifscCode;
@@ -28,32 +28,30 @@ class CharityModel {
   List<Payments>? payments;
   CharityModel(
       {this.accountHolderName,
-        this.accountNumber,
-        this.bankName,
-        this.beneficiaryName,
-        this.beneficiaryPhNumber,
-        this.cause,
-        this.charityDetailes,
-        this.confirmAccountNumber,
-        this.documents,
-        this.emailId,
-        this.endDate,
-        this.ifscCode,
-        this.image,
-        this.orgName,
-        this.phoneNumber,
-        this.status,
-        this.valueAmount,
-        this.youTubeLink,
-        this.beneficiaryLocation,
-        this.reason,
-        this.charityId,
-        this.userId,
-        this.userName,
-        required this.block,
-        this.payments
-
-      });
+      this.accountNumber,
+      this.bankName,
+      this.beneficiaryName,
+      this.beneficiaryPhNumber,
+      this.cause,
+      this.charityDetailes,
+      this.confirmAccountNumber,
+      this.documents,
+      this.emailId,
+      this.endDate,
+      this.ifscCode,
+      this.image,
+      this.orgName,
+      this.phoneNumber,
+      this.status,
+      this.valueAmount,
+      this.youTubeLink,
+      this.beneficiaryLocation,
+      this.reason,
+      this.charityId,
+      this.userId,
+      this.userName,
+      required this.block,
+      this.payments});
 
   CharityModel.fromJson(Map<String, dynamic> json) {
     accountHolderName = json['accountHolderName'];
@@ -73,13 +71,13 @@ class CharityModel {
     phoneNumber = json['phoneNumber'];
     status = json['status'];
     valueAmount = json['valueAmount'];
-    youTubeLink=json['youTubeLink'];
-    beneficiaryLocation=json['beneficiaryLocation'];
-    reason=json['reason'];
-    charityId=json['charityId'];
-    userId=json['userId'];
-    userName=json['userName'];
-    block=json['block'];
+    youTubeLink = json['youTubeLink'];
+    beneficiaryLocation = json['beneficiaryLocation'];
+    reason = json['reason'];
+    charityId = json['charityId'];
+    userId = json['userId'];
+    userName = json['userName'];
+    block = json['block'];
     if (json['payments'] != null) {
       payments = <Payments>[];
       json['payments'].forEach((v) {
@@ -106,19 +104,20 @@ class CharityModel {
     data['phoneNumber'] = this.phoneNumber;
     data['status'] = this.status;
     data['valueAmount'] = this.valueAmount;
-    data['youTubeLink']=this.youTubeLink;
-    data['beneficiaryLocation']=this.beneficiaryLocation;
-    data['reason']=this.reason;
-    data['charityId']=this.charityId;
-    data['userId']=this.userId;
-    data['userName']=this.userName;
-    data['block']=this.block;
+    data['youTubeLink'] = this.youTubeLink;
+    data['beneficiaryLocation'] = this.beneficiaryLocation;
+    data['reason'] = this.reason;
+    data['charityId'] = this.charityId;
+    data['userId'] = this.userId;
+    data['userName'] = this.userName;
+    data['block'] = this.block;
     if (this.payments != null) {
       data['payments'] = this.payments!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
+
 class Payments {
   bool? verified;
   String? userName;
@@ -129,20 +128,19 @@ class Payments {
 
   Payments(
       {this.verified,
-        this.userName,
-        this.userId,
-        this.amount,
-        this.screenShotUrl,
-        this.date
-      });
+      this.userName,
+      this.userId,
+      this.amount,
+      this.screenShotUrl,
+      this.date});
 
   Payments.fromJson(Map<String, dynamic> json) {
     verified = json['verified'];
     userName = json['userName'];
     userId = json['userId'];
-    amount = json['amount'];
+    amount = double.tryParse(json['amount'].toString());
     screenShotUrl = json['screenShotUrl'];
-    date=json['date'];
+    date = json['date'];
   }
 
   Map<String, dynamic> toJson() {
@@ -152,7 +150,7 @@ class Payments {
     data['userId'] = this.userId;
     data['amount'] = this.amount;
     data['screenShotUrl'] = this.screenShotUrl;
-    data['date']=this.date;
+    data['date'] = this.date;
     return data;
   }
 }

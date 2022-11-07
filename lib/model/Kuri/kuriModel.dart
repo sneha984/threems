@@ -14,7 +14,7 @@ class KuriModel {
   String? iFSC;
   String? userID;
   String? kuriId;
-  List<String>? members;
+  List? members;
 
   KuriModel(
       {this.private,
