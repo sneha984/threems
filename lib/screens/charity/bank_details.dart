@@ -221,7 +221,7 @@ class _CreateCharity3State extends State<CreateCharity3> {
                           return 'Please enter confirm account number';
                           }
                           else if (value!=accountnumcontroller.text) {
-                          return 'account number does not match !';
+                          return 'sucessfully completed';
                           }
                           return null;
                           },
@@ -469,7 +469,7 @@ class _CreateCharity3State extends State<CreateCharity3> {
                     if (_formkey.currentState!.validate()) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text('account number does not match '),
+                          content: Text('succesfully completed '),
                         ),
                       );
                     }

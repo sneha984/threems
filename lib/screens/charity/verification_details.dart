@@ -501,6 +501,7 @@ class _VerificationDetailsState extends State<VerificationDetails> {
                       "youTubeLink": youtubecontroller.text,
                       "image": imgUrl,
                       "documents": fileUrl,
+                      "fileNme":fileName,
                     }
 
                   );
@@ -527,11 +528,13 @@ class _VerificationDetailsState extends State<VerificationDetails> {
                     image: charityDetails[3]['image'],
                     documents: charityDetails[3]['documents'],
                     status: 0,
+                    payments: [],
                     cause: charityDetails[0]['cause'],
                     reason: charityDetails[0]['reason'],
                     userId: currentuser?.userId,
                     userName:currentuser?.userName,
                     block:false,
+                    fileNme: charityDetails[3]['fileNme'],
                   );
                   createCharity(char);
                   print("------------------===========================-----------------========================================");

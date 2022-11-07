@@ -49,8 +49,6 @@ class _HostedKuriPageState extends State<HostedKuriPage> {
                       SvgPicture.asset(
                         "assets/icons/editingicon.svg",
                       ),
-
-
                     ],
                   ),
                 ),

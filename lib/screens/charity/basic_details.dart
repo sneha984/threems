@@ -96,7 +96,7 @@ class _BasicDetailsState extends State<BasicDetails> {
         dropdownItemList.add(doc);
       }
       dropdownItems=[];
-      if(dropdownItemList!=null){
+      if(dropdownItemList.isNotEmpty){
         for(int i=0;i< dropdownItemList.length; i++){
         dropdownItems.add({
           'causeId':dropdownItemList[i]['causeId'],
@@ -269,7 +269,7 @@ class _BasicDetailsState extends State<BasicDetails> {
                         dropdownItemReverse: true,
                         dropdownItemTopGap: 2,
                         isTriangle: false,
-                        defaultValue: dropdownItems[0],
+                        defaultValue: dropdownItems[0]??'',
                         resultIconRotation: false,
                         dropdownItemPadding: EdgeInsets.all(0),
                         dropdownItemMainAxis: MainAxisAlignment.spaceEvenly,

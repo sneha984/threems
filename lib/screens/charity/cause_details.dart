@@ -511,124 +511,124 @@ class _CauseDetailsState extends State<CauseDetails> {
                 ),
               ),
               SizedBox(
-                height: scrWidth * 0.05,
+                height: scrWidth * 0.1,
               ),
-              Text(
-                "OPTIONAL",
-                style: TextStyle(
-                    fontSize: FontSize16,
-                    fontFamily: 'Urbanist',
-                    fontWeight: FontWeight.w700,
-                    color: Colors.black),
-              ),
-              SizedBox(
-                height: scrWidth * 0.05,
-              ),
-              Container(
-                width: scrWidth,
-                height: textFormFieldHeight45,
-                padding: EdgeInsets.symmetric(
-                  horizontal: scrWidth * 0.015,
-                  vertical: scrWidth*0.002,                ),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Color(0xffDADADA),
-                  ),
-                  color: textFormFieldFillColor,
-                  borderRadius: BorderRadius.circular(scrWidth * 0.026),
-                ),
-                child: TextFormField(
-                  focusNode: hospitalNameFocus,
-                  cursorHeight: scrWidth * 0.055,
-                  cursorWidth: 1,
-                  cursorColor: Colors.black,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600,
-                    fontSize: FontSize15,
-                    fontFamily: 'Urbanist',
-                  ),
-                  decoration: InputDecoration(
-                    labelText: 'Hospital Name',
-                    labelStyle: TextStyle(
-                      color: hospitalNameFocus.hasFocus
-                          ? primarycolor
-                          : textFormUnFocusColor,
-                      fontWeight: FontWeight.w500,
-                      fontSize: FontSize15,
-                      fontFamily: 'Urbanist',
-                    ),
-                    fillColor: textFormFieldFillColor,
-                    filled: true,
-                    contentPadding: EdgeInsets.only(
-                        left: scrWidth*0.03, top: scrHeight*0.006, bottom: scrWidth * 0.033),
-                    disabledBorder: InputBorder.none,
-                    enabledBorder: InputBorder.none,
-                    errorBorder: InputBorder.none,
-                    border: InputBorder.none,
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                        color: primarycolor,
-                        width: 2,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: scrWidth * 0.04,
-              ),
-              Container(
-                width: scrWidth,
-                height: textFormFieldHeight45,
-                padding: EdgeInsets.symmetric(
-                  horizontal: scrWidth * 0.015,
-                    vertical: scrWidth*0.002                ),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Color(0xffDADADA),
-                  ),
-                  color: textFormFieldFillColor,
-                  borderRadius: BorderRadius.circular(scrWidth * 0.026),
-                ),
-                child: TextFormField(
-                  focusNode: hospitalLocationFocus,
-                  cursorHeight: scrWidth * 0.055,
-                  cursorWidth: 1,
-                  cursorColor: Colors.black,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600,
-                    fontSize: FontSize15,
-                    fontFamily: 'Urbanist',
-                  ),
-                  decoration: InputDecoration(
-                    labelText: 'Location',
-                    labelStyle: TextStyle(
-                      color: hospitalLocationFocus.hasFocus
-                          ? primarycolor
-                          : textFormUnFocusColor,
-                      fontWeight: FontWeight.w500,
-                      fontSize: FontSize15,
-                      fontFamily: 'Urbanist',
-                    ),
-                    fillColor: textFormFieldFillColor,
-                    filled: true,
-                    contentPadding: EdgeInsets.only(
-                        left: scrWidth*0.03, top: scrHeight*0.006, bottom: scrWidth * 0.033),
-                    disabledBorder: InputBorder.none,
-                    enabledBorder: InputBorder.none,
-                    errorBorder: InputBorder.none,
-                    border: InputBorder.none,
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                        color: primarycolor,
-                        width: 2,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+              // Text(
+              //   "OPTIONAL",
+              //   style: TextStyle(
+              //       fontSize: FontSize16,
+              //       fontFamily: 'Urbanist',
+              //       fontWeight: FontWeight.w700,
+              //       color: Colors.black),
+              // ),
+              // SizedBox(
+              //   height: scrWidth * 0.05,
+              // ),
+              // Container(
+              //   width: scrWidth,
+              //   height: textFormFieldHeight45,
+              //   padding: EdgeInsets.symmetric(
+              //     horizontal: scrWidth * 0.015,
+              //     vertical: scrWidth*0.002,                ),
+              //   decoration: BoxDecoration(
+              //     border: Border.all(
+              //       color: Color(0xffDADADA),
+              //     ),
+              //     color: textFormFieldFillColor,
+              //     borderRadius: BorderRadius.circular(scrWidth * 0.026),
+              //   ),
+              //   child: TextFormField(
+              //     focusNode: hospitalNameFocus,
+              //     cursorHeight: scrWidth * 0.055,
+              //     cursorWidth: 1,
+              //     cursorColor: Colors.black,
+              //     style: TextStyle(
+              //       color: Colors.black,
+              //       fontWeight: FontWeight.w600,
+              //       fontSize: FontSize15,
+              //       fontFamily: 'Urbanist',
+              //     ),
+              //     decoration: InputDecoration(
+              //       labelText: 'Hospital Name',
+              //       labelStyle: TextStyle(
+              //         color: hospitalNameFocus.hasFocus
+              //             ? primarycolor
+              //             : textFormUnFocusColor,
+              //         fontWeight: FontWeight.w500,
+              //         fontSize: FontSize15,
+              //         fontFamily: 'Urbanist',
+              //       ),
+              //       fillColor: textFormFieldFillColor,
+              //       filled: true,
+              //       contentPadding: EdgeInsets.only(
+              //           left: scrWidth*0.03, top: scrHeight*0.006, bottom: scrWidth * 0.033),
+              //       disabledBorder: InputBorder.none,
+              //       enabledBorder: InputBorder.none,
+              //       errorBorder: InputBorder.none,
+              //       border: InputBorder.none,
+              //       focusedBorder: UnderlineInputBorder(
+              //         borderSide: BorderSide(
+              //           color: primarycolor,
+              //           width: 2,
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              // SizedBox(
+              //   height: scrWidth * 0.04,
+              // ),
+              // Container(
+              //   width: scrWidth,
+              //   height: textFormFieldHeight45,
+              //   padding: EdgeInsets.symmetric(
+              //     horizontal: scrWidth * 0.015,
+              //       vertical: scrWidth*0.002                ),
+              //   decoration: BoxDecoration(
+              //     border: Border.all(
+              //       color: Color(0xffDADADA),
+              //     ),
+              //     color: textFormFieldFillColor,
+              //     borderRadius: BorderRadius.circular(scrWidth * 0.026),
+              //   ),
+              //   child: TextFormField(
+              //     focusNode: hospitalLocationFocus,
+              //     cursorHeight: scrWidth * 0.055,
+              //     cursorWidth: 1,
+              //     cursorColor: Colors.black,
+              //     style: TextStyle(
+              //       color: Colors.black,
+              //       fontWeight: FontWeight.w600,
+              //       fontSize: FontSize15,
+              //       fontFamily: 'Urbanist',
+              //     ),
+              //     decoration: InputDecoration(
+              //       labelText: 'Location',
+              //       labelStyle: TextStyle(
+              //         color: hospitalLocationFocus.hasFocus
+              //             ? primarycolor
+              //             : textFormUnFocusColor,
+              //         fontWeight: FontWeight.w500,
+              //         fontSize: FontSize15,
+              //         fontFamily: 'Urbanist',
+              //       ),
+              //       fillColor: textFormFieldFillColor,
+              //       filled: true,
+              //       contentPadding: EdgeInsets.only(
+              //           left: scrWidth*0.03, top: scrHeight*0.006, bottom: scrWidth * 0.033),
+              //       disabledBorder: InputBorder.none,
+              //       enabledBorder: InputBorder.none,
+              //       errorBorder: InputBorder.none,
+              //       border: InputBorder.none,
+              //       focusedBorder: UnderlineInputBorder(
+              //         borderSide: BorderSide(
+              //           color: primarycolor,
+              //           width: 2,
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              // ),
               SizedBox(
                 height: scrHeight*0.03,
               ),

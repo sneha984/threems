@@ -34,7 +34,6 @@ class _KuriViewPageState extends State<KuriViewPage> {
       await Future.delayed(const Duration(seconds: 1));
       remainingTime = deadLine.difference(DateTime.now());
       // DateTime.now().difference(launch);
-
     }
 
     print(mounted);
