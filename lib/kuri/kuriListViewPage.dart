@@ -9,6 +9,7 @@ import '../screens/splash_screen.dart';
 import '../utils/themes.dart';
 import 'addedkuriprivate.dart';
 import 'addedkuripublic.dart';
+import 'hostedkuripage.dart';
 
 class KuriViewPage extends StatefulWidget {
   final KuriModel kuri;
@@ -35,8 +36,6 @@ class _KuriViewPageState extends State<KuriViewPage> {
       remainingTime = deadLine.difference(DateTime.now());
       // DateTime.now().difference(launch);
     }
-
-    print(mounted);
 
     if (mounted) {
       setState(() {});
@@ -66,12 +65,17 @@ class _KuriViewPageState extends State<KuriViewPage> {
           // MaterialPageRoute(
           //     builder: (context) =>
           //         AddedKuriPublic()))
+
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => AddedKuriPublic(
-                        kuri: widget.kuri,
-                      )));
+                  builder: (context) => widget.kuri.userID == currentuserid
+                      ? HostedKuriPage(
+                          id: widget.kuri.kuriId!,
+                        )
+                      : AddedKuriPublic(
+                          id: widget.kuri.kuriId!,
+                        )));
         },
         child: Container(
           height: scrHeight * 0.25,

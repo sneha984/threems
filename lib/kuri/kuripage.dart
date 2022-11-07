@@ -299,25 +299,21 @@ class _KuripageState extends State<Kuripage> with TickerProviderStateMixin {
                     )
                   : Container(
                       color: Colors.white,
-                      child: Column(
-                        children: [
-                          ListView.builder(
-                              padding: EdgeInsets.only(
-                                top: scrHeight * 0.01,
-                                left: scrHeight * 0.02,
-                                right: scrHeight * 0.02,
-                                bottom: scrHeight * 0.02,
-                              ),
-                              scrollDirection: Axis.vertical,
-                              shrinkWrap: true,
-                              itemCount: hostedKuri.length,
-                              itemBuilder: (context, index) {
-                                return KuriViewPage(
-                                  kuri: hostedKuri[index],
-                                );
-                              })
-                        ],
-                      ),
+                      child: ListView.builder(
+                          padding: EdgeInsets.only(
+                            top: scrHeight * 0.01,
+                            left: scrHeight * 0.02,
+                            right: scrHeight * 0.02,
+                            bottom: scrHeight * 0.02,
+                          ),
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount: hostedKuri.length,
+                          itemBuilder: (context, index) {
+                            return KuriViewPage(
+                              kuri: hostedKuri[index],
+                            );
+                          }),
                     ),
             ],
           ))

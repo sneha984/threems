@@ -7,6 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:threems/kuri/createkuri.dart';
 
 import '../model/Kuri/kuriModel.dart';
+import '../screens/home_screen.dart';
 import '../screens/splash_screen.dart';
 import '../utils/dummy.dart';
 import '../utils/themes.dart';

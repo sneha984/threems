@@ -37,7 +37,7 @@ class KuriModel {
   KuriModel.fromJson(Map<String, dynamic> json) {
     private = json['private'];
     kuriName = json['kuriName'];
-    amount = json['amount'];
+    amount = double.tryParse(json['amount'].toString());
     kuriId = json['kuriId'];
     totalReceived = double.tryParse(json['totalReceived'].toString());
 

@@ -19,6 +19,7 @@ import '../utils/themes.dart';
 Map<String, dynamic> useridByPhone = {};
 Map<String, dynamic> userPhoneById = {};
 Map<String, dynamic> userNameById = {};
+Map<String, dynamic> userDataById = {};
 
 class AddMembersKuri extends StatefulWidget {
   final KuriModel kuri;
@@ -76,6 +77,7 @@ class _AddMembersKuriState extends State<AddMembersKuri> {
         userPhoneById[doc.id] =
             doc['phone'].toString().trim().replaceAll(' ', '');
         userNameById[doc.id] = doc['userName'];
+        userDataById[doc.id] = doc.data();
         userNumberList.add(doc['phone'].toString().trim().replaceAll(' ', ''));
       }
       if (mounted) {
