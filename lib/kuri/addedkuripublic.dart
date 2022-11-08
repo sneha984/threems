@@ -42,6 +42,7 @@ class _AddedKuriPublicState extends State<AddedKuriPublic> {
   String? formatted;
   double? percentage = 0;
   List<UserModel> members = [];
+  UserModel? kuriOwner;
 
   getTime() async {
     DateTime deadLine = kuri!.deadLine!;
@@ -56,6 +57,20 @@ class _AddedKuriPublicState extends State<AddedKuriPublic> {
       setState(() {});
     }
     getTime();
+  }
+
+  getOwner() {
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(kuri!.kuriId)
+        .snapshots()
+        .listen((event) {
+      kuriOwner = UserModel.fromJson(event.data()!);
+
+      if (mounted) {
+        setState(() {});
+      }
+    });
   }
 
   listenKuri() {
@@ -73,6 +88,7 @@ class _AddedKuriPublicState extends State<AddedKuriPublic> {
       if (mounted) {
         setState(() {
           getMembers();
+          getOwner();
           getTime();
         });
       }
@@ -289,7 +305,7 @@ class _AddedKuriPublicState extends State<AddedKuriPublic> {
                                         color: Colors.white),
                                   ),
                                   Text(
-                                    "The room created by ${userNameById[kuri!.userID]}",
+                                    "The room created by ${kuriOwner!.userName}",
                                     style: TextStyle(
                                         fontSize: scrWidth * 0.04,
                                         fontWeight: FontWeight.w600,

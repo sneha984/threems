@@ -14,6 +14,7 @@ import '../model/usermodel.dart';
 import '../screens/charity/sucess.dart';
 import '../screens/splash_screen.dart';
 import '../utils/themes.dart';
+import 'createkuri.dart';
 
 class KuriPaymentPage extends StatefulWidget {
   final KuriModel kuri;
@@ -531,28 +532,33 @@ class _KuriPaymentPageState extends State<KuriPaymentPage> {
             GestureDetector(
               onTap: () {
                 print(amount!.text);
-                FirebaseFirestore.instance
-                    .collection('kuri')
-                    .doc(widget.kuri.kuriId)
-                    .update({
-                  'payments': FieldValue.arrayUnion([
-                    {
-                      'amount': double.tryParse(amount!.text),
-                      'screenShotUrl': imgUrl,
-                      'userId': currentuserid,
-                      'userName': currentuser!.userName,
-                      'verified': false,
-                      'date': DateFormat.yMMMd().format(DateTime.now()),
-                    }
-                  ]),
-                  'totalReceived':
-                      FieldValue.increment(double.tryParse(amount!.text)!)
-                });
+                if (amount!.text != '' && (imgUrl != '' || imgUrl != null)) {
+                  FirebaseFirestore.instance
+                      .collection('kuri')
+                      .doc(widget.kuri.kuriId)
+                      .update({
+                    'payments': FieldValue.arrayUnion([
+                      {
+                        'amount': double.tryParse(amount!.text),
+                        'screenShotUrl': imgUrl,
+                        'userId': currentuserid,
+                        'userName': currentuser!.userName,
+                        'verified': false,
+                        'date': DateFormat.yMMMd().format(DateTime.now()),
+                      }
+                    ]),
+                    'totalReceived':
+                        FieldValue.increment(double.tryParse(amount!.text)!)
+                  }).then((value) {
+                    Navigator.pop(context);
+                  });
+                } else {
+                  amount!.text == ''
+                      ? showSnackbar(context, 'Enter amount')
+                      : showSnackbar(context, 'Choose Proof');
+                }
                 print(imgUrl);
                 print(imgFile);
-
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Sucesspage()));
               },
               child: Container(
                 height: 45,
