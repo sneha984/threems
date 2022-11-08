@@ -18,14 +18,18 @@ class _StoreDetailsState extends State<StoreDetails> {
    bool finish=false;
   bool trackedlocation=false;
   final List<String> items = [
-    "Kirana Store,Grocery",
-    "Fashion Apparels,Garments,CLothing",
-    "Home Decoration,Electronics",
-    "Mobile,Computers & Accessories",
-    "Fruits,Vegetables & Agricultural Products",
-    "Pharmacy & Medical Care",
-    "Pann Shop",
-    "Books & Stationery"
+    "Grocery Store",
+    "Fashion Apparels",
+    "Mobile & Electronics",
+    "Fruits & Vegetables",
+    "Pharmacy & Medicines",
+    "Chicken & Meat",
+    "Hardware & Tools",
+    "Bakery & Cake Shops",
+    "Home Decoration",
+    "Books & Stationary",
+    "Jewellery & Golds",
+    "Motor Accessories",
   ];
   String? selectedValue;
 

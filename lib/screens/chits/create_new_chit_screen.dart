@@ -382,7 +382,7 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         SvgPicture.asset(
-                                          'assets/icons/commision.svg',
+                                          'assets/icons/Vector (8).svg',
                                           fit: BoxFit.contain,
                                         ),
                                         Text(
@@ -431,7 +431,7 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
                                       height: scrWidth * 0.052,
                                       width: scrWidth * 0.052,
                                       child: SvgPicture.asset(
-                                        'assets/icons/members.svg',
+                                        'assets/icons/Vector (9).svg',
                                         fit: BoxFit.contain,
                                       ),
                                     ),
