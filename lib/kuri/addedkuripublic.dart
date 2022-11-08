@@ -25,7 +25,7 @@ class AddedKuriPublic extends StatefulWidget {
 }
 
 class _AddedKuriPublicState extends State<AddedKuriPublic> {
-  KuriModel? kuri;
+  KuriModel kuri = KuriModel();
   UserModel? currentKuriUser;
 
   static const _locale = 'HI';
@@ -62,7 +62,7 @@ class _AddedKuriPublicState extends State<AddedKuriPublic> {
   getOwner() {
     FirebaseFirestore.instance
         .collection('users')
-        .doc(kuri!.kuriId)
+        .doc(kuri.userID)
         .snapshots()
         .listen((event) {
       kuriOwner = UserModel.fromJson(event.data()!);
@@ -87,8 +87,9 @@ class _AddedKuriPublicState extends State<AddedKuriPublic> {
       percentage = kuri!.totalReceived! / kuri!.amount!;
       if (mounted) {
         setState(() {
-          getMembers();
           getOwner();
+          getMembers();
+
           getTime();
         });
       }
@@ -119,7 +120,7 @@ class _AddedKuriPublicState extends State<AddedKuriPublic> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: kuri == null
+      body: kuri == null || kuriOwner == null
           ? const Center(
               child: CircularProgressIndicator(),
             )
@@ -859,7 +860,7 @@ class _AddedKuriPublicState extends State<AddedKuriPublic> {
                 ),
                 Text(
                   "$_currency ${_formatNumber(
-                    kuri!.totalReceived!
+                    kuri.totalReceived!
                         .truncate()
                         .toString()
                         .replaceAll(',', ''),

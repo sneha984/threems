@@ -1036,6 +1036,7 @@ class _CreateKuriPageState extends State<CreateKuriPage> {
                                 BorderRadius.circular(scrWidth * 0.026),
                           ),
                           child: TextFormField(
+                            controller: kuriName,
                             focusNode: kuriNameFocus,
                             cursorHeight: scrWidth * 0.055,
                             cursorWidth: 1,
@@ -1100,9 +1101,11 @@ class _CreateKuriPageState extends State<CreateKuriPage> {
                                 BorderRadius.circular(scrWidth * 0.026),
                           ),
                           child: TextFormField(
+                            controller: amount,
                             focusNode: valueAmountFocus,
                             cursorHeight: scrWidth * 0.055,
                             cursorWidth: 1,
+                            keyboardType: TextInputType.number,
                             cursorColor: Colors.black,
                             style: TextStyle(
                               color: Colors.black,
@@ -1248,6 +1251,7 @@ class _CreateKuriPageState extends State<CreateKuriPage> {
                               onTap: () {
                                 setState(() {
                                   selectedIndex = 1;
+                                  purpose = 'Marriage';
                                 });
                               },
                               child: Column(
@@ -1287,6 +1291,7 @@ class _CreateKuriPageState extends State<CreateKuriPage> {
                               onTap: () {
                                 setState(() {
                                   selectedIndex = 0;
+                                  purpose = 'Hospital';
                                 });
                               },
                               child: Column(
@@ -1327,6 +1332,7 @@ class _CreateKuriPageState extends State<CreateKuriPage> {
                               onTap: () {
                                 setState(() {
                                   selectedIndex = 2;
+                                  purpose = 'Other';
                                 });
                               },
                               child: Column(
@@ -1387,7 +1393,10 @@ class _CreateKuriPageState extends State<CreateKuriPage> {
                                 BorderRadius.circular(scrWidth * 0.026),
                           ),
                           child: TextFormField(
+                            controller: phone,
                             focusNode: phonenumberfocus,
+                            keyboardType: TextInputType.number,
+                            // maxLength: 10,
                             cursorHeight: scrWidth * 0.055,
                             cursorWidth: 1,
                             cursorColor: Colors.black,
@@ -1500,6 +1509,7 @@ class _CreateKuriPageState extends State<CreateKuriPage> {
                           ),
                           child: TextFormField(
                             focusNode: accountnumberfocus,
+                            controller: accountNumber,
                             cursorHeight: scrWidth * 0.055,
                             cursorWidth: 1,
                             cursorColor: Colors.black,
@@ -1552,6 +1562,7 @@ class _CreateKuriPageState extends State<CreateKuriPage> {
                           ),
                           child: TextFormField(
                             focusNode: confirmaccountnumberfocus,
+                            controller: confirmAccountNumber,
                             cursorHeight: scrWidth * 0.055,
                             cursorWidth: 1,
                             cursorColor: Colors.black,
@@ -1604,6 +1615,7 @@ class _CreateKuriPageState extends State<CreateKuriPage> {
                           ),
                           child: TextFormField(
                             focusNode: accountholdernamefocus,
+                            controller: accountHolderName,
                             cursorHeight: scrWidth * 0.055,
                             cursorWidth: 1,
                             cursorColor: Colors.black,
@@ -1656,6 +1668,7 @@ class _CreateKuriPageState extends State<CreateKuriPage> {
                           ),
                           child: TextFormField(
                             focusNode: banknamefocus,
+                            controller: bankName,
                             cursorHeight: scrWidth * 0.055,
                             cursorWidth: 1,
                             cursorColor: Colors.black,
@@ -1708,6 +1721,7 @@ class _CreateKuriPageState extends State<CreateKuriPage> {
                           ),
                           child: TextFormField(
                             focusNode: ifsccodefocus,
+                            controller: ifsc,
                             cursorHeight: scrWidth * 0.055,
                             cursorWidth: 1,
                             cursorColor: Colors.black,
