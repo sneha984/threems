@@ -906,8 +906,10 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
                                         GestureDetector(
                                           onTap: () {
                                             _selectDate(context);
-                                            print(selectedTime);
+                                            print(selectedTime!.hour);
+                                            print(selectedTime!.minute);
                                             print(selectedDate);
+                                            print(selectedDate!.weekday);
                                           },
                                           child: Container(
                                             // color: Colors.pink,
@@ -1333,7 +1335,7 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
                                           fit: BoxFit.contain,
                                         ),
                                         Text(
-                                          "Commision",
+                                          "Commission",
                                           style: TextStyle(
                                             fontSize: FontSize15,
                                             fontFamily: 'Urbanist',
