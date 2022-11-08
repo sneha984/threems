@@ -1,8 +1,38 @@
+class Sproducts{
+  final String productimage;
+  final String storename;
+  final double price;
+  final String productname;
+  Sproducts({required this.price,required this.productimage,required this.storename,required this.productname});
+}
+class NearStore{
+  final String image;
+  final String storename;
+  final String category;
+  NearStore({required this.image,required this.storename,required this.category});
+}
+class SubCategory{
+  final String storeimage;
+  final String storename;
+  final String noofproduct;
+  SubCategory({required this.noofproduct,required this.storename,required this.storeimage});
+}
+class Category{
+  final String categoryname;
+  final String categoryimage;
+  Category({required this.categoryimage,required this.categoryname});
+}
 List<String> carouselImages = [
   'https://images.pexels.com/photos/1000445/pexels-photo-1000445.jpeg',
   'https://images.pexels.com/photos/1679618/pexels-photo-1679618.jpeg',
   'https://images.pexels.com/photos/3182812/pexels-photo-3182812.jpeg',
 ];
+List<String> carouselImage = [
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxSBtzVoSGMmvxYmoFzM_hLlQCtXKywwCElA&usqp=CAU',
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxSBtzVoSGMmvxYmoFzM_hLlQCtXKywwCElA&usqp=CAU',
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxSBtzVoSGMmvxYmoFzM_hLlQCtXKywwCElA&usqp=CAU',
+];
+
 
 List<Map<String, dynamic>> verifiedCharities = [
   {

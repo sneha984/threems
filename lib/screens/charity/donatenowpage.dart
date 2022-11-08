@@ -8,6 +8,7 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:threems/Authentication/auth.dart';
+import 'package:threems/Authentication/root.dart';
 import 'package:threems/model/usermodel.dart';
 import 'package:threems/screens/charity/payment.dart';
 import 'package:threems/screens/charity/pdfviewpage.dart';
@@ -911,12 +912,11 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                                               fontWeight: FontWeight.w700,
                                               color: primarycolor),),
                                           SizedBox(width: scrWidth*0.01,),
-                                          (data.verified==true)
-                                              ?SvgPicture.asset("assets/icons/Frame (1).svg"):
+                                          (data.userId==currentuserid)?
                                           InkWell(
                                             onTap: (){
                                               bottomsheets(context);
-                                              },
+                                            },
                                             child: Container(
                                               height:25,
                                               width: 25,
@@ -925,7 +925,8 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                                               ),
 
                                             ),
-                                          ),
+                                          ) :SvgPicture.asset("assets/icons/Frame (1).svg"),
+
                                           SizedBox(width: scrWidth*0.02,)
                                         ],
                                       ),
