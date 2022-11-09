@@ -76,8 +76,8 @@ class KuriModel {
     data['IFSC'] = iFSC;
     data['userID'] = userID;
     data['members'] = members;
-    if (this.payments != null) {
-      data['payments'] = this.payments!.map((v) => v.toJson()).toList();
+    if (payments != null) {
+      data['payments'] = payments!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -101,12 +101,12 @@ class Payments {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['amount'] = this.amount;
-    data['datePaid'] = this.datePaid;
-    data['verified'] = this.verified;
-    data['url'] = this.url;
-    data['userId'] = this.userId;
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['amount'] = amount;
+    data['datePaid'] = datePaid;
+    data['verified'] = verified;
+    data['url'] = url;
+    data['userId'] = userId;
     return data;
   }
 }

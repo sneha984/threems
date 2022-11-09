@@ -212,13 +212,8 @@ class _AddMembersearchState extends State<AddMembersearch> {
                           child: CircleAvatar(
                             radius: 15,
                             backgroundColor: Colors.grey,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(15),
-                              child: CachedNetworkImage(
-                                imageUrl:
-                                    'https://pbs.twimg.com/profile_images/1392793006877540352/ytVYaEBZ_400x400.jpg',
-                              ),
-                            ),
+                            backgroundImage:
+                                MemoryImage(totalContactsSearch[index].avatar!),
                           ),
                         ),
                         Center(

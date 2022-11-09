@@ -540,11 +540,10 @@ class _KuriPaymentPageState extends State<KuriPaymentPage> {
                     'payments': FieldValue.arrayUnion([
                       {
                         'amount': double.tryParse(amount!.text),
-                        'screenShotUrl': imgUrl,
+                        'url': imgUrl,
                         'userId': currentuserid,
-                        'userName': currentuser!.userName,
                         'verified': false,
-                        'date': DateFormat.yMMMd().format(DateTime.now()),
+                        'datePaid': DateFormat.yMMMd().format(DateTime.now()),
                       }
                     ]),
                     'totalReceived':

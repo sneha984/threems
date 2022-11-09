@@ -161,7 +161,7 @@ class _AddMembersKuriState extends State<AddMembersKuri> {
           ),
         ),
         actions: [
-          GestureDetector(
+          InkWell(
             onTap: () {
               addFriend = [];
               for (int i = 0; i < addMember.length; i++) {
@@ -298,17 +298,31 @@ class _AddMembersKuriState extends State<AddMembersKuri> {
                               child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
+                              // Container(
+                              //   margin: EdgeInsets.only(left: scrWidth * 0.02),
+                              //   child: CircleAvatar(
+                              //     radius: 15,
+                              //     backgroundColor: Colors.grey,
+                              //     child: ClipRRect(
+                              //       borderRadius:
+                              //           BorderRadius.circular(scrWidth * 0.04),
+                              //       child: CachedNetworkImage(
+                              //         imageUrl:
+                              //             'https://pbs.twimg.com/profile_images/1392793006877540352/ytVYaEBZ_400x400.jpg',
+                              //       ),
+                              //     ),
+                              //   ),
+                              // ),
                               Container(
-                                margin: EdgeInsets.only(left: scrWidth * 0.02),
+                                margin: const EdgeInsets.only(left: 8),
                                 child: CircleAvatar(
                                   radius: 15,
                                   backgroundColor: Colors.grey,
                                   child: ClipRRect(
-                                    borderRadius:
-                                        BorderRadius.circular(scrWidth * 0.04),
-                                    child: CachedNetworkImage(
-                                      imageUrl:
-                                          'https://pbs.twimg.com/profile_images/1392793006877540352/ytVYaEBZ_400x400.jpg',
+                                    borderRadius: BorderRadius.circular(15),
+                                    child: Icon(
+                                      Icons.person,
+                                      color: Colors.white,
                                     ),
                                   ),
                                 ),
@@ -543,7 +557,7 @@ class _AddMembersKuriState extends State<AddMembersKuri> {
                   SizedBox(
                     width: scrWidth * 0.03,
                   ),
-                  GestureDetector(
+                  InkWell(
                     onTap: () {
                       setState(() {
                         loading = true;
