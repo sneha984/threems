@@ -1,9 +1,14 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:threems/ByeandSell/storedetailsfill.dart';
 import 'package:threems/ByeandSell/succesfullyadded.dart';
+import 'dart:io';
+
 
 import '../screens/splash_screen.dart';
 import '../utils/themes.dart';
@@ -16,16 +21,20 @@ class StoreDetailsFill2 extends StatefulWidget {
 }
 
 class _StoreDetailsFill2State extends State<StoreDetailsFill2> {
-  bool finished=false;
+  bool finished=true;
   final List<String> item = [
-    "Kirana Store,Grocery",
-    "Fashion Apparels,Garments,CLothing",
-    "Home Decoration,Electronics",
-    "Mobile,Computers & Accessories",
-    "Fruits,Vegetables & Agricultural Products",
-    "Pharmacy & Medical Care",
-    "Pann Shop",
-    "Books & Stationery"
+    "Grocery Store",
+    "Fashion Apparels",
+    "Mobile & Electronics",
+    "Fruits & Vegetables",
+    "Pharmacy & Medicines",
+    "Chicken & Meat",
+    "Hardware & Tools",
+    "Bakery & Cake Shops",
+    "Home Decoration",
+    "Books & Stationary",
+    "Jewellery & Golds",
+    "Motor Accessories",
   ];
   String? selectedValuee;
   final List<String> items = [
@@ -62,6 +71,33 @@ class _StoreDetailsFill2State extends State<StoreDetailsFill2> {
     "plate",
     "inch"
   ];
+  String? imgUrl;
+  var imgFile;
+  var uploadTask;
+  var fileUrl;
+  Future uploadImageToFirebase(BuildContext context) async {
+    Reference firebaseStorageRef =
+    FirebaseStorage.instance.ref().child('deposits/${imgFile.path}');
+    UploadTask uploadTask = firebaseStorageRef.putFile(imgFile);
+    TaskSnapshot taskSnapshot = (await uploadTask);
+    String value = await taskSnapshot.ref.getDownloadURL();
+
+    // if(value!=null){
+    //   imageList.add(value);
+    // }
+    setState(() {
+      imgUrl = value;
+
+    });
+  }
+  _pickImage() async {
+    final imageFile = await ImagePicker.platform.pickImage(
+        source: ImageSource.gallery);
+    setState(() {
+      imgFile = File(imageFile!.path);
+      uploadImageToFirebase(context);
+    });
+  }
   FocusNode payableAmountNode = FocusNode();
   @override
   void dispose() {
@@ -194,7 +230,7 @@ class _StoreDetailsFill2State extends State<StoreDetailsFill2> {
                 children: [
                   GestureDetector(
                     onTap: (){
-                      Navigator.pop(context);
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>StoreDetails()));
                     },
                     child:SvgPicture.asset("assets/icons/arrowmark.svg",),
                   ),
@@ -210,17 +246,34 @@ class _StoreDetailsFill2State extends State<StoreDetailsFill2> {
                 ],
               ),
               SizedBox(height: scrHeight*0.03,),
-              Container(
-                  height:scrHeight*0.11,
-                  width: scrWidth*0.25,
-                  decoration: BoxDecoration(
-                  color: textFormFieldFillColor,
-                  borderRadius:
-                  BorderRadius.circular(scrWidth * 0.04),
+              InkWell(
+                onTap: (){
+                  _pickImage();
+                },
+                child: Container(
+                    height:scrHeight*0.11,
+                    width: scrWidth*0.25,
+                    decoration: BoxDecoration(
+                    color: textFormFieldFillColor,
+                    borderRadius:
+                    BorderRadius.circular(scrWidth * 0.04),
+                  ),
+                  child:imgFile==null?Center(child:SvgPicture.asset("assets/icons/bigcamera.svg")):Container(
+                    height:scrHeight*0.11,
+                    width: scrWidth*0.25,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: FileImage(imgFile!) as ImageProvider,fit: BoxFit.fill),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                        color: Color(0xffDADADA),
+                      ),
+                    ),
+
+                  )
+                  )
                 ),
-                child:Center(child:SvgPicture.asset("assets/icons/bigcamera.svg"),
-                )
-              ),
+
               SizedBox(height: scrHeight*0.01,),
               Text(
                 "Add product images (upto 5)",
@@ -316,7 +369,7 @@ class _StoreDetailsFill2State extends State<StoreDetailsFill2> {
                         isExpanded: true,
                         hint: Expanded(
                           child:  Text(
-                            "Store Category",
+                            "Product Category",
                             style: TextStyle(
                                 fontSize: FontSize15,
                                 fontFamily: 'Urbanist',
@@ -684,7 +737,7 @@ class _StoreDetailsFill2State extends State<StoreDetailsFill2> {
                 ),
               ),
                SizedBox(height: scrHeight*0.195,),
-              finished?Padding(
+              finished==false?Padding(
                 padding:  EdgeInsets.only(right: scrWidth*0.053),
                 child: Container(
                   height: textFormFieldHeight45,

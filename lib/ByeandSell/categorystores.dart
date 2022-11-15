@@ -82,7 +82,7 @@ class _CategoryStoresState extends State<CategoryStores> {
               padding:  EdgeInsets.only(top: 10),
               child: Container(
                 height: scrHeight*0.042,
-                width: scrWidth*0.79,
+                width: scrWidth*0.9,
                 decoration: BoxDecoration(
                     color: Color(0xffE9EEF3),
 
@@ -126,7 +126,7 @@ class _CategoryStoresState extends State<CategoryStores> {
                   physics: NeverScrollableScrollPhysics(),
                   itemCount: subcategory.length,
                   gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(
-                      childAspectRatio: 3 / 3.4,
+                      childAspectRatio: 3 / 3.1,
                       crossAxisSpacing: 2,
                       mainAxisSpacing: 20,
                       crossAxisCount: 3),
@@ -142,8 +142,8 @@ class _CategoryStoresState extends State<CategoryStores> {
                             padding: const EdgeInsets.only(
                                 left: 10),
                             child: Container(
-                              height: 89,
-                              width: 94,
+                              height: 80,
+                              width: 88,
                               decoration: BoxDecoration(
                                 image: DecorationImage(image:
                                 NetworkImage(subcategory[index].storeimage),

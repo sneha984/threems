@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../screens/splash_screen.dart';
 import '../utils/dummy.dart';
@@ -84,7 +85,7 @@ class _ImageSlideState extends State<ImageSlide> {
           dotsCount: carouselImages.isEmpty ? 1 : carouselImages.length,
           position: _currentPageValue,
           decorator: DotsDecorator(
-            spacing: EdgeInsets.all(scrWidth * 0.012),
+            spacing: EdgeInsets.all(scrWidth * 0.01),
             activeColor: dotIndicatorColor,
             color: dotIndicatorColor,
             size: Size(

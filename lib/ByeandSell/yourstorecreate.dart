@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../screens/splash_screen.dart';
+import '../utils/dummy.dart';
 
 class YourStoreCreatePage extends StatefulWidget {
   const YourStoreCreatePage({Key? key}) : super(key: key);
@@ -11,6 +12,20 @@ class YourStoreCreatePage extends StatefulWidget {
 }
 
 class _YourStoreCreatePageState extends State<YourStoreCreatePage> {
+  List<NearStore> nearstore=[
+    NearStore(image:"https://cdn.pixabay.com/photo/2016/03/02/20/13/grocery-1232944__340.jpg",
+        storename: "Bavya Store", category: "Grocery Stores"),
+    NearStore(image:"https://cdn.pixabay.com/photo/2016/03/02/20/13/grocery-1232944__340.jpg",
+        storename: "Bavya Store", category: "Grocery Stores"),
+    NearStore(image:"https://cdn.pixabay.com/photo/2016/03/02/20/13/grocery-1232944__340.jpg",
+        storename: "Bavya Store", category: "Grocery Stores"),
+    NearStore(image:"https://cdn.pixabay.com/photo/2016/03/02/20/13/grocery-1232944__340.jpg",
+        storename: "Bavya Store", category: "Grocery Stores"),
+    NearStore(image:"https://cdn.pixabay.com/photo/2016/03/02/20/13/grocery-1232944__340.jpg",
+        storename: "Bavya Store", category: "Grocery Stores"),
+
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,10 +73,10 @@ class _YourStoreCreatePageState extends State<YourStoreCreatePage> {
               ),
             ),
             Padding(
-              padding:  EdgeInsets.only(top: 10),
+              padding: EdgeInsets.only(top: 10),
               child: Container(
                 height: scrHeight*0.042,
-                width: scrWidth*0.79,
+                width: scrWidth*0.9,
                 decoration: BoxDecoration(
                     color: Color(0xffE9EEF3),
 
@@ -103,9 +118,9 @@ class _YourStoreCreatePageState extends State<YourStoreCreatePage> {
                    shrinkWrap: true,
                   // scrollDirection: Axis.vertical,
                   physics: NeverScrollableScrollPhysics(),
-                  itemCount: 12,
+                  itemCount: nearstore.length,
                   gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(
-                      childAspectRatio: 3 / 3.4,
+                      childAspectRatio: 3 / 3.1,
                       crossAxisSpacing: 2,
                       mainAxisSpacing: 20,
                       crossAxisCount: 3),
@@ -118,12 +133,11 @@ class _YourStoreCreatePageState extends State<YourStoreCreatePage> {
                             padding: const EdgeInsets.only(
                                 left: 10),
                             child: Container(
-                              height: 89,
-                              width: 94,
+                              height: 80,
+                              width: 90,
                               decoration: BoxDecoration(
                                 image: DecorationImage(image:
-                                NetworkImage(
-                                    "https://cdn.pixabay.com/photo/2016/03/02/20/13/grocery-1232944__340.jpg"),
+                                NetworkImage(nearstore[index].image),
                                     fit: BoxFit.fill),
                                 color: Colors.white,
 
@@ -139,15 +153,18 @@ class _YourStoreCreatePageState extends State<YourStoreCreatePage> {
                             crossAxisAlignment: CrossAxisAlignment
                                 .start,
                             children: [
+                              SizedBox(height: 5,),
+
                               Text(
-                                "name", textAlign: TextAlign.center,
+                                nearstore[index].storename, textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontFamily: 'Urbanist',
                                     fontSize: 12,
                                     fontWeight: FontWeight.w600,
                                     color: Color(0xff0E0E0E)),),
+                              SizedBox(height: 1,),
                               Text(
-                                "name", textAlign: TextAlign.center,
+                               nearstore[index].category, textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontFamily: 'Urbanist',
                                     fontSize: 10,

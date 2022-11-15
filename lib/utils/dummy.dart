@@ -5,6 +5,16 @@ class Sproducts{
   final String productname;
   Sproducts({required this.price,required this.productimage,required this.storename,required this.productname});
 }
+class EachStore{
+  final String productimage;
+  final String productunit;
+  final double productprice;
+  final String productname;
+  int counter;
+  bool ShouldVisible;
+  EachStore({required this.counter,required this.ShouldVisible,required this.productimage,required this.productprice,required this.productunit,required this.productname});
+
+}
 class NearStore{
   final String image;
   final String storename;
@@ -28,13 +38,17 @@ List<String> carouselImages = [
   'https://images.pexels.com/photos/3182812/pexels-photo-3182812.jpeg',
 ];
 List<String> carouselImage = [
-  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxSBtzVoSGMmvxYmoFzM_hLlQCtXKywwCElA&usqp=CAU',
-  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxSBtzVoSGMmvxYmoFzM_hLlQCtXKywwCElA&usqp=CAU',
-  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxSBtzVoSGMmvxYmoFzM_hLlQCtXKywwCElA&usqp=CAU',
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfFH9GI999GFGnemv_RBjRY1FySnnevAFPcg&usqp=CAU',
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfFH9GI999GFGnemv_RBjRY1FySnnevAFPcg&usqp=CAU',
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfFH9GI999GFGnemv_RBjRY1FySnnevAFPcg&usqp=CAU',
+
+  // 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxSBtzVoSGMmvxYmoFzM_hLlQCtXKywwCElA&usqp=CAU',
+  // 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxSBtzVoSGMmvxYmoFzM_hLlQCtXKywwCElA&usqp=CAU',
 ];
 
 
 List<Map<String, dynamic>> verifiedCharities = [
+  
   {
     'image':
         'https://www.who.int/images/default-source/health-and-climate-change/rescue-operation-haiti-flood-c-un-photo-marco-dormino.tmb-1920v.jpg',
@@ -103,4 +117,15 @@ class Item {
   String payname;
   String pic;
   Item({required this.pic, required this.payname});
+}
+class ItemData{
+ final String Name;
+  int Counter;
+   bool ShouldVisible;
+
+  ItemData({
+   required this.Name,
+     required this.Counter,
+     required this.ShouldVisible
+  });
 }

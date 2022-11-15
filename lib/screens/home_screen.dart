@@ -19,6 +19,7 @@ import 'package:threems/widgets/funding_widget.dart';
 import 'package:threems/widgets/upcomming_card_widget.dart';
 
 import '../Authentication/auth.dart';
+import '../controller/Home_Controller.dart';
 import '../kuri/createkuri.dart';
 import '../model/charitymodel.dart';
 import 'charity/donatepage.dart';
@@ -961,7 +962,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       GestureDetector(
-                          onTap: () {}, child: VerifiedCharityWidget()),
+                          onTap: () {
+                            Navigator.push(context,MaterialPageRoute(builder: (context)=>GeolocatorPage()));
+                          }, child: VerifiedCharityWidget()),
                     ],
                   ),
                 ),

@@ -1,14 +1,19 @@
 import 'package:another_stepper/dto/stepper_data.dart';
 import 'package:another_stepper/widgets/another_stepper.dart';
+import 'package:badges/badges.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:threems/ByeandSell/categorystores.dart';
 import 'package:threems/ByeandSell/shopheadimageslider.dart';
 import 'package:threems/ByeandSell/storedetailsfill.dart';
 import 'package:threems/ByeandSell/storedetailsfill2.dart';
+import 'package:threems/ByeandSell/storepage.dart';
 import 'package:threems/ByeandSell/yourstorecreate.dart';
 import 'dart:ui' as ui;
 import 'package:threems/screens/splash_screen.dart';
@@ -25,6 +30,54 @@ class BuyAndSell extends StatefulWidget {
 }
 
 class _BuyAndSellState extends State<BuyAndSell>with TickerProviderStateMixin {
+  String currentAddress = 'Select Your Location';
+  Position? currentposition;
+
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      Fluttertoast.showToast(msg: 'Please enable Your Location Service');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        Fluttertoast.showToast(msg: 'Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      Fluttertoast.showToast(
+          msg:
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+
+    try {
+      List<Placemark> placemarks =
+      await placemarkFromCoordinates(position.latitude, position.longitude);
+
+      Placemark place = placemarks[0];
+
+      setState(() {
+        currentposition = position;
+        currentAddress = "${place.locality}";
+        //" ${place.postalCode},"
+        //" ${place.country}";
+      });
+    } catch (e) {
+      print(e);
+    }
+    throw '';
+
+  }
  bool isstorenotcreated=true;
  bool isstorecreatedcmplt=false;
   List<Sproducts> sproduct=[
@@ -51,32 +104,32 @@ class _BuyAndSellState extends State<BuyAndSell>with TickerProviderStateMixin {
     NearStore(image: "https://cdn.pixabay.com/photo/2016/03/02/20/13/grocery-1232944__340.jpg",
         storename: "Bavya Store", category: "Grocery"),
   ];
-  // List<Category> category=[
-  //   Category(categoryimage: "assets/icons/grocery.svg",
-  //       categoryname:"Grocery Stores"),
-  //   Category(categoryimage: "assets/storecategory/Frame (1).svg",
-  //       categoryname:"Fasion Apparels"),
-  //   Category(categoryimage: "assets/storecategory/Frame (1).svg",
-  //       categoryname:"Mobiles & Electronics"),
-  //   Category(categoryimage: "assets/storecategory/Frame (2).svg",
-  //       categoryname:"Fruits & Vegetabels"),
-  //   Category(categoryimage: "assets/storecategory/Frame (3).svg",
-  //       categoryname:"Pharmacy & Medicines"),
-  //   Category(categoryimage: "assets/storecategory/Frame (4).svg",
-  //       categoryname:"Chicken & Meat"),
-  //   Category(categoryimage: "assets/storecategory/Frame (5).svg",
-  //       categoryname:"Hardwares & Tools"),
-  //   Category(categoryimage: "assets/storecategory/Frame (6).svg",
-  //       categoryname:"Bakery & Cake Shops"),
-  //   Category(categoryimage: "assets/storecategory/fasion.svg",
-  //       categoryname:"Home Decoration"),
-  //   Category(categoryimage: "assets/storecategory/fasion.svg",
-  //       categoryname:"Books & Stationery"),
-  //   Category(categoryimage: "assets/storecategory/fasion.svg",
-  //       categoryname:"Jewellery & Golds"),
-  //   Category(categoryimage: "assets/storecategory/fasion.svg",
-  //       categoryname:"Moto Accessories"),
-  // ];
+  List<Category> category=[
+    Category(categoryimage: "assets/icons/grocery.svg",
+        categoryname:"Grocery Stores"),
+    Category(categoryimage: "assets/icons/grocery.svg",
+        categoryname:"Fasion Apparels"),
+    Category(categoryimage: "assets/icons/grocery.svg",
+        categoryname:"Mobiles & Electronics"),
+    Category(categoryimage: "assets/icons/grocery.svg",
+        categoryname:"Fruits & Vegetabels"),
+    Category(categoryimage: "assets/icons/grocery.svg",
+        categoryname:"Pharmacy & Medicines"),
+    Category(categoryimage: "assets/icons/grocery.svg",
+        categoryname:"Chicken & Meat"),
+    Category(categoryimage: "assets/icons/grocery.svg",
+        categoryname:"Hardwares & Tools"),
+    Category(categoryimage: "assets/icons/grocery.svg",
+        categoryname:"Bakery & Cake Shops"),
+    Category(categoryimage: "assets/icons/grocery.svg",
+        categoryname:"Home Decoration"),
+    Category(categoryimage: "assets/icons/grocery.svg",
+        categoryname:"Books & Stationery"),
+    Category(categoryimage: "assets/icons/grocery.svg",
+        categoryname:"Jewellery & Golds"),
+    Category(categoryimage: "assets/icons/grocery.svg",
+        categoryname:"Moto Accessories"),
+  ];
 
   late TabController _tabController;
   bool isShopNotCreated = false;
@@ -109,7 +162,10 @@ class _BuyAndSellState extends State<BuyAndSell>with TickerProviderStateMixin {
         elevation: 0.1,
         backgroundColor: Colors.white,
         leading: GestureDetector(
-          onTap: () {},
+          onTap: () {
+            _determinePosition();
+
+          },
           child: Padding(
             padding: EdgeInsets.only(top: scrHeight * 0.03,
                 left: scrWidth * 0.045,
@@ -121,7 +177,7 @@ class _BuyAndSellState extends State<BuyAndSell>with TickerProviderStateMixin {
         title: Padding(
           padding: EdgeInsets.only(top: scrHeight * 0.02),
           child: Text(
-            "Select Your Location",
+            currentAddress,
             style: TextStyle(
                 fontSize: scrWidth * 0.046,
                 color: Colors.black,
@@ -130,10 +186,23 @@ class _BuyAndSellState extends State<BuyAndSell>with TickerProviderStateMixin {
           ),
         ),
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 25,top: 13),
-            child: SvgPicture.asset("assets/images/cart.svg"),
-          )
+          // Padding(
+          //   padding: const EdgeInsets.only(right: 25,top: 13),
+          //   child: SvgPicture.asset("assets/images/cart.svg"),
+          // )
+          Badge(
+            position: BadgePosition.topEnd(top: 23, end: 13,),
+            animationDuration: Duration(milliseconds: 300),
+            animationType: BadgeAnimationType.fade,
+            badgeColor: Colors.black,
+            badgeContent: Text('${cartlist.length}',
+              style: TextStyle(color: Colors.white,fontSize: 10),
+            ),
+            child: Padding(
+                padding: const EdgeInsets.only(right: 25,top: 13),
+                child: SvgPicture.asset("assets/images/cart.svg"),
+              )
+          ),
         ],
       ),
       body: Column(
@@ -193,97 +262,108 @@ class _BuyAndSellState extends State<BuyAndSell>with TickerProviderStateMixin {
                             child: ImageSlide(),
                           ),
                           SizedBox(height: scrHeight * 0.02,),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(width: scrWidth * 0.03,),
-                              SvgPicture.asset("assets/icons/staricon.svg"),
-                              SizedBox(width: scrWidth * 0.03,),
-                              Text("Sponsered Product", style: TextStyle(
-                                  fontFamily: 'Urbanist',
-                                  fontSize: scrWidth * 0.04,
-                                  fontWeight: FontWeight.w600
-                              ),)
-                            ],
-                          ),
-                          SizedBox(height: 10,),
-                          Container(
-                            height: 150,
-                            child: ListView.builder(
-                                physics: BouncingScrollPhysics(),
-                                scrollDirection: Axis.horizontal,
-                                shrinkWrap: true,
-                                itemCount: sproduct.length,
-                                itemBuilder: (context, index) {
-                                  return Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      InkWell(
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 10),
-                                          child: Container(
-                                            height: 89,
-                                            width: 94,
-                                            decoration: BoxDecoration(
-                                              image: DecorationImage(image: NetworkImage(sproduct[index].productimage)),
-                                                color: Colors.white,
-                                                borderRadius: BorderRadius
-                                                    .circular(15),
-                                                border: Border.all(
-                                                    color: Color(0xffECECEC),
-                                                    width: 1)
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(left: 13),
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment
-                                              .start,
-                                          children: [
-                                            SizedBox(height: 5,),
-                                            Text(
-                                              sproduct[index].productname, textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  fontFamily: 'Urbanist',
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.w600,
-                                                  color: Color(0xff0E0E0E)),),
-                                            SizedBox(height: 2,),
-
-                                            Text(
-                                              sproduct[index].storename, textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  fontFamily: 'Urbanist',
-                                                  fontSize: 10,
-                                                  fontWeight: FontWeight.w600,
-                                                  color: Color(0xff818181)),),
-                                            SizedBox(height: 2,),
-
-                                            Text(
-                                              currencyConvert.format(sproduct[index].price).toString(), textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  fontFamily: 'Urbanist',
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.w700,
-                                                  color: Color(0xffF10000)),),
-
-                                          ],
-                                        ),
-                                      )
-                                    ],
-                                  );
-                                }
+                          Padding(
+                            padding:  EdgeInsets.only(left: 6),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(width: scrWidth * 0.03,),
+                                SvgPicture.asset("assets/icons/staricon.svg"),
+                                SizedBox(width: scrWidth * 0.03,),
+                                Text("Sponsered Product", style: TextStyle(
+                                    fontFamily: 'Urbanist',
+                                    fontSize: scrWidth * 0.04,
+                                    fontWeight: FontWeight.w600
+                                ),)
+                              ],
                             ),
                           ),
+                          SizedBox(height: 13,),
+                          Padding(
+                            padding:  EdgeInsets.only(left: 6),
+                            child: Container(
+                              height: 150,
+                              child: ListView.builder(
+                                  physics: BouncingScrollPhysics(),
+                                  scrollDirection: Axis.horizontal,
+                                  shrinkWrap: true,
+                                  itemCount: sproduct.length,
+                                  itemBuilder: (context, index) {
+                                    return Padding(
+                                      padding:  EdgeInsets.only(right: 5),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          InkWell(
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 10),
+                                              child: Container(
+                                                height: 81,
+                                                width: 89,
+                                                decoration: BoxDecoration(
+                                                  image: DecorationImage(image: NetworkImage(sproduct[index].productimage)),
+                                                    color: Colors.white,
+                                                    borderRadius: BorderRadius
+                                                        .circular(14),
+                                                    border: Border.all(
+                                                        color: Color(0xffECECEC),
+                                                        width: 1)
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(left: 13),
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment
+                                                  .start,
+                                              children: [
+                                                SizedBox(height: 5,),
+                                                Text(
+                                                  sproduct[index].productname, textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      fontFamily: 'Urbanist',
+                                                      fontSize: 12,
+                                                      fontWeight: FontWeight.w600,
+                                                      color: Color(0xff0E0E0E)),),
+                                                SizedBox(height: 2,),
+
+                                                Text(
+                                                  sproduct[index].storename, textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      fontFamily: 'Urbanist',
+                                                      fontSize: 10,
+                                                      fontWeight: FontWeight.w600,
+                                                      color: Color(0xff818181)),),
+                                                SizedBox(height: 2,),
+
+                                                Text(
+                                                  currencyConvert.format(sproduct[index].price).toString(), textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      fontFamily: 'Urbanist',
+                                                      fontSize: 12,
+                                                      fontWeight: FontWeight.w700,
+                                                      color: Color(0xffF10000)),),
+
+                                              ],
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    );
+                                  }
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 10,),
+
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              SizedBox(width: scrWidth * 0.04,),
+                              SizedBox(width: scrWidth * 0.06,),
                               Padding(
                                 padding: const EdgeInsets.only(top: 5),
                                 child: SvgPicture.asset("assets/images/nearstore.svg"),
@@ -309,66 +389,73 @@ class _BuyAndSellState extends State<BuyAndSell>with TickerProviderStateMixin {
                           ),
                           SizedBox(height: 13,),
 
-                          Container(
-                            height: 140,
-                            child: ListView.builder(
-                                physics: BouncingScrollPhysics(),
-                                scrollDirection: Axis.horizontal,
-                                shrinkWrap: true,
-                                itemCount:nstore.length,
-                                itemBuilder: (context, index) {
-                                  return Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      InkWell(
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 10),
-                                          child: Container(
-                                            height: 89,
-                                            width: 94,
-                                            decoration: BoxDecoration(
-                                              image: DecorationImage(image:
-                                              NetworkImage(nstore[index].image),
-                                                  fit: BoxFit.fill),
-                                              color: Colors.white,
+                          Padding(
+                            padding:  EdgeInsets.only(left: 6),
+                            child: Container(
+                              height: 140,
+                              child: ListView.builder(
+                                  physics: BouncingScrollPhysics(),
+                                  scrollDirection: Axis.horizontal,
+                                  shrinkWrap: true,
+                                  itemCount:nstore.length,
+                                  itemBuilder: (context, index) {
+                                    return Padding(
+                                      padding: EdgeInsets.only(right: 5),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          InkWell(
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 10),
+                                              child: Container(
+                                                height: 80,
+                                                width: 88,
+                                                decoration: BoxDecoration(
+                                                  image: DecorationImage(image:
+                                                  NetworkImage(nstore[index].image),
+                                                      fit: BoxFit.fill),
+                                                  color: Colors.white,
 
-                                              borderRadius: BorderRadius.circular(
-                                                  15),
+                                                  borderRadius: BorderRadius.circular(
+                                                      15),
+                                                ),
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(left: 13),
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment
-                                              .start,
-                                          children: [
-                                            SizedBox(height: 3,),
-                                            Text(
-                                              nstore[index].storename, textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  fontFamily: 'Urbanist',
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.w600,
-                                                  color: Color(0xff0E0E0E)),),
-                                            SizedBox(height: 3,),
-                                            Text(
-                                              nstore[index].category, textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  fontFamily: 'Urbanist',
-                                                  fontSize: 10,
-                                                  fontWeight: FontWeight.w600,
-                                                  color: Color(0xff818181)),),
+                                          Padding(
+                                            padding: const EdgeInsets.only(left: 13),
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment
+                                                  .start,
+                                              children: [
+                                                SizedBox(height: 3,),
+                                                Text(
+                                                  nstore[index].storename, textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      fontFamily: 'Urbanist',
+                                                      fontSize: 12,
+                                                      fontWeight: FontWeight.w600,
+                                                      color: Color(0xff0E0E0E)),),
+                                                SizedBox(height: 3,),
+                                                Text(
+                                                  nstore[index].category, textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      fontFamily: 'Urbanist',
+                                                      fontSize: 10,
+                                                      fontWeight: FontWeight.w600,
+                                                      color: Color(0xff818181)),),
 
-                                          ],
-                                        ),
-                                      ),
+                                              ],
+                                            ),
+                                          ),
 
-                                    ],
-                                  );
-                                }
+
+                                        ],
+                                      ),
+                                    );
+                                  }
+                              ),
                             ),
                           ),
                           GestureDetector(
@@ -376,7 +463,7 @@ class _BuyAndSellState extends State<BuyAndSell>with TickerProviderStateMixin {
                                Navigator.push(context,MaterialPageRoute(builder: (context)=>YourStoreCreatePage()));
                             },
                             child: Container(
-                              height: 48,
+                              height: 40,
                               width: 310,
                               decoration: BoxDecoration(
                                   color: primarycolor,
@@ -394,7 +481,27 @@ class _BuyAndSellState extends State<BuyAndSell>with TickerProviderStateMixin {
                               ),
                             ),
                           ),
-                          SizedBox(height: scrHeight*0.04,),
+                          SizedBox(height: scrHeight*0.03,),
+
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(width: scrWidth * 0.06,),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 5),
+                                child: SvgPicture.asset("assets/images/nearstore.svg"),
+                              ),
+                              SizedBox(width: scrWidth * 0.03,),
+                              Text("Categories", style: TextStyle(
+                                  fontFamily: 'Urbanist',
+                                  fontSize: scrWidth * 0.04,
+                                  fontWeight: FontWeight.w600
+                              ),),
+
+                            ],
+                          ),
+                          SizedBox(height: scrHeight*0.03,),
                           Padding(
                             padding:  EdgeInsets.only(left: 11,right: 11),
                             child: Container(
@@ -402,12 +509,13 @@ class _BuyAndSellState extends State<BuyAndSell>with TickerProviderStateMixin {
                               child: GridView.builder(
                                 shrinkWrap: true,
                                 physics: NeverScrollableScrollPhysics(),
-                                itemCount:12,
+                                itemCount:category.length,
                                 gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(
-                                    childAspectRatio: 3 / 3.4,
+                                    childAspectRatio: 3 / 3.5,
                                     crossAxisSpacing: 2,
                                     mainAxisSpacing: 20,
-                                    crossAxisCount: 4),
+                                    crossAxisCount: 4
+                                ),
                                 itemBuilder: (BuildContext context, int index) {
                                   return InkWell(
                                     onTap: (){
@@ -422,17 +530,20 @@ class _BuyAndSellState extends State<BuyAndSell>with TickerProviderStateMixin {
                                             radius: Radius.circular(30),
                                             dashPattern: [3, 3],
                                             color: Colors.grey,
-                                            strokeWidth: 1,
+                                            strokeWidth: 0.5,
                                             child: Center(child: Padding(
                                               padding: const EdgeInsets.all(17.0),
-                                              child: SvgPicture.asset("assets/icons/grocery.svg",height: 30,width: 30,),
+                                              child: SvgPicture.asset(category[index].categoryimage,height: 30,width: 30,),
                                             )),
                                           ),
-                                          SizedBox(height: 1,),
-                                          Text("Grocery Stores",textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: 10,fontWeight: FontWeight.w600,color: Colors.black,fontFamily: 'Urbanist'
-                                          ),)
+                                          SizedBox(height: 3,),
+                                          Container(
+                                            width: 55,
+                                            child: Text(category[index].categoryname,textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              fontSize: 10,fontWeight: FontWeight.w600,color: Colors.black,fontFamily: 'Urbanist'
+                                            ),),
+                                          )
 
                                         ],
                                       ) ,
@@ -444,8 +555,6 @@ class _BuyAndSellState extends State<BuyAndSell>with TickerProviderStateMixin {
                               ),
                             ),
                           )
-
-
                         ],
                       ),
                     ),
