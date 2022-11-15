@@ -1,28 +1,28 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
-import 'package:threems/screens/chits/chitsucesspaid.dart';
+import 'package:threems/pagess/approvepage.dart';
+import 'package:threems/pagess/winnerpage.dart';
 
-import '../../model/ChitModel.dart';
-import '../../model/usermodel.dart';
-import '../../utils/customclip2.dart';
-import '../../utils/themes.dart';
-import '../splash_screen.dart';
-import 'chit_Payment_Page.dart';
+import '../kuri/createkuri.dart';
+import '../model/ChitModel.dart';
+import '../model/usermodel.dart';
+import '../screens/splash_screen.dart';
+import '../utils/customclip2.dart';
+import '../utils/themes.dart';
 
-class YourChitPage extends StatefulWidget {
+class VaccantOrPublishedChit extends StatefulWidget {
   final String id;
-  const YourChitPage({Key? key, required this.id}) : super(key: key);
+  const VaccantOrPublishedChit({Key? key, required this.id}) : super(key: key);
 
   @override
-  State<YourChitPage> createState() => _YourChitPageState();
+  State<VaccantOrPublishedChit> createState() => _VaccantOrPublishedChitState();
 }
 
-class _YourChitPageState extends State<YourChitPage> {
+class _VaccantOrPublishedChitState extends State<VaccantOrPublishedChit> {
   static const _locale = 'HI';
   String _formatNumber(String s) =>
       NumberFormat.decimalPattern(_locale).format(int.parse(s));
@@ -62,13 +62,9 @@ class _YourChitPageState extends State<YourChitPage> {
     setState(() {});
   }
 
-  FocusNode payableAmountNode = FocusNode();
-
-  @override
-  void dispose() {
-    payableAmountNode.dispose();
-    super.dispose();
-  }
+  FocusNode dialogueAuctionAmountNode = FocusNode();
+  FocusNode dialoguePayableAmountNode = FocusNode();
+  FocusNode dialogueDividentNode = FocusNode();
 
   @override
   void initState() {
@@ -77,14 +73,17 @@ class _YourChitPageState extends State<YourChitPage> {
   }
 
   @override
+  void dispose() {
+    dialogueAuctionAmountNode.dispose();
+    dialoguePayableAmountNode.dispose();
+    dialogueDividentNode.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return chit == null
-        ? Container(
-            width: scrWidth,
-            height: scrHeight,
-            color: Colors.white,
-            child: Center(child: CircularProgressIndicator()),
-          )
+        ? Center(child: CircularProgressIndicator())
         : Scaffold(
             body: Stack(
               children: [
@@ -128,9 +127,9 @@ class _YourChitPageState extends State<YourChitPage> {
                           padding: EdgeInsets.only(left: scrWidth * 0.04),
                           child: Center(
                             child: Text(
-                              chit!.status == 2
+                              chit!.membersCount == chit!.members!.length
                                   ? "Registrations Closed"
-                                  : "In Vacant",
+                                  : "On Progress",
                               style: TextStyle(
                                   color: Colors.black,
                                   fontSize: scrWidth * 0.027,
@@ -156,12 +155,10 @@ class _YourChitPageState extends State<YourChitPage> {
                             width: scrWidth * 0.15,
                             height: scrHeight * 0.07,
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(14),
-                              color: Colors.white,
-                              image: DecorationImage(
-                                  image: NetworkImage(chit!.profile ?? ''),
-                                  fit: BoxFit.fill),
-                            ),
+                                borderRadius: BorderRadius.circular(14),
+                                color: Colors.white,
+                                image: DecorationImage(
+                                    image: NetworkImage(chit!.profile!))),
                           ),
                           SizedBox(
                             width: scrWidth * 0.03,
@@ -179,7 +176,7 @@ class _YourChitPageState extends State<YourChitPage> {
                                     color: Colors.white),
                               ),
                               Text(
-                                "${chit!.private! ? "Private" : "Public"} Chit",
+                                chit!.private! ? "Private Chit" : "Public Chit",
                                 style: TextStyle(
                                     fontSize: scrWidth * 0.04,
                                     fontWeight: FontWeight.w600,
@@ -190,6 +187,15 @@ class _YourChitPageState extends State<YourChitPage> {
                                 height: scrHeight * 0.02,
                               ),
                             ],
+                          ),
+                          SizedBox(
+                            width: scrWidth * 0.34,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(bottom: scrHeight * 0.02),
+                            child: SvgPicture.asset(
+                              "assets/icons/editingicon.svg",
+                            ),
                           ),
                         ],
                       ),
@@ -284,8 +290,7 @@ class _YourChitPageState extends State<YourChitPage> {
                                               borderRadius:
                                                   BorderRadius.circular(16)),
                                           child: Padding(
-                                            padding: EdgeInsets.all(
-                                                scrWidth * 0.025),
+                                            padding: EdgeInsets.all(9),
                                             child: SvgPicture.asset(
                                               "assets/icons/commision.svg",
                                             ),
@@ -370,8 +375,7 @@ class _YourChitPageState extends State<YourChitPage> {
                                               borderRadius:
                                                   BorderRadius.circular(16)),
                                           child: Padding(
-                                            padding: EdgeInsets.all(
-                                                scrWidth * 0.026),
+                                            padding: const EdgeInsets.all(10),
                                             child: SvgPicture.asset(
                                               "assets/icons/chit value.svg",
                                             ),
@@ -468,8 +472,7 @@ class _YourChitPageState extends State<YourChitPage> {
                                               borderRadius:
                                                   BorderRadius.circular(16)),
                                           child: Padding(
-                                            padding: EdgeInsets.all(
-                                                scrWidth * 0.026),
+                                            padding: const EdgeInsets.all(10),
                                             child: SvgPicture.asset(
                                               "assets/icons/duration.svg",
                                             ),
@@ -554,8 +557,7 @@ class _YourChitPageState extends State<YourChitPage> {
                                               borderRadius:
                                                   BorderRadius.circular(16)),
                                           child: Padding(
-                                            padding: EdgeInsets.all(
-                                                scrWidth * 0.027),
+                                            padding: const EdgeInsets.all(10),
                                             child: SvgPicture.asset(
                                               "assets/icons/members.svg",
                                             ),
@@ -807,149 +809,165 @@ class _YourChitPageState extends State<YourChitPage> {
                                     itemCount: members.length,
                                     itemBuilder:
                                         (BuildContext context, int index) {
-                                      return members.isEmpty
-                                          ? Center(
-                                              child: Text(
-                                                'There is no members',
-                                                style: TextStyle(
-                                                  color: Color(0xff02B558),
+                                      return GestureDetector(
+                                        onTap: () {
+                                          if (chit!.status == 2) {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ApprovePage()));
+                                          }
+                                        },
+                                        child: Container(
+                                          width: scrWidth * 0.02,
+                                          height: scrHeight * 0.075,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                              color: Color(0xffF3F3F3)),
+                                          child: ListTile(
+                                            leading: Padding(
+                                              padding: EdgeInsets.only(
+                                                  bottom: scrHeight * 0.015),
+                                              child: Container(
+                                                width: scrWidth * 0.12,
+                                                height: scrHeight * 0.05,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(16),
+                                                  color: Colors.black,
+                                                  image: DecorationImage(
+                                                      image: NetworkImage(
+                                                          members[index]
+                                                              .userImage!),
+                                                      fit: BoxFit.cover),
                                                 ),
                                               ),
-                                            )
-                                          : Container(
-                                              width: scrWidth * 0.02,
-                                              height: scrHeight * 0.075,
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(8),
-                                                  color: Color(0xffF3F3F3)),
-                                              child: ListTile(
-                                                leading: Padding(
-                                                  padding: EdgeInsets.only(
-                                                      bottom:
-                                                          scrHeight * 0.015),
-                                                  child: Container(
-                                                    width: scrWidth * 0.12,
-                                                    height: scrHeight * 0.05,
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              16),
-                                                      color: Colors.black,
-                                                      image: DecorationImage(
-                                                          image: NetworkImage(
-                                                              members[index]
-                                                                      .userImage ??
-                                                                  ""),
-                                                          fit: BoxFit.cover),
-                                                    ),
-                                                  ),
-                                                ),
-                                                title: Padding(
-                                                  padding: EdgeInsets.only(
-                                                      top: scrHeight * 0.01),
-                                                  child: Text(
-                                                    members[index].userName!,
-                                                    style: TextStyle(
-                                                        fontFamily: 'Urbanist',
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                        fontSize:
-                                                            scrWidth * 0.045),
-                                                  ),
-                                                ),
-                                                trailing: Padding(
-                                                  padding: EdgeInsets.only(
-                                                      bottom: scrHeight * 0.01),
-                                                  child: SvgPicture.asset(
-                                                    "assets/icons/menuicon.svg",
-                                                  ),
-                                                ),
-                                                subtitle: Row(
-                                                  children: [
-                                                    Padding(
-                                                      padding: EdgeInsets.only(
-                                                          bottom:
-                                                              scrHeight * 0.02,
-                                                          top: scrHeight *
-                                                              0.004),
-                                                      child: Text(
-                                                        '$_currency ${_formatNumber(
-                                                          chit!
-                                                              .subscriptionAmount!
-                                                              .truncate()
-                                                              .toString()
-                                                              .replaceAll(
-                                                                  ',', ''),
-                                                        )}',
-                                                        style: TextStyle(
-                                                            fontFamily:
-                                                                'Urbanist',
-                                                            fontWeight:
-                                                                FontWeight.w700,
-                                                            fontSize: 13,
-                                                            color: Color(
-                                                                0xff969696)),
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      width: scrWidth * 0.02,
-                                                    ),
-                                                    Padding(
-                                                      padding: EdgeInsets.only(
-                                                          bottom: scrHeight *
-                                                              0.018),
-                                                      child: Container(
-                                                        width: scrWidth * 0.1,
-                                                        height:
-                                                            scrHeight * 0.017,
-                                                        decoration: BoxDecoration(
-                                                            color: (index == 1)
-                                                                ? Color(
-                                                                    0xffF61C0D)
-                                                                : Color(
-                                                                    0xff02B558),
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        3)),
-                                                        child: Center(
-                                                          child: (index == 1)
-                                                              ? Text(
-                                                                  "Due",
-                                                                  style: TextStyle(
-                                                                      fontFamily:
-                                                                          'Urbanist',
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w600,
-                                                                      fontSize:
-                                                                          scrWidth *
-                                                                              0.026,
-                                                                      color: Colors
-                                                                          .white),
-                                                                )
-                                                              : Text(
-                                                                  "Paid",
-                                                                  style: TextStyle(
-                                                                      fontFamily:
-                                                                          'Urbanist',
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w600,
-                                                                      fontSize:
-                                                                          scrWidth *
-                                                                              0.026,
-                                                                      color: Colors
-                                                                          .white),
-                                                                ),
+                                            ),
+                                            title: Padding(
+                                              padding: EdgeInsets.only(
+                                                  top: scrHeight * 0.01),
+                                              child: Text(
+                                                members[index].userName!,
+                                                style: TextStyle(
+                                                    fontFamily: 'Urbanist',
+                                                    fontWeight: FontWeight.w600,
+                                                    fontSize: scrWidth * 0.045),
+                                              ),
+                                            ),
+                                            trailing: Padding(
+                                              padding: EdgeInsets.only(
+                                                  bottom: scrHeight * 0.01),
+                                              child: SvgPicture.asset(
+                                                "assets/icons/menuicon.svg",
+                                              ),
+                                            ),
+                                            subtitle: chit!.status == 2
+                                                ? Row(
+                                                    children: [
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                                bottom:
+                                                                    scrHeight *
+                                                                        0.02,
+                                                                top: scrHeight *
+                                                                    0.004),
+                                                        child: Text(
+                                                          "₹5,000",
+                                                          style: TextStyle(
+                                                              fontFamily:
+                                                                  'Urbanist',
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700,
+                                                              fontSize: 13,
+                                                              color: Color(
+                                                                  0xff969696)),
                                                         ),
                                                       ),
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                            );
+                                                      SizedBox(
+                                                        width: scrWidth * 0.02,
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                                bottom:
+                                                                    scrHeight *
+                                                                        0.018),
+                                                        child: Container(
+                                                          width: (index == 0)
+                                                              ? scrWidth * 0.15
+                                                              : scrWidth * 0.1,
+                                                          height:
+                                                              scrHeight * 0.017,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                                  color: (index ==
+                                                                          0)
+                                                                      ? Color(
+                                                                          0xff8391A1)
+                                                                      : (index ==
+                                                                              2)
+                                                                          ? Color(
+                                                                              0xffF61C0D)
+                                                                          : Color(
+                                                                              0xff02B558),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              3)),
+                                                          child: Center(
+                                                            child: (index == 0)
+                                                                ? Text(
+                                                                    "Pending",
+                                                                    style: TextStyle(
+                                                                        fontFamily:
+                                                                            'Urbanist',
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .w600,
+                                                                        fontSize:
+                                                                            scrWidth *
+                                                                                0.026,
+                                                                        color: Colors
+                                                                            .white),
+                                                                  )
+                                                                : (index == 2)
+                                                                    ? Text(
+                                                                        "Due",
+                                                                        style: TextStyle(
+                                                                            fontFamily:
+                                                                                'Urbanist',
+                                                                            fontWeight: FontWeight
+                                                                                .w600,
+                                                                            fontSize: scrWidth *
+                                                                                0.026,
+                                                                            color:
+                                                                                Colors.white),
+                                                                      )
+                                                                    : Text(
+                                                                        "Due",
+                                                                        style: TextStyle(
+                                                                            fontFamily:
+                                                                                'Urbanist',
+                                                                            fontWeight: FontWeight
+                                                                                .w600,
+                                                                            fontSize: scrWidth *
+                                                                                0.026,
+                                                                            color:
+                                                                                Colors.white),
+                                                                      ),
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  )
+                                                : SizedBox(),
+                                          ),
+                                        ),
+                                      );
                                     },
                                     separatorBuilder:
                                         (BuildContext context, int index) {
@@ -962,7 +980,7 @@ class _YourChitPageState extends State<YourChitPage> {
                                 ),
                               ],
                             )),
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -983,7 +1001,7 @@ class _YourChitPageState extends State<YourChitPage> {
                               height: scrHeight * 0.02,
                             ),
                             Text(
-                              "payable Amount",
+                              "Total Collected Amount",
                               style: TextStyle(
                                   fontSize: scrWidth * 0.026,
                                   fontWeight: FontWeight.w600,
@@ -994,12 +1012,7 @@ class _YourChitPageState extends State<YourChitPage> {
                               height: scrHeight * 0.002,
                             ),
                             Text(
-                              '$_currency ${_formatNumber(
-                                chit!.subscriptionAmount!
-                                    .truncate()
-                                    .toString()
-                                    .replaceAll(',', ''),
-                              )}',
+                              "₹35,000/50,000",
                               style: TextStyle(
                                   fontFamily: 'Urbanist',
                                   fontSize: scrWidth * 0.044,
@@ -1009,19 +1022,14 @@ class _YourChitPageState extends State<YourChitPage> {
                           ],
                         ),
                         SizedBox(
-                          width: scrWidth * 0.04,
+                          width: scrWidth * 0.02,
                         ),
                         GestureDetector(
                           onTap: () {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => ChitPaymentPage(
-                                    chit: chit!,
-                                  ),
-                                ));
-
-                            // Navigator.push(context, MaterialPageRoute(builder: (context)=>VacantChitJoinPage()));
+                                    builder: (context) => ApprovePage()));
                           },
                           child: Container(
                             height: scrHeight * 0.045,
@@ -1032,34 +1040,489 @@ class _YourChitPageState extends State<YourChitPage> {
                             ),
                             child: Center(
                                 child: Text(
-                              "Pay",
+                              "Draw",
                               style: TextStyle(
                                   fontSize: scrWidth * 0.047,
                                   fontWeight: FontWeight.w600,
                                   fontFamily: 'Urbanist'),
                             )),
                           ),
-                        )
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              payChitAmount();
+                            });
+                          },
+                          child: Container(
+                            height: scrHeight * 0.045,
+                            width: scrWidth * 0.25,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(11),
+                            ),
+                            child: Center(
+                                child: Text(
+                              "Auction",
+                              style: TextStyle(
+                                  fontSize: scrWidth * 0.047,
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: 'Urbanist'),
+                            )),
+                          ),
+                        ),
                       ],
                     ),
                   )
                 : Container(
-                    height: scrHeight * 0.05,
+                    height: scrHeight * 0.08,
                     color: primarycolor,
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
-                          "Chit is not Started yet!!!",
-                          style: TextStyle(
-                              fontSize: scrWidth * 0.045,
-                              fontWeight: FontWeight.w600,
-                              fontFamily: 'Urbanist',
-                              color: Color(0xffFBED5D)),
-                        ),
+                        GestureDetector(
+                          onTap: () {
+                            if (members.length == chit!.membersCount!) {
+                              moveToVaccant(1);
+                            } else {
+                              showSnackbar(context,
+                                  'Your chit is must be full to publish');
+                            }
+
+                            // Navigator.push(context, MaterialPageRoute(builder: (context)=>HostedVacantChitPage()));
+                          },
+                          child: Container(
+                            height: scrHeight * 0.08,
+                            width: scrWidth * 0.5,
+                            child: Center(
+                                child: Text(
+                              "Publish",
+                              style: TextStyle(
+                                  fontSize: scrWidth * 0.05,
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: 'Urbanist',
+                                  color: Colors.white),
+                            )),
+                          ),
+                        )
                       ],
                     ),
                   ),
           );
+  }
+
+  void moveToVaccant(int status) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          contentPadding:
+              EdgeInsets.only(top: 29, bottom: 23, left: 21, right: 21),
+          content: Container(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text(
+                  'Do you want to publish this Chit?',
+                  style: TextStyle(
+                    color: Color(0xff2C2C2C),
+                    fontSize: 15,
+                    fontFamily: "Urbanist",
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                SizedBox(
+                  height: 17,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Neumorphic(
+                      style: NeumorphicStyle(
+                        intensity: 0.5,
+                        surfaceIntensity: 0.3,
+                        boxShape: NeumorphicBoxShape.roundRect(
+                            BorderRadius.circular(34)),
+                        depth: -1,
+                        shadowLightColorEmboss: Colors.grey.withOpacity(0.9),
+                        lightSource: LightSource.topLeft,
+                        shadowDarkColorEmboss: Colors.white,
+                        oppositeShadowLightSource: true,
+                      ),
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                          width: 109,
+                          height: 44,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(34),
+                            color: Color(0xffDEDEDE),
+                            boxShadow: [
+                              //
+                              BoxShadow(
+                                blurRadius: 5,
+                                spreadRadius: -4,
+                                // offset: Offset(0, -4),
+                                color: Colors.black.withOpacity(0.15),
+                              ),
+                            ],
+                          ),
+                          child: Center(
+                            child: Text(
+                              "Cancel",
+                              style: TextStyle(
+                                color: Color(0xff2C2C2C),
+                                fontSize: 15,
+                                fontFamily: "Urbanist",
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Neumorphic(
+                      style: NeumorphicStyle(
+                        intensity: 0.5,
+                        surfaceIntensity: 0.3,
+                        boxShape: NeumorphicBoxShape.roundRect(
+                            BorderRadius.circular(34)),
+                        depth: -1,
+                        shadowLightColorEmboss: Colors.black,
+                        lightSource: LightSource.topLeft,
+                        shadowDarkColorEmboss: Colors.white,
+                        oppositeShadowLightSource: true,
+                      ),
+                      child: GestureDetector(
+                        onTap: () {
+                          FirebaseFirestore.instance
+                              .collection('chit')
+                              .doc(widget.id)
+                              .update({'status': 2}).then((value) {
+                            Navigator.pop(context);
+                            showSnackbar(
+                                context, 'Successfully published your chit');
+                          });
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                          width: 109,
+                          height: 44,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(34),
+                            color: Color(0xff02B558),
+                            boxShadow: [
+                              BoxShadow(
+                                blurRadius: 5,
+                                spreadRadius: -4,
+                                // offset: Offset(0, -4),
+                                color: Colors.black.withOpacity(0.15),
+                              ),
+                            ],
+                          ),
+                          child: Center(
+                            child: Text(
+                              "Confirm",
+                              style: TextStyle(
+                                color: Color(0xff2C2C2C),
+                                fontSize: 15,
+                                fontFamily: "Urbanist",
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(34),
+          ),
+        );
+      },
+    );
+  }
+
+  void payChitAmount() {
+    showDialog(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (BuildContext context, setState) {
+          dialogueAuctionAmountNode.addListener(() {
+            setState(() {});
+          });
+          dialoguePayableAmountNode.addListener(() {
+            setState(() {});
+          });
+          dialogueDividentNode.addListener(() {
+            setState(() {});
+          });
+          return AlertDialog(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            title: Text('Pay the chit amount of September'),
+            titleTextStyle: TextStyle(
+                fontSize: FontSize10,
+                fontFamily: 'Urbanist',
+                fontWeight: FontWeight.w600,
+                color: Color(0xff827C7C)),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    CircleAvatar(
+                      backgroundColor: Colors.black,
+                      radius: 16,
+                    ),
+                    Container(
+                        margin: EdgeInsets.all(14),
+                        child: Text(
+                          "akhilgeorge",
+                          style: TextStyle(
+                              fontSize: FontSize16,
+                              fontFamily: 'Urbanist',
+                              fontWeight: FontWeight.w600,
+                              color: Colors.black),
+                        ))
+                  ],
+                ),
+                SizedBox(
+                  height: scrWidth * 0.05,
+                ),
+                Container(
+                  width: scrWidth,
+                  height: textFormFieldHeight45,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: scrWidth * 0.015,
+                    vertical: 2,
+                  ),
+                  decoration: BoxDecoration(
+                    color: textFormFieldFillColor,
+                    borderRadius: BorderRadius.circular(scrWidth * 0.026),
+                  ),
+                  child: TextFormField(
+                    focusNode: dialogueAuctionAmountNode,
+                    cursorHeight: scrWidth * 0.055,
+                    cursorWidth: 1,
+                    cursorColor: Colors.black,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                      fontSize: FontSize15,
+                      fontFamily: 'Urbanist',
+                    ),
+                    decoration: InputDecoration(
+                      labelText: 'Auction Amount',
+                      labelStyle: TextStyle(
+                        color: dialogueAuctionAmountNode.hasFocus
+                            ? primarycolor
+                            : textFormUnFocusColor,
+                        fontWeight: FontWeight.w600,
+                        fontSize: FontSize15,
+                        fontFamily: 'Urbanist',
+                      ),
+                      // prefixIcon: Container(
+                      //   height: scrWidth * 0.045,
+                      //   width: 10,
+                      //   padding: EdgeInsets.all(
+                      //       scrWidth * 0.033),
+                      //   child: SvgPicture.asset(
+                      //     'assets/icons/subscription.svg',
+                      //     fit: BoxFit.contain,
+                      //     color: textFormUnFocusColor,
+                      //   ),
+                      // ),
+                      fillColor: textFormFieldFillColor,
+                      filled: true,
+                      contentPadding: EdgeInsets.only(
+                          top: 5,
+                          bottom: scrWidth * 0.033,
+                          left: scrWidth * 0.033),
+                      disabledBorder: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                      border: InputBorder.none,
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: primarycolor,
+                          width: 2,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: scrWidth * 0.03,
+                ),
+                Container(
+                  width: scrWidth,
+                  height: textFormFieldHeight45,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: scrWidth * 0.015,
+                    vertical: 2,
+                  ),
+                  decoration: BoxDecoration(
+                    color: textFormFieldFillColor,
+                    borderRadius: BorderRadius.circular(scrWidth * 0.026),
+                  ),
+                  child: TextFormField(
+                    focusNode: dialoguePayableAmountNode,
+                    cursorHeight: scrWidth * 0.055,
+                    cursorWidth: 1,
+                    cursorColor: Colors.black,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                      fontSize: FontSize15,
+                      fontFamily: 'Urbanist',
+                    ),
+                    decoration: InputDecoration(
+                      labelText: 'Payable Amount',
+                      labelStyle: TextStyle(
+                        color: dialoguePayableAmountNode.hasFocus
+                            ? primarycolor
+                            : textFormUnFocusColor,
+                        fontWeight: FontWeight.w600,
+                        fontSize: FontSize15,
+                        fontFamily: 'Urbanist',
+                      ),
+                      // prefixIcon: Container(
+                      //   height: scrWidth * 0.045,
+                      //   width: 10,
+                      //   padding: EdgeInsets.all(
+                      //       scrWidth * 0.033),
+                      //   child: SvgPicture.asset(
+                      //     'assets/icons/subscription.svg',
+                      //     fit: BoxFit.contain,
+                      //     color: textFormUnFocusColor,
+                      //   ),
+                      // ),
+                      fillColor: textFormFieldFillColor,
+                      filled: true,
+                      contentPadding: EdgeInsets.only(
+                          top: 5,
+                          bottom: scrWidth * 0.033,
+                          left: scrWidth * 0.033),
+                      disabledBorder: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                      border: InputBorder.none,
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: primarycolor,
+                          width: 2,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: scrWidth * 0.03,
+                ),
+                Container(
+                  width: scrWidth,
+                  height: textFormFieldHeight45,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: scrWidth * 0.015,
+                    vertical: 2,
+                  ),
+                  decoration: BoxDecoration(
+                    color: textFormFieldFillColor,
+                    borderRadius: BorderRadius.circular(scrWidth * 0.026),
+                  ),
+                  child: TextFormField(
+                    focusNode: dialogueDividentNode,
+                    cursorHeight: scrWidth * 0.055,
+                    cursorWidth: 1,
+                    cursorColor: Colors.black,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                      fontSize: FontSize15,
+                      fontFamily: 'Urbanist',
+                    ),
+                    decoration: InputDecoration(
+                      labelText: 'Divident Amount',
+                      labelStyle: TextStyle(
+                        color: dialogueDividentNode.hasFocus
+                            ? primarycolor
+                            : textFormUnFocusColor,
+                        fontWeight: FontWeight.w600,
+                        fontSize: FontSize15,
+                        fontFamily: 'Urbanist',
+                      ),
+                      // prefixIcon: Container(
+                      //   height: scrWidth * 0.045,
+                      //   width: 10,
+                      //   padding: EdgeInsets.all(
+                      //       scrWidth * 0.033),
+                      //   child: SvgPicture.asset(
+                      //     'assets/icons/subscription.svg',
+                      //     fit: BoxFit.contain,
+                      //     color: textFormUnFocusColor,
+                      //   ),
+                      // ),
+                      fillColor: textFormFieldFillColor,
+                      filled: true,
+                      contentPadding: EdgeInsets.only(
+                          top: 5,
+                          bottom: scrWidth * 0.033,
+                          left: scrWidth * 0.033),
+                      disabledBorder: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                      border: InputBorder.none,
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: primarycolor,
+                          width: 2,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: scrWidth * 0.06,
+                ),
+                Container(
+                  width: scrWidth,
+                  height: textFormFieldHeight45,
+                  decoration: BoxDecoration(
+                      color: primarycolor,
+                      borderRadius: BorderRadius.circular(8)),
+                  child: Center(
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => WinnerPage()));
+                      },
+                      child: Text(
+                        "Save",
+                        style: TextStyle(
+                            fontSize: FontSize16,
+                            fontFamily: 'Urbanist',
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
   }
 }

@@ -1,30 +1,30 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'dart:io';
-import '../Authentication/root.dart';
-import '../model/Kuri/kuriModel.dart';
-import '../model/usermodel.dart';
-import '../screens/charity/sucess.dart';
-import '../screens/splash_screen.dart';
-import '../utils/themes.dart';
-import 'createkuri.dart';
 
-class KuriPaymentPage extends StatefulWidget {
-  final KuriModel kuri;
-  const KuriPaymentPage({Key? key, required this.kuri}) : super(key: key);
+import '../../Authentication/root.dart';
+import '../../kuri/createkuri.dart';
+import '../../layouts/screen_layout.dart';
+import '../../model/ChitModel.dart';
+import '../../utils/themes.dart';
+import '../splash_screen.dart';
+
+class ChitPaymentPage extends StatefulWidget {
+  final ChitModel chit;
+  const ChitPaymentPage({Key? key, required this.chit}) : super(key: key);
 
   @override
-  State<KuriPaymentPage> createState() => _KuriPaymentPageState();
+  State<ChitPaymentPage> createState() => _ChitPaymentPageState();
 }
 
-class _KuriPaymentPageState extends State<KuriPaymentPage> {
+class _ChitPaymentPageState extends State<ChitPaymentPage> {
   TextEditingController? amount;
 
   String? imgUrl;
@@ -32,9 +32,8 @@ class _KuriPaymentPageState extends State<KuriPaymentPage> {
   var uploadTask;
   var fileUrl;
   Future uploadImageToFirebase(BuildContext context) async {
-    Reference firebaseStorageRef = FirebaseStorage.instance
-        .ref()
-        .child('Kuri Payment Proofs/$currentuserid/$imgFile');
+    Reference firebaseStorageRef =
+        FirebaseStorage.instance.ref().child('chit Payment Proof/$imgFile');
     UploadTask uploadTask = firebaseStorageRef.putFile(imgFile);
     TaskSnapshot taskSnapshot = (await uploadTask);
     String value = await taskSnapshot.ref.getDownloadURL();
@@ -96,7 +95,7 @@ class _KuriPaymentPageState extends State<KuriPaymentPage> {
                     SizedBox(
                       width: scrWidth * 0.07,
                     ),
-                    GestureDetector(
+                    InkWell(
                       onTap: () {
                         Navigator.pop(context);
                       },
@@ -248,7 +247,7 @@ class _KuriPaymentPageState extends State<KuriPaymentPage> {
                           width: scrWidth * 0.04,
                         ),
                         Text(
-                          widget.kuri.phone!,
+                          widget.chit.phone!,
                           style: TextStyle(
                             fontSize: scrWidth * 0.058,
                             fontFamily: 'Urbanist',
@@ -266,7 +265,7 @@ class _KuriPaymentPageState extends State<KuriPaymentPage> {
                         InkWell(
                           onTap: () {
                             Clipboard.setData(
-                                ClipboardData(text: widget.kuri.phone!));
+                                ClipboardData(text: widget.chit.phone!));
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content:
@@ -308,7 +307,7 @@ class _KuriPaymentPageState extends State<KuriPaymentPage> {
                 SizedBox(
                   width: scrWidth * 0.09,
                 ),
-                widget.kuri.upiApps!.contains('Google Pay')
+                widget.chit.upiApps!.contains('Google Pay')
                     ? Container(
                         height: 20,
                         width: 20,
@@ -318,7 +317,7 @@ class _KuriPaymentPageState extends State<KuriPaymentPage> {
                 SizedBox(
                   width: 5,
                 ),
-                widget.kuri.upiApps!.contains('Phonepe')
+                widget.chit.upiApps!.contains('Phonepe')
                     ? Container(
                         height: 20,
                         width: 15,
@@ -328,7 +327,7 @@ class _KuriPaymentPageState extends State<KuriPaymentPage> {
                 SizedBox(
                   width: 5,
                 ),
-                widget.kuri.upiApps!.contains('Paytm')
+                widget.chit.upiApps!.contains('Paytm')
                     ? Container(
                         height: 20,
                         width: 40,
@@ -338,7 +337,7 @@ class _KuriPaymentPageState extends State<KuriPaymentPage> {
                 SizedBox(
                   width: 5,
                 ),
-                widget.kuri.upiApps!.contains('Whatsapp Pay')
+                widget.chit.upiApps!.contains('Whatsapp Pay')
                     ? Container(
                         height: 20,
                         width: 15,
@@ -348,7 +347,7 @@ class _KuriPaymentPageState extends State<KuriPaymentPage> {
                 SizedBox(
                   width: 5,
                 ),
-                widget.kuri.upiApps!.contains('Amazon Pay')
+                widget.chit.upiApps!.contains('Amazon Pay')
                     ? Container(
                         height: 20,
                         width: 45,
@@ -382,7 +381,7 @@ class _KuriPaymentPageState extends State<KuriPaymentPage> {
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               Text(
-                                widget.kuri.bankName!,
+                                widget.chit.bankName!,
                                 style: TextStyle(
                                     fontSize: 16,
                                     fontFamily: 'Urbanist',
@@ -393,7 +392,7 @@ class _KuriPaymentPageState extends State<KuriPaymentPage> {
                                 height: scrHeight * 0.005,
                               ),
                               Text(
-                                "IFSC : ${widget.kuri.iFSC}",
+                                "IFSC : ${widget.chit.ifsc}",
                                 style: TextStyle(
                                     fontSize: 14,
                                     fontFamily: 'Urbanist',
@@ -423,7 +422,7 @@ class _KuriPaymentPageState extends State<KuriPaymentPage> {
                                 height: scrHeight * 0.002,
                               ),
                               Text(
-                                widget.kuri.holderName!,
+                                widget.chit.accountHolderName!,
                                 style: TextStyle(
                                     fontSize: 16,
                                     fontFamily: 'Urbanist',
@@ -445,7 +444,7 @@ class _KuriPaymentPageState extends State<KuriPaymentPage> {
                                 height: scrHeight * 0.002,
                               ),
                               Text(
-                                widget.kuri.accountNumber!,
+                                widget.chit.accountNumber!,
                                 style: TextStyle(
                                     fontSize: 16,
                                     fontFamily: 'Urbanist',
@@ -530,32 +529,47 @@ class _KuriPaymentPageState extends State<KuriPaymentPage> {
             SizedBox(
               height: 20,
             ),
-            GestureDetector(
+            InkWell(
               onTap: () {
+                final payment = Payments(
+                    userId: currentuserid,
+                    amount: double.tryParse(amount!.text),
+                    datePaid: DateTime.now(),
+                    url: imgUrl,
+                    verified: false);
                 print(amount!.text);
                 if (amount!.text != '' && (imgUrl != '' || imgUrl != null)) {
                   FirebaseFirestore.instance
-                      .collection('kuri')
-                      .doc(widget.kuri.kuriId)
-                      .update({
-                    'payments': FieldValue.arrayUnion([
-                      {
-                        'amount': double.tryParse(amount!.text),
-                        'url': imgUrl,
-                        'userId': currentuserid,
-                        'verified': false,
-                        'datePaid': DateFormat.yMMMd().format(DateTime.now()),
-                      }
-                    ]),
-                    'totalReceived':
-                        FieldValue.increment(double.tryParse(amount!.text)!)
-                  }).then((value) {
-                    Navigator.pop(context);
+                      .collection('chit')
+                      .doc(widget.chit.chitId)
+                      .collection('payments')
+                      .add(payment.toJson())
+                      //     .update({
+                      //   'payments': FieldValue.arrayUnion([
+                      //     {
+                      //       'amount': double.tryParse(amount!.text),
+                      //       'url': imgUrl,
+                      //       'userId': currentuserid,
+                      //       'verified': false,
+                      //       'datePaid': DateFormat.yMMMd().format(DateTime.now()),
+                      //     }
+                      //   ]),
+                      //   'totalReceived':
+                      //   FieldValue.increment(double.tryParse(amount!.text)!)
+                      // })
+                      .then((value) {
+                    showSnackbar(context, 'Payment Completed Successfully');
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ScreenLayout(),
+                        ),
+                        (route) => false);
                   });
                 } else {
                   amount!.text == ''
                       ? showSnackbar(context, 'Enter amount')
-                      : showSnackbar(context, 'Choose Proof');
+                      : showSnackbar(context, 'Upload Proof');
                 }
                 print(imgUrl);
                 print(imgFile);

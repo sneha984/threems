@@ -16,6 +16,7 @@ import 'package:threems/utils/themes.dart';
 
 import '../../customPackage/time_picker.dart';
 import '../../model/ChitModel.dart';
+import 'create_chit_payment_session.dart';
 
 class CreateNewChitScreen extends StatefulWidget {
   CreateNewChitScreen({Key? key}) : super(key: key);
@@ -702,7 +703,7 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
                                   fontFamily: 'Urbanist',
                                 ),
                                 decoration: InputDecoration(
-                                  labelText: 'Duration',
+                                  labelText: 'Duration (in Month)',
                                   labelStyle: TextStyle(
                                     color: durationFocus.hasFocus
                                         ? primarycolor
@@ -940,6 +941,7 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
                                     value: drawTypeValue,
                                     onChanged: (value) {
                                       drawTypeValue = value.toString();
+                                      drawDateValue = null;
                                       print(value);
                                       drawDate = [];
                                       if (drawTypeValue == 'Weekly') {
@@ -3664,18 +3666,16 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
         floatingActionButton: GestureDetector(
           onTap: () {
             if (chitName.text != '' &&
-                dropdownValue != '' &&
+                dropdownValue != null &&
                 members > 3 &&
                 amount.text != '' &&
                 duration.text != '' &&
                 subscriptionAmount.text != '' &&
-                dividend.text != '' &&
                 drawTypeValue != null &&
                 drawDateValue != null &&
                 selectedTime != null &&
                 url != '') {
               final chit = ChitModel(
-                payments: [],
                 members: [],
                 amount: double.tryParse(amount.text),
                 private: private,
@@ -3699,13 +3699,13 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => AddMembers(
+                      builder: (context) => PaymentDetails(
                             chit: chit,
                           )));
             } else {
               chitName.text == ''
                   ? showSnackbar(context, 'Please enter name of your chit')
-                  : dropdownValue == ''
+                  : dropdownValue == null
                       ? showSnackbar(context, 'Please Choose Commission')
                       : members < 4
                           ? showSnackbar(
@@ -3718,20 +3718,17 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
                                   : subscriptionAmount.text == ''
                                       ? showSnackbar(context,
                                           'Please enter Subscription amount')
-                                      : dividend.text == ''
-                                          ? showSnackbar(
-                                              context, 'Please enter divident')
-                                          : drawTypeValue == null
+                                      : drawTypeValue == null
+                                          ? showSnackbar(context,
+                                              'Please Choose Chit type')
+                                          : drawDateValue == null
                                               ? showSnackbar(context,
-                                                  'Please Choose Chit type')
-                                              : drawDateValue == null
+                                                  'Please Choose Draw Date')
+                                              : selectedTime == null
                                                   ? showSnackbar(context,
-                                                      'Please Choose Draw Date')
-                                                  : selectedTime == null
-                                                      ? showSnackbar(context,
-                                                          'Please Choose Draw Time')
-                                                      : showSnackbar(context,
-                                                          'Upload a authorised document');
+                                                      'Please Choose Draw Time')
+                                                  : showSnackbar(context,
+                                                      'Upload a authorised document');
             }
           },
           child: Container(
@@ -3743,7 +3740,7 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
               ),
               child: Center(
                 child: Text(
-                  "Add Members",
+                  "Add Payment Details",
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: FontSize15,

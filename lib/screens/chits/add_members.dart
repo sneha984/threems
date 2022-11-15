@@ -574,7 +574,12 @@ class _AddMembersState extends State<AddMembers> {
                             status: local.status,
                             subscriptionAmount: local.subscriptionAmount,
                             winners: [],
-                            payments: [],
+                            accountNumber: local.accountNumber,
+                            bankName: local.bankName,
+                            phone: local.phone,
+                            upiApps: local.upiApps,
+                            accountHolderName: local.accountHolderName,
+                            ifsc: local.ifsc,
                           );
 
                           FirebaseFirestore.instance
@@ -588,33 +593,41 @@ class _AddMembersState extends State<AddMembers> {
                             showSnackbar(context, 'Chit successfully added');
                             setState(() {
                               loading = false;
-                              Navigator.pop(context);
-                              Navigator.pop(context);
+                              Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ScreenLayout()),
+                                  (route) => false);
                             });
                           });
                         } else if (local.chitId != '' || local.chitId != null) {
                           final chit = ChitModel(
-                            createdDate: DateTime.now(),
-                            userId: currentuserid,
-                            chitDate: local.chitDate,
-                            private: local.private,
-                            chitName: local.chitName,
-                            amount: local.amount,
-                            chitTime: local.chitTime,
-                            members: addMember,
-                            chitType: local.chitType,
-                            commission: local.commission,
-                            dividendAmount: local.dividendAmount,
-                            document: local.document,
-                            drawn: local.drawn,
-                            duration: local.duration,
-                            membersCount: local.membersCount,
-                            profile: local.profile,
-                            status: local.status,
-                            subscriptionAmount: local.subscriptionAmount,
-                            winners: [],
-                            payments: [],
-                          );
+                              createdDate: DateTime.now(),
+                              userId: currentuserid,
+                              chitDate: local.chitDate,
+                              private: local.private,
+                              chitName: local.chitName,
+                              amount: local.amount,
+                              chitTime: local.chitTime,
+                              members: addMember,
+                              chitType: local.chitType,
+                              commission: local.commission,
+                              dividendAmount: local.dividendAmount,
+                              document: local.document,
+                              drawn: local.drawn,
+                              duration: local.duration,
+                              membersCount: local.membersCount,
+                              profile: local.profile,
+                              status: local.status,
+                              subscriptionAmount: local.subscriptionAmount,
+                              winners: [],
+                              chitId: local.chitId,
+                              accountNumber: local.accountNumber,
+                              bankName: local.bankName,
+                              phone: local.phone,
+                              upiApps: local.upiApps,
+                              accountHolderName: local.accountHolderName,
+                              ifsc: local.ifsc);
 
                           FirebaseFirestore.instance
                               .collection('chit')
@@ -624,11 +637,7 @@ class _AddMembersState extends State<AddMembers> {
                             showSnackbar(context, 'Kuri successfully Updated');
                             setState(() {
                               loading = false;
-                              Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => ScreenLayout()),
-                                  (route) => false);
+                              Navigator.pop(context);
                             });
                           });
                         }
