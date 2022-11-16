@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:threems/pagess/pendingapprovelpage.dart';
+import 'package:threems/pagess/vaccantORpublishedchit.dart';
 
 import '../screens/splash_screen.dart';
 import '../utils/customclip2.dart';
@@ -129,11 +129,12 @@ class _WinnerPageState extends State<WinnerPage> {
                             width: scrWidth * 0.34,
                           ),
                           GestureDetector(
-                            onTap: (){
+                            onTap: () {
                               // Navigator.push(context, MaterialPageRoute(builder: (context)=>HostedDrawnPage()));
                             },
                             child: Padding(
-                              padding: EdgeInsets.only(bottom: scrHeight * 0.02),
+                              padding:
+                                  EdgeInsets.only(bottom: scrHeight * 0.02),
                               child: SvgPicture.asset(
                                 "assets/icons/editingicon.svg",
                               ),
@@ -192,12 +193,13 @@ class _WinnerPageState extends State<WinnerPage> {
                                 ),
                                 Neumorphic(
                                   style: NeumorphicStyle(
-                                    intensity:0.5 ,
+                                    intensity: 0.5,
                                     surfaceIntensity: 0.3,
                                     boxShape: NeumorphicBoxShape.roundRect(
                                         BorderRadius.circular(16)),
                                     depth: -1,
-                                    shadowLightColorEmboss: Colors.grey.withOpacity(0.9),
+                                    shadowLightColorEmboss:
+                                        Colors.grey.withOpacity(0.9),
                                     lightSource: LightSource.topLeft,
                                     shadowDarkColorEmboss: Colors.white,
                                     oppositeShadowLightSource: true,
@@ -207,7 +209,8 @@ class _WinnerPageState extends State<WinnerPage> {
                                     width: scrWidth * 0.38,
                                     decoration: BoxDecoration(
                                         color: Color(0xffEEEEEE),
-                                        borderRadius: BorderRadius.circular(16)),
+                                        borderRadius:
+                                            BorderRadius.circular(16)),
                                     child: Row(
                                       children: [
                                         SizedBox(
@@ -219,7 +222,7 @@ class _WinnerPageState extends State<WinnerPage> {
                                           decoration: BoxDecoration(
                                               color: Color(0xff02B558),
                                               borderRadius:
-                                              BorderRadius.circular(16)),
+                                                  BorderRadius.circular(16)),
                                           child: Padding(
                                             padding: EdgeInsets.all(9),
                                             child: SvgPicture.asset(
@@ -231,9 +234,10 @@ class _WinnerPageState extends State<WinnerPage> {
                                           width: scrWidth * 0.02,
                                         ),
                                         Column(
-                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
                                           crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                              CrossAxisAlignment.start,
                                           children: [
                                             SizedBox(
                                               height: scrHeight * 0.013,
@@ -265,15 +269,15 @@ class _WinnerPageState extends State<WinnerPage> {
                                 SizedBox(
                                   width: scrWidth * 0.035,
                                 ),
-
                                 Neumorphic(
                                   style: NeumorphicStyle(
-                                    intensity:0.5 ,
+                                    intensity: 0.5,
                                     surfaceIntensity: 0.3,
                                     boxShape: NeumorphicBoxShape.roundRect(
                                         BorderRadius.circular(16)),
                                     depth: -1,
-                                    shadowLightColorEmboss: Colors.grey.withOpacity(0.9),
+                                    shadowLightColorEmboss:
+                                        Colors.grey.withOpacity(0.9),
                                     lightSource: LightSource.topLeft,
                                     shadowDarkColorEmboss: Colors.white,
                                     oppositeShadowLightSource: true,
@@ -285,11 +289,13 @@ class _WinnerPageState extends State<WinnerPage> {
                                         color: Color(0xffEEEEEE),
                                         boxShadow: [
                                           BoxShadow(
-                                            color: Color.fromRGBO(0, 0, 0, 0.05),
+                                            color:
+                                                Color.fromRGBO(0, 0, 0, 0.05),
                                             blurRadius: 5.0,
                                           ),
                                         ],
-                                        borderRadius: BorderRadius.circular(16)),
+                                        borderRadius:
+                                            BorderRadius.circular(16)),
                                     child: Row(
                                       children: [
                                         SizedBox(
@@ -300,7 +306,8 @@ class _WinnerPageState extends State<WinnerPage> {
                                           width: scrWidth * 0.12,
                                           decoration: BoxDecoration(
                                               color: Color(0xff02B558),
-                                              borderRadius: BorderRadius.circular(16)),
+                                              borderRadius:
+                                                  BorderRadius.circular(16)),
                                           child: Padding(
                                             padding: const EdgeInsets.all(10),
                                             child: SvgPicture.asset(
@@ -312,8 +319,10 @@ class _WinnerPageState extends State<WinnerPage> {
                                           width: scrWidth * 0.02,
                                         ),
                                         Column(
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             SizedBox(
                                               height: scrHeight * 0.015,
@@ -354,12 +363,13 @@ class _WinnerPageState extends State<WinnerPage> {
                                 ),
                                 Neumorphic(
                                   style: NeumorphicStyle(
-                                    intensity:0.5 ,
+                                    intensity: 0.5,
                                     surfaceIntensity: 0.3,
                                     boxShape: NeumorphicBoxShape.roundRect(
                                         BorderRadius.circular(16)),
                                     depth: -1,
-                                    shadowLightColorEmboss: Colors.grey.withOpacity(0.9),
+                                    shadowLightColorEmboss:
+                                        Colors.grey.withOpacity(0.9),
                                     lightSource: LightSource.topLeft,
                                     shadowDarkColorEmboss: Colors.white,
                                     oppositeShadowLightSource: true,
@@ -371,11 +381,13 @@ class _WinnerPageState extends State<WinnerPage> {
                                         color: Color(0xffEEEEEE),
                                         boxShadow: [
                                           BoxShadow(
-                                            color: Color.fromRGBO(0, 0, 0, 0.05),
+                                            color:
+                                                Color.fromRGBO(0, 0, 0, 0.05),
                                             blurRadius: 5.0,
                                           ),
                                         ],
-                                        borderRadius: BorderRadius.circular(16)),
+                                        borderRadius:
+                                            BorderRadius.circular(16)),
                                     child: Row(
                                       children: [
                                         SizedBox(
@@ -386,7 +398,8 @@ class _WinnerPageState extends State<WinnerPage> {
                                           width: scrWidth * 0.12,
                                           decoration: BoxDecoration(
                                               color: Color(0xff02B558),
-                                              borderRadius: BorderRadius.circular(16)),
+                                              borderRadius:
+                                                  BorderRadius.circular(16)),
                                           child: Padding(
                                             padding: const EdgeInsets.all(10),
                                             child: SvgPicture.asset(
@@ -398,8 +411,10 @@ class _WinnerPageState extends State<WinnerPage> {
                                           width: scrWidth * 0.015,
                                         ),
                                         Column(
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             SizedBox(
                                               height: scrHeight * 0.015,
@@ -433,12 +448,13 @@ class _WinnerPageState extends State<WinnerPage> {
                                 ),
                                 Neumorphic(
                                   style: NeumorphicStyle(
-                                    intensity:0.5 ,
+                                    intensity: 0.5,
                                     surfaceIntensity: 0.3,
                                     boxShape: NeumorphicBoxShape.roundRect(
                                         BorderRadius.circular(16)),
                                     depth: -1,
-                                    shadowLightColorEmboss: Colors.grey.withOpacity(0.9),
+                                    shadowLightColorEmboss:
+                                        Colors.grey.withOpacity(0.9),
                                     lightSource: LightSource.topLeft,
                                     shadowDarkColorEmboss: Colors.white,
                                     oppositeShadowLightSource: true,
@@ -450,11 +466,13 @@ class _WinnerPageState extends State<WinnerPage> {
                                         color: Color(0xffEEEEEE),
                                         boxShadow: [
                                           BoxShadow(
-                                            color: Color.fromRGBO(0, 0, 0, 0.05),
+                                            color:
+                                                Color.fromRGBO(0, 0, 0, 0.05),
                                             blurRadius: 5.0,
                                           ),
                                         ],
-                                        borderRadius: BorderRadius.circular(16)),
+                                        borderRadius:
+                                            BorderRadius.circular(16)),
                                     child: Row(
                                       children: [
                                         SizedBox(
@@ -465,7 +483,8 @@ class _WinnerPageState extends State<WinnerPage> {
                                           width: scrWidth * 0.12,
                                           decoration: BoxDecoration(
                                               color: Color(0xff02B558),
-                                              borderRadius: BorderRadius.circular(16)),
+                                              borderRadius:
+                                                  BorderRadius.circular(16)),
                                           child: Padding(
                                             padding: const EdgeInsets.all(10),
                                             child: SvgPicture.asset(
@@ -477,8 +496,10 @@ class _WinnerPageState extends State<WinnerPage> {
                                           width: scrWidth * 0.015,
                                         ),
                                         Column(
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             SizedBox(
                                               height: scrHeight * 0.012,
@@ -519,7 +540,8 @@ class _WinnerPageState extends State<WinnerPage> {
                         height: scrHeight * 0.058,
                         width: scrWidth * 1,
                         decoration: BoxDecoration(
-                            border: Border.all(color: Color(0xffF4F4F4), width: 1),
+                            border:
+                                Border.all(color: Color(0xffF4F4F4), width: 1),
                             color: Color(0xff02B558),
                             borderRadius: BorderRadius.circular(8)),
                         child: Row(
@@ -607,7 +629,7 @@ class _WinnerPageState extends State<WinnerPage> {
                       ),
                       Neumorphic(
                         style: NeumorphicStyle(
-                          intensity:0.5 ,
+                          intensity: 0.5,
                           surfaceIntensity: 0.3,
                           boxShape: NeumorphicBoxShape.roundRect(
                               BorderRadius.circular(16)),
@@ -618,19 +640,21 @@ class _WinnerPageState extends State<WinnerPage> {
                           oppositeShadowLightSource: true,
                         ),
                         child: Container(
-                          height: scrHeight*0.16,
-                          width: scrWidth*1,
+                          height: scrHeight * 0.16,
+                          width: scrWidth * 1,
                           decoration: BoxDecoration(
                               color: Color(0xffEEEEEE),
-                              borderRadius: BorderRadius.circular(16)
-                          ),
+                              borderRadius: BorderRadius.circular(16)),
                           child: Padding(
-                            padding:  EdgeInsets.only(left: scrWidth*0.05,right: scrWidth*0.05),
+                            padding: EdgeInsets.only(
+                                left: scrWidth * 0.05, right: scrWidth * 0.05),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                SizedBox(height: scrHeight*0.01,),
+                                SizedBox(
+                                  height: scrHeight * 0.01,
+                                ),
                                 Text(
                                   "Last Month Winner",
                                   style: TextStyle(
@@ -640,16 +664,20 @@ class _WinnerPageState extends State<WinnerPage> {
                                     color: Color(0xff827C7C),
                                   ),
                                 ),
-                                SizedBox(height: scrHeight*0.001,),
-
+                                SizedBox(
+                                  height: scrHeight * 0.001,
+                                ),
                                 Row(
                                   children: [
                                     CircleAvatar(
                                       radius: 16,
                                       // backgroundColor: Colors.grey,
-                                      backgroundImage: NetworkImage("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7FtTfAHZpWXQI8X4ppt-7QKqQae6h6BYhyw&usqp=CAU"),
+                                      backgroundImage: NetworkImage(
+                                          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7FtTfAHZpWXQI8X4ppt-7QKqQae6h6BYhyw&usqp=CAU"),
                                     ),
-                                    SizedBox(width: scrWidth*0.02,),
+                                    SizedBox(
+                                      width: scrWidth * 0.02,
+                                    ),
                                     Text(
                                       "akhilgeorge",
                                       style: TextStyle(
@@ -657,90 +685,112 @@ class _WinnerPageState extends State<WinnerPage> {
                                           fontWeight: FontWeight.w600,
                                           fontSize: scrWidth * 0.045),
                                     ),
-                                    SizedBox(width: scrWidth*0.33,),
+                                    SizedBox(
+                                      width: scrWidth * 0.33,
+                                    ),
                                     SvgPicture.asset(
                                       "assets/icons/winner.svg",
                                     ),
                                   ],
                                 ),
-                                SizedBox(height: scrHeight*0.019,),
-
+                                SizedBox(
+                                  height: scrHeight * 0.019,
+                                ),
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
                                   children: [
                                     Column(
                                       children: [
-                                        Text("Auction Amount",style:TextStyle(
-                                            fontSize: scrWidth * 0.024,
-                                            fontWeight: FontWeight.w500,
-                                            fontFamily: 'Urbanist',
-                                            color: Color(0xff008036))
-                                      ),
-                                        SizedBox(height: scrHeight*0.004,),
-
-                                        Text("₹7,500",style:TextStyle(
-                                            fontSize: scrWidth*0.045,
-                                            fontWeight: FontWeight.w600,
-                                            fontFamily: 'Urbanist',
-                                            color: Color(0xff000000))),
+                                        Text("Auction Amount",
+                                            style: TextStyle(
+                                                fontSize: scrWidth * 0.024,
+                                                fontWeight: FontWeight.w500,
+                                                fontFamily: 'Urbanist',
+                                                color: Color(0xff008036))),
+                                        SizedBox(
+                                          height: scrHeight * 0.004,
+                                        ),
+                                        Text("₹7,500",
+                                            style: TextStyle(
+                                                fontSize: scrWidth * 0.045,
+                                                fontWeight: FontWeight.w600,
+                                                fontFamily: 'Urbanist',
+                                                color: Color(0xff000000))),
                                       ],
                                     ),
-                                    SizedBox(width: scrWidth*0.16,),
-
+                                    SizedBox(
+                                      width: scrWidth * 0.16,
+                                    ),
                                     Column(
                                       children: [
-                                        Text("Paid Amount",style:TextStyle(
-                                            fontSize: scrWidth * 0.024,
-                                            fontWeight: FontWeight.w500,
-                                            fontFamily: 'Urbanist',
-                                            color: Color(0xff008036)),),
-                                        SizedBox(height: scrHeight*0.004,),
-
-                                        Text("₹41,500",style:TextStyle(
-                                            fontSize: scrWidth*0.045,
-                                            fontWeight: FontWeight.w600,
-                                            fontFamily: 'Urbanist',
-                                            color: Color(0xff000000))),
-
+                                        Text(
+                                          "Paid Amount",
+                                          style: TextStyle(
+                                              fontSize: scrWidth * 0.024,
+                                              fontWeight: FontWeight.w500,
+                                              fontFamily: 'Urbanist',
+                                              color: Color(0xff008036)),
+                                        ),
+                                        SizedBox(
+                                          height: scrHeight * 0.004,
+                                        ),
+                                        Text("₹41,500",
+                                            style: TextStyle(
+                                                fontSize: scrWidth * 0.045,
+                                                fontWeight: FontWeight.w600,
+                                                fontFamily: 'Urbanist',
+                                                color: Color(0xff000000))),
                                       ],
                                     ),
-                                    SizedBox(width: scrWidth*0.19,),
-
+                                    SizedBox(
+                                      width: scrWidth * 0.19,
+                                    ),
                                     Column(
                                       children: [
-                                        Text("Divident",style:TextStyle(
-                                            fontSize: scrWidth * 0.024,
-                                            fontWeight: FontWeight.w500,
-                                            fontFamily: 'Urbanist',
-                                            color: Color(0xff008036)),),
-                                        SizedBox(height: scrHeight*0.004,),
-
-
-                                        Text("₹750",style:TextStyle(
-                                            fontSize: scrWidth*0.045,
-                                            fontWeight: FontWeight.w600,
-                                            fontFamily: 'Urbanist',
-                                            color: Color(0xff000000)),),
-
+                                        Text(
+                                          "Divident",
+                                          style: TextStyle(
+                                              fontSize: scrWidth * 0.024,
+                                              fontWeight: FontWeight.w500,
+                                              fontFamily: 'Urbanist',
+                                              color: Color(0xff008036)),
+                                        ),
+                                        SizedBox(
+                                          height: scrHeight * 0.004,
+                                        ),
+                                        Text(
+                                          "₹750",
+                                          style: TextStyle(
+                                              fontSize: scrWidth * 0.045,
+                                              fontWeight: FontWeight.w600,
+                                              fontFamily: 'Urbanist',
+                                              color: Color(0xff000000)),
+                                        ),
                                       ],
                                     )
                                   ],
                                 ),
-                                SizedBox(height: scrHeight*0.006,),
+                                SizedBox(
+                                  height: scrHeight * 0.006,
+                                ),
                                 Align(
                                   alignment: Alignment.center,
-                                  child: Text("after reducing commision ",style:TextStyle(
-                                      fontSize: scrWidth * 0.024,
-                                      fontWeight: FontWeight.w500,
-                                      fontFamily: 'Urbanist',
-                                      color: Color(0xff929A95))),
+                                  child: Text("after reducing commision ",
+                                      style: TextStyle(
+                                          fontSize: scrWidth * 0.024,
+                                          fontWeight: FontWeight.w500,
+                                          fontFamily: 'Urbanist',
+                                          color: Color(0xff929A95))),
                                 ),
                               ],
                             ),
                           ),
                         ),
                       ),
-                      SizedBox(height: scrHeight*0.02,),
+                      SizedBox(
+                        height: scrHeight * 0.02,
+                      ),
                       SizedBox(
                         height: 390,
                         child: Container(
@@ -770,7 +820,8 @@ class _WinnerPageState extends State<WinnerPage> {
                                   height: scrHeight * 0.02,
                                 ),
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
                                   children: [
                                     Text(
                                       "Members",
@@ -806,177 +857,244 @@ class _WinnerPageState extends State<WinnerPage> {
                                         left: scrWidth * 0.04,
                                         right: scrWidth * 0.04,
                                         top: scrHeight * 0.003),
-                                    physics:NeverScrollableScrollPhysics(),
-                                     // scrollDirection: Axis.vertical,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    // scrollDirection: Axis.vertical,
                                     itemCount: 5,
-                                    itemBuilder: (BuildContext context, int index) {
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
                                       return Container(
-                                        width: scrWidth * 0.02,
-                                        height: scrHeight * 0.075,
-                                        decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(8),
-                                            color: Color(0xffF3F3F3)),
-                                        child: Row(
-                                          children: [
-                                            (index!=0)? Padding(
-                                                padding: EdgeInsets.only(
-                                                left: scrHeight * 0.012),
-                                                child: Container(
-                                                width: scrWidth * 0.12,
-                                                height: scrHeight * 0.05,
-                                                decoration: BoxDecoration(
-                                                borderRadius:
-                                                BorderRadius.circular(16),
-                                                color: Colors.black,
-                                                image: DecorationImage(
-                                                image: NetworkImage(
-                                                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7FtTfAHZpWXQI8X4ppt-7QKqQae6h6BYhyw&usqp=CAU"),
-                                                fit: BoxFit.cover),
-                                                ),
-                                                ),
-                                                ):Stack(
-                                                children: [
-                                                Padding(
-                                                padding: EdgeInsets.only(left: scrHeight * 0.012),                                            child: Container(
-                                                width: scrWidth * 0.12,
-                                                height: scrHeight * 0.05,
-                                                decoration: BoxDecoration(
-                                                borderRadius:
-                                                BorderRadius.circular(16),
-                                                color: Colors.black,
-                                                image: DecorationImage(
-                                                image: NetworkImage(
-                                                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7FtTfAHZpWXQI8X4ppt-7QKqQae6h6BYhyw&usqp=CAU"),
-                                                fit: BoxFit.cover),
-                                                ),
-                                                ),
-                                                ),
-                                                Positioned(
-                                                bottom: -1,left: 35,top: 22,
-                                                child: SvgPicture.asset(
-                                                "assets/icons/profilewinner.svg",
-                                                ),
-                                                ),
-
-                                                ],
-                                                ),
-                                            SizedBox(width: scrHeight * 0.012 ),
-
-                                          Column(
-                                            mainAxisAlignment: MainAxisAlignment.start,
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                          width: scrWidth * 0.02,
+                                          height: scrHeight * 0.075,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                              color: Color(0xffF3F3F3)),
+                                          child: Row(
                                             children: [
-                                              Padding(
-                                                padding: EdgeInsets.only(
-                                                    top: scrHeight * 0.013),
-                                                child: Text(
-                                                  "akhilgeorge",
-                                                  style: TextStyle(
-                                                      fontFamily: 'Urbanist',
-                                                      fontWeight: FontWeight.w600,
-                                                      fontSize: scrWidth * 0.045),
-                                                ),
-                                              ),
-                                              SizedBox(height: scrHeight*0.004,),
-
-                                              Row(
+                                              (index != 0)
+                                                  ? Padding(
+                                                      padding: EdgeInsets.only(
+                                                          left: scrHeight *
+                                                              0.012),
+                                                      child: Container(
+                                                        width: scrWidth * 0.12,
+                                                        height:
+                                                            scrHeight * 0.05,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(16),
+                                                          color: Colors.black,
+                                                          image: DecorationImage(
+                                                              image: NetworkImage(
+                                                                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7FtTfAHZpWXQI8X4ppt-7QKqQae6h6BYhyw&usqp=CAU"),
+                                                              fit:
+                                                                  BoxFit.cover),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  : Stack(
+                                                      children: [
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                                  left:
+                                                                      scrHeight *
+                                                                          0.012),
+                                                          child: Container(
+                                                            width:
+                                                                scrWidth * 0.12,
+                                                            height: scrHeight *
+                                                                0.05,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          16),
+                                                              color:
+                                                                  Colors.black,
+                                                              image: DecorationImage(
+                                                                  image: NetworkImage(
+                                                                      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7FtTfAHZpWXQI8X4ppt-7QKqQae6h6BYhyw&usqp=CAU"),
+                                                                  fit: BoxFit
+                                                                      .cover),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Positioned(
+                                                          bottom: -1,
+                                                          left: 35,
+                                                          top: 22,
+                                                          child:
+                                                              SvgPicture.asset(
+                                                            "assets/icons/profilewinner.svg",
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                              SizedBox(
+                                                  width: scrHeight * 0.012),
+                                              Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
                                                 children: [
-                                                  Text(
-                                                    "₹5,000",
-                                                    style: TextStyle(
-                                                        fontFamily: 'Urbanist',
-                                                        fontWeight: FontWeight.w700,
-                                                        fontSize: scrWidth*0.036,
-                                                        color: Color(0xff969696)),
+                                                  Padding(
+                                                    padding: EdgeInsets.only(
+                                                        top: scrHeight * 0.013),
+                                                    child: Text(
+                                                      "akhilgeorge",
+                                                      style: TextStyle(
+                                                          fontFamily:
+                                                              'Urbanist',
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          fontSize:
+                                                              scrWidth * 0.045),
+                                                    ),
                                                   ),
                                                   SizedBox(
-                                                    width: scrWidth * 0.015,
+                                                    height: scrHeight * 0.004,
                                                   ),
-                                                  Container(
-                                                    width: scrWidth * 0.1,
-                                                    height: scrHeight * 0.017,
-                                                    decoration: BoxDecoration(
-                                                        color: (index == 2)
-                                                            ? Color(0xffF61C0D)
-                                                            : Color(0xff02B558),
-                                                        borderRadius:
-                                                        BorderRadius.circular(3)),
-                                                    child: Center(
-                                                      child: (index == 2)
-                                                          ? Text(
-                                                        "Due",
+                                                  Row(
+                                                    children: [
+                                                      Text(
+                                                        "₹5,000",
                                                         style: TextStyle(
                                                             fontFamily:
-                                                            'Urbanist',
+                                                                'Urbanist',
                                                             fontWeight:
-                                                            FontWeight.w600,
+                                                                FontWeight.w700,
                                                             fontSize: scrWidth *
-                                                                0.026,
-                                                            color:
-                                                            Colors.white),
-                                                      )
-                                                          : Text(
-                                                        "Paid",
-                                                        style: TextStyle(
-                                                            fontFamily:
-                                                            'Urbanist',
-                                                            fontWeight:
-                                                            FontWeight.w600,
-                                                            fontSize: scrWidth *
-                                                                0.026,
-                                                            color:
-                                                            Colors.white),
+                                                                0.036,
+                                                            color: Color(
+                                                                0xff969696)),
                                                       ),
-                                                    ),
+                                                      SizedBox(
+                                                        width: scrWidth * 0.015,
+                                                      ),
+                                                      Container(
+                                                        width: scrWidth * 0.1,
+                                                        height:
+                                                            scrHeight * 0.017,
+                                                        decoration: BoxDecoration(
+                                                            color: (index == 2)
+                                                                ? Color(
+                                                                    0xffF61C0D)
+                                                                : Color(
+                                                                    0xff02B558),
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        3)),
+                                                        child: Center(
+                                                          child: (index == 2)
+                                                              ? Text(
+                                                                  "Due",
+                                                                  style: TextStyle(
+                                                                      fontFamily:
+                                                                          'Urbanist',
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w600,
+                                                                      fontSize:
+                                                                          scrWidth *
+                                                                              0.026,
+                                                                      color: Colors
+                                                                          .white),
+                                                                )
+                                                              : Text(
+                                                                  "Paid",
+                                                                  style: TextStyle(
+                                                                      fontFamily:
+                                                                          'Urbanist',
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w600,
+                                                                      fontSize:
+                                                                          scrWidth *
+                                                                              0.026,
+                                                                      color: Colors
+                                                                          .white),
+                                                                ),
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                        width: scrWidth * 0.15,
+                                                      ),
+                                                    ],
                                                   ),
-                                                  SizedBox(width: scrWidth*0.15,),
-
-
                                                 ],
                                               ),
-
-                                            ],
-                                          ),
-                                          Row(
-                                            children: [
-                                              (index==0)? Column(
+                                              Row(
                                                 children: [
-                                                  SizedBox(height: scrHeight*0.02,),
+                                                  (index == 0)
+                                                      ? Column(
+                                                          children: [
+                                                            SizedBox(
+                                                              height:
+                                                                  scrHeight *
+                                                                      0.02,
+                                                            ),
+                                                            Padding(
+                                                              padding: EdgeInsets.only(
+                                                                  left:
+                                                                      scrWidth *
+                                                                          0.05),
+                                                              child: Text(
+                                                                "₹41,000",
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style: TextStyle(
+                                                                    fontFamily:
+                                                                        'Urbanist',
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                    fontSize:
+                                                                        scrWidth *
+                                                                            0.034,
+                                                                    color:
+                                                                        primarycolor),
+                                                              ),
+                                                            ),
+                                                            Text(
+                                                              "September 2022",
+                                                              style: TextStyle(
+                                                                  fontFamily:
+                                                                      'Urbanist',
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                  fontSize:
+                                                                      scrWidth *
+                                                                          0.022,
+                                                                  color: Colors
+                                                                      .black),
+                                                            ),
+                                                          ],
+                                                        )
+                                                      : Container(),
                                                   Padding(
-                                                    padding:  EdgeInsets.only(left: scrWidth*0.05),
-                                                    child: Text(
-                                                      "₹41,000",textAlign: TextAlign.center,
-                                                      style: TextStyle(
-                                                          fontFamily: 'Urbanist',
-                                                          fontWeight: FontWeight.w600,
-                                                          fontSize: scrWidth*0.034,
-                                                          color: primarycolor),
+                                                    padding: (index == 0)
+                                                        ? EdgeInsets.only(
+                                                            left: scrWidth *
+                                                                0.035)
+                                                        : EdgeInsets.only(
+                                                            left: scrWidth *
+                                                                0.21),
+                                                    child: SvgPicture.asset(
+                                                      "assets/icons/menuicon.svg",
                                                     ),
                                                   ),
-                                                  Text(
-                                                    "September 2022",
-                                                    style: TextStyle(
-                                                        fontFamily: 'Urbanist',
-                                                        fontWeight: FontWeight.w600,
-                                                        fontSize: scrWidth*0.022,
-                                                        color: Colors.black),
-                                                  ),
-
                                                 ],
-                                              ):Container(),
-                                              Padding(
-                                                padding: (index==0)? EdgeInsets.only(left: scrWidth*0.035):
-                                                EdgeInsets.only(left: scrWidth*0.21),
-                                                child: SvgPicture.asset(
-                                                "assets/icons/menuicon.svg",
-                                                ),
                                               ),
                                             ],
-                                          ),
-
-                                          ],
-                                        )
-                                      );
+                                          ));
                                     },
                                     separatorBuilder:
                                         (BuildContext context, int index) {
@@ -988,8 +1106,7 @@ class _WinnerPageState extends State<WinnerPage> {
                                   ),
                                 ),
                               ],
-                            )
-                        ),
+                            )),
                       )
                     ],
                   ),
@@ -1037,8 +1154,8 @@ class _WinnerPageState extends State<WinnerPage> {
               width: scrWidth * 0.04,
             ),
             GestureDetector(
-              onTap: (){
-                 Navigator.push(context, MaterialPageRoute(builder: (context)=>PendingApprovelPage()));
+              onTap: () {
+                // Navigator.push(context, MaterialPageRoute(builder: (context)=>PendingApprovelPage()));
               },
               child: Container(
                 height: scrHeight * 0.045,
@@ -1049,12 +1166,12 @@ class _WinnerPageState extends State<WinnerPage> {
                 ),
                 child: Center(
                     child: Text(
-                      "Auction",
-                      style: TextStyle(
-                          fontSize: scrWidth * 0.047,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Urbanist'),
-                    )),
+                  "Auction",
+                  style: TextStyle(
+                      fontSize: scrWidth * 0.047,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'Urbanist'),
+                )),
               ),
             )
           ],
@@ -1063,4 +1180,3 @@ class _WinnerPageState extends State<WinnerPage> {
     );
   }
 }
-

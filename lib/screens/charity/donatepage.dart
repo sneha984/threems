@@ -23,6 +23,7 @@ class DonatePage extends StatefulWidget {
 }
 
 class _DonatePageState extends State<DonatePage>with TickerProviderStateMixin {
+
   List<Widget> tabs =[];
   List<Widget> tabBars =[];
 
@@ -137,26 +138,17 @@ class _DonatePageState extends State<DonatePage>with TickerProviderStateMixin {
                           SizedBox(height: scrHeight*0.015,),
 
 
-                          Row(
-                            children: [
-                              Text(
-                                currencyConvert
-                                    .format(charities.valueAmount)
-                                    .toString(),
-                                style: TextStyle(
-                                    fontSize: scrWidth * 0.039,
-                                    color: primarycolor,
-                                    fontFamily: 'Urbanist',
-                                    fontWeight: FontWeight.w600),
-                              ),
-                              SizedBox(width: scrWidth*0.1,),
-                              Text("30 days left",style: TextStyle(
-                                  fontSize:scrWidth*0.03,
-                                  color: Color(0xff827E7E),
-                                  fontFamily: 'Urbanist',
-                                  fontWeight: FontWeight.w500),),
-                            ],
-                          )
+                          Text(
+                            currencyConvert
+                                .format(charities.valueAmount)
+                                .toString(),
+                            style: TextStyle(
+                                fontSize: scrWidth * 0.039,
+                                color: primarycolor,
+                                fontFamily: 'Urbanist',
+                                fontWeight: FontWeight.w600),
+                          ),
+                          SizedBox(width: scrWidth*0.1,)
                         ],
                       )
                     ],
@@ -217,6 +209,7 @@ class _DonatePageState extends State<DonatePage>with TickerProviderStateMixin {
     });
     
   }
+
   late  TabController _tabController;
   var currencyConvert = NumberFormat.currency(
     locale: 'HI',

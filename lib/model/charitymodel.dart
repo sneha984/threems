@@ -7,6 +7,7 @@ class CharityModel {
   String? beneficiaryName;
   String? beneficiaryPhNumber;
   int? cause;
+  String? fileNme;
   String? charityDetailes;
   String? confirmAccountNumber;
   String? documents;//----------------------------------------
@@ -33,6 +34,7 @@ class CharityModel {
         this.beneficiaryName,
         this.beneficiaryPhNumber,
         this.cause,
+        this.fileNme,
         this.charityDetailes,
         this.confirmAccountNumber,
         this.documents,
@@ -59,6 +61,7 @@ class CharityModel {
     accountHolderName = json['accountHolderName'];
     accountNumber = json['accountNumber'];
     bankName = json['bankName'];
+    fileNme = json['fileNme'];
     beneficiaryName = json['beneficiaryName'];
     beneficiaryPhNumber = json['beneficiaryPhNumber'];
     cause = json['cause'];
@@ -99,6 +102,7 @@ class CharityModel {
     data['confirmAccountNumber'] = this.confirmAccountNumber;
     data['documents'] = this.documents;
     data['emailId'] = this.emailId;
+    data['fileNme'] = this.fileNme;
     data['endDate'] = this.endDate;
     data['ifscCode'] = this.ifscCode;
     data['image'] = this.image;
@@ -140,9 +144,9 @@ class Payments {
     verified = json['verified'];
     userName = json['userName'];
     userId = json['userId'];
-    amount = json['amount'];
+    amount = double.tryParse(json['amount'].toString());
     screenShotUrl = json['screenShotUrl'];
-    date=json['date'];
+    date = json['date'];
   }
 
   Map<String, dynamic> toJson() {
@@ -152,7 +156,7 @@ class Payments {
     data['userId'] = this.userId;
     data['amount'] = this.amount;
     data['screenShotUrl'] = this.screenShotUrl;
-    data['date']=this.date;
+    data['date'] = this.date;
     return data;
   }
 }

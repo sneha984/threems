@@ -1,21 +1,64 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:threems/utils/dummy.dart';
 
+import '../../kuri/add_members_kuri.dart';
+import '../../kuri/createkuri.dart';
+import '../../model/ChitModel.dart';
 import '../../utils/themes.dart';
 import '../splash_screen.dart';
+import 'add_members.dart';
 
 class AddMembersSearch extends StatefulWidget {
-  const AddMembersSearch({super.key});
+  final List<Contact> contacts;
+  final List numberList;
+  final ChitModel chit;
+  const AddMembersSearch(
+      {super.key,
+      required this.contacts,
+      required this.numberList,
+      required this.chit});
 
   @override
   State<AddMembersSearch> createState() => _AddMembersSearchState();
 }
 
 class _AddMembersSearchState extends State<AddMembersSearch> {
+  List<Contact> totalContactsSearch = [];
+  List<Contact> totalContacts = [];
+  List numberList = [];
+  TextEditingController search = TextEditingController();
+
+  searchContacts(String txt) {
+    print(totalContacts.length);
+    print(totalContactsSearch.length);
+    totalContactsSearch = [];
+    for (int i = 0; i < totalContacts.length; i++) {
+      if (totalContacts[i]
+          .displayName!
+          .toLowerCase()
+          .contains(txt.toLowerCase())) {
+        totalContactsSearch.add(totalContacts[i]);
+      }
+    }
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    totalContactsSearch = widget.contacts;
+    totalContacts = widget.contacts;
+    print(totalContacts.length);
+    print(totalContactsSearch.length);
+    numberList = widget.numberList;
+    print(numberList.length);
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,7 +111,7 @@ class _AddMembersSearchState extends State<AddMembersSearch> {
                     text: TextSpan(
                       children: <TextSpan>[
                         TextSpan(
-                          text: '1',
+                          text: addMember.length.toString(),
                           style: TextStyle(
                               fontSize: FontSize16,
                               fontFamily: 'Urbanist',
@@ -84,7 +127,7 @@ class _AddMembersSearchState extends State<AddMembersSearch> {
                               color: Colors.black),
                         ),
                         TextSpan(
-                          text: '10',
+                          text: widget.chit.membersCount.toString(),
                           style: TextStyle(
                               fontSize: FontSize16,
                               fontFamily: 'Urbanist',
@@ -123,6 +166,16 @@ class _AddMembersSearchState extends State<AddMembersSearch> {
                     borderRadius: BorderRadius.circular(17),
                   ),
                   child: TextFormField(
+                    controller: search,
+                    onChanged: ((txt) {
+                      print(search.text);
+                      totalContactsSearch = [];
+                      if (search.text == '') {
+                        totalContactsSearch.addAll(totalContacts);
+                      } else {
+                        searchContacts(search.text);
+                      }
+                    }),
                     // cursorHeight: scrWidth * 0.055,
                     // cursorWidth: 1,
                     // cursorColor: Colors.black,
@@ -174,103 +227,163 @@ class _AddMembersSearchState extends State<AddMembersSearch> {
             height: scrWidth * 0.02,
           ),
           physics: BouncingScrollPhysics(),
-          itemCount: Users.users.length,
+          itemCount: totalContactsSearch.length,
           shrinkWrap: true,
-          itemBuilder: (context, index) => Container(
-            width: 328,
-            height: textFormFieldHeight45,
-            padding: EdgeInsets.symmetric(
-              horizontal: scrWidth * 0.015,
-              vertical: 2,
-            ),
-            decoration: BoxDecoration(
-                border: Border.all(
-                  color: Color(0xffDADADA),
-                  width: 1,
-                ),
-                borderRadius: BorderRadius.circular(scrWidth * 0.026)),
-            child: Center(
-                child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(left: 8),
-                  child: CircleAvatar(
-                    radius: 15,
-                    backgroundColor: Colors.grey,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(15),
-                      child: CachedNetworkImage(
-                        imageUrl:
-                            'https://pbs.twimg.com/profile_images/1392793006877540352/ytVYaEBZ_400x400.jpg',
-                      ),
+          itemBuilder: (context, index) {
+            return totalContactsSearch[index].phones!.isEmpty
+                ? SizedBox()
+                : Container(
+                    width: 328,
+                    height: textFormFieldHeight45,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: scrWidth * 0.015,
+                      vertical: 2,
                     ),
-                  ),
-                ),
-                Center(
-                  child: Text(
-                    Users.users[index],
-                    style: TextStyle(
-                        fontSize: FontSize16,
-                        fontFamily: 'Urbanist',
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    if (addFriends.contains(Users.users[index])) {
-                      setState(() {
-                        addFriends.remove(Users.users[index]);
-                        print("hi: $addFriends");
-                      });
-                    } else {
-                      setState(() {
-                        addFriends.add(Users.users[index]);
-                        print("hi: $addFriends");
-                      });
-                    }
-                  },
-                  child: Container(
-                    // width: 50,
-                    height: 27,
-                    margin: EdgeInsets.only(right: 8),
-                    padding: EdgeInsets.all(5),
                     decoration: BoxDecoration(
-                        color: addFriends.contains(Users.users[index])
-                            ? Color(0xff8391A1)
-                            : primarycolor,
-                        borderRadius: BorderRadius.circular(8)),
+                        border: Border.all(
+                          color: Color(0xffDADADA),
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(scrWidth * 0.026)),
                     child: Center(
-                      child: Text(
-                        addFriends.contains(Users.users[index])
-                            ? "Added"
-                            : "+ Add",
-                        style: TextStyle(
-                            fontSize: FontSize14,
-                            fontFamily: 'Urbanist',
-                            fontWeight: FontWeight.w700,
-                            color: Colors.white),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            )),
-          ),
+                        child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.only(left: 8),
+                          child: CircleAvatar(
+                            radius: 15,
+                            backgroundColor: Colors.grey,
+                            backgroundImage:
+                                MemoryImage(totalContactsSearch[index].avatar!),
+                          ),
+                        ),
+                        Center(
+                          child: Text(
+                            totalContactsSearch[index].displayName!,
+                            style: TextStyle(
+                                fontSize: FontSize16,
+                                fontFamily: 'Urbanist',
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            if (numberList.contains(totalContactsSearch[index]
+                                .phones!
+                                .first
+                                .value!
+                                .trim()
+                                .replaceAll(' ', ''))) {
+                              if (addFriend.contains(totalContactsSearch[index]
+                                  .phones!
+                                  .first
+                                  .value!
+                                  .trim()
+                                  .replaceAll(' ', ''))) {
+                                setState(() {
+                                  addFriend.remove(totalContactsSearch[index]
+                                      .phones!
+                                      .first
+                                      .value!
+                                      .trim()
+                                      .replaceAll(' ', ''));
+                                  print("hi: $addFriend");
+                                });
+                                setState(() {});
+                              } else {
+                                setState(() {
+                                  addFriend.add(totalContactsSearch[index]
+                                      .phones!
+                                      .first
+                                      .value!
+                                      .trim()
+                                      .replaceAll(' ', ''));
+                                  print("hi: $addFriend");
+                                });
+                                setState(() {});
+                              }
+                            } else {
+                              showSnackbar(context,
+                                  'Invite ${totalContactsSearch[index].displayName}');
+                            }
+                          },
+                          child: Container(
+                            // width: 50,
+                            height: 27,
+                            margin: EdgeInsets.only(right: 8),
+                            padding: EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                                color: addFriend.contains(
+                                        totalContactsSearch[index]
+                                            .phones!
+                                            .first
+                                            .value!
+                                            .trim()
+                                            .replaceAll(' ', ''))
+                                    ? Color(0xff8391A1)
+                                    : primarycolor,
+                                borderRadius: BorderRadius.circular(8)),
+                            child: Center(
+                              child: Text(
+                                addFriend.contains(totalContactsSearch[index]
+                                        .phones!
+                                        .first
+                                        .value!
+                                        .trim()
+                                        .replaceAll(' ', ''))
+                                    ? "Added"
+                                    : numberList.contains(
+                                            totalContactsSearch[index]
+                                                .phones!
+                                                .first
+                                                .value!
+                                                .trim()
+                                                .replaceAll(' ', ''))
+                                        ? '+ Add'
+                                        : 'Invite',
+                                style: TextStyle(
+                                    fontSize: FontSize14,
+                                    fontFamily: 'Urbanist',
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.white),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )),
+                  );
+          },
         ),
       ),
-      bottomNavigationBar: Container(
-        width: 100,
-        height: 50,
-        decoration: BoxDecoration(
-            color: primarycolor, borderRadius: BorderRadius.circular(17)),
-        margin: EdgeInsets.symmetric(vertical: 10, horizontal: 50),
-        child: Center(
-            child: Text(
-          "Create New Chit",
-          style: TextStyle(color: Colors.white),
-        )),
+      bottomNavigationBar: InkWell(
+        onTap: () {
+          addMember = [];
+          for (int i = 0; i < addFriend.length; i++) {
+            addMember.add(useridByPhone[addFriend[i]]);
+          }
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => AddMembers(
+                        chit: widget.chit,
+                      )));
+          setState(() {});
+        },
+        child: Container(
+          width: 100,
+          height: 50,
+          decoration: BoxDecoration(
+              color: primarycolor, borderRadius: BorderRadius.circular(17)),
+          margin: EdgeInsets.symmetric(vertical: 10, horizontal: 50),
+          child: Center(
+              child: Text(
+            "Add Member",
+            style: TextStyle(color: Colors.white),
+          )),
+        ),
       ),
     );
   }

@@ -8,6 +8,7 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:threems/Authentication/auth.dart';
+import 'package:threems/Authentication/root.dart';
 import 'package:threems/model/usermodel.dart';
 import 'package:threems/screens/charity/payment.dart';
 import 'package:threems/screens/charity/pdfviewpage.dart';
@@ -19,6 +20,7 @@ import '../../model/charitymodel.dart';
 import '../../utils/themes.dart';
 import '../../widgets/flchart.dart';
 import '../splash_screen.dart';
+
 
 class DonateNowPage extends StatefulWidget {
   final CharityModel charities;
@@ -36,6 +38,23 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
    bool onclick=true;
   var videoId;
   late PlayerState _playerState;
+  Duration? remainingTime;
+  int count = 1;
+  getTime() async {
+    DateTime deadLine = widget.charities.endDate!.toDate();
+    for (int i = count; i > 0; i--) {
+      await Future.delayed(const Duration(seconds: 1));
+      remainingTime = deadLine.difference(DateTime.now());
+      // DateTime.now().difference(launch);
+    }
+
+    print(mounted);
+
+    if (mounted) {
+      setState(() {});
+    }
+    getTime();
+  }
 
   final ScrollController _controller = ScrollController();
   final double _height = 100.0;
@@ -57,13 +76,16 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
     "https://templatelab.com/wp-content/uploads/2016/03/Company-Letterhead-Template-1-TemplateLab-Exclusive-e1487297202368-790x1022.jpg",
   ];
   late  TabController _tabControllerr;
+
   @override
+
   void initState() {
 
     _tabControllerr = TabController(length: 4, vsync: this);
     _tabControllerr.addListener(_handleTabSelection);
 
     super.initState();
+    getTime();
     _controllers = YoutubePlayerController(
       initialVideoId:videoId=YoutubePlayer.convertUrlToId(widget.charities.youTubeLink!).toString(),
       flags: YoutubePlayerFlags(
@@ -105,6 +127,9 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
   );
   @override
   Widget build(BuildContext context) {
+    final DateTime deadLine = widget.charities.endDate!.toDate();
+    final DateFormat formatter = DateFormat('dd MMMM yyyy');
+    final String formatted = formatter.format(deadLine);
     double sum=0;
     List payAmount=[];
     for(int i=0;i<widget.charities.payments!.length;i++){
@@ -112,6 +137,7 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
       payAmount.add(x);
       sum=sum+x;
     }
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -265,7 +291,12 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
 
                           Padding(
                             padding:  EdgeInsets.only(top: scrHeight*0.06),
-                            child: Text("30 days left",style: TextStyle(
+                            child: Text(
+                              remainingTime == null
+                                ? "..."
+                                : "${remainingTime?.inDays} Days Left"
+                                .toString(),
+                                style: TextStyle(
                                 fontSize: scrWidth*0.027,
                                 fontFamily: 'Urbanist',
                                 fontWeight: FontWeight.w500,
@@ -652,69 +683,71 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                         ),),
                       ),
                       SizedBox(height: scrHeight*0.02,),
-                      Padding(
-                        padding: EdgeInsets.only(left: scrWidth*0.05),
-                        child: Container(
-                          height: scrHeight*0.2,
-                          width: scrWidth,
-                          // color: Colors.red,
-                          child: ListView.separated(
-                            controller: _controller,
-                            physics: BouncingScrollPhysics(),
-                            separatorBuilder: (context, index) => SizedBox(
-                              width: scrWidth * 0.028,
-                            ),
-                            scrollDirection: Axis.horizontal,
-                            itemCount: _items.length,
-                            itemBuilder: (context, index) {
-                              return Container(
-                                child: Row(
-                                  children: [
-                                     Container(
-                                      height: scrHeight*0.18,
-                                      width: scrWidth*0.256,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(8),
-                                        child: CachedNetworkImage(
-                                          imageUrl:_items[index],
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
-                                    (index==2)?InkWell(
-                                      onTap: (){
-                                        _animateToIndex(3);
-                                        },
-                                      child: Padding(
-                                        padding: EdgeInsets.only(right: 10),
-                                        child: CircleAvatar(
-                                          radius: scrWidth*0.04,
-                                          backgroundColor: Colors.green,
-                                          child:SvgPicture.asset("assets/icons/arrownext.svg")
-                                        ),
-                                      ),
-                                    ):Container(),
-                                  ],
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      ),
-                       // Padding(
-                       //   padding:  EdgeInsets.only(left: scrWidth*0.05),
-                       //   child: GestureDetector(
-                       //     onTap: (){
-                       //       Navigator.push(context, MaterialPageRoute(
-                       //           builder: (context)=>PdfViewPage(charity:widget.charities,)
-                       //       ));
-                       //     },
-                       //     child: Text("rokeorfoejogjoergj"),
-                       //   ),
-                       // ),
+                      // Padding(
+                      //   padding: EdgeInsets.only(left: scrWidth*0.05),
+                      //   child: Container(
+                      //     height: scrHeight*0.2,
+                      //     width: scrWidth,
+                      //     // color: Colors.red,
+                      //     child: ListView.separated(
+                      //       controller: _controller,
+                      //       physics: BouncingScrollPhysics(),
+                      //       separatorBuilder: (context, index) => SizedBox(
+                      //         width: scrWidth * 0.028,
+                      //       ),
+                      //       scrollDirection: Axis.horizontal,
+                      //       itemCount: _items.length,
+                      //       itemBuilder: (context, index) {
+                      //         return Container(
+                      //           child: Row(
+                      //             children: [
+                      //                Container(
+                      //                 height: scrHeight*0.18,
+                      //                 width: scrWidth*0.256,
+                      //                 decoration: BoxDecoration(
+                      //                   borderRadius: BorderRadius.circular(8),
+                      //                 ),
+                      //                 child: ClipRRect(
+                      //                   borderRadius: BorderRadius.circular(8),
+                      //                   child: CachedNetworkImage(
+                      //                     imageUrl:_items[index],
+                      //                     fit: BoxFit.cover,
+                      //                   ),
+                      //                 ),
+                      //               ),
+                      //               (index==2)?InkWell(
+                      //                 onTap: (){
+                      //                   _animateToIndex(3);
+                      //                   },
+                      //                 child: Padding(
+                      //                   padding: EdgeInsets.only(right: 10),
+                      //                   child: CircleAvatar(
+                      //                     radius: scrWidth*0.04,
+                      //                     backgroundColor: Colors.green,
+                      //                     child:SvgPicture.asset("assets/icons/arrownext.svg")
+                      //                   ),
+                      //                 ),
+                      //               ):Container(),
+                      //             ],
+                      //           ),
+                      //         );
+                      //       },
+                      //     ),
+                      //   ),
+                      // ),
+                       Padding(
+                         padding:  EdgeInsets.only(left: scrWidth*0.05),
+                         child: GestureDetector(
+                           onTap: (){
+                             print("-----------------------------------mmmmmmmmmmmmmmmmmmmmmmm------------------------");
+                             print(widget.charities.fileNme);
+                             Navigator.push(context, MaterialPageRoute(
+                                 builder: (context)=>PdfViewPage(charity:widget.charities,)
+                             ));
+                           },
+                           child: Text(widget.charities.fileNme!),
+                         ),
+                       ),
                       SizedBox(height: scrHeight*0.02,),
                       Padding(
                         padding:  EdgeInsets.only(left: scrWidth*0.05),
@@ -731,26 +764,21 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                          //    onclick;
                          // });
                         },
-                          child:Padding(
-                            padding:  EdgeInsets.only(left: scrWidth*0.055),
-                            child: Text(widget.charities.youTubeLink!,
-                              style: TextStyle(color:Colors.blue,fontSize: scrWidth*0.04,decoration: TextDecoration.underline),),
+                          child: Padding(
+                            padding:  EdgeInsets.only(left: 15,right: 15),
+                            child: YoutubePlayer(
+                              controller: _controllers,
+                              aspectRatio: 16 / 9,
+                              showVideoProgressIndicator: true,
+                              progressColors: ProgressBarColors(
+                                playedColor: Colors.white,
+                                handleColor: Colors.white,
+                              ),
+                              onReady: () {
+                                _controller.addListener(listener);
+                              },
+                            ),
                           ),
-                          // Padding(
-                          //   padding:  EdgeInsets.only(left: 15,right: 15),
-                          //   child: YoutubePlayer(
-                          //     controller: _controllers,
-                          //     aspectRatio: 16 / 9,
-                          //     showVideoProgressIndicator: true,
-                          //     progressColors: ProgressBarColors(
-                          //       playedColor: Colors.white,
-                          //       handleColor: Colors.white,
-                          //     ),
-                          //     onReady: () {
-                          //       _controller.addListener(listener);
-                          //     },
-                          //   ),
-                          // ),
                       ),
 
                       // Padding(
@@ -884,12 +912,11 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                                               fontWeight: FontWeight.w700,
                                               color: primarycolor),),
                                           SizedBox(width: scrWidth*0.01,),
-                                          (data.verified==true)
-                                              ?SvgPicture.asset("assets/icons/Frame (1).svg"):
+                                          (data.userId==currentuserid)?
                                           InkWell(
                                             onTap: (){
                                               bottomsheets(context);
-                                              },
+                                            },
                                             child: Container(
                                               height:25,
                                               width: 25,
@@ -898,7 +925,8 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                                               ),
 
                                             ),
-                                          ),
+                                          ) :SvgPicture.asset("assets/icons/Frame (1).svg"),
+
                                           SizedBox(width: scrWidth*0.02,)
                                         ],
                                       ),
@@ -994,23 +1022,29 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Container(
-                      height: 45,
-                      width: 100,
-                      decoration: BoxDecoration(
-                        color: primarycolor,
-                        borderRadius: BorderRadius.circular(20),
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.pop(context);
+
+                      },
+                      child: Container(
+                        height: 45,
+                        width: 100,
+                        decoration: BoxDecoration(
+                          color: primarycolor,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child:  Center(child: Text("Cancel",style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 19,
+                            fontWeight: FontWeight.w400,
+                            fontFamily: 'Urbanist'),),),
                       ),
-                      child:  Center(child: Text("Cancel",style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 19,
-                          fontWeight: FontWeight.w400,
-                          fontFamily: 'Urbanist'),),),
                     ),
 
                     GestureDetector(
                       onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>DonateNowPage(charities: widget.charities)));
+                        Navigator.pop(context);
                         CharityModel chrt=widget.charities;
                         FirebaseFirestore.instance.collection('charityReport').add(chrt.toJson()).then((value) => value.update({
                           "reportDate":DateFormat.yMMMd().format(DateTime.now()),
@@ -1033,9 +1067,6 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                     )
                   ],
                 )
-
-
-
               ],
             )));
   }

@@ -11,9 +11,15 @@ import 'package:threems/kuri/createkuri.dart';
 import '../Authentication/root.dart';
 import '../model/Kuri/kuriModel.dart';
 import '../model/usermodel.dart';
+import '../screens/home_screen.dart';
 import '../screens/splash_screen.dart';
 import '../utils/dummy.dart';
 import '../utils/themes.dart';
+
+Map<String, dynamic> useridByPhone = {};
+Map<String, dynamic> userPhoneById = {};
+Map<String, dynamic> userNameById = {};
+Map<String, dynamic> userDataById = {};
 
 class AddMembersKuri extends StatefulWidget {
   final KuriModel kuri;
@@ -29,66 +35,56 @@ class _AddMembersKuriState extends State<AddMembersKuri> {
   TextEditingController userNameController = TextEditingController();
 
   bool loading = false;
-  List<Contact> contacts = [];
+
   List<UserModel> savedContacts = [];
   List<UserModel> userList = [];
-  Map<String, dynamic> userNameById = {};
-  askPermissions() async {
-    PermissionStatus permission = await getContactPermission();
-    if (permission == PermissionStatus.granted) {
-      getContacts();
-    } else {
-      handleInvalidPermission(permission);
+  List<String> userNumberList = [];
+
+  addMembers() {
+    addMember = [];
+
+    print('hereeeeeeeeee');
+    for (int j = 0; j < widget.kuri.members!.length; j++) {
+      addMember.add(widget.kuri.members![j]);
     }
-  }
 
-  handleInvalidPermission(PermissionStatus permission) {
-    if (permission == PermissionStatus.denied) {
-      showSnackbar(context, 'Permission denied by user');
-    } else if (permission == PermissionStatus.permanentlyDenied) {
-      showSnackbar(context, 'Permission denied by user');
+    for (int i = 0; i < addFriend.length; i++) {
+      if (widget.kuri.members!.contains(useridByPhone[addFriend[i]])) {
+      } else {
+        addMember.add(useridByPhone[addFriend[i]]);
+      }
     }
-  }
-
-  getContactPermission() async {
-    PermissionStatus permission = await Permission.contacts.status;
-    if (permission != PermissionStatus.granted &&
-        permission != PermissionStatus.permanentlyDenied) {
-      PermissionStatus permissionStatus = await Permission.contacts.request();
-      return permissionStatus;
-    } else {
-      return permission;
-    }
-  }
-
-  getContacts() async {
-    List<Contact> _contacts = await ContactsService.getContacts();
-
+    // for (int i = 0; i < addMember.length; i++) {
+    //   for (int j = 0; j < widget.kuri.members!.length; j++) {
+    //     if (addMember[i].contains(widget.kuri.members![j].toString())) {
+    //     } else {
+    //       addMember.add(useridByPhone[addFriend[j]]);
+    //     }
+    //   }
+    // }
+    print(addMember.length);
     setState(() {
-      contacts = _contacts;
-      getUsers();
-      print('================ContactLength=================');
-      print(contacts.length);
+      addFriend = [];
     });
   }
 
-  getSavedContacts() {
-    savedContacts = [];
-    for (int i = 0; i < contacts.length; i++) {
-      if (contacts[i].phones!.isNotEmpty) {
-        for (int j = 0; j < userList.length; j++) {
-          if (contacts[i].phones!.first.value == userList[j].phone) {
-            savedContacts.add(userList[j]);
-          }
-        }
-        // print(contacts[i].phones!.first.value);
-        print(userList.length);
-      }
-    }
-    print('================Saved Contact Length=================');
-    print(savedContacts.length);
-    setState(() {});
-  }
+  // getSavedContacts() {
+  //   savedContacts = [];
+  //   for (int i = 0; i < contacts.length; i++) {
+  //     if (contacts[i].phones!.isNotEmpty) {
+  //       for (int j = 0; j < userList.length; j++) {
+  //         if (contacts[i].phones!.first.value == userList[j].phone) {
+  //           savedContacts.add(userList[j]);
+  //         }
+  //       }
+  //       // print(contacts[i].phones!.first.value);
+  //       print(userList.length);
+  //     }
+  //   }
+  //   print('================Saved Contact Length=================');
+  //   print(savedContacts.length);
+  //   setState(() {});
+  // }
 
   getUsers() {
     FirebaseFirestore.instance.collection('users').snapshots().listen((event) {
@@ -96,11 +92,17 @@ class _AddMembersKuriState extends State<AddMembersKuri> {
       savedContacts = [];
       for (var doc in event.docs) {
         userList.add(UserModel.fromJson(doc.data()));
+        useridByPhone[doc['phone'].toString().trim().replaceAll(' ', '')] =
+            doc.id;
+        userPhoneById[doc.id] =
+            doc['phone'].toString().trim().replaceAll(' ', '');
         userNameById[doc.id] = doc['userName'];
+        userDataById[doc.id] = doc.data();
+        userNumberList.add(doc['phone'].toString().trim().replaceAll(' ', ''));
       }
       if (mounted) {
         setState(() {
-          getSavedContacts();
+          // getSavedContacts();
         });
       }
     });
@@ -108,7 +110,8 @@ class _AddMembersKuriState extends State<AddMembersKuri> {
 
   @override
   void initState() {
-    askPermissions();
+    getUsers();
+    addMembers();
     userNameFocus.addListener(() {
       setState(() {});
     });
@@ -158,14 +161,19 @@ class _AddMembersKuriState extends State<AddMembersKuri> {
           ),
         ),
         actions: [
-          GestureDetector(
+          InkWell(
             onTap: () {
+              addFriend = [];
+              for (int i = 0; i < addMember.length; i++) {
+                addFriend.add(userPhoneById[addMember[i]]);
+              }
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => AddMembersearch(
                             contacts: contacts,
-                            savedUsers: savedContacts,
+                            numberList: userNumberList,
+                            kuri: widget.kuri,
                           )));
             },
             child: Padding(
@@ -290,24 +298,38 @@ class _AddMembersKuriState extends State<AddMembersKuri> {
                               child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
+                              // Container(
+                              //   margin: EdgeInsets.only(left: scrWidth * 0.02),
+                              //   child: CircleAvatar(
+                              //     radius: 15,
+                              //     backgroundColor: Colors.grey,
+                              //     child: ClipRRect(
+                              //       borderRadius:
+                              //           BorderRadius.circular(scrWidth * 0.04),
+                              //       child: CachedNetworkImage(
+                              //         imageUrl:
+                              //             'https://pbs.twimg.com/profile_images/1392793006877540352/ytVYaEBZ_400x400.jpg',
+                              //       ),
+                              //     ),
+                              //   ),
+                              // ),
                               Container(
-                                margin: EdgeInsets.only(left: scrWidth * 0.02),
+                                margin: const EdgeInsets.only(left: 8),
                                 child: CircleAvatar(
                                   radius: 15,
                                   backgroundColor: Colors.grey,
                                   child: ClipRRect(
-                                    borderRadius:
-                                        BorderRadius.circular(scrWidth * 0.04),
-                                    child: CachedNetworkImage(
-                                      imageUrl:
-                                          'https://pbs.twimg.com/profile_images/1392793006877540352/ytVYaEBZ_400x400.jpg',
+                                    borderRadius: BorderRadius.circular(15),
+                                    child: Icon(
+                                      Icons.person,
+                                      color: Colors.white,
                                     ),
                                   ),
                                 ),
                               ),
                               Center(
                                 child: Text(
-                                  addMember[index],
+                                  userNameById[addMember[index]],
                                   style: TextStyle(
                                       fontSize: FontSize16,
                                       fontFamily: 'Urbanist',
@@ -535,44 +557,78 @@ class _AddMembersKuriState extends State<AddMembersKuri> {
                   SizedBox(
                     width: scrWidth * 0.03,
                   ),
-                  GestureDetector(
+                  InkWell(
                     onTap: () {
                       setState(() {
                         loading = true;
                       });
-                      KuriModel local = widget.kuri;
-                      final kuri = KuriModel(
-                          userID: currentuserid,
-                          upiApps: local.upiApps,
-                          purpose: local.purpose,
-                          private: local.private,
-                          phone: local.phone,
-                          kuriName: local.kuriName,
-                          iFSC: local.iFSC,
-                          holderName: local.holderName,
-                          deadLine: local.deadLine,
-                          bankName: local.bankName,
-                          amount: local.amount,
-                          accountNumber: local.accountNumber,
-                          members: [],
-                          payments: [],
-                          totalReceived: 0);
 
-                      FirebaseFirestore.instance
-                          .collection('kuri')
-                          .add(kuri.toJson())
-                          .then((value) {
-                        print('========Current User=========');
-                        print(currentuserid);
-                        value.update({'kuriId': value.id});
-                      }).then((value) {
-                        showSnackbar(context, 'Kuri successfully added');
-                        setState(() {
-                          loading = false;
-                          Navigator.pop(context);
-                          Navigator.pop(context);
+                      KuriModel local = widget.kuri;
+                      if (local.kuriId == '' || local.kuriId == null) {
+                        final kuri = KuriModel(
+                            userID: currentuserid,
+                            upiApps: local.upiApps,
+                            purpose: local.purpose,
+                            private: local.private,
+                            phone: local.phone,
+                            kuriName: local.kuriName,
+                            iFSC: local.iFSC,
+                            holderName: local.holderName,
+                            deadLine: local.deadLine,
+                            bankName: local.bankName,
+                            amount: local.amount,
+                            accountNumber: local.accountNumber,
+                            members: addMember,
+                            payments: [],
+                            totalReceived: 0);
+
+                        FirebaseFirestore.instance
+                            .collection('kuri')
+                            .add(kuri.toJson())
+                            .then((value) {
+                          print('========Current User=========');
+                          print(currentuserid);
+                          value.update({'kuriId': value.id});
+                        }).then((value) {
+                          showSnackbar(context, 'Kuri successfully added');
+                          setState(() {
+                            loading = false;
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          });
                         });
-                      });
+                      } else if (local.kuriId != '' || local.kuriId != null) {
+                        final kuri = KuriModel(
+                            userID: currentuserid,
+                            upiApps: local.upiApps,
+                            purpose: local.purpose,
+                            private: local.private,
+                            phone: local.phone,
+                            kuriName: local.kuriName,
+                            iFSC: local.iFSC,
+                            holderName: local.holderName,
+                            deadLine: local.deadLine,
+                            bankName: local.bankName,
+                            amount: local.amount,
+                            accountNumber: local.accountNumber,
+                            members: addMember,
+                            payments: local.payments,
+                            totalReceived: local.totalReceived,
+                            kuriId: local.kuriId);
+
+                        FirebaseFirestore.instance
+                            .collection('kuri')
+                            .doc(local.kuriId)
+                            .set(kuri.toJson())
+                            .then((value) {
+                          showSnackbar(context, 'Kuri successfully Updated');
+                          setState(() {
+                            loading = false;
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          });
+                        });
+                      }
                     },
                     child: Container(
                       height: scrHeight * 0.058,
@@ -582,7 +638,9 @@ class _AddMembersKuriState extends State<AddMembersKuri> {
                           color: primarycolor),
                       child: Center(
                         child: Text(
-                          "Create New Kuri",
+                          widget.kuri.kuriId == '' || widget.kuri.kuriId == null
+                              ? "Create New Kuri"
+                              : 'Update',
                           style: TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: scrWidth * 0.04,

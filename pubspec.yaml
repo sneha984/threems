@@ -64,19 +64,19 @@ dependencies:
   google_sign_in: ^5.4.1
   image_picker: ^0.8.5+3
   file_picker: ^5.2.2
-  dropdown_button2: ^1.8.9
   firebase_storage: ^11.0.2
   another_stepper: ^1.0.4
-  youtube: ^1.0.1
   url_launcher: ^6.1.6
   flutter_linkify: ^5.0.2
   youtube_player_flutter: ^8.1.1
   syncfusion_flutter_pdfviewer: ^20.3.52
   contacts_service: ^0.6.3
   permission_handler: ^10.2.0
-
-
-
+  dotted_line: ^3.1.0
+  geolocator: ^7.7.0
+  geocoding: ^2.0.5
+  fluttertoast: ^8.1.1
+  dropdown_button2: ^1.8.9
 
 
 
