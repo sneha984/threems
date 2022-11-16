@@ -3,9 +3,12 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:threems/ByeandSell/buy_and_sell.dart';
+import 'package:threems/ByeandSell/storedetailsfill2.dart';
 
 class SuccesfullyAdded extends StatefulWidget {
-  const SuccesfullyAdded({Key? key}) : super(key: key);
+  final String id;
+
+  const SuccesfullyAdded({Key? key, required this.id}) : super(key: key);
 
   @override
   State<SuccesfullyAdded> createState() => _SuccesfullyAddedState();
@@ -16,7 +19,7 @@ class _SuccesfullyAddedState extends State<SuccesfullyAdded> {
     super.initState();
     Timer(const Duration(seconds: 4), () {
       Navigator.pushAndRemoveUntil(context, MaterialPageRoute
-        (builder: (context)=>BuyAndSell()), (route) => false);
+        (builder: (context)=>StoreDetailsFill2(id: widget.id)), (route) => false);
     });
   }
   @override

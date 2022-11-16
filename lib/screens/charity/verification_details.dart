@@ -51,12 +51,7 @@ class VerificationDetails extends StatefulWidget {
 
 class _VerificationDetailsState extends State<VerificationDetails> {
 
-  // final ImagePicker _picker = ImagePicker();
-  // dynamic url;
-  // File? image;
-  // String? imagePath;
-  // bool photo = false;
-  // bool docs = false;
+
   final TextEditingController youtubecontroller=TextEditingController();
   String? imgUrl;
   var imgFile;

@@ -12,7 +12,6 @@ import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:threems/ByeandSell/categorystores.dart';
 import 'package:threems/ByeandSell/shopheadimageslider.dart';
 import 'package:threems/ByeandSell/storedetailsfill.dart';
-import 'package:threems/ByeandSell/storedetailsfill2.dart';
 import 'package:threems/ByeandSell/storepage.dart';
 import 'package:threems/ByeandSell/yourstorecreate.dart';
 import 'dart:ui' as ui;
@@ -20,7 +19,6 @@ import 'package:threems/screens/splash_screen.dart';
 import 'package:threems/utils/themes.dart';
 
 import '../utils/dummy.dart';
-import '../widgets/head_image_slider.dart';
 
 class BuyAndSell extends StatefulWidget {
   const BuyAndSell({Key? key}) : super(key: key);
@@ -161,7 +159,7 @@ class _BuyAndSellState extends State<BuyAndSell>with TickerProviderStateMixin {
         centerTitle: false,
         elevation: 0.1,
         backgroundColor: Colors.white,
-        leading: GestureDetector(
+        leading: InkWell(
           onTap: () {
             _determinePosition();
 
@@ -186,20 +184,16 @@ class _BuyAndSellState extends State<BuyAndSell>with TickerProviderStateMixin {
           ),
         ),
         actions: [
-          // Padding(
-          //   padding: const EdgeInsets.only(right: 25,top: 13),
-          //   child: SvgPicture.asset("assets/images/cart.svg"),
-          // )
           Badge(
-            position: BadgePosition.topEnd(top: 23, end: 13,),
+            position: BadgePosition.topEnd(top: scrHeight*0.03, end: scrHeight*0.015,),
             animationDuration: Duration(milliseconds: 300),
             animationType: BadgeAnimationType.fade,
             badgeColor: Colors.black,
             badgeContent: Text('${cartlist.length}',
-              style: TextStyle(color: Colors.white,fontSize: 10),
+              style: TextStyle(color: Colors.white,fontSize: scrWidth*0.02),
             ),
             child: Padding(
-                padding: const EdgeInsets.only(right: 25,top: 13),
+                padding: EdgeInsets.only(right: 25,top: 13),
                 child: SvgPicture.asset("assets/images/cart.svg"),
               )
           ),
@@ -748,7 +742,7 @@ class _BuyAndSellState extends State<BuyAndSell>with TickerProviderStateMixin {
                         SizedBox(height: scrHeight*0.02,),
                         GestureDetector(
                           onTap: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>StoreDetailsFill2()));
+                            // Navigator.push(context, MaterialPageRoute(builder: (context)=>StoreDetailsFill2()));
                           },
                           child: Container(
                             height: scrHeight*0.055,
@@ -818,8 +812,8 @@ class _BuyAndSellState extends State<BuyAndSell>with TickerProviderStateMixin {
                         SizedBox(height: scrHeight * 0.02,),
                         GestureDetector(
                           onTap: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (
-                                context) => StoreDetailsFill2()));
+                            // Navigator.push(context, MaterialPageRoute(builder: (
+                            //     context) => StoreDetailsFill2(stredetailsmodel:,)));
                           },
                           child: Container(
                             height: scrHeight * 0.055,

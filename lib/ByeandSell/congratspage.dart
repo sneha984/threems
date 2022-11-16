@@ -7,10 +7,13 @@ import 'package:lottie/lottie.dart';
 import 'package:threems/ByeandSell/storedetailsfill2.dart';
 import 'package:threems/screens/splash_screen.dart';
 
+import '../model/Buy&sell.dart';
 import 'buy_and_sell.dart';
 
 class CongratsPage extends StatefulWidget {
-  const CongratsPage({Key? key}) : super(key: key);
+  final String id;
+
+  const CongratsPage({Key? key, required this.id}) : super(key: key);
 
   @override
   State<CongratsPage> createState() => _CongratsPageState();
@@ -21,7 +24,7 @@ class _CongratsPageState extends State<CongratsPage> {
     super.initState();
     Timer(const Duration(seconds: 4), () {
       Navigator.pushAndRemoveUntil(context, MaterialPageRoute
-        (builder: (context)=>StoreDetailsFill2()), (route) => false);
+        (builder: (context)=>StoreDetailsFill2(id: widget.id,)), (route) => false);
     });
   }
   @override

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:threems/ByeandSell/storedetailsfill.dart';
 import 'package:threems/ByeandSell/succesfullyadded.dart';
+import 'package:threems/model/Buy&sell.dart';
 import 'dart:io';
 
 
@@ -14,7 +16,9 @@ import '../screens/splash_screen.dart';
 import '../utils/themes.dart';
 
 class StoreDetailsFill2 extends StatefulWidget {
-  const StoreDetailsFill2({Key? key}) : super(key: key);
+  final String id;
+
+  const StoreDetailsFill2({Key? key, required this.id}) : super(key: key);
 
   @override
   State<StoreDetailsFill2> createState() => _StoreDetailsFill2State();
@@ -25,16 +29,6 @@ class _StoreDetailsFill2State extends State<StoreDetailsFill2> {
   final List<String> item = [
     "Grocery Store",
     "Fashion Apparels",
-    "Mobile & Electronics",
-    "Fruits & Vegetables",
-    "Pharmacy & Medicines",
-    "Chicken & Meat",
-    "Hardware & Tools",
-    "Bakery & Cake Shops",
-    "Home Decoration",
-    "Books & Stationary",
-    "Jewellery & Golds",
-    "Motor Accessories",
   ];
   String? selectedValuee;
   final List<String> items = [
@@ -71,13 +65,15 @@ class _StoreDetailsFill2State extends State<StoreDetailsFill2> {
     "plate",
     "inch"
   ];
+  List _images=[];
+  List<String> _imgurl=[];
   String? imgUrl;
   var imgFile;
   var uploadTask;
   var fileUrl;
   Future uploadImageToFirebase(BuildContext context) async {
     Reference firebaseStorageRef =
-    FirebaseStorage.instance.ref().child('deposits/${imgFile.path}');
+    FirebaseStorage.instance.ref().child('deposits/$imgFile');
     UploadTask uploadTask = firebaseStorageRef.putFile(imgFile);
     TaskSnapshot taskSnapshot = (await uploadTask);
     String value = await taskSnapshot.ref.getDownloadURL();
@@ -85,25 +81,34 @@ class _StoreDetailsFill2State extends State<StoreDetailsFill2> {
     // if(value!=null){
     //   imageList.add(value);
     // }
-    setState(() {
-      imgUrl = value;
+    print("####################################################");
+    print("####################################################");
 
+    setState(() {
+      _imgurl.add(value);
+      print(_imgurl);
     });
   }
   _pickImage() async {
-    final imageFile = await ImagePicker.platform.pickImage(
+     imgFile = await ImagePicker.platform.pickImage(
         source: ImageSource.gallery);
     setState(() {
-      imgFile = File(imageFile!.path);
+      imgFile = File(imgFile!.path);
+      _images.add(File(imgFile!.path));
+
       uploadImageToFirebase(context);
     });
   }
   FocusNode payableAmountNode = FocusNode();
-  @override
-  void dispose() {
-    payableAmountNode.dispose();
-    super.dispose();
-  }
+  String? selectedValue;
+  final FocusNode productNameFocus= FocusNode();
+  final FocusNode productPriceFocus= FocusNode();
+  final FocusNode productUnitFocus= FocusNode();
+  final FocusNode productDetails=FocusNode();
+  final  TextEditingController productNameController =TextEditingController();
+  final  TextEditingController productPriceController =TextEditingController();
+  final  TextEditingController productUnitController =TextEditingController();
+  final  TextEditingController productDetailsController =TextEditingController();
 
   void categoryAdd() {
     showDialog(
@@ -136,7 +141,6 @@ class _StoreDetailsFill2State extends State<StoreDetailsFill2> {
                     borderRadius: BorderRadius.circular(scrWidth * 0.026),
                   ),
                   child: TextFormField(
-                    keyboardType: TextInputType.number,
                     focusNode: payableAmountNode,
                     cursorHeight: scrWidth * 0.055,
                     cursorWidth: 1,
@@ -189,7 +193,6 @@ class _StoreDetailsFill2State extends State<StoreDetailsFill2> {
                   child: Center(
                     child: GestureDetector(
                       onTap: () {
-                        // Navigator.push(context, MaterialPageRoute(builder: (context)=>ChitSucessPaidPage()));
                       },
                       child: Text(
                         "Save",
@@ -209,12 +212,11 @@ class _StoreDetailsFill2State extends State<StoreDetailsFill2> {
       ),
     );
   }
-  String? selectedValue;
-  final FocusNode productNameFocus= FocusNode();
-  final FocusNode productPriceFocus= FocusNode();
-  final FocusNode productUnitFocus= FocusNode();
-  final FocusNode productDetails=FocusNode();
-  final  TextEditingController storeNameController =TextEditingController();
+  @override
+  void dispose() {
+    payableAmountNode.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -228,11 +230,14 @@ class _StoreDetailsFill2State extends State<StoreDetailsFill2> {
               SizedBox(height: scrHeight*0.08,),
               Row(
                 children: [
-                  GestureDetector(
+                  InkWell(
                     onTap: (){
                       Navigator.push(context, MaterialPageRoute(builder: (context)=>StoreDetails()));
                     },
-                    child:SvgPicture.asset("assets/icons/arrowmark.svg",),
+                    child:Container(
+                      height: 20,
+                        width: 20,
+                        child: SvgPicture.asset("assets/icons/arrowmark.svg",)),
                   ),
                   SizedBox(width: scrWidth*0.04,),
                   Text(
@@ -246,34 +251,78 @@ class _StoreDetailsFill2State extends State<StoreDetailsFill2> {
                 ],
               ),
               SizedBox(height: scrHeight*0.03,),
-              InkWell(
-                onTap: (){
-                  _pickImage();
-                },
-                child: Container(
-                    height:scrHeight*0.11,
-                    width: scrWidth*0.25,
-                    decoration: BoxDecoration(
-                    color: textFormFieldFillColor,
-                    borderRadius:
-                    BorderRadius.circular(scrWidth * 0.04),
-                  ),
-                  child:imgFile==null?Center(child:SvgPicture.asset("assets/icons/bigcamera.svg")):Container(
-                    height:scrHeight*0.11,
-                    width: scrWidth*0.25,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: FileImage(imgFile!) as ImageProvider,fit: BoxFit.fill),
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        color: Color(0xffDADADA),
-                      ),
-                    ),
+              Container(
+                height:100,
+                child: ListView.builder(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemCount:_images.length==5?_images.length:_images.length+1 ,
+                    itemBuilder: (context,index){
+                      return index==_images.length?InkWell(
+                        onTap: (){
+                          _pickImage();
+                        },
+                        child: Padding(
+                          padding:  EdgeInsets.only(left: 10),
+                          child: Container(
+                              height:scrHeight*0.11,
+                              width: scrWidth*0.28,
+                              decoration: BoxDecoration(
+                                color: textFormFieldFillColor,
+                                borderRadius:
+                                BorderRadius.circular(scrWidth * 0.04),
+                              ),
+                              child:  Center(
+                                  child: SvgPicture.asset(
+                                      "assets/icons/bigcamera.svg"))),
+                        ),
+                      ):Padding(
+                        padding:  EdgeInsets.only(left: 10),
+                        child: Container(
+                          height:scrHeight*0.11,
+                          width: scrWidth*0.28,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image:FileImage(_images[index]),
+                                // FileImage(imgFile!) as ImageProvider,
+                                fit: BoxFit.fill),
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                              color: Color(0xffDADADA),
+                            ),
+                          ),
+                        ),
+                      );
+                    }),
 
-                  )
-                  )
-                ),
-
+              ),
+              // InkWell(
+              //   onTap: (){
+              //     _pickImage();
+              //   },
+              //   child: Container(
+              //       height:scrHeight*0.11,
+              //       width: scrWidth*0.25,
+              //       decoration: BoxDecoration(
+              //       color: textFormFieldFillColor,
+              //       borderRadius:
+              //       BorderRadius.circular(scrWidth * 0.04),
+              //     ),
+              //     child:imgFile==null?Center(child:SvgPicture.asset("assets/icons/bigcamera.svg")):Container(
+              //       height:scrHeight*0.11,
+              //       width: scrWidth*0.25,
+              //       decoration: BoxDecoration(
+              //         image: DecorationImage(
+              //             image: FileImage(imgFile!) as ImageProvider,fit: BoxFit.fill),
+              //         borderRadius: BorderRadius.circular(8),
+              //         border: Border.all(
+              //           color: Color(0xffDADADA),
+              //         ),
+              //       ),
+              //
+              //     )
+              //     )
+              //   ),
               SizedBox(height: scrHeight*0.01,),
               Text(
                 "Add product images (upto 5)",
@@ -284,7 +333,6 @@ class _StoreDetailsFill2State extends State<StoreDetailsFill2> {
                     fontWeight: FontWeight.w600),
               ),
               SizedBox(height: scrHeight*0.036,),
-
               Padding(
                 padding:  EdgeInsets.only(right: scrWidth*0.053),
                 child: Container(
@@ -299,6 +347,7 @@ class _StoreDetailsFill2State extends State<StoreDetailsFill2> {
                     BorderRadius.circular(scrWidth * 0.026),
                   ),
                   child: TextFormField(
+                    controller: productNameController,
                     focusNode: productNameFocus,
                     cursorHeight: scrWidth * 0.055,
                     cursorWidth: 1,
@@ -367,30 +416,24 @@ class _StoreDetailsFill2State extends State<StoreDetailsFill2> {
                     DropdownButtonHideUnderline(
                       child: DropdownButton2(
                         isExpanded: true,
-                        hint: Expanded(
-                          child:  Text(
-                            "Product Category",
-                            style: TextStyle(
-                                fontSize: FontSize15,
-                                fontFamily: 'Urbanist',
-                                fontWeight: FontWeight.w600,
-                                color: Color(0xffB0B0B0)
-                            ),
+                        hint: Text(
+                          "Product Category",
+                          style: TextStyle(
+                              fontSize: FontSize15,
+                              fontFamily: 'Urbanist',
+                              fontWeight: FontWeight.w600,
+                              color: Color(0xffB0B0B0)
                           ),
                         ),
                         items: item
                             .map((item) => DropdownMenuItem<String>(
                           value: item,
-                          child:  Flexible(
-                            child: Container(
-                              child: Text(
-                                item.toString(),overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 14,
-                                    fontFamily: 'Urbanist'
-                                ),
-                              ),
+                          child:  Text(
+                            item.toString(),
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 14,
+                                fontFamily: 'Urbanist'
                             ),
                           ),
                         ))
@@ -466,6 +509,7 @@ class _StoreDetailsFill2State extends State<StoreDetailsFill2> {
                     BorderRadius.circular(scrWidth * 0.026),
                   ),
                   child: TextFormField(
+                    controller: productPriceController,
                     focusNode: productPriceFocus,
                     cursorHeight: scrWidth * 0.055,
                     cursorWidth: 1,
@@ -532,6 +576,7 @@ class _StoreDetailsFill2State extends State<StoreDetailsFill2> {
                         BorderRadius.circular(scrWidth * 0.026),
                       ),
                       child: TextFormField(
+                        controller: productUnitController,
                         focusNode: productUnitFocus,
                         cursorHeight: scrWidth * 0.055,
                         cursorWidth: 1,
@@ -613,16 +658,12 @@ class _StoreDetailsFill2State extends State<StoreDetailsFill2> {
                               items: items
                                   .map((item) => DropdownMenuItem<String>(
                                 value: item,
-                                child:  Flexible(
-                                  child: Container(
-                                    child: Text(
-                                      item.toString(),overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 14,
-                                          fontFamily: 'Urbanist'
-                                      ),
-                                    ),
+                                child:  Text(
+                                  item.toString(),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14,
+                                      fontFamily: 'Urbanist'
                                   ),
                                 ),
                               ))
@@ -687,6 +728,7 @@ class _StoreDetailsFill2State extends State<StoreDetailsFill2> {
                     BorderRadius.circular(scrWidth * 0.026),
                   ),
                   child: TextFormField(
+                    controller: productDetailsController,
                     focusNode: productDetails,
                     cursorHeight: scrWidth * 0.055,
                     cursorWidth: 1,
@@ -757,7 +799,21 @@ class _StoreDetailsFill2State extends State<StoreDetailsFill2> {
                 ),
               ) :GestureDetector(
                 onTap: (){
-                   Navigator.push(context, MaterialPageRoute(builder: (context)=>SuccesfullyAdded()));
+                  print(widget.id);
+                  final proDat=ProductModel(
+                    images:_imgurl,
+                    productName: productNameController.text,
+                    productCategory: selectedValuee,
+                    price:double.tryParse(productPriceController.text),
+                    unit:selectedValue ,
+                    quantity:int.tryParse(productUnitController.text) ,
+                    details: productDetailsController.text
+                  );
+                  FirebaseFirestore.instance.collection('stores').doc(widget.id)
+                      .collection('products').add(proDat.toJson());
+                  print(proDat);
+                  print(productPriceController.text);
+                   Navigator.push(context, MaterialPageRoute(builder: (context)=>SuccesfullyAdded(id: widget.id,)));
                 },
                 child: Padding(
                   padding:  EdgeInsets.only(right: scrWidth*0.053),

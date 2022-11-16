@@ -73,6 +73,7 @@ class _DonatePageState extends State<DonatePage>with TickerProviderStateMixin {
               .where('cause',isEqualTo:doc.get('causeId'))
               .snapshots(),
           builder: (context, snapshot) {
+
             List<CharityModel> charityList1 = [];
             if(snapshot.data==null){
               return Center(child: Text("No charity Found under this category"),);
