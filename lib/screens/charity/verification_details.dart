@@ -17,6 +17,26 @@ import '../../widgets/percentage_widget.dart';
 import '../splash_screen.dart';
 import 'dart:io';
 import 'basic_details.dart';
+void showUploadMessage(BuildContext context, String message,
+    {bool showLoading = false}) {
+  ScaffoldMessenger.of(context)
+    ..hideCurrentSnackBar()
+    ..showSnackBar(
+      SnackBar(
+        duration: showLoading?Duration(minutes: 30):Duration(seconds: 4),
+        content: Row(
+          children: [
+            if (showLoading)
+              Padding(
+                padding: EdgeInsets.only(right: 10.0),
+                child: CircularProgressIndicator(),
+              ),
+            Text(message),
+          ],
+        ),
+      ),
+    );
+}
 List userdetails=[];
 var fileName;
 

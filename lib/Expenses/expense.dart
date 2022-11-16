@@ -1,14 +1,8 @@
-import 'package:another_stepper/dto/stepper_data.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:threems/screens/splash_screen.dart';
-import 'package:another_stepper/another_stepper.dart';
-import 'package:threems/screens/utilities.dart';
-import 'package:threems/simple.dart';
 
 
-import '../utils/themes.dart';
+
 int _activeStepIndex=0;
 
 class Expense extends StatefulWidget {
@@ -21,40 +15,7 @@ class Expense extends StatefulWidget {
 class _ExpenseState extends State<Expense> {
   TextEditingController controller = TextEditingController();
 
-  // final List<String> items = [
-  //   "Kirana Store,Grocery",
-  //   "Fashion Apparels,Garments,CLothing",
-  //   "Home Decoration,Electronics",
-  //   "Mobile,Computers & Accessories",
-  //   "Fruits,Vegetables & Agricultural Products",
-  //   "Pharmacy & Medical Care",
-  //   "Pann Shop",
-  //   "Books & Stationery"
-  // ];
-  // String? selectedValue;
-  // List<Step> stepList()=>[
-  //   Step(
-  //       state:_activeStepIndex<=0?StepState.indexed:StepState.complete,
-  //       isActive: _activeStepIndex>=0,
-  //       title: Text("Create online store"),
-  //       subtitle: Text("Congratulations on opening your new \nonline store! "),
-  //       content: Text("nwendfuenr")
-  //   ),
-  //   Step(
-  //       state:_activeStepIndex<=1?StepState.indexed:StepState.complete,
-  //       isActive: _activeStepIndex>=1,
-  //       title: Text("Add Product"),
-  //       subtitle: Text("Create your first product by adding the product name and images. "),
-  //     content: Text("kfnekfrn"),
-  //   ),
-  //   Step(
-  //       state:_activeStepIndex<=2?StepState.indexed:StepState.complete,
-  //       isActive: _activeStepIndex>=2,
-  //       title: Text("iehdfuwe"),
-  //       subtitle: Text("Create your first product by adding the product name and images."),
-  //       content: Text("nwendfuenr")
-  //   ),
-  // ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

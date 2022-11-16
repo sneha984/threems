@@ -3,7 +3,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:threems/screens/splash_screen.dart';
 import 'package:threems/utils/themes.dart';
 import '../ByeandSell/buy_and_sell.dart';
-import '../screens/expense.dart';
+import '../Expenses/Expense_first_page.dart';
+import '../Expenses/expense.dart';
 import '../screens/home_screen.dart';
 import '../screens/utilities.dart';
 
@@ -130,7 +131,7 @@ class _ScreenLayoutState extends State<ScreenLayout> {
                       onPressed: () {
                         setState(() {
                           _index = 2;
-                          _currentScreen = Expense();
+                          _currentScreen = AddExpensesPage();
                           // _currentScreen = LoginOrSignupPage();
                         });
                       },
