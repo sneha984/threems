@@ -24,21 +24,21 @@ class _CreateKuriPageState extends State<CreateKuriPage> {
 
   List<MultiSelect> multiselect = [
     MultiSelect(
-        image: "assets/pay/googlepaysvg.svg",
+        image: "assets/icons/googlepayimage.svg",
         payname: "Google Pay",
         isSelected: false),
     MultiSelect(
-      image: "assets/pay/whatsappapysvg.svg",
+      image: "assets/icons/whatsapppayimage.svg",
       payname: "Whatsapp Pay",
       isSelected: false,
     ),
     MultiSelect(
-      image: "assets/pay/paytmpaysvg.svg",
+      image: "assets/icons/paytmimage.svg",
       payname: "Paytm",
       isSelected: false,
     ),
     MultiSelect(
-      image: "assets/pay/phonepesvg.svg",
+      image: "assets/icons/phonepayimage.svg",
       payname: "Phonepe",
       isSelected: false,
     ),
@@ -530,8 +530,11 @@ class _CreateKuriPageState extends State<CreateKuriPage> {
                                             : Border.all(
                                                 color: Colors.transparent),
                                       ),
-                                      child: SvgPicture.asset(
-                                          "assets/pay/marriagesvg.svg")),
+                                      child: Padding(
+                                        padding:  EdgeInsets.all(16.0),
+                                        child: SvgPicture.asset(
+                                            "assets/icons/marriageimage.svg"),
+                                      )),
                                   SizedBox(
                                     height: scrHeight * 0.01,
                                   ),
@@ -570,8 +573,11 @@ class _CreateKuriPageState extends State<CreateKuriPage> {
                                           : Border.all(
                                               color: Colors.transparent),
                                     ),
-                                    child: SvgPicture.asset(
-                                        "assets/pay/hospitalsvg.svg"),
+                                    child: Padding(
+                                      padding:  EdgeInsets.all(19.0),
+                                      child: SvgPicture.asset(
+                                          "assets/icons/hospitalimage.svg"),
+                                    ),
                                   ),
                                   SizedBox(
                                     height: scrHeight * 0.01,
@@ -611,8 +617,11 @@ class _CreateKuriPageState extends State<CreateKuriPage> {
                                           : Border.all(
                                               color: Colors.transparent),
                                     ),
-                                    child: SvgPicture.asset(
-                                        "assets/pay/othersvg.svg"),
+                                    child: Padding(
+                                      padding:EdgeInsets.all(19.0),
+                                      child: SvgPicture.asset(
+                                          "assets/icons/otherimage.svg"),
+                                    ),
                                   ),
                                   SizedBox(
                                     height: scrHeight * 0.01,
@@ -1875,7 +1884,10 @@ class _CreateKuriPageState extends State<CreateKuriPage> {
                     border: isSelected == true
                         ? Border.all(color: primarycolor, width: 1.5)
                         : Border.all(color: Colors.transparent)),
-                child: SvgPicture.asset(multiselect[index].image),
+                child: Padding(
+                  padding:  EdgeInsets.all(8.0),
+                  child: SvgPicture.asset(image),
+                ),
               ),
               SizedBox(
                 height: 5,
