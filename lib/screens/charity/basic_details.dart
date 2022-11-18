@@ -318,7 +318,7 @@ class _BasicDetailsState extends State<BasicDetails> {
                           var y=dropItem['image'];
                           var x = dropItem['value'];
                           causeId=dropItem['causeId'];
-                          dropdownValue=x;
+                          dropdownValue=x+y;
                           print(dropdownValue);
                           // var y=dropItem['image']+dropItem['value'];
                           // dropdown=y;

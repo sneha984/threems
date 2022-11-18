@@ -36,7 +36,7 @@ class _CategoryStoresState extends State<CategoryStores> {
           children: [
             Row(
               children: [
-                GestureDetector(
+                InkWell(
                   onTap: () {
                     Navigator.pop(context);
                   },
@@ -45,17 +45,21 @@ class _CategoryStoresState extends State<CategoryStores> {
                       top: scrHeight * 0.08,
                       left: scrWidth * 0.07,
                     ),
-                    child: SvgPicture.asset(
-                      "assets/icons/arrow.svg",
+                    child: Container(
+                      height: scrHeight*0.04,
+                      width: scrWidth*0.04,
+                      child: SvgPicture.asset(
+                        "assets/icons/arrow.svg",
+                      ),
                     ),
                   ),
                 ),
                 Padding(
-                  padding:  EdgeInsets.only(top: 55,left: 10),
-                  child: SvgPicture.asset("assets/icons/grocery.svg",height: 20,width: 20,),
+                  padding:  EdgeInsets.only(top: scrHeight*0.078,left:scrWidth*0.03),
+                  child: SvgPicture.asset("assets/icons/grocery.svg",height: 25,width: 25,),
                 ),
                 Padding(
-                  padding:  EdgeInsets.only(left: 11,top:scrHeight * 0.08 ),
+                  padding:  EdgeInsets.only(left: scrWidth*0.02,top:scrHeight * 0.08 ),
                   child: Text(
                     "Grocery Stores",
                     style: TextStyle(
@@ -68,11 +72,11 @@ class _CategoryStoresState extends State<CategoryStores> {
               ],
             ),
             Padding(
-              padding:  EdgeInsets.only(right: 170,top: 2 ),
+              padding:  EdgeInsets.only(right: scrWidth*0.5,top: scrHeight*0.001 ),
               child: Text(
                 "5 Stores available",
                 style: TextStyle(
-                    fontSize: 10,
+                    fontSize: scrWidth*0.026,
                     color: Color(0xff818181),
                     fontFamily: 'Urbanist',
                     fontWeight: FontWeight.w600),
@@ -117,7 +121,7 @@ class _CategoryStoresState extends State<CategoryStores> {
               ),
             ),
             Padding(
-              padding:  EdgeInsets.only(left: 11,right: 11),
+              padding:  EdgeInsets.only(left: scrWidth*0.03,right: scrWidth*0.03),
               child: Container(
                 height: scrHeight*3,
                 child: GridView.builder(
@@ -139,11 +143,11 @@ class _CategoryStoresState extends State<CategoryStores> {
                             Navigator.push(context,MaterialPageRoute(builder: (context)=>StorePage()));
                           },
                           child: Padding(
-                            padding: const EdgeInsets.only(
-                                left: 10),
+                            padding:  EdgeInsets.only(
+                                left: scrWidth*0.03),
                             child: Container(
-                              height: 80,
-                              width: 88,
+                              height: scrHeight*0.1,
+                              width:scrWidth*0.25,
                               decoration: BoxDecoration(
                                 image: DecorationImage(image:
                                 NetworkImage(subcategory[index].storeimage),
@@ -151,32 +155,32 @@ class _CategoryStoresState extends State<CategoryStores> {
                                 color: Colors.white,
 
                                 borderRadius: BorderRadius.circular(
-                                    15),
+                                    scrWidth*0.03),
                               ),
                             ),
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(left: 13),
+                          padding: EdgeInsets.only(left: scrWidth*0.04),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment
                                 .start,
                             children: [
-                              SizedBox(height: 5,),
+                              SizedBox(height: scrHeight*0.003,),
                               Text(
                                 subcategory[index].storename, textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontFamily: 'Urbanist',
-                                    fontSize: 12,
+                                    fontSize: scrWidth*0.036,
                                     fontWeight: FontWeight.w600,
                                     color: Color(0xff0E0E0E)),),
-                              SizedBox(height: 2,),
+                              SizedBox(height: scrHeight*0.002,),
 
                               Text(
                                 subcategory[index].noofproduct, textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontFamily: 'Urbanist',
-                                    fontSize: 10,
+                                    fontSize: scrWidth*0.025,
                                     fontWeight: FontWeight.w600,
                                     color: Color(0xff818181)),),
 

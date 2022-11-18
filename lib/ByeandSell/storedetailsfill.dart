@@ -11,7 +11,8 @@ import '../screens/splash_screen.dart';
 import '../utils/themes.dart';
 import 'congratspage.dart';
 import 'dart:io';
-
+List categoryList=[];
+List categoryItems=[];
 class StoreDetails extends StatefulWidget {
   const StoreDetails({Key? key}) : super(key: key);
 
@@ -22,6 +23,26 @@ class StoreDetails extends StatefulWidget {
 class _StoreDetailsState extends State<StoreDetails> {
   bool finish = false;
   bool trackedlocation = false;
+  getShopCategory(){
+    FirebaseFirestore.instance.collection('shopCategory').snapshots().listen((event) {
+      categoryList=[];
+      for(DocumentSnapshot <Map<String,dynamic>> doc in event.docs){
+        categoryList.add(doc);
+      }
+      categoryItems=[];
+      for(int i=0;i<categoryList.length;i++){
+        categoryItems.add({
+          "CategoryId":categoryList[i]['CategoryId']??"",
+          "category":categoryList[i]['category']??"",
+        });
+      }
+      if(mounted){
+        setState(() {
+
+        });
+      }
+    });
+  }
   final List<String> items = [
     "Grocery Store",
     "Fashion Apparels",
@@ -73,6 +94,7 @@ class _StoreDetailsState extends State<StoreDetails> {
   final TextEditingController storeAddressController = TextEditingController();
   @override
   void initState() {
+    getShopCategory();
     storeNameFocus.addListener(() {
       setState(() {});
     });
@@ -169,34 +191,6 @@ class _StoreDetailsState extends State<StoreDetails> {
                     ),
                   ),
                 ),
-               /* InkWell(
-                    onTap: () {
-                      _pickImage();
-                    },
-                    child: Container(
-                        height: scrHeight * 0.11,
-                        width: scrWidth * 0.25,
-                        decoration: BoxDecoration(
-                          color: textFormFieldFillColor,
-                          borderRadius: BorderRadius.circular(scrWidth * 0.04),
-                        ),
-                        child: imgFile == null
-                            ? Center(
-                                child: SvgPicture.asset(
-                                    "assets/icons/bigcamera.svg"))
-                            : Container(
-                                height: scrHeight * 0.11,
-                                width: scrWidth * 0.25,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                      image: FileImage(imgFile!) as ImageProvider,
-                                      fit: BoxFit.fill),
-                                  borderRadius: BorderRadius.circular(8),
-                                  border: Border.all(
-                                    color: Color(0xffDADADA),
-                                  ),
-                                ),
-                              ))),*/
               ),
               SizedBox(
                 height: scrHeight * 0.03,
@@ -313,6 +307,7 @@ class _StoreDetailsState extends State<StoreDetails> {
                         onChanged: (value) {
                           setState(() {
                             selectedValue = value as String;
+
                           });
                         },
                         icon: const Icon(
@@ -470,7 +465,7 @@ class _StoreDetailsState extends State<StoreDetails> {
                       ),
                     ),
               SizedBox(
-                height: scrHeight * 0.43,
+                height: scrHeight * 0.3,
               ),
               finish
                   ? Container(
@@ -499,14 +494,12 @@ class _StoreDetailsState extends State<StoreDetails> {
                           storeAddress: storeAddressController.text,
                           storeLocation: "ncsunuscns",
                         );
-
                         await createStore(strDat);
                         print("---------------------------------------------------------");
                         print(imgUrl);
                         print("---------------------------------------------------------");
                         print('eferjnferngirjtgurj${strDat.storeId}');
-
-                      },
+                        },
                       child: Container(
                         height: textFormFieldHeight45,
                         width: scrWidth,

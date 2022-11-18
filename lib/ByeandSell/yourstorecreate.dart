@@ -34,7 +34,7 @@ class _YourStoreCreatePageState extends State<YourStoreCreatePage> {
           children: [
             Row(
               children: [
-                GestureDetector(
+                InkWell(
                   onTap: () {
                     Navigator.pop(context);
                   },
@@ -43,13 +43,17 @@ class _YourStoreCreatePageState extends State<YourStoreCreatePage> {
                         top: scrHeight * 0.08,
                         left: scrWidth * 0.07,
                         ),
-                    child: SvgPicture.asset(
-                      "assets/icons/arrow.svg",
+                    child: Container(
+                      height: scrHeight*0.02,
+                      width: scrWidth*0.045,
+                      child: SvgPicture.asset(
+                        "assets/icons/arrow.svg",
+                      ),
                     ),
                   ),
                 ),
                 Padding(
-                  padding:  EdgeInsets.only(left: 11,top:scrHeight * 0.08 ),
+                  padding:  EdgeInsets.only(left: scrWidth*0.03,top:scrHeight * 0.08 ),
                   child: Text(
                     "View All Nearest Stores",
                     style: TextStyle(
@@ -62,28 +66,28 @@ class _YourStoreCreatePageState extends State<YourStoreCreatePage> {
               ],
             ),
             Padding(
-              padding:  EdgeInsets.only(right: 170,top: 2 ),
+              padding:  EdgeInsets.only(right: scrWidth*0.46,top: scrHeight*0.001 ),
               child: Text(
                 "56 Stores available",
                 style: TextStyle(
-                    fontSize: 10,
+                    fontSize: scrWidth*0.025,
                     color: Color(0xff818181),
                     fontFamily: 'Urbanist',
                     fontWeight: FontWeight.w600),
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(top: 10),
+              padding: EdgeInsets.only(top: scrHeight*0.015),
               child: Container(
                 height: scrHeight*0.042,
                 width: scrWidth*0.9,
                 decoration: BoxDecoration(
                     color: Color(0xffE9EEF3),
 
-                    borderRadius: BorderRadius.circular(10)
+                    borderRadius: BorderRadius.circular(scrWidth*0.03)
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.only(bottom: 5),
+                  padding:  EdgeInsets.only(bottom: 5),
                   child: TextFormField(
                     decoration:  InputDecoration(
                         prefixIcon: Padding(
@@ -111,7 +115,7 @@ class _YourStoreCreatePageState extends State<YourStoreCreatePage> {
               ),
             ),
             Padding(
-              padding:  EdgeInsets.only(left: 11,right: 11),
+              padding:  EdgeInsets.only(left: scrWidth*0.03,right:scrWidth*0.03),
               child: Container(
                 height: scrHeight*3,
                 child: GridView.builder(
@@ -130,44 +134,42 @@ class _YourStoreCreatePageState extends State<YourStoreCreatePage> {
                       children: [
                         InkWell(
                           child: Padding(
-                            padding: const EdgeInsets.only(
-                                left: 10),
+                            padding:  EdgeInsets.only(
+                                left: scrWidth*0.03),
                             child: Container(
-                              height: 80,
-                              width: 90,
+                              height: scrHeight*0.1,
+                              width: scrWidth*0.25,
                               decoration: BoxDecoration(
                                 image: DecorationImage(image:
                                 NetworkImage(nearstore[index].image),
                                     fit: BoxFit.fill),
                                 color: Colors.white,
-
-                                borderRadius: BorderRadius.circular(
-                                    15),
+                                borderRadius: BorderRadius.circular(scrWidth*0.025),
                               ),
                             ),
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(left: 13),
+                          padding:  EdgeInsets.only(left: scrWidth*0.05),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment
                                 .start,
                             children: [
-                              SizedBox(height: 5,),
+                              SizedBox(height: scrHeight*0.001,),
 
                               Text(
                                 nearstore[index].storename, textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontFamily: 'Urbanist',
-                                    fontSize: 12,
+                                    fontSize: scrWidth*0.033,
                                     fontWeight: FontWeight.w600,
                                     color: Color(0xff0E0E0E)),),
-                              SizedBox(height: 1,),
+                              SizedBox(height: scrHeight*0.001,),
                               Text(
                                nearstore[index].category, textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontFamily: 'Urbanist',
-                                    fontSize: 10,
+                                    fontSize: scrHeight*0.01,
                                     fontWeight: FontWeight.w600,
                                     color: Color(0xff818181)),),
 

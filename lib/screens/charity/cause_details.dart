@@ -26,8 +26,6 @@ class _CauseDetailsState extends State<CauseDetails> {
   final FocusNode phoneNumeberFocus = FocusNode();
   final FocusNode hospitalNameFocus = FocusNode();
   final FocusNode hospitalLocationFocus = FocusNode();
-
-
   final  TextEditingController amountcontroller =TextEditingController();
   final  TextEditingController medicaldatecontroller =TextEditingController();
   final  TextEditingController namecontroller =TextEditingController();
@@ -37,7 +35,7 @@ class _CauseDetailsState extends State<CauseDetails> {
 
   DateTime? selectedDate;
 
-//DatePick
+//DatePick----------------
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? datePicked = await showDatePickerCustom(
         cancelText: 'Cancel',

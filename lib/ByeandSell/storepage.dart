@@ -171,17 +171,22 @@ class _StorePageState extends State<StorePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(width: scrWidth*0.06,),
-                GestureDetector(
+                InkWell(
                   onTap: () {
                     Navigator.pop(context);
                   },
                   child: Padding(
                     padding: EdgeInsets.only(
-                      top: scrHeight * 0.08,
+                      top: scrHeight * 0.072,
+
                       // left: scrWidth * 0.07,
                     ),
-                    child: SvgPicture.asset(
-                      "assets/icons/arrow.svg",
+                    child: Container(
+                      height: scrHeight*0.03,
+                      width: scrWidth*0.05,
+                      child: SvgPicture.asset(
+                        "assets/icons/arrow.svg",
+                      ),
                     ),
                   ),
                 ),
@@ -202,37 +207,37 @@ class _StorePageState extends State<StorePage> {
                             fontFamily: 'Urbanist',
                             fontWeight: FontWeight.w600),
                       ),
-                      SizedBox(height: 4,),
+                      SizedBox(height: scrHeight*0.01,),
                       Text(
                         "Grocery Store",
                         style: TextStyle(
-                            fontSize:11,
+                            fontSize:scrWidth*0.027,
                             color: Color(0xff818181),
                             fontFamily: 'Urbanist',
                             fontWeight: FontWeight.w500),
                       ),
-                      SizedBox(height: 3,),
+                      SizedBox(height: scrHeight*0.002,),
 
                       Text(
                         "Manathumangalam,Perinthalmanna",
                         style: TextStyle(
-                            fontSize:11,
+                            fontSize:scrWidth*0.027,
                             color: Color(0xff818181),
                             fontFamily: 'Urbanist',
                             fontWeight: FontWeight.w500),
                       ),
-                      SizedBox(height: 9.5,),
+                      SizedBox(height: scrHeight*0.01,),
 
                       Container(
-                        width: 190,
-                        height: 28,
+                        width:scrWidth*0.5,
+                        height: scrHeight*0.031,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(scrWidth*0.02),
                           color: primarycolor
                         ),
                         child: Center(
                           child: Text("Visit Store in Map",style: TextStyle(
-                            fontFamily: 'Urbanist',fontWeight: FontWeight.w600,fontSize: 11,color: Colors.white
+                            fontFamily: 'Urbanist',fontWeight: FontWeight.w600,fontSize: scrWidth*0.027,color: Colors.white
                           ),),
                         ),
 
@@ -247,8 +252,8 @@ class _StorePageState extends State<StorePage> {
                     top: scrHeight*0.076
                   ),
                   child: Container(
-                    height: 90,
-                    width: 96,
+                    height:scrHeight*0.11,
+                    width:scrWidth*0.26,
                     decoration: BoxDecoration(
                       image: DecorationImage(image:
                       NetworkImage("https://cdn.pixabay.com/photo/2016/03/02/20/13/grocery-1232944__340.jpg"),
@@ -256,24 +261,24 @@ class _StorePageState extends State<StorePage> {
                       color: Colors.white,
 
                       borderRadius: BorderRadius.circular(
-                          15),
+                          scrWidth*0.04),
                     ),
                   ),
                 ),
               ],
             ),
             Padding(
-              padding:  EdgeInsets.only(top: 14,left: 10),
+              padding:  EdgeInsets.only(top: scrHeight*0.015,left: scrWidth*0.02),
               child: Container(
                 height: scrHeight*0.042,
                 width: scrWidth*0.92,
                 decoration: BoxDecoration(
                     color: Color(0xffE9EEF3),
 
-                    borderRadius: BorderRadius.circular(10)
+                    borderRadius: BorderRadius.circular(scrWidth*0.02)
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.only(bottom: 5),
+                  padding: EdgeInsets.only(bottom: 5),
                   child: TextFormField(
                     decoration:  InputDecoration(
                         prefixIcon: Padding(
@@ -300,7 +305,7 @@ class _StorePageState extends State<StorePage> {
                 ),
               ),
             ),
-            SizedBox(height: 10,),
+            SizedBox(height: scrHeight*0.02,),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -315,11 +320,11 @@ class _StorePageState extends State<StorePage> {
                 ),)
               ],
             ),
-            SizedBox(height: 10,),
+            SizedBox(height: scrHeight*0.02,),
             Padding(
-              padding:  EdgeInsets.only(left: 10),
+              padding:  EdgeInsets.only(left: scrWidth*0.02),
               child: Container(
-                height: 190,
+                height: scrHeight*0.22,
                 child: ListView.builder(
                     physics: BouncingScrollPhysics(),
                     scrollDirection: Axis.horizontal,
@@ -329,7 +334,7 @@ class _StorePageState extends State<StorePage> {
                     itemBuilder: (context, index) {
                       // final _isSelected=_selectedIndexs.contains(index);
                       return Padding(
-                        padding:  EdgeInsets.only(right: 10),
+                        padding:  EdgeInsets.only(right: scrWidth*0.02),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -338,18 +343,18 @@ class _StorePageState extends State<StorePage> {
                                 Navigator.push(context,MaterialPageRoute(builder: (context)=>CheckOutPage()));
                               },
                               child: Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 10),
+                                padding:  EdgeInsets.only(
+                                    left:scrWidth*0.039),
                                 child: Container(
-                                  padding: EdgeInsets.only(left: 10,right: 10),
-                                  height: 100,
-                                  width: 120,
+                                  padding: EdgeInsets.only(left: scrWidth*0.02,right: scrWidth*0.02,top: scrHeight*0.02),
+                                  height:scrHeight*0.1,
+                                  width: scrWidth*0.3,
                                   decoration: BoxDecoration(
                                       image: DecorationImage(
                                           image: NetworkImage(eachstore[index].productimage)),
                                       color: Colors.white,
                                       borderRadius: BorderRadius
-                                          .circular(15),
+                                          .circular(scrWidth*0.04),
                                       border: Border.all(
                                           color: Color(0xffECECEC),
                                           width: 1)
@@ -358,43 +363,43 @@ class _StorePageState extends State<StorePage> {
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(left: 20),
+                              padding:  EdgeInsets.only(left: scrWidth*0.06),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment
                                     .start,
                                 children: [
-                                  SizedBox(height: 5,),
+                                  SizedBox(height: scrHeight*0.009,),
                                   Text(
                                     eachstore[index].productname, textAlign: TextAlign.center,
                                     style: TextStyle(
                                         fontFamily: 'Urbanist',
-                                        fontSize: 12,
+                                        fontSize: scrWidth*0.03,
                                         fontWeight: FontWeight.w600,
                                         color: Color(0xff0E0E0E)),),
-                                  SizedBox(height: 3,),
+                                  SizedBox(height: scrHeight*0.003,),
 
                                   Text(
                                     eachstore[index].productunit, textAlign: TextAlign.center,
                                     style: TextStyle(
                                         fontFamily: 'Urbanist',
-                                        fontSize: 10,
+                                        fontSize: scrWidth*0.025,
                                         fontWeight: FontWeight.w600,
                                         color: Color(0xff818181)),),
-                                  SizedBox(height: 3,),
+                                  SizedBox(height: scrHeight*0.003,),
 
                                   Text(
                                     currencyConvert.format(eachstore[index].productprice).toString(), textAlign: TextAlign.center,
                                     style: TextStyle(
                                         fontFamily: 'Urbanist',
-                                        fontSize: 12,
+                                        fontSize: scrWidth*0.03,
                                         fontWeight: FontWeight.w700,
                                         color: Color(0xffF10000)),),
-                                  SizedBox(height: 3,),
+                                  SizedBox(height: scrHeight*0.004,),
                                 ],
                               ),
                             ),
                            eachstore[index].ShouldVisible?
-                           Padding(padding: EdgeInsets.only(left: 7),
+                           Padding(padding: EdgeInsets.only(left: scrWidth*0.07),
                              child: InkWell(
                                onTap: (){
                                  final findIndex=cartlist.indexWhere((element) => element['name'] ==eachstore[index].productname);
@@ -610,8 +615,8 @@ class _StorePageState extends State<StorePage> {
                                   ScaffoldMessenger.of(context).showSnackBar(snackBar);
                                   },
                                 child: Container(
-                                  width: 126,
-                                  height: 30,
+                                  width: scrWidth*0.32,
+                                  height: scrHeight*0.034,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(8),
                                     color: Color(0xff02B558)
@@ -858,7 +863,7 @@ class _StorePageState extends State<StorePage> {
                                         SizedBox(height: 3,),
 
                                         Text(
-                                          itemsCategory[i].categoryitems[index]['price'], textAlign: TextAlign.center,
+                                          itemsCategory[i].categoryitems[index]['price'].toString(), textAlign: TextAlign.center,
                                           style: TextStyle(
                                               fontFamily: 'Urbanist',
                                               fontSize: 12,

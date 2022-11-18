@@ -915,7 +915,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     )),
                                 child: FundingWidget(
                                     title: "Chit Funds",
-                                    image: "assets/icons/chiti_funds.svg"),
+                                    image: "assets/icons/money-bag.json"),
                               ),
                               VerticalDivider(
                                 thickness: scrHeight * 0.001,
@@ -931,7 +931,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 },
                                 child: FundingWidget(
                                     title: "Kuri Funds",
-                                    image: "assets/icons/kuri_funds.svg"),
+                                    image: "assets/icons/cash.json"),
                               ),
                             ],
                           ),

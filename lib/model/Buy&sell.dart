@@ -5,14 +5,14 @@ class StoreDetailsModel {
   String? storeLocation;
   String? storeId;
   String? storeImage;
-
   StoreDetailsModel(
       {this.storeName,
         this.storeCategory,
         this.storeAddress,
         this.storeLocation,
       this.storeId,
-      this.storeImage});
+      this.storeImage,
+      });
 
   StoreDetailsModel.fromJson(Map<String, dynamic> json) {
     storeName = json['storeName'];
@@ -45,6 +45,8 @@ class ProductModel {
   int? quantity;
   String? unit;
   String? details;
+  // List<String> categoryName=[];
+
   ProductModel(
       {this.images,
         this.productName,
@@ -52,6 +54,7 @@ class ProductModel {
         this.price,
         this.quantity,
         this.unit,
+        // required this.categoryName,
         this.details});
   ProductModel.fromJson(Map<String, dynamic> json) {
     images = json['images'].cast<String>();
@@ -59,6 +62,8 @@ class ProductModel {
     productCategory = json['productCategory'];
     price = json['price'];
     quantity = json['quantity'];
+    // categoryName=json['categoryName'];
+
     unit = json['unit'];
     details = json['details'];
   }
@@ -69,6 +74,8 @@ class ProductModel {
     data['productCategory'] = this.productCategory;
     data['price'] = this.price;
     data['quantity'] = this.quantity;
+    // data['categoryName']=this.categoryName;
+
     data['unit'] = this.unit;
     data['details'] = this.details;
     return data;

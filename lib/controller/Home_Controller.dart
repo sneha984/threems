@@ -81,11 +81,13 @@ class GeolocatorPage extends StatefulWidget {
 
   @override
   State<GeolocatorPage> createState() => _GeolocatorPageState();
+
 }
 
 class _GeolocatorPageState extends State<GeolocatorPage> {
   String currentAddress = 'My Address';
-    Position? currentposition;
+
+  Position? currentposition;
 
   Future<Position> _determinePosition() async {
     bool serviceEnabled;
@@ -144,12 +146,7 @@ class _GeolocatorPageState extends State<GeolocatorPage> {
           child: Column(
             children: [
               Text(currentAddress),
-              // currentposition != null
-              //     ? Text('Latitude = ' + currentposition!.latitude.toString())
-              //     : Container(),
-              // currentposition != null
-              //     ? Text('Longitude = ' + currentposition!.longitude.toString())
-              //     : Container(),
+
               TextButton(
                   onPressed: () {
                     _determinePosition();

@@ -40,7 +40,10 @@ class _FundingWidgetState extends State<FundingWidget> {
                     spreadRadius: 0,
                   ),
                 ]),
-            child: Lottie.asset('assets/icons/cash.json'),
+            child:
+            Lottie.asset(widget.image
+               // 'assets/icons/cash.json'
+            ),
           ),
           Text(
             widget.title,

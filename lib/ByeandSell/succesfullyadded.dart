@@ -18,8 +18,8 @@ class _SuccesfullyAddedState extends State<SuccesfullyAdded> {
   void initState() {
     super.initState();
     Timer(const Duration(seconds: 4), () {
-      Navigator.pushAndRemoveUntil(context, MaterialPageRoute
-        (builder: (context)=>StoreDetailsFill2(id: widget.id)), (route) => false);
+      Navigator.push(context, MaterialPageRoute
+        (builder: (context)=>StoreDetailsFill2(id: widget.id)));
     });
   }
   @override
