@@ -179,8 +179,8 @@ class Winners {
 
   Winners.fromJson(Map<String, dynamic> json) {
     date = json['date'].toDate();
-    userId = json['userId'];
-    amount = json['amount'];
+    userId = json['userId'] ?? "";
+    amount = json['amount'] ?? 12;
   }
 
   Map<String, dynamic> toJson() {

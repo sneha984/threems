@@ -2011,7 +2011,12 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
                 ),
                 InkWell(
                   onTap: () {
-                    if (amount.text != '' &&
+                    double pay = chit!.subscriptionAmount! -
+                        (double.tryParse(dividend.text)! / chit!.membersCount!);
+                    print('hehe');
+                    print(pay);
+                    if (winnerName != null &&
+                        amount.text != '' &&
                         payableAmount.text != '' &&
                         dividend.text != '') {
                       final winnerMember = Winners(
@@ -2028,12 +2033,15 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
                                 chit!.membersCount!)
                       });
                     } else {
-                      amount.text == ''
-                          ? showSnackbar(context, 'Please enter Amount')
-                          : payableAmount.text == ''
-                              ? showSnackbar(
-                                  context, 'Please enter Payable Amount')
-                              : showSnackbar(context, 'Please enter Dividend');
+                      winnerName == null
+                          ? showSnackbar(context, 'Please choose winner')
+                          : amount.text == ''
+                              ? showSnackbar(context, 'Please enter Amount')
+                              : payableAmount.text == ''
+                                  ? showSnackbar(
+                                      context, 'Please enter Payable Amount')
+                                  : showSnackbar(
+                                      context, 'Please enter Dividend');
                     }
                   },
                   child: Container(
