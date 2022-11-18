@@ -5,9 +5,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:threems/pagess/hosteddraft.dart';
 import 'package:threems/pagess/hosteddrawn.dart';
-import 'package:threems/pagess/vaccantORpublishedchit.dart';
-import 'package:threems/screens/chits/hostedchitpers.dart';
 import 'package:threems/screens/chits/vacantchitjoin.dart';
+import 'package:threems/screens/chits/MyHostedPublishedChit.dart';
 import 'package:threems/screens/chits/yourchitpage.dart';
 
 import '../../Authentication/root.dart';
@@ -36,6 +35,19 @@ class _HostedChitPageState extends State<HostedChitPage>
   String get _currency =>
       NumberFormat.compactSimpleCurrency(locale: _locale, decimalDigits: 2)
           .currencySymbol;
+
+  // addFieldtoAlldoc() {
+  //   FirebaseFirestore.instance.collection('chit').get().then(
+  //         (value) => value.docs.forEach(
+  //           (element) {
+  //             FirebaseFirestore.instance
+  //                 .collection('chit')
+  //                 .doc(element.id)
+  //                 .update({'payableAmount': 1000});
+  //           },
+  //         ),
+  //       );
+  // }
 
   getChits() {
     FirebaseFirestore.instance.collection('chit').snapshots().listen((event) {
@@ -68,6 +80,7 @@ class _HostedChitPageState extends State<HostedChitPage>
   late TabController _tabControllers;
   @override
   void initState() {
+    // addFieldtoAlldoc();
     getChits();
 
     _tabControllers = TabController(length: 3, vsync: this);
@@ -814,7 +827,7 @@ class _HostedChitPageState extends State<HostedChitPage>
                                                         id: hostedChits[index]
                                                             .chitId!,
                                                       )
-                                                    : VaccantOrPublishedChit(
+                                                    : MyHostedPublishedChit(
                                                         id: hostedChits[index]
                                                             .chitId!)));
                                     // : (index == 1)

@@ -84,7 +84,7 @@ class _AddedKuriPublicState extends State<AddedKuriPublic> {
       deadLine = kuri!.deadLine!;
       formatter = DateFormat('dd MMM');
       formatted = formatter!.format(deadLine!);
-      percentage = kuri!.totalReceived! / kuri!.amount!;
+      percentage = kuri.totalReceived! / kuri.amount!;
       if (mounted) {
         setState(() {
           getOwner();
@@ -865,7 +865,7 @@ class _AddedKuriPublicState extends State<AddedKuriPublic> {
                         .toString()
                         .replaceAll(',', ''),
                   )} / $_currency ${_formatNumber(
-                    kuri!.amount!.truncate().toString().replaceAll(',', ''),
+                    kuri.amount!.truncate().toString().replaceAll(',', ''),
                   )}",
                   style: TextStyle(
                       fontFamily: 'Urbanist',
@@ -884,7 +884,7 @@ class _AddedKuriPublicState extends State<AddedKuriPublic> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => KuriPaymentPage(
-                              kuri: kuri!,
+                              kuri: kuri,
                             )));
               },
               child: Container(

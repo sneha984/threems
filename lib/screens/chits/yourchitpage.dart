@@ -660,18 +660,24 @@ class _YourChitPageState extends State<YourChitPage> {
                                       :
 
                                       //Showing Next Date in weekly methode
+
+                                      //if Day is upcoming
                                       DateTime.now().weekday < chit!.chitDate!
                                           ? DateFormat('dd MMM yyyy').format(
                                               DateTime(
                                                   DateTime.now().year,
                                                   DateTime.now().month,
-                                                  DateTime.now().weekday -
-                                                      chit!.chitDate!))
+                                                  (DateTime.now().day +
+                                                      chit!.chitDate! -
+                                                      DateTime.now().weekday)))
+
+                                          //if Day is ended
                                           : DateFormat('dd MMM yyyy').format(
                                               DateTime(
                                                   DateTime.now().year,
                                                   DateTime.now().month,
-                                                  (7 - DateTime.now().weekday) +
+                                                  DateTime.now().day +
+                                                      (7 - DateTime.now().weekday) +
                                                       chit!.chitDate!)),
                                   style: TextStyle(
                                       fontFamily: 'Urbanist',
@@ -865,89 +871,88 @@ class _YourChitPageState extends State<YourChitPage> {
                                                     "assets/icons/menuicon.svg",
                                                   ),
                                                 ),
-                                                subtitle: Row(
-                                                  children: [
-                                                    Padding(
-                                                      padding: EdgeInsets.only(
-                                                          bottom:
-                                                              scrHeight * 0.02,
-                                                          top: scrHeight *
-                                                              0.004),
-                                                      child: Text(
-                                                        '$_currency ${_formatNumber(
-                                                          chit!
-                                                              .subscriptionAmount!
-                                                              .truncate()
-                                                              .toString()
-                                                              .replaceAll(
-                                                                  ',', ''),
-                                                        )}',
-                                                        style: TextStyle(
-                                                            fontFamily:
-                                                                'Urbanist',
-                                                            fontWeight:
-                                                                FontWeight.w700,
-                                                            fontSize: 13,
-                                                            color: Color(
-                                                                0xff969696)),
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      width: scrWidth * 0.02,
-                                                    ),
-                                                    Padding(
-                                                      padding: EdgeInsets.only(
-                                                          bottom: scrHeight *
-                                                              0.018),
-                                                      child: Container(
-                                                        width: scrWidth * 0.1,
-                                                        height:
-                                                            scrHeight * 0.017,
-                                                        decoration: BoxDecoration(
-                                                            color: (index == 1)
-                                                                ? Color(
-                                                                    0xffF61C0D)
-                                                                : Color(
-                                                                    0xff02B558),
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        3)),
-                                                        child: Center(
-                                                          child: (index == 1)
-                                                              ? Text(
-                                                                  "Due",
-                                                                  style: TextStyle(
-                                                                      fontFamily:
-                                                                          'Urbanist',
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w600,
-                                                                      fontSize:
-                                                                          scrWidth *
-                                                                              0.026,
-                                                                      color: Colors
-                                                                          .white),
-                                                                )
-                                                              : Text(
-                                                                  "Paid",
-                                                                  style: TextStyle(
-                                                                      fontFamily:
-                                                                          'Urbanist',
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w600,
-                                                                      fontSize:
-                                                                          scrWidth *
-                                                                              0.026,
-                                                                      color: Colors
-                                                                          .white),
-                                                                ),
-                                                        ),
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
+                                                subtitle: chit!.status == 2
+                                                    ? Row(
+                                                        children: [
+                                                          Padding(
+                                                            padding: EdgeInsets.only(
+                                                                bottom:
+                                                                    scrHeight *
+                                                                        0.02,
+                                                                top: scrHeight *
+                                                                    0.004),
+                                                            child: Text(
+                                                              '$_currency ${_formatNumber(
+                                                                chit!
+                                                                    .subscriptionAmount!
+                                                                    .truncate()
+                                                                    .toString()
+                                                                    .replaceAll(
+                                                                        ',',
+                                                                        ''),
+                                                              )}',
+                                                              style: TextStyle(
+                                                                  fontFamily:
+                                                                      'Urbanist',
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w700,
+                                                                  fontSize: 13,
+                                                                  color: Color(
+                                                                      0xff969696)),
+                                                            ),
+                                                          ),
+                                                          SizedBox(
+                                                            width:
+                                                                scrWidth * 0.02,
+                                                          ),
+                                                          Padding(
+                                                            padding: EdgeInsets.only(
+                                                                bottom:
+                                                                    scrHeight *
+                                                                        0.018),
+                                                            child: Container(
+                                                              width: scrWidth *
+                                                                  0.1,
+                                                              height:
+                                                                  scrHeight *
+                                                                      0.017,
+                                                              decoration: BoxDecoration(
+                                                                  color: (index ==
+                                                                          1)
+                                                                      ? Color(
+                                                                          0xffF61C0D)
+                                                                      : Color(
+                                                                          0xff02B558),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              3)),
+                                                              child: Center(
+                                                                child:
+                                                                    (index == 1)
+                                                                        ? Text(
+                                                                            "Due",
+                                                                            style: TextStyle(
+                                                                                fontFamily: 'Urbanist',
+                                                                                fontWeight: FontWeight.w600,
+                                                                                fontSize: scrWidth * 0.026,
+                                                                                color: Colors.white),
+                                                                          )
+                                                                        : Text(
+                                                                            "Paid",
+                                                                            style: TextStyle(
+                                                                                fontFamily: 'Urbanist',
+                                                                                fontWeight: FontWeight.w600,
+                                                                                fontSize: scrWidth * 0.026,
+                                                                                color: Colors.white),
+                                                                          ),
+                                                              ),
+                                                            ),
+                                                          )
+                                                        ],
+                                                      )
+                                                    : SizedBox(),
                                               ),
                                             );
                                     },

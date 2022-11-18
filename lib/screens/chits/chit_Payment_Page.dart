@@ -29,24 +29,29 @@ class _ChitPaymentPageState extends State<ChitPaymentPage> {
 
   String? imgUrl;
   var imgFile;
-  var uploadTask;
-  var fileUrl;
+  // var fileUrl;
+
   Future uploadImageToFirebase(BuildContext context) async {
-    Reference firebaseStorageRef =
-        FirebaseStorage.instance.ref().child('chit Payment Proof/$imgFile');
+    Reference firebaseStorageRef = FirebaseStorage.instance
+        .ref()
+        .child('chit Payment Proof/$currentuserid');
     UploadTask uploadTask = firebaseStorageRef.putFile(imgFile);
     TaskSnapshot taskSnapshot = (await uploadTask);
-    String value = await taskSnapshot.ref.getDownloadURL();
+    uploadTask.then((res) async {
+      imgUrl = (await firebaseStorageRef.getDownloadURL()).toString();
+    }).then((value) {
+      setState(() {
+        // imgUrl = value;
+        print("----=========-============-===============-=============");
+        print(imgUrl);
+        print("----=========-============-===============-=============");
+      });
+    });
+    // String value = await taskSnapshot.ref.getDownloadURL();
 
     // if(value!=null){
     //   imageList.add(value);
     // }
-    setState(() {
-      imgUrl = value;
-      print("----=========-============-===============-=============");
-      print(imgUrl);
-      print("----=========-============-===============-=============");
-    });
   }
 
   _pickImage() async {
@@ -54,6 +59,7 @@ class _ChitPaymentPageState extends State<ChitPaymentPage> {
         await ImagePicker.platform.pickImage(source: ImageSource.gallery);
     setState(() {
       imgFile = File(imageFile!.path);
+      print('here');
       uploadImageToFirebase(context);
     });
   }
@@ -531,14 +537,15 @@ class _ChitPaymentPageState extends State<ChitPaymentPage> {
             ),
             InkWell(
               onTap: () {
-                final payment = Payments(
-                    userId: currentuserid,
-                    amount: double.tryParse(amount!.text),
-                    datePaid: DateTime.now(),
-                    url: imgUrl,
-                    verified: false);
                 print(amount!.text);
                 if (amount!.text != '' && (imgUrl != '' || imgUrl != null)) {
+                  final payment = Payments(
+                      userId: currentuserid,
+                      amount: double.tryParse(amount!.text),
+                      datePaid: DateTime.now(),
+                      url: imgUrl,
+                      verified: false);
+
                   FirebaseFirestore.instance
                       .collection('chit')
                       .doc(widget.chit.chitId)
@@ -558,13 +565,15 @@ class _ChitPaymentPageState extends State<ChitPaymentPage> {
                       //   FieldValue.increment(double.tryParse(amount!.text)!)
                       // })
                       .then((value) {
-                    showSnackbar(context, 'Payment Completed Successfully');
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ScreenLayout(),
-                        ),
-                        (route) => false);
+                    value.update({"paymentId": value.id}).then((value) {
+                      showSnackbar(context, 'Payment Completed Successfully');
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ScreenLayout(),
+                          ),
+                          (route) => false);
+                    });
                   });
                 } else {
                   amount!.text == ''

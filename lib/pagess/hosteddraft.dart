@@ -404,12 +404,14 @@ class _HostedDraftPageState extends State<HostedDraftPage> {
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
                                     Text(
-                                        '$_currency ${_formatNumber(
-                                          chit!.subscriptionAmount!
-                                              .truncate()
-                                              .toString()
-                                              .replaceAll(',', ''),
-                                        )}',
+                                        chit!.dividendAmount == null
+                                            ? '0'
+                                            : '$_currency ${_formatNumber(
+                                                chit!.dividendAmount!
+                                                    .truncate()
+                                                    .toString()
+                                                    .replaceAll(',', ''),
+                                              )}',
                                         style: valuefontchit),
                                     Text(
                                         "/${chit!.chitType == 'Monthly' ? 'Month' : 'Week'}",

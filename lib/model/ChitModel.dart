@@ -5,6 +5,7 @@ class ChitModel {
   String? commission;
   String? userId;
   int? status;
+  double? payableAmount;
   List? members;
   double? amount;
   int? duration;
@@ -13,7 +14,7 @@ class ChitModel {
   double? dividendAmount;
   String? document;
   String? profile;
-  List? winners;
+  List<Winners>? winners;
   String? chitType;
   DateTime? createdDate;
   int? membersCount;
@@ -34,6 +35,7 @@ class ChitModel {
     this.chitId,
     this.userId,
     this.upiApps,
+    this.payableAmount,
     this.phone,
     this.accountNumber,
     this.accountHolderName,
@@ -59,12 +61,19 @@ class ChitModel {
     chitName = json['chitName'];
     private = json['private'];
     commission = json['commission'];
+    payableAmount = json['payableAmount'].toDouble();
     members = json['members'].cast<String>();
     upiApps = json['upiApps'].cast<String>();
-    winners = json['winners'].cast<String>();
+    if (json['winners'] != null) {
+      winners = <Winners>[];
+      json['winners'].forEach((v) {
+        winners!.add(Winners.fromJson(v));
+      });
+    }
     amount = json['amount'];
     duration = json['duration'];
-    subscriptionAmount = json['subscriptionAmount'];
+    subscriptionAmount = json['subscriptionAmount'].toDouble();
+    payableAmount = json['payableAmount'].toDouble();
     chitId = json['chitId'];
     userId = json['userId'];
     phone = json['phone'];
@@ -74,7 +83,7 @@ class ChitModel {
     ifsc = json['ifsc'];
     drawn = json['drawn'];
     status = json['status'];
-    dividendAmount = json['dividendAmount'];
+    dividendAmount = double.tryParse(json['dividendAmount'].toString());
     membersCount = json['membersCount'];
     document = json['document'];
     profile = json['profile'];
@@ -90,9 +99,12 @@ class ChitModel {
     data['private'] = private;
     data['commission'] = commission;
     data['membersCount'] = membersCount;
+    data['payableAmount'] = payableAmount;
     data['chitId'] = chitId;
     data['members'] = members;
-    data['winners'] = winners;
+    if (winners != null) {
+      data['winners'] = winners!.map((v) => v.toJson()).toList();
+    }
     data['upiApps'] = upiApps;
     data['userId'] = userId;
     data['status'] = status;
@@ -123,13 +135,21 @@ class Payments {
   double? amount;
   bool? verified;
   String? url;
+  String? paymentId;
 
-  Payments({this.datePaid, this.userId, this.amount, this.verified, this.url});
+  Payments(
+      {this.datePaid,
+      this.userId,
+      this.amount,
+      this.verified,
+      this.url,
+      this.paymentId});
 
   Payments.fromJson(Map<String, dynamic> json) {
-    datePaid = json['datePaid'];
+    datePaid = json['datePaid'].toDate();
     userId = json['userId'];
     amount = json['amount'];
+    paymentId = json['paymentId'];
     verified = json['verified'];
     url = json['url'];
   }
@@ -139,8 +159,35 @@ class Payments {
     data['datePaid'] = datePaid;
     data['userId'] = userId;
     data['amount'] = amount;
+    data['paymentId'] = paymentId;
     data['verified'] = verified;
     data['url'] = url;
+    return data;
+  }
+}
+
+class Winners {
+  DateTime? date;
+  String? userId;
+  double? amount;
+
+  Winners({
+    this.date,
+    this.userId,
+    this.amount,
+  });
+
+  Winners.fromJson(Map<String, dynamic> json) {
+    date = json['date'].toDate();
+    userId = json['userId'];
+    amount = json['amount'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['date'] = date;
+    data['userId'] = userId;
+    data['amount'] = amount;
     return data;
   }
 }

@@ -3686,7 +3686,7 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
                 chitType: drawTypeValue,
                 commission: dropdownValue,
                 createdDate: DateTime.now(),
-                dividendAmount: double.tryParse(dividend.text),
+                dividendAmount: double.tryParse(dividend.text) ?? 0.0,
                 document: url,
                 drawn: false,
                 duration: int.parse(duration.text),
