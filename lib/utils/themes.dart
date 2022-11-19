@@ -14,6 +14,7 @@ Color textFormFieldFillColor = Color(0xffF3F3F3);
 Color textFormUnFocusColor = Color(0xffB0B0B0);
 
 Color dotIndicatorColor = Color(0xffDADADA);
+Color expensefeildColor = Color(0xffE8E8E8);
 
 //textColor
 const Color primaryTextColor = Colors.black;
