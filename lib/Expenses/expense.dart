@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-
 
 class Expense extends StatefulWidget {
   const Expense({Key? key}) : super(key: key);
@@ -12,13 +10,12 @@ class Expense extends StatefulWidget {
 class _ExpenseState extends State<Expense> {
   TextEditingController controller = TextEditingController();
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(child: Text("Expense"),),
-
+      body: Center(
+        child: Text("Expense"),
+      ),
     );
-
   }
 }

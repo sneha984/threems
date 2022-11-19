@@ -219,7 +219,7 @@ class _PaymentPageState extends State<PaymentPage> {
                       borderRadius: BorderRadius.circular(scrWidth * 0.026)),
                   child: Row(
                     children: [
-                     SvgPicture.asset("assets/icons/₹.svg"),
+                     SvgPicture.asset("assets/icons/rupees.svg"),
                       Padding(
                         padding:  EdgeInsets.only(bottom: scrHeight*0.014,left: scrWidth*0.03),
                         child: Container(

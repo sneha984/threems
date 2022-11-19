@@ -9,7 +9,8 @@ import '../screens/home_screen.dart';
 import '../screens/utilities.dart';
 
 class ScreenLayout extends StatefulWidget {
-  const ScreenLayout({Key? key}) : super(key: key);
+  int? index;
+  ScreenLayout({Key? key, this.index}) : super(key: key);
 
   @override
   State<ScreenLayout> createState() => _ScreenLayoutState();
@@ -18,8 +19,15 @@ class ScreenLayout extends StatefulWidget {
 class _ScreenLayoutState extends State<ScreenLayout> {
   // double selectedIndex = 0;
   final PageStorageBucket _bucket = PageStorageBucket();
-  Widget _currentScreen = HomeScreen();
-  int _index = 0;
+  var _currentScreen;
+  int? index;
+  @override
+  void initState() {
+    index=widget.index??0;
+    print("test "+index.toString());
+    _currentScreen=index==0?HomeScreen():index==1? BuyAndSell():index==2?AddExpensesPage():Utilities();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -63,7 +71,7 @@ class _ScreenLayoutState extends State<ScreenLayout> {
                       highlightColor: Colors.transparent,
                       onPressed: () {
                         setState(() {
-                          _index = 0;
+                          index = 0;
                           _currentScreen = HomeScreen();
                         });
                       },
@@ -76,13 +84,13 @@ class _ScreenLayoutState extends State<ScreenLayout> {
                             height: bottomNavbarIconSize,
                             width: bottomNavbarIconSize,
                             color:
-                                _index == 0 ? primarycolor : navBarUnSelColor,
+                                index == 0 ? primarycolor : navBarUnSelColor,
                           ),
                           Text(
                             'Home',
                             style: TextStyle(
                               color:
-                                  _index == 0 ? primarycolor : navBarUnSelColor,
+                                  index == 0 ? primarycolor : navBarUnSelColor,
                               fontFamily: 'Poppins',
                               fontSize: FontSize10,
                               fontWeight: FontWeight.w500,
@@ -96,7 +104,7 @@ class _ScreenLayoutState extends State<ScreenLayout> {
                       highlightColor: Colors.transparent,
                       onPressed: () {
                         setState(() {
-                          _index = 1;
+                          index = 1;
                           _currentScreen = BuyAndSell();
                           // _currentScreen = CreateRoomScreen();
                         });
@@ -110,13 +118,13 @@ class _ScreenLayoutState extends State<ScreenLayout> {
                             height: bottomNavbarIconSize,
                             width: bottomNavbarIconSize,
                             color:
-                                _index == 1 ? primarycolor : navBarUnSelColor,
+                                index == 1 ? primarycolor : navBarUnSelColor,
                           ),
                           Text(
                             'Buy & Sell',
                             style: TextStyle(
                               color:
-                                  _index == 1 ? primarycolor : navBarUnSelColor,
+                                  index == 1 ? primarycolor : navBarUnSelColor,
                               fontFamily: 'Poppins',
                               fontSize: FontSize10,
                               fontWeight: FontWeight.w500,
@@ -130,7 +138,7 @@ class _ScreenLayoutState extends State<ScreenLayout> {
                       highlightColor: Colors.transparent,
                       onPressed: () {
                         setState(() {
-                          _index = 2;
+                          index = 2;
                           _currentScreen = AddExpensesPage();
                           // _currentScreen = LoginOrSignupPage();
                         });
@@ -142,7 +150,7 @@ class _ScreenLayoutState extends State<ScreenLayout> {
                           SvgPicture.asset(
                             "assets/icons/expense.svg",
                             color:
-                                _index == 2 ? primarycolor : navBarUnSelColor,
+                                index == 2 ? primarycolor : navBarUnSelColor,
                             height: bottomNavbarIconSize,
                             width: bottomNavbarIconSize,
                           ),
@@ -150,7 +158,7 @@ class _ScreenLayoutState extends State<ScreenLayout> {
                             'Expense',
                             style: TextStyle(
                               color:
-                                  _index == 2 ? primarycolor : navBarUnSelColor,
+                                  index == 2 ? primarycolor : navBarUnSelColor,
                               fontFamily: 'Poppins',
                               fontSize: FontSize10,
                               fontWeight: FontWeight.w500,
@@ -164,7 +172,7 @@ class _ScreenLayoutState extends State<ScreenLayout> {
                       highlightColor: Colors.transparent,
                       onPressed: () {
                         setState(() {
-                          _index = 3;
+                          index = 3;
                           _currentScreen=Utilities();
                           // _currentScreen = Utilities();
                           // _currentScreen = CreateNewChitScreen();
@@ -177,7 +185,7 @@ class _ScreenLayoutState extends State<ScreenLayout> {
                           SvgPicture.asset(
                             "assets/icons/utilities.svg",
                             color:
-                                _index == 3 ? primarycolor : navBarUnSelColor,
+                                index == 3 ? primarycolor : navBarUnSelColor,
                             height: bottomNavbarIconSize,
                             width: bottomNavbarIconSize,
                           ),
@@ -185,7 +193,7 @@ class _ScreenLayoutState extends State<ScreenLayout> {
                             'Utilities',
                             style: TextStyle(
                               color:
-                                  _index == 3 ? primarycolor : navBarUnSelColor,
+                                  index == 3 ? primarycolor : navBarUnSelColor,
                               fontFamily: 'Poppins',
                               fontSize: FontSize10,
                               fontWeight: FontWeight.w500,

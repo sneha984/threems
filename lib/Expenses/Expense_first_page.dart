@@ -4,11 +4,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconpicker/Serialization/iconDataSerialization.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:threems/Authentication/root.dart';
 
 import '../screens/charity/verification_details.dart';
 import '../screens/splash_screen.dart';
 import '../utils/themes.dart';
+import 'Report/report_page.dart';
+import 'new_expense.dart';
+// import 'add_expense.dart';
 class AddExpensesPage extends StatefulWidget {
   const AddExpensesPage({Key? key}) : super(key: key);
 
@@ -17,23 +21,42 @@ class AddExpensesPage extends StatefulWidget {
 }
 
 class _AddExpensesPageState extends State<AddExpensesPage> with TickerProviderStateMixin {
+  List expenseList=[];
+  getRecentExpenses(){
+    FirebaseFirestore.instance.collection('users').doc(currentuserid).collection('expense').
+    orderBy('date',descending: true).limit(5).snapshots().listen((event) {
+
+      if(event.docs.isNotEmpty) {
+        for (DocumentSnapshot data in event.docs) {
+          expenseList.add(data);
+        }
+      }
+      if(mounted){
+        setState(() {
+
+        });
+      }
+    });
+  }
+
   Icon? _icon;
   var icons;
-   TabController? _tabController;
-   TextEditingController ?expenseAmount;
-   TextEditingController ?narration;
-   void initState() {
-     expenseAmount = TextEditingController(text:'');
-     narration = TextEditingController(text:'');
-     _tabController = TabController(length: 2, vsync: this);
-     super.initState();
-   }
+  TabController? _tabController;
+  TextEditingController ?expenseAmount;
+  TextEditingController ?narration;
+  void initState() {
+    getRecentExpenses();
+    expenseAmount = TextEditingController(text:'');
+    narration = TextEditingController(text:'');
+    _tabController = TabController(length: 2, vsync: this);
+    super.initState();
+  }
 
-   @override
-   void dispose() {
-     super.dispose();
-     _tabController?.dispose();
-   }
+  // @override
+  // void dispose() {
+  //   super.dispose();
+  //   _tabController?.dispose();
+  // }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,311 +71,249 @@ class _AddExpensesPageState extends State<AddExpensesPage> with TickerProviderSt
         backgroundColor: Colors.white,
 
         title: Text(
-          "Track Your Expenses",
+          " Your Expense Tracker",
           style: TextStyle(
               fontSize: scrWidth*0.046,
               color: Colors.black,
               fontFamily: 'Urbanist',
               fontWeight: FontWeight.w600),
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 18.0),
+            child: InkWell(
+                onTap: (){
+                   Navigator.push(context, MaterialPageRoute(builder: (context)=>ReportPage()));
+
+                },
+                child: SvgPicture.asset('assets/images/expense tracker.svg',height: 35,width: 35,)),
+          )
+        ],
       ),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(height: scrHeight*0.015,),
-          Padding(
-            padding:  EdgeInsets.only(left: scrWidth*0.05,right: scrWidth*0.05),
-            child: Container(
-              height: scrHeight*0.05,
-              decoration: BoxDecoration(
-                color: primarycolor,
-                borderRadius: BorderRadius.circular(
-                  25.0,
+          Stack(
+            children: [
+              Container(
+                width: scrWidth*1,
+                height: scrHeight*0.29,
+                decoration: BoxDecoration(
+                    image: DecorationImage(image: AssetImage("assets/images/card desigbn.png"),fit: BoxFit.fill)
                 ),
               ),
-              child: TabBar(
-                controller: _tabController,
-                // give the indicator a decoration (color and border radius)
-                indicator: BoxDecoration(
-                  borderRadius: BorderRadius.circular(
-                    25.0,
-                  ),
-                  color: Color(0xff02B558),
+              Positioned(
+                  top: scrHeight*0.04,
+                  left: scrWidth*0.13,
+                  right: scrWidth*0.2,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text('Total Expences'.toString(),style: TextStyle(
+                              fontSize: 13,
+                              fontFamily: 'Urbanist',
+                              color: Colors.white
+                          ),),
+                          SizedBox(height: scrHeight*0.002,),
+                          Text('₹ '+1500000.toString(),style: TextStyle(
+                              fontSize: 24,
+                              fontFamily: 'Urbanist',
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white
+                          ),),
+                          SizedBox(height: scrHeight*0.002,),
+                          Text("Last 30 days",style: TextStyle(
+                              fontSize: 14,
+                              fontFamily: 'Urbanist',
+                              color: Colors.white
+                          ),),
+
+                        ],
+                      ),
+                      SizedBox(height: scrHeight*0.05,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text('₹ '+1500000.toString(),style: TextStyle(
+                                  fontSize: 18,
+                                  fontFamily: 'Urbanist',
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.white
+                              ),),
+                              SizedBox(height: scrHeight*0.002,),
+                              Text("Last 7 days",style: TextStyle(
+                                  fontSize: 13,
+                                  fontFamily: 'Urbanist',
+                                  color: Colors.white
+                              ),),
+
+                            ],
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text('₹ '+125263.toString(),style: TextStyle(
+                                  fontSize: 18,
+                                  fontFamily: 'Urbanist',
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.white
+                              ),),
+                              SizedBox(height: scrHeight*0.002,),
+                              Text("Total Expences",style: TextStyle(
+                                  fontSize: 13,
+                                  fontFamily: 'Urbanist',
+                                  color: Colors.white
+                              ),),
+
+                            ],
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: scrHeight*0.07,),
+                    ],
+                  )
+              ),
+            ],
+          ),
+          // SizedBox(height: scrHeight*0.015,),
+
+          InkWell(
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>NewExpensePage()));
+            },
+            child: Center(
+              child: Container(
+                width: scrWidth*0.88,
+                height: scrHeight*0.07,
+                decoration: BoxDecoration(
+                    color: Color(0xff02B558),
+                    borderRadius: BorderRadius.circular(20)
                 ),
-                labelColor: Colors.white,
-                unselectedLabelColor: Colors.white,
-                tabs: [
-                  Text("Add Expenses",style: TextStyle(
-                      fontFamily: 'Urbanist',fontSize: 15,fontWeight: FontWeight.w700
-                  ),),
-                  Text("Your Expenses",style: TextStyle(
-                      fontFamily: 'Urbanist',fontSize: 15,fontWeight: FontWeight.w700
-                  ),),
-                ],
+                child: Center(
+                  child: Text(
+                    " Add new expense",
+                    style: TextStyle(
+                        fontSize: scrWidth*0.046,
+                        color: Colors.white,
+                        fontFamily: 'Urbanist',
+                        fontWeight: FontWeight.w600),
+                  ),
+                ),
               ),
             ),
           ),
-          Expanded(
-              child: TabBarView(
-                controller: _tabController,
-                children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0,right: 8,top: 6),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text(
+                  " Recent expences",
+                  style: TextStyle(
+                      fontSize: scrWidth*0.045,
+                      color: Colors.black,
+                      fontFamily: 'Urbanist',
+                      fontWeight: FontWeight.w600),
+                ),
+                SizedBox(width: scrWidth*0.2,),
+                Icon(Icons.arrow_forward,color: Colors.red.shade500,size: 20,)
+              ],
+            ),
+          ),
+          SizedBox(height: scrWidth*0.02,),
+          SingleChildScrollView(
+            child: Container(
+              height: scrWidth*0.8,
+              child: ListView.builder(
+                  itemCount: expenseList!.length,
+                  shrinkWrap: true,
+                  scrollDirection: Axis.vertical,
+                  physics: BouncingScrollPhysics(),
+                  itemBuilder: (context,index) {
+                    return Column(
+                      children: [
+                        Padding(
+                          padding:  EdgeInsets.only(left: scrWidth*0.08,right:  scrWidth*0.08),
+                          child: Container(
+                            height: scrWidth*0.21,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(expenseList[index]['merchant'].toString(),style: TextStyle(
+                                        fontSize: 17,
+                                        fontFamily: 'Urbanist',
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w700
+                                    ),),
+                                    Container(
+                                      height:scrWidth*0.075,
+                                      width:scrWidth*0.22,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(25),
+                                        color: Colors.primaries[Random().nextInt(Colors.primaries.length)],
 
-                  Container(
-                    height: MediaQuery.of(context).size.height,
-
-                    child:StreamBuilder<QuerySnapshot> (
-                        stream: FirebaseFirestore.instance.collection('expenses').snapshots(),
-                        builder: (context, snapshot) {
-                          if(!snapshot.hasData){
-                            return  Container(child: Center(child: CircularProgressIndicator()));
-                          }
-                          var  data=snapshot.data?.docs;
-                          return data?.length==0?
-                          Center(
-                            child: Text('No Expense category ',style: TextStyle(
-                                fontFamily: 'outfit',
-                                fontSize: 15,
-                                fontWeight: FontWeight.w500
-                            ),),
-                          ):
-                          Padding(
-                            padding: const EdgeInsets.only(top: 28.0),
-                            child: GridView.builder(
-
-                              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount
-                                (
-                                  crossAxisCount: 3,
-                                  mainAxisSpacing: 15,
-                                  crossAxisSpacing: 15,
-                                  childAspectRatio: 1.2
-                              ),
-                              padding: EdgeInsets.all( MediaQuery.of(context).size.width*0.05,),
-                              itemCount: data?.length,
-                              physics: BouncingScrollPhysics(),
-                              itemBuilder: (context, index) {
-                                icons=deserializeIcon(data![index]['icon']);
-                                _icon = Icon(icons,color: Colors.primaries[Random().nextInt(Colors.primaries.length)],);
-                                return Padding(
-                                  padding: const EdgeInsets.only(left: 15.0,right: 15,bottom: 10,),
-                                  child: InkWell(
-                                    onTap: (){
-                                      showModalBottomSheet(context: context,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.vertical(
-                                              top: Radius.circular(25.0),
-                                            ),
-                                          ),
-                                          isScrollControlled: true,
-                                          builder: (context){
-                                            return Padding(
-                                              padding:  EdgeInsets.only(
-                                                  bottom: MediaQuery.of(context).viewInsets.bottom),
-                                              child: Container(
-                                                height: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                    0.3,
-                                                child: Column(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                  children: [
-                                                    Padding(
-                                                      padding: const EdgeInsets.only(top: 8.0),
-                                                      child: Text('Enter '+data![index]['expenseName']+ " Expense",style: TextStyle(
-                                                        fontFamily: 'outfit',
-                                                        fontSize: 18,
-                                                          color: Color(0xff034a82)
-                                                      ),),
-                                                    ),
-                                                    Padding(
-                                                      padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
-                                                      child: Container(
-                                                        width: MediaQuery.of(context)
-                                                            .size
-                                                            .width *
-                                                            0.9,
-                                                        height: MediaQuery.of(context)
-                                                            .size
-                                                            .height *
-                                                            0.065,
-                                                        decoration: BoxDecoration(
-                                                          color: Colors.white,
-                                                        ),
-                                                        child: TextFormField(
-                                                          controller: expenseAmount,
-                                                          obscureText: false,
-                                                          keyboardType: TextInputType.number,
-                                                          decoration: InputDecoration(
-                                                            labelText:
-                                                            'Expense Amount',
-                                                            labelStyle: TextStyle(
-                                                              fontFamily: 'outfit',
-                                                                color: Colors.grey),
-                                                            hintText: 'Expense Amount',
-                                                            enabledBorder:
-                                                            OutlineInputBorder(
-                                                              borderSide: BorderSide(
-                                                                color: Colors.black,
-                                                                width: 1,
-                                                              ),
-                                                              borderRadius:
-                                                              BorderRadius
-                                                                  .circular(12),
-                                                            ),
-                                                            focusedBorder:
-                                                            OutlineInputBorder(
-                                                              borderSide: BorderSide(
-                                                                color: primarycolor,
-                                                                width: 1,
-                                                              ),
-                                                              borderRadius:
-                                                              BorderRadius
-                                                                  .circular(12),
-                                                            ),
-                                                            filled: true,
-                                                            fillColor: Colors.white,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Padding(
-                                                      padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
-                                                      child: Container(
-                                                        width: MediaQuery.of(context)
-                                                            .size
-                                                            .width *
-                                                            0.9,
-                                                        height: MediaQuery.of(context)
-                                                            .size
-                                                            .height *
-                                                            0.065,
-                                                        decoration: BoxDecoration(
-                                                          color: Colors.white,
-                                                        ),
-                                                        child: TextFormField(
-                                                          controller: narration,
-                                                          obscureText: false,
-                                                          keyboardType: TextInputType.number,
-                                                          decoration: InputDecoration(
-                                                            labelText:
-                                                            'Narration',
-                                                            labelStyle: TextStyle(
-                                                                fontFamily: 'outfit',
-                                                                color: Colors.grey),
-                                                            hintText: 'Narration',
-                                                            enabledBorder:
-                                                            OutlineInputBorder(
-                                                              borderSide: BorderSide(
-                                                                color: Colors.black,
-                                                                width: 1,
-                                                              ),
-                                                              borderRadius:
-                                                              BorderRadius
-                                                                  .circular(12),
-                                                            ),
-                                                            focusedBorder:
-                                                            OutlineInputBorder(
-                                                              borderSide: BorderSide(
-                                                                color: primarycolor,
-                                                                width: 1,
-                                                              ),
-                                                              borderRadius:
-                                                              BorderRadius
-                                                                  .circular(12),
-                                                            ),
-                                                            filled: true,
-                                                            fillColor: Colors.white,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    InkWell(
-                                                      onTap:() {
-                                                        if(expenseAmount!.text!=''&& narration!.text!=''){
-                                                          FirebaseFirestore.instance.collection('users').doc(currentuserid).collection('expenses').add(
-                                                              {
-                                                                'expenseCategory':data![index]['expenseName'].toString(),
-                                                                'expenseAmount':expenseAmount!.text.toString(),
-                                                                'narration':narration!.text.toString(),
-                                                                'date':FieldValue.serverTimestamp(),
-
-                                                              });
-                                                        }else{
-                                                          expenseAmount!.text==''?showUploadMessage(context,'Please enter amount'):
-                                                         showUploadMessage(context,'Please enter detailes of expense');
-
-                                                        }
-
-                                                      },
-                                                      child: Container(
-                                                        width: MediaQuery.of(context)
-                                                            .size
-                                                            .width *
-                                                            0.3,
-                                                        height: MediaQuery.of(context)
-                                                            .size
-                                                            .height *
-                                                            0.045,
-                                                        decoration: BoxDecoration(
-                                                          color: primarycolor,
-                                                          borderRadius: BorderRadius.circular(10),
-                                                          border: Border.all(
-                                                            color: primarycolor,
-                                                          ),
-                                                        ),child: InkWell(
-                                                          onTap:(){
-                                                            Navigator.pop(context);
-                                                          },
-                                                          child: Center(child: Text('Save',
-                                                            style:TextStyle(
-                                                              color: Colors.white,
-                                                              fontFamily: 'outfit',
-                                                            ) ,))),),
-                                                    ),
-                                                    SizedBox(height: 5,)
-                                                  ],
-                                                ),
-                                              ),
-                                            );
-                                          });
-                                      // Navigator.push(context, MaterialPageRoute(builder: (context)=>DropdownEditPage(
-                                      //   id:data![index].id,
-                                      // )));
-                                    },
-                                    child: Container(
-                                      child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          CircleAvatar(
-                                            radius: 26,
-                                            foregroundColor: Colors.black,
-                                            backgroundColor: Colors.white,
-                                            child: _icon,
-                                          ),
-                                          Text(data![index]['expenseName'],style: TextStyle(
-                                              fontFamily: 'outfit',
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.bold,
-                                               color: Color(0xff034a82)),
-                                              // color:primarycolor),
-                                          ),
-                                        ],
                                       ),
-
-
+                                      child: Center(
+                                        child: Text(expenseList[index]['categoryName'].toString(),style: TextStyle(
+                                            fontSize: 10,
+                                            fontFamily: 'Urbanist',
+                                            color: Colors.white
+                                        ),),
+                                      ),
                                     ),
-                                  ),
-                                );
+                                    Text(DateFormat('dd MMM,yyyy').format( expenseList[index]['date'].toDate()),style: TextStyle(
+                                        fontSize: 13,
+                                        fontFamily: 'Urbanist',
+                                        color: Colors.grey
+                                    ),),
 
-                              },
+                                  ],
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text('₹ - '+expenseList[index]['amount'].toString(),style: TextStyle(
+                                        fontSize: 19,
+                                        fontFamily: 'Urbanist',
+                                        color: Colors.red.shade600,
+                                        fontWeight: FontWeight.w700
+                                    ),),
+
+                                  ],
+                                ),
+                              ],
                             ),
-                          );
-                        }),
-                  ),
-                  Container(),
-               ],
+                          ),
+                        ),
+                        Padding(
+                          padding:  EdgeInsets.only(left: scrWidth*0.08,right:  scrWidth*0.08,bottom: 10),
+                          child: Container(child: Divider(thickness: 0.5,color: Colors.grey,)),
+                        ),
 
-              )
-    )
+                      ],
+                    );
+                  }
 
+              ),
+            ),
+          )
         ],
       ),
     );
