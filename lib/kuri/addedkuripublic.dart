@@ -837,14 +837,14 @@ class _AddedKuriPublicState extends State<AddedKuriPublic> {
                                                               scrWidth * 0.045),
                                                     ),
                                                   ),
-                                                  trailing: Padding(
-                                                    padding: EdgeInsets.only(
-                                                        bottom:
-                                                            scrHeight * 0.01),
-                                                    child: SvgPicture.asset(
-                                                      "assets/icons/menuicon.svg",
-                                                    ),
-                                                  ),
+                                                  // trailing: Padding(
+                                                  //   padding: EdgeInsets.only(
+                                                  //       bottom:
+                                                  //           scrHeight * 0.01),
+                                                  //   child: SvgPicture.asset(
+                                                  //     "assets/icons/menuicon.svg",
+                                                  //   ),
+                                                  // ),
                                                 ),
                                               );
                                             },
