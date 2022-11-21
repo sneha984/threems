@@ -38,24 +38,150 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
 
   ChitModel? chit;
   List<UserModel> members = [];
-  List<String> membersList = [];
+  List<String> membersListForDraw = [];
   // List<UserModel> pendingWinners = [];
   Map<String, UserModel> totalMembers = {};
   Map<String, UserModel> userIdByName = {};
-  Map<String, Winners> mapOfWinners = {};
+  Map<String, Winners>? mapOfWinners;
+  Map<String, Payments>? mapOfCurrentPayments;
+
+  getActivePayments() {
+    mapOfCurrentPayments = {};
+
+    if (chit!.chitType == 'Monthly') {
+      // upcoming day
+      if (DateTime(
+              DateTime.now().year,
+              DateTime.now().month,
+              chit!.chitDate!,
+              int.parse(chit!.chitTime!.split(':')[0]),
+              int.parse(chit!.chitTime!.split(':')[1]))
+          .isAfter(DateTime.now())) {
+        Timestamp dateInTimeStamp = Timestamp.fromDate(DateTime(
+            DateTime.now().year,
+            DateTime.now().month - 1,
+            chit!.chitDate!,
+            int.parse(chit!.chitTime!.split(':')[0]),
+            int.parse(chit!.chitTime!.split(':')[1]))); //To TimeStamp
+        FirebaseFirestore.instance
+            .collection('chit')
+            .doc(widget.id)
+            .collection('payments')
+            .where('datePaid', isGreaterThan: dateInTimeStamp)
+            .snapshots()
+            .listen((event) {
+          for (DocumentSnapshot<Map<String, dynamic>> doc in event.docs) {
+            mapOfCurrentPayments![doc['userId']] =
+                Payments.fromJson(doc.data()!);
+          }
+
+          if (mounted) {
+            setState(() {});
+          }
+        });
+      } else {
+        Timestamp dateInTimeStamp = Timestamp.fromDate(DateTime(
+            DateTime.now().year,
+            DateTime.now().month,
+            chit!.chitDate!,
+            int.parse(chit!.chitTime!.split(':')[0]),
+            int.parse(chit!.chitTime!.split(':')[1]))); //To TimeStamp
+        FirebaseFirestore.instance
+            .collection('chit')
+            .doc(widget.id)
+            .collection('payments')
+            .where('datePaid', isGreaterThan: dateInTimeStamp)
+            .snapshots()
+            .listen((event) {
+          for (DocumentSnapshot<Map<String, dynamic>> doc in event.docs) {
+            mapOfCurrentPayments![doc['userId']] =
+                Payments.fromJson(doc.data()!);
+          }
+
+          if (mounted) {
+            setState(() {});
+          }
+        });
+      }
+    } else {
+//UPCOMING
+      if (DateTime.now().weekday < chit!.chitDate!) {
+        Timestamp dateInTimeStamp = Timestamp.fromDate(DateTime(
+            DateTime.now().year,
+            DateTime.now().month,
+            (DateTime.now().day -
+                    (7 - DateTime.now().weekday) +
+                    chit!.chitDate!) -
+                7)); //To TimeStamp
+        FirebaseFirestore.instance
+            .collection('chit')
+            .doc(widget.id)
+            .collection('payments')
+            .where('datePaid', isGreaterThan: dateInTimeStamp)
+            .snapshots()
+            .listen((event) {
+          for (DocumentSnapshot<Map<String, dynamic>> doc in event.docs) {
+            mapOfCurrentPayments![doc['userId']] =
+                Payments.fromJson(doc.data()!);
+          }
+
+          if (mounted) {
+            setState(() {});
+          }
+        });
+      } else {
+        Timestamp dateInTimeStamp = Timestamp.fromDate(DateTime(
+            DateTime.now().year,
+            DateTime.now().month,
+            (DateTime.now().day -
+                (DateTime.now().weekday - chit!.chitDate!)))); //To TimeStamp
+        FirebaseFirestore.instance
+            .collection('chit')
+            .doc(widget.id)
+            .collection('payments')
+            .where('datePaid', isGreaterThan: dateInTimeStamp)
+            .snapshots()
+            .listen((event) {
+          for (DocumentSnapshot<Map<String, dynamic>> doc in event.docs) {
+            mapOfCurrentPayments![doc['userId']] =
+                Payments.fromJson(doc.data()!);
+          }
+
+          if (mounted) {
+            setState(() {});
+          }
+        });
+      }
+    }
+
+    print('[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]');
+    // print(mapOfCurrentPayments!.length ?? 0);
+    setState(() {});
+  }
+
   getWinners() {
     print('++++++++++++++++');
     List<Winners> winners = chit!.winners!;
+    mapOfWinners = {};
 
     for (var winner in winners) {
-      mapOfWinners[winner.userId!] = winner;
+      mapOfWinners![winner.userId!] = winner;
 
-      if (membersList.contains(winner.userId!)) {
-        membersList.remove(winner.userId!);
+      if (membersListForDraw.contains(winner.userId!)) {
+        membersListForDraw.remove(winner.userId!);
       }
     }
     setState(() {
-      print(membersList.length);
+      print(membersListForDraw.length);
+      print(']]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]');
+
+      print(chit!.winners![chit!.winners!.length - 1].userId);
+      print(mapOfWinners![chit!.winners![chit!.winners!.length - 1].userId]!
+          .userId);
+      print(totalMembers[
+              mapOfWinners![chit!.winners![chit!.winners!.length - 1].userId]!
+                  .userId]!
+          .userName!);
     });
   }
 
@@ -77,9 +203,9 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
 
   getMembers() async {
     members = [];
-    membersList = [];
+    membersListForDraw = [];
     for (int i = 0; i < chit!.members!.length; i++) {
-      membersList.add(chit!.members![i]);
+      membersListForDraw.add(chit!.members![i]);
       DocumentSnapshot<Map<String, dynamic>> doc = await FirebaseFirestore
           .instance
           .collection('users')
@@ -90,7 +216,7 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
     }
     setState(() {
       print('-----------------');
-      print(membersList.length);
+      print(membersListForDraw.length);
       getWinners();
     });
   }
@@ -115,7 +241,7 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
 
   @override
   Widget build(BuildContext context) {
-    return chit == null
+    return chit == null || mapOfWinners == null
         ? Container(
             width: scrHeight,
             height: scrWidth,
@@ -791,13 +917,13 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
                                                         DateTime.now().year,
                                                         DateTime.now().month,
                                                         (DateTime.now().day +
-                                                            chit!.chitDate! -
-                                                            DateTime.now()
-                                                                .weekday)))
+                                                            (chit!.chitDate! -
+                                                                DateTime.now()
+                                                                    .weekday))))
 
                                                 //if Day is ended
-                                                : DateFormat('dd MMM yyyy').format(
-                                                    DateTime(DateTime.now().year, DateTime.now().month, (DateTime.now().day + (7 - DateTime.now().weekday) + chit!.chitDate!))),
+                                                : DateFormat('dd MMM yyyy')
+                                                    .format(DateTime(DateTime.now().year, DateTime.now().month, (DateTime.now().day + (7 - DateTime.now().weekday) + chit!.chitDate!))),
                                         style: TextStyle(
                                             fontFamily: 'Urbanist',
                                             fontSize: scrWidth * 0.042,
@@ -910,28 +1036,50 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
                                               height: scrHeight * 0.001,
                                             ),
                                             Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
-                                                CircleAvatar(
-                                                  radius: 16,
-                                                  // backgroundColor: Colors.grey,
-                                                  backgroundImage: NetworkImage(
-                                                      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7FtTfAHZpWXQI8X4ppt-7QKqQae6h6BYhyw&usqp=CAU"),
+                                                Row(
+                                                  children: [
+                                                    CircleAvatar(
+                                                      radius: 16,
+                                                      // backgroundColor: Colors.grey,
+                                                      backgroundImage: NetworkImage(
+                                                          totalMembers[mapOfWinners![chit!
+                                                                      .winners![
+                                                                          chit!.winners!.length -
+                                                                              1]
+                                                                      .userId]!
+                                                                  .userId]!
+                                                              .userImage!),
+                                                    ),
+                                                    SizedBox(
+                                                      width: scrWidth * 0.02,
+                                                    ),
+                                                    Text(
+                                                      totalMembers[mapOfWinners![chit!
+                                                                  .winners![chit!
+                                                                          .winners!
+                                                                          .length -
+                                                                      1]
+                                                                  .userId]!
+                                                              .userId]!
+                                                          .userName!,
+                                                      style: TextStyle(
+                                                          fontFamily:
+                                                              'Urbanist',
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          fontSize:
+                                                              scrWidth * 0.045),
+                                                    ),
+                                                  ],
                                                 ),
-                                                SizedBox(
-                                                  width: scrWidth * 0.02,
-                                                ),
-                                                Text(
-                                                  "akhilgeorge",
-                                                  style: TextStyle(
-                                                      fontFamily: 'Urbanist',
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      fontSize:
-                                                          scrWidth * 0.045),
-                                                ),
-                                                SizedBox(
-                                                  width: scrWidth * 0.33,
-                                                ),
+
+                                                // SizedBox(
+                                                //   width: scrWidth * 0.33,
+                                                // ),
                                                 SvgPicture.asset(
                                                   "assets/icons/winner.svg",
                                                 ),
@@ -942,11 +1090,12 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
                                             ),
                                             Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.spaceEvenly,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
                                                 Column(
                                                   children: [
-                                                    Text("Auction Amount",
+                                                    Text("Chit Amount",
                                                         style: TextStyle(
                                                             fontSize: scrWidth *
                                                                 0.024,
@@ -959,7 +1108,8 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
                                                     SizedBox(
                                                       height: scrHeight * 0.004,
                                                     ),
-                                                    Text("₹7,500",
+                                                    Text(
+                                                        "$_currency ${_formatNumber(chit!.amount!.truncate().toString().replaceAll(',', ''))}",
                                                         style: TextStyle(
                                                             fontSize: scrWidth *
                                                                 0.045,
@@ -971,9 +1121,9 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
                                                                 0xff000000))),
                                                   ],
                                                 ),
-                                                SizedBox(
-                                                  width: scrWidth * 0.16,
-                                                ),
+                                                // SizedBox(
+                                                //   width: scrWidth * 0.16,
+                                                // ),
                                                 Column(
                                                   children: [
                                                     Text(
@@ -991,7 +1141,8 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
                                                     SizedBox(
                                                       height: scrHeight * 0.004,
                                                     ),
-                                                    Text("₹41,500",
+                                                    Text(
+                                                        "$_currency ${_formatNumber(mapOfWinners![chit!.winners![chit!.winners!.length - 1].userId]!.amount!.truncate().toString().replaceAll(',', ''))}",
                                                         style: TextStyle(
                                                             fontSize: scrWidth *
                                                                 0.045,
@@ -1003,13 +1154,13 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
                                                                 0xff000000))),
                                                   ],
                                                 ),
-                                                SizedBox(
-                                                  width: scrWidth * 0.19,
-                                                ),
+                                                // SizedBox(
+                                                //   width: scrWidth * 0.19,
+                                                // ),
                                                 Column(
                                                   children: [
                                                     Text(
-                                                      "Divident",
+                                                      "Dividend",
                                                       style: TextStyle(
                                                           fontSize:
                                                               scrWidth * 0.024,
@@ -1024,10 +1175,10 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
                                                       height: scrHeight * 0.004,
                                                     ),
                                                     Text(
-                                                      "₹750",
+                                                      "$_currency ${_formatNumber(((chit!.amount!) - (mapOfWinners![chit!.winners![chit!.winners!.length - 1].userId]!.amount!)).truncate().toString().replaceAll(',', ''))}",
                                                       style: TextStyle(
                                                           fontSize:
-                                                              scrWidth * 0.045,
+                                                              scrWidth * 0.04,
                                                           fontWeight:
                                                               FontWeight.w600,
                                                           fontFamily:
@@ -1045,7 +1196,7 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
                                             Align(
                                               alignment: Alignment.center,
                                               child: Text(
-                                                  "after reducing commision ",
+                                                  "after reducing commission ",
                                                   style: TextStyle(
                                                       fontSize:
                                                           scrWidth * 0.024,
@@ -1141,7 +1292,7 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
                                           itemCount: members.length,
                                           itemBuilder: (BuildContext context,
                                               int index) {
-                                            return GestureDetector(
+                                            return InkWell(
                                               onTap: () {
                                                 if (chit!.status == 2) {
                                                   Navigator.push(
@@ -1171,7 +1322,7 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
                                                   children: [
                                                     Row(
                                                       children: [
-                                                        mapOfWinners.keys
+                                                        mapOfWinners!.keys
                                                                 .contains(members[
                                                                         index]
                                                                     .userId!)
@@ -1298,46 +1449,42 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
                                                                 Container(
                                                                   width:
                                                                       scrWidth *
-                                                                          0.1,
+                                                                          0.15,
                                                                   height:
                                                                       scrHeight *
                                                                           0.017,
                                                                   decoration: BoxDecoration(
-                                                                      color: (index ==
-                                                                              2)
-                                                                          ? Color(
-                                                                              0xffF61C0D)
-                                                                          : Color(
-                                                                              0xff02B558),
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              3)),
+                                                                      color: mapOfCurrentPayments![members[index].userId] != null
+                                                                          ? mapOfCurrentPayments![members[index].userId]!.verified!
+                                                                              ? Color(0xff02B558)
+                                                                              : Color(0xff8391A1)
+                                                                          : Color(0xffF61C0D),
+                                                                      borderRadius: BorderRadius.circular(3)),
                                                                   child: Center(
-                                                                    child: (index ==
-                                                                            2)
-                                                                        ? Text(
-                                                                            "Due",
-                                                                            style: TextStyle(
-                                                                                fontFamily: 'Urbanist',
-                                                                                fontWeight: FontWeight.w600,
-                                                                                fontSize: scrWidth * 0.026,
-                                                                                color: Colors.white),
-                                                                          )
-                                                                        : Text(
-                                                                            "Paid",
-                                                                            style: TextStyle(
-                                                                                fontFamily: 'Urbanist',
-                                                                                fontWeight: FontWeight.w600,
-                                                                                fontSize: scrWidth * 0.026,
-                                                                                color: Colors.white),
-                                                                          ),
+                                                                    child: Text(
+                                                                      mapOfCurrentPayments![members[index].userId] ==
+                                                                              null
+                                                                          ? 'Due'
+                                                                          : mapOfCurrentPayments![members[index].userId]!.verified!
+                                                                              ? 'Paid'
+                                                                              : "Pending",
+                                                                      style: TextStyle(
+                                                                          fontSize: scrWidth *
+                                                                              0.033,
+                                                                          fontWeight: FontWeight
+                                                                              .w600,
+                                                                          fontFamily:
+                                                                              'Urbanist',
+                                                                          color:
+                                                                              Colors.white),
+                                                                    ),
                                                                   ),
                                                                 ),
-                                                                SizedBox(
-                                                                  width:
-                                                                      scrWidth *
-                                                                          0.15,
-                                                                ),
+                                                                // SizedBox(
+                                                                //   width:
+                                                                //       scrWidth *
+                                                                //           0.11,
+                                                                // ),
                                                               ],
                                                             ),
                                                           ],
@@ -1346,7 +1493,7 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
                                                     ),
                                                     Row(
                                                       children: [
-                                                        mapOfWinners.keys
+                                                        mapOfWinners!.keys
                                                                 .contains(members[
                                                                         index]
                                                                     .userId!)
@@ -1362,7 +1509,7 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
                                                                         left: scrWidth *
                                                                             0.05),
                                                                     child: Text(
-                                                                      '$_currency ${_formatNumber(mapOfWinners[members[index]]!.amount!.truncate().toString().replaceAll(',', ''))}',
+                                                                      '$_currency ${_formatNumber(mapOfWinners![members[index].userId!]!.amount!.truncate().toString().replaceAll(',', ''))}',
                                                                       textAlign:
                                                                           TextAlign
                                                                               .center,
@@ -1381,7 +1528,7 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
                                                                     DateFormat(
                                                                             'MMMM yyyy')
                                                                         .format(
-                                                                            mapOfWinners[members[index]]!.date!),
+                                                                            mapOfWinners![members[index].userId!]!.date!),
                                                                     style: TextStyle(
                                                                         fontFamily:
                                                                             'Urbanist',
@@ -1396,7 +1543,13 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
                                                                   ),
                                                                 ],
                                                               )
-                                                            : Container(),
+                                                            : Container(
+                                                                width: scrWidth *
+                                                                    0.000001,
+                                                                height:
+                                                                    scrHeight *
+                                                                        0.02,
+                                                              ),
                                                         Padding(
                                                           padding: (index == 0)
                                                               ? EdgeInsets.only(
@@ -1708,7 +1861,7 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
   }
 
   void payChitAmount() {
-    print(membersList.length);
+    print(membersListForDraw.length);
     winnerName = null;
     showDialog(
       context: context,
@@ -1794,7 +1947,7 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
 
                       setState(() {});
                     },
-                    items: membersList
+                    items: membersListForDraw
                         .map(
                           (value) => DropdownMenuItem(
                             value: value,
@@ -1833,7 +1986,7 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
                       fontFamily: 'Urbanist',
                     ),
                     decoration: InputDecoration(
-                      labelText: 'Auction Amount',
+                      labelText: 'Chit Amount',
                       labelStyle: TextStyle(
                         color: dialogueAuctionAmountNode.hasFocus
                             ? primarycolor
@@ -2023,11 +2176,13 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
                           amount: double.tryParse(payableAmount.text),
                           userId: winnerName,
                           date: DateTime.now());
+                      var map = winnerMember.toJson();
+                      print(map);
                       FirebaseFirestore.instance
                           .collection('chit')
                           .doc(chit!.chitId)
                           .update({
-                        'winners': winnerMember.toJson(),
+                        'winners': FieldValue.arrayUnion([map]),
                         'payableAmount': chit!.subscriptionAmount! -
                             (double.tryParse(dividend.text)! /
                                 chit!.membersCount!)

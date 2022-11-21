@@ -6,7 +6,7 @@ import '../ByeandSell/buy_and_sell.dart';
 import '../Expenses/Expense_first_page.dart';
 import '../Expenses/expense.dart';
 import '../screens/home_screen.dart';
-import '../screens/utilities.dart';
+import '../screens/Utilities/utilities.dart';
 
 class ScreenLayout extends StatefulWidget {
   int? index;
@@ -23,11 +23,18 @@ class _ScreenLayoutState extends State<ScreenLayout> {
   int? index;
   @override
   void initState() {
-    index=widget.index??0;
-    print("test "+index.toString());
-    _currentScreen=index==0?HomeScreen():index==1? BuyAndSell():index==2?AddExpensesPage():Utilities();
+    index = widget.index ?? 0;
+    print("test " + index.toString());
+    _currentScreen = index == 0
+        ? HomeScreen()
+        : index == 1
+            ? BuyAndSell()
+            : index == 2
+                ? AddExpensesPage()
+                : Utilities();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -42,8 +49,7 @@ class _ScreenLayoutState extends State<ScreenLayout> {
             padding: EdgeInsets.only(
                 left: scrWidth * 0.059,
                 right: scrWidth * 0.059,
-                bottom: scrWidth * 0.059
-            ),
+                bottom: scrWidth * 0.059),
             child: Container(
               width: scrWidth * .85,
               // height: 72,
@@ -83,8 +89,7 @@ class _ScreenLayoutState extends State<ScreenLayout> {
                             "assets/icons/home.svg",
                             height: bottomNavbarIconSize,
                             width: bottomNavbarIconSize,
-                            color:
-                                index == 0 ? primarycolor : navBarUnSelColor,
+                            color: index == 0 ? primarycolor : navBarUnSelColor,
                           ),
                           Text(
                             'Home',
@@ -117,8 +122,7 @@ class _ScreenLayoutState extends State<ScreenLayout> {
                             "assets/icons/buyandsell.svg",
                             height: bottomNavbarIconSize,
                             width: bottomNavbarIconSize,
-                            color:
-                                index == 1 ? primarycolor : navBarUnSelColor,
+                            color: index == 1 ? primarycolor : navBarUnSelColor,
                           ),
                           Text(
                             'Buy & Sell',
@@ -149,8 +153,7 @@ class _ScreenLayoutState extends State<ScreenLayout> {
                         children: [
                           SvgPicture.asset(
                             "assets/icons/expense.svg",
-                            color:
-                                index == 2 ? primarycolor : navBarUnSelColor,
+                            color: index == 2 ? primarycolor : navBarUnSelColor,
                             height: bottomNavbarIconSize,
                             width: bottomNavbarIconSize,
                           ),
@@ -173,7 +176,7 @@ class _ScreenLayoutState extends State<ScreenLayout> {
                       onPressed: () {
                         setState(() {
                           index = 3;
-                          _currentScreen=Utilities();
+                          _currentScreen = Utilities();
                           // _currentScreen = Utilities();
                           // _currentScreen = CreateNewChitScreen();
                         });
@@ -184,8 +187,7 @@ class _ScreenLayoutState extends State<ScreenLayout> {
                         children: [
                           SvgPicture.asset(
                             "assets/icons/utilities.svg",
-                            color:
-                                index == 3 ? primarycolor : navBarUnSelColor,
+                            color: index == 3 ? primarycolor : navBarUnSelColor,
                             height: bottomNavbarIconSize,
                             width: bottomNavbarIconSize,
                           ),
