@@ -5,12 +5,15 @@ import 'package:flutter_svg/svg.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:threems/kuri/add_members_kuri.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import '../Authentication/root.dart';
 import '../model/Kuri/kuriModel.dart';
 import '../model/usermodel.dart';
 import '../screens/splash_screen.dart';
 import '../utils/customclip2.dart';
 import '../utils/themes.dart';
+import 'createkuri.dart';
 import 'kuripayment.dart';
 
 class AddedKuriPublic extends StatefulWidget {
@@ -102,7 +105,7 @@ class _AddedKuriPublicState extends State<AddedKuriPublic> {
       DocumentSnapshot<Map<String, dynamic>> doc = await FirebaseFirestore
           .instance
           .collection('users')
-          .doc(kuri!.members![i])
+          .doc(kuri.members![i])
           .get();
       members.add(UserModel.fromJson(doc.data()!));
     }
@@ -162,11 +165,24 @@ class _AddedKuriPublicState extends State<AddedKuriPublic> {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8)),
                             position: PopupMenuPosition.under,
-                            child: SvgPicture.asset(
-                              "assets/icons/whitemenuicon.svg",
+                            child: Container(
+                              width: 15,
+                              height: 15,
+                              child: SvgPicture.asset(
+                                "assets/icons/whitemenuicon.svg",
+                              ),
                             ),
                             itemBuilder: (context) => [
                               PopupMenuItem(
+                                onTap: () {
+                                  // Uri call = Uri.parse(
+                                  //     'https://wa.me/91${kuri.phone!}'
+                                  //     // 'https://wa.me/91${kuri.phone!}?text=Check Out this!'
+                                  //     // 'https://wa.me/?text=YourTextHere'
+                                  //     );
+                                  //
+                                  // launchUrl(call);
+                                },
                                 height: 30,
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
@@ -199,6 +215,11 @@ class _AddedKuriPublicState extends State<AddedKuriPublic> {
                                 ),
                               ),
                               PopupMenuItem(
+                                onTap: () {
+                                  Uri call = Uri.parse('tel://${kuri.phone!}');
+
+                                  launchUrl(call);
+                                },
                                 height: 30,
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
@@ -233,6 +254,23 @@ class _AddedKuriPublicState extends State<AddedKuriPublic> {
                               ),
                               PopupMenuItem(
                                 height: 30,
+                                onTap: () async {
+                                  var doc = await FirebaseFirestore.instance
+                                      .collection('kuri')
+                                      .doc(widget.id)
+                                      .get();
+                                  List members = doc.get('members');
+                                  members.remove(currentuserid);
+                                  FirebaseFirestore.instance
+                                      .collection('kuri')
+                                      .doc(widget.id)
+                                      .update({'members': members}).then(
+                                          (value) {
+                                    showSnackbar(context,
+                                        'Successfully left from the kuri');
+                                    Navigator.pop(context);
+                                  });
+                                },
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
