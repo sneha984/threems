@@ -94,8 +94,7 @@ class _ApprovePageState extends State<ApprovePage> {
                   DateTime.now().year,
                   DateTime.now().month,
                   (DateTime.now().day +
-                      (7 - DateTime.now().weekday) +
-                      chit.chitDate!))) &&
+                      (chit.chitDate! - DateTime.now().weekday)))) &&
               payment.datePaid!.isAfter(DateTime(
                   DateTime.now().year,
                   DateTime.now().month,
