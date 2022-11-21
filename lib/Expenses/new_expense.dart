@@ -602,7 +602,7 @@ class _NewExpensePageState extends State<NewExpensePage> {
                                     child: const Text('Cancel')),
                                 TextButton(onPressed: (){
                                   FirebaseFirestore.instance.collection('users').doc(currentuserid).collection('expense').add({
-                                    'amount':amount!.text,
+                                    'amount':double.tryParse(amount!.text.toString()),
                                     "categoryIcon":serializeIcon(xyz),
                                     "categoryName":category.toString(),
                                     'date':selectedDate,

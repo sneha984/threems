@@ -30,11 +30,11 @@ class _ReportPageState extends State<ReportPage> {
   getRecentExpenses(){
     FirebaseFirestore.instance.collection('users').doc(currentuserid).collection('expense').
     orderBy('date',descending: true).snapshots().listen((event) {
-
       if(event.docs.isNotEmpty) {
-        totalExpense=0;
+        totalExpense=0.00;
+        print(event.docs.length);
         for (DocumentSnapshot data in event.docs) {
-          totalExpense += data['amount'];
+          totalExpense+=double.tryParse(data['amount'].toString())??0;
           if(expenseCategory.contains(data['categoryName'])){
             Map item=expenseList[expenseCategory.indexOf(data['categoryName'])].data();
             double amount=item['amount'];
@@ -47,9 +47,12 @@ class _ReportPageState extends State<ReportPage> {
             expenseList.add(data);
           }
 
+
         }
 
       }
+      print("yyyyyyyyyyyyyyyyyyyyyyyyyyyyyy");
+      print(totalExpense);
       if(mounted){
         setState(() {
 
@@ -535,7 +538,7 @@ class _ReportPageState extends State<ReportPage> {
                   //
                   // )
                       :
-                  expenseList.length==0?Container(
+                  expenseList.isEmpty?Container(
                     child:Center(
                       child: Text(
                         "No expenses",
@@ -663,9 +666,8 @@ class _ReportPageState extends State<ReportPage> {
                             fontWeight: FontWeight.w600),
                       ),
                       SizedBox(height: 12,),
-                      selectedCategory!=null?
-                      catName==''?Text(
-                        "₹ "+amount.toStringAsFixed(2),
+                      selectedCategory==null?Text(
+                        " ₹"+totalExpense.toString(),
                         style: TextStyle(
                             fontSize: scrWidth*0.055,
                             color: Colors.black,
@@ -673,20 +675,13 @@ class _ReportPageState extends State<ReportPage> {
                             fontWeight: FontWeight.w800),
                       ):
                       Text(
-                        "₹ "+amount.toStringAsFixed(2),
+                        " ₹"+amount.toString(),
                         style: TextStyle(
                             fontSize: scrWidth*0.055,
                             color: Colors.black,
                             fontFamily: 'Urbanist',
                             fontWeight: FontWeight.w800),
-                      ):Text(
-                        "₹ "+totalExpense.toStringAsFixed(2),
-                        style: TextStyle(
-                            fontSize: scrWidth*0.055,
-                            color: Colors.black,
-                            fontFamily: 'Urbanist',
-                            fontWeight: FontWeight.w800),
-                      )
+                      ),
 
                     ],
                   ),
