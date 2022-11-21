@@ -1279,8 +1279,11 @@ class _CreateKuriPageState extends State<CreateKuriPage> {
                                             : Border.all(
                                                 color: Colors.transparent),
                                       ),
-                                      child: SvgPicture.asset(
-                                          "assets/pay/marriagesvg.svg")),
+                                      child: Padding(
+                                        padding:EdgeInsets.all(19.0),
+                                        child: SvgPicture.asset(
+                                            "assets/icons/marriageimage.svg"),
+                                      )),
                                   SizedBox(
                                     height: scrHeight * 0.01,
                                   ),
@@ -1319,8 +1322,11 @@ class _CreateKuriPageState extends State<CreateKuriPage> {
                                           : Border.all(
                                               color: Colors.transparent),
                                     ),
-                                    child: SvgPicture.asset(
-                                        "assets/pay/hospitalsvg.svg"),
+                                    child: Padding(
+                                      padding:EdgeInsets.all(19.0),
+                                      child: SvgPicture.asset(
+                                          "assets/icons/hospitalimage.svg"),
+                                    ),
                                   ),
                                   SizedBox(
                                     height: scrHeight * 0.01,
@@ -1360,8 +1366,11 @@ class _CreateKuriPageState extends State<CreateKuriPage> {
                                           : Border.all(
                                               color: Colors.transparent),
                                     ),
-                                    child: SvgPicture.asset(
-                                        "assets/pay/othersvg.svg"),
+                                    child:  Padding(
+                                      padding:EdgeInsets.all(19.0),
+                                      child: SvgPicture.asset(
+                                          "assets/icons/otherimage.svg"),
+                                    ),
                                   ),
                                   SizedBox(
                                     height: scrHeight * 0.01,
@@ -1885,7 +1894,7 @@ class _CreateKuriPageState extends State<CreateKuriPage> {
                         ? Border.all(color: primarycolor, width: 1.5)
                         : Border.all(color: Colors.transparent)),
                 child: Padding(
-                  padding:  EdgeInsets.all(8.0),
+                  padding:  EdgeInsets.all(13.0),
                   child: SvgPicture.asset(image),
                 ),
               ),

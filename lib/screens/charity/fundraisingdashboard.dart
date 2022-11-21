@@ -113,14 +113,14 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
                       padding:  EdgeInsets.only( top: scrHeight*0.09,),
                       child: Row(
                         children: [
-                          GestureDetector(
+                          InkWell(
                             onTap: (){
                               Navigator.pop(context);
                             },
                             child:  Padding(
                               padding: EdgeInsets.only(
                                   left: scrWidth*0.06,
-                                  right: scrWidth*0.04),
+                                  right: scrWidth*0.03),
                               child:SvgPicture.asset("assets/icons/arrow.svg",),
                             ),
                           ),
