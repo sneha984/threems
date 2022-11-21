@@ -107,20 +107,20 @@ class _SeeMoreCharitiesState extends State<SeeMoreCharities>
                             ),
                             Row(
                               children: [
-                                Text("0000000",
-                                  style: TextStyle(
-                                      fontSize: scrWidth * 0.039,
-                                      color: primarycolor,
-                                      fontFamily: 'Urbanist',
-                                      fontWeight: FontWeight.w600),
-                                ),
-                                Text("/",
-                                  style: TextStyle(
-                                      fontSize: scrWidth * 0.039,
-                                      color: primarycolor,
-                                      fontFamily: 'Urbanist',
-                                      fontWeight: FontWeight.w600),
-                                ),
+                                // Text("0000000",
+                                //   style: TextStyle(
+                                //       fontSize: scrWidth * 0.039,
+                                //       color: primarycolor,
+                                //       fontFamily: 'Urbanist',
+                                //       fontWeight: FontWeight.w600),
+                                // ),
+                                // Text("/",
+                                //   style: TextStyle(
+                                //       fontSize: scrWidth * 0.039,
+                                //       color: primarycolor,
+                                //       fontFamily: 'Urbanist',
+                                //       fontWeight: FontWeight.w600),
+                                // ),
 
                                 Text(
                                   currencyConvert
@@ -132,8 +132,6 @@ class _SeeMoreCharitiesState extends State<SeeMoreCharities>
                                       fontFamily: 'Urbanist',
                                       fontWeight: FontWeight.w600),
                                 ),
-
-
                               ],
                             ),
                             SizedBox(height: scrHeight*0.02,),
@@ -290,7 +288,7 @@ class _SeeMoreCharitiesState extends State<SeeMoreCharities>
               children: [
                 Row(
                   children: [
-                    GestureDetector(
+                    InkWell(
                       onTap: () {
                         Navigator.pop(context);
                       },
@@ -299,7 +297,7 @@ class _SeeMoreCharitiesState extends State<SeeMoreCharities>
                             top: scrHeight * 0.1,
                             left: scrWidth * 0.07,
                             // bottom: scrHeight*0.02,
-                            right: scrWidth * 0.05),
+                            right: scrWidth * 0.04),
                         child: SvgPicture.asset(
                           "assets/icons/arrow.svg",
                         ),

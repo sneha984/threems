@@ -24,11 +24,11 @@ class _CreateKuriPageState extends State<CreateKuriPage> {
 
   List<MultiSelect> multiselect = [
     MultiSelect(
-        image: "assets/icons/googlepayimage.svg",
+        image: "assets/icons/gpay.svg",
         payname: "Google Pay",
         isSelected: false),
     MultiSelect(
-      image: "assets/icons/whatsapps.svg",
+      image: "assets/images/whatsapp.svg",
       payname: "Whatsapp Pay",
       isSelected: false,
     ),
@@ -38,12 +38,12 @@ class _CreateKuriPageState extends State<CreateKuriPage> {
       isSelected: false,
     ),
     MultiSelect(
-      image: "assets/icons/phonepayimage.svg",
+      image: "assets/images/phonepe.svg",
       payname: "Phonepe",
       isSelected: false,
     ),
     MultiSelect(
-      image: "assets/pay/amazonepayimage.svg",
+      image: "assets/pay/amazon pe.svg",
       payname: "Amazon Pay",
       isSelected: false,
     ),
