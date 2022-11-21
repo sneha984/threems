@@ -26,12 +26,15 @@ class _ReportPageState extends State<ReportPage> {
   String? selectedValue;
   String? selectedCategory;
   List expenseCategory=[];
+  double totalExpense=0.00;
   getRecentExpenses(){
     FirebaseFirestore.instance.collection('users').doc(currentuserid).collection('expense').
     orderBy('date',descending: true).snapshots().listen((event) {
 
       if(event.docs.isNotEmpty) {
+        totalExpense=0;
         for (DocumentSnapshot data in event.docs) {
+          totalExpense += data['amount'];
           if(expenseCategory.contains(data['categoryName'])){
             Map item=expenseList[expenseCategory.indexOf(data['categoryName'])].data();
             double amount=item['amount'];
@@ -660,14 +663,30 @@ class _ReportPageState extends State<ReportPage> {
                             fontWeight: FontWeight.w600),
                       ),
                       SizedBox(height: 12,),
-                      Text(
-                        " ₹ 1500000",
+                      selectedCategory!=null?
+                      catName==''?Text(
+                        "₹ "+amount.toStringAsFixed(2),
                         style: TextStyle(
                             fontSize: scrWidth*0.055,
                             color: Colors.black,
                             fontFamily: 'Urbanist',
                             fontWeight: FontWeight.w800),
-                      ),
+                      ):
+                      Text(
+                        "₹ "+amount.toStringAsFixed(2),
+                        style: TextStyle(
+                            fontSize: scrWidth*0.055,
+                            color: Colors.black,
+                            fontFamily: 'Urbanist',
+                            fontWeight: FontWeight.w800),
+                      ):Text(
+                        "₹ "+totalExpense.toStringAsFixed(2),
+                        style: TextStyle(
+                            fontSize: scrWidth*0.055,
+                            color: Colors.black,
+                            fontFamily: 'Urbanist',
+                            fontWeight: FontWeight.w800),
+                      )
 
                     ],
                   ),
