@@ -2,11 +2,13 @@ import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:threems/ByeandSell/storepage.dart';
 
 import '../screens/splash_screen.dart';
 import '../utils/themes.dart';
 import 'checkout2.dart';
+import 'checkoutpage3.dart';
 
 class CheckOutPage extends StatefulWidget {
   const CheckOutPage({Key? key}) : super(key: key);
@@ -16,6 +18,10 @@ class CheckOutPage extends StatefulWidget {
 }
 
 class _CheckOutPageState extends State<CheckOutPage> {
+  var currencyConvert = NumberFormat.currency(
+    locale: 'HI',
+    symbol: '₹ ',
+  );
   bool isAddress = false;
   @override
   Widget build(BuildContext context) {
@@ -169,7 +175,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                                       height: 3,
                                     ),
                                     Text(
-                                      cartlist[index]['price'].toString(),
+                                      currencyConvert.format(cartlist[index]['price']).toString(),
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           fontFamily: 'Urbanist',
@@ -527,26 +533,31 @@ class _CheckOutPageState extends State<CheckOutPage> {
                       ),
                     ),
                   ),
-            isAddress==true?SizedBox(height: 100,) :SizedBox(height: 150,) ,
-            isAddress == true
-                ? Container(
-                    height: 40,
-                    width: 310,
-                    decoration: BoxDecoration(
-                      color: primarycolor,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Center(
-                      child: Text(
-                        "Place Order",
-                        style: TextStyle(
-                            fontFamily: 'Urbanist',
-                            fontWeight: FontWeight.w600,
-                            fontSize: 12,
-                            color: Colors.white),
+            isAddress==false?SizedBox(height: 120,) :SizedBox(height: 150,) ,
+            isAddress == false
+                ? InkWell(
+              onTap: (){
+                Navigator.push(context,MaterialPageRoute(builder: (context)=>CheckOutPage3()));
+              },
+                  child: Container(
+                      height: 40,
+                      width: 310,
+                      decoration: BoxDecoration(
+                        color: primarycolor,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Center(
+                        child: Text(
+                          "Place Order",
+                          style: TextStyle(
+                              fontFamily: 'Urbanist',
+                              fontWeight: FontWeight.w600,
+                              fontSize: 12,
+                              color: Colors.white),
+                        ),
                       ),
                     ),
-                  )
+                )
                 : Container(
                     height: 40,
                     width: 310,

@@ -28,7 +28,7 @@ class _CreateKuriPageState extends State<CreateKuriPage> {
         payname: "Google Pay",
         isSelected: false),
     MultiSelect(
-      image: "assets/icons/whatsapppayimage.svg",
+      image: "assets/icons/whatsapps.svg",
       payname: "Whatsapp Pay",
       isSelected: false,
     ),
@@ -43,7 +43,7 @@ class _CreateKuriPageState extends State<CreateKuriPage> {
       isSelected: false,
     ),
     MultiSelect(
-      image: "assets/pay/amazonepaysvg.svg",
+      image: "assets/pay/amazonepayimage.svg",
       payname: "Amazon Pay",
       isSelected: false,
     ),

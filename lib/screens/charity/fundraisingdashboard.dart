@@ -171,7 +171,7 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
                             width: scrWidth*0.3,
                             height: scrHeight*0.1,
                             decoration: BoxDecoration(
-                              image: DecorationImage(image: NetworkImage(widget.charity.image!),fit: BoxFit.fill),
+                              image: DecorationImage(image: NetworkImage(widget.charity.image??''),fit: BoxFit.fill),
                               borderRadius: BorderRadius.circular(10),
                               color: Colors.grey,
 
@@ -926,7 +926,7 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
                           SizedBox(width: scrWidth*0.045,),
                           CircleAvatar(
                             radius: scrWidth*0.05,
-                            backgroundImage: NetworkImage("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyvDOjrrjjIN5kd3-8A4R-ByYkSnGSzbFHzg&usqp=CAU"),
+                            backgroundImage: NetworkImage("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiuZGp08DDSD0P3PMfKSbbPu2nVmJdH74gHg&usqp=CAU"),
                           ),
                           SizedBox(width: scrWidth*0.05,),
 
@@ -934,7 +934,7 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              SizedBox(height: scrHeight*0.025,),
+                              SizedBox(height: scrHeight*0.035,),
 
 
                               Text(datas.userName!,style: TextStyle(
@@ -942,7 +942,7 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
                                 fontFamily: 'Urbanist',
                                 fontWeight: FontWeight.w600,
                               ),),
-                              Text("huhuhuhuh",style: TextStyle(
+                              Text("Perinthalmanna",style: TextStyle(
                                   fontSize: scrWidth*0.03,
                                   fontFamily: 'Urbanist',
                                   fontWeight: FontWeight.w500,
@@ -952,7 +952,7 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
 
                             ],
                           ),
-                          SizedBox(width: scrWidth*0.1,),
+                          SizedBox(width: scrWidth*0.26,),
                           Text(currencyConvert.format(datas.amount!).toString(),style: TextStyle(
                               fontSize: scrWidth*0.046,
                               fontFamily: 'Urbanist',

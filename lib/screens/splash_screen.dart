@@ -24,7 +24,12 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Timer(const Duration(seconds: 4), () {
-      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => ScreenLayout(),), (route) => false);
+      Navigator.pushAndRemoveUntil(
+          context, MaterialPageRoute(
+        builder: (context) => Rootingpage(),
+            // ScreenLayout(),
+      ),
+              (route) => false);
     });
   }
   @override

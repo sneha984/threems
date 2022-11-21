@@ -90,7 +90,7 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
       initialVideoId:videoId=YoutubePlayer.convertUrlToId(widget.charities.youTubeLink!).toString(),
       flags: YoutubePlayerFlags(
         mute: false,
-        autoPlay: true,
+        autoPlay:false,
         loop: false,
         isLive: false,
         forceHD: false,
@@ -109,6 +109,10 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
       });
     }
   }
+  var currencyConvert = NumberFormat.currency(
+    locale: 'HI',
+    symbol: '₹ ',
+  );
   @override
   void deactivate() {
     _controllers.pause();
@@ -121,10 +125,7 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
     super.dispose();
     _tabControllerr.dispose();
   }
-  var currencyConvert = NumberFormat.currency(
-    locale: 'HI',
-    symbol: '₹ ',
-  );
+
   @override
   Widget build(BuildContext context) {
     final DateTime deadLine = widget.charities.endDate!.toDate();
@@ -137,7 +138,6 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
       payAmount.add(x);
       sum=sum+x;
     }
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -735,19 +735,40 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                       //     ),
                       //   ),
                       // ),
-                       Padding(
-                         padding:  EdgeInsets.only(left: scrWidth*0.05),
-                         child: GestureDetector(
-                           onTap: (){
-                             print("-----------------------------------mmmmmmmmmmmmmmmmmmmmmmm------------------------");
-                             print(widget.charities.fileNme);
-                             Navigator.push(context, MaterialPageRoute(
-                                 builder: (context)=>PdfViewPage(charity:widget.charities,)
-                             ));
-                           },
-                           child: Text(widget.charities.fileNme!),
-                         ),
-                       ),
+
+                      InkWell(
+                        onTap: (){
+                          print("-----------------------------------mmmmmmmmmmmmmmmmmmmmmmm------------------------");
+                                 print(widget.charities.fileNme);
+                                 Navigator.push(context, MaterialPageRoute(
+                                     builder: (context)=>PdfViewPage(charity:widget.charities,)
+                                 ));
+
+                        },
+                        child: Container(
+                          height: 119,
+                          // color: Colors.red,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                height: 100,
+                                width: 100,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(image: AssetImage("assets/icons/pdfimage.png"),fit: BoxFit.fill)
+                                ),
+                              ),
+                               Padding(
+                                 padding:  EdgeInsets.only(left: scrWidth*0.07),
+                                 child: Text(widget.charities.fileNme!,style: TextStyle(
+                                   fontWeight: FontWeight.w500,
+                                 ),),
+                               ),
+                            ],
+                          ),
+                        ),
+                      ),
                       SizedBox(height: scrHeight*0.02,),
                       Padding(
                         padding:  EdgeInsets.only(left: scrWidth*0.05),
@@ -769,7 +790,7 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                             child: YoutubePlayer(
                               controller: _controllers,
                               aspectRatio: 16 / 9,
-                              showVideoProgressIndicator: true,
+                              showVideoProgressIndicator:false,
                               progressColors: ProgressBarColors(
                                 playedColor: Colors.white,
                                 handleColor: Colors.white,
@@ -884,7 +905,7 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                                     Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        SizedBox(height: scrHeight*0.018,),
+                                        SizedBox(height: scrHeight*0.031,),
                                         Text(data.userName!,style: TextStyle(
                                           fontSize: scrWidth*0.035,
                                           fontFamily: 'Urbanist',

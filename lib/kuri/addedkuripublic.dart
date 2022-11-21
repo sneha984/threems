@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
-import 'package:threems/kuri/add_members_kuri.dart';
 import 'package:intl/intl.dart';
-
 import '../model/Kuri/kuriModel.dart';
 import '../model/usermodel.dart';
 import '../screens/splash_screen.dart';
@@ -89,7 +87,6 @@ class _AddedKuriPublicState extends State<AddedKuriPublic> {
         setState(() {
           getOwner();
           getMembers();
-
           getTime();
         });
       }

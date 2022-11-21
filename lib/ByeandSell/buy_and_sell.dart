@@ -1,6 +1,7 @@
 import 'package:another_stepper/dto/stepper_data.dart';
 import 'package:another_stepper/widgets/another_stepper.dart';
 import 'package:badges/badges.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -10,6 +11,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:threems/ByeandSell/categorystores.dart';
+import 'package:threems/ByeandSell/checkout.dart';
 import 'package:threems/ByeandSell/shopheadimageslider.dart';
 import 'package:threems/ByeandSell/storedetailsfill.dart';
 import 'package:threems/ByeandSell/storepage.dart';
@@ -32,7 +34,6 @@ class _BuyAndSellState extends State<BuyAndSell>with TickerProviderStateMixin {
   String currentAddress = 'Select Your Location';
   Position? currentposition;
   int activeindex=0;
-
   Future<Position> _determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
@@ -74,6 +75,65 @@ class _BuyAndSellState extends State<BuyAndSell>with TickerProviderStateMixin {
     }
     throw '';
 
+  }
+  Map<String,dynamic> categorys={};
+  List<String> cateoryNames=[];
+  List<Widget> grids=[];
+  getSpecificCategory(){
+    FirebaseFirestore.instance.collection('storeCategory').snapshots().listen((event) {
+      cateoryNames=[];
+      for(DocumentSnapshot <Map<String,dynamic>> doc in event.docs){
+        categorys[doc.get('categoryName')]=doc.data();
+        print("----------------------------------------------------------------------------------------");
+        print(categorys[doc['categoryName']]);
+        grids.add(
+            Padding(
+              padding: const EdgeInsets.only(top: 40,bottom: 80),
+              child: InkWell(
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>CategoryStores()));
+                },
+                child: Container(
+                  height: scrWidth*0.15,
+                  child: Column(
+                    children: [
+                      DottedBorder(
+                        borderType: BorderType.Circle,
+                        radius: Radius.circular(scrWidth*0.06),
+                        dashPattern: [3, 3],
+                        color: Colors.grey,
+                        strokeWidth: 0.5,
+                        child: Center(child: Padding(
+                          padding: EdgeInsets.all(scrWidth*0.045),
+                          child: SvgPicture.asset(
+                          'assets/icons/grocery.svg',height:scrHeight*0.03,width: scrWidth*0.04,),
+                        )),
+                      ),
+                      SizedBox(height: scrHeight*0.004,),
+                      Container(
+                        width: scrWidth*0.15,
+                        child: Text(doc.get('categoryName'),textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: scrWidth*0.025,fontWeight: FontWeight.w600,color: Colors.black,fontFamily: 'Urbanist'
+                          ),),
+                      )
+
+                    ],
+                  ) ,
+                ),
+              ),
+            )
+
+        );
+
+        // cateoryNames.add(categorys[doc.get('categoryName').toString()]);
+      }
+      if(mounted){
+        setState(() {
+
+        });
+      }
+    });
   }
  bool isstorenotcreated=true;
  bool isstorecreatedcmplt=false;
@@ -131,6 +191,7 @@ class _BuyAndSellState extends State<BuyAndSell>with TickerProviderStateMixin {
   bool isShopNotCreated = false;
   @override
   void initState() {
+    getSpecificCategory();
     _tabController = TabController(length: 2, vsync: this, initialIndex: 0);
     super.initState();
   }
@@ -185,18 +246,23 @@ class _BuyAndSellState extends State<BuyAndSell>with TickerProviderStateMixin {
           ),
         ),
         actions: [
-          Badge(
-            position: BadgePosition.topEnd(top: scrHeight*0.03, end: scrHeight*0.015,),
-            animationDuration: Duration(milliseconds: 300),
-            animationType: BadgeAnimationType.fade,
-            badgeColor: Colors.black,
-            badgeContent: Text('${cartlist.length}',
-              style: TextStyle(color: Colors.white,fontSize: scrWidth*0.02),
+          InkWell(
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>CheckOutPage()));
+            },
+            child: Badge(
+              position: BadgePosition.topEnd(top: scrHeight*0.03, end: scrHeight*0.015,),
+              animationDuration: Duration(milliseconds: 300),
+              animationType: BadgeAnimationType.fade,
+              badgeColor: Colors.black,
+              badgeContent: Text('${cartlist.length}',
+                style: TextStyle(color: Colors.white,fontSize: scrWidth*0.02),
+              ),
+              child: Padding(
+                  padding: EdgeInsets.only(right: scrWidth*0.06,top: scrHeight*0.015),
+                  child: SvgPicture.asset("assets/images/cart.svg"),
+                )
             ),
-            child: Padding(
-                padding: EdgeInsets.only(right: scrWidth*0.06,top: scrHeight*0.015),
-                child: SvgPicture.asset("assets/images/cart.svg"),
-              )
           ),
         ],
       ),
@@ -500,7 +566,7 @@ class _BuyAndSellState extends State<BuyAndSell>with TickerProviderStateMixin {
                           Padding(
                             padding:  EdgeInsets.only(left: scrWidth*0.03,right: scrWidth*0.03),
                             child: Container(
-                              height: scrHeight*1,
+                              height: scrHeight*0.5,
                               child: GridView.builder(
                                 shrinkWrap: true,
                                 physics: NeverScrollableScrollPhysics(),
@@ -545,12 +611,22 @@ class _BuyAndSellState extends State<BuyAndSell>with TickerProviderStateMixin {
                                     ),
                                   );
 
-                                    
+
                                 },
                               ),
                             ),
-                          )
+                          ),
+
+                          // Container(
+                          //   height:500,
+                          //   color: Colors.red,
+                          //   child: Column(
+                          //     children:grids
+                          //   ),
+                          // ),
+                            SizedBox(height: 100,)
                         ],
+
                       ),
                     ),
                      isstorenotcreated?Column(

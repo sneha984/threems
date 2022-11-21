@@ -95,8 +95,8 @@ class _BasicDetailsState extends State<BasicDetails> {
       for( DocumentSnapshot <Map<String ,dynamic>> doc in event.docs){
         dropdownItemList.add(doc);
       }
+
       dropdownItems=[];
-      try{
         for(int i=0;i< dropdownItemList.length; i++){
         dropdownItems.add({
           'causeId':dropdownItemList[i]['causeId']??"",
@@ -105,9 +105,7 @@ class _BasicDetailsState extends State<BasicDetails> {
           'image':Image(image:NetworkImage(dropdownItemList[i]['image']??'')),
         });
       }
-      }catch(Exception){
 
-      }
 
       print(dropdownItems);
       print(dropdownValue);
@@ -318,7 +316,7 @@ class _BasicDetailsState extends State<BasicDetails> {
                           var y=dropItem['image'];
                           var x = dropItem['value'];
                           causeId=dropItem['causeId'];
-                          dropdownValue=x+y;
+                          dropdownValue=x;
                           print(dropdownValue);
                           // var y=dropItem['image']+dropItem['value'];
                           // dropdown=y;

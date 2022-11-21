@@ -33,9 +33,10 @@ class _RootingpageState extends State<Rootingpage> {
             userdata=snapshot.data!;
             currentuserid=userdata.uid;
             getcurrentuser();
-            return SplashScreen();
+            return ScreenLayout();
+              // SplashScreen();
           }else if(snapshot.hasError){
-            return Center(child: Text("error"),);
+            return Center(child: Text("something went wrong"),);
           }else{
             return OnBoarding();
           }

@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:threems/Authentication/root.dart';
 
 import '../model/Buy&sell.dart';
 import '../screens/splash_screen.dart';
@@ -12,7 +13,7 @@ import '../utils/themes.dart';
 import 'congratspage.dart';
 import 'dart:io';
 List categoryList=[];
-List categoryItems=[];
+List categoryListAll=[];
 class StoreDetails extends StatefulWidget {
   const StoreDetails({Key? key}) : super(key: key);
 
@@ -23,25 +24,46 @@ class StoreDetails extends StatefulWidget {
 class _StoreDetailsState extends State<StoreDetails> {
   bool finish = false;
   bool trackedlocation = false;
-  getShopCategory(){
-    FirebaseFirestore.instance.collection('shopCategory').snapshots().listen((event) {
+  // getShopCategory(){
+  //   FirebaseFirestore.instance.collection('shopCategory').snapshots().listen((event) {
+  //     categoryList=[];
+  //     for(DocumentSnapshot <Map<String,dynamic>> doc in event.docs){
+  //       categoryList.add(doc);
+  //     }
+  //     /*categoryItems=[];
+  //     for(int i=0;i<categoryList.length;i++){
+  //       categoryItems.add({
+  //         'CategoryId':categoryList[i]['CategoryId']??"",
+  //         'category':categoryList[i]['category']??"",
+  //       });
+  //     }*/
+  //     if(mounted){
+  //       setState(() {
+  //
+  //       });
+  //     }
+  //   });
+  // }
+  getCategory(){
+    FirebaseFirestore.instance.collection('storeCategory').snapshots().listen((event) {
       categoryList=[];
+      categoryListAll=[];
+
       for(DocumentSnapshot <Map<String,dynamic>> doc in event.docs){
-        categoryList.add(doc);
+        print("---====--=--9022222222222222222222222222222222222222222222222222222222222222222");
+        print('${doc['categoryName']}');
+        print('${event.docs[1]['categoryName']}');
+        // categoryListAll.add(doc.data()!);
+        categoryList.add(doc['categoryName']);
       }
-      categoryItems=[];
-      for(int i=0;i<categoryList.length;i++){
-        categoryItems.add({
-          "CategoryId":categoryList[i]['CategoryId']??"",
-          "category":categoryList[i]['category']??"",
-        });
-      }
+      print(categoryList);
       if(mounted){
         setState(() {
 
         });
       }
     });
+    
   }
   final List<String> items = [
     "Grocery Store",
@@ -68,7 +90,6 @@ class _StoreDetailsState extends State<StoreDetails> {
     TaskSnapshot taskSnapshot = (await uploadTask);
     String value = await taskSnapshot.ref.getDownloadURL();
     print(value);
-    print("_-------------------------------------------------------------ajugyuftftftyft----------");
 
     // if(value!=null){
     //   imageList.add(value);
@@ -94,7 +115,8 @@ class _StoreDetailsState extends State<StoreDetails> {
   final TextEditingController storeAddressController = TextEditingController();
   @override
   void initState() {
-    getShopCategory();
+    // getShopCategory();
+    getCategory();
     storeNameFocus.addListener(() {
       setState(() {});
     });
@@ -264,9 +286,7 @@ class _StoreDetailsState extends State<StoreDetails> {
                   color: textFormFieldFillColor,
                   borderRadius: BorderRadius.circular(scrWidth * 0.033),
                 ),
-                // padding: EdgeInsets.only(
-                //     left: scrWidth * 0.051,
-                //     right: scrWidth * 0.04),
+
                 child: Row(
                   children: [
                     SizedBox(
@@ -489,6 +509,8 @@ class _StoreDetailsState extends State<StoreDetails> {
                       onTap: () async {
                         final strDat = StoreDetailsModel(
                           storeImage: imgUrl,
+                          // categoryId:,
+                          userId: currentuserid,
                           storeName: storeNameController.text,
                           storeCategory: selectedValue,
                           storeAddress: storeAddressController.text,

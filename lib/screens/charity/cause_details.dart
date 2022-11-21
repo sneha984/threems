@@ -240,6 +240,7 @@ class _CauseDetailsState extends State<CauseDetails> {
                         ),
                         borderRadius: BorderRadius.circular(scrWidth * 0.026)),
                     child: TextFormField(
+                      keyboardType: TextInputType.number,
                       controller: amountcontroller,
                       focusNode: valueAmountFocus,
                       cursorHeight: scrWidth * 0.055,
@@ -470,6 +471,8 @@ class _CauseDetailsState extends State<CauseDetails> {
                   borderRadius: BorderRadius.circular(scrWidth * 0.026),
                 ),
                 child: TextFormField(
+                  keyboardType: TextInputType.number,
+
                   controller: phonenumbercontroller,
                   focusNode: phoneNumeberFocus,
                   cursorHeight: scrWidth * 0.055,

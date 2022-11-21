@@ -334,7 +334,7 @@ class _StorePageState extends State<StorePage> {
                     itemBuilder: (context, index) {
                       // final _isSelected=_selectedIndexs.contains(index);
                       return Padding(
-                        padding:  EdgeInsets.only(right: scrWidth*0.02),
+                        padding:  EdgeInsets.only(right: scrWidth*0.03),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -399,7 +399,7 @@ class _StorePageState extends State<StorePage> {
                               ),
                             ),
                            eachstore[index].ShouldVisible?
-                           Padding(padding: EdgeInsets.only(left: scrWidth*0.07),
+                           Padding(padding: EdgeInsets.only(left: scrWidth*0.04),
                              child: InkWell(
                                onTap: (){
                                  final findIndex=cartlist.indexWhere((element) => element['name'] ==eachstore[index].productname);
@@ -439,11 +439,11 @@ class _StorePageState extends State<StorePage> {
 
                                },
                                child: Container(
-                                 width: 126,
-                                 height: 30,
+                                 width: scrWidth*0.31,
+                                 height: scrHeight*0.033,
                                  decoration: BoxDecoration(
                                      borderRadius: BorderRadius.circular(8),
-                                     color: Color(0xff02B558)
+                                      color: Color(0xff02B558)
                                    // color: Colors.red
                                  ),
                                  child: Row(
@@ -494,9 +494,10 @@ class _StorePageState extends State<StorePage> {
                                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
                                        },
                                        child: Container(
-                                         height: 30,
-                                         width: 45,
+                                         height: scrHeight*0.033,
+                                         width: scrWidth*0.105,
                                          decoration: BoxDecoration(
+
                                              color: Color(0xff02B558),
                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(8),
                                                  bottomLeft:Radius.circular(8) )),
@@ -507,8 +508,8 @@ class _StorePageState extends State<StorePage> {
                                        ),
                                      ),
                                      Container(
-                                       height: 30,
-                                       width: 36,
+                                       height: scrHeight*0.033,
+                                       width: scrWidth*0.1,
                                        decoration: BoxDecoration(
                                          color: Color(0xff9FFFCD),
                                        ),
@@ -551,16 +552,17 @@ class _StorePageState extends State<StorePage> {
                                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
                                      },
                                      child: Container(
-                                       height: 26,
-                                       width: 30,
+                                       height: scrHeight*0.033,
+                                       width: scrWidth*0.105,
                                        decoration: BoxDecoration(
+                                         // color: Colors.red,
                                            color: Color(0xff02B558),
-                                           borderRadius: BorderRadius.only(topLeft: Radius.circular(8),
-                                               bottomLeft:Radius.circular(8) )
+                                           borderRadius: BorderRadius.only(topRight: Radius.circular(8),
+                                               bottomRight:Radius.circular(8) )
 
                                        ),
                                        child: Padding(
-                                         padding: EdgeInsets.only(left: 5),
+                                         padding: EdgeInsets.only(left: 3),
                                          child: Icon(Icons.add,size: 15,color: Colors.white,),
                                        ),
                                      ),
@@ -573,7 +575,7 @@ class _StorePageState extends State<StorePage> {
                              ),
                            ):
                            Padding(
-                              padding:  EdgeInsets.only(left: 7),
+                              padding:  EdgeInsets.only(left: scrWidth*0.04),
                               child:  InkWell(
                                 onTap: (){
                                   setState(() {
@@ -615,8 +617,8 @@ class _StorePageState extends State<StorePage> {
                                   ScaffoldMessenger.of(context).showSnackBar(snackBar);
                                   },
                                 child: Container(
-                                  width: scrWidth*0.32,
-                                  height: scrHeight*0.034,
+                                  width: scrWidth*0.31,
+                                  height: scrHeight*0.033,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(8),
                                     color: Color(0xff02B558)
