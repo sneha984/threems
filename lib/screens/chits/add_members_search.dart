@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:threems/utils/dummy.dart';
 
 import '../../kuri/add_members_kuri.dart';
@@ -270,44 +271,47 @@ class _AddMembersSearchState extends State<AddMembersSearch> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            if (numberList.contains(totalContactsSearch[index]
-                                .phones!
-                                .first
-                                .value!
-                                .trim()
-                                .replaceAll(' ', ''))) {
-                              if (addFriend.contains(totalContactsSearch[index]
-                                  .phones!
-                                  .first
-                                  .value!
-                                  .trim()
-                                  .replaceAll(' ', ''))) {
-                                setState(() {
-                                  addFriend.remove(totalContactsSearch[index]
-                                      .phones!
-                                      .first
-                                      .value!
-                                      .trim()
-                                      .replaceAll(' ', ''));
-                                  print("hi: $addFriend");
-                                });
-                                setState(() {});
-                              } else {
-                                setState(() {
-                                  addFriend.add(totalContactsSearch[index]
-                                      .phones!
-                                      .first
-                                      .value!
-                                      .trim()
-                                      .replaceAll(' ', ''));
-                                  print("hi: $addFriend");
-                                });
-                                setState(() {});
-                              }
-                            } else {
-                              showSnackbar(context,
-                                  'Invite ${totalContactsSearch[index].displayName}');
-                            }
+                            Share.share(
+                                'Welcome to First Logic Meta Lab https://firstlogicmetalab.com');
+                            // if (numberList.contains(totalContactsSearch[index]
+                            //     .phones!
+                            //     .first
+                            //     .value!
+                            //     .trim()
+                            //     .replaceAll(' ', ''))) {
+                            //   if (addFriend.contains(totalContactsSearch[index]
+                            //       .phones!
+                            //       .first
+                            //       .value!
+                            //       .trim()
+                            //       .replaceAll(' ', ''))) {
+                            //     setState(() {
+                            //       addFriend.remove(totalContactsSearch[index]
+                            //           .phones!
+                            //           .first
+                            //           .value!
+                            //           .trim()
+                            //           .replaceAll(' ', ''));
+                            //       print("hi: $addFriend");
+                            //     });
+                            //     setState(() {});
+                            //   } else {
+                            //     setState(() {
+                            //       addFriend.add(totalContactsSearch[index]
+                            //           .phones!
+                            //           .first
+                            //           .value!
+                            //           .trim()
+                            //           .replaceAll(' ', ''));
+                            //       print("hi: $addFriend");
+                            //     });
+                            //     setState(() {});
+                            //   }
+                            // } else {
+                            //   // showSnackbar(context,
+                            //   //     'Invite ${totalContactsSearch[index].displayName}');
+                            //   Share.share('Welcome to First Logic Meta Lab https://firstlogicmetalab.com');
+                            // }
                           },
                           child: Container(
                             // width: 50,
@@ -315,34 +319,37 @@ class _AddMembersSearchState extends State<AddMembersSearch> {
                             margin: EdgeInsets.only(right: 8),
                             padding: EdgeInsets.all(5),
                             decoration: BoxDecoration(
-                                color: addFriend.contains(
-                                        totalContactsSearch[index]
-                                            .phones!
-                                            .first
-                                            .value!
-                                            .trim()
-                                            .replaceAll(' ', ''))
-                                    ? Color(0xff8391A1)
-                                    : primarycolor,
+                                color:
+                                    // addFriend.contains(
+                                    //         totalContactsSearch[index]
+                                    //             .phones!
+                                    //             .first
+                                    //             .value!
+                                    //             .trim()
+                                    //             .replaceAll(' ', ''))
+                                    //     ? Color(0xff8391A1)
+                                    //     :
+                                    primarycolor,
                                 borderRadius: BorderRadius.circular(8)),
                             child: Center(
                               child: Text(
-                                addFriend.contains(totalContactsSearch[index]
-                                        .phones!
-                                        .first
-                                        .value!
-                                        .trim()
-                                        .replaceAll(' ', ''))
-                                    ? "Added"
-                                    : numberList.contains(
-                                            totalContactsSearch[index]
-                                                .phones!
-                                                .first
-                                                .value!
-                                                .trim()
-                                                .replaceAll(' ', ''))
-                                        ? '+ Add'
-                                        : 'Invite',
+                                // addFriend.contains(totalContactsSearch[index]
+                                //         .phones!
+                                //         .first
+                                //         .value!
+                                //         .trim()
+                                //         .replaceAll(' ', ''))
+                                //     ? "Added"
+                                //     : numberList.contains(
+                                //             totalContactsSearch[index]
+                                //                 .phones!
+                                //                 .first
+                                //                 .value!
+                                //                 .trim()
+                                //                 .replaceAll(' ', ''))
+                                //         ? '+ Add'
+                                //         :
+                                'Invite',
                                 style: TextStyle(
                                     fontSize: FontSize14,
                                     fontFamily: 'Urbanist',

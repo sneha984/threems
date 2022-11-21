@@ -21,10 +21,15 @@ class _AddedKuriPrivateState extends State<AddedKuriPrivate> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          titlePadding:
-          EdgeInsets.only(top: scrHeight*0.025,  left: scrWidth*0.05, right: scrWidth*0.02),
-          contentPadding:
-          EdgeInsets.only(top: scrHeight*0.002, bottom: scrHeight*0.02, left: scrWidth*0.05, right: scrWidth*0.02),
+          titlePadding: EdgeInsets.only(
+              top: scrHeight * 0.025,
+              left: scrWidth * 0.05,
+              right: scrWidth * 0.02),
+          contentPadding: EdgeInsets.only(
+              top: scrHeight * 0.002,
+              bottom: scrHeight * 0.02,
+              left: scrWidth * 0.05,
+              right: scrWidth * 0.02),
           title: Text(
             "Are you sure you don't want to continue on this kuri?",
             style: TextStyle(
@@ -39,16 +44,15 @@ class _AddedKuriPrivateState extends State<AddedKuriPrivate> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-
               SizedBox(
-                height: scrHeight*0.025,
+                height: scrHeight * 0.025,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    width: scrWidth*0.3,
-                    height: scrHeight*0.058,
+                    width: scrWidth * 0.3,
+                    height: scrHeight * 0.058,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(34),
                       color: Color(0xffDEDEDE),
@@ -74,10 +78,9 @@ class _AddedKuriPrivateState extends State<AddedKuriPrivate> {
                       ),
                     ),
                   ),
-
                   Container(
-                    width: scrWidth*0.3,
-                    height: scrHeight*0.058,
+                    width: scrWidth * 0.3,
+                    height: scrHeight * 0.058,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(34),
                       color: primarycolor,
@@ -102,7 +105,9 @@ class _AddedKuriPrivateState extends State<AddedKuriPrivate> {
                       ),
                     ),
                   ),
-                  SizedBox(width:scrWidth*0.001,),
+                  SizedBox(
+                    width: scrWidth * 0.001,
+                  ),
                 ],
               )
             ],
@@ -114,6 +119,7 @@ class _AddedKuriPrivateState extends State<AddedKuriPrivate> {
       },
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -132,7 +138,10 @@ class _AddedKuriPrivateState extends State<AddedKuriPrivate> {
                         fit: BoxFit.fill)),
               ),
               Padding(
-                padding:  EdgeInsets.only(top: scrHeight*0.085,left: scrWidth*0.08,right: scrWidth*0.08),
+                padding: EdgeInsets.only(
+                    top: scrHeight * 0.085,
+                    left: scrWidth * 0.08,
+                    right: scrWidth * 0.08),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -153,11 +162,16 @@ class _AddedKuriPrivateState extends State<AddedKuriPrivate> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8)),
                       position: PopupMenuPosition.under,
-                      child:SvgPicture.asset(
+                      child: SvgPicture.asset(
                         "assets/icons/whitemenuicon.svg",
                       ),
                       itemBuilder: (context) => [
                         PopupMenuItem(
+                          onTap: () {
+                            // Uri call = Uri.parse('http://wa.me/91${ku!}');
+                            //
+                            // launchUrl(call);
+                          },
                           height: 30,
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
@@ -255,10 +269,8 @@ class _AddedKuriPrivateState extends State<AddedKuriPrivate> {
                             ],
                           ),
                         ),
-
                       ],
                     ),
-
                   ],
                 ),
               ),
@@ -286,7 +298,9 @@ class _AddedKuriPrivateState extends State<AddedKuriPrivate> {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(height: scrHeight*0.02,),
+                            SizedBox(
+                              height: scrHeight * 0.02,
+                            ),
                             Text(
                               "Rasheed's Daughter Wedding",
                               style: TextStyle(
@@ -308,7 +322,6 @@ class _AddedKuriPrivateState extends State<AddedKuriPrivate> {
                             // ),
                           ],
                         ),
-
                       ],
                     ),
                     SizedBox(
@@ -331,38 +344,36 @@ class _AddedKuriPrivateState extends State<AddedKuriPrivate> {
                           SizedBox(
                             height: scrHeight * 0.018,
                           ),
-
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Padding(
-                                padding: EdgeInsets.only(left: scrWidth*0.03),
+                                padding: EdgeInsets.only(left: scrWidth * 0.03),
                                 child: Container(
-                                  child: Center(child: Text(
-                                      "20 Days Left",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.white,
-                                          fontSize: scrWidth*0.025,
-                                          fontFamily: 'Urbanist'))),
-                                  height: scrHeight*0.023,
-                                  width: scrWidth*0.22,
+                                  child: Center(
+                                      child: Text("20 Days Left",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              color: Colors.white,
+                                              fontSize: scrWidth * 0.025,
+                                              fontFamily: 'Urbanist'))),
+                                  height: scrHeight * 0.023,
+                                  width: scrWidth * 0.22,
                                   decoration: BoxDecoration(
                                       color: Colors.green,
-                                      borderRadius: BorderRadius.circular(scrWidth*0.04)
-                                  ),
+                                      borderRadius: BorderRadius.circular(
+                                          scrWidth * 0.04)),
                                 ),
                               ),
                               CustomPaint(
-                                size: Size(
-                                    scrWidth * 0.4,
-                                    (scrWidth * 0.04)
-                                        .toDouble()),
+                                size: Size(scrWidth * 0.4,
+                                    (scrWidth * 0.04).toDouble()),
                                 painter: RPCustomPainter(),
                                 child: Container(
                                   width: scrWidth * 0.17,
                                   height: scrHeight * 0.025,
-                                  padding: EdgeInsets.only(left: scrWidth * 0.04),
+                                  padding:
+                                      EdgeInsets.only(left: scrWidth * 0.04),
                                   child: Center(
                                     child: Text(
                                       "Private",
@@ -377,63 +388,78 @@ class _AddedKuriPrivateState extends State<AddedKuriPrivate> {
                               ),
                             ],
                           ),
-                          SizedBox(height: scrHeight*0.02,),
+                          SizedBox(
+                            height: scrHeight * 0.02,
+                          ),
                           LinearPercentIndicator(
                             //leaner progress bar
                             animation: true,
                             animationDuration: 1000,
-                            lineHeight: scrHeight*0.025,
-                            width: scrWidth*0.86,
+                            lineHeight: scrHeight * 0.025,
+                            width: scrWidth * 0.86,
                             percent: 0.3,
                             alignment: MainAxisAlignment.start,
-                            barRadius: Radius.circular(scrWidth*0.2),
+                            barRadius: Radius.circular(scrWidth * 0.2),
                             progressColor: primarycolor,
                             backgroundColor: Color(0xffD9D9D9),
                           ),
-                          SizedBox(height: scrHeight*0.015,),
+                          SizedBox(
+                            height: scrHeight * 0.015,
+                          ),
                           Row(
-                            mainAxisAlignment:MainAxisAlignment.spaceAround,
-
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               Column(
-                                mainAxisAlignment:MainAxisAlignment.start,
-                                crossAxisAlignment:CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text("Collected",
+                                  Text(
+                                    "Collected",
                                     style: TextStyle(
                                         fontWeight: FontWeight.w600,
                                         color: Color(0xff989898),
-                                        fontSize: scrWidth*0.026,
+                                        fontSize: scrWidth * 0.026,
                                         fontFamily: 'Urbanist'),
                                   ),
-                                  SizedBox(height: scrHeight*0.002,),
-                                  Text("₹25,000",style: TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                      color: primarycolor,
-                                      fontSize: scrWidth*0.026,
-                                      fontFamily: 'Urbanist'),),
-
-
+                                  SizedBox(
+                                    height: scrHeight * 0.002,
+                                  ),
+                                  Text(
+                                    "₹25,000",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        color: primarycolor,
+                                        fontSize: scrWidth * 0.026,
+                                        fontFamily: 'Urbanist'),
+                                  ),
                                 ],
                               ),
-                              SizedBox(width: scrWidth*0.35,),
-
+                              SizedBox(
+                                width: scrWidth * 0.35,
+                              ),
                               Column(
-                                mainAxisAlignment:MainAxisAlignment.start,
-                                crossAxisAlignment:CrossAxisAlignment.end,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
-                                  Text("Value",style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      color: Color(0xff989898),
-                                      fontSize: scrWidth*0.026,
-                                      fontFamily: 'Urbanist'),),
-                                  SizedBox(height: scrHeight*0.002,),
-
-                                  Text("₹5,00,000",style: TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                      color:primarycolor,
-                                      fontSize: scrWidth*0.026,
-                                      fontFamily: 'Urbanist'),),
+                                  Text(
+                                    "Value",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        color: Color(0xff989898),
+                                        fontSize: scrWidth * 0.026,
+                                        fontFamily: 'Urbanist'),
+                                  ),
+                                  SizedBox(
+                                    height: scrHeight * 0.002,
+                                  ),
+                                  Text(
+                                    "₹5,00,000",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        color: primarycolor,
+                                        fontSize: scrWidth * 0.026,
+                                        fontFamily: 'Urbanist'),
+                                  ),
                                 ],
                               )
                             ],
@@ -443,8 +469,9 @@ class _AddedKuriPrivateState extends State<AddedKuriPrivate> {
                             indent: 10,
                             endIndent: 10,
                           ),
-                          SizedBox(height: scrHeight*0.007,),
-
+                          SizedBox(
+                            height: scrHeight * 0.007,
+                          ),
                           Row(
                             children: [
                               SizedBox(
@@ -452,12 +479,13 @@ class _AddedKuriPrivateState extends State<AddedKuriPrivate> {
                               ),
                               Neumorphic(
                                 style: NeumorphicStyle(
-                                  intensity:0.5 ,
+                                  intensity: 0.5,
                                   surfaceIntensity: 0.3,
                                   boxShape: NeumorphicBoxShape.roundRect(
                                       BorderRadius.circular(16)),
                                   depth: -1,
-                                  shadowLightColorEmboss: Colors.grey.withOpacity(0.9),
+                                  shadowLightColorEmboss:
+                                      Colors.grey.withOpacity(0.9),
                                   lightSource: LightSource.topLeft,
                                   shadowDarkColorEmboss: Colors.white,
                                   oppositeShadowLightSource: true,
@@ -484,9 +512,11 @@ class _AddedKuriPrivateState extends State<AddedKuriPrivate> {
                                         width: scrWidth * 0.12,
                                         decoration: BoxDecoration(
                                             color: Color(0xff02B558),
-                                            borderRadius: BorderRadius.circular(16)),
+                                            borderRadius:
+                                                BorderRadius.circular(16)),
                                         child: Padding(
-                                          padding: EdgeInsets.all(scrWidth*0.026),
+                                          padding:
+                                              EdgeInsets.all(scrWidth * 0.026),
                                           child: SvgPicture.asset(
                                             "assets/icons/duration.svg",
                                           ),
@@ -496,8 +526,10 @@ class _AddedKuriPrivateState extends State<AddedKuriPrivate> {
                                         width: scrWidth * 0.015,
                                       ),
                                       Column(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           SizedBox(
                                             height: scrHeight * 0.015,
@@ -531,12 +563,13 @@ class _AddedKuriPrivateState extends State<AddedKuriPrivate> {
                               ),
                               Neumorphic(
                                 style: NeumorphicStyle(
-                                  intensity:0.5 ,
+                                  intensity: 0.5,
                                   surfaceIntensity: 0.3,
                                   boxShape: NeumorphicBoxShape.roundRect(
                                       BorderRadius.circular(16)),
                                   depth: -1,
-                                  shadowLightColorEmboss: Colors.grey.withOpacity(0.9),
+                                  shadowLightColorEmboss:
+                                      Colors.grey.withOpacity(0.9),
                                   lightSource: LightSource.topLeft,
                                   shadowDarkColorEmboss: Colors.white,
                                   oppositeShadowLightSource: true,
@@ -563,9 +596,11 @@ class _AddedKuriPrivateState extends State<AddedKuriPrivate> {
                                         width: scrWidth * 0.12,
                                         decoration: BoxDecoration(
                                             color: Color(0xff02B558),
-                                            borderRadius: BorderRadius.circular(16)),
+                                            borderRadius:
+                                                BorderRadius.circular(16)),
                                         child: Padding(
-                                          padding: EdgeInsets.all(scrWidth*0.026),
+                                          padding:
+                                              EdgeInsets.all(scrWidth * 0.026),
                                           child: SvgPicture.asset(
                                             "assets/icons/members.svg",
                                           ),
@@ -575,8 +610,10 @@ class _AddedKuriPrivateState extends State<AddedKuriPrivate> {
                                         width: scrWidth * 0.015,
                                       ),
                                       Column(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           SizedBox(
                                             height: scrHeight * 0.012,
@@ -613,11 +650,14 @@ class _AddedKuriPrivateState extends State<AddedKuriPrivate> {
                     SizedBox(
                       height: scrHeight * 0.2,
                     ),
-                   Text("You Can't view \n  the Members",style: TextStyle(fontWeight: FontWeight.w600,
-                     fontSize: 14,fontFamily: 'Urbanist',color: Color(0xff989898)
-
-
-                   ),)
+                    Text(
+                      "You Can't view \n  the Members",
+                      style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 14,
+                          fontFamily: 'Urbanist',
+                          color: Color(0xff989898)),
+                    )
                   ],
                 ),
               ),
@@ -663,7 +703,7 @@ class _AddedKuriPrivateState extends State<AddedKuriPrivate> {
               width: scrWidth * 0.04,
             ),
             GestureDetector(
-              onTap: (){
+              onTap: () {
                 joinChit();
               },
               child: Container(
@@ -675,12 +715,12 @@ class _AddedKuriPrivateState extends State<AddedKuriPrivate> {
                 ),
                 child: Center(
                     child: Text(
-                      "Pay",
-                      style: TextStyle(
-                          fontSize: scrWidth * 0.047,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Urbanist'),
-                    )),
+                  "Pay",
+                  style: TextStyle(
+                      fontSize: scrWidth * 0.047,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'Urbanist'),
+                )),
               ),
             )
           ],

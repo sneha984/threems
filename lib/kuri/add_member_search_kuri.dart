@@ -4,6 +4,7 @@ import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:threems/kuri/createkuri.dart';
 
 import '../model/Kuri/kuriModel.dart';
@@ -228,42 +229,44 @@ class _AddMembersearchState extends State<AddMembersearch> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            if (numberList.contains(totalContactsSearch[index]
-                                .phones!
-                                .first
-                                .value!
-                                .trim()
-                                .replaceAll(' ', ''))) {
-                              if (addFriend.contains(totalContactsSearch[index]
-                                  .phones!
-                                  .first
-                                  .value!
-                                  .trim()
-                                  .replaceAll(' ', ''))) {
-                                setState(() {
-                                  addFriend.remove(totalContactsSearch[index]
-                                      .phones!
-                                      .first
-                                      .value!
-                                      .trim()
-                                      .replaceAll(' ', ''));
-                                  print("hi: $addFriend");
-                                });
-                              } else {
-                                setState(() {
-                                  addFriend.add(totalContactsSearch[index]
-                                      .phones!
-                                      .first
-                                      .value!
-                                      .trim()
-                                      .replaceAll(' ', ''));
-                                  print("hi: $addFriend");
-                                });
-                              }
-                            } else {
-                              showSnackbar(context,
-                                  'Invite ${totalContactsSearch[index].displayName}');
-                            }
+                            Share.share(
+                                'Welcome to First Logic Meta Lab https://firstlogicmetalab.com');
+                            // if (numberList.contains(totalContactsSearch[index]
+                            //     .phones!
+                            //     .first
+                            //     .value!
+                            //     .trim()
+                            //     .replaceAll(' ', ''))) {
+                            //   if (addFriend.contains(totalContactsSearch[index]
+                            //       .phones!
+                            //       .first
+                            //       .value!
+                            //       .trim()
+                            //       .replaceAll(' ', ''))) {
+                            //     setState(() {
+                            //       addFriend.remove(totalContactsSearch[index]
+                            //           .phones!
+                            //           .first
+                            //           .value!
+                            //           .trim()
+                            //           .replaceAll(' ', ''));
+                            //       print("hi: $addFriend");
+                            //     });
+                            //   } else {
+                            //     setState(() {
+                            //       addFriend.add(totalContactsSearch[index]
+                            //           .phones!
+                            //           .first
+                            //           .value!
+                            //           .trim()
+                            //           .replaceAll(' ', ''));
+                            //       print("hi: $addFriend");
+                            //     });
+                            //   }
+                            // } else {
+                            //   showSnackbar(context,
+                            //       'Invite ${totalContactsSearch[index].displayName}');
+                            // }
                           },
                           child: Container(
                             // width: 50,
@@ -271,34 +274,37 @@ class _AddMembersearchState extends State<AddMembersearch> {
                             margin: EdgeInsets.only(right: 8),
                             padding: EdgeInsets.all(5),
                             decoration: BoxDecoration(
-                                color: addFriend.contains(
-                                        totalContactsSearch[index]
-                                            .phones!
-                                            .first
-                                            .value!
-                                            .trim()
-                                            .replaceAll(' ', ''))
-                                    ? Color(0xff8391A1)
-                                    : primarycolor,
+                                color:
+                                    // addFriend.contains(
+                                    //         totalContactsSearch[index]
+                                    //             .phones!
+                                    //             .first
+                                    //             .value!
+                                    //             .trim()
+                                    //             .replaceAll(' ', ''))
+                                    //     ? Color(0xff8391A1)
+                                    //     :
+                                    primarycolor,
                                 borderRadius: BorderRadius.circular(8)),
                             child: Center(
                               child: Text(
-                                addFriend.contains(totalContactsSearch[index]
-                                        .phones!
-                                        .first
-                                        .value!
-                                        .trim()
-                                        .replaceAll(' ', ''))
-                                    ? "Added"
-                                    : numberList.contains(
-                                            totalContactsSearch[index]
-                                                .phones!
-                                                .first
-                                                .value!
-                                                .trim()
-                                                .replaceAll(' ', ''))
-                                        ? '+ Add'
-                                        : 'Invite',
+                                // addFriend.contains(totalContactsSearch[index]
+                                //         .phones!
+                                //         .first
+                                //         .value!
+                                //         .trim()
+                                //         .replaceAll(' ', ''))
+                                //     ? "Added"
+                                //     : numberList.contains(
+                                //             totalContactsSearch[index]
+                                //                 .phones!
+                                //                 .first
+                                //                 .value!
+                                //                 .trim()
+                                //                 .replaceAll(' ', ''))
+                                //         ? '+ Add'
+                                //         :
+                                'Invite',
                                 style: TextStyle(
                                     fontSize: FontSize14,
                                     fontFamily: 'Urbanist',
