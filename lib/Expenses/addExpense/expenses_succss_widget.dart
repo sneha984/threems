@@ -6,7 +6,7 @@ import 'package:lottie/lottie.dart';
 import 'package:threems/layouts/screen_layout.dart';
 import 'package:threems/screens/splash_screen.dart';
 
-import '../utils/themes.dart';
+import '../../utils/themes.dart';
 class ExpenseSuccesPage extends StatefulWidget {
   const ExpenseSuccesPage({Key? key}) : super(key: key);
 

@@ -15,6 +15,7 @@ import '../../layouts/screen_layout.dart';
 import '../../model/ChitModel.dart';
 import '../../utils/themes.dart';
 import '../splash_screen.dart';
+import 'chitsucesspaid.dart';
 
 class ChitPaymentPage extends StatefulWidget {
   final ChitModel chit;
@@ -567,12 +568,13 @@ class _ChitPaymentPageState extends State<ChitPaymentPage> {
                       .then((value) {
                     value.update({"paymentId": value.id}).then((value) {
                       showSnackbar(context, 'Payment Completed Successfully');
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ScreenLayout(),
-                          ),
-                          (route) => false);
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>ChitSucessPaidPage()));
+                      // Navigator.pushAndRemoveUntil(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //       builder: (context) => ScreenLayout(),
+                      //     ),
+                      //     (route) => false);
                     });
                   });
                 } else {

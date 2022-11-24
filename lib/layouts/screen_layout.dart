@@ -4,7 +4,8 @@ import 'package:threems/screens/splash_screen.dart';
 import 'package:threems/utils/themes.dart';
 import '../ByeandSell/buy_and_sell.dart';
 import '../Expenses/Expense_first_page.dart';
-import '../Expenses/expense.dart';
+import '../Expenses/recentexpenses.dart';
+import '../Income/expense_income_tababr.dart';
 import '../screens/home_screen.dart';
 import '../screens/Utilities/utilities.dart';
 
@@ -24,13 +25,12 @@ class _ScreenLayoutState extends State<ScreenLayout> {
   @override
   void initState() {
     index = widget.index ?? 0;
-    print("test " + index.toString());
     _currentScreen = index == 0
         ? HomeScreen()
         : index == 1
             ? BuyAndSell()
             : index == 2
-                ? AddExpensesPage()
+                ? ExpenseIncomeTabPage()
                 : Utilities();
     super.initState();
   }
@@ -143,8 +143,8 @@ class _ScreenLayoutState extends State<ScreenLayout> {
                       onPressed: () {
                         setState(() {
                           index = 2;
-                          _currentScreen = AddExpensesPage();
-                          // _currentScreen = LoginOrSignupPage();
+                          // _currentScreen = AddExpensesPage();
+                           _currentScreen = ExpenseIncomeTabPage();
                         });
                       },
                       minWidth: scrWidth * 0.1,
@@ -158,7 +158,7 @@ class _ScreenLayoutState extends State<ScreenLayout> {
                             width: bottomNavbarIconSize,
                           ),
                           Text(
-                            'Expense',
+                            'Cash book',
                             style: TextStyle(
                               color:
                                   index == 2 ? primarycolor : navBarUnSelColor,

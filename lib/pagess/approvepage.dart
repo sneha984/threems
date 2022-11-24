@@ -1,10 +1,12 @@
 import 'dart:typed_data';
+import 'package:flutter_iconpicker/Serialization/iconDataSerialization.dart';
 import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
+import 'package:threems/Authentication/root.dart';
 import 'package:threems/kuri/createkuri.dart';
 import 'package:threems/model/usermodel.dart';
 
@@ -46,7 +48,6 @@ class _ApprovePageState extends State<ApprovePage> {
     }
     setState(() {});
   }
-
   getActivePayment() {
     ChitModel chit = widget.chit;
     for (var payment in paymentList) {
@@ -134,6 +135,21 @@ class _ApprovePageState extends State<ApprovePage> {
       }
     });
   }
+  Icon? _icon;
+  var icons;
+  getIconData(){
+    FirebaseFirestore.instance.collection('expenses').
+    where('expenseName',isEqualTo:'Kuri' ).snapshots().listen((event) {
+            for(DocumentSnapshot data in event.docs){
+              icons=deserializeIcon(data['icon']);
+              // _icon = Icon(icons,color: Colors.white,size: 45,);
+
+            }
+            
+    
+    });
+    
+  }
 
   getPayments() {
     print('here');
@@ -182,6 +198,7 @@ class _ApprovePageState extends State<ApprovePage> {
     super.initState();
     getPayments();
     getUser();
+    getIconData();
   }
 
   @override
@@ -603,12 +620,16 @@ class _ApprovePageState extends State<ApprovePage> {
                     onTap: () {
                       if (activePayment != null &&
                           activePayment!.verified != true) {
+
                         FirebaseFirestore.instance
                             .collection('chit')
                             .doc(widget.chit.chitId)
                             .collection('payments')
                             .doc(activePayment!.paymentId!)
                             .update({'verified': true}).then((value) {
+                              FirebaseFirestore.instance.collection('users').doc(currentuserid)
+                                  .collection('income')
+                              
                           showSnackbar(
                               context, 'Payment verified successfully');
                           Navigator.pop(context);

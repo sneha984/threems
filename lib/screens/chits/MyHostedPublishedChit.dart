@@ -175,13 +175,7 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
       print(membersListForDraw.length);
       print(']]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]');
 
-      print(chit!.winners![chit!.winners!.length - 1].userId);
-      print(mapOfWinners![chit!.winners![chit!.winners!.length - 1].userId]!
-          .userId);
-      print(totalMembers[
-              mapOfWinners![chit!.winners![chit!.winners!.length - 1].userId]!
-                  .userId]!
-          .userName!);
+
     });
   }
 
@@ -241,7 +235,7 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
 
   @override
   Widget build(BuildContext context) {
-    return chit == null || mapOfWinners == null
+    return chit == null || mapOfWinners==null
         ? Container(
             width: scrHeight,
             height: scrWidth,
@@ -1317,113 +1311,108 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
                                                     color: Color(0xffF3F3F3)),
                                                 child: Row(
                                                   mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                                   children: [
                                                     Row(
                                                       children: [
                                                         mapOfWinners!.keys
-                                                                .contains(members[
-                                                                        index]
-                                                                    .userId!)
+                                                            .contains(members[
+                                                        index]
+                                                            .userId!)
                                                             ? Stack(
-                                                                children: [
-                                                                  Padding(
-                                                                    padding: EdgeInsets.only(
-                                                                        left: scrHeight *
-                                                                            0.012),
-                                                                    child:
-                                                                        Container(
-                                                                      width: scrWidth *
-                                                                          0.12,
-                                                                      height:
-                                                                          scrHeight *
-                                                                              0.05,
-                                                                      decoration:
-                                                                          BoxDecoration(
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(16),
-                                                                        color: Colors
-                                                                            .black,
-                                                                        image: DecorationImage(
-                                                                            image:
-                                                                                NetworkImage(members[index].userImage!),
-                                                                            fit: BoxFit.cover),
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  Positioned(
-                                                                    bottom: -1,
-                                                                    left: 35,
-                                                                    top: 22,
-                                                                    child: SvgPicture
-                                                                        .asset(
-                                                                      "assets/icons/profilewinner.svg",
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              )
-                                                            : Padding(
-                                                                padding: EdgeInsets.only(
-                                                                    left: scrHeight *
-                                                                        0.012),
-                                                                child:
-                                                                    Container(
-                                                                  width:
-                                                                      scrWidth *
-                                                                          0.12,
-                                                                  height:
-                                                                      scrHeight *
-                                                                          0.05,
-                                                                  decoration:
-                                                                      BoxDecoration(
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            16),
-                                                                    color: Colors
-                                                                        .black,
-                                                                    image: DecorationImage(
-                                                                        image: NetworkImage(members[index]
-                                                                            .userImage!),
-                                                                        fit: BoxFit
-                                                                            .cover),
-                                                                  ),
+                                                          children: [
+                                                            Padding(
+                                                              padding:
+                                                              EdgeInsets.only(left: scrHeight * 0.012),
+                                                              child:
+                                                              Container(
+                                                                width:
+                                                                scrWidth * 0.12,
+                                                                height:
+                                                                scrHeight * 0.05,
+                                                                decoration:
+                                                                BoxDecoration(
+                                                                  borderRadius:
+                                                                  BorderRadius.circular(16),
+                                                                  color:
+                                                                  Colors.black,
+                                                                  image:
+                                                                  DecorationImage(image: NetworkImage(members[index].userImage!), fit: BoxFit.cover),
                                                                 ),
                                                               ),
+                                                            ),
+                                                            Positioned(
+                                                              bottom:
+                                                              -1,
+                                                              left:
+                                                              35,
+                                                              top: 22,
+                                                              child: SvgPicture
+                                                                  .asset(
+                                                                "assets/icons/profilewinner.svg",
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        )
+                                                            : Padding(
+                                                          padding: EdgeInsets.only(
+                                                              left: scrHeight *
+                                                                  0.012),
+                                                          child:
+                                                          Container(
+                                                            width: scrWidth *
+                                                                0.12,
+                                                            height:
+                                                            scrHeight *
+                                                                0.05,
+                                                            decoration:
+                                                            BoxDecoration(
+                                                              borderRadius:
+                                                              BorderRadius.circular(16),
+                                                              color: Colors
+                                                                  .black,
+                                                              image: DecorationImage(
+                                                                  image:
+                                                                  NetworkImage(members[index].userImage!),
+                                                                  fit: BoxFit.cover),
+                                                            ),
+                                                          ),
+                                                        ),
                                                         SizedBox(
-                                                            width: scrHeight *
+                                                            width:
+                                                            scrHeight *
                                                                 0.012),
                                                         Column(
                                                           mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
+                                                          MainAxisAlignment
+                                                              .start,
                                                           crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
+                                                          CrossAxisAlignment
+                                                              .start,
                                                           children: [
                                                             Padding(
-                                                              padding: EdgeInsets
-                                                                  .only(
-                                                                      top: scrHeight *
-                                                                          0.013),
+                                                              padding: EdgeInsets.only(
+                                                                  top: scrHeight *
+                                                                      0.013),
                                                               child: Text(
                                                                 members[index]
                                                                     .userName!,
                                                                 style: TextStyle(
                                                                     fontFamily:
-                                                                        'Urbanist',
+                                                                    'Urbanist',
                                                                     fontWeight:
-                                                                        FontWeight
-                                                                            .w600,
+                                                                    FontWeight
+                                                                        .w600,
                                                                     fontSize:
-                                                                        scrWidth *
-                                                                            0.045),
+                                                                    scrWidth *
+                                                                        0.045),
                                                               ),
                                                             ),
                                                             SizedBox(
                                                               height:
-                                                                  scrHeight *
-                                                                      0.004,
+                                                              scrHeight *
+                                                                  0.004,
                                                             ),
                                                             Row(
                                                               children: [
@@ -1431,60 +1420,47 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
                                                                   "$_currency ${_formatNumber(chit!.payableAmount!.truncate().toString().replaceAll('.', ''))}",
                                                                   style: TextStyle(
                                                                       fontFamily:
-                                                                          'Urbanist',
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w700,
-                                                                      fontSize:
-                                                                          scrWidth *
-                                                                              0.036,
-                                                                      color: Color(
-                                                                          0xff969696)),
+                                                                      'Urbanist',
+                                                                      fontWeight: FontWeight
+                                                                          .w700,
+                                                                      fontSize: scrWidth *
+                                                                          0.036,
+                                                                      color:
+                                                                      Color(0xff969696)),
                                                                 ),
                                                                 SizedBox(
-                                                                  width:
-                                                                      scrWidth *
-                                                                          0.015,
+                                                                  width: scrWidth *
+                                                                      0.015,
                                                                 ),
                                                                 Container(
-                                                                  width:
-                                                                      scrWidth *
-                                                                          0.15,
-                                                                  height:
-                                                                      scrHeight *
-                                                                          0.017,
+                                                                  width: scrWidth *
+                                                                      0.15,
+                                                                  height: scrHeight *
+                                                                      0.017,
                                                                   decoration: BoxDecoration(
-                                                                      color: mapOfCurrentPayments![members[index].userId] != null
+                                                                      color:mapOfCurrentPayments==null?Color(0xff02B558): mapOfCurrentPayments![members[index].userId] != null
                                                                           ? mapOfCurrentPayments![members[index].userId]!.verified!
-                                                                              ? Color(0xff02B558)
-                                                                              : Color(0xff8391A1)
+                                                                          ? Color(0xff02B558)
+                                                                          : Color(0xff8391A1)
                                                                           : Color(0xffF61C0D),
                                                                       borderRadius: BorderRadius.circular(3)),
-                                                                  child: Center(
-                                                                    child: Text(
-                                                                      mapOfCurrentPayments![members[index].userId] ==
-                                                                              null
+                                                                  child:
+                                                                  Center(
+                                                                    child:
+                                                                    Text(
+                                                                      mapOfCurrentPayments==null?"Due": mapOfCurrentPayments![members[index].userId] == null
                                                                           ? 'Due'
                                                                           : mapOfCurrentPayments![members[index].userId]!.verified!
-                                                                              ? 'Paid'
-                                                                              : "Pending",
+                                                                          ? 'Paid'
+                                                                          : "Pending",
                                                                       style: TextStyle(
-                                                                          fontSize: scrWidth *
-                                                                              0.033,
-                                                                          fontWeight: FontWeight
-                                                                              .w600,
-                                                                          fontFamily:
-                                                                              'Urbanist',
-                                                                          color:
-                                                                              Colors.white),
+                                                                          fontSize: scrWidth * 0.033,
+                                                                          fontWeight: FontWeight.w600,
+                                                                          fontFamily: 'Urbanist',
+                                                                          color: Colors.white),
                                                                     ),
                                                                   ),
                                                                 ),
-                                                                // SizedBox(
-                                                                //   width:
-                                                                //       scrWidth *
-                                                                //           0.11,
-                                                                // ),
                                                               ],
                                                             ),
                                                           ],
@@ -1494,84 +1470,73 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
                                                     Row(
                                                       children: [
                                                         mapOfWinners!.keys
-                                                                .contains(members[
-                                                                        index]
-                                                                    .userId!)
-                                                            ? Column(
-                                                                children: [
-                                                                  SizedBox(
-                                                                    height:
-                                                                        scrHeight *
-                                                                            0.02,
-                                                                  ),
-                                                                  Padding(
-                                                                    padding: EdgeInsets.only(
-                                                                        left: scrWidth *
-                                                                            0.05),
-                                                                    child: Text(
-                                                                      '$_currency ${_formatNumber(mapOfWinners![members[index].userId!]!.amount!.truncate().toString().replaceAll(',', ''))}',
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .center,
-                                                                      style: TextStyle(
-                                                                          fontFamily:
-                                                                              'Urbanist',
-                                                                          fontWeight: FontWeight
-                                                                              .w600,
-                                                                          fontSize: scrWidth *
-                                                                              0.034,
-                                                                          color:
-                                                                              primarycolor),
-                                                                    ),
-                                                                  ),
-                                                                  Text(
-                                                                    DateFormat(
-                                                                            'MMMM yyyy')
-                                                                        .format(
-                                                                            mapOfWinners![members[index].userId!]!.date!),
-                                                                    style: TextStyle(
-                                                                        fontFamily:
-                                                                            'Urbanist',
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .w600,
-                                                                        fontSize:
-                                                                            scrWidth *
-                                                                                0.022,
-                                                                        color: Colors
-                                                                            .black),
-                                                                  ),
-                                                                ],
-                                                              )
-                                                            : Container(
-                                                                width: scrWidth *
-                                                                    0.000001,
-                                                                height:
-                                                                    scrHeight *
-                                                                        0.02,
-                                                              ),
-                                                        Padding(
-                                                          padding: (index == 0)
-                                                              ? EdgeInsets.only(
-                                                                  left:
-                                                                      scrWidth *
-                                                                          0.035)
-                                                              : EdgeInsets.only(
-                                                                  left:
-                                                                      scrWidth *
-                                                                          0.21),
+                                                            .contains(members[
+                                                        index]
+                                                            .userId!)
+                                                            ? Container(
                                                           child:
-                                                              SvgPicture.asset(
-                                                            "assets/icons/menuicon.svg",
+                                                          Column(
+                                                            children: [
+                                                              SizedBox(
+                                                                height:
+                                                                scrHeight * 0.02,
+                                                              ),
+                                                              Padding(
+                                                                padding:
+                                                                EdgeInsets.only(left: scrWidth * 0.05),
+                                                                child:
+                                                                Text(
+                                                                  '$_currency ${_formatNumber(mapOfWinners![members[index].userId!]!.amount!.truncate().toString().replaceAll(',', ''))}',
+                                                                  textAlign:
+                                                                  TextAlign.center,
+                                                                  style: TextStyle(
+                                                                      fontFamily: 'Urbanist',
+                                                                      fontWeight: FontWeight.w600,
+                                                                      fontSize: scrWidth * 0.034,
+                                                                      color: primarycolor),
+                                                                ),
+                                                              ),
+                                                              Text(
+                                                                DateFormat('MMMM yyyy')
+                                                                    .format(mapOfWinners![members[index].userId!]!.date!),
+                                                                style: TextStyle(
+                                                                    fontFamily: 'Urbanist',
+                                                                    fontWeight: FontWeight.w600,
+                                                                    fontSize: scrWidth * 0.022,
+                                                                    color: Colors.black),
+                                                              ),
+                                                            ],
                                                           ),
+                                                        )
+                                                            : Container(
+                                                          width: scrWidth *
+                                                              0.000001,
+                                                          height:
+                                                          scrHeight *
+                                                              0.02,
                                                         ),
+                                                        // Padding(
+                                                        //   padding: (index ==
+                                                        //           0)
+                                                        //       ? EdgeInsets.only(
+                                                        //           left: scrWidth *
+                                                        //               0.035)
+                                                        //       : EdgeInsets.only(
+                                                        //           left: scrWidth *
+                                                        //               0.21),
+                                                        //   child: SvgPicture
+                                                        //       .asset(
+                                                        //     "assets/icons/menuicon.svg",
+                                                        //   ),
+                                                        // ),
                                                         SizedBox(
-                                                            width: scrHeight *
+                                                            width:
+                                                            scrHeight *
                                                                 0.012),
                                                       ],
                                                     ),
                                                   ],
-                                                ),
+                                                )
                                               ),
                                             );
                                           },
@@ -1634,30 +1599,30 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
                         SizedBox(
                           width: scrWidth * 0.02,
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            // Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //         builder: (context) => WinnerPage()));
-                          },
-                          child: Container(
-                            height: scrHeight * 0.045,
-                            width: scrWidth * 0.25,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(11),
-                            ),
-                            child: Center(
-                                child: Text(
-                              "Draw",
-                              style: TextStyle(
-                                  fontSize: scrWidth * 0.047,
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: 'Urbanist'),
-                            )),
-                          ),
-                        ),
+                        // GestureDetector(
+                        //   onTap: () {
+                        //     // Navigator.push(
+                        //     //     context,
+                        //     //     MaterialPageRoute(
+                        //     //         builder: (context) => WinnerPage()));
+                        //   },
+                        //   child: Container(
+                        //     height: scrHeight * 0.045,
+                        //     width: scrWidth * 0.25,
+                        //     decoration: BoxDecoration(
+                        //       color: Colors.white,
+                        //       borderRadius: BorderRadius.circular(11),
+                        //     ),
+                        //     child: Center(
+                        //         child: Text(
+                        //       "Draw",
+                        //       style: TextStyle(
+                        //           fontSize: scrWidth * 0.047,
+                        //           fontWeight: FontWeight.w600,
+                        //           fontFamily: 'Urbanist'),
+                        //     )),
+                        //   ),
+                        // ),
                         GestureDetector(
                           onTap: () {
                             setState(() {
@@ -1666,14 +1631,14 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
                           },
                           child: Container(
                             height: scrHeight * 0.045,
-                            width: scrWidth * 0.25,
+                            width: scrWidth * 0.27,
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(11),
                             ),
                             child: Center(
                                 child: Text(
-                              "Auction",
+                              "+ Winner",
                               style: TextStyle(
                                   fontSize: scrWidth * 0.047,
                                   fontWeight: FontWeight.w600,

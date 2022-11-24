@@ -53,6 +53,7 @@ dependencies:
   currency_text_input_formatter: ^2.1.7
   fl_chart: ^0.55.1
   cool_dropdown: ^1.4.2
+  syncfusion_flutter_datepicker: ^20.3.58
   lottie: ^1.4.3
   smooth_page_indicator: ^1.0.0+2
   syncfusion_flutter_charts: ^20.3.47

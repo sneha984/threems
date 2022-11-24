@@ -2,60 +2,36 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_iconpicker/Serialization/iconDataSerialization.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
-import 'package:threems/Authentication/root.dart';
-import 'package:threems/Expenses/recentexpenses.dart';
+import 'package:threems/Income/recentIncomes.dart';
+import 'package:threems/utils/themes.dart';
 
-import '../screens/charity/verification_details.dart';
+import '../Authentication/root.dart';
 import '../screens/splash_screen.dart';
-import '../utils/themes.dart';
-import 'Report/ExpenseReportByYear.dart';
-import 'addExpense/new_expense.dart';
-// import 'add_expense.dart';
-var date;
-
-class AddExpensesPage extends StatefulWidget {
-  const AddExpensesPage({Key? key}) : super(key: key);
+import 'addIncome/addnew_income.dart';
+class IncomeFirstPage extends StatefulWidget {
+  const IncomeFirstPage({Key? key}) : super(key: key);
 
   @override
-  State<AddExpensesPage> createState() => _AddExpensesPageState();
+  State<IncomeFirstPage> createState() => _IncomeFirstPageState();
 }
 
-class _AddExpensesPageState extends State<AddExpensesPage> {
-  List expenseList=[];
+class _IncomeFirstPageState extends State<IncomeFirstPage> {
+  List incomeList=[];
   DateTime now=DateTime.now();
-  var weekexpense=0.00;
-  var totalExp=0.00;
-  var monthExp=0.00;
-  getRecentExpenses(){
-    FirebaseFirestore.instance.collection('users').doc(currentuserid).collection('expense').
-    orderBy('date',descending: true).limit(5).snapshots().listen((event) {
-
-      if(event.docs.isNotEmpty) {
-        expenseList=[];
-        for (DocumentSnapshot data in event.docs) {
-          expenseList.add(data);
-        }
-      }
-      if(mounted){
-        setState(() {
-
-        });
-      }
-    });
-  }
-  getOneWeekandOneMonthExpense(){
-    FirebaseFirestore.instance.collection('users').doc(currentuserid).collection('expense').
+  var weekIncome=0.00;
+  var totalIncome=0.00;
+  var monthIncome=0.00;
+  getOneWeekandOneMonthIncome(){
+    FirebaseFirestore.instance.collection('users').doc(currentuserid).collection('incomes').
     orderBy('date',descending: true).
     where('date',isGreaterThanOrEqualTo:DateTime(now.year,now.month,now.day-7) ).
     snapshots().listen((event) {
 
       if(event.docs.isNotEmpty) {
-        weekexpense=0.00;
+        weekIncome=0.00;
         for (DocumentSnapshot data in event.docs) {
-          weekexpense+=data['amount'];
+          weekIncome+=data['amount'];
           // expenseList.add(data);
         }
       }
@@ -65,15 +41,15 @@ class _AddExpensesPageState extends State<AddExpensesPage> {
         });
       }
     });
-    FirebaseFirestore.instance.collection('users').doc(currentuserid).collection('expense').
+    FirebaseFirestore.instance.collection('users').doc(currentuserid).collection('incomes').
     orderBy('date',descending: true).
     where('date',isGreaterThanOrEqualTo:DateTime(now.year,now.month-1,now.day) ).
     snapshots().listen((event) {
 
       if(event.docs.isNotEmpty) {
-        monthExp=0.00;
+        monthIncome=0.00;
         for (DocumentSnapshot data in event.docs) {
-          monthExp+=data['amount'];
+          monthIncome+=data['amount'];
           // expenseList.add(data);
         }
       }
@@ -84,15 +60,32 @@ class _AddExpensesPageState extends State<AddExpensesPage> {
       }
     });
   }
-  getTotalExpense(){
-    FirebaseFirestore.instance.collection('users').doc(currentuserid).collection('expense').
+  getTotalIncome(){
+    FirebaseFirestore.instance.collection('users').doc(currentuserid).collection('incomes').
     snapshots().listen((event) {
 
       if(event.docs.isNotEmpty) {
-        totalExp=0.00;
+        totalIncome=0.00;
         for (DocumentSnapshot data in event.docs) {
-          totalExp+=data['amount'];
+          totalIncome+=data['amount'];
           // expenseList.add(data);
+        }
+      }
+      if(mounted){
+        setState(() {
+
+        });
+      }
+    });
+  }
+  getRecentIncomes(){
+    FirebaseFirestore.instance.collection('users').doc(currentuserid).collection('incomes').
+    orderBy('date',descending: true).limit(5).snapshots().listen((event) {
+
+      if(event.docs.isNotEmpty) {
+        incomeList=[];
+        for (DocumentSnapshot data in event.docs) {
+          incomeList.add(data);
         }
       }
       if(mounted){
@@ -107,17 +100,11 @@ class _AddExpensesPageState extends State<AddExpensesPage> {
   var icons;
 
   void initState() {
-    getTotalExpense();
-    getRecentExpenses();
-    getOneWeekandOneMonthExpense();
+    getOneWeekandOneMonthIncome();
+    getTotalIncome();
+    getRecentIncomes();
     super.initState();
   }
-
-  // @override
-  // void dispose() {
-  //   super.dispose();
-  //   _tabController?.dispose();
-  // }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -178,13 +165,13 @@ class _AddExpensesPageState extends State<AddExpensesPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Text('Total Expences'.toString(),style: TextStyle(
+                            Text('Total Income'.toString(),style: TextStyle(
                                 fontSize: 13,
                                 fontFamily: 'Urbanist',
                                 color: Colors.white
                             ),),
                             SizedBox(height: scrHeight*0.002,),
-                            Text('₹ '+monthExp.toString(),style: TextStyle(
+                            Text('₹ '+monthIncome.toString(),style: TextStyle(
                                 fontSize: 24,
                                 fontFamily: 'Urbanist',
                                 fontWeight: FontWeight.w700,
@@ -207,7 +194,7 @@ class _AddExpensesPageState extends State<AddExpensesPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Text('₹ '+weekexpense.toString(),style: TextStyle(
+                                Text('₹ '+weekIncome.toString(),style: TextStyle(
                                     fontSize: 18,
                                     fontFamily: 'Urbanist',
                                     fontWeight: FontWeight.w700,
@@ -226,14 +213,14 @@ class _AddExpensesPageState extends State<AddExpensesPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Text('₹ '+totalExp.toString(),style: TextStyle(
+                                Text('₹ '+totalIncome.toString(),style: TextStyle(
                                     fontSize: 18,
                                     fontFamily: 'Urbanist',
                                     fontWeight: FontWeight.w700,
                                     color: Colors.white
                                 ),),
                                 SizedBox(height: scrHeight*0.002,),
-                                Text("Total Expences",style: TextStyle(
+                                Text("Total income",style: TextStyle(
                                     fontSize: 13,
                                     fontFamily: 'Urbanist',
                                     color: Colors.white
@@ -253,7 +240,7 @@ class _AddExpensesPageState extends State<AddExpensesPage> {
 
             InkWell(
               onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>NewExpensePage()));
+                 Navigator.push(context, MaterialPageRoute(builder: (context)=>AddIncomePage()));
               },
               child: Center(
                 child: Container(
@@ -265,7 +252,7 @@ class _AddExpensesPageState extends State<AddExpensesPage> {
                   ),
                   child: Center(
                     child: Text(
-                      " Add new expense",
+                      " Add new Income",
                       style: TextStyle(
                           fontSize: scrWidth*0.046,
                           color: Colors.white,
@@ -282,7 +269,7 @@ class _AddExpensesPageState extends State<AddExpensesPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Text(
-                    " Recent expences",
+                    " Recent incomes",
                     style: TextStyle(
                         fontSize: scrWidth*0.045,
                         color: Colors.black,
@@ -292,8 +279,8 @@ class _AddExpensesPageState extends State<AddExpensesPage> {
                   SizedBox(width: scrWidth*0.2,),
                   InkWell(
                     onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>RecentIncomePage()));
 
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>RecentExpensePage()));
 
                     },
                       child: Icon(Icons.arrow_forward,color: Colors.red.shade500,size: 20,))
@@ -304,19 +291,19 @@ class _AddExpensesPageState extends State<AddExpensesPage> {
             SingleChildScrollView(
               child: Container(
                 height: scrWidth*0.8,
-                child:expenseList.isEmpty?Container(
-                  child:Center(
-                    child: Text(
-                      " No Recent expences",
-                      style: TextStyle(
+                child:incomeList.isEmpty?Container(
+                    child:Center(
+                      child: Text(
+                        " No Recent incomes",
+                        style: TextStyle(
                           fontSize: scrWidth*0.035,
                           color: Colors.black,
                           fontFamily: 'Urbanist',
+                        ),
                       ),
-                    ),
-                  )
+                    )
                 ): ListView.builder(
-                    itemCount: expenseList!.length,
+                    itemCount: incomeList!.length,
                     shrinkWrap: true,
                     scrollDirection: Axis.vertical,
                     physics: BouncingScrollPhysics(),
@@ -334,7 +321,7 @@ class _AddExpensesPageState extends State<AddExpensesPage> {
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text(expenseList[index]['merchant'].toString(),style: TextStyle(
+                                      Text(incomeList[index]['merchant'].toString(),style: TextStyle(
                                           fontSize: 17,
                                           fontFamily: 'Urbanist',
                                           color: Colors.black,
@@ -349,14 +336,14 @@ class _AddExpensesPageState extends State<AddExpensesPage> {
 
                                         ),
                                         child: Center(
-                                          child: Text(expenseList[index]['categoryName'].toString(),style: TextStyle(
+                                          child: Text(incomeList[index]['IncomeCategoryName'].toString(),style: TextStyle(
                                               fontSize: 10,
                                               fontFamily: 'Urbanist',
                                               color: Colors.white
                                           ),),
                                         ),
                                       ),
-                                      Text(DateFormat('dd MMM,yyyy').format( expenseList[index]['date'].toDate()),style: TextStyle(
+                                      Text(DateFormat('dd MMM,yyyy').format( incomeList[index]['date'].toDate()),style: TextStyle(
                                           fontSize: 13,
                                           fontFamily: 'Urbanist',
                                           color: Colors.grey
@@ -368,10 +355,10 @@ class _AddExpensesPageState extends State<AddExpensesPage> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
-                                      Text('₹ - '+expenseList[index]['amount'].toString(),style: TextStyle(
+                                      Text('₹ + '+incomeList[index]['amount'].toString(),style: TextStyle(
                                           fontSize: 19,
                                           fontFamily: 'Urbanist',
-                                          color: Colors.red.shade600,
+                                          color: primarycolor,
                                           fontWeight: FontWeight.w700
                                       ),),
 
@@ -398,5 +385,4 @@ class _AddExpensesPageState extends State<AddExpensesPage> {
       ),
     );
   }
-
 }

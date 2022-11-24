@@ -13,10 +13,11 @@ import 'package:another_stepper/another_stepper.dart';
 import 'package:threems/simple.dart';
 
 
-import '../customPackage/date_picker.dart';
-import '../screens/charity/verification_details.dart';
-import '../utils/themes.dart';
+import '../../customPackage/date_picker.dart';
+import '../../screens/charity/verification_details.dart';
+import '../../utils/themes.dart';
 import 'expenses_succss_widget.dart';
+import 'newExpenseCategory.dart';
 int _activeStepIndex=0;
 
 class NewExpensePage extends StatefulWidget {
@@ -96,10 +97,15 @@ class _NewExpensePageState extends State<NewExpensePage> {
               padding: EdgeInsets.only(top: 30,left: 15),
               child: Row(
                 children: [
-                  CircleAvatar(
-                      radius: 16,
-                      backgroundColor: Colors.white,
-                      child: Icon(Icons.close_outlined,color: Colors.black,size: 20,)),
+                  InkWell(
+                    onTap: (){
+                      Navigator.pop(context);
+                    },
+                    child: CircleAvatar(
+                        radius: 16,
+                        backgroundColor: Colors.white,
+                        child: Icon(Icons.close_outlined,color: Colors.black,size: 20,)),
+                  ),
                   SizedBox(width: 15,),
                   Text(
                     "Add new expense",
@@ -260,7 +266,8 @@ class _NewExpensePageState extends State<NewExpensePage> {
                                                 ),
                                                 width: scrWidth*1,
                                                 child: StreamBuilder<QuerySnapshot> (
-                                                    stream: FirebaseFirestore.instance.collection('expenses').snapshots(),
+                                                    stream: FirebaseFirestore.instance.collection('expenses').
+                                                     where('user',whereIn: ['admin',currentuserid]).snapshots(),
                                                     builder: (context, snapshot) {
                                                       if(!snapshot.hasData){
                                                         return  Container(child: Center(child: CircularProgressIndicator()));
@@ -343,7 +350,7 @@ class _NewExpensePageState extends State<NewExpensePage> {
                                             ),
                                             InkWell(
                                               onTap: (){
-                                                // Navigator.push(context, MaterialPageRoute(builder: (context)=>NewExpensePage()));
+                                                 Navigator.push(context, MaterialPageRoute(builder: (context)=>ExpenseCategoryPage()));
                                               },
                                               child: Center(
                                                 child: Container(
@@ -355,7 +362,7 @@ class _NewExpensePageState extends State<NewExpensePage> {
                                                   ),
                                                   child: Center(
                                                     child: Text(
-                                                      " Add new expense",
+                                                      " Add new category",
                                                       style: TextStyle(
                                                           fontSize: scrWidth*0.046,
                                                           color: Colors.white,
@@ -375,7 +382,7 @@ class _NewExpensePageState extends State<NewExpensePage> {
                               child: Row(
                                 children: [
                                   SizedBox(width: 15,),
-                                  _icon==null? CircleAvatar(
+                                  category==''? CircleAvatar(
                                       radius: 25,
                                       backgroundColor: textFormFieldFillColor,
                                       child:   SvgPicture.asset(
