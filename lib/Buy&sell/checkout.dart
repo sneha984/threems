@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
-import 'package:threems/ByeandSell/storepage.dart';
+import 'package:threems/Buy&sell/storepage.dart';
 
 import '../screens/splash_screen.dart';
 import '../utils/themes.dart';
@@ -163,7 +163,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                                       height: 3,
                                     ),
                                     Text(
-                                      cartlist[index]['unit'],
+                                      cartlist[index]['unit'].toString(),
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           fontFamily: 'Urbanist',

@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:threems/screens/charity/verification_details.dart';
 import '../../customPackage/date_picker.dart';
+import '../../kuri/createkuri.dart';
 import '../../model/charitymodel.dart';
 import '../../utils/themes.dart';
 import '../../widgets/percentage_widget.dart';
@@ -160,6 +161,7 @@ class _CreateCharity3State extends State<CreateCharity3> {
                         borderRadius: BorderRadius.circular(scrWidth * 0.026),
                       ),
                       child: TextFormField(
+                        keyboardType: TextInputType.number,
                         controller: accountnumcontroller,
                         focusNode: accountNumberFocus,
                         cursorHeight: scrWidth * 0.055,
@@ -216,6 +218,7 @@ class _CreateCharity3State extends State<CreateCharity3> {
                         borderRadius: BorderRadius.circular(scrWidth * 0.026),
                       ),
                       child: TextFormField(
+                        keyboardType: TextInputType.number,
                           validator:  (value){
                           if (value!.length == 0) {
                           return 'Please enter confirm account number';
@@ -446,16 +449,26 @@ class _CreateCharity3State extends State<CreateCharity3> {
               ),
 
               GestureDetector(
-                onTap: () {
-                  if (accountnumcontroller.text.isEmpty &&
-                      confirmaccountcontroller.text.isEmpty &&
-                      accountholdernamecontroller.text.isEmpty &&
-                      banknamecontroller.text.isEmpty &&
-                      ifsccodecontroller.text.isEmpty
-                  ) {
+                onTap: () async{
+                  setState(() {
+                    loading=true;
+                  });
+
+                  if (accountnumcontroller.text.isEmpty){
                     refreshPage();
-                    return showSnackbar("enter all details");
-                  } else {
+                    return showSnackbar(context,"Must Provide AccountNumber");
+                  }
+                  if(confirmaccountcontroller.text!=accountnumcontroller.text){
+                    refreshPage();
+                    return showSnackbar(context,"AccountNumber Doesn't Match");
+                  }
+                  if(accountholdernamecontroller.text.isEmpty
+                      && banknamecontroller.text.isEmpty
+                      && ifsccodecontroller.text.isEmpty){
+                    refreshPage();
+                    return showSnackbar(context,"enter all details");
+                  }
+                  else {
                     charityDetails.add(
                         {
                           "accountNumber": accountnumcontroller.text,
@@ -466,13 +479,13 @@ class _CreateCharity3State extends State<CreateCharity3> {
                         }
 
                     );
-                    if (_formkey.currentState!.validate()) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('succesfully completed '),
-                        ),
-                      );
-                    }
+                    // if (_formkey.currentState!.validate()) {
+                    //   ScaffoldMessenger.of(context).showSnackBar(
+                    //     const SnackBar(
+                    //       content: Text('succesfully completed '),
+                    //     ),
+                    //   );
+                    // }
 
                     Navigator.push(
                         context,
@@ -501,15 +514,5 @@ class _CreateCharity3State extends State<CreateCharity3> {
       ),
     );
   }
-  showSnackbar(String msg) {
-    final snackBar = SnackBar(
-      behavior: SnackBarBehavior.floating,
-      content: Text(msg,
-        style: TextStyle(fontWeight: FontWeight.bold),
-      ),
-      backgroundColor: Colors.grey,
-    );
 
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
 }

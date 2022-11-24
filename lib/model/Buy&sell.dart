@@ -1,6 +1,6 @@
 class StoreDetailsModel {
   String? storeName;
-  String? storeCategory;
+  List<dynamic>? storeCategory;
   String? storeAddress;
   String? storeLocation;
   String? storeId;
@@ -8,7 +8,7 @@ class StoreDetailsModel {
   String? userId;
   StoreDetailsModel(
       {this.storeName,
-        this.storeCategory,
+         this.storeCategory,
         this.storeAddress,
         this.storeLocation,
       this.storeId,
@@ -43,12 +43,15 @@ class StoreDetailsModel {
 
 class ProductModel {
   List<String>? images;
+  String? productId;
   String? productName;
   String? productCategory;
   double? price;
   int? quantity;
+  String? storedCategorys;
   String? unit;
   String? details;
+  bool? shouldVisible;
   // List<String> categoryName=[];
 
   ProductModel(
@@ -57,7 +60,10 @@ class ProductModel {
         this.productCategory,
         this.price,
         this.quantity,
+        this.productId,
         this.unit,
+        this.storedCategorys,
+        this.shouldVisible,
         // required this.categoryName,
         this.details});
   ProductModel.fromJson(Map<String, dynamic> json) {
@@ -66,6 +72,9 @@ class ProductModel {
     productCategory = json['productCategory'];
     price = json['price'];
     quantity = json['quantity'];
+    storedCategorys=json['storedCategorys'];
+    shouldVisible=json['shouldVisible'];
+    productId=json['productId'];
     // categoryName=json['categoryName'];
 
     unit = json['unit'];
@@ -78,10 +87,12 @@ class ProductModel {
     data['productCategory'] = this.productCategory;
     data['price'] = this.price;
     data['quantity'] = this.quantity;
+    data['storedCategorys']=this.storedCategorys;
     // data['categoryName']=this.categoryName;
-
     data['unit'] = this.unit;
     data['details'] = this.details;
+    data['shouldVisible']=this.shouldVisible;
+    data['productId']=this.productId;
     return data;
   }
 }

@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 
 import 'package:threems/screens/charity/cause_details.dart';
 
+import '../../kuri/createkuri.dart';
 import '../../utils/themes.dart';
 import '../splash_screen.dart';
  List dropdownItemList = [];
@@ -87,6 +88,7 @@ class _BasicDetailsState extends State<BasicDetails> {
   //     ),
   //   },
   // ];
+  bool loading = false;
   int causeId=0;
   getReasons() async {
     FirebaseFirestore.instance.collection('dropdown').snapshots().listen((event) {
@@ -118,7 +120,6 @@ class _BasicDetailsState extends State<BasicDetails> {
     });
 
   }
-  bool loading=false;
   refreshPage() {
     setState(() {
       loading = false;
@@ -192,7 +193,10 @@ class _BasicDetailsState extends State<BasicDetails> {
           ),
         ),
       ),
-      body: Padding(
+      body: loading?
+          const Center(child: CircularProgressIndicator(),)
+          :
+      Padding(
         padding: EdgeInsets.only(
           left: padding15, right: padding15, top: scrWidth * 0.05,
         ),
@@ -583,54 +587,22 @@ class _BasicDetailsState extends State<BasicDetails> {
               SizedBox(
                 height: scrWidth * 0.04,
               ),
-              // Container(
-              //   width: scrWidth,
-              //   height: textFormFieldHeight45,
-              //   padding: EdgeInsets.symmetric(
-              //     horizontal: scrWidth * 0.015,
-              //     vertical: scrHeight*0.015,
-              //   ),
-              //   decoration: BoxDecoration(
-              //     color: textFormFieldFillColor,
-              //     border: Border.all(
-              //       color: Color(0xffDADADA),
-              //     ),
-              //     borderRadius: BorderRadius.circular(scrWidth * 0.026),
-              //   ),
-              //   child: Padding(
-              //     padding:  EdgeInsets.symmetric(horizontal: scrWidth*0.025),
-              //     child: Row(
-              //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //       children: [
-              //         Text(
-              //           "Upload your photo",
-              //           style: TextStyle(
-              //             color: Color(0xff8391A1),
-              //             fontWeight: FontWeight.w500,
-              //             fontSize: FontSize15,
-              //             fontFamily: 'Urbanist',
-              //           ),
-              //         ),
-              //         SvgPicture.asset(
-              //           'assets/icons/camera2.svg',
-              //           color: Color(0xff8391A1),
-              //         ),
-              //       ],
-              //     ),
-              //   ),
-              // ),
+
               SizedBox(
                 height:scrHeight*0.256,
               ),
               GestureDetector(
-                onTap: () {
+                onTap: ()async {
+                  setState(() {
+                    loading=true;
+                  });
                    if(orgnamecontroller.text.isEmpty&&
                        charitynamecontroller.text.isEmpty&&
                        emailcontroller.text.isEmpty&&
-                        phonecontroller.text.isEmpty
+                       (phonecontroller.text.isEmpty )
                    ){
                      refreshPage();
-                     return showSnackbar();
+                     return showSnackbar(context,"Must Provide All Details");
                    }else{
                      charityDetails.add(
                         {
@@ -672,15 +644,16 @@ class _BasicDetailsState extends State<BasicDetails> {
       ),
     );
   }
-  showSnackbar() {
-    final snackBar = SnackBar(
-      behavior: SnackBarBehavior.floating,
-      content: Text("Plz Enter All Details",
-        style: TextStyle(fontWeight: FontWeight.bold),
-      ),
-      backgroundColor: Colors.grey,
-    );
-
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
+  // showSnackbars(String msg) {
+  //   final snackBar = SnackBar(
+  //     behavior: SnackBarBehavior.floating,
+  //     content: Text(msg,
+  //       style: TextStyle(fontWeight: FontWeight.bold),
+  //     ),
+  //     backgroundColor: Colors.grey,
+  //   );
+  //
+  //   ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  // }
 }
+

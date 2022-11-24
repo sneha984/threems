@@ -536,7 +536,6 @@ class _PaymentPageState extends State<PaymentPage> {
       floatingActionButton: GestureDetector(
           onTap: (){
             FirebaseFirestore.instance.collection('charity').doc(widget.charitymodel.charityId).update({
-
               'payments':FieldValue.arrayUnion(
               [
                 {
@@ -549,6 +548,8 @@ class _PaymentPageState extends State<PaymentPage> {
                 }
               ]
               ),
+              'totalReceived':
+              FieldValue.increment(double.tryParse(valueAmountController.text)!)
             }
 
             );

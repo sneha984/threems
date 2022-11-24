@@ -1,12 +1,18 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:threems/ByeandSell/storepage.dart';
+import 'package:threems/Authentication/root.dart';
+import 'package:threems/Buy&sell/storepage.dart';
 
+
+import '../model/Buy&sell.dart';
+import '../model/usermodel.dart';
 import '../screens/splash_screen.dart';
 import '../utils/dummy.dart';
-
+List<StoreDetailsModel> shops=[];
 class CategoryStores extends StatefulWidget {
-  const CategoryStores({Key? key}) : super(key: key);
+  String categoryname;
+   CategoryStores({Key? key,required this.categoryname}) : super(key: key);
 
   @override
   State<CategoryStores> createState() => _CategoryStoresState();
@@ -24,10 +30,38 @@ class _CategoryStoresState extends State<CategoryStores> {
         storeimage: "https://cdn.pixabay.com/photo/2016/03/02/20/13/grocery-1232944__340.jpg"),
     SubCategory(noofproduct: "120 products", storename: "Bavya Store",
         storeimage: "https://cdn.pixabay.com/photo/2016/03/02/20/13/grocery-1232944__340.jpg"),
-
-
-    
   ];
+  getStores(){
+    FirebaseFirestore
+        .instance
+        .collection('stores')
+        .where('storeCategory',arrayContains:widget.categoryname )
+        .snapshots()
+        .listen((event) {
+      shops=[];
+      for(DocumentSnapshot <Map<String,dynamic>> doc in event.docs){
+        shops.add(StoreDetailsModel.fromJson(doc.data()!));
+      }
+      if(mounted){
+        setState(() {
+          print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%');
+        print(shops.length);
+          print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%');
+
+        });
+      }
+    });
+  }
+  @override
+  void initState() {
+    getStores();
+    // TODO: implement initState
+    super.initState();
+  }
+  @override
+  void dispose(){
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,7 +95,7 @@ class _CategoryStoresState extends State<CategoryStores> {
                 Padding(
                   padding:  EdgeInsets.only(left: scrWidth*0.02,top:scrHeight * 0.08 ),
                   child: Text(
-                    "Grocery Stores",
+                    widget.categoryname,
                     style: TextStyle(
                         fontSize: scrWidth * 0.046,
                         color: Colors.black,
@@ -74,7 +108,7 @@ class _CategoryStoresState extends State<CategoryStores> {
             Padding(
               padding:  EdgeInsets.only(right: scrWidth*0.5,top: scrHeight*0.001 ),
               child: Text(
-                "5 Stores available",
+                "${shops.length} Stores available",
                 style: TextStyle(
                     fontSize: scrWidth*0.026,
                     color: Color(0xff818181),
@@ -120,6 +154,17 @@ class _CategoryStoresState extends State<CategoryStores> {
                 ),
               ),
             ),
+            // StreamBuilder<QuerySnapshot<Map<String,dynamic>>>(
+            //   stream: FirebaseFirestore
+            //       .instance
+            //       .collection('stores')
+            //       .where('userId',isEqualTo: currentuserid)
+            //       .where('categoryName',isEqualTo:),
+            //     builder:(context,snapshot){
+            //     return GridView.builder(gridDelegate: gridDelegate, itemBuilder: itemBuilder)
+            //
+            //     }
+            // ),
             Padding(
               padding:  EdgeInsets.only(left: scrWidth*0.03,right: scrWidth*0.03),
               child: Container(
@@ -128,19 +173,20 @@ class _CategoryStoresState extends State<CategoryStores> {
                   shrinkWrap: true,
                   // scrollDirection: Axis.vertical,
                   physics: NeverScrollableScrollPhysics(),
-                  itemCount: subcategory.length,
+                  itemCount: shops.length,
                   gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(
                       childAspectRatio: 3 / 3.1,
                       crossAxisSpacing: 2,
                       mainAxisSpacing: 20,
                       crossAxisCount: 3),
                   itemBuilder: (BuildContext context, int index) {
+                    final shoplist=shops[index];
                     return  Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         InkWell(
                           onTap: (){
-                            Navigator.push(context,MaterialPageRoute(builder: (context)=>StorePage()));
+                            Navigator.push(context,MaterialPageRoute(builder: (context)=>StorePage(storeDetailsModel: shoplist, category: widget.categoryname,)));
                           },
                           child: Padding(
                             padding:  EdgeInsets.only(
@@ -150,7 +196,7 @@ class _CategoryStoresState extends State<CategoryStores> {
                               width:scrWidth*0.25,
                               decoration: BoxDecoration(
                                 image: DecorationImage(image:
-                                NetworkImage(subcategory[index].storeimage),
+                                NetworkImage(shoplist.storeImage??''),
                                     fit: BoxFit.fill),
                                 color: Colors.white,
 
@@ -168,7 +214,7 @@ class _CategoryStoresState extends State<CategoryStores> {
                             children: [
                               SizedBox(height: scrHeight*0.003,),
                               Text(
-                                subcategory[index].storename, textAlign: TextAlign.center,
+                                shoplist.storeName!, textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontFamily: 'Urbanist',
                                     fontSize: scrWidth*0.036,
@@ -195,7 +241,8 @@ class _CategoryStoresState extends State<CategoryStores> {
                   },
                 ),
               ),
-            )
+            ),
+          
 
 
           ],

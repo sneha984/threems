@@ -14,6 +14,7 @@ import 'package:threems/screens/charity/payment.dart';
 import 'package:threems/screens/charity/pdfviewpage.dart';
 import 'package:threems/screens/charity/verification_details.dart';
 import 'package:threems/simple.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import '../../model/charitymodel.dart';
@@ -21,7 +22,8 @@ import '../../utils/themes.dart';
 import '../../widgets/flchart.dart';
 import '../splash_screen.dart';
 
-
+List totalAmounts=[];
+double sum=0;
 class DonateNowPage extends StatefulWidget {
   final CharityModel charities;
 
@@ -65,6 +67,14 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
        curve: Curves.linear,
     );
   }
+  getAmount(){
+    for(int i=0;i<widget.charities.payments!.length;i++){
+      double x=widget.charities.payments![i].amount!;
+      totalAmounts.add(x);
+      sum=sum+x;
+
+    }
+  }
 
 
   List <String> _items=[
@@ -85,6 +95,7 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
     _tabControllerr.addListener(_handleTabSelection);
 
     super.initState();
+    getAmount();
     getTime();
     _controllers = YoutubePlayerController(
       initialVideoId:videoId=YoutubePlayer.convertUrlToId(widget.charities.youTubeLink!).toString(),
@@ -109,6 +120,7 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
       });
     }
   }
+
   var currencyConvert = NumberFormat.currency(
     locale: 'HI',
     symbol: '₹ ',
@@ -131,13 +143,13 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
     final DateTime deadLine = widget.charities.endDate!.toDate();
     final DateFormat formatter = DateFormat('dd MMMM yyyy');
     final String formatted = formatter.format(deadLine);
-    double sum=0;
-    List payAmount=[];
-    for(int i=0;i<widget.charities.payments!.length;i++){
-      double x=widget.charities.payments![i].amount!;
-      payAmount.add(x);
-      sum=sum+x;
-    }
+    // double sum=0;
+    // List payAmount=[];
+    // for(int i=0;i<widget.charities.payments!.length;i++){
+    //   double x=widget.charities.payments![i].amount!;
+    //   payAmount.add(x);
+    //   sum=sum+x;
+    // }
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -784,22 +796,27 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                          // setState(() {
                          //    onclick;
                          // });
+                          Uri call = Uri.parse(
+                              'https://${widget.charities.youTubeLink!}');
+
+                          launchUrl(call);
                         },
-                          child: Padding(
-                            padding:  EdgeInsets.only(left: 15,right: 15),
-                            child: YoutubePlayer(
-                              controller: _controllers,
-                              aspectRatio: 16 / 9,
-                              showVideoProgressIndicator:false,
-                              progressColors: ProgressBarColors(
-                                playedColor: Colors.white,
-                                handleColor: Colors.white,
-                              ),
-                              onReady: () {
-                                _controller.addListener(listener);
-                              },
-                            ),
-                          ),
+                          child: Text("ufhufg"),
+                          // Padding(
+                          //   padding:  EdgeInsets.only(left: 15,right: 15),
+                          //   child: YoutubePlayer(
+                          //     controller: _controllers,
+                          //     aspectRatio: 16 / 9,
+                          //     showVideoProgressIndicator:false,
+                          //     progressColors: ProgressBarColors(
+                          //       playedColor: Colors.white,
+                          //       handleColor: Colors.white,
+                          //     ),
+                          //     onReady: () {
+                          //       _controller.addListener(listener);
+                          //     },
+                          //   ),
+                          // ),
                       ),
 
                       // Padding(
@@ -971,6 +988,7 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
       ),
       bottomNavigationBar: GestureDetector(
         onTap: (){
+
           Navigator.push(context, MaterialPageRoute(builder: (context)=>PaymentPage(charitymodel: widget.charities,)));
         },
         child: Container(

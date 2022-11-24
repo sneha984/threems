@@ -202,7 +202,6 @@ class _ServiceDetailsPageState extends State<ServiceDetailsPage> {
                                         onTap: () {
                                           Uri call = Uri.parse(
                                               'tel://${serviceList![index].phoneNumber!}');
-
                                           launchUrl(call);
                                         },
                                         child: Icon(Icons.phone))

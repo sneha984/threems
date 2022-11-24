@@ -6,14 +6,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:threems/Authentication/root.dart';
+import 'package:threems/kuri/createkuri.dart';
 
 import '../model/Buy&sell.dart';
 import '../screens/splash_screen.dart';
+import 'package:getwidget/getwidget.dart';
+
+
 import '../utils/themes.dart';
 import 'congratspage.dart';
 import 'dart:io';
 List categoryList=[];
 List categoryListAll=[];
+List<String> selectCategory=[];
 class StoreDetails extends StatefulWidget {
   const StoreDetails({Key? key}) : super(key: key);
 
@@ -113,6 +118,12 @@ class _StoreDetailsState extends State<StoreDetails> {
   final FocusNode storeAddressFocus = FocusNode();
   final TextEditingController storeNameController = TextEditingController();
   final TextEditingController storeAddressController = TextEditingController();
+  bool loading=false;
+  refreshPage() {
+    setState(() {
+      loading = false;
+    });
+  }
   @override
   void initState() {
     // getShopCategory();
@@ -146,7 +157,7 @@ class _StoreDetailsState extends State<StoreDetails> {
         leading: InkWell(
           onTap: () {
             Navigator.pop(context);
-          },
+                  },
           child: Padding(
             padding: EdgeInsets.only(
                 top: scrHeight * 0.03,
@@ -279,91 +290,91 @@ class _StoreDetailsState extends State<StoreDetails> {
               SizedBox(
                 height: scrHeight * 0.02,
               ),
-              Container(
-                width: scrWidth * 0.9,
-                height: textFormFieldHeight45,
-                decoration: BoxDecoration(
-                  color: textFormFieldFillColor,
-                  borderRadius: BorderRadius.circular(scrWidth * 0.033),
-                ),
-
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: scrWidth * 0.057,
-                    ),
-                    SvgPicture.asset(
-                      'assets/icons/storecategory.svg',
-                      // fit: BoxFit.contain,
-                    ),
-                    SizedBox(
-                      width: scrWidth * 0.04,
-                    ),
-                    DropdownButtonHideUnderline(
-                      child: DropdownButton2(
-                        isExpanded: true,
-                        hint: Text(
-                          "Store Category",
-                          style: TextStyle(
-                              fontSize: FontSize15,
-                              fontFamily: 'Urbanist',
-                              fontWeight: FontWeight.w600,
-                              color: Color(0xffB0B0B0)),
-                        ),
-                        items: items
-                            .map((item) => DropdownMenuItem<String>(
-                                  value: item,
-                                  child: Text(
-                                    item.toString(),
-                                    // overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 14,
-                                        fontFamily: 'Urbanist'),
-                                  ),
-                                ))
-                            .toList(),
-                        value: selectedValue,
-                        onChanged: (value) {
-                          setState(() {
-                            selectedValue = value as String;
-
-                          });
-                        },
-                        icon: const Icon(
-                          Icons.arrow_drop_down,
-                        ),
-                        iconSize: 18,
-                        iconEnabledColor: Colors.black,
-                        iconDisabledColor: Colors.blue,
-                        buttonHeight: 50,
-                        buttonWidth: 247,
-                        // buttonPadding: const EdgeInsets.only(),
-                        buttonDecoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(14),
-                          color: textFormFieldFillColor,
-                        ),
-                        // buttonElevation: 2,
-                        itemHeight: 40,
-                        itemPadding: const EdgeInsets.only(),
-                        dropdownMaxHeight: 260,
-                        dropdownWidth: 300,
-                        dropdownPadding: EdgeInsets.only(
-                            left: 30, top: 15, bottom: 25, right: 30),
-                        dropdownDecoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          color: Colors.white,
-                        ),
-                        dropdownElevation: 0,
-                        scrollbarRadius: Radius.circular(10),
-                        scrollbarThickness: 3,
-                        scrollbarAlwaysShow: true,
-                        offset: const Offset(-20, 0),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              // Container(
+              //   width: scrWidth * 0.9,
+              //   height: textFormFieldHeight45,
+              //   decoration: BoxDecoration(
+              //     color: textFormFieldFillColor,
+              //     borderRadius: BorderRadius.circular(scrWidth * 0.033),
+              //   ),
+              //
+              //   child: Row(
+              //     children: [
+              //       SizedBox(
+              //         width: scrWidth * 0.057,
+              //       ),
+              //       SvgPicture.asset(
+              //         'assets/icons/storecategory.svg',
+              //         // fit: BoxFit.contain,
+              //       ),
+              //       SizedBox(
+              //         width: scrWidth * 0.04,
+              //       ),
+              //       DropdownButtonHideUnderline(
+              //         child: DropdownButton2(
+              //           isExpanded: true,
+              //           hint: Text(
+              //             "Store Category",
+              //             style: TextStyle(
+              //                 fontSize: FontSize15,
+              //                 fontFamily: 'Urbanist',
+              //                 fontWeight: FontWeight.w600,
+              //                 color: Color(0xffB0B0B0)),
+              //           ),
+              //           items: categoryList
+              //               .map((item) => DropdownMenuItem<String>(
+              //                     value: item,
+              //                     child: Text(
+              //                       item.toString(),
+              //                       // overflow: TextOverflow.ellipsis,
+              //                       style: TextStyle(
+              //                           fontWeight: FontWeight.w600,
+              //                           fontSize: 14,
+              //                           fontFamily: 'Urbanist'),
+              //                     ),
+              //                   ))
+              //               .toList(),
+              //           value: selectedValue,
+              //           onChanged: (value) {
+              //             setState(() {
+              //               selectedValue = value as String;
+              //
+              //             });
+              //           },
+              //           icon:  Icon(
+              //             Icons.arrow_drop_down,
+              //           ),
+              //           iconSize: 18,
+              //           iconEnabledColor: Colors.black,
+              //           iconDisabledColor: Colors.blue,
+              //           buttonHeight: 50,
+              //           buttonWidth: 247,
+              //           // buttonPadding: const EdgeInsets.only(),
+              //           buttonDecoration: BoxDecoration(
+              //             borderRadius: BorderRadius.circular(14),
+              //             color: textFormFieldFillColor,
+              //           ),
+              //           // buttonElevation: 2,
+              //           itemHeight: 40,
+              //           itemPadding: const EdgeInsets.only(),
+              //           dropdownMaxHeight: 260,
+              //           dropdownWidth: 300,
+              //           dropdownPadding: EdgeInsets.only(
+              //               left: 30, top: 15, bottom: 25, right: 30),
+              //           dropdownDecoration: BoxDecoration(
+              //             borderRadius: BorderRadius.circular(8),
+              //             color: Colors.white,
+              //           ),
+              //           dropdownElevation: 0,
+              //           scrollbarRadius: Radius.circular(10),
+              //           scrollbarThickness: 3,
+              //           scrollbarAlwaysShow: true,
+              //           offset: const Offset(-20, 0),
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
               SizedBox(
                 height: scrHeight * 0.02,
               ),
@@ -426,6 +437,50 @@ class _StoreDetailsState extends State<StoreDetails> {
                   ),
                 ),
               ),
+              Container(
+                width: scrWidth*2,
+                child: GFMultiSelect(
+                  items: categoryList,
+                  onSelect: (value) {
+                    selectedValue=value.toString();
+                    selectCategory=[];
+                    for(int i=0;i<value.length;i++){
+                      selectCategory.add(categoryList[value[i]].toString());
+                    }
+                    print('selected $value ');
+                    print(selectCategory);
+                  },
+
+                  dropdownTitleTileText: 'Store Category',
+                  dropdownTitleTileColor: Colors.grey[200],
+                  // dropdownTitleTileMargin: EdgeInsets.only(
+                  //     top: 22, left: 18, right: 18, bottom: 5),
+                  dropdownTitleTilePadding: EdgeInsets.all(10),
+                  dropdownUnderlineBorder: const BorderSide(
+                      color: Colors.transparent, width: 2),
+                  // dropdownTitleTileBorder:
+                  // Border.all(color:Colors.red, width: 1),
+                  dropdownTitleTileBorderRadius: BorderRadius.circular(10),
+                  expandedIcon: const Icon(
+                    Icons.arrow_drop_down,
+                    color: Colors.black,
+                  ),
+                  collapsedIcon: const Icon(
+                    Icons.arrow_drop_up,
+                    color: Colors.black,
+                  ),
+                  submitButton: Text('OK'),
+                  dropdownTitleTileTextStyle:  TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
+                      fontFamily: 'Urbanist'),
+                  padding: const EdgeInsets.all(6),
+                  margin: const EdgeInsets.all(6),
+                  type: GFCheckboxType.basic,
+                  activeBgColor: Colors.green.withOpacity(0.5),
+                  inactiveBorderColor: Colors.blue,
+                ),
+              ),
               SizedBox(
                 height: scrHeight * 0.02,
               ),
@@ -484,8 +539,9 @@ class _StoreDetailsState extends State<StoreDetails> {
                         ],
                       ),
                     ),
+
               SizedBox(
-                height: scrHeight * 0.3,
+                height: scrHeight * 0.25,
               ),
               finish
                   ? Container(
@@ -507,20 +563,43 @@ class _StoreDetailsState extends State<StoreDetails> {
                     )
                   : GestureDetector(
                       onTap: () async {
-                        final strDat = StoreDetailsModel(
-                          storeImage: imgUrl,
-                          // categoryId:,
-                          userId: currentuserid,
-                          storeName: storeNameController.text,
-                          storeCategory: selectedValue,
-                          storeAddress: storeAddressController.text,
-                          storeLocation: "ncsunuscns",
-                        );
-                        await createStore(strDat);
+                        setState(() {
+                          loading=true;
+                        });
+                        if(imgFile==null){
+                          refreshPage();
+                          return showSnackbar(context,"Must Provide  image");
+                        }
+                        if(storeNameController.text.isEmpty){
+                          refreshPage();
+                          return showSnackbar(context,"Must Provide StoreName");
+                        }
+                        if(selectCategory.isEmpty){
+                          refreshPage();
+                          return showSnackbar(context,"Must select category");
+                        }
+                        if(storeAddressController.text.isEmpty){
+                          refreshPage();
+                          return showSnackbar(context,"Must Provide StoreAddress");
+                        }else{
+                          final strDat = StoreDetailsModel(
+                            storeImage: imgUrl,
+                            // categoryId:,
+                            userId: currentuserid,
+                            storeName: storeNameController.text,
+                            storeCategory: selectCategory,
+                            storeAddress: storeAddressController.text,
+                            storeLocation: "ncsunuscns",
+                          );
+                          await createStore(strDat);
+
+                        }
+
                         print("---------------------------------------------------------");
                         print(imgUrl);
                         print("---------------------------------------------------------");
-                        print('eferjnferngirjtgurj${strDat.storeId}');
+                        // print('eferjnferngirjtgurj${strDat.storeId}');
+                        
                         },
                       child: Container(
                         height: textFormFieldHeight45,
@@ -560,7 +639,7 @@ class _StoreDetailsState extends State<StoreDetails> {
           context,
           MaterialPageRoute(
               builder: (context) => CongratsPage(
-                    id: id!,
+                    id: id!, status: 0,
                   )));
     });
   }

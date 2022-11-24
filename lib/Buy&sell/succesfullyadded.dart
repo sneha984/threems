@@ -2,8 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:threems/ByeandSell/buy_and_sell.dart';
-import 'package:threems/ByeandSell/storedetailsfill2.dart';
+import 'package:threems/Buy&sell/storedetailsfill2.dart';
 
 class SuccesfullyAdded extends StatefulWidget {
   final String id;

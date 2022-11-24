@@ -547,7 +547,7 @@ class _KuriPaymentPageState extends State<KuriPaymentPage> {
                         'datePaid': DateFormat.yMMMd().format(DateTime.now()),
                       }
                     ]),
-                    'totalReceived':
+                    'totalAmount':
                         FieldValue.increment(double.tryParse(amount!.text)!)
                   }).then((value) {
                     Navigator.pop(context);

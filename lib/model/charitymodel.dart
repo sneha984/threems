@@ -26,7 +26,7 @@ class CharityModel {
   String? userId;
   String? userName;
   bool? block;
-  double?totalAmount;
+  double? totalReceived;
   List<Payments>? payments;
   CharityModel(
       {this.accountHolderName,
@@ -55,8 +55,7 @@ class CharityModel {
         this.userName,
         required this.block,
         this.payments,
-        this.totalAmount
-
+        this.totalReceived
       });
 
   CharityModel.fromJson(Map<String, dynamic> json) {
@@ -85,7 +84,7 @@ class CharityModel {
     userId=json['userId'];
     userName=json['userName'];
     block=json['block'];
-    totalAmount=json['totalAmount'];
+    totalReceived=json['totalReceived'];
     if (json['payments'] != null) {
       payments = <Payments>[];
       json['payments'].forEach((v) {
@@ -120,7 +119,7 @@ class CharityModel {
     data['userId']=this.userId;
     data['userName']=this.userName;
     data['block']=this.block;
-    data['totalAmount']=this.totalAmount;
+    data['totalReceived']=this.totalReceived;
     if (this.payments != null) {
       data['payments'] = this.payments!.map((v) => v.toJson()).toList();
     }

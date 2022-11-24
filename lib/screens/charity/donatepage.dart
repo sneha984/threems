@@ -55,6 +55,7 @@ class _DonatePageState extends State<DonatePage>with TickerProviderStateMixin {
   Map<String,dynamic> causeMap={};
   Map<String,dynamic> charityLengthMap={};
   List<String> causes=[];
+
   getDropdown(){
     FirebaseFirestore.instance.collection('dropdown').snapshots().listen((event) {
       causes=[];
@@ -82,6 +83,7 @@ class _DonatePageState extends State<DonatePage>with TickerProviderStateMixin {
               charityList1.add(CharityModel.fromJson(doc.data()!));
             }
             charityLengthMap[doc.get('value')]=charityList1.length;
+
             return ListView.separated(
               itemCount: charityList1.length,
               shrinkWrap: true,
@@ -136,7 +138,23 @@ class _DonatePageState extends State<DonatePage>with TickerProviderStateMixin {
 
                             ],
                           ),
-                          SizedBox(height: scrHeight*0.015,),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 5,bottom: 6),
+                            child: LinearPercentIndicator(
+                              //leaner progress bar
+                              animation: true,
+                              animationDuration: 1000,
+                              lineHeight: 3,
+                              width: 189,
+                              percent: charities.totalReceived!/charities.valueAmount!,
+                              alignment: MainAxisAlignment.start,
+                              barRadius: Radius.circular(1.5),
+
+                              progressColor: Color(0xff343434),
+                              backgroundColor: Color(0xffE9F6FF),
+                            ),
+                          ),
+                          SizedBox(height: 3,),
 
 
                           Text(

@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lottie/lottie.dart';
-import 'package:threems/ByeandSell/storedetailsfill2.dart';
+import 'package:threems/Buy&sell/storedetailsfill2.dart';
 import 'package:threems/screens/splash_screen.dart';
 
 import '../model/Buy&sell.dart';
@@ -12,8 +12,9 @@ import 'buy_and_sell.dart';
 
 class CongratsPage extends StatefulWidget {
   final String id;
+  final int status;
 
-  const CongratsPage({Key? key, required this.id}) : super(key: key);
+  const CongratsPage({Key? key, required this.id, required this.status}) : super(key: key);
 
   @override
   State<CongratsPage> createState() => _CongratsPageState();
@@ -24,7 +25,9 @@ class _CongratsPageState extends State<CongratsPage> {
     super.initState();
     Timer(const Duration(seconds: 4), () {
       Navigator.pushAndRemoveUntil(context, MaterialPageRoute
-        (builder: (context)=>StoreDetailsFill2(id: widget.id,)), (route) => false);
+        (builder: (context)=>
+          StoreDetailsFill2(id: widget.id,)
+      ), (route) => false);
     });
   }
   @override

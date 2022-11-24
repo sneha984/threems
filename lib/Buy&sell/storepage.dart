@@ -1,20 +1,23 @@
-import 'dart:developer';
-import 'dart:developer';
-import 'dart:developer';
 
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
-import 'package:threems/ByeandSell/checkout.dart';
 import 'package:threems/utils/themes.dart';
-import 'dart:developer';
 
+import '../model/Buy&sell.dart';
 import '../screens/splash_screen.dart';
 import '../utils/dummy.dart';
+import 'checkout.dart';
 List<Map<String,dynamic>> cartlist=[];
-
+List cartList=[];
+List<ProductModel> productsList=[];
 class StorePage extends StatefulWidget {
-  const StorePage({Key? key}) : super(key: key);
+  final StoreDetailsModel storeDetailsModel;
+  final  String category;
+
+  const StorePage({Key? key, required this.storeDetailsModel,required this.category}) : super(key: key);
 
   @override
   State<StorePage> createState() => _StorePageState();
@@ -27,8 +30,46 @@ class Items{
       );
 }
 class _StorePageState extends State<StorePage> {
-  List <Items> itemsCategory=[
+  getProducts(){
+    FirebaseFirestore
+        .instance
+        .collection('stores')
+        .doc(widget.storeDetailsModel.storeId)
+        .collection('products')
+        .where('storedCategorys',isEqualTo: widget.category)
+        .snapshots().listen((event) {
+          productsList=[];
+          for(DocumentSnapshot <Map<String,dynamic>> doc in event.docs){
+            productsList.add(ProductModel.fromJson(doc.data()!));
+          }
+          if(mounted){
+            setState(() {
 
+            });
+          }
+    });
+  }
+  Map<String,dynamic> bags={};
+  getbag(){
+    FirebaseFirestore
+        .instance
+        .collection('stores')
+        .doc(widget.storeDetailsModel.storeId)
+        .collection('products')
+        .where('storedCategorys',isEqualTo: widget.category)
+        .snapshots()
+        .listen((event) {
+          for(DocumentSnapshot <Map<String,dynamic>> doc in event.docs){
+            bags[doc.get('productId')]=doc.data();
+          }
+          if(mounted){
+            setState(() {
+
+            });
+          }
+    });
+  }
+  List <Items> itemsCategory=[
     Items(
         'Rice Products',
         [{
@@ -142,6 +183,12 @@ class _StorePageState extends State<StorePage> {
         productprice:234, productunit: "1 kg",productname: 'Surf Excel',counter: 1,ShouldVisible: false),
   ];
   bool onclick =true;
+  int qty = 1;
+  int? currentQty;
+  bool _loadingButton = false;
+  bool pressed = false;
+
+
   // int count=1;
   // int counter=1;
   //
@@ -159,12 +206,22 @@ class _StorePageState extends State<StorePage> {
   //     count++;
   //   });
   // }
-
+@override
+  void initState() {
+  getProducts();
+  getbag();
+    // TODO: implement initState
+    super.initState();
+  }
+  @override
+  void dispose(){
+  super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
             Row(
@@ -200,7 +257,7 @@ class _StorePageState extends State<StorePage> {
                     children: [
 
                       Text(
-                        "Bavya Store",
+                        widget.storeDetailsModel.storeName!,
                         style: TextStyle(
                             fontSize: scrWidth * 0.046,
                             color: Colors.black,
@@ -209,7 +266,7 @@ class _StorePageState extends State<StorePage> {
                       ),
                       SizedBox(height: scrHeight*0.01,),
                       Text(
-                        "Grocery Store",
+                        widget.category,
                         style: TextStyle(
                             fontSize:scrWidth*0.027,
                             color: Color(0xff818181),
@@ -222,7 +279,7 @@ class _StorePageState extends State<StorePage> {
                         "Manathumangalam,Perinthalmanna",
                         style: TextStyle(
                             fontSize:scrWidth*0.027,
-                            color: Color(0xff818181),
+                            color: const Color(0xff818181),
                             fontFamily: 'Urbanist',
                             fontWeight: FontWeight.w500),
                       ),
@@ -256,7 +313,7 @@ class _StorePageState extends State<StorePage> {
                     width:scrWidth*0.26,
                     decoration: BoxDecoration(
                       image: DecorationImage(image:
-                      NetworkImage("https://cdn.pixabay.com/photo/2016/03/02/20/13/grocery-1232944__340.jpg"),
+                      NetworkImage(widget.storeDetailsModel.storeImage!),
                           fit: BoxFit.fill),
                       color: Colors.white,
 
@@ -273,12 +330,12 @@ class _StorePageState extends State<StorePage> {
                 height: scrHeight*0.042,
                 width: scrWidth*0.92,
                 decoration: BoxDecoration(
-                    color: Color(0xffE9EEF3),
+                    color: const Color(0xffE9EEF3),
 
                     borderRadius: BorderRadius.circular(scrWidth*0.02)
                 ),
                 child: Padding(
-                  padding: EdgeInsets.only(bottom: 5),
+                  padding: const EdgeInsets.only(bottom: 5),
                   child: TextFormField(
                     decoration:  InputDecoration(
                         prefixIcon: Padding(
@@ -294,7 +351,7 @@ class _StorePageState extends State<StorePage> {
                         hintStyle: TextStyle(
                           fontFamily: 'Urbanist',fontWeight: FontWeight.w500,
                           fontSize: scrWidth*0.03,
-                          color: Color(0xff8391A1),
+                          color: const Color(0xff8391A1),
                         )
                     ),
                     cursorColor: Colors.black,
@@ -326,12 +383,12 @@ class _StorePageState extends State<StorePage> {
               child: Container(
                 height: scrHeight*0.22,
                 child: ListView.builder(
-                    physics: BouncingScrollPhysics(),
+                    physics: const BouncingScrollPhysics(),
                     scrollDirection: Axis.horizontal,
                     shrinkWrap: true,
-                    itemCount: eachstore.length,
-
+                    itemCount:productsList.length,
                     itemBuilder: (context, index) {
+                      final products=productsList[index];
                       // final _isSelected=_selectedIndexs.contains(index);
                       return Padding(
                         padding:  EdgeInsets.only(right: scrWidth*0.03),
@@ -340,7 +397,7 @@ class _StorePageState extends State<StorePage> {
                           children: [
                             InkWell(
                               onTap: (){
-                                Navigator.push(context,MaterialPageRoute(builder: (context)=>CheckOutPage()));
+                                // Navigator.push(context,MaterialPageRoute(builder: (context)=>CheckOutPage()));
                               },
                               child: Padding(
                                 padding:  EdgeInsets.only(
@@ -351,12 +408,12 @@ class _StorePageState extends State<StorePage> {
                                   width: scrWidth*0.3,
                                   decoration: BoxDecoration(
                                       image: DecorationImage(
-                                          image: NetworkImage(eachstore[index].productimage)),
+                                          image: NetworkImage(products.images![0])),
                                       color: Colors.white,
                                       borderRadius: BorderRadius
                                           .circular(scrWidth*0.04),
                                       border: Border.all(
-                                          color: Color(0xffECECEC),
+                                          color: const Color(0xffECECEC),
                                           width: 1)
                                   ),
                                 ),
@@ -370,30 +427,30 @@ class _StorePageState extends State<StorePage> {
                                 children: [
                                   SizedBox(height: scrHeight*0.009,),
                                   Text(
-                                    eachstore[index].productname, textAlign: TextAlign.center,
+                                    products.productName!, textAlign: TextAlign.center,
                                     style: TextStyle(
                                         fontFamily: 'Urbanist',
                                         fontSize: scrWidth*0.03,
                                         fontWeight: FontWeight.w600,
-                                        color: Color(0xff0E0E0E)),),
+                                        color: const Color(0xff0E0E0E)),),
                                   SizedBox(height: scrHeight*0.003,),
 
                                   Text(
-                                    eachstore[index].productunit, textAlign: TextAlign.center,
+                                   "${products.quantity!} ${products.unit!}", textAlign: TextAlign.center,
                                     style: TextStyle(
                                         fontFamily: 'Urbanist',
                                         fontSize: scrWidth*0.025,
                                         fontWeight: FontWeight.w600,
-                                        color: Color(0xff818181)),),
+                                        color: const Color(0xff818181)),),
                                   SizedBox(height: scrHeight*0.003,),
 
                                   Text(
-                                    currencyConvert.format(eachstore[index].productprice).toString(), textAlign: TextAlign.center,
+                                    currencyConvert.format(products.price!).toString(), textAlign: TextAlign.center,
                                     style: TextStyle(
                                         fontFamily: 'Urbanist',
                                         fontSize: scrWidth*0.03,
                                         fontWeight: FontWeight.w700,
-                                        color: Color(0xffF10000)),),
+                                        color: const Color(0xffF10000)),),
                                   SizedBox(height: scrHeight*0.004,),
                                 ],
                               ),
@@ -402,7 +459,9 @@ class _StorePageState extends State<StorePage> {
                            Padding(padding: EdgeInsets.only(left: scrWidth*0.04),
                              child: InkWell(
                                onTap: (){
-                                 final findIndex=cartlist.indexWhere((element) => element['name'] ==eachstore[index].productname);
+                                 final findIndex=cartlist.indexWhere((element) =>
+                                 element['name']==eachstore[index].productname);
+
                                  print("index" +findIndex.toString());
                                  if(findIndex>=0) {
                                    setState(() {
@@ -443,7 +502,7 @@ class _StorePageState extends State<StorePage> {
                                  height: scrHeight*0.033,
                                  decoration: BoxDecoration(
                                      borderRadius: BorderRadius.circular(8),
-                                      color: Color(0xff02B558)
+                                      color: const Color(0xff02B558)
                                    // color: Colors.red
                                  ),
                                  child: Row(
@@ -484,14 +543,15 @@ class _StorePageState extends State<StorePage> {
                                              label: 'Go To Cart',
                                              onPressed: () {
                                                Navigator.of(context).push(MaterialPageRoute(builder: (context)=>CheckOutPage()));
-
-
-
                                                // Some code to undo the change.
                                              },
                                            ),
                                          );
                                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                         // if (qty != 1) {
+                                         //   --qty;
+                                         //   setState(() {});
+                                         // }
                                        },
                                        child: Container(
                                          height: scrHeight*0.033,
@@ -513,7 +573,9 @@ class _StorePageState extends State<StorePage> {
                                        decoration: BoxDecoration(
                                          color: Color(0xff9FFFCD),
                                        ),
-                                       child: Center(child: Text('${eachstore[index].counter}')),
+                                       child: Center(child: Text(
+                                            '${eachstore[index].counter}'
+                                       )),
                                      ),
                                    InkWell(
                                      onTap: (){
@@ -550,6 +612,11 @@ class _StorePageState extends State<StorePage> {
                                          ),
                                        );
                                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                       // qty++;
+                                       // currentQty = qty;
+                                       // setState(() {
+                                       //   currentQty = qty;
+                                       // });
                                      },
                                      child: Container(
                                        height: scrHeight*0.033,
@@ -581,40 +648,38 @@ class _StorePageState extends State<StorePage> {
                                   setState(() {
                                     eachstore[index].ShouldVisible=!eachstore[index].ShouldVisible;
                                   });
-                                  final findIndex=cartlist.indexWhere((element) => element['name'] ==eachstore[index].productname);
-                                  print("index" +findIndex.toString());
-                                  if(findIndex>=0) {
-                                    setState(() {
-                                      cartlist[findIndex]['quantity'] = eachstore[index].counter;
-                                    });
-                                  }else {
-                                    cartlist.add({
-                                      'img': eachstore[index].productimage,
-                                      'name': eachstore[index].productname,
-                                      'price': eachstore[index].productprice,
-                                      'unit':eachstore[index].productunit,
-                                      'quantity':eachstore[index].counter,
-                                    });
-                                  }
-                                  print(cartlist);
-                                  final snackBar = SnackBar(
-                                    backgroundColor: Colors.white,
-                                    content: const Text(' item added to cart',
-                                      style: TextStyle(color: Colors.black),),
-                                    action: SnackBarAction(
-
-                                      textColor: Colors.blue,
-                                      label: 'Go To Cart',
-                                      onPressed: () {
-                                        Navigator.of(context).push(MaterialPageRoute(builder: (context)=>CheckOutPage()));
-
-
-
-                                        // Some code to undo the change.
-                                      },
-                                    ),
-                                  );
-                                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                  
+                                  // final findIndex=cartlist.indexWhere((element) => element['name'] ==eachstore[index].productname);
+                                  // print("index" +findIndex.toString());
+                                  // if(findIndex>=0) {
+                                  //   setState(() {
+                                  //     cartlist[findIndex]['quantity'] = eachstore[index].counter;
+                                  //   });
+                                  // }else {
+                                  //   cartlist.add({
+                                  //     'img': eachstore[index].productimage,
+                                  //     'name': eachstore[index].productname,
+                                  //     'price': eachstore[index].productprice,
+                                  //     'unit':eachstore[index].productunit,
+                                  //     'quantity':eachstore[index].counter,
+                                  //   });
+                                  // }
+                                  // print(cartlist);
+                                  // final snackBar = SnackBar(
+                                  //   backgroundColor: Colors.white,
+                                  //   content: const Text(' item added to cart',
+                                  //     style: TextStyle(color: Colors.black),),
+                                  //   action: SnackBarAction(
+                                  //
+                                  //     textColor: Colors.blue,
+                                  //     label: 'Go To Cart',
+                                  //     onPressed: () {
+                                  //       Navigator.of(context).push(MaterialPageRoute(builder: (context)=>CheckOutPage()));
+                                  //       // Some code to undo the change.
+                                  //     },
+                                  //   ),
+                                  // );
+                                  // ScaffoldMessenger.of(context).showSnackBar(snackBar);
                                   },
                                 child: Container(
                                   width: scrWidth*0.31,

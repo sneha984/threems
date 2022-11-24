@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:threems/screens/splash_screen.dart';
 import 'package:threems/utils/themes.dart';
-import '../ByeandSell/buy_and_sell.dart';
+import '../Buy&sell/buy_and_sell.dart';
 import '../Expenses/Expense_first_page.dart';
 import '../Expenses/recentexpenses.dart';
 import '../Income/expense_income_tababr.dart';

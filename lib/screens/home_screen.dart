@@ -66,18 +66,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
   getContacts() async {
     List<Contact> _contacts = await ContactsService.getContacts();
-
     setState(() {
       contacts = _contacts;
-
       print('================ContactLength=================');
       print(contacts.length);
     });
   }
 
   double selectedIndex = 0;
-
-  getVerifiedCharity() {
+  getVerifiedCharity()async {
     FirebaseFirestore.instance
         .collection('charity')
         .where('userId', isNotEqualTo: currentuser?.userId)

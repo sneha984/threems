@@ -6,14 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
-import 'package:threems/Authentication/auth.dart';
 import 'package:threems/model/usermodel.dart';
 
 import '../../model/charitymodel.dart';
 import '../../utils/themes.dart';
 import '../splash_screen.dart';
 import 'basic_details.dart';
-import 'donatenowpage.dart';
 import 'fundraisingdashboard.dart';
 
 class SeeMoreCharities extends StatefulWidget {
@@ -105,34 +103,34 @@ class _SeeMoreCharitiesState extends State<SeeMoreCharities>
                             SizedBox(
                               height: scrHeight * 0.02,
                             ),
-                            Row(
-                              children: [
-                                // Text("0000000",
-                                //   style: TextStyle(
-                                //       fontSize: scrWidth * 0.039,
-                                //       color: primarycolor,
-                                //       fontFamily: 'Urbanist',
-                                //       fontWeight: FontWeight.w600),
-                                // ),
-                                // Text("/",
-                                //   style: TextStyle(
-                                //       fontSize: scrWidth * 0.039,
-                                //       color: primarycolor,
-                                //       fontFamily: 'Urbanist',
-                                //       fontWeight: FontWeight.w600),
-                                // ),
+                            Padding(
+                              padding:  EdgeInsets.only(top: 5,bottom: 6),
+                              child: LinearPercentIndicator(
+                                //leaner progress bar
+                                animation: true,
+                                animationDuration: 1000,
+                                lineHeight: 3,
+                                width: 189,
+                                percent: charity.totalReceived!/charity.valueAmount!,
+                                alignment: MainAxisAlignment.start,
+                                barRadius: Radius.circular(1.5),
 
-                                Text(
-                                  currencyConvert
-                                      .format(charity.valueAmount??0)
-                                      .toString(),
-                                  style: TextStyle(
-                                      fontSize: scrWidth * 0.039,
-                                      color: primarycolor,
-                                      fontFamily: 'Urbanist',
-                                      fontWeight: FontWeight.w600),
-                                ),
-                              ],
+                                progressColor: Color(0xff343434),
+                                backgroundColor: Color(0xffE9F6FF),
+                              ),
+                            ),
+                            SizedBox(
+                              height: scrHeight * 0.02,
+                            ),
+                            Text(
+                              currencyConvert
+                                  .format(charity.valueAmount??0)
+                                  .toString(),
+                              style: TextStyle(
+                                  fontSize: scrWidth * 0.039,
+                                  color: primarycolor,
+                                  fontFamily: 'Urbanist',
+                                  fontWeight: FontWeight.w600),
                             ),
                             SizedBox(height: scrHeight*0.02,),
                           ],
@@ -166,7 +164,7 @@ class _SeeMoreCharitiesState extends State<SeeMoreCharities>
                       padding:  EdgeInsets.only(bottom: scrHeight*0.0035,top: scrHeight*0.0035,right: 5),
                       child: CircleAvatar(
                         radius: 11,
-                        backgroundColor:(_tabController.index==i)? Colors.white:const Color(0xffD4D4D4),
+                        backgroundColor:(_tabController.index==i)? Colors.white:Color(0xffD4D4D4),
                         child: StreamBuilder<QuerySnapshot>(
                             stream: FirebaseFirestore.instance
                                 .collection('charity')

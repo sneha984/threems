@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:threems/screens/charity/bank_details.dart';
 import '../../customPackage/date_picker.dart';
+import '../../kuri/createkuri.dart';
 import '../../model/charitymodel.dart';
 import '../../utils/themes.dart';
 import '../../widgets/percentage_widget.dart';
@@ -26,11 +27,11 @@ class _CauseDetailsState extends State<CauseDetails> {
   final FocusNode phoneNumeberFocus = FocusNode();
   final FocusNode hospitalNameFocus = FocusNode();
   final FocusNode hospitalLocationFocus = FocusNode();
-  final  TextEditingController amountcontroller =TextEditingController();
-  final  TextEditingController medicaldatecontroller =TextEditingController();
-  final  TextEditingController namecontroller =TextEditingController();
-  final  TextEditingController locationcontroller =TextEditingController();
-  final  TextEditingController phonenumbercontroller =TextEditingController();
+  final TextEditingController amountcontroller = TextEditingController();
+  final TextEditingController medicaldatecontroller = TextEditingController();
+  final TextEditingController namecontroller = TextEditingController();
+  final TextEditingController locationcontroller = TextEditingController();
+  final TextEditingController phonenumbercontroller = TextEditingController();
 
 
   DateTime? selectedDate;
@@ -42,12 +43,15 @@ class _CauseDetailsState extends State<CauseDetails> {
         confirmText: 'Select',
         context: context,
         firstDate: DateTime.now(),
-        lastDate: DateTime(DateTime.now().year + 2),
+        lastDate: DateTime(DateTime
+            .now()
+            .year + 2),
         initialDate: DateTime.now(),
-        builder: (context, child) => Theme(
-            data: ThemeData(
-                colorScheme: ColorScheme.light(primary: Colors.green)),
-            child: child!));
+        builder: (context, child) =>
+            Theme(
+                data: ThemeData(
+                    colorScheme: ColorScheme.light(primary: Colors.green)),
+                child: child!));
     if (datePicked != null && datePicked != selectedDate) {
       setState(() {
         selectedDate = datePicked;
@@ -88,7 +92,9 @@ class _CauseDetailsState extends State<CauseDetails> {
     hospitalLocationFocus.dispose();
     super.dispose();
   }
-  bool loading=false;
+
+  bool loading = false;
+
   refreshPage() {
     setState(() {
       loading = false;
@@ -114,15 +120,15 @@ class _CauseDetailsState extends State<CauseDetails> {
               onTap: () {
                 Navigator.pop(context);
               },
-              child:Container(
+              child: Container(
                 // color: Colors.red,
-                width: scrWidth*0.02,
-                height: scrHeight*0.02,
+                width: scrWidth * 0.02,
+                height: scrHeight * 0.02,
                 padding: EdgeInsets.all(scrWidth * 0.056),
                 child: SvgPicture.asset(
                   'assets/icons/back.svg',
-                  width: scrWidth*0.03,
-                  height: scrHeight*0.02,
+                  width: scrWidth * 0.03,
+                  height: scrHeight * 0.02,
                   fit: BoxFit.contain,
                 ),
               ),
@@ -227,11 +233,11 @@ class _CauseDetailsState extends State<CauseDetails> {
                         color: Color(0xff8391A1)),
                   ),
                   Container(
-                    width: scrWidth*0.63,
+                    width: scrWidth * 0.63,
                     height: textFormFieldHeight45,
                     padding: EdgeInsets.symmetric(
                       horizontal: scrWidth * 0.015,
-                      vertical: scrWidth*0.002,
+                      vertical: scrWidth * 0.002,
                     ),
                     decoration: BoxDecoration(
                         color: textFormFieldFillColor,
@@ -265,7 +271,9 @@ class _CauseDetailsState extends State<CauseDetails> {
                         fillColor: textFormFieldFillColor,
                         filled: true,
                         contentPadding: EdgeInsets.only(
-                            left: scrWidth*0.03, top: scrHeight*0.006, bottom: scrWidth * 0.033),
+                            left: scrWidth * 0.03,
+                            top: scrHeight * 0.006,
+                            bottom: scrWidth * 0.033),
                         disabledBorder: InputBorder.none,
                         enabledBorder: InputBorder.none,
                         errorBorder: InputBorder.none,
@@ -293,7 +301,7 @@ class _CauseDetailsState extends State<CauseDetails> {
                   height: textFormFieldHeight45,
                   padding: EdgeInsets.symmetric(
                     horizontal: scrWidth * 0.015,
-                    vertical: scrWidth*0.002,
+                    vertical: scrWidth * 0.002,
                   ),
                   decoration: BoxDecoration(
                     color: textFormFieldFillColor,
@@ -303,7 +311,7 @@ class _CauseDetailsState extends State<CauseDetails> {
                     borderRadius: BorderRadius.circular(scrWidth * 0.026),
                   ),
                   child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: scrWidth*0.03),
+                    padding: EdgeInsets.symmetric(horizontal: scrWidth * 0.03),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -344,11 +352,11 @@ class _CauseDetailsState extends State<CauseDetails> {
                         color: Color(0xff8391A1)),
                   ),
                   Container(
-                    width: scrWidth*0.46,
+                    width: scrWidth * 0.46,
                     height: textFormFieldHeight45,
                     padding: EdgeInsets.symmetric(
                       horizontal: scrWidth * 0.015,
-                      vertical: scrWidth*0.003,
+                      vertical: scrWidth * 0.003,
                     ),
                     decoration: BoxDecoration(
                         color: textFormFieldFillColor,
@@ -381,7 +389,7 @@ class _CauseDetailsState extends State<CauseDetails> {
                         fillColor: textFormFieldFillColor,
                         filled: true,
                         contentPadding: EdgeInsets.only(
-                            left: scrWidth*0.03, bottom: scrWidth * 0.033),
+                            left: scrWidth * 0.03, bottom: scrWidth * 0.033),
                         disabledBorder: InputBorder.none,
                         enabledBorder: InputBorder.none,
                         errorBorder: InputBorder.none,
@@ -405,7 +413,7 @@ class _CauseDetailsState extends State<CauseDetails> {
                 height: textFormFieldHeight45,
                 padding: EdgeInsets.symmetric(
                   horizontal: scrWidth * 0.015,
-                  vertical: scrWidth*0.002,
+                  vertical: scrWidth * 0.002,
                 ),
                 decoration: BoxDecoration(
                   border: Border.all(
@@ -439,7 +447,9 @@ class _CauseDetailsState extends State<CauseDetails> {
                     fillColor: textFormFieldFillColor,
                     filled: true,
                     contentPadding: EdgeInsets.only(
-                        left: scrWidth*0.03, top: scrHeight*0.006, bottom: scrWidth * 0.033),
+                        left: scrWidth * 0.03,
+                        top: scrHeight * 0.006,
+                        bottom: scrWidth * 0.033),
                     disabledBorder: InputBorder.none,
                     enabledBorder: InputBorder.none,
                     errorBorder: InputBorder.none,
@@ -461,7 +471,7 @@ class _CauseDetailsState extends State<CauseDetails> {
                 height: textFormFieldHeight45,
                 padding: EdgeInsets.symmetric(
                   horizontal: scrWidth * 0.015,
-                  vertical: scrWidth*0.002,
+                  vertical: scrWidth * 0.002,
                 ),
                 decoration: BoxDecoration(
                   border: Border.all(
@@ -497,7 +507,9 @@ class _CauseDetailsState extends State<CauseDetails> {
                     fillColor: textFormFieldFillColor,
                     filled: true,
                     contentPadding: EdgeInsets.only(
-                        left: scrWidth*0.03, top: scrHeight*0.006, bottom: scrWidth * 0.033),
+                        left: scrWidth * 0.03,
+                        top: scrHeight * 0.006,
+                        bottom: scrWidth * 0.033),
                     disabledBorder: InputBorder.none,
                     enabledBorder: InputBorder.none,
                     errorBorder: InputBorder.none,
@@ -631,66 +643,58 @@ class _CauseDetailsState extends State<CauseDetails> {
               //   ),
               // ),
               SizedBox(
-                height: scrHeight*0.03,
+                height: scrHeight * 0.03,
               ),
               GestureDetector(
-                onTap: () {
-                  if
-                  (
-                  amountcontroller.text.isEmpty&&
-                      namecontroller.text.isEmpty&&
-                      locationcontroller.text.isEmpty&&
-                      phonenumbercontroller.text.isEmpty
-                  ){
-                    refreshPage();
-                    return showSnackbar();
-                  }else{
-                    charityDetails.add(
-                      {
-                        "endDate":Timestamp.fromDate(selectedDate!),
-                        "valueAmount": double.tryParse(amountcontroller.text),
-                        "beneficiaryName": namecontroller.text,
-                        "beneficiaryPhNumber": phonenumbercontroller.text,
-                        "beneficiaryLocation":locationcontroller.text,
+                  onTap: ()async {
+                    setState(() {
+                      loading=true;
+                    });
+                    if (
+                    amountcontroller.text.isEmpty &&
+                        namecontroller.text.isEmpty &&
+                        locationcontroller.text.isEmpty &&
+                        phonenumbercontroller.text.isEmpty)
+                    {
+                      refreshPage();
+                      return showSnackbar(context,"Must Provide All Details");
+                    } else {
+                      charityDetails.add(
+                          {
+                            "endDate": Timestamp.fromDate(selectedDate!),
+                            "valueAmount": double.tryParse(amountcontroller.text),
+                            "beneficiaryName": namecontroller.text,
+                            "beneficiaryPhNumber": phonenumbercontroller.text,
+                            "beneficiaryLocation": locationcontroller.text,
 
-                      }
+                          }
 
-                    );
-                  }
-                  Navigator.push(
-                      context,
-                      CupertinoPageRoute(
-                        builder: (context) => CreateCharity3(),
-                      ));
-                },
-                child: Container(
-                  height: scrHeight*0.065,
-                  decoration: BoxDecoration(
-                      color: primarycolor,
-                      borderRadius: BorderRadius.circular(17)),
-                  margin: EdgeInsets.symmetric(vertical: scrWidth*0.03, horizontal: scrHeight*0.06),
-                  child: Center(
-                      child: Text(
-                        "Continue",
-                        style: TextStyle(color: Colors.white),
-                      )),
-                )
+                      );
+                    }
+                    Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                          builder: (context) => CreateCharity3(),
+                        ));
+                  },
+                  child: Container(
+                    height: scrHeight * 0.065,
+                    decoration: BoxDecoration(
+                        color: primarycolor,
+                        borderRadius: BorderRadius.circular(17)),
+                    margin: EdgeInsets.symmetric(vertical: scrWidth * 0.03,
+                        horizontal: scrHeight * 0.06),
+                    child: Center(
+                        child: Text(
+                          "Continue",
+                          style: TextStyle(color: Colors.white),
+                        )),
+                  )
               ),
             ],
           ),
         ),
       ),
     );
-  }
-  showSnackbar() {
-    final snackBar = SnackBar(
-      behavior: SnackBarBehavior.floating,
-      content: Text("Plz Enter All Details",
-        style: TextStyle(fontWeight: FontWeight.bold),
-      ),
-      backgroundColor: Colors.grey,
-    );
-
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }

@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:threems/ByeandSell/checkout.dart';
 
 import '../screens/splash_screen.dart';
 import '../utils/themes.dart';
+import 'checkout.dart';
 
 class AddAddressPage extends StatefulWidget {
   const AddAddressPage({Key? key}) : super(key: key);

@@ -4,14 +4,17 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:threems/ByeandSell/storedetailsfill.dart';
-import 'package:threems/ByeandSell/succesfullyadded.dart';
+import 'package:threems/Buy&sell/storedetailsfill.dart';
+import 'package:threems/Buy&sell/succesfullyadded.dart';
+
 import 'package:threems/model/Buy&sell.dart';
 import 'dart:io';
 
 
+import '../kuri/createkuri.dart';
 import '../screens/splash_screen.dart';
 import '../utils/themes.dart';
 
@@ -25,12 +28,15 @@ class StoreDetailsFill2 extends StatefulWidget {
 }
 
 class _StoreDetailsFill2State extends State<StoreDetailsFill2> {
+   String? selectedCategoryItem;
   bool finished=true;
   final FocusNode categoryFocusNode=FocusNode();
   final FocusNode productNameFocus= FocusNode();
   final FocusNode productPriceFocus= FocusNode();
   final FocusNode productUnitFocus= FocusNode();
   final FocusNode productDetails=FocusNode();
+  final FocusNode productCategoryName=FocusNode();
+  final TextEditingController productCategoryNameController=TextEditingController();
   final TextEditingController categoryNameController=TextEditingController();
   final  TextEditingController productNameController =TextEditingController();
   final  TextEditingController productPriceController =TextEditingController();
@@ -43,6 +49,12 @@ class _StoreDetailsFill2State extends State<StoreDetailsFill2> {
     //"Grocery Store",
     //"Fashion Apparels",
   //];
+   bool loading=false;
+   refreshPage() {
+     setState(() {
+       loading = false;
+     });
+   }
   final List<String> items = [
     "kg",
     "gm",
@@ -120,113 +132,7 @@ class _StoreDetailsFill2State extends State<StoreDetailsFill2> {
       uploadImageToFirebase(context);
     });
   }
-  // void categoryAdd() {
-  //   showDialog(
-  //     context: context,
-  //     builder: (context) => StatefulBuilder(
-  //       builder: (BuildContext context, setState) {
-  //         categoryFocusNode.addListener(() {
-  //           if(mounted){
-  //             setState(() {});
-  //           }
-  //
-  //         });
-  //         return AlertDialog(
-  //           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-  //           title: Text('Add New Category'),
-  //           titleTextStyle: TextStyle(
-  //               fontSize: 15,
-  //               fontFamily: 'Urbanist',
-  //               fontWeight: FontWeight.w700,
-  //               color: Color(0xff2C2C2C)),
-  //           content: Column(
-  //             mainAxisSize: MainAxisSize.min,
-  //             children: [
-  //               Container(
-  //                 width: scrWidth,
-  //                 height: textFormFieldHeight45,
-  //                 padding: EdgeInsets.symmetric(
-  //                   horizontal: scrWidth * 0.015,
-  //                   vertical: scrHeight*0.002,
-  //                 ),
-  //                 decoration: BoxDecoration(
-  //                   color: textFormFieldFillColor,
-  //                   borderRadius: BorderRadius.circular(scrWidth * 0.026),
-  //                 ),
-  //                 child: TextFormField(
-  //                   focusNode: categoryFocusNode,
-  //                   controller: categoryNameController,
-  //                   cursorHeight: scrWidth * 0.055,
-  //                   cursorWidth: 1,
-  //                   cursorColor: Colors.black,
-  //                   style: TextStyle(
-  //                     color: Colors.black,
-  //                     fontWeight: FontWeight.w600,
-  //                     fontSize: FontSize15,
-  //                     fontFamily: 'Urbanist',
-  //                   ),
-  //                   decoration: InputDecoration(
-  //                     labelText: 'Category Name',
-  //                     labelStyle: TextStyle(
-  //                       color: categoryFocusNode.hasFocus
-  //                           ? primarycolor
-  //                           : textFormUnFocusColor,
-  //                       fontWeight: FontWeight.w600,
-  //                       fontSize: FontSize15,
-  //                       fontFamily: 'Urbanist',
-  //                     ),
-  //                     fillColor: textFormFieldFillColor,
-  //                     filled: true,
-  //                     contentPadding: EdgeInsets.only(
-  //                         top: scrHeight*0.01,
-  //                         bottom: scrWidth * 0.033,
-  //                         left: scrWidth * 0.033),
-  //                     disabledBorder: InputBorder.none,
-  //                     enabledBorder: InputBorder.none,
-  //                     errorBorder: InputBorder.none,
-  //                     border: InputBorder.none,
-  //                     focusedBorder: UnderlineInputBorder(
-  //                       borderSide: BorderSide(
-  //                         color: primarycolor,
-  //                         width: 2,
-  //                       ),
-  //                     ),
-  //                   ),
-  //                 ),
-  //               ),
-  //               SizedBox(
-  //                 height: scrWidth * 0.03,
-  //               ),
-  //               Container(
-  //                 width: scrWidth,
-  //                 height: textFormFieldHeight45,
-  //                 decoration: BoxDecoration(
-  //                     color: primarycolor,
-  //                     borderRadius: BorderRadius.circular(8)),
-  //                 child: Center(
-  //                   child: GestureDetector(
-  //                     onTap: () {
-  //                       Navigator.pop(context);
-  //                       categoryName.add(categoryNameController.text);
-  //                       },
-  //                     child: Text(
-  //                       "Save",
-  //                       style: TextStyle(
-  //                           fontSize: FontSize16,
-  //                           fontFamily: 'Urbanist',
-  //                           fontWeight: FontWeight.w600,
-  //                           color: Colors.white),
-  //                     ),
-  //                   ),
-  //                 ),
-  //               ),
-  //             ],
-  //           ),
-  //         );
-  //       },
-  //     ),
-  //   );
-  // }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -253,7 +159,7 @@ class _StoreDetailsFill2State extends State<StoreDetailsFill2> {
                 children: [
                   InkWell(
                     onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>StoreDetails()));
+                       Navigator.push(context, MaterialPageRoute(builder: (context)=>StoreDetails()));
                     },
                     child:Container(
                       height: 20,
@@ -393,168 +299,200 @@ class _StoreDetailsFill2State extends State<StoreDetailsFill2> {
                 ),
               ),
               SizedBox(height: scrHeight*0.02,),
-              // Container(
-              //   width: scrWidth * 0.9,
-              //   height: textFormFieldHeight45,
-              //   decoration: BoxDecoration(
-              //     color: textFormFieldFillColor,
-              //     borderRadius:
-              //     BorderRadius.circular(scrWidth * 0.033),
-              //   ),
-              //   child: Row(
-              //     children: [
-              //       SizedBox(width: scrWidth*0.057,),
-              //       SvgPicture.asset(
-              //         'assets/icons/storecategory.svg',
-              //       ),
-              //       SizedBox(width: scrWidth*0.04,),
-              //       DropdownButtonHideUnderline(
-              //         child: DropdownButton2(
-              //           isExpanded: true,
-              //           hint: Text(
-              //             "Product Category",
-              //             style: TextStyle(
-              //                 fontSize: FontSize15,
-              //                 fontFamily: 'Urbanist',
-              //                 fontWeight: FontWeight.w600,
-              //                 color: Color(0xffB0B0B0)
-              //             ),
-              //           ),
-              //           items:getcat
-              //               .map((item) => DropdownMenuItem<String>(
-              //             value: item.toString(),
-              //             child:  Text(
-              //               item.toString(),
-              //               style: TextStyle(
-              //                   fontWeight: FontWeight.w600,
-              //                   fontSize: 14,
-              //                   fontFamily: 'Urbanist'
-              //               ),
-              //             ),
-              //           ))
-              //               .toList(),
-              //           value: selectedValuee,
-              //           onChanged: (value) {
-              //             setState(() {
-              //               selectedValuee = value as String;
-              //             });
-              //           },
-              //           icon: const Icon(
-              //             Icons.arrow_drop_down,
-              //           ),
-              //           iconSize: 18,
-              //           iconEnabledColor: Colors.black,
-              //           // iconDisabledColor: Colors.blue,
-              //           buttonHeight: 50,
-              //           buttonWidth:247,
-              //           buttonPadding: const EdgeInsets.only(right: 10),
-              //           buttonDecoration: BoxDecoration(
-              //             borderRadius: BorderRadius.circular(14),
-              //             color: textFormFieldFillColor,
-              //           ),
-              //           // buttonElevation: 2,
-              //           itemHeight: 40,
-              //           itemPadding: const EdgeInsets.only(),
-              //           dropdownMaxHeight: 260,
-              //           dropdownWidth: 300,
-              //           dropdownPadding: EdgeInsets.only(left: 30,top: 15,bottom: 25,right: 30),
-              //           dropdownDecoration: BoxDecoration(
-              //             borderRadius: BorderRadius.circular(8),
-              //             color: Colors.white,
-              //           ),
-              //           dropdownElevation: 0,
-              //           scrollbarRadius:  Radius.circular(10),
-              //           scrollbarThickness: 3,
-              //           scrollbarAlwaysShow: true,
-              //           offset: const Offset(-20, 0),
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
-              // GestureDetector(
-              //   onTap: (){
-              //     categoryAdd();
-              //     },
-              //   child: Padding(
-              //     padding:  EdgeInsets.only(left: scrWidth*0.62,top: scrHeight*0.01),
-              //     child: Text(
-              //       "Add new category",textAlign: TextAlign.end,
-              //       style: TextStyle(
-              //           fontSize: 12,
-              //           fontFamily: 'Urbanist',
-              //           fontWeight: FontWeight.w600,
-              //           color:primarycolor
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              Padding(
-                padding:  EdgeInsets.only(right: scrWidth*0.053),
-                child: Container(
-                  height: textFormFieldHeight45,
-                  padding: EdgeInsets.symmetric(
-                    horizontal: scrWidth * 0.015,
-                    vertical: scrHeight*0.002,
-                  ),
-                  decoration: BoxDecoration(
-                    color: textFormFieldFillColor,
-                    borderRadius:
-                    BorderRadius.circular(scrWidth * 0.026),
-                  ),
-                  child: TextFormField(
-                    controller:categoryNameController,
-                    focusNode: categoryFocusNode,
-                    cursorHeight: scrWidth * 0.055,
-                    cursorWidth: 1,
-                    cursorColor: Colors.black,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w600,
-                      fontSize: FontSize15,
+
+              Container(
+                width: scrWidth * 0.9,
+                height: textFormFieldHeight45,
+                decoration: BoxDecoration(
+                  color: textFormFieldFillColor,
+                  borderRadius: BorderRadius.circular(scrWidth * 0.033),
+                ),
+
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: scrWidth * 0.057,
+                    ),
+                    SvgPicture.asset(
+                      'assets/icons/storecategory.svg',
+                      // fit: BoxFit.contain,
+                    ),
+                    SizedBox(
+                      width: scrWidth * 0.04,
+                    ),
+                    DropdownButtonHideUnderline(
+                      child: DropdownButton2(
+                        isExpanded: true,
+                        hint: Text(
+                          "Store Category",
+                          style: TextStyle(
+                              fontSize: FontSize15,
+                              fontFamily: 'Urbanist',
+                              fontWeight: FontWeight.w600,
+                              color: Color(0xffB0B0B0)),
+                        ),
+                        items: selectCategory
+                            .map((item) => DropdownMenuItem<String>(
+                          value: item,
+                          child: Text(
+                            item.toString(),
+                            // overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 14,
+                                fontFamily: 'Urbanist'),
+                          ),
+                        ))
+                            .toList(),
+                        value: selectedCategoryItem,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedCategoryItem = value as String;
+
+                          });
+                        },
+                        icon:  Icon(
+                          Icons.arrow_drop_down,
+                        ),
+                        iconSize: 18,
+                        iconEnabledColor: Colors.black,
+                        iconDisabledColor: Colors.blue,
+                        buttonHeight: 50,
+                        buttonWidth: 247,
+                        // buttonPadding: const EdgeInsets.only(),
+                        buttonDecoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(14),
+                          color: textFormFieldFillColor,
+                        ),
+                        // buttonElevation: 2,
+                        itemHeight: 40,
+                        itemPadding: const EdgeInsets.only(),
+                        dropdownMaxHeight: 260,
+                        dropdownWidth: 300,
+                        dropdownPadding: EdgeInsets.only(
+                            left: 30, top: 15, bottom: 25, right: 30),
+                        dropdownDecoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          color: Colors.white,
+                        ),
+                        dropdownElevation: 0,
+                        scrollbarRadius: Radius.circular(10),
+                        scrollbarThickness: 3,
+                        scrollbarAlwaysShow: true,
+                        offset: const Offset(-20, 0),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: scrHeight*0.02,),
+
+              Container(
+                width: scrWidth * 0.9,
+                height: textFormFieldHeight45,
+                decoration: BoxDecoration(
+                  color: textFormFieldFillColor,
+                  borderRadius: BorderRadius.circular(scrWidth * 0.033),
+                ),
+
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: scrWidth * 0.057,
+                    ),
+                    SvgPicture.asset(
+                      'assets/icons/storecategory.svg',
+                      // fit: BoxFit.contain,
+                    ),
+                    SizedBox(
+                      width: scrWidth * 0.04,
+                    ),
+                    DropdownButtonHideUnderline(
+                      child: DropdownButton2(
+                        isExpanded: true,
+                        hint: Text(
+                          "Product category",
+                          style: TextStyle(
+                              fontSize: FontSize15,
+                              fontFamily: 'Urbanist',
+                              fontWeight: FontWeight.w600,
+                              color: Color(0xffB0B0B0)),
+                        ),
+                        items: selectCategory
+                            .map((item) => DropdownMenuItem<String>(
+                                  value: item,
+                                  child: Text(
+                                    item.toString(),
+                                    // overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 14,
+                                        fontFamily: 'Urbanist'),
+                                  ),
+                                ))
+                            .toList(),
+                        value: selectedCategoryItem,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedCategoryItem = value as String;
+
+                          });
+                        },
+                        icon:  Icon(
+                          Icons.arrow_drop_down,
+                        ),
+                        iconSize: 18,
+                        iconEnabledColor: Colors.black,
+                        iconDisabledColor: Colors.blue,
+                        buttonHeight: 50,
+                        buttonWidth: 247,
+                        // buttonPadding: const EdgeInsets.only(),
+                        buttonDecoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(14),
+                          color: textFormFieldFillColor,
+                        ),
+                        // buttonElevation: 2,
+                        itemHeight: 40,
+                        itemPadding: const EdgeInsets.only(),
+                        dropdownMaxHeight: 260,
+                        dropdownWidth: 300,
+                        dropdownPadding: EdgeInsets.only(
+                            left: 30, top: 15, bottom: 25, right: 30),
+                        dropdownDecoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          color: Colors.white,
+                        ),
+                        dropdownElevation: 0,
+                        scrollbarRadius: Radius.circular(10),
+                        scrollbarThickness: 3,
+                        scrollbarAlwaysShow: true,
+                        offset: const Offset(-20, 0),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+          GestureDetector(
+              onTap: (){
+                pay();
+                },
+              child: Padding(
+                padding:  EdgeInsets.only(left: scrWidth*0.62,top: scrHeight*0.01),
+                child: Text(
+                  "Add new category",textAlign: TextAlign.end,
+                  style: TextStyle(
+                      fontSize: 12,
                       fontFamily: 'Urbanist',
-                    ),
-                    decoration: InputDecoration(
-                      labelText: 'Product Category',
-                      labelStyle: TextStyle(
-                        color: categoryFocusNode.hasFocus
-                            ? primarycolor
-                            : Color(0xffB0B0B0),
-                        fontWeight: FontWeight.w600,
-                        fontSize: FontSize15,
-                        fontFamily: 'Urbanist',
-                      ),
-                      prefixIcon: Container(
-                        height: scrWidth * 0.045,
-                        width: 10,
-                        padding: EdgeInsets.all(
-                            scrWidth * 0.037),
-                        child: SvgPicture.asset(
-                          'assets/icons/storecategory.svg',
-                          fit: BoxFit.contain,
-                          color: Color(0xffB0B0B0),
-                        ),
-                      ),
-                      fillColor: textFormFieldFillColor,
-                      filled: true,
-                      contentPadding: EdgeInsets.only(
-                          top: 5, bottom: scrWidth * 0.033),
-                      disabledBorder: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      errorBorder: InputBorder.none,
-                      border: InputBorder.none,
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                          color: primarycolor,
-                          width: 2,
-                        ),
-                      ),
-                    ),
+                      fontWeight: FontWeight.w600,
+                      color:primarycolor
                   ),
                 ),
               ),
+            ),
+             SizedBox(height: scrHeight*0.02,),
+
               Padding(
-                padding:  EdgeInsets.only(right: scrWidth*0.053,top: scrHeight*0.02),
+                padding:  EdgeInsets.only(right: scrWidth*0.053,),
                 child: Container(
                   height: textFormFieldHeight45,
                   padding: EdgeInsets.symmetric(
@@ -567,6 +505,7 @@ class _StoreDetailsFill2State extends State<StoreDetailsFill2> {
                     BorderRadius.circular(scrWidth * 0.026),
                   ),
                   child: TextFormField(
+                    keyboardType: TextInputType.number,
                     controller: productPriceController,
                     focusNode: productPriceFocus,
                     cursorHeight: scrWidth * 0.055,
@@ -617,6 +556,7 @@ class _StoreDetailsFill2State extends State<StoreDetailsFill2> {
                   ),
                 ),
               ),
+
               Padding(
                 padding:  EdgeInsets.only(right: scrWidth*0.053,top: scrHeight*0.02),
                 child: Row(
@@ -634,6 +574,7 @@ class _StoreDetailsFill2State extends State<StoreDetailsFill2> {
                         BorderRadius.circular(scrWidth * 0.026),
                       ),
                       child: TextFormField(
+                        keyboardType: TextInputType.number,
                         controller: productUnitController,
                         focusNode: productUnitFocus,
                         cursorHeight: scrWidth * 0.055,
@@ -836,7 +777,7 @@ class _StoreDetailsFill2State extends State<StoreDetailsFill2> {
                   ),
                 ),
               ),
-               SizedBox(height: scrHeight*0.18,),
+               SizedBox(height: scrHeight*0.1,),
               finished==false?Padding(
                 padding:  EdgeInsets.only(right: scrWidth*0.053),
                 child: Container(
@@ -856,24 +797,54 @@ class _StoreDetailsFill2State extends State<StoreDetailsFill2> {
                   ),
                 ),
               ) :GestureDetector(
-                onTap: (){
-                  print(widget.id);
-                  final proDat=ProductModel(
-                    images:_imgurl,
-                    productName: productNameController.text,
-                    productCategory:categoryNameController.text,
-
-                    price:double.tryParse(productPriceController.text),
-                    unit:selectedValue ,
-                    quantity:int.tryParse(productUnitController.text) ,
-                    details: productDetailsController.text,
+                onTap: ()async{
+                  setState(() {
+                    loading=true;
+                  });
+                  // if(imgUrl==null){
+                  //   refreshPage();
+                  //   return showSnackbar(context,"add product images upto 5");
+                  // }
+                  if(productNameController.text.isEmpty){
+                    refreshPage();
+                    return showSnackbar(context,"Must Provide Product Name");
+                  }
+                  if(productPriceController.text.isEmpty){
+                    refreshPage();
+                    return showSnackbar(context,"Must Provide product price");
+                  }
+                  if(productUnitController.text.isEmpty){
+                    refreshPage();
+                    return showSnackbar(context,"Must Provide product unit");
+                  }
+                  if(productDetailsController.text.isEmpty){
+                    refreshPage();
+                    return showSnackbar(context,"Must Provide product  Details");
+                  }
+                  if(categoryNameController.text.isEmpty){
+                    refreshPage();
+                    return showSnackbar(context,"Must Provide category name");
+                  }else{
+                    final proDat=ProductModel(
+                      images:_imgurl,
+                      productName: productNameController.text,
+                       productCategory:categoryNameController.text,
+                      price:double.tryParse(productPriceController.text),
+                      unit:selectedValue ,
+                      quantity:int.tryParse(productUnitController.text) ,
+                      details: productDetailsController.text,
+                      storedCategorys: selectedCategoryItem,
                       // categoryName:categoryName,
-                  );
-                  FirebaseFirestore.instance.collection('stores').doc(widget.id)
-                      .collection('products').add(proDat.toJson());
-                  print(proDat);
-                  print(productPriceController.text);
-                   Navigator.push(context, MaterialPageRoute(builder: (context)=>SuccesfullyAdded(id: widget.id,)));
+                    );
+                    FirebaseFirestore.instance.collection('stores').doc(widget.id)
+                        .collection('products').add(proDat.toJson()).then((value) =>
+                        value.update({'productId':value.id}));
+                    print(proDat);
+                    print(productPriceController.text);
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>SuccesfullyAdded(id: widget.id,)));
+                  }
+                  // print(widget.id);
+
                 },
                 child: Padding(
                   padding:  EdgeInsets.only(right: scrWidth*0.053),
@@ -901,4 +872,112 @@ class _StoreDetailsFill2State extends State<StoreDetailsFill2> {
       ),
     );
   }
+   void pay() {
+       showDialog(
+         context: context,
+         builder: (context) => StatefulBuilder(
+           builder: (BuildContext context, setState) {
+             // payableAmountNode.addListener(() {
+             //   setState(() {});
+             // });
+             return AlertDialog(
+               shape:
+                   RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+               title: Text("Add New Category"),
+               titleTextStyle: TextStyle(
+                   fontSize:17,
+                   fontFamily: 'Urbanist',
+                   fontWeight: FontWeight.w600,
+                   color: Colors.black),
+               content: Column(
+                 mainAxisSize: MainAxisSize.min,
+                 children: [
+                   Container(
+                     width: scrWidth,
+                     height: textFormFieldHeight45,
+                     padding: EdgeInsets.symmetric(
+                       horizontal: scrWidth * 0.015,
+                       vertical: 2,
+                     ),
+                     decoration: BoxDecoration(
+                       color: textFormFieldFillColor,
+                       borderRadius: BorderRadius.circular(scrWidth * 0.03),
+                     ),
+                     child: TextFormField(
+                      focusNode: productCategoryName,
+                       controller: productCategoryNameController,
+                       cursorHeight: scrWidth * 0.055,
+                       cursorWidth: 1,
+                       cursorColor: Colors.black,
+                       style: TextStyle(
+                         color: Colors.black,
+                         fontWeight: FontWeight.w600,
+                         fontSize: FontSize15,
+                         fontFamily: 'Urbanist',
+                       ),
+                       decoration: InputDecoration(
+                         labelText: 'Category Name',
+                         labelStyle: TextStyle(
+                           color: productCategoryName.hasFocus
+                               ? primarycolor
+                               : textFormUnFocusColor,
+                           fontWeight: FontWeight.w600,
+                           fontSize: FontSize15,
+                           fontFamily: 'Urbanist',
+                         ),
+                         fillColor: textFormFieldFillColor,
+                         filled: true,
+                         contentPadding: EdgeInsets.only(
+                             top: 5,
+                             bottom: scrWidth * 0.033,
+                             left: scrWidth * 0.033),
+                         disabledBorder: InputBorder.none,
+                         enabledBorder: InputBorder.none,
+                         errorBorder: InputBorder.none,
+                         border: InputBorder.none,
+                         focusedBorder: UnderlineInputBorder(
+                           borderSide: BorderSide(
+                             color: primarycolor,
+                             width: 2,
+                           ),
+                         ),
+                       ),
+                     ),
+                   ),
+                   SizedBox(
+                     height: scrWidth * 0.03,
+                   ),
+
+                   Container(
+                     width: scrWidth,
+                     height: textFormFieldHeight45,
+                     decoration: BoxDecoration(
+                         color: primarycolor,
+                         borderRadius: BorderRadius.circular(12)),
+                     child: Center(
+                       child: GestureDetector(
+                         onTap: () {
+
+
+                         },
+                         child: Text(
+                           "Save",
+                           style: TextStyle(
+                               fontSize: FontSize16,
+                               fontFamily: 'Urbanist',
+                               fontWeight: FontWeight.w600,
+                               color: Colors.white),
+                         ),
+                       ),
+                     ),
+                   ),
+                 ],
+               ),
+             );
+           },
+         ),
+       );
+     }
+
+
 }

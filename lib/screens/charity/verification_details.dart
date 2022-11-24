@@ -9,7 +9,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:threems/kuri/createkuri.dart';
 import 'package:threems/model/usermodel.dart';
+import 'package:threems/screens/charity/donatenowpage.dart';
 import 'package:threems/screens/charity/fpayment.dart';
 import '../../model/charitymodel.dart';
 import '../../utils/themes.dart';
@@ -506,20 +508,31 @@ class _VerificationDetailsState extends State<VerificationDetails> {
                 height: scrHeight*0.1,
               ),
               GestureDetector(
-
-
-                onTap: () {
-
-
-                  charityDetails.add(
-                    {
-                      "youTubeLink": youtubecontroller.text,
-                      "image": imgUrl,
-                      "documents": fileUrl,
-                      "fileNme":fileName,
+                  onTap: () async{
+                    setState(() {
+                      loading=true;
+                    });
+                    if(imgFile==null){
+                      refreshPage();
+                      return showSnackbar(context,"Image Must Provide");
+                    }
+                    if(pickFile==null){
+                      refreshPage();
+                      return showSnackbar(context,"Please Provide Supporting Documents");
                     }
 
-                  );
+
+                  else {
+                      charityDetails.add(
+                          {
+                            "youTubeLink": youtubecontroller.text,
+                            "image": imgUrl,
+                            "documents": fileUrl,
+                            "fileNme": fileName,
+                          }
+
+                      );
+                    }
                   print(fileUrl);
                   print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
                   print(charityDetails);
