@@ -137,11 +137,13 @@ class _ApprovePageState extends State<ApprovePage> {
   }
   Icon? _icon;
   var icons;
+  var categoryName;
   getIconData(){
-    FirebaseFirestore.instance.collection('expenses').
-    where('expenseName',isEqualTo:'Kuri' ).snapshots().listen((event) {
+    FirebaseFirestore.instance.collection('income').
+    where('categoryName',isEqualTo:'Kuri' ).snapshots().listen((event) {
             for(DocumentSnapshot data in event.docs){
               icons=deserializeIcon(data['icon']);
+              categoryName=data['categoryName'];
               // _icon = Icon(icons,color: Colors.white,size: 45,);
 
             }
@@ -627,8 +629,14 @@ class _ApprovePageState extends State<ApprovePage> {
                             .collection('payments')
                             .doc(activePayment!.paymentId!)
                             .update({'verified': true}).then((value) {
-                              FirebaseFirestore.instance.collection('users').doc(currentuserid)
-                                  .collection('income')
+                          FirebaseFirestore.instance.collection('users').doc(currentuserid).collection('incomes').add({
+                            'amount':double.tryParse(activePayment!.amount!.toString()),
+                            "categoryIcon":serializeIcon(icons),
+                            "IncomeCategoryName":categoryName.toString(),
+                            'date':DateTime.now(),
+                            'merchant':'',
+
+                          });
                               
                           showSnackbar(
                               context, 'Payment verified successfully');

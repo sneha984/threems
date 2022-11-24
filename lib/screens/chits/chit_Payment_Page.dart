@@ -5,6 +5,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_iconpicker/Serialization/iconDataSerialization.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -26,6 +27,22 @@ class ChitPaymentPage extends StatefulWidget {
 }
 
 class _ChitPaymentPageState extends State<ChitPaymentPage> {
+  var icons;
+  var categoryName;
+  getIconData(){
+    FirebaseFirestore.instance.collection('expenses').
+    where('expenseName',isEqualTo:'Kuri' ).snapshots().listen((event) {
+      for(DocumentSnapshot data in event.docs){
+        icons=deserializeIcon(data['icon']);
+        categoryName=data['expenseName'];
+        // _icon = Icon(icons,color: Colors.white,size: 45,);
+
+      }
+
+
+    });
+
+  }
   TextEditingController? amount;
 
   String? imgUrl;
@@ -70,6 +87,7 @@ class _ChitPaymentPageState extends State<ChitPaymentPage> {
     // TODO: implement initState
     super.initState();
     amount = TextEditingController();
+    getIconData();
   }
 
   @override
@@ -567,6 +585,14 @@ class _ChitPaymentPageState extends State<ChitPaymentPage> {
                       // })
                       .then((value) {
                     value.update({"paymentId": value.id}).then((value) {
+                      FirebaseFirestore.instance.collection('users').doc(currentuserid).collection('expense').add({
+                        'amount':double.tryParse(amount!.text.toString()),
+                        "categoryIcon":serializeIcon(icons),
+                        "categoryName":categoryName.toString(),
+                        'date':DateTime.now(),
+                        'merchant':'',
+
+                      });
                       showSnackbar(context, 'Payment Completed Successfully');
                       Navigator.push(context, MaterialPageRoute(builder: (context)=>ChitSucessPaidPage()));
                       // Navigator.pushAndRemoveUntil(
