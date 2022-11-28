@@ -26,6 +26,8 @@ import '../model/charitymodel.dart';
 import 'charity/donatepage.dart';
 import 'charity/seemorecharities.dart';
 var currenPlace;
+var lat;
+var long;
 List<Contact> contacts = [];
 
 List<CharityModel> verifiedcharity = [];
@@ -109,8 +111,8 @@ class _HomeScreenState extends State<HomeScreen> {
     try{
       currentLoc=await Geolocator.getCurrentPosition();
       print('00000000000000000000000000000000000000000000000000000');
-      print(currentLoc!.latitude);
-      print(currentLoc!.longitude);
+      lat=currentLoc!.latitude;
+      long=currentLoc!.longitude;
       List<Placemark> placemarks = await placemarkFromCoordinates(currentLoc!.latitude,currentLoc!.longitude);
       Placemark place = placemarks[0];
       currenPlace=place.locality;
