@@ -1,14 +1,19 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:threems/screens/Utilities/services_subcategory.dart';
+import 'package:threems/screens/home_screen.dart';
 import 'package:threems/screens/splash_screen.dart';
 import 'dart:io';
 
+import '../../Buy&sell/shopheadimageslider.dart';
 import '../../model/service category.dart';
 import '../../utils/themes.dart';
+import '../../widgets/head_image_slider.dart';
 import 'details.dart';
 
 class Utilities extends StatefulWidget {
@@ -19,26 +24,87 @@ class Utilities extends StatefulWidget {
 }
 
 class _UtilitiesState extends State<Utilities> {
-  List iconDatas = [
-    Icon(Icons.carpenter_outlined),
-    Icon(Icons.plumbing),
-    Icon(Icons.drive_eta_rounded),
-    Icon(Icons.electrical_services),
-  ];
-  List<ServiceCategory>? categories;
+  // List services = [
+  //   {
+  //     'serviceName':'Salone & Spa',
+  //     'image':"assets/images/salone.svg",
+  //     'subCategories':[
+  //       {
+  //
+  //       }
+  //     ]
+  //
+  //
+  //   },
+  //   {
+  //     'serviceName':'Appliance Repair & Service',
+  //     'image':'assets/images/appliance.svg',
+  //   },
+  //   {
+  //     'serviceName':'Cleaning & Pest Control',
+  //     'image':'assets/images/cleaning.svg',
+  //   },
+  //   {
+  //     'serviceName':'Electrician, Plumber & Carpenters',
+  //     'image':'assets/images/electrician.svg',
+  //   },
+  //   {
+  //     'serviceName':'Home Painting',
+  //     'image':'assets/images/painter.svg',
+  //   },
+  //   {
+  //     'serviceName':'Vehicle Service',
+  //     'image':'assets/images/vehicleservice.svg',
+  //   },
+  //   {
+  //     'serviceName':'Driver',
+  //     'image':'assets/images/painter.svg',
+  //   },
+  //   {
+  //     'serviceName':'Masons',
+  //     'image':'assets/images/painter.svg',
+  //   },
+  //   {
+  //     'serviceName':'Carpenter',
+  //     'image':'assets/images/painter.svg',
+  //   },
+  //
+  // ];
+  String currentAddress = 'Perinthalmanna';
 
-  getCategory() {
-    FirebaseFirestore.instance
-        .collection('serviceCategory')
-        .snapshots()
-        .listen((event) {
-      categories = [];
-      for (DocumentSnapshot<Map<String, dynamic>> doc in event.docs) {
-        categories!.add(ServiceCategory.fromJson(doc.data()!));
+  // List<ServiceCategory>? categories;
+   List?categories=[];
+
+
+  // getCategory() {
+  //   FirebaseFirestore.instance
+  //       .collection('serviceCategory')
+  //       .snapshots()
+  //       .listen((event) {
+  //     categories = [];
+  //     for (DocumentSnapshot<Map<String, dynamic>> doc in event.docs) {
+  //       categories!.add(ServiceCategory.fromJson(doc.data()!));
+  //     }
+  //
+  //     if (mounted) {
+  //       setState(() {});
+  //     }
+  //   });
+  // }
+  getCategory(){
+    FirebaseFirestore.instance.collection('serviceCategory').
+    snapshots().listen((event) {
+
+      if(event.docs.isNotEmpty) {
+        categories=[];
+        for (DocumentSnapshot data in event.docs) {
+          categories?.add(data);
+        }
       }
+      if(mounted){
+        setState(() {
 
-      if (mounted) {
-        setState(() {});
+        });
       }
     });
   }
@@ -53,615 +119,163 @@ class _UtilitiesState extends State<Utilities> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: true,
-        foregroundColor: Colors.black,
-        toolbarHeight: 84,
-        shadowColor: Colors.grey,
-        leadingWidth: 40,
-        centerTitle: false,
-        elevation: 0.1,
-        backgroundColor: Colors.white,
+      toolbarHeight: scrHeight*0.1,
+      shadowColor: Colors.grey,
+      leadingWidth: 50,
+      centerTitle: false,
+      elevation: 0.1,
+      backgroundColor: Colors.white,
+      leading: InkWell(
+        onTap: () {
+          // _determinePosition();
 
-        title: Text(
-          " Utilities",
+        },
+        child: Container(
+          height: 30,
+          width: 30,
+          child: Padding(
+            padding: EdgeInsets.only(top: scrHeight * 0.03,
+              left: scrWidth * 0.07,
+              bottom: scrHeight * 0.01,
+            ),
+            child: SvgPicture.asset("assets/icons/locationicon.svg",),
+          ),
+        ),
+      ),
+      title: Padding(
+        padding: EdgeInsets.only(top: scrHeight * 0.02),
+        child: Text(
+          currenPlace.toString(),
           style: TextStyle(
               fontSize: scrWidth * 0.046,
               color: Colors.black,
               fontFamily: 'Urbanist',
               fontWeight: FontWeight.w600),
         ),
-        // actions: [
-        //   Padding(
-        //     padding: const EdgeInsets.only(right: 18.0),
-        //     child: Icon(Icons.)
-        //     // SvgPicture.asset('assets/images/expense tracker.svg',height: 35,width: 35,),
-        //   )
-        // ],
       ),
-      body: categories == null
-          ? Center(
-              child: CircularProgressIndicator(),
-            )
-          : SafeArea(
+
+    ),
+      body:  SafeArea(
               child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Container(
-                      height: MediaQuery.of(context).size.height,
-                      width: MediaQuery.of(context).size.width,
-                      child: GridView.builder(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 2 / 2,
-                          crossAxisSpacing: 20,
-                          mainAxisSpacing: 20,
-                        ),
-                        itemCount: categories!.length,
-                        padding: EdgeInsets.only(
-                            top: 15, bottom: 15, left: 15, right: 15),
-                        itemBuilder: (BuildContext context, int index) {
-                          return InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => ServiceDetailsPage(
-                                            category: categories![index]
-                                                .serviceCategory!,
-                                          )));
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey,
-                                    blurRadius: 5.0,
-                                  ),
-                                ],
-                                color: Colors.white,
+                child: Container(
+                  height:scrWidth * 3 ,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+
+                        child: GridView.builder(
+                          shrinkWrap: true,
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            childAspectRatio: 1,
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 10,
+                          ),
+                          itemCount: categories!.length,
+                          padding: EdgeInsets.only(
+                              top: 25, bottom: 15, left: 20,right: 15),
+                          itemBuilder: (BuildContext context, int index) {
+                            return categories!.isEmpty?Container(
+                              child:Center(
+                                child: Text(
+                                  "No  Category",
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      fontFamily: 'Urbanist',
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.black),
+                                ),
                               ),
+                            ):
+                             InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ServiceSubcategoryPage(
+                                          serviceCategoryName: categories![index]['serviceCategory'],
+                                          image:categories![index]['image'],
+                                          serviceId:categories![index].id,
+
+                                        )));
+                                // Navigator.push(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //         builder: (context) => ServiceDetailesPage(
+                                //               category: categories![index]
+                                //                   .serviceCategory!,
+                                //             )));
+                              },
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Container(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.10,
-                                      width: MediaQuery.of(context).size.width *
-                                          0.30,
-                                      child: Icon(
-                                        Icons.handyman,
-                                        size: 40,
-                                        color: primarycolor,
-                                      )),
-                                  SizedBox(
-                                    height: 5,
+                                    height:80,
+                                    width:120,
+                                    decoration: BoxDecoration(
+                                       color: Color(0xffF3F3F3),
+
+                                       borderRadius: BorderRadius.circular(20)
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        SvgPicture.network( categories![index]['image'],height: 55,width: 50, ),
+                                      ],
+                                    ),
                                   ),
-                                  Text(
-                                    categories![index].serviceCategory!,
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                  )
+                                  Expanded(
+
+                                      child:  Center(
+                                        child: Text(
+                                          categories![index]['serviceCategory'],
+                                          style: TextStyle(
+                                              fontSize: scrWidth * 0.029,
+                                              color: Colors.black,
+                                              fontFamily: 'Urbanist',
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                      ),
+                                  ),
+
                                 ],
                               ),
-                            ),
-                          );
-                        },
-                        // children: [
-                        //
-                        //   // InkWell(
-                        //   //   onTap: () {
-                        //   //     Navigator.push(
-                        //   //         context,
-                        //   //         MaterialPageRoute(
-                        //   //             builder: (context) => AddBatch()));
-                        //   //   },
-                        //   //   child: Container(
-                        //   //     decoration: BoxDecoration(
-                        //   //       borderRadius: BorderRadius.circular(8),
-                        //   //       boxShadow: [
-                        //   //         BoxShadow(
-                        //   //           color: Colors.grey,
-                        //   //           blurRadius: 5.0,
-                        //   //         ),
-                        //   //       ],
-                        //   //       color: Colors.white,
-                        //   //     ),
-                        //   //     child: Column(
-                        //   //       mainAxisAlignment: MainAxisAlignment.center,
-                        //   //       children: [
-                        //   //         Container(
-                        //   //             height:
-                        //   //                 MediaQuery.of(context).size.height * 0.10,
-                        //   //             width: MediaQuery.of(context).size.width * 0.30,
-                        //   //             child: Image.asset(
-                        //   //               'assets/images/batch.png',
-                        //   //             )),
-                        //   //         SizedBox(
-                        //   //           height: 5,
-                        //   //         ),
-                        //   //         Text(
-                        //   //           'BATCH',
-                        //   //           style: TextStyle(fontWeight: FontWeight.bold),
-                        //   //         )
-                        //   //       ],
-                        //   //     ),
-                        //   //   ),
-                        //   // ),
-                        //   // InkWell(
-                        //   //   onTap: () {
-                        //   //     Navigator.push(
-                        //   //         context,
-                        //   //         MaterialPageRoute(
-                        //   //             builder: (context) => AddProduct()));
-                        //   //   },
-                        //   //   child: Container(
-                        //   //     decoration: BoxDecoration(
-                        //   //       borderRadius: BorderRadius.circular(8),
-                        //   //       boxShadow: [
-                        //   //         BoxShadow(
-                        //   //           color: Colors.grey,
-                        //   //           blurRadius: 5.0,
-                        //   //         ),
-                        //   //       ],
-                        //   //       color: Colors.white,
-                        //   //     ),
-                        //   //     child: Column(
-                        //   //       mainAxisAlignment: MainAxisAlignment.center,
-                        //   //       children: [
-                        //   //         Container(
-                        //   //             height:
-                        //   //                 MediaQuery.of(context).size.height * 0.10,
-                        //   //             width: MediaQuery.of(context).size.width * 0.30,
-                        //   //             child: Image.asset(
-                        //   //               'assets/images/product.png',
-                        //   //             )),
-                        //   //         SizedBox(
-                        //   //           height: 5,
-                        //   //         ),
-                        //   //         Text(
-                        //   //           'PRODUCT',
-                        //   //           style: TextStyle(fontWeight: FontWeight.bold),
-                        //   //         )
-                        //   //       ],
-                        //   //     ),
-                        //   //   ),
-                        //   // ),
-                        //   // InkWell(
-                        //   //   onTap: () {
-                        //   //     Navigator.push(
-                        //   //         context,
-                        //   //         MaterialPageRoute(
-                        //   //             builder: (context) => AddProductGroup()));
-                        //   //   },
-                        //   //   child: Container(
-                        //   //     decoration: BoxDecoration(
-                        //   //       borderRadius: BorderRadius.circular(8),
-                        //   //       boxShadow: [
-                        //   //         BoxShadow(
-                        //   //           color: Colors.grey,
-                        //   //           blurRadius: 5.0,
-                        //   //         ),
-                        //   //       ],
-                        //   //       color: Colors.white,
-                        //   //     ),
-                        //   //     child: Column(
-                        //   //       mainAxisAlignment: MainAxisAlignment.center,
-                        //   //       children: [
-                        //   //         Container(
-                        //   //             height:
-                        //   //                 MediaQuery.of(context).size.height * 0.10,
-                        //   //             width: MediaQuery.of(context).size.width * 0.30,
-                        //   //             child: Image.asset(
-                        //   //               'assets/images/productgroup.png',
-                        //   //             )),
-                        //   //         SizedBox(
-                        //   //           height: 5,
-                        //   //         ),
-                        //   //         Text(
-                        //   //           'PRODUCT GROUP',
-                        //   //           style: TextStyle(fontWeight: FontWeight.bold),
-                        //   //         )
-                        //   //       ],
-                        //   //     ),
-                        //   //   ),
-                        //   // ),
-                        //   // InkWell(
-                        //   //   onTap: () {
-                        //   //     Navigator.push(context,
-                        //   //         MaterialPageRoute(builder: (context) => AddUnit()));
-                        //   //   },
-                        //   //   child: Container(
-                        //   //     decoration: BoxDecoration(
-                        //   //       borderRadius: BorderRadius.circular(8),
-                        //   //       boxShadow: [
-                        //   //         BoxShadow(
-                        //   //           color: Colors.grey,
-                        //   //           blurRadius: 5.0,
-                        //   //         ),
-                        //   //       ],
-                        //   //       color: Colors.white,
-                        //   //     ),
-                        //   //     child: Column(
-                        //   //       mainAxisAlignment: MainAxisAlignment.center,
-                        //   //       children: [
-                        //   //         Container(
-                        //   //             height:
-                        //   //                 MediaQuery.of(context).size.height * 0.10,
-                        //   //             width: MediaQuery.of(context).size.width * 0.30,
-                        //   //             child: Image.asset(
-                        //   //               'assets/images/unit.png',
-                        //   //             )),
-                        //   //         SizedBox(
-                        //   //           height: 5,
-                        //   //         ),
-                        //   //         Text(
-                        //   //           'UNIT',
-                        //   //           style: TextStyle(fontWeight: FontWeight.bold),
-                        //   //         )
-                        //   //       ],
-                        //   //     ),
-                        //   //   ),
-                        //   // ),
-                        //   // InkWell(
-                        //   //   onTap: () {
-                        //   //     Navigator.push(
-                        //   //         context,
-                        //   //         MaterialPageRoute(
-                        //   //             builder: (context) => AddBranch()));
-                        //   //   },
-                        //   //   child: Container(
-                        //   //     decoration: BoxDecoration(
-                        //   //       borderRadius: BorderRadius.circular(8),
-                        //   //       boxShadow: [
-                        //   //         BoxShadow(
-                        //   //           color: Colors.grey,
-                        //   //           blurRadius: 5.0,
-                        //   //         ),
-                        //   //       ],
-                        //   //       color: Colors.white,
-                        //   //     ),
-                        //   //     child: Column(
-                        //   //       mainAxisAlignment: MainAxisAlignment.center,
-                        //   //       children: [
-                        //   //         Container(
-                        //   //             height:
-                        //   //                 MediaQuery.of(context).size.height * 0.10,
-                        //   //             width: MediaQuery.of(context).size.width * 0.30,
-                        //   //             child: Image.asset(
-                        //   //               'assets/images/branch.png',
-                        //   //             )),
-                        //   //         SizedBox(
-                        //   //           height: 5,
-                        //   //         ),
-                        //   //         Text(
-                        //   //           'BRANCH',
-                        //   //           style: TextStyle(fontWeight: FontWeight.bold),
-                        //   //         )
-                        //   //       ],
-                        //   //     ),
-                        //   //   ),
-                        //   // ),
-                        //   // InkWell(
-                        //   //   onTap: () {
-                        //   //     Navigator.push(
-                        //   //         context,
-                        //   //         MaterialPageRoute(
-                        //   //             builder: (context) => AddSupplier()));
-                        //   //   },
-                        //   //   child: Container(
-                        //   //     decoration: BoxDecoration(
-                        //   //       borderRadius: BorderRadius.circular(8),
-                        //   //       boxShadow: [
-                        //   //         BoxShadow(
-                        //   //           color: Colors.grey,
-                        //   //           blurRadius: 5.0,
-                        //   //         ),
-                        //   //       ],
-                        //   //       color: Colors.white,
-                        //   //     ),
-                        //   //     child: Column(
-                        //   //       mainAxisAlignment: MainAxisAlignment.center,
-                        //   //       children: [
-                        //   //         SizedBox(
-                        //   //             height:
-                        //   //                 MediaQuery.of(context).size.height * 0.10,
-                        //   //             width: MediaQuery.of(context).size.width * 0.30,
-                        //   //             child: Image.asset(
-                        //   //               'assets/images/supplier.png',
-                        //   //             )),
-                        //   //         SizedBox(
-                        //   //           height: 5,
-                        //   //         ),
-                        //   //         Text(
-                        //   //           'SUPPLIER',
-                        //   //           style: TextStyle(fontWeight: FontWeight.bold),
-                        //   //         )
-                        //   //       ],
-                        //   //     ),
-                        //   //   ),
-                        //   // ),
-                        //   // InkWell(
-                        //   //   onTap: () {
-                        //   //     Navigator.push(
-                        //   //         context,
-                        //   //         MaterialPageRoute(
-                        //   //             builder: (context) => AddCustomer()));
-                        //   //   },
-                        //   //   child: Container(
-                        //   //     decoration: BoxDecoration(
-                        //   //       borderRadius: BorderRadius.circular(8),
-                        //   //       boxShadow: [
-                        //   //         BoxShadow(
-                        //   //           color: Colors.grey,
-                        //   //           blurRadius: 5.0,
-                        //   //         ),
-                        //   //       ],
-                        //   //       color: Colors.white,
-                        //   //     ),
-                        //   //     child: Column(
-                        //   //       mainAxisAlignment: MainAxisAlignment.center,
-                        //   //       children: [
-                        //   //         Container(
-                        //   //             height:
-                        //   //                 MediaQuery.of(context).size.height * 0.10,
-                        //   //             width: MediaQuery.of(context).size.width * 0.30,
-                        //   //             child: Image.asset(
-                        //   //               'assets/images/customer.png',
-                        //   //             )),
-                        //   //         SizedBox(
-                        //   //           height: 5,
-                        //   //         ),
-                        //   //         Text(
-                        //   //           'CUSTOMER',
-                        //   //           style: TextStyle(fontWeight: FontWeight.bold),
-                        //   //         )
-                        //   //       ],
-                        //   //     ),
-                        //   //   ),
-                        //   // ),
-                        //   // InkWell(
-                        //   //   onTap: () {
-                        //   //     Navigator.push(
-                        //   //         context,
-                        //   //         MaterialPageRoute(
-                        //   //             builder: (context) => PurchaseHome()));
-                        //   //   },
-                        //   //   child: Container(
-                        //   //     decoration: BoxDecoration(
-                        //   //       borderRadius: BorderRadius.circular(8),
-                        //   //       boxShadow: [
-                        //   //         BoxShadow(
-                        //   //           color: Colors.grey,
-                        //   //           blurRadius: 5.0,
-                        //   //         ),
-                        //   //       ],
-                        //   //       color: Colors.white,
-                        //   //     ),
-                        //   //     child: Column(
-                        //   //       mainAxisAlignment: MainAxisAlignment.center,
-                        //   //       children: [
-                        //   //         Container(
-                        //   //             height:
-                        //   //                 MediaQuery.of(context).size.height * 0.10,
-                        //   //             width: MediaQuery.of(context).size.width * 0.30,
-                        //   //             child: Image.asset(
-                        //   //               'assets/images/purchase.png',
-                        //   //             )),
-                        //   //         SizedBox(
-                        //   //           height: 5,
-                        //   //         ),
-                        //   //         Text(
-                        //   //           'PURCHASE',
-                        //   //           style: TextStyle(fontWeight: FontWeight.bold),
-                        //   //         )
-                        //   //       ],
-                        //   //     ),
-                        //   //   ),
-                        //   // ),
-                        //   // InkWell(
-                        //   //   onTap: () {
-                        //   //     Navigator.push(
-                        //   //         context,
-                        //   //         MaterialPageRoute(
-                        //   //             builder: (context) => AddSales()));
-                        //   //   },
-                        //   //   child: Container(
-                        //   //     decoration: BoxDecoration(
-                        //   //       borderRadius: BorderRadius.circular(8),
-                        //   //       boxShadow: [
-                        //   //         BoxShadow(
-                        //   //           color: Colors.grey,
-                        //   //           blurRadius: 5.0,
-                        //   //         ),
-                        //   //       ],
-                        //   //       color: Colors.white,
-                        //   //     ),
-                        //   //     child: Column(
-                        //   //       mainAxisAlignment: MainAxisAlignment.center,
-                        //   //       children: [
-                        //   //         Container(
-                        //   //             height:
-                        //   //                 MediaQuery.of(context).size.height * 0.10,
-                        //   //             width: MediaQuery.of(context).size.width * 0.30,
-                        //   //             child: Image.asset(
-                        //   //               'assets/images/sales.png',
-                        //   //             )),
-                        //   //         SizedBox(
-                        //   //           height: 5,
-                        //   //         ),
-                        //   //         Text(
-                        //   //           'SALES',
-                        //   //           style: TextStyle(fontWeight: FontWeight.bold),
-                        //   //         )
-                        //   //       ],
-                        //   //     ),
-                        //   //   ),
-                        //   // ),
-                        //   // InkWell(
-                        //   //   onTap: () {
-                        //   //     Navigator.push(
-                        //   //         context,
-                        //   //         MaterialPageRoute(
-                        //   //             builder: (context) => AddSalesMan()));
-                        //   //   },
-                        //   //   child: Container(
-                        //   //     decoration: BoxDecoration(
-                        //   //       borderRadius: BorderRadius.circular(8),
-                        //   //       boxShadow: [
-                        //   //         BoxShadow(
-                        //   //           color: Colors.grey,
-                        //   //           blurRadius: 5.0,
-                        //   //         ),
-                        //   //       ],
-                        //   //       color: Colors.white,
-                        //   //     ),
-                        //   //     child: Column(
-                        //   //       mainAxisAlignment: MainAxisAlignment.center,
-                        //   //       children: [
-                        //   //         Container(
-                        //   //             height:
-                        //   //                 MediaQuery.of(context).size.height * 0.10,
-                        //   //             width: MediaQuery.of(context).size.width * 0.30,
-                        //   //             child: Image.asset(
-                        //   //               'assets/images/salesman.png',
-                        //   //             )),
-                        //   //         SizedBox(
-                        //   //           height: 5,
-                        //   //         ),
-                        //   //         Text(
-                        //   //           'SALESMAN',
-                        //   //           style: TextStyle(fontWeight: FontWeight.bold),
-                        //   //         )
-                        //   //       ],
-                        //   //     ),
-                        //   //   ),
-                        //   // ),
-                        //   // InkWell(
-                        //   //   onTap: () {
-                        //   //     Navigator.push(context,
-                        //   //         MaterialPageRoute(builder: (context) => Stock()));
-                        //   //   },
-                        //   //   child: Container(
-                        //   //     decoration: BoxDecoration(
-                        //   //       borderRadius: BorderRadius.circular(8),
-                        //   //       boxShadow: [
-                        //   //         BoxShadow(
-                        //   //           color: Colors.grey,
-                        //   //           blurRadius: 5.0,
-                        //   //         ),
-                        //   //       ],
-                        //   //       color: Colors.white,
-                        //   //     ),
-                        //   //     child: Column(
-                        //   //       mainAxisAlignment: MainAxisAlignment.center,
-                        //   //       children: [
-                        //   //         Container(
-                        //   //             height:
-                        //   //                 MediaQuery.of(context).size.height * 0.10,
-                        //   //             width: MediaQuery.of(context).size.width * 0.30,
-                        //   //             child: Image.asset(
-                        //   //               'assets/images/packages.png',
-                        //   //             )),
-                        //   //         SizedBox(
-                        //   //           height: 5,
-                        //   //         ),
-                        //   //         Center(
-                        //   //             child: Text(
-                        //   //           'STOCK',
-                        //   //           style: TextStyle(fontWeight: FontWeight.bold),
-                        //   //         ))
-                        //   //       ],
-                        //   //     ),
-                        //   //   ),
-                        //   // ),
-                        //   // InkWell(
-                        //   //   onTap: () {
-                        //   //     Navigator.push(
-                        //   //         context,
-                        //   //         MaterialPageRoute(
-                        //   //             builder: (context) => AddReceipt()));
-                        //   //   },
-                        //   //   child: Container(
-                        //   //     decoration: BoxDecoration(
-                        //   //       borderRadius: BorderRadius.circular(8),
-                        //   //       boxShadow: [
-                        //   //         BoxShadow(
-                        //   //           color: Colors.grey,
-                        //   //           blurRadius: 5.0,
-                        //   //         ),
-                        //   //       ],
-                        //   //       color: Colors.white,
-                        //   //     ),
-                        //   //     child: Column(
-                        //   //       mainAxisAlignment: MainAxisAlignment.center,
-                        //   //       children: [
-                        //   //         Container(
-                        //   //             height:
-                        //   //                 MediaQuery.of(context).size.height * 0.10,
-                        //   //             width: MediaQuery.of(context).size.width * 0.30,
-                        //   //             child: Image.asset(
-                        //   //               'assets/images/receipt.png',
-                        //   //             )),
-                        //   //         SizedBox(
-                        //   //           height: 5,
-                        //   //         ),
-                        //   //         Center(
-                        //   //             child: Text(
-                        //   //           'RECEIPT',
-                        //   //           style: TextStyle(fontWeight: FontWeight.bold),
-                        //   //         ))
-                        //   //       ],
-                        //   //     ),
-                        //   //   ),
-                        //   // ),
-                        //   // InkWell(
-                        //   //   onTap: () {
-                        //   //     Navigator.push(
-                        //   //         context,
-                        //   //         MaterialPageRoute(
-                        //   //             builder: (context) => AddPayment()));
-                        //   //   },
-                        //   //   child: Container(
-                        //   //     decoration: BoxDecoration(
-                        //   //       borderRadius: BorderRadius.circular(8),
-                        //   //       boxShadow: [
-                        //   //         BoxShadow(
-                        //   //           color: Colors.grey,
-                        //   //           blurRadius: 5.0,
-                        //   //         ),
-                        //   //       ],
-                        //   //       color: Colors.white,
-                        //   //     ),
-                        //   //     child: Column(
-                        //   //       mainAxisAlignment: MainAxisAlignment.center,
-                        //   //       children: [
-                        //   //         Container(
-                        //   //             height:
-                        //   //                 MediaQuery.of(context).size.height * 0.10,
-                        //   //             width: MediaQuery.of(context).size.width * 0.30,
-                        //   //             child: Image.asset(
-                        //   //               'assets/images/payment-method.png',
-                        //   //             )),
-                        //   //         SizedBox(
-                        //   //           height: 5,
-                        //   //         ),
-                        //   //         Center(
-                        //   //             child: Text(
-                        //   //           'PAYMENT',
-                        //   //           style: TextStyle(fontWeight: FontWeight.bold),
-                        //   //         ))
-                        //   //       ],
-                        //   //     ),
-                        //   //   ),
-                        //   // ),
-                        //   // Container(),
-                        //   // Container(),
-                        // ],
+                            );
+                          },
+
+                        ),
                       ),
-                    ),
-                  ],
+                      SizedBox(
+                        height: scrWidth * 0.01,
+                      ),
+                      Padding(
+                        padding:  EdgeInsets.only(left: scrWidth * 0.045,right: scrWidth * 0.045),
+                        child: Text(
+                          "Sponsered Ads",
+                          style: TextStyle(
+                              fontSize: scrWidth * 0.046,
+                              color: Colors.black,
+                              fontFamily: 'Urbanist',
+                              fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                      SizedBox(
+                        height: scrWidth * 0.01,
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(
+                            left: scrWidth * 0.045,
+                            right: scrWidth * 0.045,
+                            top: scrWidth * 0.025),
+                        height: scrHeight * .18,
+                        width: scrWidth * 1,
+                        child: ImageSlide(),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

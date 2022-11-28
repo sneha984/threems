@@ -4,13 +4,14 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:getwidget/components/dropdown/gf_multiselect.dart';
+import 'package:getwidget/types/gf_checkbox_type.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:threems/Authentication/root.dart';
 import 'package:threems/kuri/createkuri.dart';
 
 import '../model/Buy&sell.dart';
 import '../screens/splash_screen.dart';
-import 'package:getwidget/getwidget.dart';
 
 
 import '../utils/themes.dart';

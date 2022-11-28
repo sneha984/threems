@@ -3,6 +3,8 @@ import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:contacts_service/contacts_service.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:threems/kuri/kuripage.dart';
@@ -23,7 +25,7 @@ import '../kuri/createkuri.dart';
 import '../model/charitymodel.dart';
 import 'charity/donatepage.dart';
 import 'charity/seemorecharities.dart';
-
+var currenPlace;
 List<Contact> contacts = [];
 
 List<CharityModel> verifiedcharity = [];
@@ -44,7 +46,6 @@ class _HomeScreenState extends State<HomeScreen> {
       handleInvalidPermission(permission);
     }
   }
-
   handleInvalidPermission(PermissionStatus permission) {
     if (permission == PermissionStatus.denied) {
       showSnackbar(context, 'Permission denied by user');
@@ -66,15 +67,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
   getContacts() async {
     List<Contact> _contacts = await ContactsService.getContacts();
+
     setState(() {
       contacts = _contacts;
+
       print('================ContactLength=================');
       print(contacts.length);
     });
   }
 
   double selectedIndex = 0;
-  getVerifiedCharity()async {
+
+  getVerifiedCharity() {
     FirebaseFirestore.instance
         .collection('charity')
         .where('userId', isNotEqualTo: currentuser?.userId)
@@ -99,11 +103,34 @@ class _HomeScreenState extends State<HomeScreen> {
     print(
         "----------------------------------------------------------------------------");
   }
+  Position? currentLoc;
 
+  getLocation() async {
+    try{
+      currentLoc=await Geolocator.getCurrentPosition();
+      print('00000000000000000000000000000000000000000000000000000');
+      print(currentLoc!.latitude);
+      print(currentLoc!.longitude);
+      List<Placemark> placemarks = await placemarkFromCoordinates(currentLoc!.latitude,currentLoc!.longitude);
+      Placemark place = placemarks[0];
+      currenPlace=place.locality;
+      print( currenPlace.toString());
+      print('kkkkkkkkkkkkkkkkkkkkkkkkplace');
+
+
+
+    }catch(err){
+      print(err.toString());
+      print('00000000000000000000000000000000000000000000000000000');
+    }
+
+  }
   @override
   void initState() {
     askPermissions();
     getVerifiedCharity();
+    getLocation();
+
     super.initState();
   }
 

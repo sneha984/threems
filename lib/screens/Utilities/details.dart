@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -8,27 +10,31 @@ import '../../model/servicesModel.dart';
 import '../../utils/themes.dart';
 import '../charity/verification_details.dart';
 import '../splash_screen.dart';
-
-class ServiceDetailsPage extends StatefulWidget {
+import 'AddYouService.dart';
+import 'detailesSinglePage.dart';
+bool ?editService;
+StreamController controller = StreamController<int>.broadcast();
+class ServiceDetailesPage extends StatefulWidget {
+  final String subCategoryName;
   final String category;
-  const ServiceDetailsPage({Key? key, required this.category})
+  const ServiceDetailesPage({Key? key, required this.subCategoryName, required this.category, })
       : super(key: key);
 
   @override
-  State<ServiceDetailsPage> createState() => _ServiceDetailsPageState();
+  State<ServiceDetailesPage> createState() => _ServiceDetailesPageState();
 }
 
-class _ServiceDetailsPageState extends State<ServiceDetailsPage> {
+class _ServiceDetailesPageState extends State<ServiceDetailesPage> {
   String selectedCity2 = '';
   TextEditingController city2 = TextEditingController();
   List<String> serviceCity = [];
-  List<ServiceDetails>? serviceList;
+  List<ServiceDetails> serviceList=[];
 
   getService() {
     print(widget.category);
     FirebaseFirestore.instance
         .collection('services')
-        .where('serviceCategory', isEqualTo: widget.category)
+        .where('subCategory', isEqualTo: widget.subCategoryName)
         .snapshots()
         .listen((event) {
       serviceList = [];
@@ -53,84 +59,89 @@ class _ServiceDetailsPageState extends State<ServiceDetailsPage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,
-        foregroundColor: Colors.black,
+        foregroundColor: Colors.white,
         toolbarHeight: 84,
         shadowColor: Colors.grey,
         leadingWidth: 40,
         centerTitle: false,
         elevation: 0.1,
-        backgroundColor: Colors.white,
+        backgroundColor: tabBarColor,
 
         title: Text(
-          widget.category,
+          widget.subCategoryName,
           style: TextStyle(
               fontSize: scrWidth * 0.046,
-              color: Colors.black,
+              color: Colors.white,
               fontFamily: 'Urbanist',
               fontWeight: FontWeight.w600),
         ),
-        // actions: [
-        //   Padding(
-        //     padding: const EdgeInsets.only(right: 18.0),
-        //     child: Icon(Icons.)
-        //     // SvgPicture.asset('assets/images/expense tracker.svg',height: 35,width: 35,),
-        //   )
-        // ],
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(
+                right: scrWidth * 0.038,
+                top: scrHeight * 0.04,
+                bottom: scrHeight * 0.02),
+            child: InkWell(
+              onTap: () {
+                editService=false;
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AddServicePage(
+                        subCategoryName:widget.subCategoryName,
+                        Category:widget.category
+                        )));
+              },
+              child: Container(
+                height: scrHeight * 0.07,
+                width: scrWidth * 0.25,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30),
+                  color: Colors.white,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.add,
+                      size: 11,
+                      color:primarycolor
+                    ),
+                    Text(
+                      "Create New",
+                      style: TextStyle(
+                          color: primarycolor,
+                          fontSize: CreateChitFont,
+                          fontFamily: 'Urbanist',
+                          fontWeight: FontWeight.w700),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Padding(
-            //   padding: const EdgeInsets.all(8.0),
-            //   child: Row(
-            //     mainAxisAlignment: MainAxisAlignment.spaceAround,
-            //     children: [
-            //       Container(
-            //         width: scrWidth * 0.44,
-            //         // width: scrWidth,
-            //         height: textFormFieldHeight45,
-            //         padding: EdgeInsets.symmetric(
-            //           horizontal: scrWidth * 0.015,
-            //           vertical: scrWidth * 0.002,
-            //         ),
-            //         decoration: BoxDecoration(
-            //           border: Border.all(
-            //             color: Color(0xffDADADA),
-            //           ),
-            //           color: textFormFieldFillColor,
-            //           borderRadius: BorderRadius.circular(scrWidth * 0.026),
-            //         ),
-            //
-            //         child: CustomDropdown.search(
-            //           hintText: selectedCity2 == '' ? 'City ' : selectedCity2,
-            //           items: serviceCity,
-            //           controller: city2,
-            //           excludeSelected: false,
-            //           onChanged: (value) {
-            //             setState(() {
-            //               selectedCity2 = value;
-            //             });
-            //             // print( userMap[selectedUser]);
-            //           },
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            // ),
+
             Container(
                 height: MediaQuery.of(context).size.height,
-                child: serviceList == null
+                child: serviceList?.length==0
                     ? Center(
-                        child: Text('No list Found'),
+                        child: Text('No list Found',style: GoogleFonts.urbanist(
+                          fontSize: 15
+                        ),),
                       )
-                    : ListView.builder(
+                    : serviceList.isEmpty?CircularProgressIndicator():ListView.builder(
                         padding: EdgeInsets.all(
                           MediaQuery.of(context).size.width * 0.05,
                         ),
-                        itemCount: serviceList!.length,
+                        itemCount: serviceList?.length,
                         physics: BouncingScrollPhysics(),
                         itemBuilder: (context, index) {
-                          final serviceItems = serviceList![index];
+                          final serviceItems = serviceList?[index];
                           return Padding(
                             padding: const EdgeInsets.only(
                               left: 15.0,
@@ -159,7 +170,7 @@ class _ServiceDetailsPageState extends State<ServiceDetailsPage> {
                                               BorderRadius.circular(8),
                                           child: CachedNetworkImage(
                                             imageUrl:
-                                                serviceItems.image.toString(),
+                                                serviceItems!.image.toString(),
                                             fit: BoxFit.cover,
                                           )),
                                     ),
@@ -202,6 +213,7 @@ class _ServiceDetailsPageState extends State<ServiceDetailsPage> {
                                         onTap: () {
                                           Uri call = Uri.parse(
                                               'tel://${serviceList![index].phoneNumber!}');
+
                                           launchUrl(call);
                                         },
                                         child: Icon(Icons.phone))
