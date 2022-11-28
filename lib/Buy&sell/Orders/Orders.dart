@@ -16,7 +16,7 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin{
   late  TabController _tabController;
   @override
   void initState() {
-    _tabController = TabController(length: 6, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
     _tabController.addListener(_handleTabSelection);
     super.initState();
   }
@@ -124,7 +124,7 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin{
                                   border: Border.all(color: Colors.white, width: 1)),
                               child: Align(
                                 alignment: Alignment.center,
-                                child: Text("Shipped",),
+                                child: Text("Delivered",),
                               ),
                             ),
                           ),
@@ -138,39 +138,10 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin{
                                   border: Border.all(color: Colors.white, width: 1)),
                               child: Align(
                                 alignment: Alignment.center,
-                                child: Text("Shipped",),
+                                child: Text("Cancelled",),
                               ),
                             ),
                           ),
-                          Tab(
-                            child: Container(
-                              height: 32,
-                              width: 100,
-
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50),
-                                  border: Border.all(color: Colors.white, width: 1)),
-                              child: Align(
-                                alignment: Alignment.center,
-                                child: Text("Shipped",),
-                              ),
-                            ),
-                          ),
-                          Tab(
-                            child: Container(
-                              height: 32,
-                              width: 100,
-
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50),
-                                  border: Border.all(color: Colors.white, width: 1)),
-                              child: Align(
-                                alignment: Alignment.center,
-                                child: Text("Shipped",),
-                              ),
-                            ),
-                          ),
-
                         ],
                       ),
                     ),
@@ -185,11 +156,6 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin{
                 Container(),
                 Container(),
                 Container(),
-                Container(),
-                Container(),
-
-
-
               ],
             ))
           ]

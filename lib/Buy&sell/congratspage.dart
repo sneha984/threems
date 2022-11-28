@@ -7,6 +7,7 @@ import 'package:lottie/lottie.dart';
 import 'package:threems/Buy&sell/storedetailsfill2.dart';
 import 'package:threems/screens/splash_screen.dart';
 
+import '../layouts/screen_layout.dart';
 import '../model/Buy&sell.dart';
 import 'buy_and_sell.dart';
 
@@ -24,10 +25,12 @@ class _CongratsPageState extends State<CongratsPage> {
   void initState() {
     super.initState();
     Timer(const Duration(seconds: 4), () {
-      Navigator.pushAndRemoveUntil(context, MaterialPageRoute
-        (builder: (context)=>
-          StoreDetailsFill2(id: widget.id,)
-      ), (route) => false);
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+          ScreenLayout(index: 1,tabIndex: 1,),), (route) => false);
+      // Navigator.pushAndRemoveUntil(context, MaterialPageRoute
+      //   (builder: (context)=>
+      //     StoreDetailsFill2(id: widget.id,)
+      // ), (route) => false);
     });
   }
   @override

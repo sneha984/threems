@@ -41,6 +41,7 @@ void showUploadMessage(BuildContext context, String message,
 }
 List userdetails=[];
 var fileName;
+var docName;
 
 
 
@@ -55,10 +56,13 @@ class _VerificationDetailsState extends State<VerificationDetails> {
 
 
   final TextEditingController youtubecontroller=TextEditingController();
+  final TextEditingController videoLinkController=TextEditingController();
   String? imgUrl;
   var imgFile;
   var uploadTask;
   var fileUrl;
+  var docUrl;
+  var uploadTasks;
   Future uploadImageToFirebase(BuildContext context) async {
     Reference firebaseStorageRef =
     FirebaseStorage.instance.ref().child('deposits/${imgFile.path}');
@@ -125,7 +129,51 @@ class _VerificationDetailsState extends State<VerificationDetails> {
     });
 
   }
+  var pickFiles;
+  Future uploadFileToFireBases(fileBytes) async {
+    print(fileBytes);
+    uploadTasks = FirebaseStorage.instance.ref('documents/${DateTime.now()}')
+        .putData(fileBytes);
+    final snapshot= await  uploadTask?.whenComplete((){});
+    final urlDownlods = await  snapshot?.ref.getDownloadURL();
+    print("--------------------------------------------------------------------------------");
+
+    print(urlDownlods);
+
+    // FirebaseFirestore.instance.collection('candidates').doc(widget.id).update({
+    //   'documents.$name':urlDownlod,
+    // });
+
+    setState(() {
+      docUrl=urlDownlods!;
+
+    });
+
+  }
+  _pickFiles() async {
+    print('      PICK FILE      ');
+    final result = await FilePicker.platform.pickFiles(
+      withData: true,
+    );
+
+    if(result==null) return;
+
+    // final fileBytes=result.files.first.bytes;
+
+    pickFiles=result.files.first;
+    final fileBytes = pickFiles!.bytes;
+    docName = result.files.first.name;
+
+    print(fileBytes);
+    print('      PICK FILE      ');
+    uploadFileToFireBases(fileBytes);
+    setState(() {
+
+    });
+
+  }
   final FocusNode youtubeLinkNode = FocusNode();
+  final FocusNode videoLinkNode=FocusNode();
   @override
   void initState() {
     youtubeLinkNode.addListener(() {
@@ -137,6 +185,7 @@ class _VerificationDetailsState extends State<VerificationDetails> {
 
   @override
   void dispose() {
+    videoLinkNode.dispose();
     youtubeLinkNode.dispose();
     super.dispose();
   }
@@ -431,6 +480,119 @@ class _VerificationDetailsState extends State<VerificationDetails> {
               SizedBox(
                 height: scrWidth * 0.06,
               ),
+              pickFiles==null
+                  ? Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "Documents Uploaded",
+                    style: TextStyle(
+                      fontSize: FontSize15,
+                      fontFamily: 'Urbanist',
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xff8391A1),
+                    ),
+                  ),
+                  SizedBox(width: scrWidth * 0.01),
+                  SizedBox(
+                    child: SvgPicture.asset(
+                      'assets/icons/uploaded.svg',
+                      color: Color(0xff8391A1),
+                    ),
+                  )
+                ],
+              )
+                  : Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    "Documents Uploaded",
+                    style: TextStyle(
+                      fontSize: FontSize15,
+                      fontFamily: 'Urbanist',
+                      fontWeight: FontWeight.w500,
+                      color: primarycolor,
+                    ),
+                  ),
+                  SizedBox(width: scrWidth * 0.01),
+                  SizedBox(
+                    child: SvgPicture.asset(
+                      'assets/icons/uploaded.svg',
+                      color: primarycolor,
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(
+                height: scrWidth * 0.02,
+              ),
+              InkWell(
+                onTap: (){
+                  _pickFiles();
+
+                },
+                child: pickFiles==null?  Container(
+                  width: scrWidth,
+                  height: textFormFieldHeight45,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: scrWidth * 0.015,
+                    vertical: scrHeight*0.002,
+                  ),
+                  decoration: BoxDecoration(
+                    color: textFormFieldFillColor,
+                    border: Border.all(
+                      color: Color(0xffDADADA),
+                    ),
+                    borderRadius: BorderRadius.circular(scrWidth * 0.026),
+                  ),
+                  child: Padding(
+                    padding:  EdgeInsets.symmetric(horizontal: scrHeight*0.03),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Upload Documents",
+                          style: TextStyle(
+                            color: Color(0xff8391A1),
+                            fontWeight: FontWeight.w500,
+                            fontSize: FontSize15,
+                            fontFamily: 'Urbanist',
+                          ),
+                        ),
+                        SvgPicture.asset(
+                          'assets/icons/camera2.svg',
+                          color: Color(0xff8391A1),
+                        ),
+                      ],
+                    ),
+                  ),
+                ):Container(
+                  width: scrWidth,
+                  height: textFormFieldHeight45,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: scrWidth * 0.04,
+                    vertical: scrHeight*0.015,
+                  ),
+                  decoration: BoxDecoration(
+                    color: textFormFieldFillColor,
+                    border: Border.all(
+                      color: Color(0xffDADADA),
+                    ),
+                    borderRadius: BorderRadius.circular(scrWidth * 0.026),
+                  ),
+                  child: Text(docName!,style: TextStyle(
+                    color: Color(0xff8391A1),
+                    fontWeight: FontWeight.w500,
+                    fontSize: FontSize15,
+                    fontFamily: 'Urbanist',
+
+                  ),),
+
+                ),
+              ),
+              SizedBox(
+                height: scrWidth * 0.06,
+              ),
               Text(
                 'Tag the links of Videos for know more about the situation',
                 style: TextStyle(
@@ -504,6 +666,67 @@ class _VerificationDetailsState extends State<VerificationDetails> {
               SizedBox(
                 height: scrWidth * 0.04,
               ),
+              Container(
+                width: scrWidth,
+                height: textFormFieldHeight45,
+                padding: EdgeInsets.symmetric(
+                  horizontal: scrWidth * 0.015,
+                  vertical: scrHeight*0.002,
+                ),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Color(0xffDADADA),
+                  ),
+                  color: textFormFieldFillColor,
+                  borderRadius: BorderRadius.circular(scrWidth * 0.026),
+                ),
+                child: TextFormField(
+                  focusNode: videoLinkNode,
+                  controller: videoLinkController,
+                  cursorHeight: scrWidth * 0.055,
+                  cursorWidth: 1,
+                  cursorColor: Colors.black,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600,
+                    fontSize: FontSize15,
+                    fontFamily: 'Urbanist',
+                  ),
+                  decoration: InputDecoration(
+                    labelText: 'Paste Video link',
+                    labelStyle: TextStyle(
+                      color: videoLinkNode.hasFocus
+                          ? primarycolor
+                          : textFormUnFocusColor,
+                      fontWeight: FontWeight.w500,
+                      fontSize: FontSize15,
+                      fontFamily: 'Urbanist',
+                    ),
+                    fillColor: textFormFieldFillColor,
+                    filled: true,
+                    // prefixIcon: SvgPicture.asset(
+                    //   'assets/icons/youtube.svg',
+                    //   width: scrWidth*0.03,
+                    //   height: scrHeight*0.02,
+                    // ),
+                    contentPadding: EdgeInsets.only(
+                        left: scrWidth*0.03, top: scrHeight*0.006, bottom: scrWidth * 0.033),
+                    disabledBorder: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    errorBorder: InputBorder.none,
+                    border: InputBorder.none,
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: primarycolor,
+                        width: 2,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: scrWidth * 0.04,
+              ),
               SizedBox(
                 height: scrHeight*0.1,
               ),
@@ -529,6 +752,9 @@ class _VerificationDetailsState extends State<VerificationDetails> {
                             "image": imgUrl,
                             "documents": fileUrl,
                             "fileNme": fileName,
+                            "otherDocument":docUrl,
+                            "videoLink":videoLinkController.text,
+                            "docNme":docName
                           }
 
                       );
@@ -555,7 +781,10 @@ class _VerificationDetailsState extends State<VerificationDetails> {
                     youTubeLink: charityDetails[3]['youTubeLink'],
                     image: charityDetails[3]['image'],
                     documents: charityDetails[3]['documents'],
+                    otherDocument: charityDetails[3]['otherDocument'],
+                    videoLink: charityDetails[3]['videoLink'],
                     status: 0,
+                    docNme: charityDetails[3]['docNme'],
                     payments: [],
                     cause: charityDetails[0]['cause'],
                     reason: charityDetails[0]['reason'],

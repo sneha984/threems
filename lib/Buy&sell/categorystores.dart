@@ -223,7 +223,8 @@ class _CategoryStoresState extends State<CategoryStores> {
                               SizedBox(height: scrHeight*0.002,),
 
                               Text(
-                                subcategory[index].noofproduct, textAlign: TextAlign.center,
+                                "${productsList.length} products"
+                                    , textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontFamily: 'Urbanist',
                                     fontSize: scrWidth*0.025,
@@ -236,9 +237,7 @@ class _CategoryStoresState extends State<CategoryStores> {
 
                       ],
                     );
-
-
-                  },
+                    },
                 ),
               ),
             ),

@@ -51,7 +51,6 @@ class ProductModel {
   String? storedCategorys;
   String? unit;
   String? details;
-  bool? shouldVisible;
   // List<String> categoryName=[];
 
   ProductModel(
@@ -63,7 +62,6 @@ class ProductModel {
         this.productId,
         this.unit,
         this.storedCategorys,
-        this.shouldVisible,
         // required this.categoryName,
         this.details});
   ProductModel.fromJson(Map<String, dynamic> json) {
@@ -73,7 +71,6 @@ class ProductModel {
     price = json['price'];
     quantity = json['quantity'];
     storedCategorys=json['storedCategorys'];
-    shouldVisible=json['shouldVisible'];
     productId=json['productId'];
     // categoryName=json['categoryName'];
 
@@ -90,9 +87,7 @@ class ProductModel {
     data['storedCategorys']=this.storedCategorys;
     // data['categoryName']=this.categoryName;
     data['unit'] = this.unit;
-    data['details'] = this.details;
-    data['shouldVisible']=this.shouldVisible;
-    data['productId']=this.productId;
+    data['details'] = this.details;data['productId']=this.productId;
     return data;
   }
 }

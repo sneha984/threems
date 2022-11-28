@@ -691,7 +691,7 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                         child: Text("Supporting Documents",style: TextStyle(
                           fontSize: scrWidth*0.04,
                           fontFamily: 'Urbanist',
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.w700,
                         ),),
                       ),
                       SizedBox(height: scrHeight*0.02,),
@@ -774,9 +774,53 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                                Padding(
                                  padding:  EdgeInsets.only(left: scrWidth*0.07),
                                  child: Text(widget.charities.fileNme!,style: TextStyle(
-                                   fontWeight: FontWeight.w500,
+                                   fontWeight: FontWeight.w400,
                                  ),),
                                ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: scrHeight*0.02,),
+
+                      Padding(
+                        padding:  EdgeInsets.only(left: scrWidth*0.05),
+                        child: Text("Genuinity Documents",style: TextStyle(
+                          fontSize: scrWidth*0.04,
+                          fontFamily: 'Urbanist',
+                          fontWeight: FontWeight.w700,
+                        ),),
+                      ),
+                      SizedBox(height: scrHeight*0.02,),
+                      InkWell(
+                        onTap: (){
+                          print("-----------------------------------mmmmmmmmmmmmmmmmmmmmmmm------------------------");
+                          print(widget.charities.docNme!);
+                          Navigator.push(context, MaterialPageRoute(
+                              builder: (context)=>PdfPage(charitys:widget.charities,)
+                          ));
+
+                        },
+                        child: Container(
+                          height: 119,
+                          // color: Colors.red,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                height: 100,
+                                width: 100,
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(image: AssetImage("assets/icons/pdfimage.png"),fit: BoxFit.fill)
+                                ),
+                              ),
+                              Padding(
+                                padding:  EdgeInsets.only(left: scrWidth*0.07),
+                                child: Text(widget.charities.docNme??'',style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                ),),
+                              ),
                             ],
                           ),
                         ),
@@ -793,29 +837,29 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                       SizedBox(height: scrHeight*0.02,),
                       GestureDetector(
                         onTap: (){
-                         // setState(() {
-                         //    onclick;
-                         // });
-                          Uri call = Uri.parse(
-                              'https://${widget.charities.youTubeLink!}');
+                         setState(() {
+                            onclick;
+                         });
+                         //  Uri call = Uri.parse(
+                         //      'https://${widget.charities.youTubeLink!}');
+                         //
+                         //  launchUrl(call);
 
-                          launchUrl(call);
                         },
-                          child: Text("ufhufg"),
-                          // Padding(
-                          //   padding:  EdgeInsets.only(left: 15,right: 15),
-                          //   child: YoutubePlayer(
-                          //     controller: _controllers,
-                          //     aspectRatio: 16 / 9,
-                          //     showVideoProgressIndicator:false,
-                          //     progressColors: ProgressBarColors(
-                          //       playedColor: Colors.white,
-                          //       handleColor: Colors.white,
-                          //     ),
-                          //     onReady: () {
-                          //       _controller.addListener(listener);
-                          //     },
-                          //   ),
+                          child: Padding(
+                            padding:  EdgeInsets.only(left: 15,right: 15),
+                            child: YoutubePlayer(
+                              controller: _controllers,
+                              aspectRatio: 16 / 9,
+                              showVideoProgressIndicator:false,
+                              progressColors: ProgressBarColors(
+                                playedColor: Colors.white,
+                                handleColor: Colors.white,
+                              ),
+                              onReady: () {
+                                _controller.addListener(listener);
+                              },
+                            ),
                           // ),
                       ),
 
@@ -848,7 +892,19 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                       //
                       //   ),
                       // ),
+                      ),
                       SizedBox(height: scrHeight*0.02,),
+                      InkWell(
+                        onTap: (){
+                          Uri? video=Uri.tryParse(widget.charities.videoLink!);
+                        launchUrl(video!);
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 19,bottom: 10),
+                          child: Text(widget.charities.videoLink??'',style: TextStyle(color: Colors.indigo),),
+                        ),
+
+                      ),
 
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -915,7 +971,7 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                                     CircleAvatar(
                                       radius: 19,
                                       backgroundImage:
-                                      NetworkImage("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyvDOjrrjjIN5kd3-8A4R-ByYkSnGSzbFHzg&usqp=CAU"),
+                                      NetworkImage("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiuZGp08DDSD0P3PMfKSbbPu2nVmJdH74gHg&usqp=CAU"),
                                     ),
                                     SizedBox(width: scrWidth*0.055,),
 
@@ -929,12 +985,12 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                                           fontWeight: FontWeight.w600,
                                         ),),
 
-                                        Text("12 june 22",style: TextStyle(
-                                            fontSize: scrWidth*0.025,
-                                            fontFamily: 'Urbanist',
-                                            fontWeight: FontWeight.w500,
-                                            color: Color(0xff8B8B8B)
-                                        ),),
+                                        // Text("12 june 22",style: TextStyle(
+                                        //     fontSize: scrWidth*0.025,
+                                        //     fontFamily: 'Urbanist',
+                                        //     fontWeight: FontWeight.w500,
+                                        //     color: Color(0xff8B8B8B)
+                                        // ),),
 
 
                                       ],
@@ -978,7 +1034,7 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                             height: scrHeight*0.015,
                           ),
                       ),
-                    ],
+                      ],
                   ),
                 ),
               ],
@@ -999,7 +1055,7 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
               SizedBox(width: scrWidth*0.035,),
               Container(
                 height: scrHeight*0.06,
-                width: scrWidth*0.76,
+                width: scrWidth*0.9,
                 decoration: BoxDecoration(
                   color: primarycolor,
                   borderRadius: BorderRadius.circular(17)
@@ -1014,19 +1070,19 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                 ),
               ),
               SizedBox(width: scrWidth*0.028,),
-              Container(
-                height: scrHeight*0.06,
-                width: scrWidth*0.14,
-                decoration: BoxDecoration(
-                    color: primarycolor,
-                    borderRadius: BorderRadius.circular(17),
-
-                ),
-                child: Padding(
-                  padding:  EdgeInsets.only(top: scrHeight*0.015,bottom: scrHeight*0.015),
-                  child: SvgPicture.asset("assets/icons/share.svg"),
-                ),
-              ),
+              // Container(
+              //   height: scrHeight*0.06,
+              //   width: scrWidth*0.14,
+              //   decoration: BoxDecoration(
+              //       color: primarycolor,
+              //       borderRadius: BorderRadius.circular(17),
+              //
+              //   ),
+              //   child: Padding(
+              //     padding:  EdgeInsets.only(top: scrHeight*0.015,bottom: scrHeight*0.015),
+              //     child: SvgPicture.asset("assets/icons/share.svg"),
+              //   ),
+              // ),
             ],
           ),
         ),

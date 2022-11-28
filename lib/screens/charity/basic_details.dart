@@ -271,7 +271,7 @@ class _BasicDetailsState extends State<BasicDetails> {
                         dropdownItemReverse: true,
                         dropdownItemTopGap: 2,
                         isTriangle: false,
-                        defaultValue: dropdownItems.length==0?'select':dropdownItems[0]??0,
+                        defaultValue: dropdownItems[0],
                         resultIconRotation: false,
                         dropdownItemPadding: EdgeInsets.all(0),
                         dropdownItemMainAxis: MainAxisAlignment.spaceEvenly,

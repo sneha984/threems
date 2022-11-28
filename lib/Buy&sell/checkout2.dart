@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
+import 'package:threems/Authentication/root.dart';
 
 import '../screens/splash_screen.dart';
 import '../utils/themes.dart';
@@ -26,7 +29,9 @@ class _AddAddressPageState extends State<AddAddressPage> {
   FocusNode pinCodeFocusNode = FocusNode();
   FocusNode flatNoFocusNode = FocusNode();
   FocusNode localityFocusNode = FocusNode();
-   int selectedIndex=1;
+  String purpose = 'Home';
+  int selectedIndex = 0;
+
 
 
   @override
@@ -247,7 +252,6 @@ class _AddAddressPageState extends State<AddAddressPage> {
                       ),
                       child: TextFormField(
                         controller: localityController,
-                        keyboardType: TextInputType.number,
                         focusNode: localityFocusNode,
                         cursorHeight: scrWidth * 0.055,
                         cursorWidth: 1,
@@ -353,43 +357,19 @@ class _AddAddressPageState extends State<AddAddressPage> {
                 GestureDetector(
                   onTap: (){
                     setState(() {
-                      selectedIndex=0;
+                      selectedIndex = 1;
+                      purpose = 'Home';
                     });
                   },
                   child: Container(
                     width: scrWidth*0.24,
                     height: textFormFieldHeight45,
                     decoration: BoxDecoration(
-                      color:selectedIndex==0? primarycolor:textFormFieldFillColor,
+                      color:selectedIndex == 1? primarycolor:textFormFieldFillColor,
                         borderRadius: BorderRadius.circular(scrWidth * 0.026),
                     ),
                     child: Center(
                       child: Text("Home",style:  TextStyle(
-                        color:selectedIndex==0?Colors.white: textFormUnFocusColor,
-                        fontWeight: FontWeight.w600,
-                        fontSize: FontSize15,
-                        fontFamily: 'Urbanist',
-                      ),),
-                    ),
-                  ),
-                ),
-                SizedBox(width: scrWidth*0.056,),
-
-                GestureDetector(
-                  onTap: (){
-                    setState(() {
-                      selectedIndex=1;
-                    });
-                  },
-                  child: Container(
-                    width:  scrWidth*0.24,
-                    height: textFormFieldHeight45,
-                    decoration: BoxDecoration(
-                      color:selectedIndex==1?primarycolor: textFormFieldFillColor,
-                      borderRadius: BorderRadius.circular(scrWidth * 0.026),
-                    ),
-                    child: Center(
-                      child: Text("Work",style:  TextStyle(
                         color:selectedIndex==1?Colors.white: textFormUnFocusColor,
                         fontWeight: FontWeight.w600,
                         fontSize: FontSize15,
@@ -403,7 +383,34 @@ class _AddAddressPageState extends State<AddAddressPage> {
                 GestureDetector(
                   onTap: (){
                     setState(() {
-                      selectedIndex=2;
+                      selectedIndex = 0;
+                      purpose = 'Work';
+                    });
+                  },
+                  child: Container(
+                    width:  scrWidth*0.24,
+                    height: textFormFieldHeight45,
+                    decoration: BoxDecoration(
+                      color:selectedIndex==0?primarycolor: textFormFieldFillColor,
+                      borderRadius: BorderRadius.circular(scrWidth * 0.026),
+                    ),
+                    child: Center(
+                      child: Text("Work",style:  TextStyle(
+                        color:selectedIndex==0?Colors.white: textFormUnFocusColor,
+                        fontWeight: FontWeight.w600,
+                        fontSize: FontSize15,
+                        fontFamily: 'Urbanist',
+                      ),),
+                    ),
+                  ),
+                ),
+                SizedBox(width: scrWidth*0.056,),
+
+                GestureDetector(
+                  onTap: (){
+                    setState(() {
+                      selectedIndex = 2;
+                      purpose = 'Other';
                     });
                   },
                   child: Container(
@@ -428,30 +435,49 @@ class _AddAddressPageState extends State<AddAddressPage> {
               ],
             ),
             SizedBox(height: 20,),
-            Padding(
-              padding: const EdgeInsets.only(left: 22,right: 22),
-              child: Container(
-                height: textFormFieldHeight45,
-                width: scrWidth,
-                decoration: BoxDecoration(
-                    color: primarycolor,
-                    borderRadius: BorderRadius.circular(8)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SvgPicture.asset("assets/icons/crtlocation.svg"),
-                    SizedBox(width: scrWidth*0.03,),
-                    Text(
-                      "Use My Current Location",
-                      style: TextStyle(color: Colors.white,fontFamily: 'Urbanist',fontSize: 16,fontWeight: FontWeight.w600),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(height: scrHeight*0.2,),
+            // Padding(
+            //   padding: const EdgeInsets.only(left: 22,right: 22),
+            //   child: Container(
+            //     height: textFormFieldHeight45,
+            //     width: scrWidth,
+            //     decoration: BoxDecoration(
+            //         color: primarycolor,
+            //         borderRadius: BorderRadius.circular(8)),
+            //     child: Row(
+            //       mainAxisAlignment: MainAxisAlignment.center,
+            //       children: [
+            //         SvgPicture.asset("assets/icons/crtlocation.svg"),
+            //         SizedBox(width: scrWidth*0.03,),
+            //         Text(
+            //           "Use My Current Location",
+            //           style: TextStyle(color: Colors.white,fontFamily: 'Urbanist',fontSize: 16,fontWeight: FontWeight.w600),
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
+            SizedBox(height: scrHeight*0.25,),
             GestureDetector(
               onTap: (){
+                FirebaseFirestore.instance.collection('users').doc(currentuserid).update({
+                  'address':FieldValue.arrayUnion(
+                      [
+                        {
+                          'phoneNumber':phoneController.text,
+                          'locality':localityController.text,
+                          'pinCode':pinCodeController.text,
+                          'name':nameController.text,
+                          'select':purpose,
+                          'flatNo':flatNoController.text,
+                          'date':DateFormat.yMMMd().format(DateTime.now()),
+                        }
+                      ]
+                  ),
+                  // 'totalReceived':
+                  // FieldValue.increment(double.tryParse(valueAmountController.text)!)
+                }
+
+                );
                 Navigator.push(context, MaterialPageRoute(builder: (context)=>CheckOutPage()));
               },
               child: Container(

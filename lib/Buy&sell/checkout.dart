@@ -1,10 +1,16 @@
+import 'dart:convert';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:threems/Authentication/root.dart';
 import 'package:threems/Buy&sell/storepage.dart';
 
+import '../model/usermodel.dart';
 import '../screens/splash_screen.dart';
 import '../utils/themes.dart';
 import 'checkout2.dart';
@@ -18,19 +24,57 @@ class CheckOutPage extends StatefulWidget {
 }
 
 class _CheckOutPageState extends State<CheckOutPage> {
+
+
+
+   String cartKey = 'cart';
+
+
+  Future storeData()async{
+    final prefs = await SharedPreferences.getInstance();
+    final myItemsAsJsonString = json.encode(cartlist);
+    await prefs.setString(cartKey, myItemsAsJsonString);
+
+
+  }
+  List<Address>?  addressList;
+  getAddress(){
+    FirebaseFirestore.instance.collection('users').doc(currentuserid).snapshots().listen((event) {
+      addressList=[];
+      List names=event.get('address');
+      print(names);
+      for(var doc in names){
+        print(doc);
+        addressList!.add(Address.fromJson(doc));
+      }
+      if(mounted){
+        setState(() {
+
+        });
+      }
+    });
+  }
+  @override
+  void initState() {
+    getAddress();
+    // TODO: implement initState
+    super.initState();
+  }
   var currencyConvert = NumberFormat.currency(
     locale: 'HI',
     symbol: '₹ ',
   );
+
   bool isAddress = false;
   @override
   Widget build(BuildContext context) {
+
     double sum=0;
     double deliverycharge=12;
     double grandtotal=0;
     List totalprice=[];
     for(int i=0;i<cartlist.length;i++){
-      double x=cartlist[i]['price']*cartlist[i]['quantity'];
+      double x=cartlist[i]['price']*cartlist[i]['count'];
       totalprice.add(x);
       sum=sum+x;
       grandtotal=sum+deliverycharge;
@@ -163,7 +207,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                                       height: 3,
                                     ),
                                     Text(
-                                      cartlist[index]['unit'].toString(),
+                                      '${cartlist[index]['quantity']} ${cartlist[index]['unit']}',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           fontFamily: 'Urbanist',
@@ -213,14 +257,15 @@ class _CheckOutPageState extends State<CheckOutPage> {
                                         padding: const EdgeInsets.only(bottom: 8),
                                         child: InkWell(
                                             onTap:(){
-                                              if( cartlist[index]['quantity']==1)
+                                            storeData();
+                                              if( cartlist[index]['count']==1)
                                               {
                                                 cartlist.removeAt(index);
                                                 setState(() {});
 
                                               }
                                               else {
-                                                cartlist[index]['quantity']--;
+                                                cartlist[index]['count']--;
                                                 setState(() {});
                                               }
                                               // setState(() {
@@ -234,8 +279,10 @@ class _CheckOutPageState extends State<CheckOutPage> {
                                               // });
                                             },
                                             child: Padding(
-                                              padding: cartlist[index]['quantity']==1? EdgeInsets.only(top: 8): EdgeInsets.only(),
-                                              child: Icon(cartlist[index]['quantity']==1?Icons.delete_outline_outlined:Icons.minimize_outlined,size: 15,color: Colors.white,),
+                                              padding: cartlist[index]['count']==1? EdgeInsets.only(top: 8): EdgeInsets.only(),
+                                              child: Icon(cartlist[index]['count']==1?
+                                              Icons.delete_outline_outlined:Icons.minimize_outlined,size:
+                                              15,color: Colors.white,),
                                             )),
                                       ),
                                     ),
@@ -247,7 +294,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                                       ),
                                       child: Center(child: Text(
                                           // '${eachstore[index].counter}'
-                                        '${cartlist[index]['quantity']}'
+                                        cartlist[index]['count'].toString()
                                       )),
                                     ),
                                     Container(
@@ -261,13 +308,12 @@ class _CheckOutPageState extends State<CheckOutPage> {
                                       ),
                                       child: InkWell(
                                           onTap:(){
-                                            setState(() {
                                               setState((){
-                                                cartlist[index]['quantity']=cartlist[index]['quantity']+1;
-
+                                                cartlist[index]['count']=cartlist[index]['count']+1;
                                               });
-                                              // eachstore[index].counter++;
-                                            });
+                                              storeData();
+
+                                            // eachstore[index].counter++;
                                           },
                                           child: Icon(Icons.add,size: 15,color: Colors.white,)),
                                     ),
@@ -449,65 +495,8 @@ class _CheckOutPageState extends State<CheckOutPage> {
               height: 20,
             ),
 
-            isAddress == true
-                ? Container(
-                    height: 100,
-                    width: 310,
-                    decoration: BoxDecoration(
-                        // color: Colors.white,
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: Color(0xffD2D2D2), width: 1)),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 15, top: 10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Asif Ali",
-                            style: TextStyle(
-                                fontFamily: 'Urbanist',
-                                fontWeight: FontWeight.w600,
-                                fontSize: 12,
-                                color: Colors.black),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            "7034847868",
-                            style: TextStyle(
-                                fontFamily: 'Urbanist',
-                                fontWeight: FontWeight.w600,
-                                fontSize: 12,
-                                color: Colors.black),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            "Flat 50 Manathumangalam, Perintalmanna",
-                            style: TextStyle(
-                                fontFamily: 'Urbanist',
-                                fontWeight: FontWeight.w600,
-                                fontSize: 12,
-                                color: Colors.black),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            "Work",
-                            style: TextStyle(
-                                fontFamily: 'Urbanist',
-                                fontWeight: FontWeight.w600,
-                                fontSize: 12,
-                                color: Colors.black),
-                          ),
-                        ],
-                      ),
-                    ),
-                  )
-                : InkWell(
+            addressList ==null
+                ? InkWell(
                     onTap: () {
                       Navigator.push(
                           context,
@@ -532,33 +521,67 @@ class _CheckOutPageState extends State<CheckOutPage> {
                         ),
                       ),
                     ),
-                  ),
-            isAddress==false?SizedBox(height: 120,) :SizedBox(height: 150,) ,
-            isAddress == false
-                ? InkWell(
-              onTap: (){
-                Navigator.push(context,MaterialPageRoute(builder: (context)=>CheckOutPage3()));
-              },
-                  child: Container(
-                      height: 40,
-                      width: 310,
-                      decoration: BoxDecoration(
-                        color: primarycolor,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Center(
-                        child: Text(
-                          "Place Order",
-                          style: TextStyle(
-                              fontFamily: 'Urbanist',
-                              fontWeight: FontWeight.w600,
-                              fontSize: 12,
-                              color: Colors.white),
-                        ),
-                      ),
+                  ):Container(
+              height: 100,
+              width: 355,
+              decoration: BoxDecoration(
+                // color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Color(0xffD2D2D2), width: 1)),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 15, top: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(addressList==null?'':
+                    addressList![0].name!,
+                      style: TextStyle(
+                          fontFamily: 'Urbanist',
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12,
+                          color: Colors.black),
                     ),
-                )
-                : Container(
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Text(addressList==null?'':
+                    addressList![0].phoneNumber!,
+                      style: TextStyle(
+                          fontFamily: 'Urbanist',
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12,
+                          color: Colors.black),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Text(addressList==null?'':
+                    "Flat ${addressList![0].flatNo!},${addressList![0].locality!},"
+                        "${addressList![0].pinCode!}",
+                      style: TextStyle(
+                          fontFamily: 'Urbanist',
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12,
+                          color: Colors.black),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Text(addressList==null?'':
+                    addressList![0].select!,
+                      style: TextStyle(
+                          fontFamily: 'Urbanist',
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12,
+                          color: Colors.black),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            addressList==null?SizedBox(height: 120,) :SizedBox(height: 150,) ,
+            addressList == null
+                ? Container(
                     height: 40,
                     width: 310,
                     decoration: BoxDecoration(
@@ -575,10 +598,41 @@ class _CheckOutPageState extends State<CheckOutPage> {
                             color: Colors.white),
                       ),
                     ),
+                  ):InkWell(
+              onTap: (){
+                Navigator.push(context,MaterialPageRoute(builder: (context)=>CheckOutPage3()));
+              },
+              child: Container(
+                height: 40,
+                width: 310,
+                decoration: BoxDecoration(
+                  color: primarycolor,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Center(
+                  child: Text(
+                    "Place Order",
+                    style: TextStyle(
+                        fontFamily: 'Urbanist',
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
+                        color: Colors.white),
                   ),
+                ),
+              ),
+            )
           ],
         ),
       ),
     );
+  }
+  delete()async{
+    final prefs=await SharedPreferences.getInstance();
+    final myItemsAsJsonString = json.encode(cartlist);
+    await prefs.remove( myItemsAsJsonString);
+    setState(() {
+
+    });
+
   }
 }

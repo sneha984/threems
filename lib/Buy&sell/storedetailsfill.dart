@@ -17,9 +17,7 @@ import '../screens/splash_screen.dart';
 import '../utils/themes.dart';
 import 'congratspage.dart';
 import 'dart:io';
-List categoryList=[];
-List categoryListAll=[];
-List<String> selectCategory=[];
+
 class StoreDetails extends StatefulWidget {
   const StoreDetails({Key? key}) : super(key: key);
 
@@ -30,6 +28,9 @@ class StoreDetails extends StatefulWidget {
 class _StoreDetailsState extends State<StoreDetails> {
   bool finish = false;
   bool trackedlocation = false;
+  List categoryList=[];
+  List categoryListAll=[];
+  List<String> selectCategory=[];
   // getShopCategory(){
   //   FirebaseFirestore.instance.collection('shopCategory').snapshots().listen((event) {
   //     categoryList=[];
@@ -376,6 +377,62 @@ class _StoreDetailsState extends State<StoreDetails> {
               //     ],
               //   ),
               // ),
+              Container(
+                width: scrWidth*27,
+                decoration: BoxDecoration(                color: textFormFieldFillColor,
+                    borderRadius: BorderRadius.circular(scrWidth * 0.026)),
+                child: GFMultiSelect(
+                  items: categoryList,
+                  onSelect: (value) {
+                    selectedValue=value.toString();
+                    selectCategory=[];
+                    for(int i=0;i<value.length;i++){
+                      selectCategory.add(categoryList[value[i]].toString());
+                    }
+                    print('selected $value ');
+                    print(selectCategory);
+                  },
+
+                  dropdownTitleTileText: 'Store Category',
+                  // dropdownTitleTileHintText: 'Store Category',
+                  // dropdownTitleTileHintTextStyle: TextStyle(
+                  //  color: Color(0xffB0B0B0),
+                  //   fontWeight: FontWeight.w600,
+                  //   fontSize: FontSize15,
+                  //   fontFamily: 'Urbanist',
+                  //
+                  // ),
+                  dropdownTitleTileColor: textFormFieldFillColor,
+                   dropdownTitleTilePadding: EdgeInsets.only(left: 9),
+                  dropdownTitleTileMargin: EdgeInsets.only(
+                      top: 22, left: 18, right: 18, bottom: 14),
+                  //  dropdownTitleTilePadding: EdgeInsets.all(10),
+                  dropdownUnderlineBorder: const BorderSide(
+                      color: Colors.transparent, width: 2),
+                  // dropdownTitleTileBorder:
+                  // Border.all(color:Colors.red, width: 1),
+                  dropdownTitleTileBorderRadius: BorderRadius.circular(10),
+                  expandedIcon: const Icon(
+                    Icons.arrow_drop_down,
+                    color: Colors.black,
+                  ),
+                  collapsedIcon: const Icon(
+                    Icons.arrow_drop_up,
+                    color: Colors.black,
+                  ),
+                  submitButton: Text('OK'),
+
+                  dropdownTitleTileTextStyle:  TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
+                      fontFamily: 'Urbanist'),
+                  padding: const EdgeInsets.all(6),
+                  margin: const EdgeInsets.all(6),
+                  type: GFCheckboxType.square,
+                  activeBgColor: Colors.green.withOpacity(0.5),
+                  inactiveBorderColor:primarycolor,
+                ),
+              ),
               SizedBox(
                 height: scrHeight * 0.02,
               ),
@@ -438,108 +495,65 @@ class _StoreDetailsState extends State<StoreDetails> {
                   ),
                 ),
               ),
-              Container(
-                width: scrWidth*2,
-                child: GFMultiSelect(
-                  items: categoryList,
-                  onSelect: (value) {
-                    selectedValue=value.toString();
-                    selectCategory=[];
-                    for(int i=0;i<value.length;i++){
-                      selectCategory.add(categoryList[value[i]].toString());
-                    }
-                    print('selected $value ');
-                    print(selectCategory);
-                  },
 
-                  dropdownTitleTileText: 'Store Category',
-                  dropdownTitleTileColor: Colors.grey[200],
-                  // dropdownTitleTileMargin: EdgeInsets.only(
-                  //     top: 22, left: 18, right: 18, bottom: 5),
-                  dropdownTitleTilePadding: EdgeInsets.all(10),
-                  dropdownUnderlineBorder: const BorderSide(
-                      color: Colors.transparent, width: 2),
-                  // dropdownTitleTileBorder:
-                  // Border.all(color:Colors.red, width: 1),
-                  dropdownTitleTileBorderRadius: BorderRadius.circular(10),
-                  expandedIcon: const Icon(
-                    Icons.arrow_drop_down,
-                    color: Colors.black,
-                  ),
-                  collapsedIcon: const Icon(
-                    Icons.arrow_drop_up,
-                    color: Colors.black,
-                  ),
-                  submitButton: Text('OK'),
-                  dropdownTitleTileTextStyle:  TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 14,
-                      fontFamily: 'Urbanist'),
-                  padding: const EdgeInsets.all(6),
-                  margin: const EdgeInsets.all(6),
-                  type: GFCheckboxType.basic,
-                  activeBgColor: Colors.green.withOpacity(0.5),
-                  inactiveBorderColor: Colors.blue,
-                ),
-              ),
               SizedBox(
                 height: scrHeight * 0.02,
               ),
-              trackedlocation == false
-                  ? Container(
-                      height: textFormFieldHeight45,
-                      width: scrWidth,
-                      decoration: BoxDecoration(
-                          color: primarycolor,
-                          borderRadius: BorderRadius.circular(8)),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SvgPicture.asset("assets/icons/crtlocation.svg"),
-                          SizedBox(
-                            width: scrWidth * 0.03,
-                          ),
-                          Text(
-                            "Set Store Location",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'Urbanist',
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600),
-                          ),
-                        ],
-                      ),
-                    )
-                  : Padding(
-                      padding: EdgeInsets.only(right: scrWidth * 0.2),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            height: scrHeight * 0.003,
-                          ),
-                          Text(
-                            "Tracked location",
-                            style: TextStyle(
-                                color: Color(0xffB0B0B0),
-                                fontFamily: 'Urbanist',
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600),
-                          ),
-                          SizedBox(
-                            height: scrHeight * 0.008,
-                          ),
-                          Text(
-                            "Angadippuram, Perintalmanna",
-                            style: TextStyle(
-                                color: Color(0xff232323),
-                                fontFamily: 'Urbanist',
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600),
-                          ),
-                        ],
-                      ),
-                    ),
+              // trackedlocation == false
+              //     ? Container(
+              //         height: textFormFieldHeight45,
+              //         width: scrWidth,
+              //         decoration: BoxDecoration(
+              //             color: primarycolor,
+              //             borderRadius: BorderRadius.circular(8)),
+              //         child: Row(
+              //           mainAxisAlignment: MainAxisAlignment.center,
+              //           children: [
+              //             SvgPicture.asset("assets/icons/crtlocation.svg"),
+              //             SizedBox(
+              //               width: scrWidth * 0.03,
+              //             ),
+              //             Text(
+              //               "Set Store Location",
+              //               style: TextStyle(
+              //                   color: Colors.white,
+              //                   fontFamily: 'Urbanist',
+              //                   fontSize: 16,
+              //                   fontWeight: FontWeight.w600),
+              //             ),
+              //           ],
+              //         ),
+              //       )
+              //     : Padding(
+              //         padding: EdgeInsets.only(right: scrWidth * 0.2),
+              //         child: Column(
+              //           crossAxisAlignment: CrossAxisAlignment.start,
+              //           children: [
+              //             SizedBox(
+              //               height: scrHeight * 0.003,
+              //             ),
+              //             Text(
+              //               "Tracked location",
+              //               style: TextStyle(
+              //                   color: Color(0xffB0B0B0),
+              //                   fontFamily: 'Urbanist',
+              //                   fontSize: 14,
+              //                   fontWeight: FontWeight.w600),
+              //             ),
+              //             SizedBox(
+              //               height: scrHeight * 0.008,
+              //             ),
+              //             Text(
+              //               "Angadippuram, Perintalmanna",
+              //               style: TextStyle(
+              //                   color: Color(0xff232323),
+              //                   fontFamily: 'Urbanist',
+              //                   fontSize: 16,
+              //                   fontWeight: FontWeight.w600),
+              //             ),
+              //           ],
+              //         ),
+              //       ),
 
               SizedBox(
                 height: scrHeight * 0.25,

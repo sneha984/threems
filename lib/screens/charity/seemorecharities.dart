@@ -164,7 +164,7 @@ class _SeeMoreCharitiesState extends State<SeeMoreCharities>
                       padding:  EdgeInsets.only(bottom: scrHeight*0.0035,top: scrHeight*0.0035,right: 5),
                       child: CircleAvatar(
                         radius: 11,
-                        backgroundColor:(_tabController.index==i)? Colors.white:Color(0xffD4D4D4),
+                        backgroundColor: Colors.white,
                         child: StreamBuilder<QuerySnapshot>(
                             stream: FirebaseFirestore.instance
                                 .collection('charity')
@@ -269,7 +269,7 @@ class _SeeMoreCharitiesState extends State<SeeMoreCharities>
       body: Column(
         children: [
           Container(
-            height: scrHeight * 0.21,
+            height: scrHeight * 0.158,
             width: scrWidth,
             decoration: BoxDecoration(
               color: Colors.white,
@@ -352,41 +352,41 @@ class _SeeMoreCharitiesState extends State<SeeMoreCharities>
                     ),
                   ],
                 ),
-                Padding(
-                  padding: EdgeInsets.only(
-                      left: scrWidth * 0.02, top: scrHeight * 0.02),
-                  child: Container(
-                    height: scrHeight * 0.042,
-                    width: scrWidth * 0.9,
-                    decoration: BoxDecoration(
-                        color: Color(0xffE9EEF3),
-                        borderRadius: BorderRadius.circular(17)),
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                          prefixIcon: Padding(
-                            padding: EdgeInsets.only(
-                                top: scrHeight * 0.01,
-                                left: scrWidth * 0.04,
-                                bottom: scrHeight * 0.01,
-                                right: scrWidth * 0.05),
-                            child: SvgPicture.asset(
-                              "assets/icons/Vector (4).svg",
-                            ),
-                          ),
-                          border: InputBorder.none,
-                          hintText: "search here",
-                          hintStyle: TextStyle(
-                            fontFamily: 'Urbanist',
-                            fontWeight: FontWeight.w500,
-                            fontSize: scrWidth * 0.042,
-                            color: Colors.grey,
-                          )),
-                      cursorColor: Colors.black,
-                      cursorHeight: 20,
-                      cursorWidth: 0.5,
-                    ),
-                  ),
-                ),
+                // Padding(
+                //   padding: EdgeInsets.only(
+                //       left: scrWidth * 0.02, top: scrHeight * 0.02),
+                //   child: Container(
+                //     height: scrHeight * 0.042,
+                //     width: scrWidth * 0.9,
+                //     decoration: BoxDecoration(
+                //         color: Color(0xffE9EEF3),
+                //         borderRadius: BorderRadius.circular(17)),
+                //     child: TextFormField(
+                //       decoration: InputDecoration(
+                //           prefixIcon: Padding(
+                //             padding: EdgeInsets.only(
+                //                 top: scrHeight * 0.01,
+                //                 left: scrWidth * 0.04,
+                //                 bottom: scrHeight * 0.01,
+                //                 right: scrWidth * 0.05),
+                //             child: SvgPicture.asset(
+                //               "assets/icons/Vector (4).svg",
+                //             ),
+                //           ),
+                //           border: InputBorder.none,
+                //           hintText: "search here",
+                //           hintStyle: TextStyle(
+                //             fontFamily: 'Urbanist',
+                //             fontWeight: FontWeight.w500,
+                //             fontSize: scrWidth * 0.042,
+                //             color: Colors.grey,
+                //           )),
+                //       cursorColor: Colors.black,
+                //       cursorHeight: 20,
+                //       cursorWidth: 0.5,
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),
@@ -398,23 +398,23 @@ class _SeeMoreCharitiesState extends State<SeeMoreCharities>
               SizedBox(
                 width: scrWidth * 0.045,
               ),
-              Container(
-                width: scrWidth * 0.09,
-                height: scrHeight * 0.04,
-                decoration: BoxDecoration(
-                    color: primarycolor,
-                    borderRadius: BorderRadius.circular(17.5)),
-                child: Padding(
-                  padding: EdgeInsets.only(
-                      top: scrHeight * 0.01, bottom: scrHeight * 0.01),
-                  child: SvgPicture.asset(
-                    "assets/icons/Group (1).svg",
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: scrWidth * 0.02,
-              ),
+              // Container(
+              //   width: scrWidth * 0.09,
+              //   height: scrHeight * 0.04,
+              //   decoration: BoxDecoration(
+              //       color: primarycolor,
+              //       borderRadius: BorderRadius.circular(17.5)),
+              //   child: Padding(
+              //     padding: EdgeInsets.only(
+              //         top: scrHeight * 0.01, bottom: scrHeight * 0.01),
+              //     child: SvgPicture.asset(
+              //       "assets/icons/Group (1).svg",
+              //     ),
+              //   ),
+              // ),
+              // SizedBox(
+              //   width: scrWidth * 0.02,
+              // ),
               Expanded(
                 child: Container(
                   height: scrHeight * 0.039,

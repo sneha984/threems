@@ -10,8 +10,9 @@ import '../screens/home_screen.dart';
 import '../screens/Utilities/utilities.dart';
 
 class ScreenLayout extends StatefulWidget {
-  int? index;
-  ScreenLayout({Key? key, this.index}) : super(key: key);
+  final int index;
+  final int tabIndex;
+  ScreenLayout({Key? key,  this.index=0,  this.tabIndex=0}) : super(key: key);
 
   @override
   State<ScreenLayout> createState() => _ScreenLayoutState();
@@ -21,14 +22,14 @@ class _ScreenLayoutState extends State<ScreenLayout> {
   // double selectedIndex = 0;
   final PageStorageBucket _bucket = PageStorageBucket();
   var _currentScreen;
-  int? index;
+  int index=0;
   @override
   void initState() {
     index = widget.index ?? 0;
     _currentScreen = index == 0
         ? HomeScreen()
         : index == 1
-            ? BuyAndSell()
+            ? BuyAndSell(index: widget.tabIndex??0,)
             : index == 2
                 ? ExpenseIncomeTabPage()
                 : Utilities();
@@ -110,7 +111,7 @@ class _ScreenLayoutState extends State<ScreenLayout> {
                       onPressed: () {
                         setState(() {
                           index = 1;
-                          _currentScreen = BuyAndSell();
+                          _currentScreen = BuyAndSell(index: widget.tabIndex??0,);
                           // _currentScreen = CreateRoomScreen();
                         });
                       },

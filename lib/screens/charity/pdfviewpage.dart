@@ -18,3 +18,20 @@ class _PdfViewPageState extends State<PdfViewPage> {
     );
   }
 }
+class PdfPage extends StatefulWidget {
+  final  CharityModel charitys;
+
+  const PdfPage({Key? key, required this.charitys}) : super(key: key);
+
+  @override
+  State<PdfPage> createState() => _PdfPageState();
+}
+
+class _PdfPageState extends State<PdfPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SfPdfViewer.network(widget.charitys.otherDocument!),
+    );
+  }
+}

@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:threems/Buy&sell/storedetailsfill2.dart';
 
 class SuccesfullyAdded extends StatefulWidget {
-  final String id;
+  final dynamic data;
 
-  const SuccesfullyAdded({Key? key, required this.id}) : super(key: key);
+  const SuccesfullyAdded({Key? key, required this.data}) : super(key: key);
 
   @override
   State<SuccesfullyAdded> createState() => _SuccesfullyAddedState();
@@ -17,8 +17,8 @@ class _SuccesfullyAddedState extends State<SuccesfullyAdded> {
   void initState() {
     super.initState();
     Timer(const Duration(seconds: 4), () {
-      Navigator.push(context, MaterialPageRoute
-        (builder: (context)=>StoreDetailsFill2(id: widget.id)));
+      Navigator.pushReplacement(context, MaterialPageRoute
+        (builder: (context)=>StoreDetailsFill2(data: widget.data)));
     });
   }
   @override
