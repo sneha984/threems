@@ -187,7 +187,6 @@ class _AddServicePageState extends State<AddServicePage>  with TickerProviderSta
 
   }
   TabController? _tabController;
-
   TextEditingController? name;
   TextEditingController? phoneNumber;
   TextEditingController? email;
@@ -238,8 +237,8 @@ class _AddServicePageState extends State<AddServicePage>  with TickerProviderSta
     sevicesProvided = TextEditingController(text:serviceItems?.servicesProvided.toString()??'');
     aboutService = TextEditingController(text:serviceItems?.aboutService.toString()??'');
 
-    selectedCategory=serviceItems?.serviceCategory??'';
-    selectedSubCategory=serviceItems?.subCategory??'';
+    selectedCategory=widget.Category??'';
+    selectedSubCategory=widget.subCategoryName??'';
     selectedUnit=serviceItems?.serviceUnit??'';
     selectedCity=serviceItems?.city??'';
     imgUrl=serviceItems?.image??'';
@@ -816,68 +815,7 @@ class _AddServicePageState extends State<AddServicePage>  with TickerProviderSta
                           SizedBox(
                             height: scrWidth * 0.04,
                           ),
-                          // Container(
-                          //   width: scrWidth,
-                          //   height: textFormFieldHeight45,
-                          //   padding: EdgeInsets.symmetric(
-                          //     horizontal: scrWidth * 0.015,
-                          //     vertical:scrHeight*0.002,
-                          //   ),
-                          //   decoration: BoxDecoration(
-                          //     border: Border.all(
-                          //       color: Color(0xffDADADA),
-                          //     ),
-                          //     color: textFormFieldFillColor,
-                          //     borderRadius: BorderRadius.circular(scrWidth * 0.026),
-                          //   ),
-                          //   child:  TextFormField(
-                          //     controller:  userId,
-                          //     cursorHeight: scrWidth * 0.055,
-                          //     cursorWidth: 1,
-                          //     cursorColor: Colors.black,
-                          //     style: GoogleFonts.urbanist(
-                          //       color: Colors.black,
-                          //       fontWeight: FontWeight.w600,
-                          //       fontSize: FontSize15,
-                          //     ),
-                          //     keyboardType: TextInputType.text,
-                          //     decoration:  InputDecoration(
-                          //       labelText: 'Enter UserId',
-                          //       labelStyle: TextStyle(
-                          //         color: textFormUnFocusColor,
-                          //         fontWeight: FontWeight.w500,
-                          //         fontSize: FontSize15,
-                          //         fontFamily: 'Urbanist',
-                          //       ),
-                          //       fillColor: textFormFieldFillColor,
-                          //       filled: true,
-                          //       contentPadding: EdgeInsets.only(
-                          //           left: scrWidth*0.03, top: scrHeight*0.006, bottom: scrWidth * 0.02),
-                          //       disabledBorder: InputBorder.none,
-                          //       enabledBorder: InputBorder.none,
-                          //       errorBorder: InputBorder.none,
-                          //       border: InputBorder.none,
-                          //       focusedBorder: UnderlineInputBorder(
-                          //         borderSide: BorderSide(
-                          //           color: primarycolor,
-                          //           width: 2,
-                          //         ),
-                          //       ),
-                          //
-                          //       floatingLabelStyle: TextStyle(
-                          //           color:primarycolor),
-                          //       focusColor: Color(0xff034a82),
-                          //       // border: OutlineInputBorder(),
-                          //       // focusedBorder: OutlineInputBorder(
-                          //       //     borderSide: BorderSide(color: Color(0xff034a82),width: 2)
-                          //       // ),
-                          //     ),
-                          //   ),
-                          //
-                          // ),
-                          // SizedBox(
-                          //   height: scrWidth * 0.04,
-                          // ),
+
 
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1614,30 +1552,39 @@ class _AddServicePageState extends State<AddServicePage>  with TickerProviderSta
                                       child: InkWell(
                                         onTap: (){
                                           editService=true;
-                                          name!.text=serviceItems.name!;
-                                          email!.text=serviceItems.emailId!;
-                                          phoneNumber!.text=serviceItems.phoneNumber!;
-                                          whatsappNumber!.text=serviceItems.whatsappNo!;
-                                          address!.text=serviceItems.address!;
-                                          selectedCity=serviceItems.city!;
-                                          selectedUnit=serviceItems.serviceUnit!;
-                                          city.text=serviceItems.city!;
-                                          unit.text=serviceItems.serviceUnit!;
-                                          sevicesProvided!.text=serviceItems.servicesProvided!;
-                                          aboutService!.text=serviceItems.aboutService!;
-                                          imgUrl=serviceItems.image!.toString();
-                                          wage!.text=serviceItems.wage.toString();
-                                          fileUrl=serviceItems.documents!;
-                                          fileName=serviceItems.documents!;
-                                                setState(() {});
-
-                                          _tabController!.animateTo(0);
-
-
-                                          // Navigator.push(context, MaterialPageRoute(builder: (context)=>AddServicePage(
-                                          //     serviceItems:serviceItems,
+                                          // name!.text=serviceItems.name!;
+                                          // email!.text=serviceItems.emailId!;
+                                          // phoneNumber!.text=serviceItems.phoneNumber!;
+                                          // whatsappNumber!.text=serviceItems.whatsappNo!;
+                                          // address!.text=serviceItems.address!;
+                                          // selectedCity=serviceItems.city!;
+                                          // selectedUnit=serviceItems.serviceUnit!;
+                                          // city.text=serviceItems.city!;
+                                          // unit.text=serviceItems.serviceUnit!;
+                                          // sevicesProvided!.text=serviceItems.servicesProvided!;
+                                          // aboutService!.text=serviceItems.aboutService!;
+                                          // imgUrl=serviceItems.image!.toString();
+                                          // wage!.text=serviceItems.wage.toString();
+                                          // fileUrl=serviceItems.documents!;
+                                          // fileName=serviceItems.documents!;
+                                          // _tabController!.animateTo(0);
+                                          // if(mounted) {
+                                          //   setState(() {
                                           //
-                                          // )));
+                                          //   });
+                                          // };
+
+                                          Navigator.push(context, MaterialPageRoute(builder: (context)=>AddServicePage(
+                                              serviceItems:serviceItems,
+                                              subCategoryName: widget.subCategoryName,
+                                               Category: widget.Category
+
+                                          )));
+                                          if(mounted) {
+                                            setState(() {
+
+                                            });
+                                          };
                                         },
                                         onLongPress: (){
                                           showDialog(context: context, builder:(buildcontext)
@@ -1764,11 +1711,6 @@ class _AddServicePageState extends State<AddServicePage>  with TickerProviderSta
     );
   }
 }
-
-
-
-
-
 addService(ServiceDetails service){
   FirebaseFirestore.instance.collection('services').add(service.toJson()).then((value){
     value.update({
@@ -1781,4 +1723,5 @@ EditService(ServiceDetails service){
   FirebaseFirestore.instance.collection('services').doc(service.serviceId?.trim()).update(service.toJson());
 
 }
+
 
