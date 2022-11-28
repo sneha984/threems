@@ -4,11 +4,13 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:geo_firestore_flutter/geo_firestore_flutter.dart';
 import 'package:getwidget/components/dropdown/gf_multiselect.dart';
 import 'package:getwidget/types/gf_checkbox_type.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:threems/Authentication/root.dart';
 import 'package:threems/kuri/createkuri.dart';
+import 'package:threems/screens/home_screen.dart';
 
 import '../model/Buy&sell.dart';
 import '../screens/splash_screen.dart';
@@ -31,6 +33,20 @@ class _StoreDetailsState extends State<StoreDetails> {
   List categoryList=[];
   List categoryListAll=[];
   List<String> selectCategory=[];
+  geoLocation(String id)async{
+    GeoFirestore geoFirestore = GeoFirestore(FirebaseFirestore.instance.collection('stores'));
+    await geoFirestore.setLocation(id, GeoPoint(lat!, long!));
+    final queryLocation = GeoPoint(lat!, long!);
+    // creates a new query around [37.7832, -122.4056] with a radius of 0.6 kilometers
+    final List<DocumentSnapshot> documents = await geoFirestore.getAtLocation(queryLocation, 0.6);
+    documents.forEach((doc) {
+      print("111111111111111111111111111111111111111111111111111111");
+      print(doc.data());
+
+      print("111111111111111111111111111111111111111111111111111111");
+
+    });
+  }
   // getShopCategory(){
   //   FirebaseFirestore.instance.collection('shopCategory').snapshots().listen((event) {
   //     categoryList=[];
@@ -72,20 +88,20 @@ class _StoreDetailsState extends State<StoreDetails> {
     });
     
   }
-  final List<String> items = [
-    "Grocery Store",
-    "Fashion Apparels",
-    "Mobile & Electronics",
-    "Fruits & Vegetables",
-    "Pharmacy & Medicines",
-    "Chicken & Meat",
-    "Hardware & Tools",
-    "Bakery & Cake Shops",
-    "Home Decoration",
-    "Books & Stationary",
-    "Jewellery & Golds",
-    "Motor Accessories",
-  ];
+  // final List<String> items = [
+  //   "Grocery Store",
+  //   "Fashion Apparels",
+  //   "Mobile & Electronics",
+  //   "Fruits & Vegetables",
+  //   "Pharmacy & Medicines",
+  //   "Chicken & Meat",
+  //   "Hardware & Tools",
+  //   "Bakery & Cake Shops",
+  //   "Home Decoration",
+  //   "Books & Stationary",
+  //   "Jewellery & Golds",
+  //   "Motor Accessories",
+  // ];
   String? imgUrl;
   var imgFile;
   var uploadTask;
@@ -599,6 +615,8 @@ class _StoreDetailsState extends State<StoreDetails> {
                         }else{
                           final strDat = StoreDetailsModel(
                             storeImage: imgUrl,
+                            latitude: lat,
+                            longitude:long ,
                             // categoryId:,
                             userId: currentuserid,
                             storeName: storeNameController.text,
@@ -607,9 +625,7 @@ class _StoreDetailsState extends State<StoreDetails> {
                             storeLocation: "ncsunuscns",
                           );
                           await createStore(strDat);
-
                         }
-
                         print("---------------------------------------------------------");
                         print(imgUrl);
                         print("---------------------------------------------------------");
@@ -647,6 +663,7 @@ class _StoreDetailsState extends State<StoreDetails> {
         .collection('stores')
         .add(strDat.toJson())
         .then((value) {
+          geoLocation(value.id);
       value.update({'storeId': value.id});
       id=value.id;
     }).then((value) {

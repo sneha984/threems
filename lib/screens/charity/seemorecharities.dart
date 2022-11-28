@@ -111,7 +111,7 @@ class _SeeMoreCharitiesState extends State<SeeMoreCharities>
                                 animationDuration: 1000,
                                 lineHeight: 3,
                                 width: 189,
-                                percent: charity.totalReceived!/charity.valueAmount!,
+                                percent: charity.totalReceived??0/charity.valueAmount!,
                                 alignment: MainAxisAlignment.start,
                                 barRadius: Radius.circular(1.5),
 

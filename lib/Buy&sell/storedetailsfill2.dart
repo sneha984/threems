@@ -57,40 +57,61 @@ class _StoreDetailsFill2State extends State<StoreDetailsFill2> {
        loading = false;
      });
    }
-  final List<String> items = [
-    "kg",
-    "gm",
-    "ml",
-    "liter",
-    "mm",
-    "ft",
-    "meter",
-    "sq. ft.",
-    "sq. meter",
-    "km",
-    "set",
-    "hour",
-    "day",
-    "bunch",
-    "bundle",
-    "month",
-    "year",
-    "service",
-    "work",
-    "packet",
-    "box",
-    "pound",
-    "dozen",
-    "gunta",
-    "pair",
-    "minute",
-    "quintal",
-    "ton",
-    "capsule",
-    "tablet",
-    "plate",
-    "inch"
-  ];
+   List productUnit=[];
+   getUnit(){
+     FirebaseFirestore.instance.collection('productUnit').snapshots().listen((event) {
+       productUnit=[];
+
+       for(DocumentSnapshot <Map<String,dynamic>> doc in event.docs){
+         print("---====--=--9022222222222222222222222222222222222222222222222222222222222222222");
+         print('${doc['unit']}');
+         print('${event.docs[1]['unit']}');
+         // categoryListAll.add(doc.data()!);
+         productUnit.add(doc['unit']);
+       }
+       print(productUnit);
+       if(mounted){
+         setState(() {
+
+         });
+       }
+     });
+
+   }
+  // final List<String> items = [
+  //   "kg",
+  //   "gm",
+  //   "ml",
+  //   "liter",
+  //   "mm",
+  //   "ft",
+  //   "meter",
+  //   "sq. ft.",
+  //   "sq. meter",
+  //   "km",
+  //   "set",
+  //   "hour",
+  //   "day",
+  //   "bunch",
+  //   "bundle",
+  //   "month",
+  //   "year",
+  //   "service",
+  //   "work",
+  //   "packet",
+  //   "box",
+  //   "pound",
+  //   "dozen",
+  //   "gunta",
+  //   "pair",
+  //   "minute",
+  //   "quintal",
+  //   "ton",
+  //   "capsule",
+  //   "tablet",
+  //   "plate",
+  //   "inch"
+  // ];
   // List getcat=[];
   // getCategorys(){
   //   // getcat=[];
@@ -137,6 +158,7 @@ class _StoreDetailsFill2State extends State<StoreDetailsFill2> {
 
   @override
   void initState() {
+    getUnit();
     // TODO: implement initState
     selectCategory=widget.data['storeCategory'];
     super.initState();
@@ -719,10 +741,10 @@ class _StoreDetailsFill2State extends State<StoreDetailsFill2> {
                                     fontSize: FontSize15,
                                     fontFamily: 'Urbanist',
                                     fontWeight: FontWeight.w600,
-                                    color: Colors.black
+                                    color:Color(0xffB0B0B0)
                                 ),
                               ),
-                              items: items
+                              items: productUnit
                                   .map((item) => DropdownMenuItem<String>(
                                 value: item,
                                 child:  Text(
@@ -778,7 +800,7 @@ class _StoreDetailsFill2State extends State<StoreDetailsFill2> {
                   ],
                 ),
               ),
-              Text("Unit : per 2 piece",style: TextStyle(
+              Text("Unit : per ${productUnitController.text} ${selectedValue}",style: TextStyle(
                 fontFamily: 'Urbanist',fontWeight: FontWeight.w600,color: primarycolor,fontSize: 12
               ),),
               Padding(
@@ -885,10 +907,6 @@ class _StoreDetailsFill2State extends State<StoreDetailsFill2> {
                     refreshPage();
                     return showSnackbar(context,"Must Provide product unit");
                   }
-                  if(productDetailsController.text.isEmpty){
-                    refreshPage();
-                    return showSnackbar(context,"Must Provide product  Details");
-                  }
                   if(categoryNameController.text.isEmpty){
                     refreshPage();
                     return showSnackbar(context,"Must Provide category name");
@@ -912,7 +930,6 @@ class _StoreDetailsFill2State extends State<StoreDetailsFill2> {
                     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>SuccesfullyAdded(data: widget.data)));
                   }
                   // print(widget.id);
-
                 },
                 child: Padding(
                   padding:  EdgeInsets.only(right: scrWidth*0.053),

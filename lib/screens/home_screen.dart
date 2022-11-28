@@ -26,8 +26,8 @@ import '../model/charitymodel.dart';
 import 'charity/donatepage.dart';
 import 'charity/seemorecharities.dart';
 var currenPlace;
-var lat;
-var long;
+double? lat;
+double? long;
 List<Contact> contacts = [];
 
 List<CharityModel> verifiedcharity = [];

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:another_stepper/dto/stepper_data.dart';
 import 'package:another_stepper/widgets/another_stepper.dart';
 import 'package:badges/badges.dart';
@@ -6,6 +8,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geo_firestore_flutter/geo_firestore_flutter.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
@@ -20,6 +23,7 @@ import 'package:threems/Buy&sell/yourstorecreate.dart';
 import 'dart:ui' as ui;
 import 'package:threems/screens/splash_screen.dart';
 import 'package:threems/utils/themes.dart';
+import '../screens/home_screen.dart';
 import '../utils/dummy.dart';
 import 'Orders/Orders.dart';
 import 'categorystores.dart';
@@ -47,48 +51,98 @@ class _BuyAndSellState extends State<BuyAndSell>with TickerProviderStateMixin {
   String currentAddress = 'Select Your Location';
   Position? currentposition;
   int activeindex=0;
-  Future<Position> _determinePosition() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      Fluttertoast.showToast(msg: 'Please enable Your Location Service');
-    }
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        Fluttertoast.showToast(msg: 'Location permissions are denied');
-      }
-    }
+  // Future<Position> _determinePosition() async {
+  //   bool serviceEnabled;
+  //   LocationPermission permission;
+  //   serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  //   if (!serviceEnabled) {
+  //     Fluttertoast.showToast(msg: 'Please enable Your Location Service');
+  //   }
+  //   permission = await Geolocator.checkPermission();
+  //   if (permission == LocationPermission.denied) {
+  //     permission = await Geolocator.requestPermission();
+  //     if (permission == LocationPermission.denied) {
+  //       Fluttertoast.showToast(msg: 'Location permissions are denied');
+  //     }
+  //   }
+  //
+  //   if (permission == LocationPermission.deniedForever) {
+  //     Fluttertoast.showToast(
+  //         msg:
+  //         'Location permissions are permanently denied, we cannot request permissions.');
+  //   }
+  //
+  //   Position position = await Geolocator.getCurrentPosition(
+  //       desiredAccuracy: LocationAccuracy.high);
+  //
+  //   try {
+  //     List<Placemark> placemarks =
+  //     await placemarkFromCoordinates(position.latitude, position.longitude);
+  //
+  //     Placemark place = placemarks[0];
+  //
+  //     setState(() {
+  //       currentposition = position;
+  //       currentAddress = "${place.locality}";
+  //       //" ${place.postalCode},"
+  //       //" ${place.country}";
+  //     });
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  //   throw '';
+  //
+  // }
+  List<Map<String,dynamic>> location=[];
+  // getLocations(){
+  //   FirebaseFirestore.instance.collection('stores').snapshots().listen((event) {
+  //     location=[];
+  //     for(DocumentSnapshot <Map<String,dynamic>> doc in event.docs ){
+  //       location.add(doc.data()!);
+  //     }
+  //     if(mounted){
+  //       setState(() {
+  //
+  //       });
+  //     }
+  //   });
+  // }
+  // getArea(Map<String,dynamic> selectedAddress) async {
+  //   selectedArea = "";
+  //   selectedAreaId = "";
+  //   if(selectedAddress.keys.length>0) {
+  //     double lat = selectedAddress['lat'];
+  //     double lng = selectedAddress['long'];
+  //     double distance = 0;
+  //     double prevDistance = 0;
+  //     for (Map<String, dynamic> area in location) {
+  //       var result = await http.get(Uri.parse(
+  //           "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=$lat,"
+  //               "$lng&destinations=${area['lat']},"
+  //               "${area['long']}&key=AIzaSyCUZFUZ1yMpkzh6QUnKj54Q2N4L2iT4tBY"));
+  //       Map<String, dynamic> map = jsonDecode(result.body);
+  //
+  //       if (map['rows'].length > 0) {
+  //         if (map['rows'][0]["elements"].length > 0) {
+  //           mapDeliveryData = map['rows'][0]["elements"][0];
+  //           distance = double.tryParse(
+  //               mapDeliveryData['distance']['value'].toString());
+  //         }
+  //       }
+  //       if (distance < prevDistance || prevDistance==0) {
+  //
+  //         if(area['arearadius']>(distance/1000)) {
+  //           prevDistance = distance;
+  //           selectedArea = area['name'];
+  //           selectedAreaId = area['areaId'];
+  //           adminApproval = area['adminApproval']??false;
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
+  // FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-    if (permission == LocationPermission.deniedForever) {
-      Fluttertoast.showToast(
-          msg:
-          'Location permissions are permanently denied, we cannot request permissions.');
-    }
-
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-
-    try {
-      List<Placemark> placemarks =
-      await placemarkFromCoordinates(position.latitude, position.longitude);
-
-      Placemark place = placemarks[0];
-
-      setState(() {
-        currentposition = position;
-        currentAddress = "${place.locality}";
-        //" ${place.postalCode},"
-        //" ${place.country}";
-      });
-    } catch (e) {
-      print(e);
-    }
-    throw '';
-
-  }
   Map<String,dynamic> categorys={};
   // List<String> cateoryNames=[];
   int status=0;
@@ -105,11 +159,11 @@ class _BuyAndSellState extends State<BuyAndSell>with TickerProviderStateMixin {
         cateoryNames.add(doc.get('categoryName'));
         print("----------------------------------------------------------------------------------------");
         print(categorys[doc['categoryName']]);
+        print(doc.get('categoryImage'));
         grids.add(
             InkWell(
               onTap: (){
                 Navigator.push(context, MaterialPageRoute(builder: (context)=>CategoryStores(categoryname:doc.get('categoryName'),
-
                 )));
               },
               child: Container(
@@ -123,15 +177,11 @@ class _BuyAndSellState extends State<BuyAndSell>with TickerProviderStateMixin {
                       color: Colors.grey,
                       strokeWidth: 0.5,
                       child: Center(child: Padding(
-                        padding: EdgeInsets.all(scrWidth*0.045),
+                        padding: EdgeInsets.all(scrWidth*0.04),
                         child:Container(
-                          height: 30,
-                          width: 30,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(30),
-                            image: DecorationImage(image: NetworkImage(doc.get('categoryImage')),fit: BoxFit.fill)
-                          ),
-                        )
+                          height: 27,
+                            width: 27,
+                            child: SvgPicture.network(doc.get('categoryImage')))
                         // Image.network(doc.get('categoryImage'))
                         // SvgPicture.network(
                         // doc.get('categoryImage'),height:scrHeight*0.03,width: scrWidth*0.04,),
@@ -168,7 +218,7 @@ class _BuyAndSellState extends State<BuyAndSell>with TickerProviderStateMixin {
     FirebaseFirestore
         .instance
         .collection('stores')
-        .where('userId',isNotEqualTo: currentuserid)
+        .where('userId',isEqualTo: currentuserid)
         .snapshots()
         .listen((event) {
       shops=[];
@@ -179,6 +229,8 @@ class _BuyAndSellState extends State<BuyAndSell>with TickerProviderStateMixin {
       if(data.length>0){
         status=1;
       }
+      print('sneha ${shops.length}');
+      print(currentuserid);
       FirebaseFirestore.instance.collection('stores').doc(data[0]['storeId']).collection('products').snapshots().listen((event2) {
         products=[];
 
@@ -268,6 +320,7 @@ class _BuyAndSellState extends State<BuyAndSell>with TickerProviderStateMixin {
   bool isShopNotCreated = false;
   @override
   void initState() {
+    // getLocations();
     getSpecificCategory();
     getShop();
     _tabController = TabController(length: 2, vsync: this, initialIndex: widget.index??0);
@@ -285,7 +338,6 @@ class _BuyAndSellState extends State<BuyAndSell>with TickerProviderStateMixin {
    symbol: '₹ ',
  );
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -296,27 +348,21 @@ class _BuyAndSellState extends State<BuyAndSell>with TickerProviderStateMixin {
         centerTitle: false,
         elevation: 0.1,
         backgroundColor: Colors.white,
-        leading: InkWell(
-          onTap: () {
-            _determinePosition();
-
-          },
-          child: Container(
-            height: 30,
-            width: 30,
-            child: Padding(
-              padding: EdgeInsets.only(top: scrHeight * 0.03,
-                  left: scrWidth * 0.07,
-                  bottom: scrHeight * 0.01,
-                  ),
-              child: SvgPicture.asset("assets/icons/locationicon.svg",),
-            ),
+        leading: Container(
+          height: 30,
+          width: 30,
+          child: Padding(
+            padding: EdgeInsets.only(top: scrHeight * 0.03,
+                left: scrWidth * 0.07,
+                bottom: scrHeight * 0.01,
+                ),
+            child: SvgPicture.asset("assets/icons/locationicon.svg",),
           ),
         ),
         title: Padding(
           padding: EdgeInsets.only(top: scrHeight * 0.02),
           child: Text(
-            currentAddress,
+              currenPlace.toString(),
             style: TextStyle(
                 fontSize: scrWidth * 0.046,
                 color: Colors.black,
@@ -518,7 +564,7 @@ class _BuyAndSellState extends State<BuyAndSell>with TickerProviderStateMixin {
                                       fontSize: scrWidth * 0.04,
                                       fontWeight: FontWeight.w600
                                   ),),
-                                  Text("56 Stores available", style: TextStyle(
+                                  Text("0 Stores available", style: TextStyle(
                                       fontFamily: 'Urbanist',
                                       fontSize: scrWidth*0.025,
                                       color: Color(0xff818181),
@@ -529,76 +575,79 @@ class _BuyAndSellState extends State<BuyAndSell>with TickerProviderStateMixin {
                             ],
                           ),
                           SizedBox(height: scrHeight*0.015,),
+                          Text("No Stores"),
+                          SizedBox(height: 300,),
 
-                          Padding(
-                            padding:  EdgeInsets.only(left: scrWidth*0.037,right: scrWidth*0.037),
-                            child: Container(
-                              height: scrHeight*0.15,
-                              child: ListView.builder(
-                                  physics: BouncingScrollPhysics(),
-                                  scrollDirection: Axis.horizontal,
-                                  shrinkWrap: true,
-                                  itemCount:nstore.length,
-                                  itemBuilder: (context, index) {
-                                    return Padding(
-                                      padding: EdgeInsets.only(right: scrWidth*0.017),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          InkWell(
-                                            child: Padding(
-                                              padding: EdgeInsets.only(
-                                                  left: scrWidth*0.03),
-                                              child: Container(
-                                                height:scrHeight*0.09,
-                                                width: scrWidth*0.22,
-                                                decoration: BoxDecoration(
-                                                  image: DecorationImage(image:
-                                                  NetworkImage(nstore[index].image),
-                                                      fit: BoxFit.fill),
-                                                  color: Colors.white,
+                          // Padding(
+                          //   padding:  EdgeInsets.only(left: scrWidth*0.037,right: scrWidth*0.037),
+                          //   child: Container(
+                          //     height: scrHeight*0.15,
+                          //     child: ListView.builder(
+                          //         physics: BouncingScrollPhysics(),
+                          //         scrollDirection: Axis.horizontal,
+                          //         shrinkWrap: true,
+                          //         itemCount:nstore.length,
+                          //         itemBuilder: (context, index) {
+                          //           return Padding(
+                          //             padding: EdgeInsets.only(right: scrWidth*0.017),
+                          //             child: Column(
+                          //               crossAxisAlignment: CrossAxisAlignment.start,
+                          //               children: [
+                          //                 InkWell(
+                          //                   child: Padding(
+                          //                     padding: EdgeInsets.only(
+                          //                         left: scrWidth*0.03),
+                          //                     child: Container(
+                          //                       height:scrHeight*0.09,
+                          //                       width: scrWidth*0.22,
+                          //                       decoration: BoxDecoration(
+                          //                         image: DecorationImage(image:
+                          //                         NetworkImage(nstore[index].image),
+                          //                             fit: BoxFit.fill),
+                          //                         color: Colors.white,
+                          //
+                          //                         borderRadius: BorderRadius.circular(
+                          //                             scrWidth*0.03),
+                          //                       ),
+                          //                     ),
+                          //                   ),
+                          //                 ),
+                          //                 Padding(
+                          //                   padding: EdgeInsets.only(left: scrWidth*0.04),
+                          //                   child: Column(
+                          //                     crossAxisAlignment: CrossAxisAlignment
+                          //                         .start,
+                          //                     children: [
+                          //                       SizedBox(height: scrHeight*0.002,),
+                          //                       Text(
+                          //                         nstore[index].storename, textAlign: TextAlign.center,
+                          //                         style: TextStyle(
+                          //                             fontFamily: 'Urbanist',
+                          //                             fontSize: scrWidth*0.032,
+                          //                             fontWeight: FontWeight.w600,
+                          //                             color: Color(0xff0E0E0E)),),
+                          //                       SizedBox(height: scrHeight*0.0015,),
+                          //                       Text(
+                          //                         nstore[index].category, textAlign: TextAlign.center,
+                          //                         style: TextStyle(
+                          //                             fontFamily: 'Urbanist',
+                          //                             fontSize: scrWidth*0.025,
+                          //                             fontWeight: FontWeight.w600,
+                          //                             color: Color(0xff818181)),),
+                          //
+                          //                     ],
+                          //                   ),
+                          //                 ),
+                          //
+                          //
+                          //               ],
+                          //             ),
+                          //           );
+                          //         }
+                          //     ),
+                          //   ),
+                          // ),
 
-                                                  borderRadius: BorderRadius.circular(
-                                                      scrWidth*0.03),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.only(left: scrWidth*0.04),
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment
-                                                  .start,
-                                              children: [
-                                                SizedBox(height: scrHeight*0.002,),
-                                                Text(
-                                                  nstore[index].storename, textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      fontFamily: 'Urbanist',
-                                                      fontSize: scrWidth*0.032,
-                                                      fontWeight: FontWeight.w600,
-                                                      color: Color(0xff0E0E0E)),),
-                                                SizedBox(height: scrHeight*0.0015,),
-                                                Text(
-                                                  nstore[index].category, textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      fontFamily: 'Urbanist',
-                                                      fontSize: scrWidth*0.025,
-                                                      fontWeight: FontWeight.w600,
-                                                      color: Color(0xff818181)),),
-
-                                              ],
-                                            ),
-                                          ),
-
-
-                                        ],
-                                      ),
-                                    );
-                                  }
-                              ),
-                            ),
-                          ),
                           GestureDetector(
                             onTap: (){
                                Navigator.push(context,MaterialPageRoute(builder: (context)=>YourStoreCreatePage()));
@@ -704,9 +753,9 @@ class _BuyAndSellState extends State<BuyAndSell>with TickerProviderStateMixin {
                                 shrinkWrap: true,
                                 physics: NeverScrollableScrollPhysics(),
                                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                  childAspectRatio: 3 / 3.7,
-                                  crossAxisSpacing: 2,
-                                  mainAxisSpacing: 20,
+                                  childAspectRatio: 3 / 4,
+                                  crossAxisSpacing: 5,
+                                  mainAxisSpacing: 25,
                                   crossAxisCount: 4,
                                 ),
                                 children:grids
@@ -724,7 +773,8 @@ class _BuyAndSellState extends State<BuyAndSell>with TickerProviderStateMixin {
 
                       ),
                     ),
-                     status==0?Column(
+                     status==0?
+                     Column(
                       children: [
                         SizedBox(height: scrHeight * 0.03,),
                         DottedBorder(
@@ -804,7 +854,8 @@ class _BuyAndSellState extends State<BuyAndSell>with TickerProviderStateMixin {
                           ),
                         )
                       ],
-                    ):(status==1)?
+                    ):
+                     (status==1)?
                      Column(
                        children: [
                          SizedBox(height: scrHeight * 0.02,),
@@ -944,7 +995,9 @@ class _BuyAndSellState extends State<BuyAndSell>with TickerProviderStateMixin {
                            ),
                          )
                        ],
-                     ):(status==2)?Column(
+                     ):
+                     (status==2)?
+                     Column(
                        children: [
                          SizedBox(height: scrHeight*0.02,),
                          Container(
@@ -1096,7 +1149,6 @@ class _BuyAndSellState extends State<BuyAndSell>with TickerProviderStateMixin {
                            ],
                          ),
                          SizedBox(height: scrHeight*0.013,),
-
                          Padding(
                            padding:  EdgeInsets.only(left: scrWidth*0.035,right: scrWidth*0.035),
                            child: Row(

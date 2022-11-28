@@ -298,20 +298,7 @@ class _VerificationDetailsState extends State<VerificationDetails> {
               SizedBox(
                 height: scrWidth * 0.02,
               ),
-              // photo
-              //     ? Container(
-              //         height:scrHeight*0.16,
-              //         width: scrWidth*1,
-              //         child: ClipRRect(
-              //           borderRadius: BorderRadius.circular(8),
-              //           child: CachedNetworkImage(
-              //             imageUrl:
-              //                 'https://www.who.int/images/default-source/health-and-climate-change/rescue-operation-haiti-flood-c-un-photo-marco-dormino.tmb-1920v.jpg',
-              //             fit: BoxFit.cover,
-              //           ),
-              //         ),
-              //       )
-              //     :
+
               InkWell(
                 onTap: (){
                   _pickImage();
@@ -727,9 +714,7 @@ class _VerificationDetailsState extends State<VerificationDetails> {
               SizedBox(
                 height: scrWidth * 0.04,
               ),
-              SizedBox(
-                height: scrHeight*0.1,
-              ),
+
               GestureDetector(
                   onTap: () async{
                     setState(() {
@@ -791,6 +776,7 @@ class _VerificationDetailsState extends State<VerificationDetails> {
                     userId: currentuser?.userId,
                     userName:currentuser?.userName,
                     block:false,
+                    qrImage: charityDetails[2]['qrImage'],
                     fileNme: charityDetails[3]['fileNme'],
                   );
                   createCharity(char);

@@ -1,6 +1,8 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:threems/screens/charity/verification_details.dart';
 import '../../customPackage/date_picker.dart';
@@ -10,6 +12,8 @@ import '../../utils/themes.dart';
 import '../../widgets/percentage_widget.dart';
 import '../splash_screen.dart';
 import 'basic_details.dart';
+import 'dart:io';
+
 import 'cause_details.dart';
 
 class CreateCharity3 extends StatefulWidget {
@@ -34,6 +38,34 @@ class _CreateCharity3State extends State<CreateCharity3> {
   final  TextEditingController banknamecontroller =TextEditingController();
   final  TextEditingController ifsccodecontroller =TextEditingController();
   final  TextEditingController youtubelinkcontroller=TextEditingController();
+  String? picUrl;
+  var imgFile;
+  var uploadTask;
+  Future uploadImageToFirebase(BuildContext context) async {
+    Reference firebaseStorageRef =
+    FirebaseStorage.instance.ref().child('deposits/${imgFile.path}');
+    UploadTask uploadTask = firebaseStorageRef.putFile(imgFile);
+    TaskSnapshot taskSnapshot = (await uploadTask);
+    String value = await taskSnapshot.ref.getDownloadURL();
+
+    // if(value!=null){
+    //   imageList.add(value);
+    // }
+    setState(() {
+      picUrl = value;
+      print("=====================================================================");
+      print(picUrl);
+
+    });
+  }
+  _pickImag() async {
+    final imageFile = await ImagePicker.platform.pickImage(
+        source: ImageSource.gallery);
+    setState(() {
+      imgFile = File(imageFile!.path);
+      uploadImageToFirebase(context);
+    });
+  }
 
   @override
   void initState() {
@@ -439,9 +471,95 @@ class _CreateCharity3State extends State<CreateCharity3> {
                     SizedBox(
                       height: scrWidth * 0.04,
                     ),
-                    SizedBox(
-                      height: scrHeight*0.3,
+
+                    Row(
+                      mainAxisAlignment:
+                      imgFile==null ?  MainAxisAlignment.start:MainAxisAlignment.end ,
+                      children: [
+                        Text(
+                          "Upload QR Photo",
+                          style: TextStyle(
+                            fontSize: FontSize15,
+                            fontFamily: 'Urbanist',
+                            fontWeight: FontWeight.w500,
+                            color: imgFile==null ? Color(0xff8391A1): primarycolor ,
+                          ),
+                        ),
+                        imgFile==null ?SizedBox(): SizedBox(width: scrWidth * 0.01)  ,
+                        imgFile ==null?  SizedBox(
+                          child: SvgPicture.asset(
+                            'assets/icons/uploaded.svg',
+                            color:Color(0xff8391A1) ,
+                          ),
+                        ):SizedBox(
+                          child: SvgPicture.asset(
+                            'assets/icons/uploaded.svg',
+                            color: primarycolor,
+                          ),
+                        )
+
+
+                      ],
                     ),
+                    SizedBox(
+                      height: scrWidth * 0.02,
+                    ),
+
+                    InkWell(
+                      onTap: (){
+                        _pickImag();
+                      },
+                      child: Container(
+                        height:scrHeight*0.25,
+                        width: scrWidth*06,
+                        decoration: BoxDecoration(
+                          color: Color(0xffF7F8F9),
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                            color: Color(0xffDADADA),
+                          ),
+                        ),
+                        child: Center(
+                            child: imgFile==null?Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SvgPicture.asset(
+                                  'assets/icons/camera2.svg',
+                                  color: Color(0xff8391A1),
+                                ),
+                                SizedBox(
+                                  width: scrWidth * 0.04,
+                                ),
+                                Text(
+                                  'Upload QR photo',
+                                  style: TextStyle(
+                                    fontSize: FontSize15,
+                                    fontFamily: 'Urbanist',
+                                    fontWeight: FontWeight.w500,
+                                    color: Color(0xff8391A1),
+                                  ),
+                                )
+                              ],
+                            ):Container(
+                              height:scrHeight*0.25,
+                              width: scrWidth*06,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    image: FileImage(imgFile!) as ImageProvider,fit: BoxFit.fill),
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(
+                                  color: Color(0xffDADADA),
+                                ),
+                              ),
+
+                            )
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: scrWidth * 0.02,
+                    ),
+
 
 
                   ],
@@ -475,8 +593,10 @@ class _CreateCharity3State extends State<CreateCharity3> {
                           "confirmAccountNumber": confirmaccountcontroller.text,
                           "accountHolderName": accountholdernamecontroller.text,
                           "bankName": banknamecontroller.text,
-                          "ifscCode": ifsccodecontroller.text
+                          "ifscCode": ifsccodecontroller.text,
+                          "qrImage":picUrl,
                         }
+
 
                     );
                     // if (_formkey.currentState!.validate()) {

@@ -523,63 +523,77 @@ class _CheckOutPageState extends State<CheckOutPage> {
                     ),
                   ):Container(
               height: 100,
-              width: 355,
+              width: 340,
               decoration: BoxDecoration(
                 // color: Colors.white,
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(color: Color(0xffD2D2D2), width: 1)),
               child: Padding(
                 padding: const EdgeInsets.only(left: 15, top: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Row(
                   children: [
-                    Text(addressList==null?'':
-                    addressList![0].name!,
-                      style: TextStyle(
-                          fontFamily: 'Urbanist',
-                          fontWeight: FontWeight.w600,
-                          fontSize: 12,
-                          color: Colors.black),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(addressList==null?'':
+                        addressList![0].name!,
+                          style: TextStyle(
+                              fontFamily: 'Urbanist',
+                              fontWeight: FontWeight.w600,
+                              fontSize: 12,
+                              color: Colors.black),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Text(addressList==null?'':
+                        addressList![0].phoneNumber!,
+                          style: TextStyle(
+                              fontFamily: 'Urbanist',
+                              fontWeight: FontWeight.w600,
+                              fontSize: 12,
+                              color: Colors.black),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Text(addressList==null?'':
+                        "Flat ${addressList![0].flatNo!},${addressList![0].locality!},"
+                            "${addressList![0].pinCode!}",
+                          style: TextStyle(
+                              fontFamily: 'Urbanist',
+                              fontWeight: FontWeight.w600,
+                              fontSize: 12,
+                              color: Colors.black),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Text(addressList==null?'':
+                        addressList![0].select!,
+                          style: TextStyle(
+                              fontFamily: 'Urbanist',
+                              fontWeight: FontWeight.w600,
+                              fontSize: 12,
+                              color: Colors.black),
+                        ),
+                      ],
                     ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text(addressList==null?'':
-                    addressList![0].phoneNumber!,
-                      style: TextStyle(
-                          fontFamily: 'Urbanist',
-                          fontWeight: FontWeight.w600,
-                          fontSize: 12,
-                          color: Colors.black),
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text(addressList==null?'':
-                    "Flat ${addressList![0].flatNo!},${addressList![0].locality!},"
-                        "${addressList![0].pinCode!}",
-                      style: TextStyle(
-                          fontFamily: 'Urbanist',
-                          fontWeight: FontWeight.w600,
-                          fontSize: 12,
-                          color: Colors.black),
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text(addressList==null?'':
-                    addressList![0].select!,
-                      style: TextStyle(
-                          fontFamily: 'Urbanist',
-                          fontWeight: FontWeight.w600,
-                          fontSize: 12,
-                          color: Colors.black),
-                    ),
+                    SizedBox(width: 130,),
+                    // IconButton(onPressed: (){
+                    //   FirebaseFirestore
+                    //       .instance
+                    //       .collection('users')
+                    //       .doc(currentuserid)
+                    //       .update({'address': FieldValue.delete()}).whenComplete((){
+                    //     print('Field Deleted');
+                    //   });
+                    // }, icon: Icon(Icons.delete))
                   ],
                 ),
               ),
             ),
-            addressList==null?SizedBox(height: 120,) :SizedBox(height: 150,) ,
+            addressList==null?SizedBox(height: 120,) :SizedBox(height: 120,) ,
             addressList == null
                 ? Container(
                     height: 40,

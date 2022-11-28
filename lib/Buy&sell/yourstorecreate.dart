@@ -68,7 +68,7 @@ class _YourStoreCreatePageState extends State<YourStoreCreatePage> {
             Padding(
               padding:  EdgeInsets.only(right: scrWidth*0.46,top: scrHeight*0.001 ),
               child: Text(
-                "56 Stores available",
+                "0 Stores available",
                 style: TextStyle(
                     fontSize: scrWidth*0.025,
                     color: Color(0xff818181),
@@ -114,77 +114,78 @@ class _YourStoreCreatePageState extends State<YourStoreCreatePage> {
                 ),
               ),
             ),
-            Padding(
-              padding:  EdgeInsets.only(left: scrWidth*0.03,right:scrWidth*0.03),
-              child: Container(
-                height: scrHeight*3,
-                child: GridView.builder(
-                   shrinkWrap: true,
-                  // scrollDirection: Axis.vertical,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: nearstore.length,
-                  gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(
-                      childAspectRatio: 3 / 3.1,
-                      crossAxisSpacing: 2,
-                      mainAxisSpacing: 20,
-                      crossAxisCount: 3),
-                  itemBuilder: (BuildContext context, int index) {
-                    return  Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        InkWell(
-                          child: Padding(
-                            padding:  EdgeInsets.only(
-                                left: scrWidth*0.03),
-                            child: Container(
-                              height: scrHeight*0.1,
-                              width: scrWidth*0.25,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(image:
-                                NetworkImage(nearstore[index].image),
-                                    fit: BoxFit.fill),
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(scrWidth*0.025),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding:  EdgeInsets.only(left: scrWidth*0.05),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment
-                                .start,
-                            children: [
-                              SizedBox(height: scrHeight*0.001,),
-
-                              Text(
-                                nearstore[index].storename, textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontFamily: 'Urbanist',
-                                    fontSize: scrWidth*0.033,
-                                    fontWeight: FontWeight.w600,
-                                    color: Color(0xff0E0E0E)),),
-                              SizedBox(height: scrHeight*0.001,),
-                              Text(
-                               nearstore[index].category, textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontFamily: 'Urbanist',
-                                    fontSize: scrHeight*0.01,
-                                    fontWeight: FontWeight.w600,
-                                    color: Color(0xff818181)),),
-
-                            ],
-                          ),
-                        ),
-
-                      ],
-                    );
-
-
-                  },
-                ),
-              ),
-            )
+            Center(child: Text("No Nearest Stores"),),
+            // Padding(
+            //   padding:  EdgeInsets.only(left: scrWidth*0.03,right:scrWidth*0.03),
+            //   child: Container(
+            //     height: scrHeight*3,
+            //     child: GridView.builder(
+            //        shrinkWrap: true,
+            //       // scrollDirection: Axis.vertical,
+            //       physics: NeverScrollableScrollPhysics(),
+            //       itemCount: nearstore.length,
+            //       gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(
+            //           childAspectRatio: 3 / 3.1,
+            //           crossAxisSpacing: 2,
+            //           mainAxisSpacing: 20,
+            //           crossAxisCount: 3),
+            //       itemBuilder: (BuildContext context, int index) {
+            //         return  Column(
+            //           crossAxisAlignment: CrossAxisAlignment.start,
+            //           children: [
+            //             InkWell(
+            //               child: Padding(
+            //                 padding:  EdgeInsets.only(
+            //                     left: scrWidth*0.03),
+            //                 child: Container(
+            //                   height: scrHeight*0.1,
+            //                   width: scrWidth*0.25,
+            //                   decoration: BoxDecoration(
+            //                     image: DecorationImage(image:
+            //                     NetworkImage(nearstore[index].image),
+            //                         fit: BoxFit.fill),
+            //                     color: Colors.white,
+            //                     borderRadius: BorderRadius.circular(scrWidth*0.025),
+            //                   ),
+            //                 ),
+            //               ),
+            //             ),
+            //             Padding(
+            //               padding:  EdgeInsets.only(left: scrWidth*0.05),
+            //               child: Column(
+            //                 crossAxisAlignment: CrossAxisAlignment
+            //                     .start,
+            //                 children: [
+            //                   SizedBox(height: scrHeight*0.001,),
+            //
+            //                   Text(
+            //                     nearstore[index].storename, textAlign: TextAlign.center,
+            //                     style: TextStyle(
+            //                         fontFamily: 'Urbanist',
+            //                         fontSize: scrWidth*0.033,
+            //                         fontWeight: FontWeight.w600,
+            //                         color: Color(0xff0E0E0E)),),
+            //                   SizedBox(height: scrHeight*0.001,),
+            //                   Text(
+            //                    nearstore[index].category, textAlign: TextAlign.center,
+            //                     style: TextStyle(
+            //                         fontFamily: 'Urbanist',
+            //                         fontSize: scrHeight*0.01,
+            //                         fontWeight: FontWeight.w600,
+            //                         color: Color(0xff818181)),),
+            //
+            //                 ],
+            //               ),
+            //             ),
+            //
+            //           ],
+            //         );
+            //
+            //
+            //       },
+            //     ),
+            //   ),
+            // )
 
 
           ],
