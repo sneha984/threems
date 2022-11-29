@@ -1,8 +1,10 @@
-import 'dart:developer';
 import 'dart:io';
-
+import 'dart:async';
+import 'dart:io';
+import 'dart:math';
 import 'package:cr_calendar/cr_calendar.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -14,12 +16,14 @@ import 'package:threems/screens/chits/add_members.dart';
 import 'package:threems/screens/splash_screen.dart';
 import 'package:threems/utils/themes.dart';
 
+import '../../Authentication/root.dart';
 import '../../customPackage/time_picker.dart';
 import '../../model/ChitModel.dart';
 import 'create_chit_payment_session.dart';
 
 class CreateNewChitScreen extends StatefulWidget {
-  CreateNewChitScreen({Key? key}) : super(key: key);
+  final ChitModel chit;
+  const CreateNewChitScreen({Key? key, required this.chit}) : super(key: key);
 
   @override
   State<CreateNewChitScreen> createState() => _CreateNewChitScreenState();
@@ -34,7 +38,7 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
   final PageController _drawnOrAuctionpageController =
       PageController(keepPage: true);
 
-  List dropDownList = ["1%", "2%", "3%", "4%", "5%"];
+  List dropDownList = ["0%", "1%", "2%", "3%", "4%", "5%"];
   List drawType = ['Weekly', 'Monthly'];
   List drawDate = [];
   FocusNode chitNameFocus = FocusNode();
@@ -60,24 +64,65 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
   DateTime? selectedDate;
   TimeOfDay? selectedTime;
 
-//DatePick
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? datePicked = await showDatePickerCustom(
-        cancelText: 'Cancel',
-        confirmText: 'Select',
-        context: context,
-        firstDate: DateTime.now(),
-        lastDate: DateTime(DateTime.now().year + 2),
-        initialDate: DateTime.now(),
-        builder: (context, child) => Theme(
-            data: ThemeData(
-                colorScheme: ColorScheme.light(primary: Colors.green)),
-            child: child!));
-    if (datePicked != null && datePicked != selectedDate) {
-      setState(() {
-        selectedDate = datePicked;
-      });
-    }
+  var pickFile;
+  var fileName;
+  Future uploadFileToFireBase(fileBytes) async {
+    print(fileBytes);
+    uploadTask = FirebaseStorage.instance
+        .ref('uploads/${DateTime.now()}')
+        .putData(fileBytes);
+    final snapshot = await uploadTask?.whenComplete(() {});
+    final urlDownlod = await snapshot?.ref.getDownloadURL();
+    print(
+        "--------------------------------------------------------------------------------");
+
+    print(urlDownlod);
+
+    // FirebaseFirestore.instance.collection('candidates').doc(widget.id).update({
+    //   'documents.$name':urlDownlod,
+    // });
+
+    setState(() {
+      fileUrl = urlDownlod!;
+    });
+  }
+
+  String? ext;
+  String? size;
+  var bytes;
+
+  _pickFile() async {
+    print('      PICK FILE      ');
+    final result = await FilePicker.platform.pickFiles(
+      withData: true,
+    );
+
+    if (result == null) return;
+
+    // final fileBytes=result.files.first.bytes;
+
+    pickFile = result.files.first;
+    final fileBytes = pickFile!.bytes;
+    fileName = result.files.first.name;
+    ext = result.files.single.extension;
+    bytes = result.files.single.bytes;
+
+    size = formatBytes(result.files.single.size, 2);
+
+    print(fileBytes);
+    print('      PICK FILE      ');
+    print(ext);
+    print(bytes);
+    print(size);
+    uploadFileToFireBase(fileBytes);
+    setState(() {});
+  }
+
+  static String formatBytes(int bytes, int decimals) {
+    if (bytes <= 0) return "0 B";
+    const suffixes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+    var i = (log(bytes) / log(1024)).floor();
+    return '${(bytes / pow(1000, i)).toStringAsFixed(decimals)} ${suffixes[i]}';
   }
 
 //TimePicker
@@ -122,6 +167,7 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
     // if(value!=null){
     //   imageList.add(value);
     // }
+
     setState(() {
       type == 'Profile' ? profile = value : url = value;
       print("----=========-============-===============-=============");
@@ -143,6 +189,45 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
     });
   }
 
+  getDatas() {
+    if (widget.chit.chitName != null) {
+      members = widget.chit.membersCount ?? 10;
+      private = widget.chit.private ?? false;
+      chitName.text = widget.chit.chitName ?? '';
+      dropdownValue = widget.chit.commission;
+      amount.text = widget.chit.amount.toString() ?? '';
+      duration.text =
+          widget.chit.duration == null ? '' : widget.chit.duration!.toString();
+      subscriptionAmount.text = widget.chit.subscriptionAmount == null
+          ? ''
+          : widget.chit.subscriptionAmount.toString();
+      dividend.text = widget.chit.dividendAmount == null
+          ? ''
+          : widget.chit.dividendAmount!.toString();
+      drawTypeValue = widget.chit.chitType;
+      if (drawTypeValue == 'Weekly') {
+        for (int i = 0; i < 7; i++) {
+          drawDate.add((i + 1).toString());
+        }
+      } else {
+        for (int i = 0; i < 31; i++) {
+          drawDate.add((i + 1).toString());
+        }
+      }
+      drawDateValue = widget.chit.chitDate.toString() ?? '';
+      profile = widget.chit.profile ?? '';
+      fileUrl = widget.chit.document ?? '';
+      selectedTime = TimeOfDay(
+          hour: int.parse(widget.chit.chitTime!.split(':')[0]),
+          minute: int.parse(widget.chit.chitTime!.split(':')[1]));
+//TimeOfDay(hour: 15, minute: 0); // 3:00pm
+      print(url);
+      print('hehe');
+      print(profile);
+      setState(() {});
+    }
+  }
+
   @override
   void initState() {
     chitNameFocus.addListener(() {
@@ -161,6 +246,7 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
       setState(() {});
     });
     super.initState();
+    getDatas();
   }
 
   void dispose() {
@@ -405,7 +491,7 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
                                               width: 2,
                                             ))),
                                       )),
-                                  profileFile != null
+                                  profile != ''
                                       ? InkWell(
                                           onTap: () {
                                             _pickImage('Profile');
@@ -413,21 +499,32 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
                                           child: CircleAvatar(
                                             radius: scrWidth * 0.06,
                                             backgroundImage:
-                                                FileImage(profileFile),
+                                                NetworkImage(profile),
                                           ),
                                         )
-                                      : InkWell(
-                                          onTap: () {
-                                            _pickImage('Profile');
-                                          },
-                                          child: SvgPicture.asset(
-                                            "assets/icons/camera.svg",
-                                            height: scrWidth * 0.06,
-                                            width: scrWidth * 0.08,
-                                            // height: 21,
-                                            // width: 25,
-                                          ),
-                                        )
+                                      : profileFile != null
+                                          ? InkWell(
+                                              onTap: () {
+                                                _pickImage('Profile');
+                                              },
+                                              child: CircleAvatar(
+                                                radius: scrWidth * 0.06,
+                                                backgroundImage:
+                                                    FileImage(profileFile),
+                                              ),
+                                            )
+                                          : InkWell(
+                                              onTap: () {
+                                                _pickImage('Profile');
+                                              },
+                                              child: SvgPicture.asset(
+                                                "assets/icons/camera.svg",
+                                                height: scrWidth * 0.06,
+                                                width: scrWidth * 0.08,
+                                                // height: 21,
+                                                // width: 25,
+                                              ),
+                                            )
                                 ],
                               ),
                             ),
@@ -1190,9 +1287,11 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
                                 ),
                               ),
                             ),
+
                             SizedBox(
                               height: scrWidth * 0.02,
                             ),
+
                             Text(
                               "First drawn date & time will remains for upcoming drawn dates.",
                               style: TextStyle(
@@ -1202,67 +1301,173 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-                            SizedBox(
-                              height: scrWidth * 0.04,
-                            ),
-                            InkWell(
-                              onTap: () {
-                                print('HEREEEEEEEEEEEEEEE');
-                                _pickImage('Document');
-                              },
-                              child: imgFile == null
-                                  ? DottedBorder(
-                                      padding: EdgeInsets.all(0),
-                                      borderType: BorderType.RRect,
-                                      radius: Radius.circular(8),
-                                      color: Color(0xffDADADA),
-                                      dashPattern: [4, 4],
-                                      strokeWidth: 2,
-                                      child: Container(
-                                        height: scrHeight * 0.08,
-                                        width: scrWidth * 0.85,
-                                        decoration: BoxDecoration(
-                                          color: Color(0xffF7F8F9),
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            SvgPicture.asset(
-                                              "assets/images/Group 135.svg",
-                                            ),
-                                            SizedBox(
-                                              width: scrWidth * 0.02,
-                                            ),
-                                            Text(
-                                              "Upload Screenshot",
-                                              style: TextStyle(
-                                                color: Color(0xff8391A1),
-                                                fontSize: scrWidth * 0.04,
-                                                fontFamily: 'Urbanist',
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                          ],
+                            (fileUrl != '' || fileUrl != null)
+                                ? Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        "Documents Uploaded",
+                                        style: TextStyle(
+                                          fontSize: FontSize15,
+                                          fontFamily: 'Urbanist',
+                                          fontWeight: FontWeight.w500,
+                                          color: primarycolor,
                                         ),
                                       ),
-                                    )
-                                  : Container(
-                                      height: scrHeight * 0.5,
-                                      width: scrWidth * 0.85,
+                                      SizedBox(width: scrWidth * 0.01),
+                                      SizedBox(
+                                        child: SvgPicture.asset(
+                                          'assets/icons/uploaded.svg',
+                                          color: primarycolor,
+                                        ),
+                                      )
+                                    ],
+                                  )
+                                : pickFile == null
+                                    ? Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "Upload Documents",
+                                            style: TextStyle(
+                                              fontSize: FontSize15,
+                                              fontFamily: 'Urbanist',
+                                              fontWeight: FontWeight.w500,
+                                              color: Color(0xff8391A1),
+                                            ),
+                                          ),
+                                          SizedBox(width: scrWidth * 0.01),
+                                          SizedBox(
+                                            child: SvgPicture.asset(
+                                              'assets/icons/uploaded.svg',
+                                              color: Color(0xff8391A1),
+                                            ),
+                                          )
+                                        ],
+                                      )
+                                    : Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          Text(
+                                            "Documents Uploaded",
+                                            style: TextStyle(
+                                              fontSize: FontSize15,
+                                              fontFamily: 'Urbanist',
+                                              fontWeight: FontWeight.w500,
+                                              color: primarycolor,
+                                            ),
+                                          ),
+                                          SizedBox(width: scrWidth * 0.01),
+                                          SizedBox(
+                                            child: SvgPicture.asset(
+                                              'assets/icons/uploaded.svg',
+                                              color: primarycolor,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                            SizedBox(
+                              height: scrWidth * 0.02,
+                            ),
+
+                            InkWell(
+                              onTap: () {
+                                _pickFile();
+                              },
+                              child: (fileUrl != '' || fileUrl != null)
+                                  ? Container(
+                                      width: scrWidth,
+                                      height: textFormFieldHeight45,
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: scrWidth * 0.04,
+                                        vertical: scrHeight * 0.015,
+                                      ),
                                       decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                            image: FileImage(imgFile)
-                                                as ImageProvider,
-                                            fit: BoxFit.fill),
-                                        borderRadius: BorderRadius.circular(8),
+                                        color: textFormFieldFillColor,
                                         border: Border.all(
                                           color: Color(0xffDADADA),
                                         ),
+                                        borderRadius: BorderRadius.circular(
+                                            scrWidth * 0.026),
                                       ),
-                                    ),
+                                      child: Text(
+                                        fileName ?? '',
+                                        style: TextStyle(
+                                          color: Color(0xff8391A1),
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: FontSize15,
+                                          fontFamily: 'Urbanist',
+                                        ),
+                                      ),
+                                    )
+                                  : pickFile == null
+                                      ? Container(
+                                          width: scrWidth,
+                                          height: textFormFieldHeight45,
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal: scrWidth * 0.015,
+                                            vertical: scrHeight * 0.002,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: textFormFieldFillColor,
+                                            border: Border.all(
+                                              color: Color(0xffDADADA),
+                                            ),
+                                            borderRadius: BorderRadius.circular(
+                                                scrWidth * 0.026),
+                                          ),
+                                          child: Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: scrHeight * 0.03),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  "Upload Documents",
+                                                  style: TextStyle(
+                                                    color: Color(0xff8391A1),
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: FontSize15,
+                                                    fontFamily: 'Urbanist',
+                                                  ),
+                                                ),
+                                                SvgPicture.asset(
+                                                  'assets/icons/camera2.svg',
+                                                  color: Color(0xff8391A1),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        )
+                                      : Container(
+                                          width: scrWidth,
+                                          height: textFormFieldHeight45,
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal: scrWidth * 0.04,
+                                            vertical: scrHeight * 0.015,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: textFormFieldFillColor,
+                                            border: Border.all(
+                                              color: Color(0xffDADADA),
+                                            ),
+                                            borderRadius: BorderRadius.circular(
+                                                scrWidth * 0.026),
+                                          ),
+                                          child: Text(
+                                            fileName!,
+                                            style: TextStyle(
+                                              color: Color(0xff8391A1),
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: FontSize15,
+                                              fontFamily: 'Urbanist',
+                                            ),
+                                          ),
+                                        ),
                             ),
                             // Container(
                             //   width: scrWidth,
@@ -1993,6 +2198,8 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
                           ],
                         ),
                       ),
+
+                      //PRIVATE CHIT
                       SingleChildScrollView(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -2066,7 +2273,7 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
                                               width: 2,
                                             ))),
                                       )),
-                                  profileFile != null
+                                  profile != ''
                                       ? InkWell(
                                           onTap: () {
                                             _pickImage('Profile');
@@ -2074,21 +2281,32 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
                                           child: CircleAvatar(
                                             radius: scrWidth * 0.06,
                                             backgroundImage:
-                                                FileImage(profileFile),
+                                                NetworkImage(profile),
                                           ),
                                         )
-                                      : InkWell(
-                                          onTap: () {
-                                            _pickImage('Profile');
-                                          },
-                                          child: SvgPicture.asset(
-                                            "assets/icons/camera.svg",
-                                            height: scrWidth * 0.06,
-                                            width: scrWidth * 0.08,
-                                            // height: 21,
-                                            // width: 25,
-                                          ),
-                                        )
+                                      : profileFile != null
+                                          ? InkWell(
+                                              onTap: () {
+                                                _pickImage('Profile');
+                                              },
+                                              child: CircleAvatar(
+                                                radius: scrWidth * 0.06,
+                                                backgroundImage:
+                                                    FileImage(profileFile),
+                                              ),
+                                            )
+                                          : InkWell(
+                                              onTap: () {
+                                                _pickImage('Profile');
+                                              },
+                                              child: SvgPicture.asset(
+                                                "assets/icons/camera.svg",
+                                                height: scrWidth * 0.06,
+                                                width: scrWidth * 0.08,
+                                                // height: 21,
+                                                // width: 25,
+                                              ),
+                                            )
                                 ],
                               ),
                             ),
@@ -2862,64 +3080,119 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
+                            pickFile == null
+                                ? Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Documents Uploaded",
+                                        style: TextStyle(
+                                          fontSize: FontSize15,
+                                          fontFamily: 'Urbanist',
+                                          fontWeight: FontWeight.w500,
+                                          color: Color(0xff8391A1),
+                                        ),
+                                      ),
+                                      SizedBox(width: scrWidth * 0.01),
+                                      SizedBox(
+                                        child: SvgPicture.asset(
+                                          'assets/icons/uploaded.svg',
+                                          color: Color(0xff8391A1),
+                                        ),
+                                      )
+                                    ],
+                                  )
+                                : Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        "Documents Uploaded",
+                                        style: TextStyle(
+                                          fontSize: FontSize15,
+                                          fontFamily: 'Urbanist',
+                                          fontWeight: FontWeight.w500,
+                                          color: primarycolor,
+                                        ),
+                                      ),
+                                      SizedBox(width: scrWidth * 0.01),
+                                      SizedBox(
+                                        child: SvgPicture.asset(
+                                          'assets/icons/uploaded.svg',
+                                          color: primarycolor,
+                                        ),
+                                      )
+                                    ],
+                                  ),
                             SizedBox(
-                              height: scrWidth * 0.04,
+                              height: scrWidth * 0.02,
                             ),
+
                             InkWell(
                               onTap: () {
-                                print('HEREEEEEEEEEEEEEEE');
-                                _pickImage('Document');
+                                _pickFile();
                               },
-                              child: imgFile == null
-                                  ? DottedBorder(
-                                      padding: EdgeInsets.all(0),
-                                      borderType: BorderType.RRect,
-                                      radius: Radius.circular(8),
-                                      color: Color(0xffDADADA),
-                                      dashPattern: [4, 4],
-                                      strokeWidth: 2,
-                                      child: Container(
-                                        height: scrHeight * 0.08,
-                                        width: scrWidth * 0.85,
-                                        decoration: BoxDecoration(
-                                          color: Color(0xffF7F8F9),
-                                          borderRadius:
-                                              BorderRadius.circular(8),
+                              child: pickFile == null
+                                  ? Container(
+                                      width: scrWidth,
+                                      height: textFormFieldHeight45,
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: scrWidth * 0.015,
+                                        vertical: scrHeight * 0.002,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: textFormFieldFillColor,
+                                        border: Border.all(
+                                          color: Color(0xffDADADA),
                                         ),
+                                        borderRadius: BorderRadius.circular(
+                                            scrWidth * 0.026),
+                                      ),
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: scrHeight * 0.03),
                                         child: Row(
                                           mainAxisAlignment:
-                                              MainAxisAlignment.center,
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
-                                            SvgPicture.asset(
-                                              "assets/images/Group 135.svg",
-                                            ),
-                                            SizedBox(
-                                              width: scrWidth * 0.02,
-                                            ),
                                             Text(
-                                              "Upload Screenshot",
+                                              "Upload Documents",
                                               style: TextStyle(
                                                 color: Color(0xff8391A1),
-                                                fontSize: scrWidth * 0.04,
-                                                fontFamily: 'Urbanist',
                                                 fontWeight: FontWeight.w500,
+                                                fontSize: FontSize15,
+                                                fontFamily: 'Urbanist',
                                               ),
+                                            ),
+                                            SvgPicture.asset(
+                                              'assets/icons/camera2.svg',
+                                              color: Color(0xff8391A1),
                                             ),
                                           ],
                                         ),
                                       ),
                                     )
                                   : Container(
-                                      height: scrHeight * 0.5,
-                                      width: scrWidth * 0.85,
+                                      width: scrWidth,
+                                      height: textFormFieldHeight45,
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: scrWidth * 0.04,
+                                        vertical: scrHeight * 0.015,
+                                      ),
                                       decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                            image: FileImage(imgFile)
-                                                as ImageProvider,
-                                            fit: BoxFit.fill),
-                                        borderRadius: BorderRadius.circular(8),
+                                        color: textFormFieldFillColor,
                                         border: Border.all(
                                           color: Color(0xffDADADA),
+                                        ),
+                                        borderRadius: BorderRadius.circular(
+                                            scrWidth * 0.026),
+                                      ),
+                                      child: Text(
+                                        fileName!,
+                                        style: TextStyle(
+                                          color: Color(0xff8391A1),
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: FontSize15,
+                                          fontFamily: 'Urbanist',
                                         ),
                                       ),
                                     ),
@@ -3664,7 +3937,7 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
           ),
         ),
         floatingActionButton: GestureDetector(
-          onTap: () {
+          onTap: () async {
             if (chitName.text != '' &&
                 dropdownValue != null &&
                 members > 3 &&
@@ -3674,9 +3947,8 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
                 drawTypeValue != null &&
                 drawDateValue != null &&
                 selectedTime != null &&
-                url != '') {
+                (fileUrl != null || fileUrl != '')) {
               final chit = ChitModel(
-                members: [],
                 amount: double.tryParse(amount.text),
                 private: private,
                 chitDate: int.parse(drawDateValue!),
@@ -3692,16 +3964,33 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
                 duration: int.parse(duration.text),
                 profile: profile,
                 subscriptionAmount: double.tryParse(subscriptionAmount.text),
-                status: 0,
+                status: widget.chit.status ?? 0,
                 membersCount: members,
-                winners: [],
+                phone: widget.chit.phone ?? '',
+                userId: currentuserid,
+                ifsc: widget.chit.ifsc ?? '',
+                accountHolderName: widget.chit.accountHolderName ?? '',
+                upiApps: widget.chit.upiApps,
+                bankName: widget.chit.bankName ?? '',
+                accountNumber: widget.chit.accountNumber ?? '',
+                members: widget.chit.members ?? [],
+                winners: widget.chit.winners ?? [],
+                chitId: widget.chit.chitId ?? '',
+                payableAmount: widget.chit.subscriptionAmount,
               );
-              Navigator.push(
+
+              await Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => PaymentDetails(
                             chit: chit,
+                            size: size ?? '',
+                            ext: ext ?? '',
+                            bytes: bytes ?? '',
+                            fileName: fileName ?? '',
                           )));
+
+              Navigator.pop(context);
             } else {
               chitName.text == ''
                   ? showSnackbar(context, 'Please enter name of your chit')

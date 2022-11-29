@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -14,7 +15,18 @@ import 'add_members.dart';
 
 class PaymentDetails extends StatefulWidget {
   final ChitModel chit;
-  const PaymentDetails({Key? key, required this.chit}) : super(key: key);
+  final String size;
+  final String ext;
+  final String fileName;
+  final dynamic bytes;
+  const PaymentDetails(
+      {Key? key,
+      required this.chit,
+      required this.size,
+      required this.ext,
+      this.bytes,
+      required this.fileName})
+      : super(key: key);
 
   @override
   State<PaymentDetails> createState() => _PaymentDetailsState();
@@ -74,7 +86,33 @@ class _PaymentDetailsState extends State<PaymentDetails> {
   TextEditingController bankName = TextEditingController();
   TextEditingController ifsc = TextEditingController();
 
-//DatePick
+  getDatas() {
+    phone.text = widget.chit.phone ?? '';
+    upiApps =
+        widget.chit.upiApps == null ? [] : widget.chit.upiApps as List<String>;
+    accountNumber.text = widget.chit.accountNumber ?? '';
+    confirmAccountNumber.text = widget.chit.accountNumber ?? '';
+    accountHolderName.text = widget.chit.accountHolderName ?? '';
+    bankName.text = widget.chit.bankName ?? '';
+    ifsc.text = widget.chit.ifsc ?? '';
+    print(upiApps);
+    print(phone.text);
+
+    for (int i = 0; i < multiselect.length; i++) {
+      if (upiApps.contains(multiselect[i].payname)) {
+        selectedPayments.add(MultiSelect(
+            image: multiselect[i].image,
+            payname: multiselect[i].payname,
+            isSelected: true));
+        multiselect[i].isSelected = true;
+        // upiApps.add(multiselect[index].payname);
+
+      }
+    }
+
+    print(selectedPayments);
+    setState(() {});
+  }
 
   @override
   void initState() {
@@ -88,6 +126,7 @@ class _PaymentDetailsState extends State<PaymentDetails> {
       setState(() {});
     });
     super.initState();
+    getDatas();
   }
 
   @override
@@ -287,6 +326,7 @@ class _PaymentDetailsState extends State<PaymentDetails> {
                   controller: accountNumber,
                   cursorHeight: scrWidth * 0.055,
                   cursorWidth: 1,
+                  keyboardType: TextInputType.number,
                   cursorColor: Colors.black,
                   style: TextStyle(
                     color: Colors.black,
@@ -338,6 +378,7 @@ class _PaymentDetailsState extends State<PaymentDetails> {
                   focusNode: confirmaccountnumberfocus,
                   controller: confirmAccountNumber,
                   cursorHeight: scrWidth * 0.055,
+                  keyboardType: TextInputType.number,
                   cursorWidth: 1,
                   cursorColor: Colors.black,
                   style: TextStyle(
@@ -536,8 +577,50 @@ class _PaymentDetailsState extends State<PaymentDetails> {
       floatingActionButton: GestureDetector(
         onTap: () {
           ChitModel local = widget.chit;
-          if (phone.text != '' && upiApps.length != 0) {
-            final chit = ChitModel(
+          if (phone.text != '' &&
+              upiApps.isNotEmpty &&
+              accountNumber.text == confirmAccountNumber.text) {
+            if (widget.chit.chitId != '') {
+              final chit = ChitModel(
+                  winners: local.winners,
+                  membersCount: local.membersCount,
+                  status: local.status,
+                  subscriptionAmount: local.subscriptionAmount,
+                  profile: local.profile,
+                  duration: local.duration,
+                  drawn: local.drawn,
+                  document: local.document,
+                  dividendAmount: local.dividendAmount,
+                  createdDate: DateTime.now(),
+                  commission: local.commission,
+                  chitType: local.chitType,
+                  chitTime: local.chitTime,
+                  chitName: local.chitName,
+                  fileName: local.fileName,
+                  chitDate: local.chitDate,
+                  private: local.private,
+                  amount: local.amount,
+                  members: local.members,
+                  accountNumber: accountNumber.text,
+                  bankName: bankName.text,
+                  phone: phone.text,
+                  upiApps: upiApps,
+                  accountHolderName: accountHolderName.text,
+                  userId: currentuserid,
+                  ifsc: ifsc.text,
+                  payableAmount: local.payableAmount,
+                  chitId: local.chitId ?? '');
+
+              FirebaseFirestore.instance
+                  .collection('chit')
+                  .doc(local.chitId)
+                  .update(chit.toJson())
+                  .then((value) {
+                showSnackbar(context, 'Chit Update Successfully');
+                Navigator.pop(context);
+              });
+            } else {
+              final chit = ChitModel(
                 winners: [],
                 membersCount: local.membersCount,
                 status: local.status,
@@ -562,18 +645,30 @@ class _PaymentDetailsState extends State<PaymentDetails> {
                 upiApps: upiApps,
                 accountHolderName: accountHolderName.text,
                 userId: currentuserid,
-                ifsc: ifsc.text);
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AddMembers(
-                    chit: chit,
-                  ),
-                ));
+                payableAmount: local.subscriptionAmount,
+                chitId: local.chitId,
+                fileName: widget.fileName,
+                ifsc: ifsc.text,
+              );
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AddMembers(
+                      chit: chit,
+                      size: widget.size,
+                      ext: widget.ext,
+                      bytes: widget.bytes,
+                      fileName: widget.fileName,
+                    ),
+                  ));
+            }
           } else {
             phone.text == ''
                 ? showSnackbar(context, 'Please Enter Phone Number')
-                : showSnackbar(context, 'Please Choose Available UPI Apps');
+                : upiApps.isEmpty
+                    ? showSnackbar(context, 'Please Choose Available UPI Apps')
+                    : showSnackbar(context,
+                        'Confirm account number must be same as account number.');
           }
         },
         child: Container(
@@ -585,7 +680,7 @@ class _PaymentDetailsState extends State<PaymentDetails> {
             ),
             child: Center(
               child: Text(
-                "Add Members",
+                widget.chit.chitId == '' ? "Add Members" : 'Update',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: FontSize15,
@@ -600,7 +695,7 @@ class _PaymentDetailsState extends State<PaymentDetails> {
   }
 
   Widget PayItem(String image, String payname, bool isSelected, int index) {
-    return GestureDetector(
+    return InkWell(
       onTap: () {
         setState(() {
           multiselect[index].isSelected = !multiselect[index].isSelected;

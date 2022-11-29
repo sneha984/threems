@@ -1,24 +1,26 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:threems/kuri/createkuri.dart';
+import 'package:threems/Authentication/root.dart';
 
-import '../Authentication/auth.dart';
+import '../kuri/createkuri.dart';
+import '../pagess/otppage.dart';
 import '../screens/splash_screen.dart';
 import '../utils/themes.dart';
-import 'otppage.dart';
+import 'auth.dart';
 
-class GetOtpPage extends StatefulWidget {
-  const GetOtpPage({Key? key}) : super(key: key);
+class AddPhone extends StatefulWidget {
+  final String id;
+  const AddPhone({Key? key, required this.id}) : super(key: key);
 
   @override
-  State<GetOtpPage> createState() => _GetOtpPageState();
+  State<AddPhone> createState() => _AddPhoneState();
 }
 
-class _GetOtpPageState extends State<GetOtpPage> {
+class _AddPhoneState extends State<AddPhone> {
   final _formkey = GlobalKey<FormState>();
   bool loading = false;
 
@@ -74,7 +76,6 @@ class _GetOtpPageState extends State<GetOtpPage> {
     );
   }
 
-  final Authentication _auth = Authentication();
   final FirebaseAuth phoneAuth = FirebaseAuth.instance;
 
   @override
@@ -249,7 +250,15 @@ class _GetOtpPageState extends State<GetOtpPage> {
               GestureDetector(
                 onTap: () {
                   if (_formkey.currentState!.validate()) {
-                    verifyPhoneNumber(context);
+                    FirebaseFirestore.instance
+                        .collection('users')
+                        .doc(widget.id)
+                        .update({'phone': phoneNumber.text}).then((value) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Rootingpage()));
+                    });
                   }
                 },
                 child: Container(
@@ -261,7 +270,7 @@ class _GetOtpPageState extends State<GetOtpPage> {
                   ),
                   child: Center(
                     child: Text(
-                      "GET OTP",
+                      "Update Phone Number",
                       style: style,
                     ),
                   ),
@@ -269,35 +278,6 @@ class _GetOtpPageState extends State<GetOtpPage> {
               ),
               SizedBox(
                 height: scrHeight * 0.03,
-              ),
-              GestureDetector(
-                onTap: () {
-                  _auth.signInWithGoogle(context);
-                },
-                child: Container(
-                  height: scrHeight * 0.055,
-                  width: scrWidth * 0.87,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                        width: 1, color: Color.fromRGBO(0, 0, 0, 0.12)),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(),
-                        child: SvgPicture.asset(
-                          "assets/icons/google_logos.svg",
-                        ),
-                      ),
-                      SizedBox(
-                        width: 8,
-                      ),
-                      Text("Continue with Google", style: googlelogin),
-                    ],
-                  ),
-                ),
               ),
             ],
           ),

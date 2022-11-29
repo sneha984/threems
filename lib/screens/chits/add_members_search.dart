@@ -17,11 +17,19 @@ class AddMembersSearch extends StatefulWidget {
   final List<Contact> contacts;
   final List numberList;
   final ChitModel chit;
+  final String size;
+  final String ext;
+  final String fileName;
+  final dynamic bytes;
   const AddMembersSearch(
       {super.key,
       required this.contacts,
       required this.numberList,
-      required this.chit});
+      required this.chit,
+      required this.size,
+      required this.ext,
+      this.bytes,
+      required this.fileName});
 
   @override
   State<AddMembersSearch> createState() => _AddMembersSearchState();
@@ -376,6 +384,10 @@ class _AddMembersSearchState extends State<AddMembersSearch> {
               MaterialPageRoute(
                   builder: (context) => AddMembers(
                         chit: widget.chit,
+                        size: widget.size,
+                        ext: widget.ext,
+                        bytes: widget.bytes,
+                        fileName: widget.fileName,
                       )));
           setState(() {});
         },

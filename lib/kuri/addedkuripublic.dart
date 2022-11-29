@@ -6,6 +6,7 @@ import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:threems/kuri/add_members_kuri.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:whatsapp_share2/whatsapp_share2.dart';
 
 import '../Authentication/root.dart';
 import '../model/Kuri/kuriModel.dart';
@@ -28,7 +29,7 @@ class AddedKuriPublic extends StatefulWidget {
 }
 
 class _AddedKuriPublicState extends State<AddedKuriPublic> {
-  KuriModel kuri = KuriModel();
+  KuriModel? kuri;
   UserModel? currentKuriUser;
 
   static const _locale = 'HI';
@@ -65,7 +66,7 @@ class _AddedKuriPublicState extends State<AddedKuriPublic> {
   getOwner() {
     FirebaseFirestore.instance
         .collection('users')
-        .doc(kuri.userID)
+        .doc(kuri!.userID)
         .snapshots()
         .listen((event) {
       kuriOwner = UserModel.fromJson(event.data()!);
@@ -87,7 +88,7 @@ class _AddedKuriPublicState extends State<AddedKuriPublic> {
       deadLine = kuri!.deadLine!;
       formatter = DateFormat('dd MMM');
       formatted = formatter!.format(deadLine!);
-      percentage = kuri.totalReceived! / kuri.amount!;
+      percentage = kuri!.totalReceived! / kuri!.amount!;
       if (mounted) {
         setState(() {
           getOwner();
@@ -105,7 +106,7 @@ class _AddedKuriPublicState extends State<AddedKuriPublic> {
       DocumentSnapshot<Map<String, dynamic>> doc = await FirebaseFirestore
           .instance
           .collection('users')
-          .doc(kuri.members![i])
+          .doc(kuri!.members![i])
           .get();
       members.add(UserModel.fromJson(doc.data()!));
     }
@@ -121,13 +122,13 @@ class _AddedKuriPublicState extends State<AddedKuriPublic> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: kuri == null || kuriOwner == null
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : Column(
+    return kuri == null || kuriOwner == null
+        ? const Center(
+            child: CircularProgressIndicator(),
+          )
+        : Scaffold(
+            backgroundColor: Colors.white,
+            body: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Stack(
@@ -174,14 +175,12 @@ class _AddedKuriPublicState extends State<AddedKuriPublic> {
                             ),
                             itemBuilder: (context) => [
                               PopupMenuItem(
-                                onTap: () {
-                                  // Uri call = Uri.parse(
-                                  //     'https://wa.me/91${kuri.phone!}'
-                                  //     // 'https://wa.me/91${kuri.phone!}?text=Check Out this!'
-                                  //     // 'https://wa.me/?text=YourTextHere'
-                                  //     );
-                                  //
-                                  // launchUrl(call);
+                                onTap: () async {
+                                  print('-----------------------------');
+                                  print(kuri!.phone!);
+                                  await WhatsappShare.share(
+                                    phone: '91${kuri!.phone!}',
+                                  );
                                 },
                                 height: 30,
                                 child: Row(
@@ -216,7 +215,7 @@ class _AddedKuriPublicState extends State<AddedKuriPublic> {
                               ),
                               PopupMenuItem(
                                 onTap: () {
-                                  Uri call = Uri.parse('tel://${kuri.phone!}');
+                                  Uri call = Uri.parse('tel://${kuri!.phone!}');
 
                                   launchUrl(call);
                                 },
@@ -872,79 +871,82 @@ class _AddedKuriPublicState extends State<AddedKuriPublic> {
                 ),
               ],
             ),
-      bottomNavigationBar: Container(
-        height: scrHeight * 0.08,
-        color: primarycolor,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: scrHeight * 0.02,
-                ),
-                Text(
-                  "Total Collected Amount",
-                  style: TextStyle(
-                      fontSize: scrWidth * 0.026,
-                      fontWeight: FontWeight.w600,
-                      fontFamily: 'Urbanist',
-                      color: Color(0xffFBED5D)),
-                ),
-                SizedBox(
-                  height: scrHeight * 0.002,
-                ),
-                Text(
-                  "$_currency ${_formatNumber(
-                    kuri.totalReceived!
-                        .truncate()
-                        .toString()
-                        .replaceAll(',', ''),
-                  )} / $_currency ${_formatNumber(
-                    kuri.amount!.truncate().toString().replaceAll(',', ''),
-                  )}",
-                  style: TextStyle(
-                      fontFamily: 'Urbanist',
-                      fontSize: scrWidth * 0.044,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white),
-                )
-              ],
-            ),
-            SizedBox(
-              width: scrWidth * 0.04,
-            ),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => KuriPaymentPage(
-                              kuri: kuri,
-                            )));
-              },
-              child: Container(
-                height: scrHeight * 0.045,
-                width: scrWidth * 0.27,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(11),
-                ),
-                child: Center(
-                    child: Text(
-                  "Pay",
-                  style: TextStyle(
-                      fontSize: scrWidth * 0.047,
-                      fontWeight: FontWeight.w600,
-                      fontFamily: 'Urbanist'),
-                )),
+            bottomNavigationBar: Container(
+              height: scrHeight * 0.08,
+              color: primarycolor,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: scrHeight * 0.02,
+                      ),
+                      Text(
+                        "Total Collected Amount",
+                        style: TextStyle(
+                            fontSize: scrWidth * 0.026,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Urbanist',
+                            color: Color(0xffFBED5D)),
+                      ),
+                      SizedBox(
+                        height: scrHeight * 0.002,
+                      ),
+                      Text(
+                        "$_currency ${_formatNumber(
+                          kuri!.totalReceived!
+                              .truncate()
+                              .toString()
+                              .replaceAll(',', ''),
+                        )} / $_currency ${_formatNumber(
+                          kuri!.amount!
+                              .truncate()
+                              .toString()
+                              .replaceAll(',', ''),
+                        )}",
+                        style: TextStyle(
+                            fontFamily: 'Urbanist',
+                            fontSize: scrWidth * 0.044,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white),
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    width: scrWidth * 0.04,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => KuriPaymentPage(
+                                    kuri: kuri!,
+                                  )));
+                    },
+                    child: Container(
+                      height: scrHeight * 0.045,
+                      width: scrWidth * 0.27,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(11),
+                      ),
+                      child: Center(
+                          child: Text(
+                        "Pay",
+                        style: TextStyle(
+                            fontSize: scrWidth * 0.047,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Urbanist'),
+                      )),
+                    ),
+                  )
+                ],
               ),
-            )
-          ],
-        ),
-      ),
-    );
+            ),
+          );
   }
 }

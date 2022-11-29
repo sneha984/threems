@@ -26,10 +26,12 @@ class ChitModel {
   String? accountHolderName;
   String? bankName;
   String? ifsc;
+  String? fileName;
 
   ChitModel({
     this.chitName,
     this.private,
+    this.fileName,
     this.commission,
     this.members,
     this.chitId,
@@ -61,7 +63,8 @@ class ChitModel {
     chitName = json['chitName'];
     private = json['private'];
     commission = json['commission'];
-    payableAmount = json['payableAmount'].toDouble();
+    fileName = json['fileName'];
+    payableAmount = double.tryParse(json['payableAmount'].toString());
     members = json['members'].cast<String>();
     upiApps = json['upiApps'].cast<String>();
     if (json['winners'] != null) {
@@ -73,7 +76,7 @@ class ChitModel {
     amount = json['amount'];
     duration = json['duration'];
     subscriptionAmount = json['subscriptionAmount'].toDouble();
-    payableAmount = json['payableAmount'].toDouble();
+
     chitId = json['chitId'];
     userId = json['userId'];
     phone = json['phone'];
@@ -98,6 +101,7 @@ class ChitModel {
     data['chitName'] = chitName;
     data['private'] = private;
     data['commission'] = commission;
+    data['fileName'] = fileName;
     data['membersCount'] = membersCount;
     data['payableAmount'] = payableAmount;
     data['chitId'] = chitId;

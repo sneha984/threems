@@ -25,6 +25,7 @@ import '../kuri/createkuri.dart';
 import '../model/charitymodel.dart';
 import 'charity/donatepage.dart';
 import 'charity/seemorecharities.dart';
+
 var currenPlace;
 double? lat;
 double? long;
@@ -48,6 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
       handleInvalidPermission(permission);
     }
   }
+
   handleInvalidPermission(PermissionStatus permission) {
     if (permission == PermissionStatus.denied) {
       showSnackbar(context, 'Permission denied by user');
@@ -105,28 +107,27 @@ class _HomeScreenState extends State<HomeScreen> {
     print(
         "----------------------------------------------------------------------------");
   }
+
   Position? currentLoc;
 
   getLocation() async {
-    try{
-      currentLoc=await Geolocator.getCurrentPosition();
+    try {
+      currentLoc = await Geolocator.getCurrentPosition();
       print('00000000000000000000000000000000000000000000000000000');
-      lat=currentLoc!.latitude;
-      long=currentLoc!.longitude;
-      List<Placemark> placemarks = await placemarkFromCoordinates(currentLoc!.latitude,currentLoc!.longitude);
+      lat = currentLoc!.latitude;
+      long = currentLoc!.longitude;
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+          currentLoc!.latitude, currentLoc!.longitude);
       Placemark place = placemarks[0];
-      currenPlace=place.locality;
-      print( currenPlace.toString());
+      currenPlace = place.locality;
+      print(currenPlace.toString());
       print('kkkkkkkkkkkkkkkkkkkkkkkkplace');
-
-
-
-    }catch(err){
+    } catch (err) {
       print(err.toString());
       print('00000000000000000000000000000000000000000000000000000');
     }
-
   }
+
   @override
   void initState() {
     askPermissions();
@@ -989,7 +990,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       GestureDetector(
                           onTap: () {
                             // Navigator.push(context,MaterialPageRoute(builder: (context)=>GeolocatorPage()));
-                          }, child: VerifiedCharityWidget()),
+                          },
+                          child: VerifiedCharityWidget()),
                     ],
                   ),
                 ),

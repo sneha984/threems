@@ -16,7 +16,13 @@ class UserModel {
   List<Address>? address;
 
   UserModel(
-      {this.userName, this.userEmail, this.userImage, this.userId, this.phone,this.cart,this.address});
+      {this.userName,
+      this.userEmail,
+      this.userImage,
+      this.userId,
+      this.phone,
+      this.cart,
+      this.address});
   UserModel.fromJson(Map<String, dynamic> json) {
     userName = json['userName'];
     userEmail = json['userEmail'];
@@ -35,8 +41,6 @@ class UserModel {
         cart!.add(new Cart.fromJson(v));
       });
     }
-
-
   }
 
   Map<String, dynamic> toJson() {
@@ -66,6 +70,7 @@ getcurrentuser() {
     currentuser = UserModel.fromJson(event.data()!);
   });
 }
+
 class Address {
   String? name;
   String? phoneNumber;
@@ -76,11 +81,11 @@ class Address {
 
   Address(
       {this.name,
-        this.phoneNumber,
-        this.pinCode,
-        this.locality,
-        this.flatNo,
-        this.select});
+      this.phoneNumber,
+      this.pinCode,
+      this.locality,
+      this.flatNo,
+      this.select});
 
   Address.fromJson(Map<String, dynamic> json) {
     name = json['name'];
@@ -102,6 +107,7 @@ class Address {
     return data;
   }
 }
+
 class Cart {
   String? productId;
   String? storeId;

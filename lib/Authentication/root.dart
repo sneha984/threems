@@ -8,8 +8,9 @@ import 'package:threems/pagess/loginpage.dart';
 import 'package:threems/pagess/onboardingpage.dart';
 import 'package:threems/screens/home_screen.dart';
 import 'package:threems/screens/splash_screen.dart';
+
 var userdata;
-var  currentuserid;
+var currentuserid;
 
 class Rootingpage extends StatefulWidget {
   const Rootingpage({Key? key}) : super(key: key);
@@ -26,23 +27,23 @@ class _RootingpageState extends State<Rootingpage> {
     return Scaffold(
       body: StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context,snapshot){
-          if(snapshot.connectionState==ConnectionState.waiting){
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
             return CircularProgressIndicator();
-          }else if(snapshot.hasData){
-            userdata=snapshot.data!;
-            currentuserid=userdata.uid;
+          } else if (snapshot.hasData) {
+            userdata = snapshot.data!;
+            currentuserid = userdata.uid;
             getcurrentuser();
             return ScreenLayout();
-              // SplashScreen();
-          }else if(snapshot.hasError){
-            return Center(child: Text("something went wrong"),);
-          }else{
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text("something went wrong"),
+            );
+          } else {
             return OnBoarding();
           }
-          },
+        },
       ),
-
     );
   }
 }

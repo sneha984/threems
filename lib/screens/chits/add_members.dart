@@ -19,7 +19,17 @@ import '../splash_screen.dart';
 
 class AddMembers extends StatefulWidget {
   final ChitModel chit;
-  const AddMembers({super.key, required this.chit});
+  final String size;
+  final String ext;
+  final String fileName;
+  final dynamic bytes;
+  const AddMembers(
+      {super.key,
+      required this.chit,
+      required this.size,
+      required this.ext,
+      this.bytes,
+      required this.fileName});
 
   @override
   State<AddMembers> createState() => _AddMembersState();
@@ -156,6 +166,10 @@ class _AddMembersState extends State<AddMembers> {
                                 contacts: contacts,
                                 numberList: userNumberList,
                                 chit: widget.chit,
+                                size: widget.size,
+                                ext: widget.ext,
+                                bytes: widget.bytes,
+                                fileName: widget.fileName,
                               )));
                 },
                 child: Container(
@@ -559,6 +573,7 @@ class _AddMembersState extends State<AddMembers> {
                             userId: currentuserid,
                             chitDate: local.chitDate,
                             private: local.private,
+                            payableAmount: local.subscriptionAmount,
                             chitName: local.chitName,
                             amount: local.amount,
                             chitTime: local.chitTime,
@@ -580,15 +595,24 @@ class _AddMembersState extends State<AddMembers> {
                             upiApps: local.upiApps,
                             accountHolderName: local.accountHolderName,
                             ifsc: local.ifsc,
+                            fileName: widget.fileName,
                           );
 
                           FirebaseFirestore.instance
                               .collection('chit')
                               .add(chit.toJson())
                               .then((value) {
-                            print('========Current User=========');
-                            print(currentuserid);
                             value.update({'chitId': value.id});
+                            value.collection('chats').add({
+                              "file": local.document!,
+                              "fileName": 'PROOF',
+                              "senderId": currentuserid,
+                              "sendTime": DateTime.now(),
+                              "readBy": [],
+                              "type": "file",
+                              "ext": widget.ext,
+                              "size": widget.size,
+                            });
                           }).then((value) {
                             showSnackbar(context, 'Chit successfully added');
                             setState(() {
@@ -626,6 +650,7 @@ class _AddMembersState extends State<AddMembers> {
                               bankName: local.bankName,
                               phone: local.phone,
                               upiApps: local.upiApps,
+                              payableAmount: local.subscriptionAmount,
                               accountHolderName: local.accountHolderName,
                               ifsc: local.ifsc);
 
@@ -643,7 +668,6 @@ class _AddMembersState extends State<AddMembers> {
                         }
                       },
                       child: Container(
-                        // width: 100,
                         height: 50,
                         decoration: BoxDecoration(
                             color: primarycolor,

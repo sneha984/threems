@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:threems/Authentication/phoneUpdate.dart';
 import 'package:threems/Authentication/root.dart';
 import 'package:threems/pagess/onboardingpage.dart';
 
@@ -25,8 +26,8 @@ class Authentication {
     userImage = userCredential.user?.photoURL;
     userEmail = userCredential.user?.email;
     userDoc = userCredential.user?.uid;
+    currentuserid = userCredential.user?.uid;
     phone = userCredential.user?.phoneNumber ?? '';
-    print("chugfg ggggggg$userDoc");
 
     FirebaseFirestore.instance.collection('users').doc(userDoc).set({
       "userId": userDoc,
@@ -34,12 +35,13 @@ class Authentication {
       "userEmail": userEmail,
       "userImage": userImage,
       "phone": phone,
-    }).then((value) => Navigator.pushAndRemoveUntil(
+    }).then((value) => Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => Rootingpage(),
-        ),
-        (route) => false));
+          builder: (context) => AddPhone(
+            id: userDoc!,
+          ),
+        )));
 
     //     .then((value) {
     //   Navigator.pushReplacement(
@@ -49,6 +51,36 @@ class Authentication {
     //       ));
     // })
   }
+
+  // Future<void> verifyPhoneNumber(BuildContext context) async {
+  //   await FirebaseAuth.instance.verifyPhoneNumber(
+  //     phoneNumber: phoneNumber,
+  //     timeout: const Duration(seconds: 15),
+  //     verificationCompleted: (AuthCredential authCredential) {
+  //       setState(() {
+  //         authStatus = "Your account is successfully verified";
+  //       });
+  //     },
+  //     verificationFailed: (AuthException authException) {
+  //       setState(() {
+  //         authStatus = "Authentication failed";
+  //       });
+  //     },
+  //     codeSent: (String verId, [int forceCodeResent]) {
+  //       verificationId = verId;
+  //       setState(() {
+  //         authStatus = "OTP has been successfully send";
+  //       });
+  //       otpDialogBox(context).then((value) {});
+  //     },
+  //     codeAutoRetrievalTimeout: (String verId) {
+  //       verificationId = verId;
+  //       setState(() {
+  //         authStatus = "TIMEOUT";
+  //       });
+  //     },
+  //   );
+  // }
 
   //SIGN OUT
   // signOut() {
