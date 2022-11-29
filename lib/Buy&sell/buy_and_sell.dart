@@ -575,9 +575,10 @@ class _BuyAndSellState extends State<BuyAndSell>with TickerProviderStateMixin {
                             ],
                           ),
                           SizedBox(height: scrHeight*0.015,),
-                          Text("No Stores"),
-                          SizedBox(height: 300,),
+                          SizedBox(height:50,),
 
+                          Text("No Stores"),
+                          SizedBox(height: 50,),
                           // Padding(
                           //   padding:  EdgeInsets.only(left: scrWidth*0.037,right: scrWidth*0.037),
                           //   child: Container(

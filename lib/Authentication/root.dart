@@ -40,8 +40,7 @@ class _RootingpageState extends State<Rootingpage> {
           }else{
             return OnBoarding();
           }
-          }
-        ,
+          },
       ),
 
     );

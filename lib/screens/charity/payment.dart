@@ -433,8 +433,14 @@ class _PaymentPageState extends State<PaymentPage> {
                                   fontWeight: FontWeight.w700,
                                   color: Colors.white
                               ),),
-
                             ],
+                          ),
+                        ),
+                        Container(
+                          height: 100,
+                          width:100,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(image: NetworkImage(widget.charitymodel.qrImage!),fit: BoxFit.fill)
                           ),
                         ),
                         SizedBox(height: scrHeight*0.05,),
@@ -450,8 +456,6 @@ class _PaymentPageState extends State<PaymentPage> {
                                   color: Colors.white
                               ),),
                               SizedBox(height: scrHeight*0.002,),
-
-
                               Text(widget.charitymodel.accountHolderName!,style: TextStyle(
                                   fontSize: 16,
                                   fontFamily: 'Urbanist',
@@ -459,7 +463,6 @@ class _PaymentPageState extends State<PaymentPage> {
                                   color: Colors.white
                               ),),
                               SizedBox(height: scrHeight*0.005,),
-
                               Text("Account Number",style: TextStyle(
                                   fontSize: 10,
                                   fontFamily: 'Urbanist',
