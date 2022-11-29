@@ -5,11 +5,13 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_iconpicker/Serialization/iconDataSerialization.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:threems/screens/charity/sucess.dart';
 
+import '../../Authentication/root.dart';
 import '../../model/charitymodel.dart';
 import '../../model/usermodel.dart';
 import '../../utils/themes.dart';
@@ -26,6 +28,22 @@ class PaymentPage extends StatefulWidget {
 }
 
 class _PaymentPageState extends State<PaymentPage> {
+  var icons;
+  var categoryName;
+  getIconData(){
+    FirebaseFirestore.instance.collection('expenses').
+    where('expenseName',isEqualTo:'charity' ).snapshots().listen((event) {
+      for(DocumentSnapshot data in event.docs){
+        icons=deserializeIcon(data['icon']);
+        categoryName=data['expenseName'];
+        // _icon = Icon(icons,color: Colors.white,size: 45,);
+
+      }
+
+
+    });
+
+  }
   final FocusNode valueAmountFocus = FocusNode();
   final  TextEditingController valueAmountController =TextEditingController();
   String? imgUrl;
@@ -64,6 +82,7 @@ class _PaymentPageState extends State<PaymentPage> {
 
     // image = null;
     super.initState();
+    getIconData();
   }
 
   @override
@@ -553,6 +572,15 @@ class _PaymentPageState extends State<PaymentPage> {
             }
 
             );
+            FirebaseFirestore.instance.collection('users').doc(currentuserid).collection('expense').add({
+              'amount':double.tryParse(valueAmountController.text),
+              "categoryIcon":serializeIcon(icons),
+              "categoryName":categoryName.toString(),
+              'date':DateTime.now(),
+              'merchant':'',
+
+            });
+
             print(imgUrl);
             print(imgFile);
 

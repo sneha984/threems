@@ -38,7 +38,7 @@ class _IncomeReportPageState extends State<IncomeReportPage> {
   double amount=0.00;
   getYearwiseCategoryIncome(){
     FirebaseFirestore.instance.collection('users').doc(currentuserid).collection('incomes').
-    orderBy('date',descending: true).snapshots().listen((event) {
+    snapshots().listen((event) {
       if(event.docs.isNotEmpty) {
         totalExpense=0.00;
         incomeList=[];
@@ -46,7 +46,7 @@ class _IncomeReportPageState extends State<IncomeReportPage> {
         for (DocumentSnapshot data in event.docs) {
           totalExpense+=double.tryParse(data['amount'].toString())??0;
           if(incomeCategory.contains(data['IncomeCategoryName'])){
-            Map item=incomeList[incomeCategory.indexOf(data['IncomeCategoryName'])].data();
+            Map <String,dynamic>item=incomeList[incomeCategory.indexOf(data['IncomeCategoryName'])];
             double amount=item['amount'];
             amount+=data['amount'];
             item['amount']=amount;
@@ -61,8 +61,6 @@ class _IncomeReportPageState extends State<IncomeReportPage> {
         }
 
       }
-      print("yyyyyyyyyyyyyyyyyyyyyyyyyyyyyy");
-      print(totalExpense);
       if(mounted){
         setState(() {
 
@@ -183,11 +181,11 @@ class _IncomeReportPageState extends State<IncomeReportPage> {
     // getCategoryName();
     getYearwiseCategoryIncome();
 
+
     // getYearMonthExpenses();
     // fromDate=DateTime.now();
     // toDate=DateTime.now();
 
-    // TODO: implement initState
     super.initState();
   }
   @override
@@ -890,7 +888,7 @@ class _IncomeReportPageState extends State<IncomeReportPage> {
           confirmText: 'Select',
           context: context,
           firstDate: DateTime(2000,1),
-          lastDate: DateTime(DateTime.now().year + 100),
+          lastDate: DateTime(DateTime.now().year + 100,),
           initialDate: DateTime.now(),
           builder: (context, child) => Theme(
               data: ThemeData(

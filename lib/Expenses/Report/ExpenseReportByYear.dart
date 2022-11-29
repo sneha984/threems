@@ -66,8 +66,6 @@ class _ExpenseReportPageState extends State<ExpenseReportPage> {
         }
 
       }
-      print("yyyyyyyyyyyyyyyyyyyyyyyyyyyyyy");
-      print(totalExpense);
       if(mounted){
         setState(() {
 

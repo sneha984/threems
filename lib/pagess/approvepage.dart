@@ -140,7 +140,7 @@ class _ApprovePageState extends State<ApprovePage> {
   var categoryName;
   getIconData(){
     FirebaseFirestore.instance.collection('income').
-    where('categoryName',isEqualTo:'Kuri' ).snapshots().listen((event) {
+    where('categoryName',isEqualTo:'Chit' ).snapshots().listen((event) {
             for(DocumentSnapshot data in event.docs){
               icons=deserializeIcon(data['icon']);
               categoryName=data['categoryName'];

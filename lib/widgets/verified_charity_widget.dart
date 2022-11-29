@@ -128,22 +128,22 @@ class _VerifiedCharityWidgetState extends State<VerifiedCharityWidget> {
                         //     backgroundColor: Color(0xffE9F6FF),
                         //   ),
                         // ),
-                        // Padding(
-                        //   padding: const EdgeInsets.only(top: 5,bottom: 6),
-                        //   child: LinearPercentIndicator(
-                        //     //leaner progress bar
-                        //     animation: true,
-                        //     animationDuration: 1000,
-                        //     lineHeight: 3,
-                        //     width: 181,
-                        //     percent: vcharity?.totalReceived??0/vcharity.valueAmount!,
-                        //     alignment: MainAxisAlignment.start,
-                        //     barRadius: Radius.circular(1.5),
-                        //
-                        //     progressColor: Color(0xff343434),
-                        //     backgroundColor: Color(0xffE9F6FF),
-                        //   ),
-                        // ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 5,bottom: 6),
+                          child: LinearPercentIndicator(
+                            //leaner progress bar
+                            animation: true,
+                            animationDuration: 1000,
+                            lineHeight: 3,
+                            width: 181,
+                            percent: (vcharity.totalReceived)??0/(vcharity.valueAmount)!,
+                            alignment: MainAxisAlignment.start,
+                            barRadius: Radius.circular(1.5),
+
+                            progressColor: Color(0xff343434),
+                            backgroundColor: Color(0xffE9F6FF),
+                          ),
+                        ),
                         Padding(
                             padding: EdgeInsets.symmetric(
                                 horizontal: scrWidth * 0.035),

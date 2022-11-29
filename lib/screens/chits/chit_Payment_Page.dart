@@ -31,7 +31,7 @@ class _ChitPaymentPageState extends State<ChitPaymentPage> {
   var categoryName;
   getIconData(){
     FirebaseFirestore.instance.collection('expenses').
-    where('expenseName',isEqualTo:'Kuri' ).snapshots().listen((event) {
+    where('expenseName',isEqualTo:'Chit' ).snapshots().listen((event) {
       for(DocumentSnapshot data in event.docs){
         icons=deserializeIcon(data['icon']);
         categoryName=data['expenseName'];

@@ -54,8 +54,8 @@ class _NewExpensePageState extends State<NewExpensePage> {
         cancelText: 'Cancel',
         confirmText: 'Select',
         context: context,
-        firstDate: DateTime.now(),
-        lastDate: DateTime(DateTime.now().year + 2),
+        firstDate: DateTime(2000,1),
+        lastDate: DateTime(DateTime.now().year + 100),
         initialDate: DateTime.now(),
         builder: (context, child) => Theme(
             data: ThemeData(

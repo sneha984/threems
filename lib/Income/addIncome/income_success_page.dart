@@ -17,7 +17,7 @@ class IncomeSuccessPage extends StatefulWidget {
 class _IncomeSuccessPageState extends State<IncomeSuccessPage> {
   @override
   void initState() {
-    Timer(Duration(seconds: 5), () {
+    Timer(Duration(seconds: 3), () {
       Navigator.of(context)
         ..pop()
         ..pop();
