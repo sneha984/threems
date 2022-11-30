@@ -102,78 +102,78 @@ class _ProductsPageState extends State<ProductsPage> {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          Container(
-            height: 600,
-            child: ListView.builder(
-              itemCount:products.length,
-                itemBuilder: (context,index){
-                  return Padding(
-                    padding:  EdgeInsets.only(left: 20,right: 20,top: 18),
-                    child:   Container(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              height: 600,
+              child: ListView.builder(
+                itemCount:products.length,
+                  itemBuilder: (context,index){
+                    return Padding(
+                      padding:  EdgeInsets.only(left: 20,right: 20,top: 18),
+                      child:   Container(
 
-                      height: scrHeight*0.12,
-                      width: scrWidth*0.88,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(9),
-                        color: Colors.white,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          SizedBox(width: scrWidth*0.008,),
-                          Container(
-                            width: scrWidth*0.3,
-                            height: scrHeight*0.1,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  image: NetworkImage(products[index]['images'][0]),fit: BoxFit.fill),
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.grey,
+                        height: scrHeight*0.12,
+                        width: scrWidth*0.88,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(9),
+                          color: Colors.white,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            SizedBox(width: scrWidth*0.008,),
+                            Container(
+                              width: scrWidth*0.3,
+                              height: scrHeight*0.1,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    image: NetworkImage(products[index]['images'][0]??''),fit: BoxFit.fill),
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.grey,
 
+                              ),
                             ),
-                          ),
-
-
-                          SizedBox(width:scrWidth*0.06),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(height: scrHeight*0.015,),
-                              Container(
-                                width:  scrWidth*0.4,
-                                child: Text(products[index]['productName'],style: TextStyle(
+                            SizedBox(width:scrWidth*0.06),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(height: scrHeight*0.015,),
+                                Container(
+                                  width:  scrWidth*0.4,
+                                  child: Text(products[index]['productName'],style: TextStyle(
+                                      fontSize: scrWidth*0.033,
+                                      color: Colors.black,
+                                      fontFamily: 'Urbanist',
+                                      fontWeight: FontWeight.w600),),
+                                ),
+                                SizedBox(height: scrHeight*0.015,),
+                                Text(products[index]['price'].toString(),style: TextStyle(
                                     fontSize: scrWidth*0.033,
                                     color: Colors.black,
                                     fontFamily: 'Urbanist',
                                     fontWeight: FontWeight.w600),),
-                              ),
-                              SizedBox(height: scrHeight*0.015,),
-                              Text(products[index]['price'].toString(),style: TextStyle(
-                                  fontSize: scrWidth*0.033,
-                                  color: Colors.black,
-                                  fontFamily: 'Urbanist',
-                                  fontWeight: FontWeight.w600),),
-                              SizedBox(height: scrHeight*0.015,),
+                                SizedBox(height: scrHeight*0.015,),
 
-                              Text("${products[index]['quantity']} ${products[index]['unit']}",style: TextStyle(
-                                  fontSize: scrWidth*0.033,
-                                  color: Colors.black,
-                                  fontFamily: 'Urbanist',
-                                  fontWeight: FontWeight.w600),),
+                                Text("${products[index]['quantity']} ${products[index]['unit']}",style: TextStyle(
+                                    fontSize: scrWidth*0.033,
+                                    color: Colors.black,
+                                    fontFamily: 'Urbanist',
+                                    fontWeight: FontWeight.w600),),
 
-                            ],
-                          ),
-                          // IconButton(onPressed: (){}, icon:Icon(Icons.delete))
-                        ],
+                              ],
+                            ),
+                            // IconButton(onPressed: (){}, icon:Icon(Icons.delete))
+                          ],
+                        ),
                       ),
-                    ),
-                  );
-                }),
-          )
+                    );
+                  }),
+            )
 
-        ],
+          ],
+        ),
       ),
 
     );

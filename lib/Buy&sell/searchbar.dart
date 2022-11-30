@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class SearchBarPage extends StatefulWidget {
-  const SearchBarPage({Key? key}) : super(key: key);
+  final String shopname;
+  const SearchBarPage({Key? key, required this.shopname}) : super(key: key);
 
   @override
   State<SearchBarPage> createState() => _SearchBarPageState();
@@ -13,6 +14,7 @@ class _SearchBarPageState extends State<SearchBarPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
 
     );
   }

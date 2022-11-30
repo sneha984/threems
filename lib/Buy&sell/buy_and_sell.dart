@@ -72,8 +72,7 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                 MaterialPageRoute(
                     builder: (context) => CategoryStores(
                           categoryname: doc.get('categoryName'),
-
-                        )));
+                    )));
           },
           child: Container(
             height: scrWidth * 0.3,
@@ -139,7 +138,7 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
       if (data.length > 0) {
         status = 1;
       }
-      print('sneha ${shops.length}');
+      print('sneha ${store.length}');
       print(currentuserid);
       FirebaseFirestore.instance
           .collection('stores')
@@ -252,8 +251,8 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
         actions: [
           InkWell(
             onTap: () {
-              // Navigator.push(context,
-              //     MaterialPageRoute(builder: (context) => CheckOutPage(,)));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => CheckOutPage(id:store[0].storeId!,)));
             },
             child: Badge(
                 position: BadgePosition.topEnd(
@@ -584,8 +583,38 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                       ),
                     ),
                     SizedBox(
+                      height: scrHeight * 0.015,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => YourStoreCreatePage()));
+                      },
+                      child: Container(
+                        height: scrHeight * 0.045,
+                        width: scrHeight * 0.35,
+                        decoration: BoxDecoration(
+                            color: primarycolor,
+                            borderRadius:
+                            BorderRadius.circular(scrWidth * 0.02)),
+                        child: Center(
+                          child: Text(
+                            "My Orders",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'Urbanist',
+                                fontWeight: FontWeight.w700,
+                                fontSize: scrWidth * 0.04),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
                       height: scrHeight * 0.03,
                     ),
+
 
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -933,11 +962,12 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                             ),
                             GestureDetector(
                               onTap: () {
+                                print(shops.length);
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => StoreDetailsFill2(
-                                              data: shops[0],
+                                              data: store[0],
                                             )));
                               },
                               child: Container(
@@ -1172,7 +1202,7 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      Orders()));
+                                                      Orders(storeId:store[0].storeId!,)));
                                         },
                                         child: Container(
                                           height: scrHeight * 0.11,
@@ -1376,7 +1406,8 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                     ),
                                     InkWell(
                                       onTap: (){
-                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>CategoryPage(storeId: store[0].storeId!,)));
+                                        Navigator.push(context, MaterialPageRoute(
+                                            builder: (context)=>CategoryPage(storeId: store[0].storeId!,)));
                                       },
                                       child: Container(
                                         height: scrHeight * 0.1,

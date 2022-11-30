@@ -21,9 +21,9 @@ import '../utils/themes.dart';
 List selectCategory=[];
 
 class StoreDetailsFill2 extends StatefulWidget {
-  final dynamic data;
+  final StoreDetailsModel data;
 
-  const StoreDetailsFill2({Key? key,  this.data,}) : super(key: key);
+  const StoreDetailsFill2({Key? key,  required this.data,}) : super(key: key);
 
   @override
   State<StoreDetailsFill2> createState() => _StoreDetailsFill2State();
@@ -78,7 +78,7 @@ class _StoreDetailsFill2State extends State<StoreDetailsFill2> {
      FirebaseFirestore
          .instance
          .collection('stores')
-         .doc(widget.data['storeId'])
+         .doc(widget.data.storeId)
          .snapshots().listen((event) {
        productCategory=event.get('productCategory');
        print(productCategory);
@@ -129,7 +129,7 @@ List productCategoryList=[];
     getUnit();
     getProductCat();
     // TODO: implement initState
-    selectCategory=widget.data['storeCategory'];
+    selectCategory=widget.data.storeCategory!;
     super.initState();
   }
   @override
@@ -974,10 +974,10 @@ List productCategoryList=[];
                       quantity:int.tryParse(productUnitController.text) ,
                       details: productDetailsController.text,
                       storedCategorys: selectedCategoryItem,
-                      storeId: widget.data['storeId'],
+                      storeId: widget.data.storeId,
                       // categoryName:categoryName,
                     );
-                    FirebaseFirestore.instance.collection('stores').doc(widget.data['storeId'])
+                    FirebaseFirestore.instance.collection('stores').doc(widget.data.storeId)
                         .collection('products').add(proDat.toJson()).then((value) =>
                         value.update({'productId':value.id}));
                     print(proDat);
@@ -1098,7 +1098,7 @@ List productCategoryList=[];
                        child: GestureDetector(
                          onTap: () {
                            productCategoryList.add(productCategoryNameController.text);
-                    FirebaseFirestore.instance.collection('stores').doc(widget.data['storeId']).update({
+                    FirebaseFirestore.instance.collection('stores').doc(widget.data.storeId).update({
                       'productCategory':FieldValue.arrayUnion(productCategoryList),
                     });
                   Navigator.pop(context);

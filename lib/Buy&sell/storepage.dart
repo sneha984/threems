@@ -334,32 +334,32 @@ class _StorePageState extends State<StorePage> {
 
                     borderRadius: BorderRadius.circular(scrWidth*0.02)
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 5),
-                  child: TextFormField(
-                    decoration:  InputDecoration(
-                        prefixIcon: Padding(
-                          padding: EdgeInsets.only(
-                              top: scrHeight*0.015,
-                              left: scrWidth*0.04,
-                              bottom: scrHeight*0.01,
-                              right: scrWidth*0.05),
-                          child:SvgPicture.asset("assets/icons/Vector (4).svg",),
-                        ),
-                        border: InputBorder.none,
-                        hintText: "Search Products",
-                        hintStyle: TextStyle(
-                          fontFamily: 'Urbanist',fontWeight: FontWeight.w500,
-                          fontSize: scrWidth*0.03,
-                          color: const Color(0xff8391A1),
-                        )
-                    ),
-                    cursorColor: Colors.black,
-                    cursorHeight: 20,
-                    cursorWidth: 0.5,
-
-                  ),
-                ),
+                // child: Padding(
+                //   padding: const EdgeInsets.only(bottom: 5),
+                //   child: TextFormField(
+                //     decoration:  InputDecoration(
+                //         prefixIcon: Padding(
+                //           padding: EdgeInsets.only(
+                //               top: scrHeight*0.015,
+                //               left: scrWidth*0.04,
+                //               bottom: scrHeight*0.01,
+                //               right: scrWidth*0.05),
+                //           child:SvgPicture.asset("assets/icons/Vector (4).svg",),
+                //         ),
+                //         border: InputBorder.none,
+                //         hintText: "Search Products",
+                //         hintStyle: TextStyle(
+                //           fontFamily: 'Urbanist',fontWeight: FontWeight.w500,
+                //           fontSize: scrWidth*0.03,
+                //           color: const Color(0xff8391A1),
+                //         )
+                //     ),
+                //     cursorColor: Colors.black,
+                //     cursorHeight: 20,
+                //     cursorWidth: 0.5,
+                //
+                //   ),
+                // ),
               ),
             ),
             SizedBox(height: scrHeight*0.02,),
@@ -378,25 +378,21 @@ class _StorePageState extends State<StorePage> {
               ],
             ),
             SizedBox(height: scrHeight*0.02,),
-            Padding(
-              padding:  EdgeInsets.only(left: scrWidth*0.02),
-              child: Container(
-                height: scrHeight*2,
-                child: GridView.builder(
-                    physics: const BouncingScrollPhysics(),
-                    scrollDirection: Axis.horizontal,
-                    shrinkWrap: true,
-                    itemCount:productsList.length,
-                    itemBuilder: (context, index) {
-                      final products=productsList[index];
-                      // final _isSelected=_selectedIndexs.contains(index);
-                      return ShopSingleProduct(product:products, storeId: widget.storeDetailsModel.storeId!,);
-                    }, gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  childAspectRatio: 3 / 9,
-                  crossAxisSpacing: 2,
-                  mainAxisSpacing: 20,
-                  ),
+            Container(
+              child: GridView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  padding: EdgeInsets.all(10),
+                  shrinkWrap: true,
+                  itemCount:productsList.length,
+                  itemBuilder: (context, index) {
+                    final products=productsList[index];
+                    // final _isSelected=_selectedIndexs.contains(index);
+                    return ShopSingleProduct(product:products, storeId: widget.storeDetailsModel.storeId!,);
+                  }, gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                childAspectRatio: 0.6,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 20,
                 ),
               ),
             ),
@@ -939,25 +935,22 @@ class _ShopSingleProductState extends State<ShopSingleProduct> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding:  EdgeInsets.only(right: scrWidth*0.03),
+    return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          InkWell(
-            onTap: (){
-              // Navigator.push(context,MaterialPageRoute(builder: (context)=>CheckOutPage()));
-            },
-            child: Padding(
-              padding:  EdgeInsets.only(
-                  left:scrWidth*0.039),
+          Expanded(
+            flex: 3,
+            child: InkWell(
+              onTap: (){
+                // Navigator.push(context,MaterialPageRoute(builder: (context)=>CheckOutPage()));
+              },
               child: Container(
-                padding: EdgeInsets.only(left: scrWidth*0.02,right: scrWidth*0.02,top: scrHeight*0.02),
-                height:scrHeight*0.1,
-                width: scrWidth*0.3,
+
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                        image: NetworkImage(products.images![0])),
+                        image: NetworkImage(products.images![0]),
+                    fit: BoxFit.cover),
                     color: Colors.white,
                     borderRadius: BorderRadius
                         .circular(scrWidth*0.04),
@@ -968,61 +961,69 @@ class _ShopSingleProductState extends State<ShopSingleProduct> {
               ),
             ),
           ),
-          Padding(
-            padding:  EdgeInsets.only(left: scrWidth*0.06),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment
-                  .start,
-              children: [
-                SizedBox(height: scrHeight*0.009,),
-                Text(
-                  products.productName!, textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontFamily: 'Urbanist',
-                      fontSize: scrWidth*0.03,
-                      fontWeight: FontWeight.w600,
-                      color: const Color(0xff0E0E0E)),),
-                SizedBox(height: scrHeight*0.003,),
+          Expanded(
+            flex: 2,
+            child: Padding(
+              padding:  EdgeInsets.only(
+                right: 5,
+                left: 5
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment
+                    .start,
+                children: [
 
-                Text(
-                  "${products.quantity!} ${products.unit!}", textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontFamily: 'Urbanist',
-                      fontSize: scrWidth*0.025,
-                      fontWeight: FontWeight.w600,
-                      color: const Color(0xff818181)),),
-                SizedBox(height: scrHeight*0.003,),
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        products.productName!,maxLines: 2, textAlign: TextAlign.start,
+                        style: TextStyle(
+                            fontFamily: 'Urbanist',
+                            fontSize: scrWidth*0.03,
+                            fontWeight: FontWeight.w600,
+                            color: const Color(0xff0E0E0E)),),
+                    ),
+                  ),
+                  SizedBox(height: scrHeight*0.003,),
 
-                Text(
-                  currencyConvert.format(products.price!).toString(), textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontFamily: 'Urbanist',
-                      fontSize: scrWidth*0.03,
-                      fontWeight: FontWeight.w700,
-                      color: const Color(0xffF10000)),),
-                SizedBox(height: scrHeight*0.004,),
-              ],
+                  Text(
+                    "${products.quantity!} ${products.unit!}", textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontFamily: 'Urbanist',
+                        fontSize: scrWidth*0.025,
+                        fontWeight: FontWeight.w600,
+                        color: const Color(0xff818181)),),
+                  SizedBox(height: scrHeight*0.003,),
+
+                  Text(
+                    currencyConvert.format(products.price!).toString(), textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontFamily: 'Urbanist',
+                        fontSize: scrWidth*0.03,
+                        fontWeight: FontWeight.w700,
+                        color: const Color(0xffF10000)),),
+                  SizedBox(height: scrHeight*0.004,),
+                ],
+              ),
             ),
           ),
           isCarted?
-          Padding(padding: EdgeInsets.only(left: scrWidth*0.04),
-            child: InkWell(
-              onTap: (){
-
-
-
+          InkWell(
+            onTap: (){
               },
-              child: Container(
-                width: scrWidth*0.31,
-                height: scrHeight*0.033,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: const Color(0xff02B558)
-                  // color: Colors.red
-                ),
-                child: Row(
-                  children: [
-                    InkWell(
+            child: Container(
+
+              height: scrHeight*0.033,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  color: const Color(0xff02B558)
+                // color: Colors.red
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: InkWell(
                       onTap: (){
                         if (qty != 1) {
                           --qty;
@@ -1060,8 +1061,7 @@ class _ShopSingleProductState extends State<ShopSingleProduct> {
 
                       },
                       child: Container(
-                        height: scrHeight*0.033,
-                        width: scrWidth*0.105,
+
                         decoration: BoxDecoration(
 
                             color: Color(0xff02B558),
@@ -1073,9 +1073,9 @@ class _ShopSingleProductState extends State<ShopSingleProduct> {
                         ),
                       ),
                     ),
-                    Container(
-                      height: scrHeight*0.033,
-                      width: scrWidth*0.1,
+                  ),
+                  Expanded(
+                    child: Container(
                       decoration: BoxDecoration(
                         color: Color(0xff9FFFCD),
                       ),
@@ -1083,11 +1083,13 @@ class _ShopSingleProductState extends State<ShopSingleProduct> {
                         // '${eachstore[index].counter}'
                       )),
                     ),
-                    InkWell(
+                  ),
+                  Expanded(
+                    child: InkWell(
                       onTap: (){
-print(products.productId);
-print(products.productName);
-qty++;
+                print(products.productId);
+                print(products.productName);
+                qty++;
                         incrementCount(products.productId!,widget.storeId,qty );
                         print(cartlist);
                         // final snackBar = SnackBar(
@@ -1129,8 +1131,7 @@ qty++;
 
                       },
                       child: Container(
-                        height: scrHeight*0.033,
-                        width: scrWidth*0.105,
+
                         decoration: BoxDecoration(
                           // color: Colors.red,
                             color: Color(0xff02B558),
@@ -1144,58 +1145,54 @@ qty++;
                         ),
                       ),
                     ),
+                  ),
 
-                  ],
-                ),
-
+                ],
               ),
+
             ),
           ):
-          Padding(
-            padding:  EdgeInsets.only(left: scrWidth*0.04),
-            child:  InkWell(
-              onTap: (){
+          InkWell(
+            onTap: (){
 
-                addToCart(products,widget.storeId);
+              addToCart(products,widget.storeId);
 
-                isCarted=true;
-                setState(() {
+              isCarted=true;
+              setState(() {
 
-                });
+              });
 
-                print(cartlist);
-                final snackBar = SnackBar(
-                  backgroundColor: Colors.white,
-                  content: const Text(' item added to cart',
-                    style: TextStyle(color: Colors.black),),
-                  action: SnackBarAction(
+              print(cartlist);
+              final snackBar = SnackBar(
+                backgroundColor: Colors.white,
+                content: const Text(' item added to cart',
+                  style: TextStyle(color: Colors.black),),
+                action: SnackBarAction(
 
-                    textColor: Colors.blue,
-                    label: 'Go To Cart',
-                    onPressed: () {
-                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>CheckOutPage(id: widget.storeId,)));
-                      // Some code to undo the change.
-                    },
-                  ),
-                );
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
-              },
-              child: Container(
-                width: scrWidth*0.31,
-                height: scrHeight*0.033,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: Color(0xff02B558)
-                  // color: Colors.red
+                  textColor: Colors.blue,
+                  label: 'Go To Cart',
+                  onPressed: () {
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>CheckOutPage(id: widget.storeId,)));
+                    // Some code to undo the change.
+                  },
                 ),
-                child: Center(
-                  child: Text("Add",style: TextStyle(
-                      fontFamily: 'Urbanist',fontWeight: FontWeight.w600,fontSize: 12,color: Colors.white
-                  ),),
-                ),
+              );
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            },
+            child: Container(
+              width: scrWidth*0.31,
+              height: scrHeight*0.033,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  color: Color(0xff02B558)
+                // color: Colors.red
+              ),
+              child: Center(
+                child: Text("Add",style: TextStyle(
+                    fontFamily: 'Urbanist',fontWeight: FontWeight.w600,fontSize: 12,color: Colors.white
+                ),),
               ),
             ),
-
           ),
 
           // Padding(

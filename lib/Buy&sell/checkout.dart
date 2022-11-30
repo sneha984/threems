@@ -10,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:threems/Authentication/root.dart';
 import 'package:threems/Buy&sell/storepage.dart';
 
+import '../model/OrderModel.dart';
 import '../model/usermodel.dart';
 import '../screens/splash_screen.dart';
 import '../utils/themes.dart';
@@ -615,7 +616,34 @@ class _CheckOutPageState extends State<CheckOutPage> {
                     ),
                   ):InkWell(
               onTap: (){
+                for(int i=0;i<cartlist.length;i++){
+                  //
+                  // final addr=Addresses(
+                  //
+                  // )
 
+
+                  var ordr=OrderModel(
+                      item: cartlist[i]['name'],
+                    itemImage: cartlist[i]['img'],
+                    amount: cartlist[i]['price'],
+                    time:DateTime.now(),
+                    userId: currentuserid,
+                    deliveryCharge: 30,
+                    status: 0,
+                    count: cartlist[i]['count'],
+                    storeId: cartlist[i]['storeId'],
+                    address: Addresses(
+                      phoneNumber: addressList![0].phoneNumber!,
+                      flatNo: addressList![0].flatNo!,
+                      pincode: addressList![0].pinCode!,
+                      locality: addressList![0].locality!,
+                      locationType: addressList![0].select!,
+                      name: addressList![0].name!
+                    )
+                  );
+                  orderPlacing(ordr,cartlist[i]['storeId']);
+                }
 
                 Navigator.push(context,MaterialPageRoute(builder: (context)=>CheckOutPage3()));
               },
@@ -643,14 +671,14 @@ class _CheckOutPageState extends State<CheckOutPage> {
       ),
     );
   }
-   // orderPlacing(OrderModel ordr)async{
-   //   FirebaseFirestore
-   //       .instance
-   //       .collection('stores')
-   //       .doc(widget.id)
-   //       .collection('orders')
-   //       .add(ordr.toJson()).then((value) =>
-   //       value.update({'orderId':value.id})
-   //   );
-   // }
+   orderPlacing(OrderModel ordr,String id){
+     FirebaseFirestore
+         .instance
+         .collection('stores')
+         .doc(id)
+         .collection('orders')
+         .add(ordr.toJson()).then((value) =>
+         value.update({'orderId':value.id})
+     );
+   }
 }

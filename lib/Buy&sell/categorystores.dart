@@ -19,6 +19,9 @@ class CategoryStores extends StatefulWidget {
 }
 
 class _CategoryStoresState extends State<CategoryStores> {
+  String name="";
+  List <Map<String,dynamic>> data=[];
+  TextEditingController search=TextEditingController();
   List<SubCategory> subcategory=[
     SubCategory(noofproduct: "120 products", storename: "Bavya Store",
         storeimage: "https://cdn.pixabay.com/photo/2016/03/02/20/13/grocery-1232944__340.jpg"),
@@ -36,6 +39,7 @@ class _CategoryStoresState extends State<CategoryStores> {
         .instance
         .collection('stores')
         .where('storeCategory',arrayContains:widget.categoryname )
+        .where("userId",isNotEqualTo: currentuserid)
         .snapshots()
         .listen((event) {
       shops=[];
@@ -129,6 +133,12 @@ class _CategoryStoresState extends State<CategoryStores> {
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 5),
                   child: TextFormField(
+                    onChanged: (val){
+                      setState((){
+                        name=val;
+                      });
+                    },
+                    controller: search,
                     decoration:  InputDecoration(
                         prefixIcon: Padding(
                           padding: EdgeInsets.only(
@@ -154,6 +164,166 @@ class _CategoryStoresState extends State<CategoryStores> {
                 ),
               ),
             ),
+            Container(
+              child: StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore
+                    .instance
+                    .collection('stores')
+                    .where('storeCategory',arrayContains:widget.categoryname)
+                    .where('userId',isNotEqualTo: currentuserid)
+                    .snapshots(),
+                builder: (context,snapshot){
+                  return (snapshot.connectionState==ConnectionState.waiting)?Center(
+                    child: CircularProgressIndicator(),
+                  ):GridView.builder(
+                      itemCount:shops.length,
+                      scrollDirection: Axis.vertical,
+                      physics: BouncingScrollPhysics(),
+                      shrinkWrap: true,
+                      itemBuilder: (context,index){
+                        var data=shops[index];
+                        if(search.text.isEmpty){
+                          return Padding(
+                            padding:  EdgeInsets.only(left: scrWidth*0.03,right: scrWidth*0.03),
+                            child: Container(
+                              height: scrHeight*3,
+                              child: GridView.builder(
+                                shrinkWrap: true,
+                                // scrollDirection: Axis.vertical,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemCount: shops.length,
+                                gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(
+                                    childAspectRatio: 3 / 3.1,
+                                    crossAxisSpacing: 2,
+                                    mainAxisSpacing: 20,
+                                    crossAxisCount: 3),
+                                itemBuilder: (BuildContext context, int index) {
+                                  final shoplist=shops[index];
+                                  return  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      InkWell(
+                                        onTap: (){
+                                          Navigator.push(context,MaterialPageRoute(builder: (context)=>StorePage(storeDetailsModel: shoplist, category: widget.categoryname,)));
+                                        },
+                                        child: Padding(
+                                          padding:  EdgeInsets.only(
+                                              left: scrWidth*0.03),
+                                          child: Container(
+                                            height: scrHeight*0.1,
+                                            width:scrWidth*0.25,
+                                            decoration: BoxDecoration(
+                                              image: DecorationImage(image:
+                                              NetworkImage(shoplist.storeImage??''),
+                                                  fit: BoxFit.fill),
+                                              color: Colors.white,
+
+                                              borderRadius: BorderRadius.circular(
+                                                  scrWidth*0.03),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(left: scrWidth*0.04),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment
+                                              .start,
+                                          children: [
+                                            SizedBox(height: scrHeight*0.003,),
+                                            Text(
+                                              shoplist.storeName!, textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontFamily: 'Urbanist',
+                                                  fontSize: scrWidth*0.036,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: Color(0xff0E0E0E)),),
+                                            SizedBox(height: scrHeight*0.002,),
+
+                                            Text(
+                                              "${productsList.length} products"
+                                              , textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontFamily: 'Urbanist',
+                                                  fontSize: scrWidth*0.025,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: Color(0xff818181)),),
+
+                                          ],
+                                        ),
+                                      ),
+
+                                    ],
+                                  );
+                                },
+                              ),
+                            ),
+                          );
+                        }
+                        if(data.storeName.toString().startsWith(name.toLowerCase() )){
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              InkWell(
+                                onTap: (){
+                                  Navigator.push(context,MaterialPageRoute(builder: (context)=>StorePage(storeDetailsModel: data, category: widget.categoryname,)));
+                                },
+                                child: Padding(
+                                  padding:  EdgeInsets.only(
+                                      left: scrWidth*0.03),
+                                  child: Container(
+                                    height: scrHeight*0.1,
+                                    width:scrWidth*0.25,
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(image:
+                                      NetworkImage(data.storeImage??''),
+                                          fit: BoxFit.fill),
+                                      color: Colors.white,
+
+                                      borderRadius: BorderRadius.circular(
+                                          scrWidth*0.03),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(left: scrWidth*0.04),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment
+                                      .start,
+                                  children: [
+                                    SizedBox(height: scrHeight*0.003,),
+                                    Text(
+                                      data.storeName!, textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontFamily: 'Urbanist',
+                                          fontSize: scrWidth*0.036,
+                                          fontWeight: FontWeight.w600,
+                                          color: Color(0xff0E0E0E)),),
+                                    SizedBox(height: scrHeight*0.002,),
+
+                                    Text(
+                                      "${productsList.length} products"
+                                      , textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontFamily: 'Urbanist',
+                                          fontSize: scrWidth*0.025,
+                                          fontWeight: FontWeight.w600,
+                                          color: Color(0xff818181)),),
+
+                                  ],
+                                ),
+                              ),
+
+                            ],
+                          );
+                        }
+                        return Container();
+                      }, gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 1),);
+
+                },
+              ),
+            ),
             // StreamBuilder<QuerySnapshot<Map<String,dynamic>>>(
             //   stream: FirebaseFirestore
             //       .instance
@@ -165,83 +335,8 @@ class _CategoryStoresState extends State<CategoryStores> {
             //
             //     }
             // ),
-            Padding(
-              padding:  EdgeInsets.only(left: scrWidth*0.03,right: scrWidth*0.03),
-              child: Container(
-                height: scrHeight*3,
-                child: GridView.builder(
-                  shrinkWrap: true,
-                  // scrollDirection: Axis.vertical,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: shops.length,
-                  gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(
-                      childAspectRatio: 3 / 3.1,
-                      crossAxisSpacing: 2,
-                      mainAxisSpacing: 20,
-                      crossAxisCount: 3),
-                  itemBuilder: (BuildContext context, int index) {
-                    final shoplist=shops[index];
-                    return  Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        InkWell(
-                          onTap: (){
-                            Navigator.push(context,MaterialPageRoute(builder: (context)=>StorePage(storeDetailsModel: shoplist, category: widget.categoryname,)));
-                          },
-                          child: Padding(
-                            padding:  EdgeInsets.only(
-                                left: scrWidth*0.03),
-                            child: Container(
-                              height: scrHeight*0.1,
-                              width:scrWidth*0.25,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(image:
-                                NetworkImage(shoplist.storeImage??''),
-                                    fit: BoxFit.fill),
-                                color: Colors.white,
 
-                                borderRadius: BorderRadius.circular(
-                                    scrWidth*0.03),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(left: scrWidth*0.04),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment
-                                .start,
-                            children: [
-                              SizedBox(height: scrHeight*0.003,),
-                              Text(
-                                shoplist.storeName!, textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontFamily: 'Urbanist',
-                                    fontSize: scrWidth*0.036,
-                                    fontWeight: FontWeight.w600,
-                                    color: Color(0xff0E0E0E)),),
-                              SizedBox(height: scrHeight*0.002,),
 
-                              Text(
-                                "${productsList.length} products"
-                                    , textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontFamily: 'Urbanist',
-                                    fontSize: scrWidth*0.025,
-                                    fontWeight: FontWeight.w600,
-                                    color: Color(0xff818181)),),
-
-                            ],
-                          ),
-                        ),
-
-                      ],
-                    );
-                    },
-                ),
-              ),
-            ),
-          
 
 
           ],

@@ -1,7 +1,8 @@
 class OrderModel {
   String? item;
-  int? amount;
-  String? time;
+  double? amount;
+  String? itemImage;
+  DateTime? time;
   Addresses? address;
   String? orderId;
   String? userId;
@@ -9,8 +10,6 @@ class OrderModel {
   int? status;
   int? count;
   String? storeId;
-
-
   OrderModel(
       {this.item,
         this.amount,
@@ -18,7 +17,10 @@ class OrderModel {
         this.address,
         this.orderId,
         this.userId,
-        this.deliveryCharge,this.status,this.count,this.storeId});
+        this.deliveryCharge,
+        this.status,
+        this.count,
+        this.storeId,this.itemImage});
 
   OrderModel.fromJson(Map<String, dynamic> json) {
     item = json['item'];
@@ -32,6 +34,7 @@ class OrderModel {
     status=json['status'];
     count=json['count'];
     storeId=json['storeId'];
+    itemImage=json['itemImage'];
   }
 
   Map<String, dynamic> toJson() {
@@ -48,6 +51,7 @@ class OrderModel {
     data['deliveryCharge'] = this.deliveryCharge;
     data['count']=this.count;
     data['storeId']=this.storeId;
+    data['itemImage']=this.itemImage;
     return data;
   }
 }
