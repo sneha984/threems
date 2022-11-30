@@ -10,7 +10,8 @@ import '../utils/themes.dart';
 import 'checkout.dart';
 
 class AddAddressPage extends StatefulWidget {
-  const AddAddressPage({Key? key}) : super(key: key);
+  final String storeid;
+  const AddAddressPage({Key? key, required this.storeid}) : super(key: key);
 
   @override
   State<AddAddressPage> createState() => _AddAddressPageState();
@@ -478,7 +479,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
                 }
 
                 );
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>CheckOutPage()));
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>CheckOutPage(id: widget.storeid,)));
               },
               child: Container(
                 height: scrHeight*0.05,

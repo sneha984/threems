@@ -17,7 +17,8 @@ import 'checkout2.dart';
 import 'checkoutpage3.dart';
 
 class CheckOutPage extends StatefulWidget {
-  const CheckOutPage({Key? key}) : super(key: key);
+  final String id;
+  const CheckOutPage({Key? key, required this.id}) : super(key: key);
 
   @override
   State<CheckOutPage> createState() => _CheckOutPageState();
@@ -164,10 +165,10 @@ class _CheckOutPageState extends State<CheckOutPage> {
                           children: [
                             InkWell(
                               onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => CheckOutPage()));
+                                // Navigator.push(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //         builder: (context) => CheckOutPage(id: widget.id,)));
                               },
                               child: Padding(
                                 padding: const EdgeInsets.only(),
@@ -501,7 +502,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => AddAddressPage()));
+                              builder: (context) => AddAddressPage(storeid:widget.id,)));
                     },
                     child: Container(
                       height: 40,
@@ -529,7 +530,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(color: Color(0xffD2D2D2), width: 1)),
               child: Padding(
-                padding: const EdgeInsets.only(left: 15, top: 10),
+                padding:  EdgeInsets.only(left: 15, top: 10),
                 child: Row(
                   children: [
                     Column(
@@ -548,7 +549,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                         ),
                         Text(addressList==null?'':
                         addressList![0].phoneNumber!,
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontFamily: 'Urbanist',
                               fontWeight: FontWeight.w600,
                               fontSize: 12,
@@ -614,6 +615,8 @@ class _CheckOutPageState extends State<CheckOutPage> {
                     ),
                   ):InkWell(
               onTap: (){
+
+
                 Navigator.push(context,MaterialPageRoute(builder: (context)=>CheckOutPage3()));
               },
               child: Container(
@@ -640,13 +643,14 @@ class _CheckOutPageState extends State<CheckOutPage> {
       ),
     );
   }
-  delete()async{
-    final prefs=await SharedPreferences.getInstance();
-    final myItemsAsJsonString = json.encode(cartlist);
-    await prefs.remove( myItemsAsJsonString);
-    setState(() {
-
-    });
-
-  }
+   // orderPlacing(OrderModel ordr)async{
+   //   FirebaseFirestore
+   //       .instance
+   //       .collection('stores')
+   //       .doc(widget.id)
+   //       .collection('orders')
+   //       .add(ordr.toJson()).then((value) =>
+   //       value.update({'orderId':value.id})
+   //   );
+   // }
 }

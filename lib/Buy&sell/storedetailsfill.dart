@@ -47,26 +47,7 @@ class _StoreDetailsState extends State<StoreDetails> {
 
     });
   }
-  // getShopCategory(){
-  //   FirebaseFirestore.instance.collection('shopCategory').snapshots().listen((event) {
-  //     categoryList=[];
-  //     for(DocumentSnapshot <Map<String,dynamic>> doc in event.docs){
-  //       categoryList.add(doc);
-  //     }
-  //     /*categoryItems=[];
-  //     for(int i=0;i<categoryList.length;i++){
-  //       categoryItems.add({
-  //         'CategoryId':categoryList[i]['CategoryId']??"",
-  //         'category':categoryList[i]['category']??"",
-  //       });
-  //     }*/
-  //     if(mounted){
-  //       setState(() {
-  //
-  //       });
-  //     }
-  //   });
-  // }
+
   getCategory(){
     FirebaseFirestore.instance.collection('storeCategory').snapshots().listen((event) {
       categoryList=[];
@@ -88,20 +69,7 @@ class _StoreDetailsState extends State<StoreDetails> {
     });
     
   }
-  // final List<String> items = [
-  //   "Grocery Store",
-  //   "Fashion Apparels",
-  //   "Mobile & Electronics",
-  //   "Fruits & Vegetables",
-  //   "Pharmacy & Medicines",
-  //   "Chicken & Meat",
-  //   "Hardware & Tools",
-  //   "Bakery & Cake Shops",
-  //   "Home Decoration",
-  //   "Books & Stationary",
-  //   "Jewellery & Golds",
-  //   "Motor Accessories",
-  // ];
+
   String? imgUrl;
   var imgFile;
   var uploadTask;

@@ -313,7 +313,7 @@ class _StorePageState extends State<StorePage> {
                     width:scrWidth*0.26,
                     decoration: BoxDecoration(
                       image: DecorationImage(image:
-                      NetworkImage(widget.storeDetailsModel.storeImage!),
+                      NetworkImage(widget.storeDetailsModel.storeImage??''),
                           fit: BoxFit.fill),
                       color: Colors.white,
 
@@ -1051,7 +1051,7 @@ class _ShopSingleProductState extends State<ShopSingleProduct> {
                             textColor: Colors.blue,
                             label: 'Go To Cart',
                             onPressed: () {
-                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>CheckOutPage()));
+                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>CheckOutPage(id: widget.storeId,)));
                               // Some code to undo the change.
                             },
                           ),
@@ -1120,7 +1120,7 @@ qty++;
                           textColor: Colors.blue,
                           label: 'Go To Cart',
                           onPressed: () {
-                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>CheckOutPage()));
+                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>CheckOutPage(id: '',)));
                             // Some code to undo the change.
                           },
                         ),
@@ -1173,7 +1173,7 @@ qty++;
                     textColor: Colors.blue,
                     label: 'Go To Cart',
                     onPressed: () {
-                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>CheckOutPage()));
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>CheckOutPage(id: widget.storeId,)));
                       // Some code to undo the change.
                     },
                   ),

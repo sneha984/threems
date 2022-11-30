@@ -23,7 +23,7 @@ List selectCategory=[];
 class StoreDetailsFill2 extends StatefulWidget {
   final dynamic data;
 
-  const StoreDetailsFill2({Key? key, required this.data,}) : super(key: key);
+  const StoreDetailsFill2({Key? key,  this.data,}) : super(key: key);
 
   @override
   State<StoreDetailsFill2> createState() => _StoreDetailsFill2State();
@@ -31,6 +31,7 @@ class StoreDetailsFill2 extends StatefulWidget {
 
 class _StoreDetailsFill2State extends State<StoreDetailsFill2> {
    String? selectedCategoryItem;
+   String? productCategoryItem;
   bool finished=true;
   final FocusNode categoryFocusNode=FocusNode();
   final FocusNode productNameFocus= FocusNode();
@@ -46,11 +47,7 @@ class _StoreDetailsFill2State extends State<StoreDetailsFill2> {
   final  TextEditingController productDetailsController =TextEditingController();
   String? selectedValuee;
   String? selectedValue;
-  // final List<String> categoryName=[];
-  //final List<String> item = [
-    //"Grocery Store",
-    //"Fashion Apparels",
-  //];
+  
    bool loading=false;
    refreshPage() {
      setState(() {
@@ -58,10 +55,10 @@ class _StoreDetailsFill2State extends State<StoreDetailsFill2> {
      });
    }
    List productUnit=[];
+   List productCategory=[];
    getUnit(){
      FirebaseFirestore.instance.collection('productUnit').snapshots().listen((event) {
        productUnit=[];
-
        for(DocumentSnapshot <Map<String,dynamic>> doc in event.docs){
          print("---====--=--9022222222222222222222222222222222222222222222222222222222222222222");
          print('${doc['unit']}');
@@ -76,51 +73,24 @@ class _StoreDetailsFill2State extends State<StoreDetailsFill2> {
          });
        }
      });
-
    }
-  // final List<String> items = [
-  //   "kg",
-  //   "gm",
-  //   "ml",
-  //   "liter",
-  //   "mm",
-  //   "ft",
-  //   "meter",
-  //   "sq. ft.",
-  //   "sq. meter",
-  //   "km",
-  //   "set",
-  //   "hour",
-  //   "day",
-  //   "bunch",
-  //   "bundle",
-  //   "month",
-  //   "year",
-  //   "service",
-  //   "work",
-  //   "packet",
-  //   "box",
-  //   "pound",
-  //   "dozen",
-  //   "gunta",
-  //   "pair",
-  //   "minute",
-  //   "quintal",
-  //   "ton",
-  //   "capsule",
-  //   "tablet",
-  //   "plate",
-  //   "inch"
-  // ];
-  // List getcat=[];
-  // getCategorys(){
-  //   // getcat=[];
-  //   FirebaseFirestore.instance.collection('stores').doc(widget.id).collection('products').snapshots().listen((event) {
-  //     for (DocumentSnapshot doc in event.docs){
-  //       getcat.add(doc!);
-  //     }
-  //   });
-  // }
+   getProductCat(){
+     FirebaseFirestore
+         .instance
+         .collection('stores')
+         .doc(widget.data['storeId'])
+         .snapshots().listen((event) {
+       productCategory=event.get('productCategory');
+       print(productCategory);
+       if(mounted){
+         setState(() {
+
+         });
+       }
+     });
+   }
+    
+List productCategoryList=[];
   List _images=[];
   List<String> _imgurl=[];
   String? imgUrl;
@@ -134,9 +104,7 @@ class _StoreDetailsFill2State extends State<StoreDetailsFill2> {
     TaskSnapshot taskSnapshot = (await uploadTask);
     String value = await taskSnapshot.ref.getDownloadURL();
 
-    // if(value!=null){
-    //   imageList.add(value);
-    // }
+  
     print("####################################################");
     print("####################################################");
 
@@ -159,10 +127,10 @@ class _StoreDetailsFill2State extends State<StoreDetailsFill2> {
   @override
   void initState() {
     getUnit();
+    getProductCat();
     // TODO: implement initState
     selectCategory=widget.data['storeCategory'];
     super.initState();
-    // getCategorys();
   }
   @override
   void dispose() {
@@ -412,173 +380,258 @@ class _StoreDetailsFill2State extends State<StoreDetailsFill2> {
                 ),
               ),
               SizedBox(height: scrHeight*0.02,),
-              Padding(
-                padding:  EdgeInsets.only(right: scrWidth*0.053),
-                child: Container(
-                  height: textFormFieldHeight45,
-                  padding: EdgeInsets.symmetric(
-                    horizontal: scrWidth * 0.015,
-                    vertical: scrHeight*0.002,
-                  ),
-                  decoration: BoxDecoration(
-                    color: textFormFieldFillColor,
-                    borderRadius:
-                    BorderRadius.circular(scrWidth * 0.026),
-                  ),
-                  child: TextFormField(
-                    controller: categoryNameController,
-                    focusNode: categoryFocusNode,
-                    cursorHeight: scrWidth * 0.055,
-                    cursorWidth: 1,
-                    cursorColor: Colors.black,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w600,
-                      fontSize: FontSize15,
+              Container(
+                width: scrWidth * 0.9,
+                height: textFormFieldHeight45,
+                decoration: BoxDecoration(
+                  color: textFormFieldFillColor,
+                  borderRadius: BorderRadius.circular(scrWidth * 0.033),
+                ),
+
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: scrWidth * 0.057,
+                    ),
+                    SvgPicture.asset(
+                      'assets/icons/storecategory.svg',
+                      // fit: BoxFit.contain,
+                    ),
+                    SizedBox(
+                      width: scrWidth * 0.04,
+                    ),
+                    DropdownButtonHideUnderline(
+                      child: DropdownButton2(
+                        isExpanded: true,
+                        hint: Text(
+                          "Product Category",
+                          style: TextStyle(
+                              fontSize: FontSize15,
+                              fontFamily: 'Urbanist',
+                              fontWeight: FontWeight.w600,
+                              color: Color(0xffB0B0B0)),
+                        ),
+                        items: productCategory
+                            .map((item) => DropdownMenuItem<String>(
+                          value: item,
+                          child: Text(
+                            item.toString(),
+                            // overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 14,
+                                fontFamily: 'Urbanist'),
+                          ),
+                        ))
+                            .toList(),
+                        value: productCategoryItem,
+                        onChanged: (value) {
+                          setState(() {
+                            productCategoryItem  = value as String;
+
+                          });
+                        },
+                        icon:  Icon(
+                          Icons.arrow_drop_down,
+                        ),
+                        iconSize: 18,
+                        iconEnabledColor: Colors.black,
+                        iconDisabledColor: Colors.blue,
+                        buttonHeight: 50,
+                        buttonWidth: 247,
+                        // buttonPadding: const EdgeInsets.only(),
+                        buttonDecoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(14),
+                          color: textFormFieldFillColor,
+                        ),
+                        // buttonElevation: 2,
+                        itemHeight: 40,
+                        itemPadding: const EdgeInsets.only(),
+                        dropdownMaxHeight: 260,
+                        dropdownWidth: 300,
+                        dropdownPadding: EdgeInsets.only(
+                            left: 30, top: 15, bottom: 25, right: 30),
+                        dropdownDecoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          color: Colors.white,
+                        ),
+                        dropdownElevation: 0,
+                        scrollbarRadius: Radius.circular(10),
+                        scrollbarThickness: 3,
+                        scrollbarAlwaysShow: true,
+                        offset: const Offset(-20, 0),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              // Padding(
+              //   padding:  EdgeInsets.only(right: scrWidth*0.053),
+              //   child: Container(
+              //     height: textFormFieldHeight45,
+              //     padding: EdgeInsets.symmetric(
+              //       horizontal: scrWidth * 0.015,
+              //       vertical: scrHeight*0.002,
+              //     ),
+              //     decoration: BoxDecoration(
+              //       color: textFormFieldFillColor,
+              //       borderRadius:
+              //       BorderRadius.circular(scrWidth * 0.026),
+              //     ),
+              //     child: TextFormField(
+              //       controller: categoryNameController,
+              //       focusNode: categoryFocusNode,
+              //       cursorHeight: scrWidth * 0.055,
+              //       cursorWidth: 1,
+              //       cursorColor: Colors.black,
+              //       style: TextStyle(
+              //         color: Colors.black,
+              //         fontWeight: FontWeight.w600,
+              //         fontSize: FontSize15,
+              //         fontFamily: 'Urbanist',
+              //       ),
+              //       decoration: InputDecoration(
+              //         labelText: 'Product Category',
+              //         labelStyle: TextStyle(
+              //           color: categoryFocusNode.hasFocus
+              //               ? primarycolor
+              //               : Color(0xffB0B0B0),
+              //           fontWeight: FontWeight.w600,
+              //           fontSize: FontSize15,
+              //           fontFamily: 'Urbanist',
+              //         ),
+              //         prefixIcon: Container(
+              //           height: scrWidth * 0.045,
+              //           width: 10,
+              //           padding: EdgeInsets.all(
+              //               scrWidth * 0.033),
+              //           child: SvgPicture.asset(
+              //             'assets/icons/storename.svg',
+              //             fit: BoxFit.contain,
+              //             color: Color(0xffB0B0B0),
+              //           ),
+              //         ),
+              //         fillColor: textFormFieldFillColor,
+              //         filled: true,
+              //         contentPadding: EdgeInsets.only(
+              //             top: 5, bottom: scrWidth * 0.033),
+              //         disabledBorder: InputBorder.none,
+              //         enabledBorder: InputBorder.none,
+              //         errorBorder: InputBorder.none,
+              //         border: InputBorder.none,
+              //         focusedBorder: UnderlineInputBorder(
+              //           borderSide: BorderSide(
+              //             color: primarycolor,
+              //             width: 2,
+              //           ),
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              // ),
+
+              // Container(
+              //   width: scrWidth * 0.9,
+              //   height: textFormFieldHeight45,
+              //   decoration: BoxDecoration(
+              //     color: textFormFieldFillColor,
+              //     borderRadius: BorderRadius.circular(scrWidth * 0.033),
+              //   ),
+              //
+              //   child: Row(
+              //     children: [
+              //       SizedBox(
+              //         width: scrWidth * 0.057,
+              //       ),
+              //       SvgPicture.asset(
+              //         'assets/icons/storecategory.svg',
+              //         // fit: BoxFit.contain,
+              //       ),
+              //       SizedBox(
+              //         width: scrWidth * 0.04,
+              //       ),
+              //       DropdownButtonHideUnderline(
+              //         child: DropdownButton2(
+              //           isExpanded: true,
+              //           hint: Text(
+              //             "Product category",
+              //             style: TextStyle(
+              //                 fontSize: FontSize15,
+              //                 fontFamily: 'Urbanist',
+              //                 fontWeight: FontWeight.w600,
+              //                 color: Color(0xffB0B0B0)),
+              //           ),
+              //           items: selectCategory
+              //               .map((item) => DropdownMenuItem<String>(
+              //                     value: item,
+              //                     child: Text(
+              //                       item.toString(),
+              //                       // overflow: TextOverflow.ellipsis,
+              //                       style: TextStyle(
+              //                           fontWeight: FontWeight.w600,
+              //                           fontSize: 14,
+              //                           fontFamily: 'Urbanist'),
+              //                     ),
+              //                   ))
+              //               .toList(),
+              //           value: selectedCategoryItem,
+              //           onChanged: (value) {
+              //             setState(() {
+              //               selectedCategoryItem = value as String;
+              //
+              //             });
+              //           },
+              //           icon:  Icon(
+              //             Icons.arrow_drop_down,
+              //           ),
+              //           iconSize: 18,
+              //           iconEnabledColor: Colors.black,
+              //           iconDisabledColor: Colors.blue,
+              //           buttonHeight: 50,
+              //           buttonWidth: 247,
+              //           // buttonPadding: const EdgeInsets.only(),
+              //           buttonDecoration: BoxDecoration(
+              //             borderRadius: BorderRadius.circular(14),
+              //             color: textFormFieldFillColor,
+              //           ),
+              //           // buttonElevation: 2,
+              //           itemHeight: 40,
+              //           itemPadding: const EdgeInsets.only(),
+              //           dropdownMaxHeight: 260,
+              //           dropdownWidth: 300,
+              //           dropdownPadding: EdgeInsets.only(
+              //               left: 30, top: 15, bottom: 25, right: 30),
+              //           dropdownDecoration: BoxDecoration(
+              //             borderRadius: BorderRadius.circular(8),
+              //             color: Colors.white,
+              //           ),
+              //           dropdownElevation: 0,
+              //           scrollbarRadius: Radius.circular(10),
+              //           scrollbarThickness: 3,
+              //           scrollbarAlwaysShow: true,
+              //           offset: const Offset(-20, 0),
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
+          GestureDetector(
+              onTap: (){
+                pay();
+                },
+              child: Padding(
+                padding:  EdgeInsets.only(left: scrWidth*0.62,top: scrHeight*0.01),
+                child: Text(
+                  "Add new category",textAlign: TextAlign.end,
+                  style: TextStyle(
+                      fontSize: 12,
                       fontFamily: 'Urbanist',
-                    ),
-                    decoration: InputDecoration(
-                      labelText: 'Product Category',
-                      labelStyle: TextStyle(
-                        color: categoryFocusNode.hasFocus
-                            ? primarycolor
-                            : Color(0xffB0B0B0),
-                        fontWeight: FontWeight.w600,
-                        fontSize: FontSize15,
-                        fontFamily: 'Urbanist',
-                      ),
-                      prefixIcon: Container(
-                        height: scrWidth * 0.045,
-                        width: 10,
-                        padding: EdgeInsets.all(
-                            scrWidth * 0.033),
-                        child: SvgPicture.asset(
-                          'assets/icons/storename.svg',
-                          fit: BoxFit.contain,
-                          color: Color(0xffB0B0B0),
-                        ),
-                      ),
-                      fillColor: textFormFieldFillColor,
-                      filled: true,
-                      contentPadding: EdgeInsets.only(
-                          top: 5, bottom: scrWidth * 0.033),
-                      disabledBorder: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      errorBorder: InputBorder.none,
-                      border: InputBorder.none,
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                          color: primarycolor,
-                          width: 2,
-                        ),
-                      ),
-                    ),
+                      fontWeight: FontWeight.w600,
+                      color:primarycolor
                   ),
                 ),
               ),
-
-          //     Container(mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
-          //       width: scrWidth * 0.9,
-          //       height: textFormFieldHeight45,
-          //       decoration: BoxDecoration(
-          //         color: textFormFieldFillColor,
-          //         borderRadius: BorderRadius.circular(scrWidth * 0.033),
-          //       ),
-          //
-          //       child: Row(
-          //         children: [
-          //           SizedBox(
-          //             width: scrWidth * 0.057,
-          //           ),
-          //           SvgPicture.asset(
-          //             'assets/icons/storecategory.svg',
-          //             // fit: BoxFit.contain,
-          //           ),
-          //           SizedBox(
-          //             width: scrWidth * 0.04,
-          //           ),
-          //           DropdownButtonHideUnderline(
-          //             child: DropdownButton2(
-          //               isExpanded: true,
-          //               hint: Text(
-          //                 "Product category",
-          //                 style: TextStyle(
-          //                     fontSize: FontSize15,
-          //                     fontFamily: 'Urbanist',
-          //                     fontWeight: FontWeight.w600,
-          //                     color: Color(0xffB0B0B0)),
-          //               ),
-          //               items: selectCategory
-          //                   .map((item) => DropdownMenuItem<String>(
-          //                         value: item,
-          //                         child: Text(
-          //                           item.toString(),
-          //                           // overflow: TextOverflow.ellipsis,
-          //                           style: TextStyle(
-          //                               fontWeight: FontWeight.w600,
-          //                               fontSize: 14,
-          //                               fontFamily: 'Urbanist'),
-          //                         ),
-          //                       ))
-          //                   .toList(),
-          //               value: selectedCategoryItem,
-          //               onChanged: (value) {
-          //                 setState(() {
-          //                   selectedCategoryItem = value as String;
-          //
-          //                 });
-          //               },
-          //               icon:  Icon(
-          //                 Icons.arrow_drop_down,
-          //               ),
-          //               iconSize: 18,
-          //               iconEnabledColor: Colors.black,
-          //               iconDisabledColor: Colors.blue,
-          //               buttonHeight: 50,
-          //               buttonWidth: 247,
-          //               // buttonPadding: const EdgeInsets.only(),
-          //               buttonDecoration: BoxDecoration(
-          //                 borderRadius: BorderRadius.circular(14),
-          //                 color: textFormFieldFillColor,
-          //               ),
-          //               // buttonElevation: 2,
-          //               itemHeight: 40,
-          //               itemPadding: const EdgeInsets.only(),
-          //               dropdownMaxHeight: 260,
-          //               dropdownWidth: 300,
-          //               dropdownPadding: EdgeInsets.only(
-          //                   left: 30, top: 15, bottom: 25, right: 30),
-          //               dropdownDecoration: BoxDecoration(
-          //                 borderRadius: BorderRadius.circular(8),
-          //                 color: Colors.white,
-          //               ),
-          //               dropdownElevation: 0,
-          //               scrollbarRadius: Radius.circular(10),
-          //               scrollbarThickness: 3,
-          //               scrollbarAlwaysShow: true,
-          //               offset: const Offset(-20, 0),
-          //             ),
-          //           ),
-          //         ],
-          //       ),
-          //     ),
-          // GestureDetector(
-          //     onTap: (){
-          //       pay();
-          //       },
-          //     child: Padding(
-          //       padding:  EdgeInsets.only(left: scrWidth*0.62,top: scrHeight*0.01),
-          //       child: Text(
-          //         "Add new category",textAlign: TextAlign.end,
-          //         style: TextStyle(
-          //             fontSize: 12,
-          //             fontFamily: 'Urbanist',
-          //             fontWeight: FontWeight.w600,
-          //             color:primarycolor
-          //         ),
-          //       ),
-          //     ),
-          //   ),
+            ),
              SizedBox(height: scrHeight*0.02,),
 
               Padding(
@@ -907,19 +960,21 @@ class _StoreDetailsFill2State extends State<StoreDetailsFill2> {
                     refreshPage();
                     return showSnackbar(context,"Must Provide product unit");
                   }
-                  if(categoryNameController.text.isEmpty){
-                    refreshPage();
-                    return showSnackbar(context,"Must Provide category name");
-                  }else{
+                  // if(categoryNameController.text.isEmpty){
+                  //   refreshPage();
+                  //   return showSnackbar(context,"Must Provide category name");
+                  // }
+                  else{
                     final proDat=ProductModel(
                       images:_imgurl,
                       productName: productNameController.text,
-                       productCategory:categoryNameController.text,
+                       productCategory:productCategoryItem,
                       price:double.tryParse(productPriceController.text),
                       unit:selectedValue ,
                       quantity:int.tryParse(productUnitController.text) ,
                       details: productDetailsController.text,
                       storedCategorys: selectedCategoryItem,
+                      storeId: widget.data['storeId'],
                       // categoryName:categoryName,
                     );
                     FirebaseFirestore.instance.collection('stores').doc(widget.data['storeId'])
@@ -1042,8 +1097,11 @@ class _StoreDetailsFill2State extends State<StoreDetailsFill2> {
                      child: Center(
                        child: GestureDetector(
                          onTap: () {
-
-
+                           productCategoryList.add(productCategoryNameController.text);
+                    FirebaseFirestore.instance.collection('stores').doc(widget.data['storeId']).update({
+                      'productCategory':FieldValue.arrayUnion(productCategoryList),
+                    });
+                  Navigator.pop(context);
                          },
                          child: Text(
                            "Save",

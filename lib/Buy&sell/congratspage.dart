@@ -26,7 +26,7 @@ class _CongratsPageState extends State<CongratsPage> {
     super.initState();
     Timer(const Duration(seconds: 4), () {
       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-          ScreenLayout(index: 1,tabIndex: 1,),), (route) => false);
+          ScreenLayout(index: 1,tabIndex: 1, ),), (route) => false);
       // Navigator.pushAndRemoveUntil(context, MaterialPageRoute
       //   (builder: (context)=>
       //     StoreDetailsFill2(id: widget.id,)

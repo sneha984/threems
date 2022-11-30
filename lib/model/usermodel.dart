@@ -68,6 +68,7 @@ getcurrentuser() {
       .snapshots()
       .listen((event) {
     currentuser = UserModel.fromJson(event.data()!);
+
   });
 }
 

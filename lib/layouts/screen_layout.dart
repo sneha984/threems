@@ -12,7 +12,7 @@ import '../screens/Utilities/utilities.dart';
 class ScreenLayout extends StatefulWidget {
   final int index;
   final int tabIndex;
-  ScreenLayout({Key? key,  this.index=0,  this.tabIndex=0}) : super(key: key);
+  ScreenLayout({Key? key,  this.index=0,  this.tabIndex=0,}) : super(key: key);
 
   @override
   State<ScreenLayout> createState() => _ScreenLayoutState();

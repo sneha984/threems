@@ -1,3 +1,8 @@
+import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:threems/Buy&sell/buy_and_sell.dart';
+
 class StoreDetailsModel {
   String? storeName;
   List<dynamic>? storeCategory;
@@ -53,6 +58,7 @@ class StoreDetailsModel {
 class ProductModel {
   List<String>? images;
   String? productId;
+  String? storeId;
   String? productName;
   String? productCategory;
   double? price;
@@ -62,6 +68,7 @@ class ProductModel {
   String? details;
   // List<String> categoryName=[];
 
+
   ProductModel(
       {this.images,
         this.productName,
@@ -70,6 +77,7 @@ class ProductModel {
         this.quantity,
         this.productId,
         this.unit,
+        this.storeId,
         this.storedCategorys,
         // required this.categoryName,
         this.details});
@@ -81,6 +89,7 @@ class ProductModel {
     quantity = json['quantity'];
     storedCategorys=json['storedCategorys'];
     productId=json['productId'];
+    storeId=json['storeId'];
     // categoryName=json['categoryName'];
 
     unit = json['unit'];
@@ -90,10 +99,12 @@ class ProductModel {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['images'] = this.images;
     data['productName'] = this.productName;
+    data['storeId']=this.storeId;
     data['productCategory'] = this.productCategory;
     data['price'] = this.price;
     data['quantity'] = this.quantity;
     data['storedCategorys']=this.storedCategorys;
+    data['storeId']=this.storeId;
 
     // data['categoryName']=this.categoryName;
     data['unit'] = this.unit;

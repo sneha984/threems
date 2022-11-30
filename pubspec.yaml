@@ -88,9 +88,6 @@ dependencies:
   google_maps_flutter: ^2.2.1
   shared_preferences: ^2.0.15
   geo_firestore_flutter: ^0.1.6
-
-
-
   emoji_picker_flutter: ^1.3.0
 
 
