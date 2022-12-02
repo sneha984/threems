@@ -5,17 +5,16 @@ import 'package:flutter_svg/svg.dart';
 import 'package:threems/model/OrderModel.dart';
 
 import '../../screens/splash_screen.dart';
-import '../../utils/themes.dart';
 
-class OrderViewPage extends StatefulWidget {
-  final OrderModel orderModel;
-  const OrderViewPage({Key? key, required this.orderModel}) : super(key: key);
+class AcceptedPage extends StatefulWidget {
+  final OrderModel orderMdl;
+  const AcceptedPage({Key? key, required this.orderMdl}) : super(key: key);
 
   @override
-  State<OrderViewPage> createState() => _OrderViewPageState();
+  State<AcceptedPage> createState() => _AcceptedPageState();
 }
 
-class _OrderViewPageState extends State<OrderViewPage> {
+class _AcceptedPageState extends State<AcceptedPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,14 +72,14 @@ class _OrderViewPageState extends State<OrderViewPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Customer Name:${widget.orderModel.address?.name??''}"),
+                      Text("Customer Name:${widget.orderMdl.address?.name??''}"),
                       SizedBox(height: 5,),
-                      Text("Delivery Location:${widget.orderModel.address?.flatNo??''},"
-                          "${widget.orderModel.address?.locality??''},"
-                          "${widget.orderModel.address?.pincode??''},"
-                          "${widget.orderModel.address?.locationType??''}}"),
+                      Text("Delivery Location: Flat No ${widget.orderMdl.address?.flatNo??''},"
+                          "${widget.orderMdl.address?.locality??''},"
+                          "${widget.orderMdl.address?.pincode??''},"
+                          "${widget.orderMdl.address?.locationType??''}}"),
                       SizedBox(height: 5,),
-                      Text("Phone Number:${widget.orderModel.address?.phoneNumber??''}"),
+                      Text("Phone Number:${widget.orderMdl.address?.phoneNumber??''}"),
                     ],
                   ),
                 ),
@@ -90,7 +89,7 @@ class _OrderViewPageState extends State<OrderViewPage> {
           SizedBox(height: 20,),
           Container(
             height: 70,
-              width: 325,
+            width: 325,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               color: Colors.grey,
@@ -100,20 +99,20 @@ class _OrderViewPageState extends State<OrderViewPage> {
                 SizedBox(width: 10,),
                 Container(
                   height: 50,
-                    width: 50,
+                  width: 50,
                   decoration: BoxDecoration(
-                    image: DecorationImage(image: NetworkImage(widget.orderModel.itemImage!),fit: BoxFit.fill)
+                      image: DecorationImage(image: NetworkImage(widget.orderMdl.itemImage!),fit: BoxFit.fill)
                   ),
                 ),
                 SizedBox(width: 20,),
 
-                Text(widget.orderModel.item!),
+                Text(widget.orderMdl.item!),
                 SizedBox(width: 50,),
 
-                Text(widget.orderModel.count!.toString()),
+                Text(widget.orderMdl.count!.toString()),
                 SizedBox(width: 35,),
 
-                Text(widget.orderModel.amount!.toString()),
+                Text(widget.orderMdl.amount!.toString()),
               ],
             ),
           ),
@@ -127,12 +126,12 @@ class _OrderViewPageState extends State<OrderViewPage> {
                 FirebaseFirestore
                     .instance
                     .collection('stores')
-                    .doc(widget.orderModel.storeId)
-                    .collection('orders').doc(widget.orderModel.orderId).update({
-                  'status':1
+                    .doc(widget.orderMdl.storeId)
+                    .collection('orders').doc(widget.orderMdl.orderId).update({
+                  'status':2
                 });
               } ,
-              child:Text("Mark as Accepted"))
+              child:Text("Mark as Delivered"))
         ],
       ),
     );

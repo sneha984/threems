@@ -19,9 +19,32 @@ class ProductsPage extends StatefulWidget {
 }
 
 class _ProductsPageState extends State<ProductsPage> {
+  List getAllProducts=[];
+  getProductsAll(){
+    FirebaseFirestore
+        .instance
+        .collection('stores')
+        .doc(widget.storeId)
+        .collection('products')
+        .snapshots()
+        .listen((event) {
+          getAllProducts=[];
+          for(DocumentSnapshot <Map<String,dynamic>> doc in event.docs){
+            getAllProducts.add(doc.data()!);
+          }
+          if(mounted){
+            setState(() {
+
+            });
+          }
+
+    });
+
+  }
 
   @override
   void initState() {
+    getProductsAll();
     // TODO: implement initState
     super.initState();
   }
@@ -108,7 +131,7 @@ class _ProductsPageState extends State<ProductsPage> {
             Container(
               height: 600,
               child: ListView.builder(
-                itemCount:products.length,
+                itemCount:getAllProducts.length,
                   itemBuilder: (context,index){
                     return Padding(
                       padding:  EdgeInsets.only(left: 20,right: 20,top: 18),
@@ -121,7 +144,7 @@ class _ProductsPageState extends State<ProductsPage> {
                           color: Colors.white,
                         ),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             SizedBox(width: scrWidth*0.008,),
                             Container(
@@ -129,34 +152,35 @@ class _ProductsPageState extends State<ProductsPage> {
                               height: scrHeight*0.1,
                               decoration: BoxDecoration(
                                 image: DecorationImage(
-                                    image: NetworkImage(products[index]['images'][0]??''),fit: BoxFit.fill),
+                                    image: NetworkImage(getAllProducts[index]['images'][0]??''),fit: BoxFit.fill),
                                 borderRadius: BorderRadius.circular(10),
                                 color: Colors.grey,
 
                               ),
+
                             ),
-                            SizedBox(width:scrWidth*0.06),
+                            // SizedBox(width:scrWidth*0.06),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 SizedBox(height: scrHeight*0.015,),
                                 Container(
                                   width:  scrWidth*0.4,
-                                  child: Text(products[index]['productName'],style: TextStyle(
+                                  child: Text(getAllProducts[index]['productName'],style: TextStyle(
                                       fontSize: scrWidth*0.033,
                                       color: Colors.black,
                                       fontFamily: 'Urbanist',
                                       fontWeight: FontWeight.w600),),
                                 ),
                                 SizedBox(height: scrHeight*0.015,),
-                                Text(products[index]['price'].toString(),style: TextStyle(
+                                Text(getAllProducts[index]['price'].toString(),style: TextStyle(
                                     fontSize: scrWidth*0.033,
                                     color: Colors.black,
                                     fontFamily: 'Urbanist',
                                     fontWeight: FontWeight.w600),),
                                 SizedBox(height: scrHeight*0.015,),
 
-                                Text("${products[index]['quantity']} ${products[index]['unit']}",style: TextStyle(
+                                Text("${getAllProducts[index]['quantity']} ${products[index]['unit']}",style: TextStyle(
                                     fontSize: scrWidth*0.033,
                                     color: Colors.black,
                                     fontFamily: 'Urbanist',
@@ -164,13 +188,35 @@ class _ProductsPageState extends State<ProductsPage> {
 
                               ],
                             ),
+                            Switch(value:getAllProducts[index]['available'], onChanged: (value) {
+
+                              print(widget.storeId);
+
+                              FirebaseFirestore
+                                  .instance
+                                  .collection('stores')
+                                  .doc(widget.storeId)
+                                  .collection('products')
+                                  .doc(getAllProducts[index]['productId'])
+                                  .update(
+                                {
+                                'available':!getAllProducts[index]['available']
+                                }
+                              );
+                              setState(() {
+
+                              });
+                            },
+
+                            )
                             // IconButton(onPressed: (){}, icon:Icon(Icons.delete))
                           ],
                         ),
                       ),
                     );
                   }),
-            )
+            ),
+
 
           ],
         ),

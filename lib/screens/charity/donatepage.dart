@@ -138,22 +138,22 @@ class _DonatePageState extends State<DonatePage>with TickerProviderStateMixin {
 
                             ],
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 5,bottom: 6),
-                            child: LinearPercentIndicator(
-                              //leaner progress bar
-                              animation: true,
-                              animationDuration: 1000,
-                              lineHeight: 3,
-                              width: 189,
-                              percent: charities.totalReceived!/charities.valueAmount!,
-                              alignment: MainAxisAlignment.start,
-                              barRadius: Radius.circular(1.5),
-
-                              progressColor: Color(0xff343434),
-                              backgroundColor: Color(0xffE9F6FF),
-                            ),
-                          ),
+                          // Padding(
+                          //   padding: const EdgeInsets.only(top: 5,bottom: 6),
+                          //   child: LinearPercentIndicator(
+                          //     //leaner progress bar
+                          //     animation: true,
+                          //     animationDuration: 1000,
+                          //     lineHeight: 3,
+                          //     width: 189,
+                          //     percent: charities.totalReceived??0/charities.valueAmount!,
+                          //     alignment: MainAxisAlignment.start,
+                          //     barRadius: Radius.circular(1.5),
+                          //
+                          //     progressColor: Color(0xff343434),
+                          //     backgroundColor: Color(0xffE9F6FF),
+                          //   ),
+                          // ),
                           SizedBox(height: 3,),
 
 
@@ -334,7 +334,7 @@ class _DonatePageState extends State<DonatePage>with TickerProviderStateMixin {
             Row(
               children: [
                 SizedBox(width: scrWidth*0.045,),
-                Container(
+                /**Container(
                   width: scrWidth*0.09,
                   height: scrHeight*0.04,
                   decoration: BoxDecoration(
@@ -345,7 +345,7 @@ class _DonatePageState extends State<DonatePage>with TickerProviderStateMixin {
                     padding:  EdgeInsets.only(top: scrHeight*0.01,bottom: scrHeight*0.01),
                     child: SvgPicture.asset("assets/icons/Group (1).svg",),
                   ),
-                ),
+                ),**/
                 SizedBox(width: scrWidth*0.02,),
                 Expanded(
                   child: Container(

@@ -966,6 +966,7 @@ List productCategoryList=[];
                   // }
                   else{
                     final proDat=ProductModel(
+                      available: true,
                       images:_imgurl,
                       productName: productNameController.text,
                        productCategory:productCategoryItem,

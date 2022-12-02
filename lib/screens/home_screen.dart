@@ -10,6 +10,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:threems/kuri/kuripage.dart';
 import 'package:threems/model/usermodel.dart';
 import 'package:threems/screens/charity/basic_details.dart';
+import 'package:threems/screens/charity/payment.dart';
 import 'package:threems/screens/chits/hostedchits.dart';
 import 'package:threems/screens/flgraph.dart';
 import 'package:threems/screens/splash_screen.dart';
@@ -1045,7 +1046,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: scrWidth * 0.3,
                 ),
               ],
-            )
+            ),
+
           ],
         ),
       ),

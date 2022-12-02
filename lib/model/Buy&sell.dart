@@ -62,6 +62,7 @@ class ProductModel {
   String? productName;
   String? productCategory;
   double? price;
+  bool? available;
   int? quantity;
   String? storedCategorys;
   String? unit;
@@ -75,6 +76,7 @@ class ProductModel {
         this.productCategory,
         this.price,
         this.quantity,
+        this.available,
         this.productId,
         this.unit,
         this.storeId,
@@ -86,6 +88,7 @@ class ProductModel {
     productName = json['productName'];
     productCategory = json['productCategory'];
     price = json['price'];
+    available = json['available'];
     quantity = json['quantity'];
     storedCategorys=json['storedCategorys'];
     productId=json['productId'];
@@ -100,6 +103,7 @@ class ProductModel {
     data['images'] = this.images;
     data['productName'] = this.productName;
     data['storeId']=this.storeId;
+    data['available']=this.available;
     data['productCategory'] = this.productCategory;
     data['price'] = this.price;
     data['quantity'] = this.quantity;

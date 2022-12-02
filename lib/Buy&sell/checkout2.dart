@@ -199,6 +199,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
                       ),
                       child: TextFormField(
                         controller: pinCodeController,
+                        keyboardType: TextInputType.number,
                         focusNode: pinCodeFocusNode,
                         cursorHeight: scrWidth * 0.055,
                         cursorWidth: 1,

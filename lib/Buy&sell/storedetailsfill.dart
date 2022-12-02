@@ -31,8 +31,8 @@ class _StoreDetailsState extends State<StoreDetails> {
   bool finish = false;
   bool trackedlocation = false;
   List categoryList=[];
-  List categoryListAll=[];
   List<String> selectCategory=[];
+
   geoLocation(String id)async{
     GeoFirestore geoFirestore = GeoFirestore(FirebaseFirestore.instance.collection('stores'));
     await geoFirestore.setLocation(id, GeoPoint(lat!, long!));
@@ -42,23 +42,26 @@ class _StoreDetailsState extends State<StoreDetails> {
     documents.forEach((doc) {
       print("111111111111111111111111111111111111111111111111111111");
       print(doc.data());
-
       print("111111111111111111111111111111111111111111111111111111");
-
     });
   }
+  Map<String,dynamic> categoryListAll={};
 
+  Map<String,dynamic> categoryNames={};
   getCategory(){
     FirebaseFirestore.instance.collection('storeCategory').snapshots().listen((event) {
       categoryList=[];
-      categoryListAll=[];
+      categoryNames={};
+      categoryListAll={};
 
       for(DocumentSnapshot <Map<String,dynamic>> doc in event.docs){
         print("---====--=--9022222222222222222222222222222222222222222222222222222222222222222");
         print('${doc['categoryName']}');
         print('${event.docs[1]['categoryName']}');
         // categoryListAll.add(doc.data()!);
-        categoryList.add(doc['categoryName']);
+        categoryNames[doc.get('categoryName')] = doc.data();
+        categoryList.add(doc.get('categoryName'));
+        categoryListAll[doc.get('categoryName')]=doc.id;
       }
       print(categoryList);
       if(mounted){
@@ -102,8 +105,10 @@ class _StoreDetailsState extends State<StoreDetails> {
   String? selectedValue;
   final FocusNode storeNameFocus = FocusNode();
   final FocusNode storeAddressFocus = FocusNode();
+  final FocusNode delivereyChargeFocus=FocusNode();
   final TextEditingController storeNameController = TextEditingController();
   final TextEditingController storeAddressController = TextEditingController();
+  final TextEditingController deliveryChargeController=TextEditingController();
   bool loading=false;
   refreshPage() {
     setState(() {
@@ -112,6 +117,7 @@ class _StoreDetailsState extends State<StoreDetails> {
   }
   @override
   void initState() {
+
     // getShopCategory();
     getCategory();
     storeNameFocus.addListener(() {
@@ -120,6 +126,10 @@ class _StoreDetailsState extends State<StoreDetails> {
     storeAddressFocus.addListener(() {
       setState(() {});
     });
+    delivereyChargeFocus.addListener(() {
+      setState(() {});
+    });
+
     super.initState();
   }
 
@@ -127,6 +137,7 @@ class _StoreDetailsState extends State<StoreDetails> {
   void dispose() {
     storeNameFocus.dispose();
     storeAddressFocus.dispose();
+    delivereyChargeFocus.dispose();
     super.dispose();
   }
 
@@ -363,7 +374,8 @@ class _StoreDetailsState extends State<StoreDetails> {
               // ),
               Container(
                 width: scrWidth*27,
-                decoration: BoxDecoration(                color: textFormFieldFillColor,
+                decoration: BoxDecoration(
+                    color: textFormFieldFillColor,
                     borderRadius: BorderRadius.circular(scrWidth * 0.026)),
                 child: GFMultiSelect(
                   items: categoryList,
@@ -431,6 +443,69 @@ class _StoreDetailsState extends State<StoreDetails> {
                   borderRadius: BorderRadius.circular(scrWidth * 0.026),
                 ),
                 child: TextFormField(
+                  keyboardType: TextInputType.number,
+                  controller: deliveryChargeController,
+                  focusNode: delivereyChargeFocus,
+                  cursorHeight: scrWidth * 0.055,
+                  cursorWidth: 1,
+                  cursorColor: Colors.black,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600,
+                    fontSize: FontSize15,
+                    fontFamily: 'Urbanist',
+                  ),
+                  decoration: InputDecoration(
+                    labelText: 'Delivery Charge',
+                    labelStyle: TextStyle(
+                      color: delivereyChargeFocus.hasFocus
+                          ? primarycolor
+                          : Color(0xffB0B0B0),
+                      fontWeight: FontWeight.w600,
+                      fontSize: FontSize15,
+                      fontFamily: 'Urbanist',
+                    ),
+                    prefixIcon: Container(
+                      height: scrWidth * 0.045,
+                      width: 10,
+                      padding: EdgeInsets.all(scrWidth * 0.033),
+                      child: SvgPicture.asset(
+                        'assets/icons/storename.svg',
+                        fit: BoxFit.contain,
+                        color: Color(0xffB0B0B0),
+                      ),
+                    ),
+                    fillColor: textFormFieldFillColor,
+                    filled: true,
+                    contentPadding:
+                        EdgeInsets.only(top: 5, bottom: scrWidth * 0.033),
+                    disabledBorder: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    errorBorder: InputBorder.none,
+                    border: InputBorder.none,
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: primarycolor,
+                        width: 2,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: scrHeight * 0.02,
+              ),
+              Container(
+                height: textFormFieldHeight45,
+                padding: EdgeInsets.symmetric(
+                  horizontal: scrWidth * 0.015,
+                  vertical: scrHeight * 0.002,
+                ),
+                decoration: BoxDecoration(
+                  color: textFormFieldFillColor,
+                  borderRadius: BorderRadius.circular(scrWidth * 0.026),
+                ),
+                child: TextFormField(
                   controller: storeAddressController,
                   focusNode: storeAddressFocus,
                   cursorHeight: scrWidth * 0.055,
@@ -465,7 +540,7 @@ class _StoreDetailsState extends State<StoreDetails> {
                     fillColor: textFormFieldFillColor,
                     filled: true,
                     contentPadding:
-                        EdgeInsets.only(top: 5, bottom: scrWidth * 0.033),
+                    EdgeInsets.only(top: 5, bottom: scrWidth * 0.033),
                     disabledBorder: InputBorder.none,
                     enabledBorder: InputBorder.none,
                     errorBorder: InputBorder.none,
@@ -480,9 +555,7 @@ class _StoreDetailsState extends State<StoreDetails> {
                 ),
               ),
 
-              SizedBox(
-                height: scrHeight * 0.02,
-              ),
+
               // trackedlocation == false
               //     ? Container(
               //         height: textFormFieldHeight45,

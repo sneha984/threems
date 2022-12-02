@@ -354,7 +354,7 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                                           "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiuZGp08DDSD0P3PMfKSbbPu2nVmJdH74gHg&usqp=CAU"),
                                     ),
                                     SizedBox(width: scrWidth*0.02,),
-                                    Text(widget.charities.userName!,style: TextStyle(
+                                    Text(widget.charities.orgName!,style: TextStyle(
                                         fontSize: scrWidth*0.045,
                                         fontFamily: 'Urbanist',
                                         fontWeight: FontWeight.w500,
@@ -477,14 +477,16 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Text("Raised",style: TextStyle(
-                                    fontSize: scrWidth*0.034,
+                                    fontSize: scrWidth*0.039,
                                     color: Colors.black,
                                     fontFamily: 'Urbanist',
                                     fontWeight: FontWeight.w500),),
                                 SizedBox(height: scrHeight*0.006,),
 
-                                Text('₹$sum',style: TextStyle(
-                                    fontSize: scrWidth*0.05,
+                                Text(currencyConvert
+                                    .format(widget.charities.totalReceived??0)
+                                    .toString(),style: TextStyle(
+                                    fontSize: scrWidth*0.075,
                                     color: primarycolor,
                                     fontFamily: 'Urbanist',
                                     fontWeight: FontWeight.w700),),
@@ -493,14 +495,14 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                                 Row(
                                   children: [
                                     Text("Out of ",style: TextStyle(
-                                        fontSize: scrWidth*0.034,
+                                        fontSize: scrWidth*0.039,
                                         color: Colors.black,
                                         fontFamily: 'Urbanist',
                                         fontWeight: FontWeight.w600),),
                                     Text(currencyConvert
                                         .format(widget.charities.valueAmount)
                                         .toString(),style: TextStyle(
-                                        fontSize: scrWidth*0.034,
+                                        fontSize: scrWidth*0.039,
                                         color: Colors.black,
                                         fontFamily: 'Urbanist',
                                         fontWeight: FontWeight.w600),),
@@ -597,12 +599,12 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                       Padding(
                         padding:  EdgeInsets.only(left: scrWidth*0.05),
                         child: Text("Bank Details",style: TextStyle(
-                          fontSize: scrWidth*0.04,
+                          fontSize: scrWidth*0.047,
                           fontFamily: 'Urbanist',
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.w600,
                         ),),
                       ),
-                      SizedBox(height: scrHeight*0.03,),
+                      // SizedBox(height: scrHeight*0.03,),
                       // Padding(
                       //   padding:EdgeInsets.only(),
                       //   child: Image(image: AssetImage("assets/icons/card 2.png")),
@@ -689,12 +691,12 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                       Padding(
                         padding:  EdgeInsets.only(left: scrWidth*0.05),
                         child: Text("Supporting Documents",style: TextStyle(
-                          fontSize: scrWidth*0.04,
+                          fontSize: scrWidth*0.047,
                           fontFamily: 'Urbanist',
                           fontWeight: FontWeight.w700,
                         ),),
                       ),
-                      SizedBox(height: scrHeight*0.02,),
+                      // SizedBox(height: scrHeight*0.02,),
                       // Padding(
                       //   padding: EdgeInsets.only(left: scrWidth*0.05),
                       //   child: Container(
@@ -786,7 +788,7 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                       Padding(
                         padding:  EdgeInsets.only(left: scrWidth*0.05),
                         child: Text("Genuinity Documents",style: TextStyle(
-                          fontSize: scrWidth*0.04,
+                          fontSize: scrWidth*0.047,
                           fontFamily: 'Urbanist',
                           fontWeight: FontWeight.w700,
                         ),),
@@ -829,9 +831,9 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                       Padding(
                         padding:  EdgeInsets.only(left: scrWidth*0.05),
                         child: Text("Videos",style: TextStyle(
-                          fontSize: scrWidth*0.04,
+                          fontSize: scrWidth*0.047,
                           fontFamily: 'Urbanist',
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.w600,
                         ),),
                       ),
                       SizedBox(height: scrHeight*0.02,),
@@ -900,7 +902,7 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                         launchUrl(video!);
                         },
                         child: Padding(
-                          padding: EdgeInsets.only(left: 19,bottom: 10),
+                          padding: EdgeInsets.only(left: 19,bottom: 10,right: 19),
                           child: Text(widget.charities.videoLink??'',style: TextStyle(color: Colors.indigo),),
                         ),
 
@@ -912,9 +914,9 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                           Padding(
                             padding:  EdgeInsets.only(left: scrWidth*0.05),
                             child: Text("Supporters",style: TextStyle(
-                              fontSize: scrWidth*0.04,
+                              fontSize: scrWidth*0.047,
                               fontFamily: 'Urbanist',
-                              fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.w600,
                             ),),
                           ),
                           Row(

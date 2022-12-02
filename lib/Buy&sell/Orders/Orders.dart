@@ -2,12 +2,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:threems/Authentication/root.dart';
+import 'package:threems/Buy&sell/Orders/acceptedpage.dart';
+import 'package:threems/Buy&sell/Orders/deliveredpage.dart';
 import 'package:threems/Buy&sell/buy_and_sell.dart';
 import 'package:threems/utils/themes.dart';
 
 import '../../model/OrderModel.dart';
 import '../../model/usermodel.dart';
 import '../../screens/splash_screen.dart';
+import 'cancelledpage.dart';
 import 'orderviewpage.dart';
 
 class Orders extends StatefulWidget {
@@ -19,10 +23,10 @@ class Orders extends StatefulWidget {
 }
 
 class _OrdersState extends State<Orders> with TickerProviderStateMixin{
-  List<OrderModel> pendingList=[];
-  List<OrderModel> acceptedList=[];
-  List<OrderModel> deliveredList=[];
-  List<OrderModel> cancelledList=[];
+  List <OrderModel> pendingList=[];
+  List <OrderModel> acceptedList=[];
+  List  <OrderModel> deliveredList=[];
+  List  <OrderModel> cancelledList=[];
   getOrders(){
     FirebaseFirestore.instance
         .collection('stores')
@@ -30,31 +34,35 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin{
         .collection('orders')
         .snapshots()
         .listen((event) {
+          print(event.docs.length);
+          print(event.docs.length);
           pendingList=[];
           acceptedList=[];
           deliveredList=[];
           cancelledList=[];
-      for (DocumentSnapshot<Map<String, dynamic>> doc in event.docs) {
+      for(DocumentSnapshot <Map<String,dynamic>> doc in event.docs) {
+        print('status');
+        print(doc['status']);
         doc['status'] == 0
-            ?pendingList.add(OrderModel.fromJson(doc!.data()!))
+            ?pendingList.add(OrderModel.fromJson(doc.data()!))
             : doc['status'] == 1
-            ? acceptedList.add(OrderModel.fromJson(doc!.data()!))
+            ? acceptedList.add(OrderModel.fromJson(doc.data()!))
             : doc['status']==2
-            ? deliveredList.add(OrderModel.fromJson(doc!.data()!)):
-        cancelledList.add(OrderModel.fromJson(doc!.data()!));
+            ? deliveredList.add(OrderModel.fromJson(doc.data()!)):
+             cancelledList.add(OrderModel.fromJson(doc.data()!));
       }
 
       if (mounted) {
-        setState(() {});
+        setState(() {
+          print(widget.storeId);
+          print("1111111111111111111111111");
+          print(pendingList.length);
+        });
       }
         });
-    print("1111111111111111111111111");
-    print(pendingList.length);
+
   }
-  //   print(charityList2.length);
-  //   print(charityList3.length);
-  //   print(charityList4.length);
-  // }
+
   late  TabController _tabController;
     void _handleTabSelection() {
       setState(() {
@@ -197,17 +205,29 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin{
               child: TabBarView(
               controller: _tabController,
               children: [
-                Container(
+                pendingList.isEmpty?
+                Column(
+                  children: [
+                    SvgPicture.asset("assets/svg/noorders.svg"),
+                    Text("You don't have any order yet",style: TextStyle(
+                      fontFamily: 'Urbanist',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600
+                    ),)
+                  ],
+                )
+                :Container(
                   height: scrHeight*6,
                   child: ListView.builder(
-                    itemCount:1,
+                    itemCount:pendingList.length,
                       itemBuilder: (context,index){
                        // final pending=pendingList[index];
                     return Padding(
                       padding: const EdgeInsets.only(left: 15,right: 15,top: 15),
                       child: InkWell(
                         onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>OrderViewPage()));
+                          Navigator.push(context, MaterialPageRoute(
+                              builder: (context)=>OrderViewPage(orderModel: pendingList[index],)));
                         },
                         child: Container(
                           height: 100,
@@ -221,27 +241,137 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin{
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text("Customer Name:"),
+                                Text("Customer Name:${pendingList[index].address!.name}"),
+                                SizedBox(height: 5),
+                                Text("Phone Number:${pendingList[index].address!.phoneNumber}"),
                                 SizedBox(height: 5,),
-                                Text("Phone Number:"),
-                                SizedBox(height: 5,),
-                                Text("Date:"),
+                                Text("DateTime:${pendingList[index].time}"),
                               ],
                             ),
                           ),
-
-
-
-
 
                         ),
                       ),
                     );
                   }),
                 ),
-                Container(),
-                Container(),
-                Container(),
+                Container(
+                  height: scrHeight*6,
+                  child: ListView.builder(
+                      itemCount:acceptedList.length,
+                      itemBuilder: (context,index){
+                        // final pending=pendingList[index];
+                        return Padding(
+                          padding: const EdgeInsets.only(left: 15,right: 15,top: 15),
+                          child: InkWell(
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(
+                                  builder: (context)=>AcceptedPage(orderMdl: acceptedList[index],)));
+                            },
+                            child: Container(
+                              height: 100,
+                              width: 30,
+                              decoration: BoxDecoration(
+                                  color: Colors.green,
+                                  borderRadius: BorderRadius.circular(30)
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 20,top: 15),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text("Customer Name:${acceptedList[index].address!.name}"),
+                                    SizedBox(height: 5),
+                                    Text("Phone Number:${acceptedList[index].address!.phoneNumber}"),
+                                    SizedBox(height: 5,),
+                                    Text("DateTime:${acceptedList[index].time}"),
+                                  ],
+                                ),
+                              ),
+
+                            ),
+                          ),
+                        );
+                      }),
+                ),
+                Container(
+                  height: scrHeight*6,
+                  child: ListView.builder(
+                      itemCount:deliveredList.length,
+                      itemBuilder: (context,index){
+                        // final pending=pendingList[index];
+                        return Padding(
+                          padding: const EdgeInsets.only(left: 15,right: 15,top: 15),
+                          child: InkWell(
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(
+                                  builder: (context)=>DeliveredPage(order: deliveredList[index],)));
+                            },
+                            child: Container(
+                              height: 100,
+                              width: 30,
+                              decoration: BoxDecoration(
+                                  color: Colors.green,
+                                  borderRadius: BorderRadius.circular(30)
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 20,top: 15),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text("Customer Name:${deliveredList[index].address!.name}"),
+                                    SizedBox(height: 5),
+                                    Text("Phone Number:${deliveredList[index].address!.phoneNumber}"),
+                                    SizedBox(height: 5,),
+                                    Text("DateTime:${deliveredList[index].time}"),
+                                  ],
+                                ),
+                              ),
+
+                            ),
+                          ),
+                        );
+                      }),
+                ),
+                Container(
+                  height: scrHeight*6,
+                  child: ListView.builder(
+                      itemCount:cancelledList.length,
+                      itemBuilder: (context,index){
+                        // final pending=pendingList[index];
+                        return Padding(
+                          padding: const EdgeInsets.only(left: 15,right: 15,top: 15),
+                          child: InkWell(
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(
+                                  builder: (context)=>CancelledPage(orderModels: cancelledList[index],)));
+                            },
+                            child: Container(
+                              height: 100,
+                              width: 30,
+                              decoration: BoxDecoration(
+                                  color: Colors.green,
+                                  borderRadius: BorderRadius.circular(30)
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 20,top: 15),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text("Customer Name:${cancelledList[index].address!.name}"),
+                                    SizedBox(height: 5),
+                                    Text("Phone Number:${cancelledList[index].address!.phoneNumber}"),
+                                    SizedBox(height: 5,),
+                                    Text("DateTime:${cancelledList[index].time}"),
+                                  ],
+                                ),
+                              ),
+
+                            ),
+                          ),
+                        );
+                      }),
+                ),
               ],
             ))
           ]

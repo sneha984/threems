@@ -167,19 +167,7 @@ class _StorePageState extends State<StorePage> {
     locale: 'HI',
     symbol: '₹ ',
   );
-  bool _customTileExpanded = false;
-  List<EachStore> eachstore=[
-    EachStore(productimage: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3YhxUEFTHw7Q7YAzXp7AG7-oqE6AI5x8O8Q&usqp=CAU",
-        productprice:234, productunit: "1 kg", productname: 'Surf Excel',counter: 1,ShouldVisible: false),
-    EachStore(productimage: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8rNEg0PFYehTq2_ZTRckqgvNZRKTm8WjPkCoQZalie5uoxQFYTiTuUxdAYjHPOJeOmHA&usqp=CAU",
-        productprice:100, productunit: "3 kg",productname: 'Sugar',counter: 1,ShouldVisible: false),
-    EachStore(productimage: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_-le3oZrKxbung5DnvptkskDJ6BTEdfH6KA&usqp=CAU",
-        productprice:40, productunit: "1 kg",productname: 'Colgate',counter: 1,ShouldVisible: false),
-    EachStore(productimage: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3YhxUEFTHw7Q7YAzXp7AG7-oqE6AI5x8O8Q&usqp=CAU",
-        productprice:234, productunit: "1 kg",productname: 'Surf Excel',counter: 1,ShouldVisible: false),
-    EachStore(productimage: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3YhxUEFTHw7Q7YAzXp7AG7-oqE6AI5x8O8Q&usqp=CAU",
-        productprice:234, productunit: "1 kg",productname: 'Surf Excel',counter: 1,ShouldVisible: false),
-  ];
+
   bool onclick =true;
   int qty = 1;
   int? currentQty;

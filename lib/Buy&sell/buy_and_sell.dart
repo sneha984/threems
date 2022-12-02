@@ -7,11 +7,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:geo_firestore_flutter/geo_firestore_flutter.dart';
 
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_maps_place_picker/google_maps_place_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:threems/Authentication/root.dart';
+import 'package:threems/Buy&sell/Sales/salesPage.dart';
+import 'package:threems/Buy&sell/paymentpage.dart';
 import 'package:threems/Buy&sell/productaddingpage.dart';
 import 'package:threems/Buy&sell/productspage.dart';
 import 'package:threems/Buy&sell/shopheadimageslider.dart';
@@ -24,14 +29,17 @@ import 'package:threems/model/Buy&sell.dart';
 import 'dart:ui' as ui;
 import 'package:threems/screens/splash_screen.dart';
 import 'package:threems/utils/themes.dart';
+import '../screens/charity/payment.dart';
 import '../screens/home_screen.dart';
 import '../utils/dummy.dart';
 import 'Orders/Orders.dart';
 import 'categorypage.dart';
 import 'categorystores.dart';
 import 'checkout.dart';
+import 'myorderspage.dart';
 
 List<String> cateoryNames = [];
+Map<String,dynamic> cateoryNamesMap = {};
 List products = [];
 List orders = [];
 
@@ -39,12 +47,17 @@ List orders = [];
 class BuyAndSell extends StatefulWidget {
   final int index;
   const BuyAndSell({Key? key, required this.index, }) : super(key: key);
+  static final kInitialPosition = LatLng(10.954697, 76.2208631);
+
 
   @override
   State<BuyAndSell> createState() => _BuyAndSellState();
 }
 
 class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
+  late PickResult selectedPlace;
+
+
   String currentAddress = 'Select Your Location';
   Position? currentposition;
   int activeindex = 0;
@@ -52,19 +65,43 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
   Map<String, dynamic> categorys = {};
   int status = 0;
   List<Widget> grids = [];
+   List<DocumentSnapshot> documents=[];
+  geoLocation(String id)async{
+    GeoFirestore geoFirestore = GeoFirestore(FirebaseFirestore.instance.collection('stores'));
+    await geoFirestore.setLocation(id, GeoPoint(lat!, long!));
+    final queryLocation = GeoPoint(lat!, long!);
+    // creates a new query around [37.7832, -122.4056] with a radius of 0.6 kilometers
+    documents = await geoFirestore.getAtLocation(queryLocation, 1);
+    documents.forEach((doc) {
+      print("111111111111111111111111111111111111111111111111111111");
+      print(doc.data());
+      print(documents);
+      print("111111111111111111111111111111111111111111111111111111");
+      print("111111111111111111111111111111111111111111111111111111");
+    });
+    if(mounted){
+      setState(() {
+        print("hiii sneha");
+        print(documents.length);
+      });
+    }
+  }
+
   getSpecificCategory() {
     FirebaseFirestore.instance
         .collection('storeCategory')
         .snapshots()
         .listen((event) {
       cateoryNames = [];
+      cateoryNamesMap = {};
       for (DocumentSnapshot<Map<String, dynamic>> doc in event.docs) {
         categorys[doc.get('categoryName')] = doc.data();
         cateoryNames.add(doc.get('categoryName'));
+        cateoryNamesMap[doc.get('categoryName')]=doc.id;
         print(
             "----------------------------------------------------------------------------------------");
-        print(categorys[doc['categoryName']]);
-        print(doc.get('categoryImage'));
+        //print(categorys[doc['categoryName']]);
+       // print(doc.get('categoryImage'));
         grids.add(InkWell(
           onTap: () {
             Navigator.push(
@@ -232,8 +269,27 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
               left: scrWidth * 0.07,
               bottom: scrHeight * 0.01,
             ),
-            child: SvgPicture.asset(
-              "assets/icons/locationicon.svg",
+            child: InkWell(
+              onTap: (){
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => PlacePicker(
+                //       apiKey: 'AIzaSyCUZFUZ1yMpkzh6QUnKj54Q2N4L2iT4tBY',   // Put YOUR OWN KEY here.
+                //       onPlacePicked: (result) {
+                //         print(result.address);
+                //         Navigator.of(context).pop();
+                //       },
+                //       initialPosition: HomePage.kInitialPosition,
+                //       useCurrentLocation: true,
+                //     ),
+                //   ),
+                // );
+                 Navigator.push(context, MaterialPageRoute(builder: (context)=>PaymentPageInBuy()));
+              },
+              child: SvgPicture.asset(
+                "assets/icons/locationicon.svg",
+              ),
             ),
           ),
         ),
@@ -271,6 +327,31 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                   padding: EdgeInsets.only(
                       right: scrWidth * 0.06, top: scrHeight * 0.015),
                   child: SvgPicture.asset("assets/images/cart.svg"),
+                )),
+          ),
+
+          InkWell(
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => MyOrdersPage()));
+            },
+            child: Badge(
+                position: BadgePosition.topEnd(
+                  top: scrHeight * 0.03,
+                  end: scrHeight * 0.015,
+                ),
+                animationDuration: Duration(milliseconds: 300),
+                animationType: BadgeAnimationType.fade,
+                badgeColor: Colors.black,
+                badgeContent: Text(
+                  '${allOrders.length}',
+                  style:
+                  TextStyle(color: Colors.white, fontSize: scrWidth * 0.02),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      right: scrWidth * 0.06, top: scrHeight * 0.015),
+                  child: SvgPicture.asset("assets/icons/myorder.svg"),
                 )),
           ),
         ],
@@ -478,83 +559,83 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                     SizedBox(
                       height: scrHeight * 0.015,
                     ),
-                    SizedBox(
-                      height: 50,
-                    ),
-
-                    Text("No Stores"),
-                    SizedBox(
-                      height: 50,
-                    ),
-                    // Padding(
-                    //   padding:  EdgeInsets.only(left: scrWidth*0.037,right: scrWidth*0.037),
-                    //   child: Container(
-                    //     height: scrHeight*0.15,
-                    //     child: ListView.builder(
-                    //         physics: BouncingScrollPhysics(),
-                    //         scrollDirection: Axis.horizontal,
-                    //         shrinkWrap: true,
-                    //         itemCount:nstore.length,
-                    //         itemBuilder: (context, index) {
-                    //           return Padding(
-                    //             padding: EdgeInsets.only(right: scrWidth*0.017),
-                    //             child: Column(
-                    //               crossAxisAlignment: CrossAxisAlignment.start,
-                    //               children: [
-                    //                 InkWell(
-                    //                   child: Padding(
-                    //                     padding: EdgeInsets.only(
-                    //                         left: scrWidth*0.03),
-                    //                     child: Container(
-                    //                       height:scrHeight*0.09,
-                    //                       width: scrWidth*0.22,
-                    //                       decoration: BoxDecoration(
-                    //                         image: DecorationImage(image:
-                    //                         NetworkImage(nstore[index].image),
-                    //                             fit: BoxFit.fill),
-                    //                         color: Colors.white,
-                    //
-                    //                         borderRadius: BorderRadius.circular(
-                    //                             scrWidth*0.03),
-                    //                       ),
-                    //                     ),
-                    //                   ),
-                    //                 ),
-                    //                 Padding(
-                    //                   padding: EdgeInsets.only(left: scrWidth*0.04),
-                    //                   child: Column(
-                    //                     crossAxisAlignment: CrossAxisAlignment
-                    //                         .start,
-                    //                     children: [
-                    //                       SizedBox(height: scrHeight*0.002,),
-                    //                       Text(
-                    //                         nstore[index].storename, textAlign: TextAlign.center,
-                    //                         style: TextStyle(
-                    //                             fontFamily: 'Urbanist',
-                    //                             fontSize: scrWidth*0.032,
-                    //                             fontWeight: FontWeight.w600,
-                    //                             color: Color(0xff0E0E0E)),),
-                    //                       SizedBox(height: scrHeight*0.0015,),
-                    //                       Text(
-                    //                         nstore[index].category, textAlign: TextAlign.center,
-                    //                         style: TextStyle(
-                    //                             fontFamily: 'Urbanist',
-                    //                             fontSize: scrWidth*0.025,
-                    //                             fontWeight: FontWeight.w600,
-                    //                             color: Color(0xff818181)),),
-                    //
-                    //                     ],
-                    //                   ),
-                    //                 ),
-                    //
-                    //
-                    //               ],
-                    //             ),
-                    //           );
-                    //         }
-                    //     ),
-                    //   ),
+                    // SizedBox(
+                    //   height: 50,
                     // ),
+                    //
+                    // Text("No Stores"),
+                    // SizedBox(
+                    //   height: 50,
+                    // ),
+                    Padding(
+                      padding:  EdgeInsets.only(left: scrWidth*0.037,right: scrWidth*0.037),
+                      child: Container(
+                        height: scrHeight*0.15,
+                        child: ListView.builder(
+                            physics: BouncingScrollPhysics(),
+                            scrollDirection: Axis.horizontal,
+                            shrinkWrap: true,
+                            itemCount:documents.length,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: EdgeInsets.only(right: scrWidth*0.017),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    InkWell(
+                                      child: Padding(
+                                        padding: EdgeInsets.only(
+                                            left: scrWidth*0.03),
+                                        child: Container(
+                                          height:scrHeight*0.09,
+                                          width: scrWidth*0.22,
+                                          decoration: BoxDecoration(
+                                            image: DecorationImage(image:
+                                            NetworkImage("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQt4xN5NUBDKwdj-rtbQgpCiezCJn_0-iLMMQ&usqp=CAU"),
+                                                fit: BoxFit.fill),
+                                            color: Colors.white,
+
+                                            borderRadius: BorderRadius.circular(
+                                                scrWidth*0.03),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: scrWidth*0.04),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment
+                                            .start,
+                                        children: [
+                                          SizedBox(height: scrHeight*0.002,),
+                                          Text(
+                                          documents[index].get('storeName'), textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                fontFamily: 'Urbanist',
+                                                fontSize: scrWidth*0.032,
+                                                fontWeight: FontWeight.w600,
+                                                color: Color(0xff0E0E0E)),),
+                                          SizedBox(height: scrHeight*0.0015,),
+                                          Text(
+                                            "huhuhsduhxuhx", textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                fontFamily: 'Urbanist',
+                                                fontSize: scrWidth*0.025,
+                                                fontWeight: FontWeight.w600,
+                                                color: Color(0xff818181)),),
+
+                                        ],
+                                      ),
+                                    ),
+
+
+                                  ],
+                                ),
+                              );
+                            }
+                        ),
+                      ),
+                    ),
 
                     GestureDetector(
                       onTap: () {
@@ -585,37 +666,6 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                     SizedBox(
                       height: scrHeight * 0.015,
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => YourStoreCreatePage()));
-                      },
-                      child: Container(
-                        height: scrHeight * 0.045,
-                        width: scrHeight * 0.35,
-                        decoration: BoxDecoration(
-                            color: primarycolor,
-                            borderRadius:
-                            BorderRadius.circular(scrWidth * 0.02)),
-                        child: Center(
-                          child: Text(
-                            "My Orders",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'Urbanist',
-                                fontWeight: FontWeight.w700,
-                                fontSize: scrWidth * 0.04),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: scrHeight * 0.03,
-                    ),
-
-
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -719,6 +769,7 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                     //   Navigator.push(context, MaterialPageRoute(builder: (context)=>MapSample()));
                     // }, child: Text("uhsdhw")),
                     // SizedBox(height: 100,),
+
                   ],
                 ),
               ),
@@ -839,7 +890,7 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                             ),
                             Container(
                               width: scrWidth * 0.8,
-                              height: scrHeight * 0.15,
+                              height: scrHeight * 0.12,
                               padding: EdgeInsets.symmetric(
                                 horizontal: scrWidth * 0.015,
                                 vertical: scrHeight * 0.002,
@@ -852,7 +903,7 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                               child: Column(
                                 children: [
                                   SizedBox(
-                                    height: scrHeight * 0.02,
+                                    height: scrHeight * 0.01,
                                   ),
                                   Text(
                                     "50%",
@@ -864,13 +915,13 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                         color: Colors.black),
                                   ),
                                   SizedBox(
-                                    height: scrHeight * 0.009,
+                                    height: scrHeight * 0.004,
                                   ),
                                   LinearPercentIndicator(
                                     //leaner progress bar
                                     animation: true,
                                     animationDuration: 1000,
-                                    lineHeight: scrHeight * 0.021,
+                                    lineHeight: scrHeight * 0.02,
                                     width: scrWidth * 0.77,
                                     percent: 0.5,
                                     alignment: MainAxisAlignment.start,
@@ -879,7 +930,7 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                     backgroundColor: Color(0xffD9D9D9),
                                   ),
                                   SizedBox(
-                                    height: scrHeight * 0.02,
+                                    height: scrHeight * 0.01,
                                   ),
                                   Text(
                                     "Store setup is completed",
@@ -899,7 +950,7 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                             Padding(
                               padding: EdgeInsets.only(left: 10, right: 10),
                               child: Container(
-                                height: scrHeight * 0.32,
+                                height: scrHeight * 0.42,
                                 width: scrWidth * 0.8,
                                 decoration: BoxDecoration(
                                     color: Color(0xffF3F3F3),
@@ -946,10 +997,16 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                         subtitle:
                                             "Create your first product by adding the \nproduct name and images.",
                                       ),
+                                      StepperData(
+                                        title: "Payment",
+                                        subtitle:
+                                        "Confirm Your Payment section",
+                                      ),
                                     ],
                                     horizontalStepperHeight: 200,
                                     stepperDirection: Axis.vertical,
-                                    inActiveBarColor: primarycolor,
+
+                                    inActiveBarColor:Colors.grey,
                                     activeIndex: activeindex,
                                     barThickness: 2,
                                     activeBarColor: primarycolor,
@@ -962,7 +1019,7 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                             ),
                             GestureDetector(
                               onTap: () {
-                                print(shops.length);
+                                print(filteredShops.length);
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -1116,6 +1173,11 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                             subtitle:
                                                 "Create your first product by adding the \nproduct name and images.",
                                           ),
+                                          StepperData(
+                                            title: "Payment",
+                                            subtitle:
+                                            "Confirm Your Payment section ",
+                                          ),
                                         ],
                                         horizontalStepperHeight: 200,
                                         stepperDirection: Axis.vertical,
@@ -1156,7 +1218,8 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                 ),
                               ],
                             )
-                          : Column(
+                            :(status==3)?
+                                Column(
                               children: [
                                 SizedBox(
                                   height: scrHeight * 0.02,
@@ -1176,7 +1239,7 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                       width: scrWidth * 0.37,
                                     ),
                                     Text(
-                                      "LifeTime",
+                                      "Today",
                                       style: TextStyle(
                                           fontSize: scrWidth * 0.03,
                                           color: Color(0xff6F6E6E),
@@ -1234,62 +1297,82 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                                 SizedBox(
                                                   height: scrHeight * 0.018,
                                                 ),
-                                                Text(
-                                                  orders.length.toString(),
-                                                  style: TextStyle(
-                                                      fontSize: scrWidth * 0.07,
-                                                      color: Colors.white,
-                                                      fontFamily: 'Urbanist',
-                                                      fontWeight:
-                                                          FontWeight.w700),
+                                                Row(
+                                                  children: [
+                                                    Text(
+                                                      orders.length.toString(),
+                                                      style: TextStyle(
+                                                          fontSize: scrWidth * 0.07,
+                                                          color: Colors.white,
+                                                          fontFamily: 'Urbanist',
+                                                          fontWeight:
+                                                              FontWeight.w700),
+                                                    ),
+                                                    SizedBox(width: scrWidth*0.18,),
+                                                    SvgPicture.asset("assets/circlearrow.svg"),
+                                                  ],
                                                 )
                                               ],
                                             ),
                                           ),
                                         ),
                                       ),
-                                      Container(
-                                          height: scrHeight * 0.11,
-                                          width: scrWidth * 0.4,
-                                          decoration: BoxDecoration(
-                                              color: Color(0xff02B558),
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      scrWidth * 0.06)),
-                                          child: Padding(
-                                            padding: EdgeInsets.only(
-                                                left: scrWidth * 0.05),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                SizedBox(
-                                                  height: scrHeight * 0.02,
-                                                ),
-                                                Text(
-                                                  "Sale",
-                                                  style: TextStyle(
-                                                      fontSize: scrWidth * 0.04,
-                                                      color: Colors.white,
-                                                      fontFamily: 'Urbanist',
-                                                      fontWeight:
-                                                          FontWeight.w600),
-                                                ),
-                                                SizedBox(
-                                                  height: scrHeight * 0.018,
-                                                ),
-                                                Text(
-                                                  "₹0",
-                                                  style: TextStyle(
-                                                      fontSize: scrWidth * 0.07,
-                                                      color: Colors.white,
-                                                      fontFamily: 'Urbanist',
-                                                      fontWeight:
-                                                          FontWeight.w700),
-                                                )
-                                              ],
-                                            ),
-                                          )),
+                                      InkWell(
+                                        onTap: (){
+                                          Navigator.push(context,MaterialPageRoute(builder: (context)=>SalesPage()));
+                                        },
+                                        child: Container(
+                                            height: scrHeight * 0.11,
+                                            width: scrWidth * 0.4,
+                                            decoration: BoxDecoration(
+                                                color: Color(0xff02B558),
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        scrWidth * 0.06)),
+                                            child: Padding(
+                                              padding: EdgeInsets.only(
+                                                  left: scrWidth * 0.05),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  SizedBox(
+                                                    height: scrHeight * 0.02,
+                                                  ),
+                                                  Text(
+                                                    "Sale",
+                                                    style: TextStyle(
+                                                        fontSize: scrWidth * 0.04,
+                                                        color: Colors.white,
+                                                        fontFamily: 'Urbanist',
+                                                        fontWeight:
+                                                            FontWeight.w600),
+                                                  ),
+                                                  SizedBox(
+                                                    height: scrHeight * 0.018,
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      Container(
+                                                        width: 30,
+                                                        child: Text(
+                                                          "₹0",
+                                                          style: TextStyle(
+                                                              fontSize: scrWidth * 0.07,
+                                                              color: Colors.white,
+                                                              fontFamily: 'Urbanist',
+                                                              fontWeight:
+                                                                  FontWeight.w700),
+                                                        ),
+                                                      ),
+                                                      SizedBox(width: scrWidth*0.14,),
+                                                      SvgPicture.asset("assets/circlearrow.svg"),
+                                                    ],
+                                                  )
+                                                ],
+                                              ),
+                                            )),
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -1297,43 +1380,47 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                   padding: EdgeInsets.only(
                                       right: scrWidth * 0.46,
                                       top: scrHeight * 0.026),
-                                  child: Container(
-                                    height: scrHeight * 0.11,
-                                    width: scrWidth * 0.4,
-                                    decoration: BoxDecoration(
-                                        color: Color(0xff02B558),
-                                        borderRadius: BorderRadius.circular(
-                                            scrWidth * 0.06)),
-                                    child: Padding(
-                                      padding: EdgeInsets.only(
-                                          left: scrWidth * 0.05),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          SizedBox(
-                                            height: scrHeight * 0.02,
-                                          ),
-                                          Text(
-                                            "Store Views",
-                                            style: TextStyle(
-                                                fontSize: scrWidth * 0.04,
-                                                color: Colors.white,
-                                                fontFamily: 'Urbanist',
-                                                fontWeight: FontWeight.w600),
-                                          ),
-                                          SizedBox(
-                                            height: scrHeight * 0.018,
-                                          ),
-                                          Text(
-                                            "0",
-                                            style: TextStyle(
-                                                fontSize: scrWidth * 0.07,
-                                                color: Colors.white,
-                                                fontFamily: 'Urbanist',
-                                                fontWeight: FontWeight.w700),
-                                          )
-                                        ],
+                                  child: InkWell(
+                                    onTap: (){
+                                    },
+                                    child: Container(
+                                      height: scrHeight * 0.11,
+                                      width: scrWidth * 0.4,
+                                      decoration: BoxDecoration(
+                                          color: Color(0xff02B558),
+                                          borderRadius: BorderRadius.circular(
+                                              scrWidth * 0.06)),
+                                      child: Padding(
+                                        padding: EdgeInsets.only(
+                                            left: scrWidth * 0.05),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            SizedBox(
+                                              height: scrHeight * 0.02,
+                                            ),
+                                            Text(
+                                              "Store Views",
+                                              style: TextStyle(
+                                                  fontSize: scrWidth * 0.04,
+                                                  color: Colors.white,
+                                                  fontFamily: 'Urbanist',
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                            SizedBox(
+                                              height: scrHeight * 0.018,
+                                            ),
+                                            Text(
+                                              "0",
+                                              style: TextStyle(
+                                                  fontSize: scrWidth * 0.07,
+                                                  color: Colors.white,
+                                                  fontFamily: 'Urbanist',
+                                                  fontWeight: FontWeight.w700),
+                                            )
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -1452,8 +1539,171 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                     ),
                                   ],
                                 ),
+
+
                               ],
                             )
+                                    :Column(
+                children: [
+                  SizedBox(
+                    height: scrHeight * 0.02,
+                  ),
+                  Container(
+                    width: scrWidth * 0.8,
+                    height: scrHeight * 0.15,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: scrWidth * 0.015,
+                      vertical: scrHeight * 0.002,
+                    ),
+                    decoration: BoxDecoration(
+                      color: textFormFieldFillColor,
+                      // color: Colors.red,
+                      borderRadius: BorderRadius.circular(21),
+                    ),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: scrHeight * 0.02,
+                        ),
+                        Text(
+                          "75%",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontFamily: 'Urbanist',
+                              fontSize: scrWidth * 0.07,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.black),
+                        ),
+                        SizedBox(
+                          height: scrHeight * 0.009,
+                        ),
+                        LinearPercentIndicator(
+                          //leaner progress bar
+                          animation: true,
+                          animationDuration: 1000,
+                          lineHeight: scrHeight * 0.021,
+                          width: scrWidth * 0.77,
+                          percent: 0.7,
+                          alignment: MainAxisAlignment.start,
+                          barRadius:
+                          Radius.circular(scrWidth * 0.2),
+                          progressColor: primarycolor,
+                          backgroundColor: Color(0xffD9D9D9),
+                        ),
+                        SizedBox(
+                          height: scrHeight * 0.02,
+                        ),
+                        Text(
+                          "Store setup is completed",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontFamily: 'Urbanist',
+                              fontSize: scrWidth * 0.04,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.black),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: scrHeight * 0.02,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 10, right: 10),
+                    child: Container(
+                      height: scrHeight * 0.32,
+                      width: scrWidth * 0.8,
+                      decoration: BoxDecoration(
+                          color: Color(0xffF3F3F3),
+                          borderRadius:
+                          BorderRadius.circular(20)),
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                            left: scrWidth * 0.05),
+                        child: AnotherStepper(
+                          titleTextStyle: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Urbanist',
+                            color: Color(0xff232323),
+                          ),
+                          subtitleTextStyle: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Urbanist',
+                            color: Color(0xff8B8B8B),
+                          ),
+                          dotWidget: Container(
+                              height: 35,
+                              width: 35,
+                              decoration: BoxDecoration(
+                                color: Color(0xff30CF7C),
+                                borderRadius:
+                                BorderRadius.circular(30),
+                                // border: Border.all(color: primarycolor,width: 2)
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.only(
+                                    left: 5, right: 5),
+                                child: SvgPicture.asset(
+                                    "assets/icons/tickmark.svg"),
+                              )),
+                          stepperList: [
+                            StepperData(
+                              title: "Create online store",
+                              subtitle:
+                              "Congratulations on opening your new \nonline store!",
+                            ),
+                            StepperData(
+                              title: "Add Product",
+                              subtitle:
+                              "Create your first product by adding the \nproduct name and images.",
+                            ),
+                            StepperData(
+                              title: "Payment",
+                              subtitle:
+                              "Confirm Your Payment Section",
+                            ),
+                          ],
+                          horizontalStepperHeight: 200,
+                          stepperDirection: Axis.vertical,
+                          inActiveBarColor: Colors.grey,
+                          activeIndex: 1,
+                          barThickness: 2,
+                          activeBarColor: primarycolor,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: scrHeight * 0.02,
+                  ),
+                  // GestureDetector(
+                  //   onTap: () {
+                  //     // Navigator.push(context, MaterialPageRoute(builder: (context)=>StoreDetailsFill2()));
+                  //   },
+                  //   child: Container(
+                  //     height: scrHeight * 0.055,
+                  //     width: scrWidth * 0.55,
+                  //     decoration: BoxDecoration(
+                  //         color: primarycolor,
+                  //         borderRadius:
+                  //         BorderRadius.circular(21.5)),
+                  //     child: Center(
+                  //       child: Text(
+                  //         "View Store",
+                  //         textAlign: TextAlign.center,
+                  //         style: TextStyle(
+                  //             fontFamily: 'Urbanist',
+                  //             fontSize: scrWidth * 0.04,
+                  //             fontWeight: FontWeight.w700,
+                  //             color: Colors.white),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                ],
+              ),
 
               //after store created
             ]),
@@ -1462,4 +1712,7 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
       ),
     );
   }
+}
+
+class HomePage {
 }

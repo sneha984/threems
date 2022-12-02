@@ -25,7 +25,7 @@ class OrderModel {
   OrderModel.fromJson(Map<String, dynamic> json) {
     item = json['item'];
     amount = json['amount'];
-    time = json['time'];
+    time = DateTime.tryParse(json['time'].toString());
     address =
     json['address'] != null ? new Addresses.fromJson(json['address']) : null;
     orderId = json['orderId'];

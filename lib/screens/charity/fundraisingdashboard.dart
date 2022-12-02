@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 
 
 import 'package:flutter_svg/svg.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:threems/model/charitymodel.dart';
 
@@ -639,9 +640,16 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
                                     ),
                                   ),
                                   // SizedBox(width: 30,),
-                                  Padding(
-                                    padding:  EdgeInsets.only(left: scrWidth*0.2),
-                                    child: SvgPicture.asset("assets/icons/shareicon.svg",),
+                                  InkWell(
+                                    onTap: (){
+
+                            Share.share(
+                                'Welcome to First Logic Meta Lab https://firstlogicmetalab.com');
+                                    },
+                                    child: Padding(
+                                      padding:  EdgeInsets.only(left: scrWidth*0.2),
+                                      child: SvgPicture.asset("assets/icons/shareicon.svg",),
+                                    ),
                                   ),
 
                                 ],

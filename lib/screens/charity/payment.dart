@@ -436,13 +436,7 @@ class _PaymentPageState extends State<PaymentPage> {
                             ],
                           ),
                         ),
-                        Container(
-                          height: 100,
-                          width:100,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(image: NetworkImage(widget.charitymodel.qrImage!),fit: BoxFit.fill)
-                          ),
-                        ),
+
                         SizedBox(height: scrHeight*0.05,),
                         Padding(
                           padding:  EdgeInsets.only(right: scrWidth*0.6),
@@ -484,8 +478,28 @@ class _PaymentPageState extends State<PaymentPage> {
                 ),
               ],
             ),
+            Container(
+              height: 200,
+              width:300,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                  image: DecorationImage(
+                      image: NetworkImage(
+                          widget.charitymodel.qrImage??''),fit: BoxFit.fill)
+              ),
+            ),
+         SizedBox(height: 20,),
+            Padding(
+              padding:  EdgeInsets.only(right: 98),
+              child: Text("Upload Payment Screenshot",style: TextStyle(
+                fontSize: scrWidth*0.043,
+                fontFamily: 'Urbanist',
+                fontWeight: FontWeight.w500,
+              ),),
+            ),
+            SizedBox(height: 10,),
 
-        InkWell(
+            InkWell(
           onTap: (){
             _pickImage();
             print(imgUrl);
@@ -527,7 +541,7 @@ class _PaymentPageState extends State<PaymentPage> {
                   ),
                 ),
               ):Container(
-                height: scrHeight*0.5,
+                height: scrHeight*0.3,
                 width: scrWidth*0.85,
                 decoration: BoxDecoration(
                   image: DecorationImage(
@@ -549,7 +563,7 @@ class _PaymentPageState extends State<PaymentPage> {
                 fontWeight: FontWeight.w500,
               ),
             ),
-            SizedBox(height: scrHeight*0.02,),
+            SizedBox(height: scrHeight*0.2,),
 
 
           ],
@@ -581,13 +595,10 @@ class _PaymentPageState extends State<PaymentPage> {
               "categoryName":categoryName.toString(),
               'date':DateTime.now(),
               'merchant':'',
-
             });
-
             print(imgUrl);
             print(imgFile);
-
-             Navigator.push(context, MaterialPageRoute(builder: (context)=>Sucesspage()));
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>Sucesspage()));
           },
           child: Container(
       height: scrHeight*0.055,
