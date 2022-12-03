@@ -4,14 +4,18 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
+import 'package:geoflutterfire/geoflutterfire.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../model/servicesModel.dart';
 import '../../utils/themes.dart';
 import '../charity/verification_details.dart';
+import '../home_screen.dart';
 import '../splash_screen.dart';
 import 'AddYouService.dart';
 import 'detailesSinglePage.dart';
+Position? position;
 bool ?editService;
 StreamController controller = StreamController<int>.broadcast();
 class ServiceDetailesPage extends StatefulWidget {
@@ -29,25 +33,55 @@ class _ServiceDetailesPageState extends State<ServiceDetailesPage> {
   TextEditingController city2 = TextEditingController();
   List<String> serviceCity = [];
   List<ServiceDetails> serviceList=[];
-
+  StreamSubscription<Position>? positionStream;
+  Stream? orderStream;
+  final geo = Geoflutterfire();
+  late GeoFirePoint center;
+  // getService() {
+  //   FirebaseFirestore.instance
+  //       .collection('services')
+  //       .where('subCategory', isEqualTo: widget.subCategoryName)
+  //       .snapshots()
+  //       .listen((event) {
+  //     serviceList = [];
+  //     for (DocumentSnapshot<Map<String, dynamic>> doc in event.docs) {
+  //       serviceList!.add(ServiceDetails.fromJson(doc.data()!));
+  //     }
+  //
+  //     if (mounted) {
+  //       setState(() {});
+  //     }
+  //   });
+  // }
+  int s1=0;
   getService() {
-    print(widget.category);
-    FirebaseFirestore.instance
+    print("details lat and long");
+    print(lat);
+    print(long);
+    center = geo.point(latitude: lat!, longitude: long!);
+    var collectionReference =  FirebaseFirestore.instance
         .collection('services')
-        .where('subCategory', isEqualTo: widget.subCategoryName)
-        .snapshots()
-        .listen((event) {
-      serviceList = [];
-      for (DocumentSnapshot<Map<String, dynamic>> doc in event.docs) {
+        .where('subCategory', isEqualTo: widget.subCategoryName);
+       double? radius = 100;
+       String field = 'position';
+       print(field);
+    // Stream<List<DocumentSnapshot>>
+       geo.collection(collectionRef: collectionReference)
+        .within(center: center!, radius: radius!, field: field,strictMode: true).listen((event) {
+       serviceList = [];
+       for (DocumentSnapshot<Map<String, dynamic>> doc in event) {
         serviceList!.add(ServiceDetails.fromJson(doc.data()!));
       }
+      s1 =event.length;
+       print(s1);
+       print("jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj");
 
-      if (mounted) {
-        setState(() {});
-      }
+
+         if (mounted) {
+           setState(() {});
+         }
     });
   }
-
   @override
   void initState() {
     super.initState();
@@ -154,70 +188,85 @@ class _ServiceDetailesPageState extends State<ServiceDetailesPage> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
                               ),
-                              child: Container(
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                  color: Color(0xFFE3F2FD),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      height: 100,
-                                      width: 100,
-                                      child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                          child: CachedNetworkImage(
-                                            imageUrl:
-                                                serviceItems!.image.toString(),
-                                            fit: BoxFit.cover,
-                                          )),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          10, 0, 0, 0),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            'Name : ${serviceItems.name.toString()}',
-                                            style: GoogleFonts.urbanist(
-                                                fontSize: 14),
-                                          ),
-                                          SizedBox(
-                                            height: 15,
-                                          ),
-                                          // Text(
-                                          //   'Phone Number : ${serviceItems.phoneNumber.toString()}',
-                                          //   style: GoogleFonts.urbanist(
-                                          //       fontSize: 14),
-                                          // ),
-                                          // Text(
-                                          //   'Email Id : ${serviceItems.emailId.toString()}',
-                                          //   style: GoogleFonts.urbanist(
-                                          //       fontSize: 14),
-                                          // ),
-                                          Text(
-                                            'Wage : ${serviceItems.wage} / ${serviceItems.serviceUnit}',
-                                            style: GoogleFonts.urbanist(
-                                                fontSize: 14),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    InkWell(
-                                        onTap: () {
-                                          Uri call = Uri.parse(
-                                              'tel://${serviceList![index].phoneNumber!}');
+                              child: InkWell(
+                                onTap: (){
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => detailesSinglePage(
+                                            // subCategoryName: subcategories[index]['sub'],
+                                            // category: widget.serviceCategoryName,
+                                            services:serviceItems
 
-                                          launchUrl(call);
-                                        },
-                                        child: Icon(Icons.phone))
-                                  ],
+                                            // image:categories![index]['image'],
+                                            // serviceId:categories![index].id,
+
+                                          )));
+                                },
+                                child: Container(
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    color: Color(0xFFE3F2FD),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
+                                        height: 100,
+                                        width: 100,
+                                        child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                            child: CachedNetworkImage(
+                                              imageUrl:
+                                                  serviceItems!.image.toString(),
+                                              fit: BoxFit.cover,
+                                            )),
+                                      ),
+                                     Expanded(child: Row(
+                                       mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                       crossAxisAlignment: CrossAxisAlignment.start,
+
+                                       children: [
+                                         Column(
+                                           mainAxisAlignment: MainAxisAlignment.start,
+                                           crossAxisAlignment: CrossAxisAlignment.start,
+
+                                           children: [
+                                             Text(
+                                               'Name : ${serviceItems.name.toString()}',
+                                               style: GoogleFonts.urbanist(
+                                                   fontSize: 14),
+                                             ),
+                                             SizedBox(
+                                               height: 15,
+                                             ),
+                                             Text(
+                                               'Wage : ${serviceItems.wage} / ${serviceItems.serviceUnit}',
+                                               style: GoogleFonts.urbanist(
+                                                   fontSize: 14),
+                                             ),
+                                           ],
+                                         ),
+                                         InkWell(
+                                             onTap: () {
+                                               Uri call = Uri.parse(
+                                                   'tel://${serviceList![index].phoneNumber!}');
+
+                                               launchUrl(call);
+                                             },
+                                             child: Padding(
+                                               padding: const EdgeInsets.only(top: 5.0),
+                                               child: CircleAvatar(
+                                                 backgroundColor: tabBarColor,
+                                                   child: Icon(Icons.phone,color: Colors.white,size: 25,)),
+                                             )),
+                                       ],
+                                     ))
+
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),

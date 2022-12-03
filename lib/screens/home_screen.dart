@@ -10,7 +10,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:threems/kuri/kuripage.dart';
 import 'package:threems/model/usermodel.dart';
 import 'package:threems/screens/charity/basic_details.dart';
-import 'package:threems/screens/charity/payment.dart';
 import 'package:threems/screens/chits/hostedchits.dart';
 import 'package:threems/screens/flgraph.dart';
 import 'package:threems/screens/splash_screen.dart';
@@ -22,8 +21,6 @@ import 'package:threems/widgets/funding_widget.dart';
 import 'package:threems/widgets/upcomming_card_widget.dart';
 
 import '../Authentication/auth.dart';
-import '../UpComing__Collection_&__Payments/Collections.dart';
-import '../UpComing__Collection_&__Payments/payments.dart';
 import '../kuri/createkuri.dart';
 import '../model/charitymodel.dart';
 import 'charity/donatepage.dart';
@@ -74,13 +71,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   getContacts() async {
     List<Contact> _contacts = await ContactsService.getContacts();
-    contacts = _contacts;
-    if (mounted) {
-      setState(() {
-        print('================ContactLength=================');
-        print(contacts.length);
-      });
-    }
+
+    setState(() {
+      contacts = _contacts;
+
+      print('================ContactLength=================');
+      print(contacts.length);
+    });
   }
 
   double selectedIndex = 0;
@@ -99,16 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
         setState(() {});
       }
     });
-    print(verifiedcharity.length);
-    print(dropdownValue);
-    print(
-        "----------------------------------------------------------------------------");
-    print(
-        "----------------------------------------------------------------------------");
-    print(
-        "----------------------------------------------------------------------------");
-    print(
-        "----------------------------------------------------------------------------");
+
   }
 
   Position? currentLoc;
@@ -884,15 +872,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        InkWell(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => UpcomingPayments(),
-                                ));
-                          },
-                          child: UpcommingCardWidget(
+                        UpcommingCardWidget(
                             image: 'assets/icons/upcoming_payments.svg',
                             title: "Upcoming\nPayments",
                           ),
@@ -1063,8 +1043,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: scrWidth * 0.3,
                 ),
               ],
-            ),
-
+            )
           ],
         ),
       ),

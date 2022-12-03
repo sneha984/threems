@@ -16,6 +16,10 @@ class ServiceDetails {
   String? subCategory;
   String? servicesProvided;
   String? aboutService;
+  double? lat;
+  double? long;
+  String? serviceLocation;
+  Map? position;
 
   ServiceDetails({
     this.name,
@@ -35,6 +39,10 @@ class ServiceDetails {
     this.subCategory,
     this.servicesProvided,
     this.aboutService,
+    this.lat,
+    this.long,
+    this.serviceLocation,
+    this.position,
   });
 
   ServiceDetails.fromJson(Map<String, dynamic> json) {
@@ -54,6 +62,10 @@ class ServiceDetails {
     servicesProvided = json['servicesProvided'];
     image = json['image'];
     documents = json['documents'];
+    lat = json['lat'];
+    long = json['long'];
+    serviceLocation = json['serviceLocation'];
+    position = json['position'];
     addedDate = json['addedDate'].toDate();
   }
 
@@ -76,6 +88,10 @@ class ServiceDetails {
     data['documents'] = documents;
     data['addedDate'] = addedDate;
     data['subCategory'] = subCategory;
+    data['serviceLocation'] = serviceLocation;
+    data['position'] = position;
+    data['lat'] = lat;
+    data['long'] = long;
     return data;
   }
 }

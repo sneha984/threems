@@ -44,7 +44,7 @@ dependencies:
   intl: ^0.17.0
   badges: ^2.0.3
   flutter_svg: ^1.1.4
-  flutter_iconpicker: ^3.2.2
+  flutter_iconpicker: ^3.0.0
   flutter_bounceable: ^1.0.3
   dotted_border: ^2.0.0+2
   flutter_typeahead: ^4.1.0
@@ -62,23 +62,25 @@ dependencies:
   cloud_firestore: ^4.0.2
   firebase_core: ^2.1.0
   firebase_auth: ^4.0.2
-  google_sign_in:
-  image_picker:
+  google_sign_in: ^5.4.1
+  image_picker: ^0.8.5+3
   file_picker: ^5.2.2
-  firebase_storage:
+  firebase_storage: ^11.0.2
   another_stepper: ^1.0.4
   url_launcher: ^6.1.6
   flutter_linkify: ^5.0.2
   youtube_player_flutter: ^8.1.1
-  syncfusion_flutter_pdfviewer:
+  syncfusion_flutter_pdfviewer: ^20.3.52
   animated_custom_dropdown: ^1.2.2
   http:
   share_plus: ^6.3.0
+  google_maps_place_picker: ^2.1.0-nullsafety.3
+  firebase_core_platform_interface: 4.5.1
   whatsapp_share2: ^2.0.2
-  contacts_service:
-  permission_handler:
+  contacts_service: ^0.6.3
+  permission_handler: ^10.2.0
   dotted_line: ^3.1.0
-  geolocator:
+  geolocator: ^7.7.0
   geocoding: ^2.0.5
   firebase_dynamic_links: ^5.0.6
   fluttertoast: ^8.1.1
@@ -87,11 +89,8 @@ dependencies:
   getwidget: ^3.0.1
   google_maps_flutter:
   shared_preferences: ^2.0.15
-#  google_maps_place_picker:
   geo_firestore_flutter: ^0.1.6
   emoji_picker_flutter: ^1.3.0
-  flutter_fortune_wheel: ^1.2.0
-  flutter_bounce: ^1.1.0
 
 
 
@@ -123,7 +122,6 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/
-    - assets/svg/
     - assets/images/
     - assets/icons/
 

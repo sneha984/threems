@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:threems/model/servicesModel.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../utils/themes.dart';
 import '../splash_screen.dart';
@@ -100,16 +101,25 @@ class _detailesSinglePageState extends State<detailesSinglePage> with TickerProv
                         ),
                         Padding(
                           padding:  EdgeInsets.only(right:scrWidth*0.07 ),
-                          child: Container(
-                            height: scrWidth*0.19,
-                            width:  scrWidth*0.19,
-                            decoration: BoxDecoration(
-                              color: tabBarColor,
-                              borderRadius: BorderRadius.circular(20)
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(15.0),
-                              child: SvgPicture.asset('assets/images/call.svg',height: 20,width: 20,),
+                          child: InkWell(
+                            onTap: (){
+
+                                  Uri call = Uri.parse(
+                                  'tel://${services!.phoneNumber!}');
+
+                                  launchUrl(call);
+                            },
+                            child: Container(
+                              height: scrWidth*0.19,
+                              width:  scrWidth*0.19,
+                              decoration: BoxDecoration(
+                                color: tabBarColor,
+                                borderRadius: BorderRadius.circular(20)
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: SvgPicture.asset('assets/images/call.svg',height: 20,width: 20,),
+                              ),
                             ),
                           ),
                         ),

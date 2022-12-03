@@ -6,15 +6,25 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geoflutterfire/geoflutterfire.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:threems/Authentication/root.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart' as gMap;
+import 'package:google_maps_place_picker/google_maps_place_picker.dart' as gMapPlacePicker;
+import 'package:threems/screens/home_screen.dart';
+
 
 import '../../model/servicesModel.dart';
+import '../../model/usermodel.dart';
 import '../../utils/themes.dart';
 import '../charity/verification_details.dart';
 import '../splash_screen.dart';
 import 'details.dart';
+final geo = Geoflutterfire();
+
 class AddServicePage extends StatefulWidget {
   final String subCategoryName;
   final String Category;
@@ -37,6 +47,7 @@ class _AddServicePageState extends State<AddServicePage>  with TickerProviderSta
 
   bool photo = false;
   String imgUrl='';
+  String serviceLocation='';
   String catgoryId='';
   late File imgFile;
   Map<String,dynamic>categoryIdByName={};
@@ -56,6 +67,11 @@ class _AddServicePageState extends State<AddServicePage>  with TickerProviderSta
   // late File pickFile;
   UploadTask ?uploadTask;
   PlatformFile ?pickFile;
+  set(){
+    setState(() {
+
+    });
+  }
   Future uploadFileToFireBase(fileBytes) async {
     print(fileBytes);
     uploadTask= FirebaseStorage.instance.ref('uploads/${DateTime.now()}').putData(fileBytes);
@@ -203,6 +219,10 @@ class _AddServicePageState extends State<AddServicePage>  with TickerProviderSta
   TextEditingController unit = TextEditingController(text: '');
   TextEditingController city = TextEditingController(text: '');
   TextEditingController city2 = TextEditingController(text: '');
+  TextEditingController? latitude;
+  TextEditingController? longitude;
+  gMapPlacePicker.PickResult? result;
+
   @override
   void initState() {
     serviceItems=widget.serviceItems;
@@ -237,13 +257,18 @@ class _AddServicePageState extends State<AddServicePage>  with TickerProviderSta
     sevicesProvided = TextEditingController(text:serviceItems?.servicesProvided.toString()??'');
     aboutService = TextEditingController(text:serviceItems?.aboutService.toString()??'');
 
+    latitude = TextEditingController(text:serviceItems?.lat.toString()??'0');
+    longitude = TextEditingController(text:serviceItems?.long.toString()??'0');
+
     selectedCategory=widget.Category??'';
     selectedSubCategory=widget.subCategoryName??'';
     selectedUnit=serviceItems?.serviceUnit??'';
     selectedCity=serviceItems?.city??'';
     imgUrl=serviceItems?.image??'';
+    serviceLocation=serviceItems?.serviceLocation??'';
     fileUrl=serviceItems?.documents??'';
     fileName=serviceItems?.documents??'';
+
 
   }
   void dispose() {
@@ -577,6 +602,84 @@ class _AddServicePageState extends State<AddServicePage>  with TickerProviderSta
                               //     borderSide: BorderSide(color: Color(0xff034a82),width: 2)
                               // ),
                             ),
+                          ),
+                          SizedBox(
+                            height: scrWidth * 0.03,
+                          ),
+                          Row(
+                            children: [
+                              Container(
+                               width: scrWidth*0.91,
+                                height: textFormFieldHeight45,
+                            // padding: EdgeInsets.symmetric(
+                            //   horizontal: scrWidth * 0.015,
+                            //   vertical:scrHeight*0.002,
+                            // ),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Color(0xffDADADA),
+                              ),
+                              color: textFormFieldFillColor,
+                              borderRadius: BorderRadius.circular(scrWidth * 0.026),
+                            ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  children: [
+                                    Column(
+                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Text('Location: '+serviceLocation.toString(),style: GoogleFonts.outfit(),)
+                                        // Text('Lattitude:'+latitude!.text),
+                                        // Text('Longitude:'+longitude!.text),
+                                      ],
+                                    ),
+
+                                    InkWell(
+                                        onTap: ()  async {
+                                          Position location = await Geolocator.getCurrentPosition(
+                                              desiredAccuracy: LocationAccuracy.high
+                                          );
+
+                                        await   Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => gMapPlacePicker.PlacePicker(
+                                                apiKey: "AIzaSyCUZFUZ1yMpkzh6QUnKj54Q2N4L2iT4tBY",
+                                                initialPosition: gMap.LatLng(
+                                                    location.latitude,location.longitude
+                                                ),
+                                                // Put YOUR OWN KEY here.
+                                                searchForInitialValue: false,
+                                                selectInitialPosition: true,
+                                                // initialPosition: LatLng(currentLoc==null?0:currentLoc!.latitude,currentLoc==null?0:currentLoc!.longitude),
+                                                onPlacePicked: (res) async {
+                                                  Navigator.of(context).pop();
+                                                  // GeoCode geoCode = GeoCode();
+                                                  // Address address=await geoCode.reverseGeocoding(latitude: res.geometry!.location.lat,longitude: res.geometry!.location.lng);
+                                                  result=res;
+                                                  latitude!.text=res.geometry!.location.lat.toString();
+                                                  longitude!.text=res.geometry!.location.lng.toString();
+                                                  List<Placemark> placemarks = await placemarkFromCoordinates(
+                                                      res.geometry!.location.lat, res.geometry!.location.lng);
+                                                  Placemark place = placemarks[0];
+                                                  serviceLocation = place.locality!;
+                                                  // longitude!.text=res.geometry!.location.lng.toString();
+                                                  // lat=result.geometry!.location.lat;
+                                                  // long=result.geometry!.location.lng;
+                                                  set();
+                                                },
+                                                useCurrentLocation: true,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        child: Icon(Icons.location_on,color: Colors.red,size: 30,)),
+
+                                  ],
+                                ),
+                              ),
+
+                            ],
                           ),
                           SizedBox(
                             height: scrWidth * 0.03,
@@ -1112,7 +1215,7 @@ class _AddServicePageState extends State<AddServicePage>  with TickerProviderSta
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     SvgPicture.asset(
-                                      'assets/images/upload.svg',
+                                      'assets/icons/upload.svg',
                                       color: Color(0xff8391A1),
                                     ),
                                     SizedBox(
@@ -1256,8 +1359,10 @@ class _AddServicePageState extends State<AddServicePage>  with TickerProviderSta
                           editService==false?  InkWell(
                               onTap: () {
                                 if(name?.text!='' &&phoneNumber?.text!='' &&email?.text!=''&&whatsappNumber?.text!=''
-                                    &&address?.text!=''&&selectedCity!=''&& selectedCategory!=''&& selectedSubCategory!=''&& selectedUnit!=''
+                                    &&address?.text!=''&&serviceLocation!=''&&selectedCity!=''&& selectedCategory!=''&& selectedSubCategory!=''&& selectedUnit!=''
                                     &&sevicesProvided!.text!=''&&aboutService!.text!=''&& imgUrl!=''&& fileUrl!=''){
+                                  GeoFirePoint myLocation = geo.point(latitude:double.tryParse(latitude!.text)??0, longitude: double.tryParse(longitude!.text)??0);
+
                                   showDialog(context: context,
                                       builder: (buildcontext)
                                       {
@@ -1286,7 +1391,11 @@ class _AddServicePageState extends State<AddServicePage>  with TickerProviderSta
                                                   documents:fileUrl,
                                                   subCategory:selectedSubCategory,
                                                   servicesProvided:sevicesProvided!.text,
-                                                  aboutService:aboutService!.text
+                                                  aboutService:aboutService!.text,
+                                                  lat:double.tryParse(latitude!.text.toString()),
+                                                  long:double.tryParse(longitude!.text.toString()),
+                                                  serviceLocation:serviceLocation.toString(),
+                                                  position: myLocation.data
                                               );
                                               addService(service);
                                               showUploadMessage(context, 'service added succesfully');
@@ -1304,6 +1413,7 @@ class _AddServicePageState extends State<AddServicePage>  with TickerProviderSta
                                               subCategory.clear();
                                               imgUrl='';
                                               fileUrl='';
+                                              serviceLocation='';
                                               sevicesProvided!.clear();
                                               aboutService!.clear();
                                               setState(() {
@@ -1325,6 +1435,7 @@ class _AddServicePageState extends State<AddServicePage>  with TickerProviderSta
                                   phoneNumber?.text==''?showUploadMessage(context,'Please enter phone number'):
                                   whatsappNumber?.text==''?showUploadMessage(context,'Please enter whatsappNumber'):
                                   address?.text==''?showUploadMessage(context,'Please enter address'):
+                                  serviceLocation==''?showUploadMessage(context,'Please Choose Location of your service'):
                                   selectedCity==''?showUploadMessage(context,'Please choose your city'):
                                   selectedCategory==''?showUploadMessage(context,'Please choose service category'):
                                   selectedSubCategory==''?showUploadMessage(context,'Please choose sub category'):
@@ -1356,8 +1467,10 @@ class _AddServicePageState extends State<AddServicePage>  with TickerProviderSta
                               onTap: () {
                                 if(name?.text!='' &&phoneNumber?.text!='' &&email?.text!=''&&whatsappNumber?.text!=''
                                     &&address?.text!=''&&selectedCity!=''&& selectedCategory!=''&&  selectedSubCategory!=''&&
-                                    selectedUnit!=''&& sevicesProvided!.text!=''
+                                    selectedUnit!=''&& sevicesProvided!.text!='' && serviceLocation!=''
                                     &&aboutService!.text!=''&& imgUrl!=''&& fileUrl!=''){
+                                  GeoFirePoint myLocation = geo.point(latitude:double.tryParse(latitude!.text)??0, longitude: double.tryParse(longitude!.text)??0);
+
                                   showDialog(context: context,
                                       builder: (buildcontext)
                                       {
@@ -1387,7 +1500,12 @@ class _AddServicePageState extends State<AddServicePage>  with TickerProviderSta
                                                   serviceId: serviceItems!.serviceId,
                                                   subCategory:selectedSubCategory??'',
                                                   servicesProvided:sevicesProvided!.text,
-                                                  aboutService:aboutService!.text
+                                                  aboutService:aboutService!.text,
+                                                  lat:double.tryParse(latitude!.text.toString()),
+                                                  long:double.tryParse(longitude!.text.toString()),
+                                                  serviceLocation:serviceLocation.toString(),
+                                                  position: myLocation.data
+
 
                                               );
                                               EditService(service);
@@ -1408,6 +1526,7 @@ class _AddServicePageState extends State<AddServicePage>  with TickerProviderSta
                                               fileUrl='';
                                               sevicesProvided!.clear();
                                               aboutService!.clear();
+                                              serviceLocation='';
                                               controller.sink.add(1);
                                               setState(() {
 
@@ -1425,6 +1544,7 @@ class _AddServicePageState extends State<AddServicePage>  with TickerProviderSta
                                   email?.text==''?showUploadMessage(context,'Please enter emailId'):
                                   phoneNumber?.text==''?showUploadMessage(context,'Please enter phone number'):
                                   whatsappNumber?.text==''?showUploadMessage(context,'Please enter whatsappNumber'):
+                                  serviceLocation==''?showUploadMessage(context,'Please Choose Location of your service'):
                                   address?.text==''?showUploadMessage(context,'Please enter address'):
                                   selectedCity==''?showUploadMessage(context,'Please choose your city'):
                                   serviceCategory==''?showUploadMessage(context,'Please choose service category'):
