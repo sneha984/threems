@@ -7,6 +7,7 @@ import 'package:threems/Authentication/root.dart';
 
 import '../../customPackage/date_picker.dart';
 import '../../kuri/createkuri.dart';
+import '../../layouts/screen_layout.dart';
 import '../../model/ChitModel.dart';
 import '../../utils/themes.dart';
 import '../../widgets/list.dart';
@@ -33,6 +34,8 @@ class PaymentDetails extends StatefulWidget {
 }
 
 class _PaymentDetailsState extends State<PaymentDetails> {
+  bool loading = false;
+
   List<MultiSelect> multiselect = [
     MultiSelect(
         image: "assets/pay/googlepaysvg.svg",
@@ -650,17 +653,32 @@ class _PaymentDetailsState extends State<PaymentDetails> {
                 fileName: widget.fileName,
                 ifsc: ifsc.text,
               );
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AddMembers(
-                      chit: chit,
-                      size: widget.size,
-                      ext: widget.ext,
-                      bytes: widget.bytes,
-                      fileName: widget.fileName,
-                    ),
-                  ));
+
+              FirebaseFirestore.instance
+                  .collection('chit')
+                  .add(chit.toJson())
+                  .then((value) {
+                value.update({'chitId': value.id});
+                value.collection('chats').add({
+                  "file": local.document!,
+                  "fileName": 'PROOF',
+                  "senderId": currentuserid,
+                  "sendTime": DateTime.now(),
+                  "readBy": [],
+                  "type": "file",
+                  "ext": widget.ext,
+                  "size": widget.size,
+                });
+              }).then((value) {
+                showSnackbar(context, 'Chit successfully added');
+                setState(() {
+                  loading = false;
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => ScreenLayout()),
+                      (route) => false);
+                });
+              });
             }
           } else {
             phone.text == ''
@@ -680,7 +698,7 @@ class _PaymentDetailsState extends State<PaymentDetails> {
             ),
             child: Center(
               child: Text(
-                widget.chit.chitId == '' ? "Add Members" : 'Update',
+                "Create Chit",
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: FontSize15,

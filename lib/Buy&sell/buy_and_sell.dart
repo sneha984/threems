@@ -11,7 +11,6 @@ import 'package:geo_firestore_flutter/geo_firestore_flutter.dart';
 
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:google_maps_place_picker/google_maps_place_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:threems/Authentication/root.dart';
@@ -39,24 +38,24 @@ import 'checkout.dart';
 import 'myorderspage.dart';
 
 List<String> cateoryNames = [];
-Map<String,dynamic> cateoryNamesMap = {};
+Map<String, dynamic> cateoryNamesMap = {};
 List products = [];
 List orders = [];
 
-
 class BuyAndSell extends StatefulWidget {
   final int index;
-  const BuyAndSell({Key? key, required this.index, }) : super(key: key);
+  const BuyAndSell({
+    Key? key,
+    required this.index,
+  }) : super(key: key);
   static final kInitialPosition = LatLng(10.954697, 76.2208631);
-
 
   @override
   State<BuyAndSell> createState() => _BuyAndSellState();
 }
 
 class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
-  late PickResult selectedPlace;
-
+  // late PickResult selectedPlace;
 
   String currentAddress = 'Select Your Location';
   Position? currentposition;
@@ -65,9 +64,10 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
   Map<String, dynamic> categorys = {};
   int status = 0;
   List<Widget> grids = [];
-   List<DocumentSnapshot> documents=[];
-  geoLocation(String id)async{
-    GeoFirestore geoFirestore = GeoFirestore(FirebaseFirestore.instance.collection('stores'));
+  List<DocumentSnapshot> documents = [];
+  geoLocation(String id) async {
+    GeoFirestore geoFirestore =
+        GeoFirestore(FirebaseFirestore.instance.collection('stores'));
     await geoFirestore.setLocation(id, GeoPoint(lat!, long!));
     final queryLocation = GeoPoint(lat!, long!);
     // creates a new query around [37.7832, -122.4056] with a radius of 0.6 kilometers
@@ -79,7 +79,7 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
       print("111111111111111111111111111111111111111111111111111111");
       print("111111111111111111111111111111111111111111111111111111");
     });
-    if(mounted){
+    if (mounted) {
       setState(() {
         print("hiii sneha");
         print(documents.length);
@@ -97,11 +97,11 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
       for (DocumentSnapshot<Map<String, dynamic>> doc in event.docs) {
         categorys[doc.get('categoryName')] = doc.data();
         cateoryNames.add(doc.get('categoryName'));
-        cateoryNamesMap[doc.get('categoryName')]=doc.id;
+        cateoryNamesMap[doc.get('categoryName')] = doc.id;
         print(
             "----------------------------------------------------------------------------------------");
         //print(categorys[doc['categoryName']]);
-       // print(doc.get('categoryImage'));
+        // print(doc.get('categoryImage'));
         grids.add(InkWell(
           onTap: () {
             Navigator.push(
@@ -109,7 +109,7 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                 MaterialPageRoute(
                     builder: (context) => CategoryStores(
                           categoryname: doc.get('categoryName'),
-                    )));
+                        )));
           },
           child: Container(
             height: scrWidth * 0.3,
@@ -127,10 +127,8 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                           child: Container(
                               height: 27,
                               width: 27,
-                              child:
-                                  SvgPicture.network(doc.get('categoryImage')))
-
-                          )),
+                              child: SvgPicture.network(
+                                  doc.get('categoryImage'))))),
                 ),
                 SizedBox(
                   height: scrHeight * 0.004,
@@ -151,7 +149,6 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
             ),
           ),
         ));
-
       }
       if (mounted) {
         setState(() {});
@@ -169,7 +166,7 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
         .listen((event) {
       store = [];
       var data = event.docs;
-      for (DocumentSnapshot<Map<String,dynamic>> item in data) {
+      for (DocumentSnapshot<Map<String, dynamic>> item in data) {
         store.add(StoreDetailsModel.fromJson(item.data()!));
       }
       if (data.length > 0) {
@@ -209,23 +206,19 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
           .collection('orders')
           .snapshots()
           .listen((event) {
-         orders=[];
-         for(var doc in event.docs){
-           orders.add(doc.data());
-         }
-         if(mounted){
-           setState(() {
-
-           });
-         }
-          });
+        orders = [];
+        for (var doc in event.docs) {
+          orders.add(doc.data());
+        }
+        if (mounted) {
+          setState(() {});
+        }
+      });
       if (mounted) {
         setState(() {});
       }
     });
   }
-
-
 
   late TabController _tabController;
   bool loading = false;
@@ -270,7 +263,7 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
               bottom: scrHeight * 0.01,
             ),
             child: InkWell(
-              onTap: (){
+              onTap: () {
                 // Navigator.push(
                 //   context,
                 //   MaterialPageRoute(
@@ -285,7 +278,10 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                 //     ),
                 //   ),
                 // );
-                 Navigator.push(context, MaterialPageRoute(builder: (context)=>PaymentPageInBuy()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => PaymentPageInBuy()));
               },
               child: SvgPicture.asset(
                 "assets/icons/locationicon.svg",
@@ -307,8 +303,12 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
         actions: [
           InkWell(
             onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => CheckOutPage(id:store[0].storeId!,)));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => CheckOutPage(
+                            id: store[0].storeId!,
+                          )));
             },
             child: Badge(
                 position: BadgePosition.topEnd(
@@ -329,7 +329,6 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                   child: SvgPicture.asset("assets/images/cart.svg"),
                 )),
           ),
-
           InkWell(
             onTap: () {
               Navigator.push(context,
@@ -346,7 +345,7 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                 badgeContent: Text(
                   '${allOrders.length}',
                   style:
-                  TextStyle(color: Colors.white, fontSize: scrWidth * 0.02),
+                      TextStyle(color: Colors.white, fontSize: scrWidth * 0.02),
                 ),
                 child: Padding(
                   padding: EdgeInsets.only(
@@ -568,72 +567,79 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                     //   height: 50,
                     // ),
                     Padding(
-                      padding:  EdgeInsets.only(left: scrWidth*0.037,right: scrWidth*0.037),
+                      padding: EdgeInsets.only(
+                          left: scrWidth * 0.037, right: scrWidth * 0.037),
                       child: Container(
-                        height: scrHeight*0.15,
+                        height: scrHeight * 0.15,
                         child: ListView.builder(
                             physics: BouncingScrollPhysics(),
                             scrollDirection: Axis.horizontal,
                             shrinkWrap: true,
-                            itemCount:documents.length,
+                            itemCount: documents.length,
                             itemBuilder: (context, index) {
                               return Padding(
-                                padding: EdgeInsets.only(right: scrWidth*0.017),
+                                padding:
+                                    EdgeInsets.only(right: scrWidth * 0.017),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     InkWell(
                                       child: Padding(
                                         padding: EdgeInsets.only(
-                                            left: scrWidth*0.03),
+                                            left: scrWidth * 0.03),
                                         child: Container(
-                                          height:scrHeight*0.09,
-                                          width: scrWidth*0.22,
+                                          height: scrHeight * 0.09,
+                                          width: scrWidth * 0.22,
                                           decoration: BoxDecoration(
-                                            image: DecorationImage(image:
-                                            NetworkImage("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQt4xN5NUBDKwdj-rtbQgpCiezCJn_0-iLMMQ&usqp=CAU"),
+                                            image: DecorationImage(
+                                                image: NetworkImage(
+                                                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQt4xN5NUBDKwdj-rtbQgpCiezCJn_0-iLMMQ&usqp=CAU"),
                                                 fit: BoxFit.fill),
                                             color: Colors.white,
-
                                             borderRadius: BorderRadius.circular(
-                                                scrWidth*0.03),
+                                                scrWidth * 0.03),
                                           ),
                                         ),
                                       ),
                                     ),
                                     Padding(
-                                      padding: EdgeInsets.only(left: scrWidth*0.04),
+                                      padding: EdgeInsets.only(
+                                          left: scrWidth * 0.04),
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment
-                                            .start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
-                                          SizedBox(height: scrHeight*0.002,),
+                                          SizedBox(
+                                            height: scrHeight * 0.002,
+                                          ),
                                           Text(
-                                          documents[index].get('storeName'), textAlign: TextAlign.center,
+                                            documents[index].get('storeName'),
+                                            textAlign: TextAlign.center,
                                             style: TextStyle(
                                                 fontFamily: 'Urbanist',
-                                                fontSize: scrWidth*0.032,
+                                                fontSize: scrWidth * 0.032,
                                                 fontWeight: FontWeight.w600,
-                                                color: Color(0xff0E0E0E)),),
-                                          SizedBox(height: scrHeight*0.0015,),
+                                                color: Color(0xff0E0E0E)),
+                                          ),
+                                          SizedBox(
+                                            height: scrHeight * 0.0015,
+                                          ),
                                           Text(
-                                            "huhuhsduhxuhx", textAlign: TextAlign.center,
+                                            "huhuhsduhxuhx",
+                                            textAlign: TextAlign.center,
                                             style: TextStyle(
                                                 fontFamily: 'Urbanist',
-                                                fontSize: scrWidth*0.025,
+                                                fontSize: scrWidth * 0.025,
                                                 fontWeight: FontWeight.w600,
-                                                color: Color(0xff818181)),),
-
+                                                color: Color(0xff818181)),
+                                          ),
                                         ],
                                       ),
                                     ),
-
-
                                   ],
                                 ),
                               );
-                            }
-                        ),
+                            }),
                       ),
                     ),
 
@@ -769,7 +775,6 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                     //   Navigator.push(context, MaterialPageRoute(builder: (context)=>MapSample()));
                     // }, child: Text("uhsdhw")),
                     // SizedBox(height: 100,),
-
                   ],
                 ),
               ),
@@ -1000,13 +1005,12 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                       StepperData(
                                         title: "Payment",
                                         subtitle:
-                                        "Confirm Your Payment section",
+                                            "Confirm Your Payment section",
                                       ),
                                     ],
                                     horizontalStepperHeight: 200,
                                     stepperDirection: Axis.vertical,
-
-                                    inActiveBarColor:Colors.grey,
+                                    inActiveBarColor: Colors.grey,
                                     activeIndex: activeindex,
                                     barThickness: 2,
                                     activeBarColor: primarycolor,
@@ -1176,7 +1180,7 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                           StepperData(
                                             title: "Payment",
                                             subtitle:
-                                            "Confirm Your Payment section ",
+                                                "Confirm Your Payment section ",
                                           ),
                                         ],
                                         horizontalStepperHeight: 200,
@@ -1218,55 +1222,204 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                 ),
                               ],
                             )
-                            :(status==3)?
-                                Column(
-                              children: [
-                                SizedBox(
-                                  height: scrHeight * 0.02,
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
+                          : (status == 3)
+                              ? Column(
                                   children: [
-                                    Text(
-                                      "Overview",
-                                      style: TextStyle(
-                                          fontSize: scrWidth * 0.04,
-                                          fontFamily: 'Urbanist',
-                                          fontWeight: FontWeight.w600),
+                                    SizedBox(
+                                      height: scrHeight * 0.02,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Text(
+                                          "Overview",
+                                          style: TextStyle(
+                                              fontSize: scrWidth * 0.04,
+                                              fontFamily: 'Urbanist',
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                        SizedBox(
+                                          width: scrWidth * 0.37,
+                                        ),
+                                        Text(
+                                          "Today",
+                                          style: TextStyle(
+                                              fontSize: scrWidth * 0.03,
+                                              color: Color(0xff6F6E6E),
+                                              fontFamily: 'Urbanist',
+                                              fontWeight: FontWeight.w600),
+                                        )
+                                      ],
                                     ),
                                     SizedBox(
-                                      width: scrWidth * 0.37,
+                                      height: scrHeight * 0.013,
                                     ),
-                                    Text(
-                                      "Today",
-                                      style: TextStyle(
-                                          fontSize: scrWidth * 0.03,
-                                          color: Color(0xff6F6E6E),
-                                          fontFamily: 'Urbanist',
-                                          fontWeight: FontWeight.w600),
-                                    )
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: scrHeight * 0.013,
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                      left: scrWidth * 0.035,
-                                      right: scrWidth * 0.035),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      InkWell(
-                                        onTap: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      Orders(storeId:store[0].storeId!,)));
-                                        },
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          left: scrWidth * 0.035,
+                                          right: scrWidth * 0.035),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          InkWell(
+                                            onTap: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          Orders(
+                                                            storeId: store[0]
+                                                                .storeId!,
+                                                          )));
+                                            },
+                                            child: Container(
+                                              height: scrHeight * 0.11,
+                                              width: scrWidth * 0.4,
+                                              decoration: BoxDecoration(
+                                                  color: Color(0xff02B558),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          scrWidth * 0.06)),
+                                              child: Padding(
+                                                padding: EdgeInsets.only(
+                                                    left: scrWidth * 0.05),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    SizedBox(
+                                                      height: scrHeight * 0.02,
+                                                    ),
+                                                    Text(
+                                                      "Orders",
+                                                      style: TextStyle(
+                                                          fontSize:
+                                                              scrWidth * 0.04,
+                                                          color: Colors.white,
+                                                          fontFamily:
+                                                              'Urbanist',
+                                                          fontWeight:
+                                                              FontWeight.w600),
+                                                    ),
+                                                    SizedBox(
+                                                      height: scrHeight * 0.018,
+                                                    ),
+                                                    Row(
+                                                      children: [
+                                                        Text(
+                                                          orders.length
+                                                              .toString(),
+                                                          style: TextStyle(
+                                                              fontSize:
+                                                                  scrWidth *
+                                                                      0.07,
+                                                              color:
+                                                                  Colors.white,
+                                                              fontFamily:
+                                                                  'Urbanist',
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700),
+                                                        ),
+                                                        SizedBox(
+                                                          width:
+                                                              scrWidth * 0.18,
+                                                        ),
+                                                        SvgPicture.asset(
+                                                            "assets/circlearrow.svg"),
+                                                      ],
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          InkWell(
+                                            onTap: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          SalesPage()));
+                                            },
+                                            child: Container(
+                                                height: scrHeight * 0.11,
+                                                width: scrWidth * 0.4,
+                                                decoration: BoxDecoration(
+                                                    color: Color(0xff02B558),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            scrWidth * 0.06)),
+                                                child: Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: scrWidth * 0.05),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      SizedBox(
+                                                        height:
+                                                            scrHeight * 0.02,
+                                                      ),
+                                                      Text(
+                                                        "Sale",
+                                                        style: TextStyle(
+                                                            fontSize:
+                                                                scrWidth * 0.04,
+                                                            color: Colors.white,
+                                                            fontFamily:
+                                                                'Urbanist',
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w600),
+                                                      ),
+                                                      SizedBox(
+                                                        height:
+                                                            scrHeight * 0.018,
+                                                      ),
+                                                      Row(
+                                                        children: [
+                                                          Container(
+                                                            width: 30,
+                                                            child: Text(
+                                                              "₹0",
+                                                              style: TextStyle(
+                                                                  fontSize:
+                                                                      scrWidth *
+                                                                          0.07,
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontFamily:
+                                                                      'Urbanist',
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w700),
+                                                            ),
+                                                          ),
+                                                          SizedBox(
+                                                            width:
+                                                                scrWidth * 0.14,
+                                                          ),
+                                                          SvgPicture.asset(
+                                                              "assets/circlearrow.svg"),
+                                                        ],
+                                                      )
+                                                    ],
+                                                  ),
+                                                )),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          right: scrWidth * 0.46,
+                                          top: scrHeight * 0.026),
+                                      child: InkWell(
+                                        onTap: () {},
                                         child: Container(
                                           height: scrHeight * 0.11,
                                           width: scrWidth * 0.4,
@@ -1286,7 +1439,7 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                                   height: scrHeight * 0.02,
                                                 ),
                                                 Text(
-                                                  "Orders",
+                                                  "Store Views",
                                                   style: TextStyle(
                                                       fontSize: scrWidth * 0.04,
                                                       color: Colors.white,
@@ -1297,35 +1450,55 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                                 SizedBox(
                                                   height: scrHeight * 0.018,
                                                 ),
-                                                Row(
-                                                  children: [
-                                                    Text(
-                                                      orders.length.toString(),
-                                                      style: TextStyle(
-                                                          fontSize: scrWidth * 0.07,
-                                                          color: Colors.white,
-                                                          fontFamily: 'Urbanist',
-                                                          fontWeight:
-                                                              FontWeight.w700),
-                                                    ),
-                                                    SizedBox(width: scrWidth*0.18,),
-                                                    SvgPicture.asset("assets/circlearrow.svg"),
-                                                  ],
+                                                Text(
+                                                  "0",
+                                                  style: TextStyle(
+                                                      fontSize: scrWidth * 0.07,
+                                                      color: Colors.white,
+                                                      fontFamily: 'Urbanist',
+                                                      fontWeight:
+                                                          FontWeight.w700),
                                                 )
                                               ],
                                             ),
                                           ),
                                         ),
                                       ),
-                                      InkWell(
-                                        onTap: (){
-                                          Navigator.push(context,MaterialPageRoute(builder: (context)=>SalesPage()));
-                                        },
-                                        child: Container(
-                                            height: scrHeight * 0.11,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          right: scrWidth * 0.65,
+                                          top: scrHeight * 0.02,
+                                          bottom: scrHeight * 0.02),
+                                      child: Text(
+                                        "Products",
+                                        style: TextStyle(
+                                            fontSize: scrWidth * 0.04,
+                                            fontFamily: 'Urbanist',
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                    ),
+                                    Row(
+                                      children: [
+                                        SizedBox(
+                                          width: scrWidth * 0.08,
+                                        ),
+                                        InkWell(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ProductsPage(
+                                                          storeId:
+                                                              store[0].storeId!,
+                                                        )));
+                                          },
+                                          child: Container(
+                                            height: scrHeight * 0.1,
                                             width: scrWidth * 0.4,
                                             decoration: BoxDecoration(
-                                                color: Color(0xff02B558),
+                                                color: Color(0xffF3F3F3),
                                                 borderRadius:
                                                     BorderRadius.circular(
                                                         scrWidth * 0.06)),
@@ -1335,375 +1508,267 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                               child: Column(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
                                                 children: [
                                                   SizedBox(
                                                     height: scrHeight * 0.02,
                                                   ),
                                                   Text(
-                                                    "Sale",
+                                                    "Products",
                                                     style: TextStyle(
-                                                        fontSize: scrWidth * 0.04,
-                                                        color: Colors.white,
+                                                        fontSize:
+                                                            scrWidth * 0.035,
                                                         fontFamily: 'Urbanist',
                                                         fontWeight:
                                                             FontWeight.w600),
                                                   ),
                                                   SizedBox(
-                                                    height: scrHeight * 0.018,
+                                                    height: scrHeight * 0.01,
                                                   ),
-                                                  Row(
-                                                    children: [
-                                                      Container(
-                                                        width: 30,
-                                                        child: Text(
-                                                          "₹0",
-                                                          style: TextStyle(
-                                                              fontSize: scrWidth * 0.07,
-                                                              color: Colors.white,
-                                                              fontFamily: 'Urbanist',
-                                                              fontWeight:
-                                                                  FontWeight.w700),
-                                                        ),
-                                                      ),
-                                                      SizedBox(width: scrWidth*0.14,),
-                                                      SvgPicture.asset("assets/circlearrow.svg"),
-                                                    ],
-                                                  )
+                                                  Text(
+                                                    products.length.toString(),
+                                                    style: TextStyle(
+                                                        fontSize:
+                                                            scrWidth * 0.06,
+                                                        fontFamily: 'Urbanist',
+                                                        fontWeight:
+                                                            FontWeight.w600),
+                                                  ),
                                                 ],
                                               ),
-                                            )),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                      right: scrWidth * 0.46,
-                                      top: scrHeight * 0.026),
-                                  child: InkWell(
-                                    onTap: (){
-                                    },
-                                    child: Container(
-                                      height: scrHeight * 0.11,
-                                      width: scrWidth * 0.4,
-                                      decoration: BoxDecoration(
-                                          color: Color(0xff02B558),
-                                          borderRadius: BorderRadius.circular(
-                                              scrWidth * 0.06)),
-                                      child: Padding(
-                                        padding: EdgeInsets.only(
-                                            left: scrWidth * 0.05),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            SizedBox(
-                                              height: scrHeight * 0.02,
                                             ),
-                                            Text(
-                                              "Store Views",
-                                              style: TextStyle(
-                                                  fontSize: scrWidth * 0.04,
-                                                  color: Colors.white,
-                                                  fontFamily: 'Urbanist',
-                                                  fontWeight: FontWeight.w600),
-                                            ),
-                                            SizedBox(
-                                              height: scrHeight * 0.018,
-                                            ),
-                                            Text(
-                                              "0",
-                                              style: TextStyle(
-                                                  fontSize: scrWidth * 0.07,
-                                                  color: Colors.white,
-                                                  fontFamily: 'Urbanist',
-                                                  fontWeight: FontWeight.w700),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                      right: scrWidth * 0.65,
-                                      top: scrHeight * 0.02,
-                                      bottom: scrHeight * 0.02),
-                                  child: Text(
-                                    "Products",
-                                    style: TextStyle(
-                                        fontSize: scrWidth * 0.04,
-                                        fontFamily: 'Urbanist',
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                ),
-                                Row(
-                                  children: [
-                                    SizedBox(
-                                      width: scrWidth * 0.08,
-                                    ),
-                                    InkWell(
-                                      onTap: (){
-                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>ProductsPage(storeId:store[0].storeId!,)));
-                                      },
-                                      child: Container(
-                                        height: scrHeight * 0.1,
-                                        width: scrWidth * 0.4,
-                                        decoration: BoxDecoration(
-                                            color: Color(0xffF3F3F3),
-                                            borderRadius: BorderRadius.circular(
-                                                scrWidth * 0.06)),
-                                        child: Padding(
-                                          padding: EdgeInsets.only(
-                                              left: scrWidth * 0.05),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: [
-                                              SizedBox(
-                                                height: scrHeight * 0.02,
-                                              ),
-                                              Text(
-                                                "Products",
-                                                style: TextStyle(
-                                                    fontSize: scrWidth * 0.035,
-                                                    fontFamily: 'Urbanist',
-                                                    fontWeight: FontWeight.w600),
-                                              ),
-                                              SizedBox(
-                                                height: scrHeight * 0.01,
-                                              ),
-                                              Text(
-                                                products.length.toString(),
-                                                style: TextStyle(
-                                                    fontSize: scrWidth * 0.06,
-                                                    fontFamily: 'Urbanist',
-                                                    fontWeight: FontWeight.w600),
-                                              ),
-                                            ],
                                           ),
                                         ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 18,
-                                    ),
-                                    InkWell(
-                                      onTap: (){
-                                        Navigator.push(context, MaterialPageRoute(
-                                            builder: (context)=>CategoryPage(storeId: store[0].storeId!,)));
-                                      },
-                                      child: Container(
-                                        height: scrHeight * 0.1,
-                                        width: scrWidth * 0.4,
-                                        decoration: BoxDecoration(
-                                            color: Color(0xffF3F3F3),
-                                            borderRadius: BorderRadius.circular(
-                                                scrWidth * 0.06)),
-                                        child: Padding(
-                                          padding: EdgeInsets.only(
-                                              left: scrWidth * 0.05),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: [
-                                              SizedBox(
-                                                height: scrHeight * 0.02,
+                                        SizedBox(
+                                          width: 18,
+                                        ),
+                                        InkWell(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        CategoryPage(
+                                                          storeId:
+                                                              store[0].storeId!,
+                                                        )));
+                                          },
+                                          child: Container(
+                                            height: scrHeight * 0.1,
+                                            width: scrWidth * 0.4,
+                                            decoration: BoxDecoration(
+                                                color: Color(0xffF3F3F3),
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        scrWidth * 0.06)),
+                                            child: Padding(
+                                              padding: EdgeInsets.only(
+                                                  left: scrWidth * 0.05),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  SizedBox(
+                                                    height: scrHeight * 0.02,
+                                                  ),
+                                                  Text(
+                                                    "Categories",
+                                                    style: TextStyle(
+                                                        fontSize:
+                                                            scrWidth * 0.035,
+                                                        fontFamily: 'Urbanist',
+                                                        fontWeight:
+                                                            FontWeight.w600),
+                                                  ),
+                                                  SizedBox(
+                                                    height: scrHeight * 0.01,
+                                                  ),
+                                                  Text(
+                                                    store[0]
+                                                        .storeCategory!
+                                                        .length
+                                                        .toString(),
+                                                    style: TextStyle(
+                                                        fontSize:
+                                                            scrWidth * 0.06,
+                                                        fontFamily: 'Urbanist',
+                                                        fontWeight:
+                                                            FontWeight.w600),
+                                                  ),
+                                                ],
                                               ),
-                                              Text(
-                                                "Categories",
-                                                style: TextStyle(
-                                                    fontSize: scrWidth * 0.035,
-                                                    fontFamily: 'Urbanist',
-                                                    fontWeight: FontWeight.w600),
-                                              ),
-                                              SizedBox(
-                                                height: scrHeight * 0.01,
-                                              ),
-                                              Text(
-                                                 store[0].storeCategory!.length.toString(),
-                                                style: TextStyle(
-                                                    fontSize: scrWidth * 0.06,
-                                                    fontFamily: 'Urbanist',
-                                                    fontWeight: FontWeight.w600),
-                                              ),
-                                            ],
+                                            ),
                                           ),
                                         ),
-                                      ),
+                                      ],
                                     ),
                                   ],
+                                )
+                              : Column(
+                                  children: [
+                                    SizedBox(
+                                      height: scrHeight * 0.02,
+                                    ),
+                                    Container(
+                                      width: scrWidth * 0.8,
+                                      height: scrHeight * 0.15,
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: scrWidth * 0.015,
+                                        vertical: scrHeight * 0.002,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: textFormFieldFillColor,
+                                        // color: Colors.red,
+                                        borderRadius: BorderRadius.circular(21),
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          SizedBox(
+                                            height: scrHeight * 0.02,
+                                          ),
+                                          Text(
+                                            "75%",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                fontFamily: 'Urbanist',
+                                                fontSize: scrWidth * 0.07,
+                                                fontWeight: FontWeight.w600,
+                                                color: Colors.black),
+                                          ),
+                                          SizedBox(
+                                            height: scrHeight * 0.009,
+                                          ),
+                                          LinearPercentIndicator(
+                                            //leaner progress bar
+                                            animation: true,
+                                            animationDuration: 1000,
+                                            lineHeight: scrHeight * 0.021,
+                                            width: scrWidth * 0.77,
+                                            percent: 0.7,
+                                            alignment: MainAxisAlignment.start,
+                                            barRadius:
+                                                Radius.circular(scrWidth * 0.2),
+                                            progressColor: primarycolor,
+                                            backgroundColor: Color(0xffD9D9D9),
+                                          ),
+                                          SizedBox(
+                                            height: scrHeight * 0.02,
+                                          ),
+                                          Text(
+                                            "Store setup is completed",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                fontFamily: 'Urbanist',
+                                                fontSize: scrWidth * 0.04,
+                                                fontWeight: FontWeight.w600,
+                                                color: Colors.black),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: scrHeight * 0.02,
+                                    ),
+                                    Padding(
+                                      padding:
+                                          EdgeInsets.only(left: 10, right: 10),
+                                      child: Container(
+                                        height: scrHeight * 0.32,
+                                        width: scrWidth * 0.8,
+                                        decoration: BoxDecoration(
+                                            color: Color(0xffF3F3F3),
+                                            borderRadius:
+                                                BorderRadius.circular(20)),
+                                        child: Padding(
+                                          padding: EdgeInsets.only(
+                                              left: scrWidth * 0.05),
+                                          child: AnotherStepper(
+                                            titleTextStyle: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w600,
+                                              fontFamily: 'Urbanist',
+                                              color: Color(0xff232323),
+                                            ),
+                                            subtitleTextStyle: TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w600,
+                                              fontFamily: 'Urbanist',
+                                              color: Color(0xff8B8B8B),
+                                            ),
+                                            dotWidget: Container(
+                                                height: 35,
+                                                width: 35,
+                                                decoration: BoxDecoration(
+                                                  color: Color(0xff30CF7C),
+                                                  borderRadius:
+                                                      BorderRadius.circular(30),
+                                                  // border: Border.all(color: primarycolor,width: 2)
+                                                ),
+                                                child: Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 5, right: 5),
+                                                  child: SvgPicture.asset(
+                                                      "assets/icons/tickmark.svg"),
+                                                )),
+                                            stepperList: [
+                                              StepperData(
+                                                title: "Create online store",
+                                                subtitle:
+                                                    "Congratulations on opening your new \nonline store!",
+                                              ),
+                                              StepperData(
+                                                title: "Add Product",
+                                                subtitle:
+                                                    "Create your first product by adding the \nproduct name and images.",
+                                              ),
+                                              StepperData(
+                                                title: "Payment",
+                                                subtitle:
+                                                    "Confirm Your Payment Section",
+                                              ),
+                                            ],
+                                            horizontalStepperHeight: 200,
+                                            stepperDirection: Axis.vertical,
+                                            inActiveBarColor: Colors.grey,
+                                            activeIndex: 1,
+                                            barThickness: 2,
+                                            activeBarColor: primarycolor,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: scrHeight * 0.02,
+                                    ),
+                                    // GestureDetector(
+                                    //   onTap: () {
+                                    //     // Navigator.push(context, MaterialPageRoute(builder: (context)=>StoreDetailsFill2()));
+                                    //   },
+                                    //   child: Container(
+                                    //     height: scrHeight * 0.055,
+                                    //     width: scrWidth * 0.55,
+                                    //     decoration: BoxDecoration(
+                                    //         color: primarycolor,
+                                    //         borderRadius:
+                                    //         BorderRadius.circular(21.5)),
+                                    //     child: Center(
+                                    //       child: Text(
+                                    //         "View Store",
+                                    //         textAlign: TextAlign.center,
+                                    //         style: TextStyle(
+                                    //             fontFamily: 'Urbanist',
+                                    //             fontSize: scrWidth * 0.04,
+                                    //             fontWeight: FontWeight.w700,
+                                    //             color: Colors.white),
+                                    //       ),
+                                    //     ),
+                                    //   ),
+                                    // ),
+                                  ],
                                 ),
-
-
-                              ],
-                            )
-                                    :Column(
-                children: [
-                  SizedBox(
-                    height: scrHeight * 0.02,
-                  ),
-                  Container(
-                    width: scrWidth * 0.8,
-                    height: scrHeight * 0.15,
-                    padding: EdgeInsets.symmetric(
-                      horizontal: scrWidth * 0.015,
-                      vertical: scrHeight * 0.002,
-                    ),
-                    decoration: BoxDecoration(
-                      color: textFormFieldFillColor,
-                      // color: Colors.red,
-                      borderRadius: BorderRadius.circular(21),
-                    ),
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: scrHeight * 0.02,
-                        ),
-                        Text(
-                          "75%",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontFamily: 'Urbanist',
-                              fontSize: scrWidth * 0.07,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black),
-                        ),
-                        SizedBox(
-                          height: scrHeight * 0.009,
-                        ),
-                        LinearPercentIndicator(
-                          //leaner progress bar
-                          animation: true,
-                          animationDuration: 1000,
-                          lineHeight: scrHeight * 0.021,
-                          width: scrWidth * 0.77,
-                          percent: 0.7,
-                          alignment: MainAxisAlignment.start,
-                          barRadius:
-                          Radius.circular(scrWidth * 0.2),
-                          progressColor: primarycolor,
-                          backgroundColor: Color(0xffD9D9D9),
-                        ),
-                        SizedBox(
-                          height: scrHeight * 0.02,
-                        ),
-                        Text(
-                          "Store setup is completed",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontFamily: 'Urbanist',
-                              fontSize: scrWidth * 0.04,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: scrHeight * 0.02,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 10, right: 10),
-                    child: Container(
-                      height: scrHeight * 0.32,
-                      width: scrWidth * 0.8,
-                      decoration: BoxDecoration(
-                          color: Color(0xffF3F3F3),
-                          borderRadius:
-                          BorderRadius.circular(20)),
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                            left: scrWidth * 0.05),
-                        child: AnotherStepper(
-                          titleTextStyle: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            fontFamily: 'Urbanist',
-                            color: Color(0xff232323),
-                          ),
-                          subtitleTextStyle: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            fontFamily: 'Urbanist',
-                            color: Color(0xff8B8B8B),
-                          ),
-                          dotWidget: Container(
-                              height: 35,
-                              width: 35,
-                              decoration: BoxDecoration(
-                                color: Color(0xff30CF7C),
-                                borderRadius:
-                                BorderRadius.circular(30),
-                                // border: Border.all(color: primarycolor,width: 2)
-                              ),
-                              child: Padding(
-                                padding: EdgeInsets.only(
-                                    left: 5, right: 5),
-                                child: SvgPicture.asset(
-                                    "assets/icons/tickmark.svg"),
-                              )),
-                          stepperList: [
-                            StepperData(
-                              title: "Create online store",
-                              subtitle:
-                              "Congratulations on opening your new \nonline store!",
-                            ),
-                            StepperData(
-                              title: "Add Product",
-                              subtitle:
-                              "Create your first product by adding the \nproduct name and images.",
-                            ),
-                            StepperData(
-                              title: "Payment",
-                              subtitle:
-                              "Confirm Your Payment Section",
-                            ),
-                          ],
-                          horizontalStepperHeight: 200,
-                          stepperDirection: Axis.vertical,
-                          inActiveBarColor: Colors.grey,
-                          activeIndex: 1,
-                          barThickness: 2,
-                          activeBarColor: primarycolor,
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: scrHeight * 0.02,
-                  ),
-                  // GestureDetector(
-                  //   onTap: () {
-                  //     // Navigator.push(context, MaterialPageRoute(builder: (context)=>StoreDetailsFill2()));
-                  //   },
-                  //   child: Container(
-                  //     height: scrHeight * 0.055,
-                  //     width: scrWidth * 0.55,
-                  //     decoration: BoxDecoration(
-                  //         color: primarycolor,
-                  //         borderRadius:
-                  //         BorderRadius.circular(21.5)),
-                  //     child: Center(
-                  //       child: Text(
-                  //         "View Store",
-                  //         textAlign: TextAlign.center,
-                  //         style: TextStyle(
-                  //             fontFamily: 'Urbanist',
-                  //             fontSize: scrWidth * 0.04,
-                  //             fontWeight: FontWeight.w700,
-                  //             color: Colors.white),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-                ],
-              ),
 
               //after store created
             ]),
@@ -1714,5 +1779,4 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
   }
 }
 
-class HomePage {
-}
+class HomePage {}

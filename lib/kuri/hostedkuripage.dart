@@ -8,9 +8,11 @@ import 'package:percent_indicator/linear_percent_indicator.dart';
 
 import '../model/Kuri/kuriModel.dart';
 import '../model/usermodel.dart';
+import '../screens/home_screen.dart';
 import '../screens/splash_screen.dart';
 import '../utils/customclip2.dart';
 import '../utils/themes.dart';
+import 'add_member_search_kuri.dart';
 import 'add_members_kuri.dart';
 
 class HostedKuriPage extends StatefulWidget {
@@ -857,7 +859,7 @@ class _HostedKuriPageState extends State<HostedKuriPage> {
                                             context,
                                             MaterialPageRoute(
                                               builder: (context) =>
-                                                  AddMembersKuri(kuri: kuri!),
+                                                  AddMembersearch(kuri: kuri!),
                                             ));
                                       },
                                       child: Container(

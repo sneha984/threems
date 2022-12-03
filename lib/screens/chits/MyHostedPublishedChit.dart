@@ -5,6 +5,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 
+import '../../Spinner.dart';
 import '../../kuri/createkuri.dart';
 import '../../model/ChitModel.dart';
 import '../../model/usermodel.dart';
@@ -14,6 +15,7 @@ import '../../utils/themes.dart';
 import '../../pagess/approvepage.dart';
 import 'Chit__Chat_Screen.dart';
 import 'Draw_OPTOUT_Page.dart';
+import 'add_members_search.dart';
 import 'chit_winners_Short_List.dart';
 import 'create_new_chit_screen.dart';
 
@@ -380,6 +382,7 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
                                                     ChatScreen(
                                                   name: chit!.chitName!,
                                                   id: chit!.chitId!,
+                                                  chit: chit!,
                                                   profile: chit!.profile!,
                                                   members: totalMembers,
                                                 ),
@@ -390,6 +393,35 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
                                           color: Colors.white,
                                         )),
                                   ),
+                                  SizedBox(
+                                    width: scrWidth * 0.05,
+                                  ),
+                                  chit!.status! < 2
+                                      ? Padding(
+                                          padding: EdgeInsets.only(
+                                              bottom: scrHeight * 0.02),
+                                          child: InkWell(
+                                            onTap: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        AddMembersSearch(
+                                                      chit: chit!,
+                                                    ),
+                                                  ));
+                                            },
+                                            child: SvgPicture.asset(
+                                              "assets/icons/connected.svg",
+                                              width: scrWidth * 0.059,
+                                              height: scrWidth * 0.055,
+                                              fit: BoxFit.contain,
+                                              // width: 19,
+                                              // height: 20,
+                                            ),
+                                          ),
+                                        )
+                                      : SizedBox(),
                                   SizedBox(
                                     width: scrWidth * 0.05,
                                   ),

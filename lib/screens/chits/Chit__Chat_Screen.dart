@@ -1,596 +1,644 @@
-import 'dart:async';
-import 'dart:io';
-import 'dart:math';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:intl/intl.dart';
-import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
-import '../../Authentication/root.dart';
-import '../../model/usermodel.dart';
-import '../splash_screen.dart';
-import 'imageView.dart';
+import 'package:threems/screens/splash_screen.dart';
+import 'package:threems/utils/themes.dart';
+import 'package:flutter_bounce/flutter_bounce.dart';
 
+import '../../Authentication/root.dart';
+import '../../model/ChitModel.dart';
+import '../../model/usermodel.dart';
+
+// import 'package:just_audio/just_audio.dart' as ap;
 class ChatScreen extends StatefulWidget {
+  final ChitModel chit;
   final String name;
   final String id;
   final String profile;
   final Map<String, UserModel> members;
-  const ChatScreen(
-      {Key? key,
-      required this.name,
-      required this.id,
-      required this.profile,
-      required this.members})
-      : super(key: key);
+  const ChatScreen({
+    Key? key,
+    required this.chit,
+    required this.name,
+    required this.id,
+    required this.profile,
+    required this.members,
+  }) : super(key: key);
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  TextEditingController textData = TextEditingController();
-  DateTime? d;
-  bool emojiShowing = false;
-  final ImagePicker _picker = ImagePicker();
-  File? chatimage;
-  File? file;
-  dynamic url;
-  String? chatfileName;
-  String? ext;
-  String? size;
-  var bytes;
+  var w = scrWidth;
 
-  var loginKey = GlobalKey<FormState>();
+  TextEditingController msg = TextEditingController();
+  List chat = [];
+  getChat() {
+    FirebaseFirestore.instance
+        .collection('chit')
+        .doc(widget.id)
+        .collection('chat')
+        .orderBy('time', descending: false)
+        .snapshots()
+        .listen((event) {
+      chat = event.docs;
 
-  _onEmojiSelected(Emoji emoji) {
-    textData
-      ..text += emoji.emoji
-      ..selection = TextSelection.fromPosition(
-          TextPosition(offset: textData.text.length));
+      if (mounted) {
+        setState(() {});
+      }
+    });
   }
 
-  _onBackspacePressed() {
-    textData
-      ..text = textData.text.characters.skipLast(1).toString()
-      ..selection = TextSelection.fromPosition(
-          TextPosition(offset: textData.text.length));
+  ItemScrollController _scrollController = ItemScrollController();
+  final ItemPositionsListener itemPositionsListener =
+      ItemPositionsListener.create();
+  @override
+  void initState() {
+    getChat();
+    msg = TextEditingController();
+    // students = classMap[CurrentUserClassId]['students'];
+    // tutors = classMap[CurrentUserClassId]['tutors'];
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    print(widget.id);
     return Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Colors.teal,
-          leadingWidth: 90, //MediaQuery.of(context).size.width,
-          leading: Row(children: [
-            IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: const Icon(
-                Icons.arrow_back,
-                color: Color(0xff101010),
-              ),
+      backgroundColor: Colors.white,
+      body: SafeArea(
+          child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: EdgeInsets.fromLTRB(
+              w * 0.075,
+              w * 0.05,
+              w * 0.075,
+              w * 0.05,
             ),
-            CircleAvatar(
-              radius: 20,
-              backgroundImage: NetworkImage(widget.profile),
-              child: widget.profile == '' ? Icon(Icons.groups) : SizedBox(),
-            )
-          ]),
-          title: Text(widget.name),
-        ),
-        body: GestureDetector(
-          onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-          child: Container(
-            padding: const EdgeInsets.only(left: 5, right: 5),
-            color: Colors.grey,
-            child: Column(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                StreamBuilder<QuerySnapshot>(
-                    stream: FirebaseFirestore.instance
-                        .collection("chit")
-                        .doc(widget.id)
-                        .collection('chats')
-                        .orderBy('sendTime', descending: true)
-                        .snapshots(),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return const CircularProgressIndicator();
-                      }
-                      var msg = snapshot.data!.docs;
-                      print(']]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]');
-                      print(msg.length);
-                      print(snapshot);
-                      return Expanded(
-                        child: ListView.builder(
-                            reverse: true,
-                            scrollDirection: Axis.vertical,
-                            shrinkWrap: true,
-                            // physics: const BouncingScrollPhysics(),
-                            itemCount: msg.length,
-                            itemBuilder: (context, index) {
-                              List readBy = msg[index]['readBy'];
-                              if (msg[index]['senderId'] != currentuserid) {
-                                if (readBy.contains(currentuserid)) {
-                                } else {
-                                  FirebaseFirestore.instance
-                                      .collection("chit")
-                                      .doc(widget.id)
-                                      .collection('chats')
-                                      .doc(msg[index].id)
-                                      .update({
-                                    'readBy':
-                                        FieldValue.arrayUnion([currentuserid])
-                                  });
-                                }
-                              }
-
-                              Timestamp t = msg[index]['sendTime'];
-                              d = t.toDate();
-                              if (!snapshot.hasData) {
-                                return const CircularProgressIndicator();
-                              }
-                              return Align(
-                                alignment:
-                                    (msg[index]["senderId"] == currentuserid
-                                        ? Alignment.topRight
-                                        : Alignment.topLeft),
-                                child: ConstrainedBox(
-                                  constraints: BoxConstraints(
-                                      maxWidth:
-                                          MediaQuery.of(context).size.width -
-                                              45,
-                                      minWidth: 115),
-                                  child: Card(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(15)),
-                                    color:
-                                        (msg[index]["senderId"] == currentuserid
-                                            ? Colors.green[200]
-                                            : Colors.grey.shade200),
-                                    margin: const EdgeInsets.symmetric(
-                                        horizontal: 15, vertical: 5),
-                                    child: Stack(
-                                      children: [
-                                        InkWell(
-                                          onTap: () {
-                                            if (msg[index]['type'] == "image") {
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        FileViewPage(
-                                                      url: msg[index]['file'],
-                                                      type: 'img',
-                                                    ),
-                                                  ));
-                                            } else if (msg[index]['type'] ==
-                                                "file") {
-                                              if (msg[index]['ext'] == "mp4") {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          FileViewPage(
-                                                        url: msg[index]['file'],
-                                                        type: 'vid',
-                                                      ),
-                                                    ));
-                                              } else if (msg[index]['ext'] ==
-                                                  "jpg") {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          FileViewPage(
-                                                        url: msg[index]['file'],
-                                                        type: 'img',
-                                                      ),
-                                                    ));
-                                              } else if (msg[index]['ext'] ==
-                                                  "pdf") {
-                                                Uri link = Uri.parse(
-                                                    msg[index]['file']);
-                                                launchUrl(link);
-                                              }
-                                            }
-                                          },
-                                          child: msg[index]["senderId"] ==
-                                                  currentuserid
-                                              ? Container(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                    left: 10,
-                                                    right: 30,
-                                                    top: 5,
-                                                    bottom: 20,
-                                                  ),
-                                                  child: msg[index]['type'] ==
-                                                          "text"
-                                                      ? Text(
-                                                          msg[index]["message"],
-                                                          style:
-                                                              const TextStyle(
-                                                            fontSize: 16,
-                                                            color: Colors.black,
-                                                          ),
-                                                        )
-                                                      : msg[index]['type'] ==
-                                                              "image"
-                                                          ? CachedNetworkImage(
-                                                              imageUrl:
-                                                                  msg[index]
-                                                                      ['file'])
-                                                          : Column(
-                                                              children: [
-                                                                Row(
-                                                                  children: [
-                                                                    Icon(Icons
-                                                                        .file_present),
-                                                                    Flexible(
-                                                                      child:
-                                                                          Text(
-                                                                        msg[index]
-                                                                            [
-                                                                            'fileName'],
-                                                                        style: TextStyle(
-                                                                            color:
-                                                                                Colors.black),
-                                                                      ),
-                                                                    )
-                                                                  ],
-                                                                ),
-                                                                Row(
-                                                                  children: [
-                                                                    Text(msg[index]
-                                                                            [
-                                                                            'size']
-                                                                        .toString()),
-                                                                    Text("•"),
-                                                                    Text(msg[
-                                                                            index]
-                                                                        ['ext'])
-                                                                  ],
-                                                                )
-                                                              ],
-                                                            ))
-                                              : Container(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                    left: 10,
-                                                    right: 30,
-                                                    top: 5,
-                                                    bottom: 20,
-                                                  ),
-                                                  child: Column(
-                                                    children: [
-                                                      Text(
-                                                        widget
-                                                            .members[msg[index]
-                                                                ['senderId']]!
-                                                            .userName!,
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                      ),
-                                                      SizedBox(
-                                                          height: scrHeight *
-                                                              0.006),
-                                                      msg[index]['type'] ==
-                                                              "text"
-                                                          ? Text(
-                                                              msg[index]
-                                                                  ["message"],
-                                                              style:
-                                                                  const TextStyle(
-                                                                fontSize: 16,
-                                                                color: Colors
-                                                                    .black,
-                                                              ),
-                                                            )
-                                                          : msg[index][
-                                                                      'type'] ==
-                                                                  "image"
-                                                              ? CachedNetworkImage(
-                                                                  imageUrl: msg[
-                                                                          index]
-                                                                      ['file'])
-                                                              : Column(
-                                                                  children: [
-                                                                    Row(
-                                                                      children: [
-                                                                        Icon(Icons
-                                                                            .file_present),
-                                                                        Text(
-                                                                          msg[index]
-                                                                              [
-                                                                              'fileName'],
-                                                                          style:
-                                                                              TextStyle(color: Colors.black),
-                                                                        )
-                                                                      ],
-                                                                    ),
-                                                                    Row(
-                                                                      children: [
-                                                                        Text(msg[index]['size']
-                                                                            .toString()),
-                                                                        Text(
-                                                                            "•"),
-                                                                        Text(msg[index]
-                                                                            [
-                                                                            'ext'])
-                                                                      ],
-                                                                    )
-                                                                  ],
-                                                                )
-                                                    ],
-                                                  ),
-                                                ),
-                                        ),
-                                        Positioned(
-                                          bottom: 4,
-                                          right: 10,
-                                          child: Row(
-                                            children: [
-                                              Text(
-                                                DateFormat('h:mm a')
-                                                    .format(d!)
-                                                    .toLowerCase(),
-                                                style: TextStyle(
-                                                  fontSize: 11,
-                                                  color: Colors.grey[600],
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                width: 5,
-                                              ),
-                                              // msg[index]["senderId"] ==
-                                              //         currentuserid
-                                              //     ? Icon(
-                                              //         Icons.done_all,
-                                              //         color: msg[index]
-                                              //                 ["readBy"]
-                                              //             ? Colors.blue
-                                              //             : Colors.grey,
-                                              //         size: 20,
-                                              //       )
-                                              //     : const SizedBox()
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              );
-                            }),
-                      );
-                    }),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.793,
-                      child: TextFormField(
-                        onTap: () {
-                          setState(() {
-                            emojiShowing = false;
-                          });
-                        },
-                        autofocus: false,
-                        controller: textData,
-                        decoration: InputDecoration(
-                          focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30),
-                              borderSide: const BorderSide(
-                                  width: 0, color: Colors.white)),
-                          prefixIcon: InkWell(
-                            onTap: () async {
-                              FocusManager.instance.primaryFocus?.unfocus();
-                              await Future.delayed(
-                                  const Duration(milliseconds: 99));
-
-                              setState(() {
-                                emojiShowing = !emojiShowing;
-                              });
-                            },
-                            child: const Icon(
-                              Icons.emoji_emotions_outlined,
-                              color: Colors.grey,
-                            ),
-                          ),
-                          fillColor: Colors.white,
-                          filled: true,
-                          hintText: 'Message',
-                          contentPadding: const EdgeInsets.all(15),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30)),
-
-                          // suffixIcon: Row(
-                          //   children: [
-                          //     Transform.rotate(
-                          //         angle: 45,
-                          //         child: IconButton(
-                          //           icon: const Icon(
-                          //               Icons.attach_file_outlined),
-                          //           onPressed: () {},
-                          //         ))
-                          //   ],
-                          // ),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.only(bottom: 8),
-                      child: FloatingActionButton(
-                        backgroundColor: Colors.teal,
-                        onPressed: () {
-                          sendMessage();
-                          setState(() {
-                            textData.clear();
-                          });
-                        },
-                        child: const Icon(Icons.send),
-                      ),
-                    )
-                  ],
-                ),
-                Offstage(
-                  offstage: !emojiShowing,
-                  child: SizedBox(
-                    height: 250,
-                    child: EmojiPicker(
-                        onEmojiSelected: (Category? category, Emoji emoji) {
-                          _onEmojiSelected(emoji);
-                        },
-                        onBackspacePressed: _onBackspacePressed,
-                        config: const Config(
-                            columns: 7,
-                            // Issue: https://github.com/flutter/flutter/issues/28894
-                            emojiSizeMax: 32 * 1.0,
-                            verticalSpacing: 0,
-                            horizontalSpacing: 0,
-                            gridPadding: EdgeInsets.zero,
-                            initCategory: Category.RECENT,
-                            bgColor: Color(0xFFF2F2F2),
-                            indicatorColor: Colors.teal,
-                            iconColor: Colors.grey,
-                            iconColorSelected: Colors.black,
-                            backspaceColor: Colors.grey,
-                            skinToneDialogBgColor: Colors.white,
-                            skinToneIndicatorColor: Colors.grey,
-                            enableSkinTones: true,
-                            showRecentsTab: true,
-                            recentsLimit: 28,
-                            replaceEmojiOnLimitExceed: false,
-                            noRecents: Text(
-                              'No Recent',
-                              style: TextStyle(
-                                  fontSize: 20, color: Colors.black26),
-                              textAlign: TextAlign.center,
-                            ),
-                            tabIndicatorAnimDuration: kTabScrollDuration,
-                            categoryIcons: CategoryIcons(),
-                            buttonMode: ButtonMode.MATERIAL)),
+                Expanded(
+                  child: Text(
+                    widget.name,
+                    style: GoogleFonts.lexend(
+                        fontSize: 14, fontWeight: FontWeight.w600),
                   ),
                 ),
+                SizedBox(
+                  width: 5,
+                ),
+                InkWell(
+                    onTap: () {
+                      classMates();
+                    },
+                    child: Icon(Icons.more_horiz_outlined))
               ],
             ),
           ),
-        ));
+          chat.length == 0
+              ? Expanded(child: Container())
+              : Expanded(
+                  child: ScrollablePositionedList.builder(
+                  itemScrollController: _scrollController,
+                  itemPositionsListener: itemPositionsListener,
+                  padding: EdgeInsets.only(
+                    left: w * 0.025,
+                    right: w * 0.025,
+                  ),
+                  itemCount: chat.length,
+                  itemBuilder: (context, index) {
+                    DateTime date = chat[index]['time'] == null
+                        ? DateTime.now()
+                        : chat[index]['time'].toDate();
+                    String time = formattedTime(date).toString();
+                    return chat[index]['time'] == null
+                        ? Container()
+                        : Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              (index != 0 &&
+                                      date.toString().substring(0, 10) !=
+                                          chat[(index - 1)]['time']
+                                              .toDate()
+                                              .toString()
+                                              .substring(0, 10))
+                                  ? Center(
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 5),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              color:
+                                                  Colors.green.withOpacity(0.5),
+                                              borderRadius:
+                                                  BorderRadius.circular(5)),
+                                          child: Padding(
+                                            padding: EdgeInsets.only(
+                                                top: 5,
+                                                bottom: 5,
+                                                left: 15,
+                                                right: 15),
+                                            child: Text(
+                                              (date
+                                                          .toString()
+                                                          .substring(0, 10) ==
+                                                      DateTime.now()
+                                                          .toString()
+                                                          .substring(0, 10))
+                                                  ? 'Today'
+                                                  : (date.toString().substring(
+                                                              0, 10) ==
+                                                          DateTime.now()
+                                                              .add(Duration(
+                                                                  days: -1))
+                                                              .toString()
+                                                              .substring(0, 10))
+                                                      ? 'Yesterday'
+                                                      : DateFormat(
+                                                              "MMM dd yyyy")
+                                                          .format(date),
+                                              style: GoogleFonts.lexend(
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 12,
+                                                color: Colors.grey.shade700,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  : index == 0
+                                      ? Center(
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 5),
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                  color: Colors.green
+                                                      .withOpacity(0.5),
+                                                  borderRadius:
+                                                      BorderRadius.circular(5)),
+                                              child: Padding(
+                                                padding: EdgeInsets.only(
+                                                    top: 5,
+                                                    bottom: 5,
+                                                    left: 15,
+                                                    right: 15),
+                                                child: Text(
+                                                  (date.toString().substring(
+                                                              0, 10) ==
+                                                          DateTime.now()
+                                                              .toString()
+                                                              .substring(0, 10))
+                                                      ? 'Today'
+                                                      : (date
+                                                                  .toString()
+                                                                  .substring(
+                                                                      0, 10) ==
+                                                              DateTime.now()
+                                                                  .add(Duration(
+                                                                      days: -1))
+                                                                  .toString()
+                                                                  .substring(
+                                                                      0, 10))
+                                                          ? 'Yesterday'
+                                                          : DateFormat(
+                                                                  "MMM dd yyyy")
+                                                              .format(date),
+                                                  style: GoogleFonts.lexend(
+                                                    fontWeight: FontWeight.w600,
+                                                    fontSize: 12,
+                                                    color: Colors.grey.shade700,
+                                                  ),
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      : Container(),
+                              chat[index]['id'] == currentuserid
+                                  ? Padding(
+                                      padding: EdgeInsets.only(
+                                          bottom: w * 0.03, left: w * 0.125),
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Expanded(
+                                              child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.stretch,
+                                            children: [
+                                              SizedBox(
+                                                height: w * 0.015,
+                                              ),
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                  color: Colors.grey.shade600,
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                    topLeft:
+                                                        Radius.circular(10),
+                                                    bottomRight:
+                                                        Radius.circular(10),
+                                                    bottomLeft:
+                                                        Radius.circular(10),
+                                                  ),
+                                                ),
+                                                child: Padding(
+                                                  padding:
+                                                      EdgeInsets.all(w * 0.03),
+                                                  child: Text(
+                                                    chat[index]['msg'],
+                                                    style: GoogleFonts.lexend(
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        fontSize: 14,
+                                                        color: Colors.white),
+                                                    textAlign: TextAlign.end,
+                                                  ),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: w * 0.01,
+                                              ),
+                                              Text(
+                                                time.toString(),
+                                                style: GoogleFonts.lexend(
+                                                  fontWeight: FontWeight.w400,
+                                                  fontSize: 12,
+                                                  color: Colors.grey.shade700,
+                                                ),
+                                                textAlign: TextAlign.end,
+                                              ),
+                                            ],
+                                          )),
+                                          SizedBox(
+                                            width: w * 0.025,
+                                          ),
+                                          CircleAvatar(
+                                            radius: w * 0.05,
+                                            backgroundImage: NetworkImage(
+                                                chat[index]['photo']),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  : Padding(
+                                      padding: EdgeInsets.only(
+                                          bottom: w * 0.03, right: w * 0.125),
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          CircleAvatar(
+                                            radius: w * 0.05,
+                                            backgroundImage: NetworkImage(
+                                                chat[index]['photo']),
+                                          ),
+                                          SizedBox(
+                                            width: w * 0.025,
+                                          ),
+                                          Expanded(
+                                              child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.stretch,
+                                            children: [
+                                              Text(
+                                                chat[index]['name'],
+                                                style: GoogleFonts.lexend(
+                                                    fontWeight: FontWeight.w600,
+                                                    fontSize: 13),
+                                              ),
+                                              SizedBox(
+                                                height: w * 0.015,
+                                              ),
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                  color: chat[index]['type'] ==
+                                                          1
+                                                      ? primarycolor
+                                                          .withOpacity(0.5)
+                                                      : Colors.grey.shade200,
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                    topRight:
+                                                        Radius.circular(10),
+                                                    bottomRight:
+                                                        Radius.circular(10),
+                                                    bottomLeft:
+                                                        Radius.circular(10),
+                                                  ),
+                                                ),
+                                                child: Padding(
+                                                  padding:
+                                                      EdgeInsets.all(w * 0.03),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      // chat[index]['type']==1&&chat[index]['voice_clip']!=''?AudioPlayer(
+                                                      //   source: ap.AudioSource.uri(Uri.tryParse(chat[index]['voice_clip'])), onDelete: null,message: true,
+                                                      // ):Container(),
+                                                      (chat[index]['type'] ==
+                                                                  1 &&
+                                                              chat[index][
+                                                                      'media'] !=
+                                                                  '' &&
+                                                              chat[index][
+                                                                      'voice_clip'] ==
+                                                                  '')
+                                                          ? Image.network(
+                                                              chat[index]
+                                                                  ['media'])
+                                                          : Container(),
+                                                      (chat[index]['type'] ==
+                                                                  1 &&
+                                                              chat[index][
+                                                                      'media'] !=
+                                                                  '')
+                                                          ? SizedBox(
+                                                              height: 5,
+                                                            )
+                                                          : Container(),
+                                                      chat[index]['type'] == 0
+                                                          ? Text(
+                                                              chat[index]
+                                                                  ['msg'],
+                                                              style: GoogleFonts.lexend(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400,
+                                                                  fontSize: 14,
+                                                                  color: Colors
+                                                                      .grey
+                                                                      .shade900),
+                                                            )
+                                                          : chat[index]['type'] ==
+                                                                      1 &&
+                                                                  chat[index][
+                                                                          'voice_clip'] ==
+                                                                      ''
+                                                              ? Text(
+                                                                  chat[index]
+                                                                      ['msg'],
+                                                                  style: GoogleFonts.lexend(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w400,
+                                                                      fontSize:
+                                                                          14,
+                                                                      color: Colors
+                                                                          .grey
+                                                                          .shade900),
+                                                                )
+                                                              : Container(),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                height: w * 0.01,
+                                              ),
+                                              Text(
+                                                time.toString(),
+                                                style: GoogleFonts.lexend(
+                                                    fontWeight: FontWeight.w400,
+                                                    fontSize: 12,
+                                                    color:
+                                                        Colors.grey.shade700),
+                                              ),
+                                            ],
+                                          ))
+                                        ],
+                                      ),
+                                    )
+                            ],
+                          );
+                  },
+                )),
+          Padding(
+            padding: EdgeInsets.all(w * 0.05),
+            child: Row(
+              children: [
+                Expanded(
+                    child: Container(
+                  height: w * 0.13,
+                  child: Center(
+                    child: TextFormField(
+                      keyboardType: TextInputType.multiline,
+                      textCapitalization: TextCapitalization.sentences,
+                      controller: msg,
+                      style: GoogleFonts.lexend(
+                          fontSize: 14, color: Colors.grey.shade700),
+                      cursorColor: Colors.grey.shade700,
+                      decoration: InputDecoration(
+                          filled: true,
+                          hintText: 'Type here...',
+                          hintStyle: GoogleFonts.lexend(
+                              fontSize: 14, color: Colors.grey.shade600),
+                          fillColor: Colors.grey.shade200,
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30),
+                              borderSide:
+                                  BorderSide(color: Colors.transparent)),
+                          enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30),
+                              borderSide:
+                                  BorderSide(color: Colors.transparent)),
+                          disabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30),
+                              borderSide:
+                                  BorderSide(color: Colors.transparent)),
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30),
+                              borderSide:
+                                  BorderSide(color: Colors.transparent))),
+                    ),
+                  ),
+                )),
+                SizedBox(
+                  width: w * 0.025,
+                ),
+                Bounce(
+                  onPressed: () async {
+                    FocusManager.instance.primaryFocus?.unfocus();
+                    if (msg.text != '') {
+                      await FirebaseFirestore.instance
+                          .collection('chit')
+                          .doc(widget.id)
+                          .collection('chat')
+                          .add({
+                        'type': 0,
+                        'name': currentuser!.userName,
+                        'photo': currentuser!.userImage,
+                        'msg': msg.text,
+                        'time': FieldValue.serverTimestamp(),
+                        'id': currentuserid,
+                      });
+                    }
+                    msg.clear();
+
+                    _scrollController.scrollTo(
+                        index: chat.length - 1,
+                        duration: Duration(seconds: 2),
+                        curve: Curves.easeInOutCubic);
+                  },
+                  duration: Duration(milliseconds: 100),
+                  child: Container(
+                    height: w * 0.12,
+                    width: w * 0.15,
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment(0.8, 1),
+                          colors: <Color>[
+                            Color(0xff02B558),
+                            primarycolor,
+                          ], // Gradient from https://learnui.design/tools/gradient-generator.html
+                          tileMode: TileMode.mirror,
+                        ),
+                        borderRadius: BorderRadius.circular(30)),
+                    child: Center(
+                        child: SvgPicture.asset('assets/icons/send.svg')),
+                  ),
+                )
+              ],
+            ),
+          )
+        ],
+      )),
+    );
   }
 
-  imgPicker() async {
-    XFile? file =
-        await _picker.pickImage(source: ImageSource.camera, imageQuality: 45);
-    if (file != null) {
-      chatimage = File(file.path);
-      setState(() {});
-    }
+  classMates() {
+    // YoutubePlayerController _controllerZ;
+    // _controllerZ = YoutubePlayerController(
+    //
+    //   initialVideoId:tutorials['PopUpVideoUrl'] ,
+    //   flags: YoutubePlayerFlags(
+    //     autoPlay: true,
+    //     mute: false,
+    //
+    //   ),
+    // );
+    return showModalBottomSheet(
+        backgroundColor: Colors.transparent,
+        context: context,
+        isScrollControlled: true,
+        builder: (context) => StatefulBuilder(
+              builder: (context, setState) {
+                return Container(
+                    height: MediaQuery.of(context).size.height * 0.8,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(30),
+                          topRight: Radius.circular(30),
+                        )),
+                    child: Padding(
+                      padding: EdgeInsets.all(w * 0.05),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    'Class Members',
+                                    style: GoogleFonts.lexend(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: w * 0.04),
+                                  ),
+                                  SizedBox(
+                                    width: w * 0.05,
+                                  ),
+                                  CircleAvatar(
+                                    backgroundColor: Colors.black,
+                                    radius: w * 0.03,
+                                    child: Text(
+                                      (widget.chit.members!.length).toString(),
+                                      style: GoogleFonts.lexend(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: w * 0.02,
+                                          color: Colors.white60),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Bounce(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                duration: Duration(milliseconds: 100),
+                                child: CircleAvatar(
+                                    backgroundColor: primarycolor,
+                                    radius: w * 0.035,
+                                    child: Icon(
+                                      Icons.close,
+                                      color: Colors.black,
+                                      size: w * 0.04,
+                                    )),
+                              ),
+                            ],
+                          ),
+                          Divider(),
+                          Expanded(
+                            child: ListView.builder(
+                              itemCount: widget.chit.members!.length,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding: EdgeInsets.only(top: 10),
+                                  child: Row(
+                                    children: [
+                                      CircleAvatar(
+                                        backgroundColor: Colors.grey.shade100,
+                                        backgroundImage: NetworkImage(widget
+                                            .members[
+                                                widget.chit.members![index]]!
+                                            .userImage!),
+                                      ),
+                                      SizedBox(
+                                        width: w * 0.05,
+                                      ),
+                                      Text(
+                                        currentuserid ==
+                                                widget.chit.members![index]
+                                            ? 'You'
+                                            : widget
+                                                .members[widget
+                                                    .chit.members![index]]!
+                                                .userName!,
+                                        style: GoogleFonts.lexend(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: w * 0.035,
+                                            color: Colors.grey.shade700),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ));
+              },
+            ));
   }
+}
 
-  sendMessage() {
-    FirebaseFirestore.instance
-        .collection("chit")
-        .doc(widget.id)
-        .collection('chats')
-        .add({
-      'message': textData.text,
-      'senderId': currentuserid,
-      'readBy': [],
-      'sendTime': DateTime.now(),
-      'type': 'text'
-    }).then((value) {
-      value.update({'msgId': value.id});
-    });
-  }
-
-  sendPhoto() {
-    String fileName = DateTime.now().toString();
-    var ref = FirebaseStorage.instance
-        .ref()
-        .child('chit/${widget.id}/chat/$fileName');
-    UploadTask uploadTask = ref.putFile(File(chatimage!.path));
-    setState(() {
-      chatimage = null;
-    });
-    uploadTask.then((res) async {
-      url = (await ref.getDownloadURL()).toString();
-    }).then((value) => FirebaseFirestore.instance
-            .collection("chit")
-            .doc(widget.id)
-            .collection('chats')
-            .add({
-          "file": url,
-          "senderId": currentuserid,
-          "sendTime": DateTime.now(),
-          "readBy": [],
-          "type": "image"
-        }).then((value) {
-          value.update({"msgId": value.id});
-        }));
-  }
-
-  sendFile() {
-    var ref = FirebaseStorage.instance
-        .ref()
-        .child('chat/${DateTime.now().toString()}');
-    UploadTask uploadTask = ref.putFile(File(file!.path));
-    setState(() {
-      file = null;
-    });
-    uploadTask.then((res) async {
-      url = (await ref.getDownloadURL()).toString();
-    }).then((value) => FirebaseFirestore.instance
-            .collection("chit")
-            .doc(widget.id)
-            .collection('chats')
-            .add({
-          "file": url,
-          "fileName": chatfileName,
-          "senderId": currentuserid,
-          "sendTime": DateTime.now(),
-          "readBy": [],
-          "type": "file",
-          "ext": ext,
-          "size": size,
-        }).then((value) {
-          value.update({"msgId": value.id});
-        }));
-  }
-
-  pickFile() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
-
-    if (result != null) {
-      file = File(result.files.single.path!);
-      chatfileName = result.files.single.name;
-      ext = result.files.single.extension;
-      bytes = result.files.single.bytes;
-
-      size = formatBytes(result.files.single.size, 2);
-      setState(() {});
-      print('bytes!!!!!!!!' + bytes.toString());
-    } else {
-      // User canceled the picker
-    }
-  }
-
-  static String formatBytes(int bytes, int decimals) {
-    if (bytes <= 0) return "0 B";
-    const suffixes = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
-    var i = (log(bytes) / log(1024)).floor();
-    return '${(bytes / pow(1000, i)).toStringAsFixed(decimals)} ${suffixes[i]}';
-  }
+String formattedTime(DateTime dateTime) {
+  return DateFormat().add_jm().format(dateTime);
 }

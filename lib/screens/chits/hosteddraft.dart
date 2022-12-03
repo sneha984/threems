@@ -11,6 +11,7 @@ import '../splash_screen.dart';
 import '../../utils/customclip2.dart';
 import '../../utils/themes.dart';
 import 'Chit__Chat_Screen.dart';
+import 'add_members_search.dart';
 import 'create_new_chit_screen.dart';
 
 class HostedDraftPage extends StatefulWidget {
@@ -360,6 +361,7 @@ class _HostedDraftPageState extends State<HostedDraftPage> {
                                                 MaterialPageRoute(
                                                   builder: (context) =>
                                                       ChatScreen(
+                                                    chit: chit!,
                                                     name: chit!.chitName!,
                                                     id: chit!.chitId!,
                                                     profile: chit!.profile!,
@@ -371,6 +373,33 @@ class _HostedDraftPageState extends State<HostedDraftPage> {
                                             Icons.chat_outlined,
                                             color: Colors.white,
                                           )),
+                                    ),
+                                    SizedBox(
+                                      width: scrWidth * 0.05,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          bottom: scrHeight * 0.02),
+                                      child: InkWell(
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    AddMembersSearch(
+                                                  chit: chit!,
+                                                ),
+                                              ));
+                                        },
+                                        child: SvgPicture.asset(
+                                          "assets/icons/connected.svg",
+                                          width: scrWidth * 0.059,
+                                          height: scrWidth * 0.055,
+                                          fit: BoxFit.contain,
+                                          // width: 19,
+                                          // height: 20,
+                                        ),
+                                      ),
                                     ),
                                     SizedBox(
                                       width: scrWidth * 0.05,

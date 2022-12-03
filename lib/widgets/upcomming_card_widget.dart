@@ -7,10 +7,12 @@ import '../utils/themes.dart';
 class UpcommingCardWidget extends StatefulWidget {
   String image;
   String title;
-  int count;
-  UpcommingCardWidget(
-      {Key? key, required this.image, required this.title, required this.count})
-      : super(key: key);
+
+  UpcommingCardWidget({
+    Key? key,
+    required this.image,
+    required this.title,
+  }) : super(key: key);
 
   @override
   State<UpcommingCardWidget> createState() => _UpcommingCardWidgetState();
@@ -56,21 +58,21 @@ class _UpcommingCardWidgetState extends State<UpcommingCardWidget> {
               fontWeight: FontWeight.w600,
             ),
           ),
-          CircleAvatar(
-            radius: scrWidth * 0.025,
-            backgroundColor: Color(0xffF14336),
-            child: Center(
-              child: Text(
-                widget.count.toString(),
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: scrWidth * 0.035,
-                  fontFamily: "Urbanist",
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-          ),
+          // CircleAvatar(
+          //   radius: scrWidth * 0.025,
+          //   backgroundColor: Color(0xffF14336),
+          //   child: Center(
+          //     child: Text(
+          //       widget.count.toString(),
+          //       style: TextStyle(
+          //         color: Colors.white,
+          //         fontSize: scrWidth * 0.035,
+          //         fontFamily: "Urbanist",
+          //         fontWeight: FontWeight.w600,
+          //       ),
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

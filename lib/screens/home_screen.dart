@@ -22,6 +22,8 @@ import 'package:threems/widgets/funding_widget.dart';
 import 'package:threems/widgets/upcomming_card_widget.dart';
 
 import '../Authentication/auth.dart';
+import '../UpComing__Collection_&__Payments/Collections.dart';
+import '../UpComing__Collection_&__Payments/payments.dart';
 import '../kuri/createkuri.dart';
 import '../model/charitymodel.dart';
 import 'charity/donatepage.dart';
@@ -72,13 +74,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   getContacts() async {
     List<Contact> _contacts = await ContactsService.getContacts();
-
-    setState(() {
-      contacts = _contacts;
-
-      print('================ContactLength=================');
-      print(contacts.length);
-    });
+    contacts = _contacts;
+    if (mounted) {
+      setState(() {
+        print('================ContactLength=================');
+        print(contacts.length);
+      });
+    }
   }
 
   double selectedIndex = 0;
@@ -882,16 +884,31 @@ class _HomeScreenState extends State<HomeScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        UpcommingCardWidget(
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => UpcomingPayments(),
+                                ));
+                          },
+                          child: UpcommingCardWidget(
                             image: 'assets/icons/upcoming_payments.svg',
                             title: "Upcoming\nPayments",
-                            count: 6),
-                        GestureDetector(
-                          onTap: () {},
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => UpcomingCollections(),
+                                ));
+                          },
                           child: UpcommingCardWidget(
-                              image: 'assets/icons/upcoming_collections.svg',
-                              title: "Upcoming\nCollections",
-                              count: 8),
+                            image: 'assets/icons/upcoming_collections.svg',
+                            title: "Upcoming\nCollections",
+                          ),
                         ),
                       ],
                     ),

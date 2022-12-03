@@ -533,7 +533,10 @@ class _KuriPaymentPageState extends State<KuriPaymentPage> {
             GestureDetector(
               onTap: () {
                 print(amount!.text);
-                if (amount!.text != '' && (imgUrl != '' || imgUrl != null)) {
+                if (amount!.text != '' &&
+                    double.tryParse(amount!.text)! <
+                        widget.kuri.totalReceived! &&
+                    (imgUrl != '' || imgUrl != null)) {
                   FirebaseFirestore.instance
                       .collection('kuri')
                       .doc(widget.kuri.kuriId)
@@ -555,7 +558,10 @@ class _KuriPaymentPageState extends State<KuriPaymentPage> {
                 } else {
                   amount!.text == ''
                       ? showSnackbar(context, 'Enter amount')
-                      : showSnackbar(context, 'Choose Proof');
+                      : double.tryParse(amount!.text)! <
+                              widget.kuri.totalReceived!
+                          ? showSnackbar(context, 'Incorrect Amount')
+                          : showSnackbar(context, 'Choose Proof');
                 }
                 print(imgUrl);
                 print(imgFile);

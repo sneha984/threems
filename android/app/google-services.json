@@ -14,6 +14,30 @@
       },
       "oauth_client": [
         {
+          "client_id": "323415617563-g27m0h8i8s1ic5ua30lvmoa6napc3egg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.threems",
+            "certificate_hash": "347ee87e7515d79f78d88c92c4a182480b8794b4"
+          }
+        },
+        {
+          "client_id": "323415617563-jsce0l8ard8b8hdms7nb15rjg6ta4od8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.threems",
+            "certificate_hash": "6da0146d836a742c85b83c6f1947d7e201d52e83"
+          }
+        },
+        {
+          "client_id": "323415617563-okddmjk9sh1ak61illrkqrffke97al15.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.threems",
+            "certificate_hash": "b772ca99bd1853298054e6a9282693264b5f27ae"
+          }
+        },
+        {
           "client_id": "323415617563-5qdkfnntr2hdm5krrdl0jiouddk5l5ng.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -50,6 +74,35 @@
             "certificate_hash": "347ee87e7515d79f78d88c92c4a182480b8794b4"
           }
         },
+        {
+          "client_id": "323415617563-5qdkfnntr2hdm5krrdl0jiouddk5l5ng.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA0mr5EQx52nPnbQp79xfF1rIUoTjYX_18"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "323415617563-5qdkfnntr2hdm5krrdl0jiouddk5l5ng.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:323415617563:android:f890d314be90ddc83188be",
+        "android_client_info": {
+          "package_name": "com.firstlogicmetalab.threems"
+        }
+      },
+      "oauth_client": [
         {
           "client_id": "323415617563-5qdkfnntr2hdm5krrdl0jiouddk5l5ng.apps.googleusercontent.com",
           "client_type": 3

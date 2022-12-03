@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -531,7 +532,7 @@ class _CreateKuriPageState extends State<CreateKuriPage> {
                                                 color: Colors.transparent),
                                       ),
                                       child: Padding(
-                                        padding:  EdgeInsets.all(16.0),
+                                        padding: EdgeInsets.all(16.0),
                                         child: SvgPicture.asset(
                                             "assets/icons/marriageimage.svg"),
                                       )),
@@ -574,7 +575,7 @@ class _CreateKuriPageState extends State<CreateKuriPage> {
                                               color: Colors.transparent),
                                     ),
                                     child: Padding(
-                                      padding:  EdgeInsets.all(19.0),
+                                      padding: EdgeInsets.all(19.0),
                                       child: SvgPicture.asset(
                                           "assets/icons/hospitalimage.svg"),
                                     ),
@@ -618,7 +619,7 @@ class _CreateKuriPageState extends State<CreateKuriPage> {
                                               color: Colors.transparent),
                                     ),
                                     child: Padding(
-                                      padding:EdgeInsets.all(19.0),
+                                      padding: EdgeInsets.all(19.0),
                                       child: SvgPicture.asset(
                                           "assets/icons/otherimage.svg"),
                                     ),
@@ -1280,7 +1281,7 @@ class _CreateKuriPageState extends State<CreateKuriPage> {
                                                 color: Colors.transparent),
                                       ),
                                       child: Padding(
-                                        padding:EdgeInsets.all(19.0),
+                                        padding: EdgeInsets.all(19.0),
                                         child: SvgPicture.asset(
                                             "assets/icons/marriageimage.svg"),
                                       )),
@@ -1323,7 +1324,7 @@ class _CreateKuriPageState extends State<CreateKuriPage> {
                                               color: Colors.transparent),
                                     ),
                                     child: Padding(
-                                      padding:EdgeInsets.all(19.0),
+                                      padding: EdgeInsets.all(19.0),
                                       child: SvgPicture.asset(
                                           "assets/icons/hospitalimage.svg"),
                                     ),
@@ -1366,8 +1367,8 @@ class _CreateKuriPageState extends State<CreateKuriPage> {
                                           : Border.all(
                                               color: Colors.transparent),
                                     ),
-                                    child:  Padding(
-                                      padding:EdgeInsets.all(19.0),
+                                    child: Padding(
+                                      padding: EdgeInsets.all(19.0),
                                       child: SvgPicture.asset(
                                           "assets/icons/otherimage.svg"),
                                     ),
@@ -1806,15 +1807,24 @@ class _CreateKuriPageState extends State<CreateKuriPage> {
                 private: private,
                 purpose: purpose,
                 upiApps: upiApps,
+                members: [],
+                payments: [],
+                totalReceived: 0,
                 userID: currentuserid);
 
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AddMembersKuri(
-                    kuri: kuri,
-                  ),
-                ));
+            FirebaseFirestore.instance
+                .collection('kuri')
+                .add(kuri.toJson())
+                .then((value) {
+              print('========Current User=========');
+              print(currentuserid);
+              value.update({'kuriId': value.id});
+            }).then((value) {
+              showSnackbar(context, 'Kuri successfully added');
+              setState(() {
+                Navigator.pop(context);
+              });
+            });
           } else {
             kuriName.text == ''
                 ? showSnackbar(context, 'Please Enter Kuri Name')
@@ -1843,7 +1853,7 @@ class _CreateKuriPageState extends State<CreateKuriPage> {
             ),
             child: Center(
               child: Text(
-                "Add Members",
+                "Create Kuri",
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: FontSize15,
@@ -1894,7 +1904,7 @@ class _CreateKuriPageState extends State<CreateKuriPage> {
                         ? Border.all(color: primarycolor, width: 1.5)
                         : Border.all(color: Colors.transparent)),
                 child: Padding(
-                  padding:  EdgeInsets.all(13.0),
+                  padding: EdgeInsets.all(13.0),
                   child: SvgPicture.asset(image),
                 ),
               ),

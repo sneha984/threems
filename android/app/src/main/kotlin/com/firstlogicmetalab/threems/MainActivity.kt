@@ -1,4 +1,4 @@
-package com.example.threems
+package com.firstlogicmetalab.threems
 
 import io.flutter.embedding.android.FlutterActivity
 

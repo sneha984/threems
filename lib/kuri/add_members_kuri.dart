@@ -167,14 +167,14 @@ class _AddMembersKuriState extends State<AddMembersKuri> {
               for (int i = 0; i < addMember.length; i++) {
                 addFriend.add(userPhoneById[addMember[i]]);
               }
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => AddMembersearch(
-                            contacts: contacts,
-                            numberList: userNumberList,
-                            kuri: widget.kuri,
-                          )));
+              // Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //         builder: (context) => AddMembersearch(
+              //               contacts: contacts,
+              //               numberList: userNumberList,
+              //               kuri: widget.kuri,
+              //             )));
             },
             child: Padding(
               padding: EdgeInsets.only(
@@ -581,22 +581,6 @@ class _AddMembersKuriState extends State<AddMembersKuri> {
                             members: addMember,
                             payments: [],
                             totalReceived: 0);
-
-                        FirebaseFirestore.instance
-                            .collection('kuri')
-                            .add(kuri.toJson())
-                            .then((value) {
-                          print('========Current User=========');
-                          print(currentuserid);
-                          value.update({'kuriId': value.id});
-                        }).then((value) {
-                          showSnackbar(context, 'Kuri successfully added');
-                          setState(() {
-                            loading = false;
-                            Navigator.pop(context);
-                            Navigator.pop(context);
-                          });
-                        });
                       } else if (local.kuriId != '' || local.kuriId != null) {
                         final kuri = KuriModel(
                             userID: currentuserid,

@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:contacts_service/contacts_service.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -15,13 +16,9 @@ import '../utils/themes.dart';
 import 'add_members_kuri.dart';
 
 class AddMembersearch extends StatefulWidget {
-  final List<Contact> contacts;
-  final List numberList;
   final KuriModel kuri;
   const AddMembersearch({
     Key? key,
-    required this.contacts,
-    required this.numberList,
     required this.kuri,
   }) : super(key: key);
 
@@ -34,6 +31,14 @@ class _AddMembersearchState extends State<AddMembersearch> {
   List<Contact> totalContacts = [];
   List numberList = [];
   TextEditingController search = TextEditingController();
+
+  String? _linkMessage;
+  bool _isCreatingLink = false;
+
+  FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
+
+  final String dynamicLink = 'https://threems.page.link';
+  final String link = 'https://threems.page.link/kuri_Invite';
 
   searchContacts(String txt) {
     print(totalContacts.length);
@@ -52,12 +57,12 @@ class _AddMembersearchState extends State<AddMembersearch> {
 
   @override
   void initState() {
-    totalContactsSearch = widget.contacts;
-    totalContacts = widget.contacts;
+    totalContactsSearch = contacts;
+    totalContacts = contacts;
     print(totalContacts.length);
     print(totalContactsSearch.length);
-    numberList = widget.numberList;
-    print(numberList.length);
+    // numberList = widget.numberList;
+    // print(numberList.length);
     // TODO: implement initState
     super.initState();
   }
@@ -228,45 +233,10 @@ class _AddMembersearchState extends State<AddMembersearch> {
                           ),
                         ),
                         GestureDetector(
-                          onTap: () {
+                          onTap: () async {
+                            await _createDynamicLink(false);
                             Share.share(
-                                'Welcome to First Logic Meta Lab https://firstlogicmetalab.com');
-                            // if (numberList.contains(totalContactsSearch[index]
-                            //     .phones!
-                            //     .first
-                            //     .value!
-                            //     .trim()
-                            //     .replaceAll(' ', ''))) {
-                            //   if (addFriend.contains(totalContactsSearch[index]
-                            //       .phones!
-                            //       .first
-                            //       .value!
-                            //       .trim()
-                            //       .replaceAll(' ', ''))) {
-                            //     setState(() {
-                            //       addFriend.remove(totalContactsSearch[index]
-                            //           .phones!
-                            //           .first
-                            //           .value!
-                            //           .trim()
-                            //           .replaceAll(' ', ''));
-                            //       print("hi: $addFriend");
-                            //     });
-                            //   } else {
-                            //     setState(() {
-                            //       addFriend.add(totalContactsSearch[index]
-                            //           .phones!
-                            //           .first
-                            //           .value!
-                            //           .trim()
-                            //           .replaceAll(' ', ''));
-                            //       print("hi: $addFriend");
-                            //     });
-                            //   }
-                            // } else {
-                            //   showSnackbar(context,
-                            //       'Invite ${totalContactsSearch[index].displayName}');
-                            // }
+                                'Inviting you to join *${widget.kuri.kuriName}* \n \n \n $_linkMessage');
                           },
                           child: Container(
                             // width: 50,
@@ -429,17 +399,18 @@ class _AddMembersearchState extends State<AddMembersearch> {
       ),
       bottomNavigationBar: InkWell(
         onTap: () {
-          addMember = [];
-          for (int i = 0; i < addFriend.length; i++) {
-            addMember.add(useridByPhone[addFriend[i]]);
-          }
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => AddMembersKuri(
-                        kuri: widget.kuri,
-                      )));
-          setState(() {});
+          Navigator.pop(context);
+          // addMember = [];
+          // for (int i = 0; i < addFriend.length; i++) {
+          //   addMember.add(useridByPhone[addFriend[i]]);
+          // }
+          // Navigator.pushReplacement(
+          //     context,
+          //     MaterialPageRoute(
+          //         builder: (context) => AddMembersKuri(
+          //               kuri: widget.kuri,
+          //             )));
+          // setState(() {});
         },
         child: Container(
           width: 100,
@@ -449,7 +420,7 @@ class _AddMembersearchState extends State<AddMembersearch> {
           margin: EdgeInsets.symmetric(vertical: 10, horizontal: 50),
           child: Center(
               child: Text(
-            "Add Members",
+            "Done",
             style: TextStyle(
                 fontWeight: FontWeight.w500,
                 fontSize: 15,
@@ -459,5 +430,43 @@ class _AddMembersearchState extends State<AddMembersearch> {
         ),
       ),
     );
+  }
+
+  Future<void> _createDynamicLink(bool short) async {
+    setState(() {
+      _isCreatingLink = true;
+    });
+
+    final DynamicLinkParameters parameters = DynamicLinkParameters(
+      uriPrefix: 'https://threems.page.link/kuri_Invite',
+      longDynamicLink: Uri.parse(
+        'https://threems.page.link/chit_invite?chitId=${widget.kuri.kuriId}&referralId=${widget.kuri.userID}',
+      ),
+      link: Uri.parse(dynamicLink),
+      androidParameters: const AndroidParameters(
+        packageName: 'com.firstlogicmetalab.threems',
+        minimumVersion: 0,
+      ),
+      iosParameters: const IOSParameters(
+        bundleId: 'io.flutter.plugins.firebase.dynamiclinksexample',
+        minimumVersion: '0',
+      ),
+    );
+
+    Uri url;
+    if (short) {
+      final ShortDynamicLink shortLink =
+          await dynamicLinks.buildShortLink(parameters);
+      url = shortLink.shortUrl;
+    } else {
+      url = await dynamicLinks.buildLink(parameters);
+    }
+
+    setState(() {
+      _linkMessage = url.toString();
+      _isCreatingLink = false;
+
+      print(_linkMessage);
+    });
   }
 }

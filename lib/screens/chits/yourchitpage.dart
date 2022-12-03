@@ -7,6 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:threems/screens/chits/chitsucesspaid.dart';
 
+import '../../Spinner.dart';
 import '../../model/ChitModel.dart';
 import '../../model/usermodel.dart';
 import '../../utils/customclip2.dart';
@@ -365,6 +366,7 @@ class _YourChitPageState extends State<YourChitPage> {
                                               builder: (context) => ChatScreen(
                                                 name: chit!.chitName!,
                                                 id: chit!.chitId!,
+                                                chit: chit!,
                                                 profile: chit!.profile!,
                                                 members: totalMembers,
                                               ),

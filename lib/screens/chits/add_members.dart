@@ -159,18 +159,18 @@ class _AddMembersState extends State<AddMembers> {
                   for (int i = 0; i < addMember.length; i++) {
                     addFriend.add(userPhoneById[addMember[i]]);
                   }
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => AddMembersSearch(
-                                contacts: contacts,
-                                numberList: userNumberList,
-                                chit: widget.chit,
-                                size: widget.size,
-                                ext: widget.ext,
-                                bytes: widget.bytes,
-                                fileName: widget.fileName,
-                              )));
+                  // Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //         builder: (context) => AddMembersSearch(
+                  //               contacts: contacts,
+                  //               numberList: userNumberList,
+                  //               chit: widget.chit,
+                  //               size: widget.size,
+                  //               ext: widget.ext,
+                  //               bytes: widget.bytes,
+                  //               fileName: widget.fileName,
+                  //             )));
                 },
                 child: Container(
                   width: 47,
