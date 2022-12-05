@@ -478,13 +478,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "9.2.0"
-  geo_firestore_flutter:
-    dependency: "direct main"
-    description:
-      name: geo_firestore_flutter
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.5"
   geocoding:
     dependency: "direct main"
     description:

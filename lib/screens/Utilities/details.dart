@@ -66,10 +66,10 @@ class _ServiceDetailesPageState extends State<ServiceDetailesPage> {
        String field = 'position';
        print(field);
     // Stream<List<DocumentSnapshot>>
-       geo.collection(collectionRef: collectionReference)
-        .within(center: center!, radius: radius!, field: field,strictMode: true).listen((event) {
+       geo.collection(collectionRef: collectionReference  )
+        .within(center: center, radius: radius, field: field,strictMode: true).listen((event) {
        serviceList = [];
-       for (DocumentSnapshot<Map<String, dynamic>> doc in event) {
+       for (var doc in event) {
         serviceList!.add(ServiceDetails.fromJson(doc.data()!));
       }
       s1 =event.length;

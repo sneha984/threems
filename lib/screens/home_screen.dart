@@ -21,6 +21,7 @@ import 'package:threems/widgets/funding_widget.dart';
 import 'package:threems/widgets/upcomming_card_widget.dart';
 
 import '../Authentication/auth.dart';
+import '../UpComing__Collection_&__Payments/Collections.dart';
 import '../kuri/createkuri.dart';
 import '../model/charitymodel.dart';
 import 'charity/donatepage.dart';
@@ -876,7 +877,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             image: 'assets/icons/upcoming_payments.svg',
                             title: "Upcoming\nPayments",
                           ),
-                        ),
+
+
                         InkWell(
                           onTap: () {
                             Navigator.push(

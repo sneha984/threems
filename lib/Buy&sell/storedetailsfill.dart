@@ -4,7 +4,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:geo_firestore_flutter/geo_firestore_flutter.dart';
 import 'package:getwidget/components/dropdown/gf_multiselect.dart';
 import 'package:getwidget/types/gf_checkbox_type.dart';
 import 'package:image_picker/image_picker.dart';
@@ -33,18 +32,18 @@ class _StoreDetailsState extends State<StoreDetails> {
   List categoryList=[];
   List<String> selectCategory=[];
 
-  geoLocation(String id)async{
-    GeoFirestore geoFirestore = GeoFirestore(FirebaseFirestore.instance.collection('stores'));
-    await geoFirestore.setLocation(id, GeoPoint(lat!, long!));
-    final queryLocation = GeoPoint(lat!, long!);
-    // creates a new query around [37.7832, -122.4056] with a radius of 0.6 kilometers
-    final List<DocumentSnapshot> documents = await geoFirestore.getAtLocation(queryLocation, 0.6);
-    documents.forEach((doc) {
-      print("111111111111111111111111111111111111111111111111111111");
-      print(doc.data());
-      print("111111111111111111111111111111111111111111111111111111");
-    });
-  }
+  // geoLocation(String id)async{
+  //   GeoFirestore geoFirestore = GeoFirestore(FirebaseFirestore.instance.collection('stores'));
+  //   await geoFirestore.setLocation(id, GeoPoint(lat!, long!));
+  //   final queryLocation = GeoPoint(lat!, long!);
+  //   // creates a new query around [37.7832, -122.4056] with a radius of 0.6 kilometers
+  //   final List<DocumentSnapshot> documents = await geoFirestore.getAtLocation(queryLocation, 0.6);
+  //   documents.forEach((doc) {
+  //     print("111111111111111111111111111111111111111111111111111111");
+  //     print(doc.data());
+  //     print("111111111111111111111111111111111111111111111111111111");
+  //   });
+  // }
   Map<String,dynamic> categoryListAll={};
 
   Map<String,dynamic> categoryNames={};
@@ -704,7 +703,7 @@ class _StoreDetailsState extends State<StoreDetails> {
         .collection('stores')
         .add(strDat.toJson())
         .then((value) {
-          geoLocation(value.id);
+
       value.update({'storeId': value.id});
       id=value.id;
     }).then((value) {

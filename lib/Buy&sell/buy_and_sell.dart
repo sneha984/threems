@@ -7,7 +7,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:geo_firestore_flutter/geo_firestore_flutter.dart';
 
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -65,27 +64,27 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
   int status = 0;
   List<Widget> grids = [];
   List<DocumentSnapshot> documents = [];
-  geoLocation(String id) async {
-    GeoFirestore geoFirestore =
-        GeoFirestore(FirebaseFirestore.instance.collection('stores'));
-    await geoFirestore.setLocation(id, GeoPoint(lat!, long!));
-    final queryLocation = GeoPoint(lat!, long!);
-    // creates a new query around [37.7832, -122.4056] with a radius of 0.6 kilometers
-    documents = await geoFirestore.getAtLocation(queryLocation, 1);
-    documents.forEach((doc) {
-      print("111111111111111111111111111111111111111111111111111111");
-      print(doc.data());
-      print(documents);
-      print("111111111111111111111111111111111111111111111111111111");
-      print("111111111111111111111111111111111111111111111111111111");
-    });
-    if (mounted) {
-      setState(() {
-        print("hiii sneha");
-        print(documents.length);
-      });
-    }
-  }
+  // geoLocation(String id) async {
+  //   GeoFirestore geoFirestore =
+  //       GeoFirestore(FirebaseFirestore.instance.collection('stores'));
+  //   await geoFirestore.setLocation(id, GeoPoint(lat!, long!));
+  //   final queryLocation = GeoPoint(lat!, long!);
+  //   // creates a new query around [37.7832, -122.4056] with a radius of 0.6 kilometers
+  //   documents = await geoFirestore.getAtLocation(queryLocation, 1);
+  //   documents.forEach((doc) {
+  //     print("111111111111111111111111111111111111111111111111111111");
+  //     print(doc.data());
+  //     print(documents);
+  //     print("111111111111111111111111111111111111111111111111111111");
+  //     print("111111111111111111111111111111111111111111111111111111");
+  //   });
+  //   if (mounted) {
+  //     setState(() {
+  //       print("hiii sneha");
+  //       print(documents.length);
+  //     });
+  //   }
+  // }
 
   getSpecificCategory() {
     FirebaseFirestore.instance
