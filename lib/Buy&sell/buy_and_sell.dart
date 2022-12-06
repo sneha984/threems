@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:geocoding/geocoding.dart';
+import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart' as gMap;
 import 'package:google_maps_place_picker/google_maps_place_picker.dart' as gMapPlacePicker;
 import 'package:another_stepper/dto/stepper_data.dart';
@@ -231,6 +232,30 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
       }
     });
   }
+  final geo = Geoflutterfire();
+  late GeoFirePoint center;
+  List<StoreDetailsModel> nearestStores=[];
+  getNearestShop() {
+
+    center = geo.point(latitude: lat!, longitude: long!);
+    var collectionReference = FirebaseFirestore.instance
+        .collection('stores');
+    double? radius = 5;
+    String field = 'position';
+    geo.collection(collectionRef: collectionReference  )
+        .within(center: center, radius: radius, field: field,strictMode: true).listen((event) {
+       nearestStores = [];
+      for (var doc in event) {
+        nearestStores.add(StoreDetailsModel.fromJson(doc.data()!));
+      }
+
+
+
+      if (mounted) {
+        setState(() {});
+      }
+    });
+  }
 
   late TabController _tabController;
   bool loading = false;
@@ -239,6 +264,7 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
   void initState() {
     getSpecificCategory();
     getShop();
+    getNearestShop();
     _tabController =
         TabController(length: 2, vsync: this, initialIndex: widget.index ?? 0);
     super.initState();
@@ -565,11 +591,15 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                             ),
                           ],
                         )
+
                       ],
                     ),
                     SizedBox(
                       height: scrHeight * 0.015,
                     ),
+
+
+
                     // SizedBox(
                     //   height: 50,
                     // ),
@@ -587,8 +617,11 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                             physics: BouncingScrollPhysics(),
                             scrollDirection: Axis.horizontal,
                             shrinkWrap: true,
-                            itemCount: documents.length,
+                            itemCount: nearestStores.length,
                             itemBuilder: (context, index) {
+                              print('--------------------------');
+                              print(nearestStores.length);
+                              StoreDetailsModel store=nearestStores[index];
                               return Padding(
                                 padding:
                                     EdgeInsets.only(right: scrWidth * 0.017),
@@ -605,7 +638,7 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                           decoration: BoxDecoration(
                                             image: DecorationImage(
                                                 image: NetworkImage(
-                                                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQt4xN5NUBDKwdj-rtbQgpCiezCJn_0-iLMMQ&usqp=CAU"),
+                                                    store.storeImage!),
                                                 fit: BoxFit.fill),
                                             color: Colors.white,
                                             borderRadius: BorderRadius.circular(
@@ -625,7 +658,7 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                             height: scrHeight * 0.002,
                                           ),
                                           Text(
-                                            documents[index].get('storeName'),
+                                            store.storeName!,
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                                 fontFamily: 'Urbanist',
@@ -637,7 +670,7 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                             height: scrHeight * 0.0015,
                                           ),
                                           Text(
-                                            "huhuhsduhxuhx",
+                                            store.storeAddress!,
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                                 fontFamily: 'Urbanist',
@@ -678,6 +711,7 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                 fontWeight: FontWeight.w700,
                                 fontSize: scrWidth * 0.04),
                           ),
+
                         ),
                       ),
                     ),
@@ -782,85 +816,7 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                   children: grids),
                             ),
                           ),
-                    Row(
-                      children: [
-                        Container(
-                          width: scrWidth*0.91,
-                          height: textFormFieldHeight45,
-                          // padding: EdgeInsets.symmetric(
-                          //   horizontal: scrWidth * 0.015,
-                          //   vertical:scrHeight*0.002,
-                          // ),
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Color(0xffDADADA),
-                            ),
-                            color: textFormFieldFillColor,
-                            borderRadius: BorderRadius.circular(scrWidth * 0.026),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Text('Location: '+serviceLocation.toString(),style:TextStyle(fontSize: 20),)
-                                  // Text('Lattitude:'+latitude!.text),
-                                  // Text('Longitude:'+longitude!.text),
-                                ],
-                              ),
 
-                              InkWell(
-                                  onTap: ()  async {
-
-                                    Position location = await Geolocator.getCurrentPosition(
-                                        desiredAccuracy: LocationAccuracy.high
-                                    );
-
-                                    await   Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            gMapPlacePicker.PlacePicker(
-                                              apiKey: "AIzaSyCUZFUZ1yMpkzh6QUnKj54Q2N4L2iT4tBY",
-                                              initialPosition: gMap.LatLng(
-                                                  location.latitude,location.longitude
-                                              ),
-                                              // Put YOUR OWN KEY here.
-                                              searchForInitialValue: false,
-                                              selectInitialPosition: true,
-                                              // initialPosition: LatLng(currentLoc==null?0:currentLoc!.latitude,currentLoc==null?0:currentLoc!.longitude),
-                                              onPlacePicked: (res) async {
-                                                Navigator.of(context).pop();
-                                                // GeoCode geoCode = GeoCode();
-                                                // Address address=await geoCode.reverseGeocoding(latitude: res.geometry!.location.lat,longitude: res.geometry!.location.lng);
-                                                result=res;
-                                                latitude!.text=res.geometry!.location.lat.toString();
-                                                longitude!.text=res.geometry!.location.lng.toString();
-                                                List<Placemark> placemarks = await placemarkFromCoordinates(
-                                                    res.geometry!.location.lat, res.geometry!.location.lng);
-                                                Placemark place = placemarks[0];
-                                                serviceLocation = place.locality!;
-                                                // longitude!.text=res.geometry!.location.lng.toString();
-                                                // lat=result.geometry!.location.lat;
-                                                // long=result.geometry!.location.lng;
-
-                                                set();
-                                              },
-                                              useCurrentLocation: true,
-                                            ),
-                                      ),
-                                    );
-
-                                  },
-                                  child: Icon(Icons.location_on,color: Colors.red,size: 30,)),
-
-                            ],
-                          ),
-                        ),
-
-                      ],
-                    ),
                     SizedBox(height: 100,),
 
                     // ElevatedButton(onPressed: (){

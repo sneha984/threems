@@ -76,10 +76,10 @@ dependencies:
   http:
   share_plus: ^6.3.0
   google_maps_place_picker: ^2.1.0-nullsafety.3
-  firebase_core_platform_interface: ^4.5.1
+  firebase_core_platform_interface: 4.5.1
   whatsapp_share2: ^2.0.2
   contacts_service: ^0.6.3
-  permission_handler:
+  permission_handler: ^6.0.1+1
   dotted_line: ^3.1.0
   geolocator: ^7.7.0
   geocoding: ^2.0.5

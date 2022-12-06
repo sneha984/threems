@@ -74,7 +74,6 @@ class _ServiceDetailesPageState extends State<ServiceDetailesPage> {
       }
       s1 =event.length;
        print(s1);
-       print("jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj");
 
 
          if (mounted) {

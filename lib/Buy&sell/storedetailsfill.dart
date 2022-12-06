@@ -4,6 +4,12 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geoflutterfire/geoflutterfire.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart' as gMap;
+import 'package:google_maps_place_picker/google_maps_place_picker.dart' as gMapPlacePicker;
 // import 'package:geo_firestore_flutter/geo_firestore_flutter.dart';
 import 'package:getwidget/components/dropdown/gf_multiselect.dart';
 import 'package:getwidget/types/gf_checkbox_type.dart';
@@ -13,6 +19,7 @@ import 'package:threems/kuri/createkuri.dart';
 import 'package:threems/screens/home_screen.dart';
 
 import '../model/Buy&sell.dart';
+import '../screens/Utilities/AddYouService.dart';
 import '../screens/splash_screen.dart';
 
 
@@ -29,6 +36,10 @@ class StoreDetails extends StatefulWidget {
 
 class _StoreDetailsState extends State<StoreDetails> {
   bool finish = false;
+  String serviceLocation='';
+  TextEditingController? latitude;
+  TextEditingController? longitude;
+  gMapPlacePicker.PickResult? result;
   bool trackedlocation = false;
   List categoryList=[];
   List<String> selectCategory=[];
@@ -101,7 +112,11 @@ class _StoreDetailsState extends State<StoreDetails> {
       uploadImageToFirebase(context);
     });
   }
+  set(){
+    setState(() {
 
+    });
+  }
   String? selectedValue;
   final FocusNode storeNameFocus = FocusNode();
   final FocusNode storeAddressFocus = FocusNode();
@@ -129,7 +144,8 @@ class _StoreDetailsState extends State<StoreDetails> {
     delivereyChargeFocus.addListener(() {
       setState(() {});
     });
-
+    latitude = TextEditingController(text:'0');
+    longitude = TextEditingController(text:'0');
     super.initState();
   }
 
@@ -554,8 +570,88 @@ class _StoreDetailsState extends State<StoreDetails> {
                   ),
                 ),
               ),
+              SizedBox(
+                height: scrHeight * 0.02,
+              ),
+              Row(
+                children: [
+                  Container(
+                    width: scrWidth*0.88,
+                    height: textFormFieldHeight45,
+                    // padding: EdgeInsets.symmetric(
+                    //   horizontal: scrWidth * 0.015,
+                    //   vertical:scrHeight*0.002,
+                    // ),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Color(0xffDADADA),
+                      ),
+                      color: textFormFieldFillColor,
+                      borderRadius: BorderRadius.circular(scrWidth * 0.026),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Text('Location: '+serviceLocation.toString(),style: GoogleFonts.outfit(),)
+                            // Text('Lattitude:'+latitude!.text),
+                            // Text('Longitude:'+longitude!.text),
+                          ],
+                        ),
 
+                        InkWell(
+                            onTap: ()  async {
+                              Position location = await Geolocator.getCurrentPosition(
+                                  desiredAccuracy: LocationAccuracy.high
+                              );
 
+                              await   Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      gMapPlacePicker.PlacePicker(
+                                        apiKey: "AIzaSyCUZFUZ1yMpkzh6QUnKj54Q2N4L2iT4tBY",
+                                        initialPosition: gMap.LatLng(
+                                            location.latitude,location.longitude
+                                        ),
+                                        // Put YOUR OWN KEY here.
+                                        searchForInitialValue: false,
+                                        selectInitialPosition: true,
+                                        // initialPosition: LatLng(currentLoc==null?0:currentLoc!.latitude,currentLoc==null?0:currentLoc!.longitude),
+                                        onPlacePicked: (res) async {
+                                          Navigator.of(context).pop();
+                                          // GeoCode geoCode = GeoCode();
+                                          // Address address=await geoCode.reverseGeocoding(latitude: res.geometry!.location.lat,longitude: res.geometry!.location.lng);
+                                          result=res;
+                                          latitude!.text=res.geometry!.location.lat.toString();
+                                          longitude!.text=res.geometry!.location.lng.toString();
+                                          List<Placemark> placemarks = await placemarkFromCoordinates(
+                                              res.geometry!.location.lat, res.geometry!.location.lng);
+                                          Placemark place = placemarks[0];
+                                          serviceLocation = place.locality!;
+                                          // longitude!.text=res.geometry!.location.lng.toString();
+                                          // lat=result.geometry!.location.lat;
+                                          // long=result.geometry!.location.lng;
+                                          set();
+                                        },
+                                        useCurrentLocation: true,
+                                      ),
+                                ),
+                              );
+                            },
+                            child: Icon(Icons.location_on,color: Colors.red,size: 30,)),
+
+                      ],
+                    ),
+                  ),
+
+                ],
+              ),
+              SizedBox(
+                height: scrHeight * 0.25,
+              ),
               // trackedlocation == false
               //     ? Container(
               //         height: textFormFieldHeight45,
@@ -612,9 +708,7 @@ class _StoreDetailsState extends State<StoreDetails> {
               //         ),
               //       ),
 
-              SizedBox(
-                height: scrHeight * 0.25,
-              ),
+
               finish
                   ? Container(
                       height: textFormFieldHeight45,
@@ -654,6 +748,8 @@ class _StoreDetailsState extends State<StoreDetails> {
                           refreshPage();
                           return showSnackbar(context,"Must Provide StoreAddress");
                         }else{
+                          GeoFirePoint myLocation = geo.point(latitude:double.tryParse(latitude!.text)??0, longitude: double.tryParse(longitude!.text)??0);
+
                           // List<String> ids=[];
                           // for(var item in selectCategory){
                           //   ids.add(categoryListAll[item]);
@@ -670,6 +766,8 @@ class _StoreDetailsState extends State<StoreDetails> {
                             storeCategory: selectCategory,
                             storeAddress: storeAddressController.text,
                             storeLocation: "ncsunuscns",
+                            position: myLocation.data
+
                           );
                           await createStore(strDat);
                         }

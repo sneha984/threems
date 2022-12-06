@@ -80,9 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
       print(contacts.length);
     });
   }
-
   double selectedIndex = 0;
-
   getVerifiedCharity() {
     FirebaseFirestore.instance
         .collection('charity')
@@ -99,9 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
 
   }
-
   Position? currentLoc;
-
   getLocation() async {
     try {
       currentLoc = await Geolocator.getCurrentPosition();
@@ -119,7 +115,6 @@ class _HomeScreenState extends State<HomeScreen> {
       print('00000000000000000000000000000000000000000000000000000');
     }
   }
-
   @override
   void initState() {
     askPermissions();

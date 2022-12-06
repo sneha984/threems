@@ -14,6 +14,7 @@ class StoreDetailsModel {
   String? userId;
   double? latitude;
   double? longitude;
+  Map? position;
   StoreDetailsModel(
       {this.storeName,
         this.deliveryCharge,
@@ -24,7 +25,8 @@ class StoreDetailsModel {
       this.storeImage,
         this.userId,
         this.longitude,
-        this.latitude
+        this.latitude,
+        this. position
       });
 
   StoreDetailsModel.fromJson(Map<String, dynamic> json) {
@@ -37,6 +39,7 @@ class StoreDetailsModel {
     storeImage=json['storeImage'];
     longitude=json['longitude'];
     latitude=json['latitude'];
+    position=json['position'];
 
     userId=json['userId'];
   }
@@ -53,6 +56,7 @@ class StoreDetailsModel {
     data['longitude']=this.longitude;
     data['userId']=this.userId;
     data['latitude']=this.latitude;
+    data['position']=this.position;
     return data;
   }
 }
