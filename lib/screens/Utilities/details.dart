@@ -121,10 +121,13 @@ class _ServiceDetailesPageState extends State<ServiceDetailesPage> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => AddServicePage(
+                        builder: (context) =>
+                            AddServicePage(
                         subCategoryName:widget.subCategoryName,
                         Category:widget.category
-                        )));
+                        )
+                    )
+                );
               },
               child: Container(
                 height: scrHeight * 0.07,

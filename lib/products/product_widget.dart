@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:threems/products/productListWidget.dart';
+import '../screens/splash_screen.dart';
 import 'const.dart';
 import 'dummyData.dart';
 
@@ -21,7 +22,7 @@ class _ProductWidgetState extends State<ProductWidget> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(size20),
+          borderRadius: BorderRadius.circular(scrWidth * 0.055),
           color: Colors.white,
           boxShadow: [
             BoxShadow(
@@ -41,7 +42,7 @@ class _ProductWidgetState extends State<ProductWidget> {
             },
             child: Padding(
               padding:
-                  EdgeInsets.symmetric(horizontal: size20, vertical: size24),
+                  EdgeInsets.symmetric(horizontal: scrWidth * 0.055, vertical: scrWidth * 0.065),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -49,15 +50,15 @@ class _ProductWidgetState extends State<ProductWidget> {
                     children: [
                       SvgPicture.asset('assets/svg/edit_cat.svg'),
                       SizedBox(
-                        width: size15,
+                        width: scrWidth * 0.039,
                       ),
                       Text(yourPro[widget.index]['title']),
                     ],
                   ),
                   Container(
                     padding: const EdgeInsets.all(6),
-                    width: size24,
-                    height: size24,
+                    width: scrWidth * 0.065,
+                    height: scrWidth * 0.065,
                     child: SvgPicture.asset(showProduct
                         ? 'assets/svg/arrow_up.svg'
                         : 'assets/svg/arrow_down.svg'),
@@ -76,7 +77,7 @@ class _ProductWidgetState extends State<ProductWidget> {
                     ),
                     ListView.separated(
                       shrinkWrap: true,
-                      padding: EdgeInsets.symmetric(vertical: size15),
+                      padding: EdgeInsets.symmetric(vertical: scrWidth * 0.039),
                       itemCount: yourPro[widget.index]['pro'].length,
                       itemBuilder: (context, index) {
                         var prodLis = yourPro[widget.index]['pro'][index];
@@ -85,7 +86,7 @@ class _ProductWidgetState extends State<ProductWidget> {
                         );
                       },
                       separatorBuilder: (context, index) => SizedBox(
-                        height: size8,
+                        height: scrWidth * 0.026,
                       ),
                     ),
                   ],

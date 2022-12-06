@@ -10,7 +10,7 @@ import '../model/Buy&sell.dart';
 import '../screens/splash_screen.dart';
 import '../utils/dummy.dart';
 import 'checkout.dart';
-List<Map<String,dynamic>> cartlist=[];
+List cartlist=[];
 List<ProductModel> productsList=[];
 class StorePage extends StatefulWidget {
   final StoreDetailsModel storeDetailsModel;
@@ -21,13 +21,13 @@ class StorePage extends StatefulWidget {
   @override
   State<StorePage> createState() => _StorePageState();
 }
-class Items{
-  final String categoryname;
-  List<Map<String,dynamic>> categoryitems;
-  Items(
-      this.categoryname, this.categoryitems,
-      );
-}
+// class Items{
+//   final String categoryname;
+//   List<Map<String,dynamic>> categoryitems;
+//   Items(
+//       this.categoryname, this.categoryitems,
+//       );
+// }
 class _StorePageState extends State<StorePage> {
   getProducts(){
     FirebaseFirestore
@@ -67,102 +67,7 @@ class _StorePageState extends State<StorePage> {
           }
     });
   }
-  List <Items> itemsCategory=[
-    Items(
-        'Rice Products',
-        [{
-          'image':'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3YhxUEFTHw7Q7YAzXp7AG7-oqE6AI5x8O8Q&usqp=CAU',
-          'unit':'1 kg',
-          'price':243,
-          'name':'close up',
-          'ShouldVisible':false,
-          'counter':1
 
-        },
-          {
-            'image':'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3YhxUEFTHw7Q7YAzXp7AG7-oqE6AI5x8O8Q&usqp=CAU',
-            'unit':'1 kg',
-            'price':243,
-            'name':'Mandhi Rice',
-            'ShouldVisible':false,
-            'counter':1
-
-
-
-          },
-          {
-            'image':'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3YhxUEFTHw7Q7YAzXp7AG7-oqE6AI5x8O8Q&usqp=CAU',
-            'unit':'1 kg',
-            'price':243,
-            'name':'Surf Ecl',
-            'ShouldVisible':false,
-            'counter':1
-
-
-
-          },
-          {
-            'image':'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3YhxUEFTHw7Q7YAzXp7AG7-oqE6AI5x8O8Q&usqp=CAU',
-            'unit':'1 kg',
-            'price':243,
-            'name':'Surf Ecl',
-          'ShouldVisible':false,
-            'counter':1
-
-
-
-          }
-        ]
-    ),
-    Items(
-        'Snacks Items',
-        [{
-          'image':'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3YhxUEFTHw7Q7YAzXp7AG7-oqE6AI5x8O8Q&usqp=CAU',
-          'unit':'1 kg',
-          'price':243,
-          'name':'Surf Ecl',
-          'ShouldVisible':false,
-          'counter':1
-
-
-
-        },
-          {
-            'image':'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3YhxUEFTHw7Q7YAzXp7AG7-oqE6AI5x8O8Q&usqp=CAU',
-            'unit':'1 kg',
-            'price':243,
-            'name':'Surf Ecl',
-            'ShouldVisible':false,
-            'counter':1
-
-
-
-          }
-        ]
-    ),
-    Items(
-        'Oils',
-        [{
-          'image':'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3YhxUEFTHw7Q7YAzXp7AG7-oqE6AI5x8O8Q&usqp=CAU',
-          'unit':'1 kg',
-          'price':243,
-          'name':'Surf Ecl',
-          'ShouldVisible':false,
-          'counter':1
-
-        },
-          {
-            'image':'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3YhxUEFTHw7Q7YAzXp7AG7-oqE6AI5x8O8Q&usqp=CAU',
-            'unit':'1 kg',
-            'price':243,
-            'name':'Surf Ecl',
-            'ShouldVisible':false,
-            'counter':1
-          }
-        ]
-    ),
-
-  ];
   var currencyConvert = NumberFormat.currency(
     locale: 'HI',
     symbol: '₹ ',
@@ -290,7 +195,7 @@ class _StorePageState extends State<StorePage> {
                     ],
                   ),
                 ),
-                 SizedBox(width: scrWidth*0.3,),
+                  SizedBox(width: scrWidth*0.17,),
                 Padding(
                   padding:  EdgeInsets.only(
                       // left: 70,
@@ -367,6 +272,8 @@ class _StorePageState extends State<StorePage> {
             ),
             SizedBox(height: scrHeight*0.02,),
             Container(
+              // color: Colors.blue,
+              height: 600,
               child: GridView.builder(
                   physics: const BouncingScrollPhysics(),
                   padding: EdgeInsets.all(10),
@@ -374,6 +281,8 @@ class _StorePageState extends State<StorePage> {
                   itemCount:productsList.length,
                   itemBuilder: (context, index) {
                     final products=productsList[index];
+                    print("hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+                    print(productsList.length);
                     // final _isSelected=_selectedIndexs.contains(index);
                     return ShopSingleProduct(product:products, storeId: widget.storeDetailsModel.storeId!,);
                   }, gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -893,7 +802,7 @@ class ShopSingleProduct extends StatefulWidget {
 
 class _ShopSingleProductState extends State<ShopSingleProduct> {
 
-  ProductModel products=ProductModel();
+  // ProductModel products=ProductModel();
   var currencyConvert = NumberFormat.currency(
     locale: 'HI',
     symbol: '₹ ',
@@ -901,7 +810,7 @@ class _ShopSingleProductState extends State<ShopSingleProduct> {
   bool isCarted=false;
   getProduct(){
     for(int i=0;i<cartlist.length;i++){
-      if(cartlist[i]['productId'] == products.productId&&cartlist[i]['storeId'] == widget.storeId){
+      if(cartlist[i]['productId'] == widget.product.productId&&cartlist[i]['storeId'] == widget.product.storeId){
 
         isCarted=true;
       }
@@ -917,7 +826,7 @@ class _ShopSingleProductState extends State<ShopSingleProduct> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    products=widget.product;
+    // products=widget.product;
     getProduct();
   }
 
@@ -937,7 +846,7 @@ class _ShopSingleProductState extends State<ShopSingleProduct> {
 
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                        image: NetworkImage(products.images![0]),
+                        image: NetworkImage(widget.product.images![0]),
                     fit: BoxFit.cover),
                     color: Colors.white,
                     borderRadius: BorderRadius
@@ -965,7 +874,7 @@ class _ShopSingleProductState extends State<ShopSingleProduct> {
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        products.productName!,maxLines: 2, textAlign: TextAlign.start,
+                        widget.product.productName!,maxLines: 2, textAlign: TextAlign.start,
                         style: TextStyle(
                             fontFamily: 'Urbanist',
                             fontSize: scrWidth*0.03,
@@ -976,7 +885,7 @@ class _ShopSingleProductState extends State<ShopSingleProduct> {
                   SizedBox(height: scrHeight*0.003,),
 
                   Text(
-                    "${products.quantity!} ${products.unit!}", textAlign: TextAlign.center,
+                    "${widget.product.quantity!} ${widget.product.unit!}", textAlign: TextAlign.center,
                     style: TextStyle(
                         fontFamily: 'Urbanist',
                         fontSize: scrWidth*0.025,
@@ -985,7 +894,7 @@ class _ShopSingleProductState extends State<ShopSingleProduct> {
                   SizedBox(height: scrHeight*0.003,),
 
                   Text(
-                    currencyConvert.format(products.price!).toString(), textAlign: TextAlign.center,
+                    currencyConvert.format(widget.product.price!).toString(), textAlign: TextAlign.center,
                     style: TextStyle(
                         fontFamily: 'Urbanist',
                         fontSize: scrWidth*0.03,
@@ -1028,7 +937,7 @@ class _ShopSingleProductState extends State<ShopSingleProduct> {
                         //   }
                         //
                         // });
-                        decrementCount(products.productId!, widget.storeId,qty);
+                        decrementCount(widget.product.productId!, widget.storeId,qty);
 
                         print(cartlist);
                         final snackBar = SnackBar(
@@ -1075,10 +984,10 @@ class _ShopSingleProductState extends State<ShopSingleProduct> {
                   Expanded(
                     child: InkWell(
                       onTap: (){
-                print(products.productId);
-                print(products.productName);
+                // print(products.productId);
+                // print(products.productName);
                 qty++;
-                        incrementCount(products.productId!,widget.storeId,qty );
+                        incrementCount(widget.product.productId!,widget.storeId,qty );
                         print(cartlist);
                         // final snackBar = SnackBar(
                         //   backgroundColor: Colors.white,
@@ -1143,7 +1052,7 @@ class _ShopSingleProductState extends State<ShopSingleProduct> {
           InkWell(
             onTap: (){
 
-              addToCart(products,widget.storeId);
+              addToCart(widget.product,widget.storeId);
 
               isCarted=true;
               setState(() {

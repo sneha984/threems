@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:threems/Buy&sell/buy_and_sell.dart';
 
 class StoreDetailsModel {
+  double? deliveryCharge;
   String? storeName;
   List<dynamic>? storeCategory;
   String? storeAddress;
@@ -15,6 +16,7 @@ class StoreDetailsModel {
   double? longitude;
   StoreDetailsModel(
       {this.storeName,
+        this.deliveryCharge,
          this.storeCategory,
         this.storeAddress,
         this.storeLocation,
@@ -26,6 +28,7 @@ class StoreDetailsModel {
       });
 
   StoreDetailsModel.fromJson(Map<String, dynamic> json) {
+    deliveryCharge=json['deliveryCharge'];
     storeName = json['storeName'];
     storeCategory = json['storeCategory'];
     storeAddress = json['storeAddress'];
@@ -40,6 +43,7 @@ class StoreDetailsModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['deliveryCharge']=this.deliveryCharge;
     data['storeName'] = this.storeName;
     data['storeCategory'] = this.storeCategory;
     data['storeAddress'] = this.storeAddress;

@@ -4,6 +4,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+// import 'package:geo_firestore_flutter/geo_firestore_flutter.dart';
 import 'package:getwidget/components/dropdown/gf_multiselect.dart';
 import 'package:getwidget/types/gf_checkbox_type.dart';
 import 'package:image_picker/image_picker.dart';
@@ -60,7 +61,7 @@ class _StoreDetailsState extends State<StoreDetails> {
         // categoryListAll.add(doc.data()!);
         categoryNames[doc.get('categoryName')] = doc.data();
         categoryList.add(doc.get('categoryName'));
-        categoryListAll[doc.get('categoryName')]=doc.id;
+        // categoryListAll[doc.get('categoryName')]=doc.id;
       }
       print(categoryList);
       if(mounted){
@@ -653,10 +654,16 @@ class _StoreDetailsState extends State<StoreDetails> {
                           refreshPage();
                           return showSnackbar(context,"Must Provide StoreAddress");
                         }else{
+                          // List<String> ids=[];
+                          // for(var item in selectCategory){
+                          //   ids.add(categoryListAll[item]);
+                          // }
+                          // print(ids);
                           final strDat = StoreDetailsModel(
                             storeImage: imgUrl,
                             latitude: lat,
                             longitude:long ,
+                            deliveryCharge: double.tryParse(deliveryChargeController.text),
                             // categoryId:,
                             userId: currentuserid,
                             storeName: storeNameController.text,
@@ -703,6 +710,7 @@ class _StoreDetailsState extends State<StoreDetails> {
         .collection('stores')
         .add(strDat.toJson())
         .then((value) {
+          // geoLocation(value.id);
 
       value.update({'storeId': value.id});
       id=value.id;

@@ -98,25 +98,25 @@ class _OrderViewPageState extends State<OrderViewPage> {
             child: Row(
               children: [
                 SizedBox(width: 10,),
-                Container(
-                  height: 50,
-                    width: 50,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(image: NetworkImage(widget.orderModel.itemImage!),fit: BoxFit.fill)
-                  ),
-                ),
-                SizedBox(width: 20,),
-
-                Text(widget.orderModel.item!),
-                SizedBox(width: 50,),
-
-                Text(widget.orderModel.count!.toString()),
-                SizedBox(width: 35,),
-
-                Text(widget.orderModel.amount!.toString()),
-              ],
-            ),
-          ),
+          //       Container(
+          //         height: 50,
+          //           width: 50,
+          //         decoration: BoxDecoration(
+          //           image: DecorationImage(image: NetworkImage(widget.orderModel.itemImage!),fit: BoxFit.fill)
+          //         ),
+          //       ),
+          //       SizedBox(width: 20,),
+          //
+          //       Text(widget.orderModel.item!),
+          //       SizedBox(width: 50,),
+          //
+          //       Text(widget.orderModel.count!.toString()),
+          //       SizedBox(width: 35,),
+          //
+          //       Text(widget.orderModel.amount!.toString()),
+          //     ],
+          //   ),
+          // ),
           SizedBox(
             height: 300,
           ),
@@ -135,6 +135,6 @@ class _OrderViewPageState extends State<OrderViewPage> {
               child:Text("Mark as Accepted"))
         ],
       ),
-    );
+    )]));
   }
 }

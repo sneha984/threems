@@ -877,8 +877,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             image: 'assets/icons/upcoming_payments.svg',
                             title: "Upcoming\nPayments",
                           ),
-
-
                         InkWell(
                           onTap: () {
                             Navigator.push(
@@ -893,8 +891,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                       ],
-                    ),
+
+
                   ),
+                ),
                 ),
                 Container(
                   padding: EdgeInsets.symmetric(

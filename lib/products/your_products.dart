@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:threems/products/product_widget.dart';
 
+import '../screens/splash_screen.dart';
 import 'const.dart';
 import 'dummyData.dart';
 
@@ -17,8 +18,7 @@ class YourProducts extends StatefulWidget {
 class _YourProductsState extends State<YourProducts> {
   @override
   Widget build(BuildContext context) {
-    scrHeight = MediaQuery.of(context).size.height;
-    scrWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 0,
@@ -38,7 +38,7 @@ class _YourProductsState extends State<YourProducts> {
             width: scrWidth,
             height: scrHeight * 0.07,
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: size20),
+              padding: EdgeInsets.symmetric(horizontal: scrWidth * 0.055),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -46,22 +46,22 @@ class _YourProductsState extends State<YourProducts> {
                     children: [
                       SvgPicture.asset('assets/svg/back.svg'),
                       SizedBox(
-                        width: size15,
+                        width: scrWidth * 0.039,
                       ),
                       Text(
                         "Your Products",
                         style: GoogleFonts.urbanist(
                             fontWeight: FontWeight.w500,
-                            fontSize: fontSize16,
+                            fontSize: scrWidth * 0.045,
                             color: Colors.white),
                       ),
                     ],
                   ),
                   Container(
                     width: scrWidth * 0.28,
-                    height: size40,
+                    height: scrWidth * 0.1,
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(size16),
+                        borderRadius: BorderRadius.circular(scrWidth * 0.045),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withOpacity(0.15),
@@ -75,7 +75,7 @@ class _YourProductsState extends State<YourProducts> {
                         "+ Add new",
                         style: GoogleFonts.urbanist(
                             fontWeight: FontWeight.w500,
-                            fontSize: fontSize16,
+                            fontSize: scrWidth * 0.045,
                             color: Colors.black),
                       ),
                     ),
@@ -85,19 +85,19 @@ class _YourProductsState extends State<YourProducts> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: size17),
+            padding: EdgeInsets.symmetric(horizontal:  scrWidth * 0.052),
             child: Container(
               width: scrWidth,
               height: scrHeight * 0.895,
               // color: Colors.red,
               child: ListView.separated(
-                padding: EdgeInsets.only(top: size20),
+                padding: EdgeInsets.only(top: scrWidth * 0.055),
                 itemCount: yourPro.length,
                 itemBuilder: (context, index) => ProductWidget(
                   index: index,
                 ),
                 separatorBuilder: (context, index) => SizedBox(
-                  height: size20,
+                  height: scrWidth * 0.055,
                 ),
               ),
             ),

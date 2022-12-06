@@ -20,18 +20,18 @@ class _ProductListWidgetState extends State<ProductListWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: size20),
+      padding: EdgeInsets.symmetric(horizontal: scrWidth * 0.055),
       child: Container(
         width: 200,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              height: size55,
-              width: size55,
+              height: scrWidth * 0.2,
+              width: scrWidth * 0.2,
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.grey.withOpacity(0.2)),
-                borderRadius: BorderRadius.circular(size10),
+                borderRadius: BorderRadius.circular(scrWidth * 0.025),
               ),
               child: Padding(
                 padding: const EdgeInsets.all(3),
@@ -39,7 +39,7 @@ class _ProductListWidgetState extends State<ProductListWidget> {
               ),
             ),
             SizedBox(
-              width: size12,
+              width: scrWidth * 0.03,
             ),
             Container(
               width:20,
@@ -55,12 +55,12 @@ class _ProductListWidgetState extends State<ProductListWidget> {
                           Text(
                             widget.proLis['name'],
                             style: GoogleFonts.urbanist(
-                                fontSize: size15, fontWeight: FontWeight.w600),
+                                fontSize: scrWidth * 0.039, fontWeight: FontWeight.w600),
                           ),
                           Text(
                             widget.proLis['qty'],
                             style: GoogleFonts.urbanist(
-                                fontSize: size12,
+                                fontSize: scrWidth * 0.03,
                                 fontWeight: FontWeight.w600,
                                 color: Color(0xff818181)),
                           )
@@ -91,13 +91,13 @@ class _ProductListWidgetState extends State<ProductListWidget> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   SizedBox(
-                                    width: size24,
+                                    width: scrWidth * 0.065,
                                   ),
                                   Text(
                                     "Edit",
                                     style: TextStyle(
                                       color: Colors.black,
-                                      fontSize: fontSize13,
+                                      fontSize: scrWidth * 0.035,
                                       fontFamily: "Urbanist",
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -113,13 +113,13 @@ class _ProductListWidgetState extends State<ProductListWidget> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   SizedBox(
-                                    width: size24,
+                                    width: scrWidth * 0.065,
                                   ),
                                   Text(
                                     "Delete ",
                                     style: TextStyle(
                                       color: Colors.black,
-                                      fontSize: fontSize13,
+                                      fontSize: scrWidth * 0.035,
                                       fontFamily: "Urbanist",
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -138,7 +138,7 @@ class _ProductListWidgetState extends State<ProductListWidget> {
                       Text(
                         widget.proLis['price'],
                         style: GoogleFonts.urbanist(
-                            fontSize: size12,
+                            fontSize: scrWidth * 0.03,
                             fontWeight: FontWeight.w700,
                             color: Colors.red),
                       ),
@@ -147,7 +147,7 @@ class _ProductListWidgetState extends State<ProductListWidget> {
                           Text(
                             inStock ? "(in stock)" : "(out of stock)",
                             style: GoogleFonts.urbanist(
-                                fontSize: size10, fontWeight: FontWeight.w600),
+                                fontSize: scrWidth * 0.025, fontWeight: FontWeight.w600),
                           ),
                           Transform.scale(
                             scale: 0.7,

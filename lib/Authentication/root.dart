@@ -22,8 +22,10 @@ class Rootingpage extends StatefulWidget {
 class _RootingpageState extends State<Rootingpage> {
   @override
   Widget build(BuildContext context) {
-    scrHeight = MediaQuery.of(context).size.height;
-    scrWidth = MediaQuery.of(context).size.width;
+    scrHeight=MediaQuery.of(context).size.height;
+    scrWidth=MediaQuery.of(context).size.width;
+
+
     return Scaffold(
       body: StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),

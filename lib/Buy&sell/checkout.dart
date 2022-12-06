@@ -643,23 +643,29 @@ class _CheckOutPageState extends State<CheckOutPage> {
           )
               :InkWell(
             onTap: (){
-              for(int i=0;i<cartlist.length;i++){
-                //
-                // final addr=Addresses(
-                //
-                // )
+              List <OrderedItems> orders1=[];
 
-
+              for(int i=0;i<cartlist.length;i++) {
+                orders1.add(OrderedItems(
+                  item:cartlist[i]['name'] ,
+                  count:cartlist[i]['count'] ,
+                  amount:cartlist[i]['price'] ,
+                  itemImage:cartlist[i]['img'] ,
+                ));
+              }
                 var ordr=OrderModel(
-                    item: cartlist[i]['name'],
-                    itemImage: cartlist[i]['img'],
-                    amount: cartlist[i]['price'],
+
+                    // item: cartlist[i]['name'],
+                    // itemImage: cartlist[i]['img'],
+                    // amount: cartlist[i]['price'],
                     time:DateTime.now(),
                     userId: currentuserid,
                     deliveryCharge: 30,
                     status: 0,
-                    count: cartlist[i]['count'],
-                    storeId: cartlist[i]['storeId'],
+                    orderedItems: orders1,
+                    // count: cartlist[i]['count'],
+
+                    storeId: widget.id,
                     address: Addresses(
                         phoneNumber: addressList![0].phoneNumber!,
                         flatNo: addressList![0].flatNo!,
@@ -669,8 +675,8 @@ class _CheckOutPageState extends State<CheckOutPage> {
                         name: addressList![0].name!
                     )
                 );
-                orderPlacing(ordr,cartlist[i]['storeId']);
-              }
+                orderPlacing(ordr,widget.id);
+
 
               Navigator.push(context,MaterialPageRoute(builder: (context)=>CheckOutPage3()));
             },
@@ -700,13 +706,30 @@ class _CheckOutPageState extends State<CheckOutPage> {
     );
   }
    orderPlacing(OrderModel ordr,String id){
-     FirebaseFirestore
-         .instance
-         .collection('stores')
-         .doc(id)
-         .collection('orders')
-         .add(ordr.toJson()).then((value) =>
-         value.update({'orderId':value.id})
-     );
-   }
+
+      FirebaseFirestore
+          .instance
+          .collection('stores')
+          .doc(id)
+          .collection('orders')
+          .add(ordr.toJson()).then((value) =>
+          value.update({
+            'orderId':value.id,
+            // 'orderedItems':FieldValue.arrayUnion(
+            //   [
+            //     {
+            //       'item':cartlist[i]['name'],
+            //       'count':cartlist[i]['count'],
+            //       'itemImage':cartlist[i]['img'],
+            //       'amount':cartlist[i]['price']
+            //     }
+            //   ]
+            // )
+
+          })
+      );
+    }
+
+
+
 }

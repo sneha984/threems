@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
-import 'package:threems/screens/chits/chitsucesspaid.dart';
-
 import '../../model/ChitModel.dart';
 import '../../model/usermodel.dart';
 import '../../utils/customclip2.dart';

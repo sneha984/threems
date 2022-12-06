@@ -59,6 +59,7 @@ dependencies:
   syncfusion_flutter_charts: ^20.3.47
   flutter_neumorphic: ^3.2.0
   syncfusion_flutter_gauges: ^20.3.48
+#  google_sign_in: ^5.4.1
   cloud_firestore:
   firebase_core:
   firebase_auth:
@@ -139,11 +140,11 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    #   - family: Schyler
-    #     fonts:
-    #       - asset: fonts/Schyler-Regular.ttf
-    #       - asset: fonts/Schyler-Italic.ttf
-    #         style: italic
+  #   - family: Schyler
+  #     fonts:
+  #       - asset: fonts/Schyler-Regular.ttf
+  #       - asset: fonts/Schyler-Italic.ttf
+  #         style: italic
     - family: Urbanist
       fonts:
         - asset: assets/fonts/Urbanist-Regular.ttf

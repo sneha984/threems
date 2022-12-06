@@ -7,13 +7,13 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:geoflutterfire/geoflutterfire.dart';
+ import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:threems/Authentication/root.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart' as gMap;
-import 'package:google_maps_place_picker/google_maps_place_picker.dart' as gMapPlacePicker;
+ import 'package:google_maps_place_picker/google_maps_place_picker.dart' as gMapPlacePicker;
 import 'package:threems/screens/home_screen.dart';
 
 
@@ -23,7 +23,7 @@ import '../../utils/themes.dart';
 import '../charity/verification_details.dart';
 import '../splash_screen.dart';
 import 'details.dart';
-final geo = Geoflutterfire();
+ final geo = Geoflutterfire();
 
 class AddServicePage extends StatefulWidget {
   final String subCategoryName;
@@ -643,7 +643,8 @@ class _AddServicePageState extends State<AddServicePage>  with TickerProviderSta
                                         await   Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                              builder: (context) => gMapPlacePicker.PlacePicker(
+                                              builder: (context) =>
+                                                  gMapPlacePicker.PlacePicker(
                                                 apiKey: "AIzaSyCUZFUZ1yMpkzh6QUnKj54Q2N4L2iT4tBY",
                                                 initialPosition: gMap.LatLng(
                                                     location.latitude,location.longitude
@@ -1361,7 +1362,7 @@ class _AddServicePageState extends State<AddServicePage>  with TickerProviderSta
                                 if(name?.text!='' &&phoneNumber?.text!='' &&email?.text!=''&&whatsappNumber?.text!=''
                                     &&address?.text!=''&&serviceLocation!=''&&selectedCity!=''&& selectedCategory!=''&& selectedSubCategory!=''&& selectedUnit!=''
                                     &&sevicesProvided!.text!=''&&aboutService!.text!=''&& imgUrl!=''&& fileUrl!=''){
-                                  GeoFirePoint myLocation = geo.point(latitude:double.tryParse(latitude!.text)??0, longitude: double.tryParse(longitude!.text)??0);
+                                   GeoFirePoint myLocation = geo.point(latitude:double.tryParse(latitude!.text)??0, longitude: double.tryParse(longitude!.text)??0);
 
                                   showDialog(context: context,
                                       builder: (buildcontext)

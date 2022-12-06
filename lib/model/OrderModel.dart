@@ -1,57 +1,55 @@
 class OrderModel {
-  String? item;
-  double? amount;
-  String? itemImage;
   DateTime? time;
   Addresses? address;
   String? orderId;
   String? userId;
   double? deliveryCharge;
   int? status;
-  int? count;
   String? storeId;
+  List<OrderedItems>? orderedItems;
   OrderModel(
-      {this.item,
-        this.amount,
+      {
         this.time,
         this.address,
         this.orderId,
         this.userId,
         this.deliveryCharge,
         this.status,
-        this.count,
-        this.storeId,this.itemImage});
+        this.storeId,
+        this.orderedItems});
 
   OrderModel.fromJson(Map<String, dynamic> json) {
-    item = json['item'];
-    amount = json['amount'];
     time = DateTime.tryParse(json['time'].toString());
     address =
     json['address'] != null ? new Addresses.fromJson(json['address']) : null;
+    if (json['orderedItems'] != null) {
+      orderedItems = <OrderedItems>[];
+      json['orderedItems'].forEach((v) {
+        orderedItems!.add(new OrderedItems.fromJson(v));
+      });
+    }
     orderId = json['orderId'];
     userId = json['userId'];
     deliveryCharge = json['deliveryCharge'];
     status=json['status'];
-    count=json['count'];
     storeId=json['storeId'];
-    itemImage=json['itemImage'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['item'] = this.item;
-    data['amount'] = this.amount;
     data['time'] = this.time;
     data['status']=this.status;
     if (this.address != null) {
       data['address'] = this.address!.toJson();
+
+    }
+    if (this.orderedItems != null) {
+      data['orderedItems'] = this.orderedItems!.map((v) => v.toJson()).toList();
     }
     data['orderId'] = this.orderId;
     data['userId'] = this.userId;
     data['deliveryCharge'] = this.deliveryCharge;
-    data['count']=this.count;
     data['storeId']=this.storeId;
-    data['itemImage']=this.itemImage;
     return data;
   }
 }
@@ -89,6 +87,30 @@ class Addresses {
     data['locationType'] = this.locationType;
     data['phoneNumber'] = this.phoneNumber;
     data['name'] = this.name;
+    return data;
+  }
+}
+class OrderedItems {
+  double? amount;
+  int? count;
+  String? item;
+  String? itemImage;
+
+  OrderedItems({this.amount, this.count, this.item, this.itemImage});
+
+  OrderedItems.fromJson(Map<String, dynamic> json) {
+    amount = json['amount'];
+    count = json['count'];
+    item = json['item'];
+    itemImage = json['itemImage'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['amount'] = this.amount;
+    data['count'] = this.count;
+    data['item'] = this.item;
+    data['itemImage'] = this.itemImage;
     return data;
   }
 }

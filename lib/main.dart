@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:threems/Authentication/root.dart';
 import 'package:threems/utils/themes.dart';
 import 'screens/splash_screen.dart';
-import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+// import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,11 +20,11 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
+  // FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
 
   @override
   void initState() {
-    initDynamicLinks();
+    // initDynamicLinks();
     super.initState();
   }
 
@@ -40,15 +40,15 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  Future<void> initDynamicLinks() async {
-    dynamicLinks.onLink.listen((dynamicLinkData) {
-      print('here');
-      snackbarKey.currentState!.showSnackBar(
-          SnackBar(content: Text('${dynamicLinkData.link.data}')));
-      // Navigator.pushNamed(context, dynamicLinkData.link.path);
-    }).onError((error) {
-      print('onLink error');
-      print(error.message);
-    });
-  }
+  // Future<void> initDynamicLinks() async {
+  //   dynamicLinks.onLink.listen((dynamicLinkData) {
+  //     print('here');
+  //     snackbarKey.currentState!.showSnackBar(
+  //         SnackBar(content: Text('${dynamicLinkData.link.data}')));
+  //     // Navigator.pushNamed(context, dynamicLinkData.link.path);
+  //   }).onError((error) {
+  //     print('onLink error');
+  //     print(error.message);
+  //   });
+  // }
 }

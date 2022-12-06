@@ -1,5 +1,7 @@
 import 'dart:convert';
-
+import 'package:geocoding/geocoding.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart' as gMap;
+import 'package:google_maps_place_picker/google_maps_place_picker.dart' as gMapPlacePicker;
 import 'package:another_stepper/dto/stepper_data.dart';
 import 'package:another_stepper/widgets/another_stepper.dart';
 import 'package:badges/badges.dart';
@@ -54,6 +56,11 @@ class BuyAndSell extends StatefulWidget {
 }
 
 class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
+  TextEditingController? latitude;
+  TextEditingController? longitude;
+  gMapPlacePicker.PickResult? result;
+  String serviceLocation='';
+
   // late PickResult selectedPlace;
 
   String currentAddress = 'Select Your Location';
@@ -64,6 +71,11 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
   int status = 0;
   List<Widget> grids = [];
   List<DocumentSnapshot> documents = [];
+  set(){
+    setState(() {
+
+    });
+  }
   // geoLocation(String id) async {
   //   GeoFirestore geoFirestore =
   //       GeoFirestore(FirebaseFirestore.instance.collection('stores'));
@@ -97,6 +109,7 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
         categorys[doc.get('categoryName')] = doc.data();
         cateoryNames.add(doc.get('categoryName'));
         cateoryNamesMap[doc.get('categoryName')] = doc.id;
+        print(doc.get('categoryName'));
         print(
             "----------------------------------------------------------------------------------------");
         //print(categorys[doc['categoryName']]);
@@ -306,7 +319,7 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                   context,
                   MaterialPageRoute(
                       builder: (context) => CheckOutPage(
-                            id: store[0].storeId!,
+                            id: store[0].storeId??'',
                           )));
             },
             child: Badge(
@@ -769,6 +782,86 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                   children: grids),
                             ),
                           ),
+                    Row(
+                      children: [
+                        Container(
+                          width: scrWidth*0.91,
+                          height: textFormFieldHeight45,
+                          // padding: EdgeInsets.symmetric(
+                          //   horizontal: scrWidth * 0.015,
+                          //   vertical:scrHeight*0.002,
+                          // ),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Color(0xffDADADA),
+                            ),
+                            color: textFormFieldFillColor,
+                            borderRadius: BorderRadius.circular(scrWidth * 0.026),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Text('Location: '+serviceLocation.toString(),style:TextStyle(fontSize: 20),)
+                                  // Text('Lattitude:'+latitude!.text),
+                                  // Text('Longitude:'+longitude!.text),
+                                ],
+                              ),
+
+                              InkWell(
+                                  onTap: ()  async {
+
+                                    Position location = await Geolocator.getCurrentPosition(
+                                        desiredAccuracy: LocationAccuracy.high
+                                    );
+
+                                    await   Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            gMapPlacePicker.PlacePicker(
+                                              apiKey: "AIzaSyCUZFUZ1yMpkzh6QUnKj54Q2N4L2iT4tBY",
+                                              initialPosition: gMap.LatLng(
+                                                  location.latitude,location.longitude
+                                              ),
+                                              // Put YOUR OWN KEY here.
+                                              searchForInitialValue: false,
+                                              selectInitialPosition: true,
+                                              // initialPosition: LatLng(currentLoc==null?0:currentLoc!.latitude,currentLoc==null?0:currentLoc!.longitude),
+                                              onPlacePicked: (res) async {
+                                                Navigator.of(context).pop();
+                                                // GeoCode geoCode = GeoCode();
+                                                // Address address=await geoCode.reverseGeocoding(latitude: res.geometry!.location.lat,longitude: res.geometry!.location.lng);
+                                                result=res;
+                                                latitude!.text=res.geometry!.location.lat.toString();
+                                                longitude!.text=res.geometry!.location.lng.toString();
+                                                List<Placemark> placemarks = await placemarkFromCoordinates(
+                                                    res.geometry!.location.lat, res.geometry!.location.lng);
+                                                Placemark place = placemarks[0];
+                                                serviceLocation = place.locality!;
+                                                // longitude!.text=res.geometry!.location.lng.toString();
+                                                // lat=result.geometry!.location.lat;
+                                                // long=result.geometry!.location.lng;
+
+                                                set();
+                                              },
+                                              useCurrentLocation: true,
+                                            ),
+                                      ),
+                                    );
+
+                                  },
+                                  child: Icon(Icons.location_on,color: Colors.red,size: 30,)),
+
+                            ],
+                          ),
+                        ),
+
+                      ],
+                    ),
+                    SizedBox(height: 100,),
 
                     // ElevatedButton(onPressed: (){
                     //   Navigator.push(context, MaterialPageRoute(builder: (context)=>MapSample()));
@@ -1221,8 +1314,8 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                 ),
                               ],
                             )
-                          : (status == 3)
-                              ? Column(
+
+                              : Column(
                                   children: [
                                     SizedBox(
                                       height: scrHeight * 0.02,
@@ -1264,14 +1357,14 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                         children: [
                                           InkWell(
                                             onTap: () {
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          Orders(
-                                                            storeId: store[0]
-                                                                .storeId!,
-                                                          )));
+                                              // Navigator.push(
+                                              //     context,
+                                              //     MaterialPageRoute(
+                                              //         builder: (context) =>
+                                              //             Orders(
+                                              //               storeId: store[0]
+                                              //                   .storeId!,
+                                              //             )));
                                             },
                                             child: Container(
                                               height: scrHeight * 0.11,
@@ -1586,7 +1679,7 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                                     height: scrHeight * 0.01,
                                                   ),
                                                   Text(
-                                                    store[0]
+                                                    store[0]!
                                                         .storeCategory!
                                                         .length
                                                         .toString(),
@@ -1606,168 +1699,168 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                     ),
                                   ],
                                 )
-                              : Column(
-                                  children: [
-                                    SizedBox(
-                                      height: scrHeight * 0.02,
-                                    ),
-                                    Container(
-                                      width: scrWidth * 0.8,
-                                      height: scrHeight * 0.15,
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: scrWidth * 0.015,
-                                        vertical: scrHeight * 0.002,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: textFormFieldFillColor,
-                                        // color: Colors.red,
-                                        borderRadius: BorderRadius.circular(21),
-                                      ),
-                                      child: Column(
-                                        children: [
-                                          SizedBox(
-                                            height: scrHeight * 0.02,
-                                          ),
-                                          Text(
-                                            "75%",
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                fontFamily: 'Urbanist',
-                                                fontSize: scrWidth * 0.07,
-                                                fontWeight: FontWeight.w600,
-                                                color: Colors.black),
-                                          ),
-                                          SizedBox(
-                                            height: scrHeight * 0.009,
-                                          ),
-                                          LinearPercentIndicator(
-                                            //leaner progress bar
-                                            animation: true,
-                                            animationDuration: 1000,
-                                            lineHeight: scrHeight * 0.021,
-                                            width: scrWidth * 0.77,
-                                            percent: 0.7,
-                                            alignment: MainAxisAlignment.start,
-                                            barRadius:
-                                                Radius.circular(scrWidth * 0.2),
-                                            progressColor: primarycolor,
-                                            backgroundColor: Color(0xffD9D9D9),
-                                          ),
-                                          SizedBox(
-                                            height: scrHeight * 0.02,
-                                          ),
-                                          Text(
-                                            "Store setup is completed",
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                fontFamily: 'Urbanist',
-                                                fontSize: scrWidth * 0.04,
-                                                fontWeight: FontWeight.w600,
-                                                color: Colors.black),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: scrHeight * 0.02,
-                                    ),
-                                    Padding(
-                                      padding:
-                                          EdgeInsets.only(left: 10, right: 10),
-                                      child: Container(
-                                        height: scrHeight * 0.32,
-                                        width: scrWidth * 0.8,
-                                        decoration: BoxDecoration(
-                                            color: Color(0xffF3F3F3),
-                                            borderRadius:
-                                                BorderRadius.circular(20)),
-                                        child: Padding(
-                                          padding: EdgeInsets.only(
-                                              left: scrWidth * 0.05),
-                                          child: AnotherStepper(
-                                            titleTextStyle: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w600,
-                                              fontFamily: 'Urbanist',
-                                              color: Color(0xff232323),
-                                            ),
-                                            subtitleTextStyle: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w600,
-                                              fontFamily: 'Urbanist',
-                                              color: Color(0xff8B8B8B),
-                                            ),
-                                            dotWidget: Container(
-                                                height: 35,
-                                                width: 35,
-                                                decoration: BoxDecoration(
-                                                  color: Color(0xff30CF7C),
-                                                  borderRadius:
-                                                      BorderRadius.circular(30),
-                                                  // border: Border.all(color: primarycolor,width: 2)
-                                                ),
-                                                child: Padding(
-                                                  padding: EdgeInsets.only(
-                                                      left: 5, right: 5),
-                                                  child: SvgPicture.asset(
-                                                      "assets/icons/tickmark.svg"),
-                                                )),
-                                            stepperList: [
-                                              StepperData(
-                                                title: "Create online store",
-                                                subtitle:
-                                                    "Congratulations on opening your new \nonline store!",
-                                              ),
-                                              StepperData(
-                                                title: "Add Product",
-                                                subtitle:
-                                                    "Create your first product by adding the \nproduct name and images.",
-                                              ),
-                                              StepperData(
-                                                title: "Payment",
-                                                subtitle:
-                                                    "Confirm Your Payment Section",
-                                              ),
-                                            ],
-                                            horizontalStepperHeight: 200,
-                                            stepperDirection: Axis.vertical,
-                                            inActiveBarColor: Colors.grey,
-                                            activeIndex: 1,
-                                            barThickness: 2,
-                                            activeBarColor: primarycolor,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: scrHeight * 0.02,
-                                    ),
-                                    // GestureDetector(
-                                    //   onTap: () {
-                                    //     // Navigator.push(context, MaterialPageRoute(builder: (context)=>StoreDetailsFill2()));
-                                    //   },
-                                    //   child: Container(
-                                    //     height: scrHeight * 0.055,
-                                    //     width: scrWidth * 0.55,
-                                    //     decoration: BoxDecoration(
-                                    //         color: primarycolor,
-                                    //         borderRadius:
-                                    //         BorderRadius.circular(21.5)),
-                                    //     child: Center(
-                                    //       child: Text(
-                                    //         "View Store",
-                                    //         textAlign: TextAlign.center,
-                                    //         style: TextStyle(
-                                    //             fontFamily: 'Urbanist',
-                                    //             fontSize: scrWidth * 0.04,
-                                    //             fontWeight: FontWeight.w700,
-                                    //             color: Colors.white),
-                                    //       ),
-                                    //     ),
-                                    //   ),
-                                    // ),
-                                  ],
-                                ),
+                               // Column(
+                               //    children: [
+                               //      SizedBox(
+                               //        height: scrHeight * 0.02,
+                               //      ),
+                               //      Container(
+                               //        width: scrWidth * 0.8,
+                               //        height: scrHeight * 0.15,
+                               //        padding: EdgeInsets.symmetric(
+                               //          horizontal: scrWidth * 0.015,
+                               //          vertical: scrHeight * 0.002,
+                               //        ),
+                               //        decoration: BoxDecoration(
+                               //          color: textFormFieldFillColor,
+                               //          // color: Colors.red,
+                               //          borderRadius: BorderRadius.circular(21),
+                               //        ),
+                               //        child: Column(
+                               //          children: [
+                               //            SizedBox(
+                               //              height: scrHeight * 0.02,
+                               //            ),
+                               //            Text(
+                               //              "75%",
+                               //              textAlign: TextAlign.center,
+                               //              style: TextStyle(
+                               //                  fontFamily: 'Urbanist',
+                               //                  fontSize: scrWidth * 0.07,
+                               //                  fontWeight: FontWeight.w600,
+                               //                  color: Colors.black),
+                               //            ),
+                               //            SizedBox(
+                               //              height: scrHeight * 0.009,
+                               //            ),
+                               //            LinearPercentIndicator(
+                               //              //leaner progress bar
+                               //              animation: true,
+                               //              animationDuration: 1000,
+                               //              lineHeight: scrHeight * 0.021,
+                               //              width: scrWidth * 0.77,
+                               //              percent: 0.7,
+                               //              alignment: MainAxisAlignment.start,
+                               //              barRadius:
+                               //                  Radius.circular(scrWidth * 0.2),
+                               //              progressColor: primarycolor,
+                               //              backgroundColor: Color(0xffD9D9D9),
+                               //            ),
+                               //            SizedBox(
+                               //              height: scrHeight * 0.02,
+                               //            ),
+                               //            Text(
+                               //              "Store setup is completed",
+                               //              textAlign: TextAlign.center,
+                               //              style: TextStyle(
+                               //                  fontFamily: 'Urbanist',
+                               //                  fontSize: scrWidth * 0.04,
+                               //                  fontWeight: FontWeight.w600,
+                               //                  color: Colors.black),
+                               //            ),
+                               //          ],
+                               //        ),
+                               //      ),
+                               //      SizedBox(
+                               //        height: scrHeight * 0.02,
+                               //      ),
+                               //      Padding(
+                               //        padding:
+                               //            EdgeInsets.only(left: 10, right: 10),
+                               //        child: Container(
+                               //          height: scrHeight * 0.32,
+                               //          width: scrWidth * 0.8,
+                               //          decoration: BoxDecoration(
+                               //              color: Color(0xffF3F3F3),
+                               //              borderRadius:
+                               //                  BorderRadius.circular(20)),
+                               //          child: Padding(
+                               //            padding: EdgeInsets.only(
+                               //                left: scrWidth * 0.05),
+                               //            child: AnotherStepper(
+                               //              titleTextStyle: TextStyle(
+                               //                fontSize: 16,
+                               //                fontWeight: FontWeight.w600,
+                               //                fontFamily: 'Urbanist',
+                               //                color: Color(0xff232323),
+                               //              ),
+                               //              subtitleTextStyle: TextStyle(
+                               //                fontSize: 12,
+                               //                fontWeight: FontWeight.w600,
+                               //                fontFamily: 'Urbanist',
+                               //                color: Color(0xff8B8B8B),
+                               //              ),
+                               //              dotWidget: Container(
+                               //                  height: 35,
+                               //                  width: 35,
+                               //                  decoration: BoxDecoration(
+                               //                    color: Color(0xff30CF7C),
+                               //                    borderRadius:
+                               //                        BorderRadius.circular(30),
+                               //                    // border: Border.all(color: primarycolor,width: 2)
+                               //                  ),
+                               //                  child: Padding(
+                               //                    padding: EdgeInsets.only(
+                               //                        left: 5, right: 5),
+                               //                    child: SvgPicture.asset(
+                               //                        "assets/icons/tickmark.svg"),
+                               //                  )),
+                               //              stepperList: [
+                               //                StepperData(
+                               //                  title: "Create online store",
+                               //                  subtitle:
+                               //                      "Congratulations on opening your new \nonline store!",
+                               //                ),
+                               //                StepperData(
+                               //                  title: "Add Product",
+                               //                  subtitle:
+                               //                      "Create your first product by adding the \nproduct name and images.",
+                               //                ),
+                               //                StepperData(
+                               //                  title: "Payment",
+                               //                  subtitle:
+                               //                      "Confirm Your Payment Section",
+                               //                ),
+                               //              ],
+                               //              horizontalStepperHeight: 200,
+                               //              stepperDirection: Axis.vertical,
+                               //              inActiveBarColor: Colors.grey,
+                               //              activeIndex: 1,
+                               //              barThickness: 2,
+                               //              activeBarColor: primarycolor,
+                               //            ),
+                               //          ),
+                               //        ),
+                               //      ),
+                               //      SizedBox(
+                               //        height: scrHeight * 0.02,
+                               //      ),
+                               //      // GestureDetector(
+                               //      //   onTap: () {
+                               //      //     // Navigator.push(context, MaterialPageRoute(builder: (context)=>StoreDetailsFill2()));
+                               //      //   },
+                               //      //   child: Container(
+                               //      //     height: scrHeight * 0.055,
+                               //      //     width: scrWidth * 0.55,
+                               //      //     decoration: BoxDecoration(
+                               //      //         color: primarycolor,
+                               //      //         borderRadius:
+                               //      //         BorderRadius.circular(21.5)),
+                               //      //     child: Center(
+                               //      //       child: Text(
+                               //      //         "View Store",
+                               //      //         textAlign: TextAlign.center,
+                               //      //         style: TextStyle(
+                               //      //             fontFamily: 'Urbanist',
+                               //      //             fontSize: scrWidth * 0.04,
+                               //      //             fontWeight: FontWeight.w700,
+                               //      //             color: Colors.white),
+                               //      //       ),
+                               //      //     ),
+                               //      //   ),
+                               //      // ),
+                               //    ],
+                               //  ),
 
               //after store created
             ]),

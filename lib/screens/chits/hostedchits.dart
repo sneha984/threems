@@ -824,18 +824,18 @@ class _HostedChitPageState extends State<HostedChitPage>
                                 child: InkWell(
                                   onTap: () {
                                     setState(() {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  hostedChits[index].status == 0
-                                                      ? HostedDraftPage(
-                                                          id: hostedChits[index]
-                                                              .chitId!,
-                                                        )
-                                                      : MyHostedPublishedChit(
-                                                          id: hostedChits[index]
-                                                              .chitId!)));
+                                      // Navigator.push(
+                                      //     context,
+                                      //     MaterialPageRoute(
+                                      //         builder: (context) =>
+                                      //             hostedChits[index].status == 0
+                                      //                 ? HostedDraftPage(
+                                      //                     id: hostedChits[index]
+                                      //                         .chitId!,
+                                      //                   )
+                                      //                 : MyHostedPublishedChit(
+                                      //                     id: hostedChits[index]
+                                      //                         .chitId!)));
                                       // : (index == 1)
                                       //     ? Navigator.push(
                                       //         context,

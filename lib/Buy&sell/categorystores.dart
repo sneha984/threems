@@ -23,18 +23,6 @@ class _CategoryStoresState extends State<CategoryStores> {
   String name="";
   List <Map<String,dynamic>> data=[];
   TextEditingController search=TextEditingController();
-  List<SubCategory> subcategory=[
-    SubCategory(noofproduct: "120 products", storename: "Bavya Store",
-        storeimage: "https://cdn.pixabay.com/photo/2016/03/02/20/13/grocery-1232944__340.jpg"),
-    SubCategory(noofproduct: "120 products", storename: "Bavya Store",
-        storeimage: "https://cdn.pixabay.com/photo/2016/03/02/20/13/grocery-1232944__340.jpg"),
-    SubCategory(noofproduct: "120 products", storename: "Bavya Store",
-        storeimage: "https://cdn.pixabay.com/photo/2016/03/02/20/13/grocery-1232944__340.jpg"),
-    SubCategory(noofproduct: "120 products", storename: "Bavya Store",
-        storeimage: "https://cdn.pixabay.com/photo/2016/03/02/20/13/grocery-1232944__340.jpg"),
-    SubCategory(noofproduct: "120 products", storename: "Bavya Store",
-        storeimage: "https://cdn.pixabay.com/photo/2016/03/02/20/13/grocery-1232944__340.jpg"),
-  ];
   getStores(){
     FirebaseFirestore
         .instance
@@ -52,13 +40,34 @@ class _CategoryStoresState extends State<CategoryStores> {
       if(mounted){
         setState(() {
           print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%');
-        print(filteredShops.length);
+          print(filteredShops.length);
           print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%');
 
         });
       }
     });
   }
+  getProducts(){
+    FirebaseFirestore
+        .instance
+        .collection('stores')
+        .doc(shops[0].storeId)
+        .collection('products')
+        .where('storedCategorys',isEqualTo: widget.categoryname)
+        .snapshots().listen((event) {
+      productsList=[];
+      for(DocumentSnapshot <Map<String,dynamic>> doc in event.docs){
+        productsList.add(ProductModel.fromJson(doc.data()!));
+      }
+      if(mounted){
+        setState(() {
+        });
+      }
+    });
+  }
+
+
+
 
   getSearchedData(String str){
     filteredShops=[];
