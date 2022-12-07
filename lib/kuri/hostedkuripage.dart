@@ -1,11 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_iconpicker/Serialization/iconDataSerialization.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:gallery_saver/gallery_saver.dart';
 import 'package:intl/intl.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:threems/kuri/createkuri.dart';
 
+import '../Authentication/root.dart';
 import '../model/Kuri/kuriModel.dart';
 import '../model/usermodel.dart';
 import '../screens/home_screen.dart';
@@ -25,6 +30,50 @@ class HostedKuriPage extends StatefulWidget {
 
 class _HostedKuriPageState extends State<HostedKuriPage> {
   Map<String, Payments> latestPayments = {};
+
+  bool verifying = false;
+
+  getPayments() {
+    FirebaseFirestore.instance
+        .collection('kuri')
+        .doc(widget.id)
+        .collection('payments')
+        .orderBy('datePaid', descending: false)
+        .snapshots()
+        .listen((event) {
+      for (var doc in event.docs) {
+        if (latestPayments[doc['userId']] == null) {
+          latestPayments[doc['userId']] = Payments.fromJson(doc.data());
+        } else if (latestPayments[doc['userId']]!.verified == true) {
+          latestPayments[doc['userId']] = Payments.fromJson(doc.data());
+        }
+      }
+      if (mounted) {
+        setState(() {});
+      }
+    });
+  }
+
+  Icon? _icon;
+  var icons;
+  var categoryName;
+  getIconData() {
+    FirebaseFirestore.instance
+        .collection('income')
+        .where('categoryName', isEqualTo: 'Kuri')
+        .snapshots()
+        .listen((event) {
+      for (DocumentSnapshot data in event.docs) {
+        icons = deserializeIcon(data['icon']);
+        categoryName = data['categoryName'];
+        // _icon = Icon(icons,color: Colors.white,size: 45,);
+
+      }
+      if (mounted) {
+        setState(() {});
+      }
+    });
+  }
 
   KuriModel? kuri;
   UserModel? currentKuriUser;
@@ -108,7 +157,9 @@ class _HostedKuriPageState extends State<HostedKuriPage> {
           .get();
       members.add(UserModel.fromJson(doc.data()!));
     }
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override
@@ -116,6 +167,8 @@ class _HostedKuriPageState extends State<HostedKuriPage> {
     // TODO: implement initState
     super.initState();
     listenKuri();
+    getIconData();
+    getPayments();
   }
 
   @override
@@ -639,204 +692,208 @@ class _HostedKuriPageState extends State<HostedKuriPage> {
                                         itemCount: members.length,
                                         itemBuilder:
                                             (BuildContext context, int index) {
-                                          for (int i = 0;
-                                              i < kuri!.payments!.length;
-                                              i++) {
-                                            if (kuri!.payments![i].userId ==
-                                                members[index].userId) {
-                                              latestPayments[kuri!
-                                                      .payments![i].userId] !=
-                                                  kuri!.payments![i];
-                                            }
-                                          }
-
                                           var data = members[index];
-                                          return Container(
-                                            width: scrWidth * 0.02,
-                                            height: scrHeight * 0.075,
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                                color: Color(0xffF3F3F3)),
-                                            child: ListTile(
-                                              leading: Padding(
-                                                padding: EdgeInsets.only(
-                                                    top: scrHeight * 0.004),
-                                                child: Container(
-                                                  width: scrWidth * 0.12,
-                                                  height: scrHeight * 0.05,
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            16),
-                                                    color: Colors.black,
-                                                    image: DecorationImage(
-                                                        image: NetworkImage(
-                                                            data.userImage!),
-                                                        fit: BoxFit.cover),
+                                          return InkWell(
+                                            onTap: () {
+                                              latestPayments[data.userId] !=
+                                                      null
+                                                  ? verifyPayment(
+                                                      latestPayments[
+                                                          data.userId]!,
+                                                      data)
+                                                  : showSnackbar(context,
+                                                      '${data.userName!} is not paid yet!!.');
+                                            },
+                                            child: Container(
+                                              width: scrWidth * 0.02,
+                                              height: scrHeight * 0.075,
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                  color: Color(0xffF3F3F3)),
+                                              child: ListTile(
+                                                leading: Padding(
+                                                  padding: EdgeInsets.only(
+                                                      top: scrHeight * 0.004),
+                                                  child: Container(
+                                                    width: scrWidth * 0.12,
+                                                    height: scrHeight * 0.05,
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              16),
+                                                      color: Colors.black,
+                                                      image: DecorationImage(
+                                                          image: NetworkImage(
+                                                              data.userImage!),
+                                                          fit: BoxFit.cover),
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                              title: Padding(
-                                                padding: EdgeInsets.only(
-                                                    top: scrHeight * 0.01),
-                                                child: Column(
-                                                  children: [
-                                                    Text(
-                                                      data.userName!,
-                                                      style: TextStyle(
-                                                          fontFamily:
-                                                              'Urbanist',
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          fontSize:
-                                                              scrWidth * 0.045),
+                                                title: Padding(
+                                                  padding: EdgeInsets.only(
+                                                      top: scrHeight * 0.01),
+                                                  child: Column(
+                                                    children: [
+                                                      Text(
+                                                        data.userName!,
+                                                        style: TextStyle(
+                                                            fontFamily:
+                                                                'Urbanist',
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            fontSize: scrWidth *
+                                                                0.045),
+                                                      ),
+                                                      SizedBox(
+                                                        height:
+                                                            scrHeight * 0.004,
+                                                      ),
+                                                      Container(
+                                                        width: scrWidth * 0.15,
+                                                        height:
+                                                            scrHeight * 0.017,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                                color: latestPayments[members[index]
+                                                                            .userId] !=
+                                                                        null
+                                                                    ? latestPayments[members[index].userId]!
+                                                                            .verified!
+                                                                        ? Color(
+                                                                            0xff02B558)
+                                                                        : Color(
+                                                                            0xff8391A1)
+                                                                    : Color(
+                                                                        0xffF61C0D),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            3)),
+                                                        child: Center(
+                                                          child: Text(
+                                                            latestPayments![members[
+                                                                            index]
+                                                                        .userId] ==
+                                                                    null
+                                                                ? 'Due'
+                                                                : latestPayments![
+                                                                            members[index].userId]!
+                                                                        .verified!
+                                                                    ? 'Paid'
+                                                                    : "Pending",
+                                                            style: TextStyle(
+                                                                fontSize:
+                                                                    scrWidth *
+                                                                        0.033,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600,
+                                                                fontFamily:
+                                                                    'Urbanist',
+                                                                color: Colors
+                                                                    .white),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                trailing:
+                                                    PopupMenuButton<MenuItem>(
+                                                  constraints: BoxConstraints(
+                                                      maxWidth: 150,
+                                                      minWidth: 150,
+                                                      maxHeight: 50,
+                                                      minHeight: 50),
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8)),
+                                                  position:
+                                                      PopupMenuPosition.under,
+                                                  child: SizedBox(
+                                                    width: 10,
+                                                    height: 10,
+                                                    child: SvgPicture.asset(
+                                                      "assets/icons/menuicon.svg",
                                                     ),
-                                                    SizedBox(
-                                                      height: scrHeight * 0.004,
-                                                    ),
-                                                    Container(
-                                                      width: scrWidth * 0.15,
-                                                      height: scrHeight * 0.017,
-                                                      decoration: BoxDecoration(
-                                                          color: latestPayments[
-                                                                      members[index]
-                                                                          .userId] !=
-                                                                  null
-                                                              ? latestPayments[members[
-                                                                              index]
-                                                                          .userId]!
-                                                                      .verified!
-                                                                  ? Color(
-                                                                      0xff02B558)
-                                                                  : Color(
-                                                                      0xff8391A1)
-                                                              : Color(
-                                                                  0xffF61C0D),
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(3)),
-                                                      child: Center(
-                                                        child: Text(
-                                                          latestPayments![members[
-                                                                          index]
-                                                                      .userId] ==
-                                                                  null
-                                                              ? 'Due'
-                                                              : latestPayments![
-                                                                          members[index]
-                                                                              .userId]!
-                                                                      .verified!
-                                                                  ? 'Paid'
-                                                                  : "Pending",
-                                                          style: TextStyle(
-                                                              fontSize:
-                                                                  scrWidth *
-                                                                      0.033,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w600,
-                                                              fontFamily:
-                                                                  'Urbanist',
-                                                              color:
-                                                                  Colors.white),
+                                                  ),
+                                                  itemBuilder: (context) => [
+                                                    PopupMenuItem(
+                                                      height: 30,
+                                                      child: InkWell(
+                                                        onTap: () async {
+                                                          DocumentSnapshot doc =
+                                                              await FirebaseFirestore
+                                                                  .instance
+                                                                  .collection(
+                                                                      'kuri')
+                                                                  .doc(kuri!
+                                                                      .kuriId)
+                                                                  .get();
+
+                                                          List allMembers =
+                                                              doc['members'];
+                                                          allMembers.remove(
+                                                              data.userId);
+                                                          print(allMembers);
+
+                                                          FirebaseFirestore
+                                                              .instance
+                                                              .collection(
+                                                                  'kuri')
+                                                              .doc(kuri!.kuriId)
+                                                              .update({
+                                                            'members':
+                                                                allMembers
+                                                          });
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        child: Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          children: [
+                                                            Container(
+                                                              // padding: EdgeInsets.symmetric(horizontal: 1),
+                                                              height: 15,
+                                                              width: 15,
+                                                              child: SvgPicture
+                                                                  .asset(
+                                                                'assets/icons/trash.svg',
+                                                                color: Colors
+                                                                    .black,
+                                                                fit: BoxFit
+                                                                    .contain,
+                                                              ),
+                                                            ),
+                                                            SizedBox(
+                                                              width: 5,
+                                                            ),
+                                                            Text(
+                                                              "Remove",
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .black,
+                                                                fontSize:
+                                                                    FontSize13,
+                                                                fontFamily:
+                                                                    "Urbanist",
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                              ),
+                                                            ),
+                                                            SizedBox(
+                                                              width: 5,
+                                                            ),
+                                                          ],
                                                         ),
                                                       ),
                                                     ),
                                                   ],
                                                 ),
-                                              ),
-                                              trailing:
-                                                  PopupMenuButton<MenuItem>(
-                                                constraints: BoxConstraints(
-                                                    maxWidth: 150,
-                                                    minWidth: 150,
-                                                    maxHeight: 50,
-                                                    minHeight: 50),
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8)),
-                                                position:
-                                                    PopupMenuPosition.under,
-                                                child: SizedBox(
-                                                  width: 10,
-                                                  height: 10,
-                                                  child: SvgPicture.asset(
-                                                    "assets/icons/menuicon.svg",
-                                                  ),
-                                                ),
-                                                itemBuilder: (context) => [
-                                                  PopupMenuItem(
-                                                    height: 30,
-                                                    child: InkWell(
-                                                      onTap: () async {
-                                                        DocumentSnapshot doc =
-                                                            await FirebaseFirestore
-                                                                .instance
-                                                                .collection(
-                                                                    'kuri')
-                                                                .doc(kuri!
-                                                                    .kuriId)
-                                                                .get();
-
-                                                        List allMembers =
-                                                            doc['members'];
-                                                        allMembers.remove(
-                                                            data.userId);
-                                                        print(allMembers);
-
-                                                        FirebaseFirestore
-                                                            .instance
-                                                            .collection('kuri')
-                                                            .doc(kuri!.kuriId)
-                                                            .update({
-                                                          'members': allMembers
-                                                        });
-                                                        Navigator.pop(context);
-                                                      },
-                                                      child: Row(
-                                                        mainAxisSize:
-                                                            MainAxisSize.min,
-                                                        children: [
-                                                          Container(
-                                                            // padding: EdgeInsets.symmetric(horizontal: 1),
-                                                            height: 15,
-                                                            width: 15,
-                                                            child: SvgPicture
-                                                                .asset(
-                                                              'assets/icons/trash.svg',
-                                                              color:
-                                                                  Colors.black,
-                                                              fit: BoxFit
-                                                                  .contain,
-                                                            ),
-                                                          ),
-                                                          SizedBox(
-                                                            width: 5,
-                                                          ),
-                                                          Text(
-                                                            "Remove",
-                                                            style: TextStyle(
-                                                              color:
-                                                                  Colors.black,
-                                                              fontSize:
-                                                                  FontSize13,
-                                                              fontFamily:
-                                                                  "Urbanist",
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w500,
-                                                            ),
-                                                          ),
-                                                          SizedBox(
-                                                            width: 5,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
                                               ),
                                             ),
                                           );
@@ -896,637 +953,250 @@ class _HostedKuriPageState extends State<HostedKuriPage> {
                 ],
               ));
   }
-// void pay() {
-//   showDialog(
-//     context: context,
-//     builder: (context) => StatefulBuilder(
-//       builder: (BuildContext context, setState) {
-//         payableAmountNode.addListener(() {
-//           setState(() {});
-//         });
-//         return AlertDialog(
-//           shape:
-//               RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-//           title: Text('Pay the chit amount of September'),
-//           titleTextStyle: TextStyle(
-//               fontSize: FontSize10,
-//               fontFamily: 'Urbanist',
-//               fontWeight: FontWeight.w600,
-//               color: Color(0xff827C7C)),
-//           content: Column(
-//             mainAxisSize: MainAxisSize.min,
-//             children: [
-//               Container(
-//                 width: scrWidth,
-//                 height: textFormFieldHeight45,
-//                 padding: EdgeInsets.symmetric(
-//                   horizontal: scrWidth * 0.015,
-//                   vertical: 2,
-//                 ),
-//                 decoration: BoxDecoration(
-//                   color: textFormFieldFillColor,
-//                   borderRadius: BorderRadius.circular(scrWidth * 0.026),
-//                 ),
-//                 child: TextFormField(
-//                   keyboardType: TextInputType.number,
-//                   inputFormatters: <TextInputFormatter>[
-//                     CurrencyTextInputFormatter(
-//                         locale: 'HI', decimalDigits: 0, symbol: '₹ '),
-//                   ],
-//                   focusNode: payableAmountNode,
-//                   cursorHeight: scrWidth * 0.055,
-//                   cursorWidth: 1,
-//                   cursorColor: Colors.black,
-//                   style: TextStyle(
-//                     color: Colors.black,
-//                     fontWeight: FontWeight.w600,
-//                     fontSize: FontSize15,
-//                     fontFamily: 'Urbanist',
-//                   ),
-//                   decoration: InputDecoration(
-//                     labelText: 'Payable Amount',
-//                     labelStyle: TextStyle(
-//                       color: payableAmountNode.hasFocus
-//                           ? primarycolor
-//                           : textFormUnFocusColor,
-//                       fontWeight: FontWeight.w600,
-//                       fontSize: FontSize15,
-//                       fontFamily: 'Urbanist',
-//                     ),
-//                     fillColor: textFormFieldFillColor,
-//                     filled: true,
-//                     contentPadding: EdgeInsets.only(
-//                         top: 5,
-//                         bottom: scrWidth * 0.033,
-//                         left: scrWidth * 0.033),
-//                     disabledBorder: InputBorder.none,
-//                     enabledBorder: InputBorder.none,
-//                     errorBorder: InputBorder.none,
-//                     border: InputBorder.none,
-//                     focusedBorder: UnderlineInputBorder(
-//                       borderSide: BorderSide(
-//                         color: primarycolor,
-//                         width: 2,
-//                       ),
-//                     ),
-//                   ),
-//                 ),
-//               ),
-//               SizedBox(
-//                 height: scrWidth * 0.03,
-//               ),
-//               DottedBorder(
-//                 padding: EdgeInsets.all(0),
-//                 borderType: BorderType.RRect,
-//                 radius: Radius.circular(8),
-//                 color: Color(0xffDADADA),
-//                 strokeWidth: 2,
-//                 child: Container(
-//                   height: 56,
-//                   width: 256,
-//                   decoration: BoxDecoration(
-//                     color: Color(0xffF7F8F9),
-//                     borderRadius: BorderRadius.circular(8),
-//                   ),
-//                   child: Row(
-//                     mainAxisAlignment: MainAxisAlignment.center,
-//                     children: [
-//                       SvgPicture.asset(
-//                         "assets/icons/docCam.svg",
-//                         height: scrWidth * 0.04,
-//                         width: scrWidth * 0.05,
-//                         color: Color(0xff8391A1),
-//                         // height: 21,
-//                         // width: 25,
-//                       ),
-//                       SizedBox(
-//                         width: scrWidth * 0.02,
-//                       ),
-//                       Text(
-//                         "Upload Screenshot",
-//                         style: TextStyle(
-//                           color: Color(0xffB0B0B0),
-//                           fontSize: FontSize13,
-//                           fontFamily: 'Urbanist',
-//                           fontWeight: FontWeight.w500,
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//               ),
-//               SizedBox(
-//                 height: scrWidth * 0.03,
-//               ),
-//               Container(
-//                 width: scrWidth,
-//                 height: textFormFieldHeight45,
-//                 decoration: BoxDecoration(
-//                     color: primarycolor,
-//                     borderRadius: BorderRadius.circular(8)),
-//                 child: Center(
-//                   child: GestureDetector(
-//                     onTap: () {},
-//                     child: Text(
-//                       "Confirm Pay",
-//                       style: TextStyle(
-//                           fontSize: FontSize16,
-//                           fontFamily: 'Urbanist',
-//                           fontWeight: FontWeight.w600,
-//                           color: Colors.white),
-//                     ),
-//                   ),
-//                 ),
-//               ),
-//             ],
-//           ),
-//         );
-//       },
-//     ),
-//   );
-// }
 
-// void joinChit() {
-//   showDialog(
-//     context: context,
-//     builder: (context) {
-//       return AlertDialog(
-//         titlePadding:
-//             EdgeInsets.only(top: 29, bottom: 0, left: 20, right: 20),
-//         contentPadding:
-//             EdgeInsets.only(top: 5, bottom: 23, left: 20, right: 20),
-//         title: Text(
-//           "Are you sure want to join this Chit?",
-//           style: TextStyle(
-//             color: Color(0xff2C2C2C),
-//             fontSize: FontSize15,
-//             fontFamily: "Urbanist",
-//             fontWeight: FontWeight.w700,
-//           ),
-//         ),
-//         content: Container(
-//           child: Column(
-//             mainAxisSize: MainAxisSize.min,
-//             crossAxisAlignment: CrossAxisAlignment.start,
-//             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//             children: [
-//               Text(
-//                 'You can join after the approvel of Admin',
-//                 style: TextStyle(
-//                   color: Color(0xff827C7C),
-//                   fontSize: FontSize10,
-//                   fontFamily: "Urbanist",
-//                   fontWeight: FontWeight.w600,
-//                 ),
-//               ),
-//               SizedBox(
-//                 height: 17,
-//               ),
-//               Row(
-//                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                 children: [
-//                   Container(
-//                     width: 109,
-//                     height: 44,
-//                     decoration: BoxDecoration(
-//                       borderRadius: BorderRadius.circular(34),
-//                       color: Color(0xffDEDEDE),
-//                       boxShadow: [
-//                         //
-//                         BoxShadow(
-//                           blurRadius: 5,
-//                           spreadRadius: -4,
-//                           // offset: Offset(0, -4),
-//                           color: Colors.black.withOpacity(0.15),
-//                         ),
-//                       ],
-//                     ),
-//                     child: Center(
-//                       child: Text(
-//                         "Cancel",
-//                         style: TextStyle(
-//                           color: Color(0xff2C2C2C),
-//                           fontSize: FontSize16,
-//                           fontFamily: "Urbanist",
-//                           fontWeight: FontWeight.w700,
-//                         ),
-//                       ),
-//                     ),
-//                   ),
-//                   Container(
-//                     width: 109,
-//                     height: 44,
-//                     decoration: BoxDecoration(
-//                       borderRadius: BorderRadius.circular(34),
-//                       color: primarycolor,
-//                       boxShadow: [
-//                         BoxShadow(
-//                           blurRadius: 5,
-//                           spreadRadius: -4,
-//                           // offset: Offset(0, -4),
-//                           color: Colors.black.withOpacity(0.15),
-//                         ),
-//                       ],
-//                     ),
-//                     child: Center(
-//                       child: Text(
-//                         "Confirm",
-//                         style: TextStyle(
-//                           color: Color(0xff2C2C2C),
-//                           fontSize: FontSize16,
-//                           fontFamily: "Urbanist",
-//                           fontWeight: FontWeight.w700,
-//                         ),
-//                       ),
-//                     ),
-//                   ),
-//                 ],
-//               )
-//             ],
-//           ),
-//         ),
-//         shape: RoundedRectangleBorder(
-//           borderRadius: BorderRadius.circular(34),
-//         ),
-//       );
-//     },
-//   );
-// }
+  FocusNode dialogueAuctionAmountNode = FocusNode();
+  FocusNode dialoguePayableAmountNode = FocusNode();
+  FocusNode dialogueDividentNode = FocusNode();
 
-// void moveToVaccant() {
-//   showDialog(
-//     context: context,
-//     builder: (context) {
-//       return AlertDialog(
-//         contentPadding:
-//             EdgeInsets.only(top: 29, bottom: 23, left: 21, right: 21),
-//         content: Container(
-//           child: Column(
-//             mainAxisSize: MainAxisSize.min,
-//             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//             children: [
-//               Text(
-//                 'Is this Chit is moving to Vacant Chit?',
-//                 style: TextStyle(
-//                   color: Color(0xff2C2C2C),
-//                   fontSize: FontSize16,
-//                   fontFamily: "Urbanist",
-//                   fontWeight: FontWeight.w700,
-//                 ),
-//               ),
-//               SizedBox(
-//                 height: 17,
-//               ),
-//               Row(
-//                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                 children: [
-//                   Container(
-//                     width: 109,
-//                     height: 44,
-//                     decoration: BoxDecoration(
-//                       borderRadius: BorderRadius.circular(34),
-//                       color: Color(0xffDEDEDE),
-//                       boxShadow: [
-//                         //
-//                         BoxShadow(
-//                           blurRadius: 5,
-//                           spreadRadius: -4,
-//                           // offset: Offset(0, -4),
-//                           color: Colors.black.withOpacity(0.15),
-//                         ),
-//                       ],
-//                     ),
-//                     child: Center(
-//                       child: Text(
-//                         "Cancel",
-//                         style: TextStyle(
-//                           color: Color(0xff2C2C2C),
-//                           fontSize: FontSize16,
-//                           fontFamily: "Urbanist",
-//                           fontWeight: FontWeight.w700,
-//                         ),
-//                       ),
-//                     ),
-//                   ),
-//                   Container(
-//                     width: 109,
-//                     height: 44,
-//                     decoration: BoxDecoration(
-//                       borderRadius: BorderRadius.circular(34),
-//                       color: primarycolor,
-//                       boxShadow: [
-//                         BoxShadow(
-//                           blurRadius: 5,
-//                           spreadRadius: -4,
-//                           // offset: Offset(0, -4),
-//                           color: Colors.black.withOpacity(0.15),
-//                         ),
-//                       ],
-//                     ),
-//                     child: Center(
-//                       child: Text(
-//                         "Confirm",
-//                         style: TextStyle(
-//                           color: Color(0xff2C2C2C),
-//                           fontSize: FontSize16,
-//                           fontFamily: "Urbanist",
-//                           fontWeight: FontWeight.w700,
-//                         ),
-//                       ),
-//                     ),
-//                   ),
-//                 ],
-//               )
-//             ],
-//           ),
-//         ),
-//         shape: RoundedRectangleBorder(
-//           borderRadius: BorderRadius.circular(34),
-//         ),
-//       );
-//     },
-//   );
-// }
-// FocusNode dialogueAuctionAmountNode = FocusNode();
-// FocusNode dialoguePayableAmountNode = FocusNode();
-// FocusNode dialogueDividentNode = FocusNode();
+  @override
+  void dispose() {
+    dialogueAuctionAmountNode.dispose();
+    dialoguePayableAmountNode.dispose();
+    dialogueDividentNode.dispose();
+    super.dispose();
+  }
 
-// @override
-// void dispose() {
-//   dialogueAuctionAmountNode.dispose();
-//   dialoguePayableAmountNode.dispose();
-//   dialogueDividentNode.dispose();
-//   super.dispose();
-// }
+  void verifyPayment(Payments payment, UserModel user) {
+    showDialog(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (BuildContext context, setState) {
+          dialogueAuctionAmountNode.addListener(() {
+            setState(() {});
+          });
+          dialoguePayableAmountNode.addListener(() {
+            setState(() {});
+          });
+          dialogueDividentNode.addListener(() {
+            setState(() {});
+          });
+          return AlertDialog(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            title: Text('Verify the Payment'),
+            titleTextStyle: TextStyle(
+                fontSize: FontSize10,
+                fontFamily: 'Urbanist',
+                fontWeight: FontWeight.w600,
+                color: Color(0xff827C7C)),
+            content: Container(
+              width: scrWidth * 0.99,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: Colors.black,
+                        backgroundImage: NetworkImage(user.userImage!),
+                        radius: 16,
+                      ),
+                      Container(
+                          margin: EdgeInsets.all(14),
+                          child: Text(
+                            user.userName!,
+                            style: TextStyle(
+                                fontSize: FontSize16,
+                                fontFamily: 'Urbanist',
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black),
+                          ))
+                    ],
+                  ),
+                  SizedBox(
+                    height: scrWidth * 0.05,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Text(
+                        '$_currency ${_formatNumber(payment.amount!.truncate().toString().replaceAll(',', ''))}',
+                        style: TextStyle(
+                            fontSize: scrWidth * 0.045,
+                            fontWeight: FontWeight.w700,
+                            fontFamily: 'Urbanist',
+                            color: Color(0xff008036)),
+                      ),
+                      // SizedBox(width: scrWidth*0.02,),
 
-// void payChitAmount() {
-//   showDialog(
-//     context: context,
-//     builder: (context) => StatefulBuilder(
-//       builder: (BuildContext context, setState) {
-//         dialogueAuctionAmountNode.addListener(() {
-//           setState(() {});
-//         });
-//         dialoguePayableAmountNode.addListener(() {
-//           setState(() {});
-//         });
-//         dialogueDividentNode.addListener(() {
-//           setState(() {});
-//         });
-//         return AlertDialog(
-//           shape:
-//               RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-//           title: Text('Pay the chit amount of September'),
-//           titleTextStyle: TextStyle(
-//               fontSize: FontSize10,
-//               fontFamily: 'Urbanist',
-//               fontWeight: FontWeight.w600,
-//               color: Color(0xff827C7C)),
-//           content: Column(
-//             mainAxisSize: MainAxisSize.min,
-//             children: [
-//               Row(
-//                 mainAxisAlignment: MainAxisAlignment.start,
-//                 children: [
-//                   CircleAvatar(
-//                     backgroundColor: Colors.black,
-//                     radius: 16,
-//                   ),
-//                   Container(
-//                       margin: EdgeInsets.all(14),
-//                       child: Text(
-//                         "akhilgeorge",
-//                         style: TextStyle(
-//                             fontSize: FontSize16,
-//                             fontFamily: 'Urbanist',
-//                             fontWeight: FontWeight.w600,
-//                             color: Colors.black),
-//                       ))
-//                 ],
-//               ),
-//               SizedBox(
-//                 height: scrWidth * 0.05,
-//               ),
-//               Container(
-//                 width: scrWidth,
-//                 height: textFormFieldHeight45,
-//                 padding: EdgeInsets.symmetric(
-//                   horizontal: scrWidth * 0.015,
-//                   vertical: 2,
-//                 ),
-//                 decoration: BoxDecoration(
-//                   color: textFormFieldFillColor,
-//                   borderRadius: BorderRadius.circular(scrWidth * 0.026),
-//                 ),
-//                 child: TextFormField(
-//                   focusNode: dialogueAuctionAmountNode,
-//                   cursorHeight: scrWidth * 0.055,
-//                   cursorWidth: 1,
-//                   cursorColor: Colors.black,
-//                   style: TextStyle(
-//                     color: Colors.black,
-//                     fontWeight: FontWeight.w600,
-//                     fontSize: FontSize15,
-//                     fontFamily: 'Urbanist',
-//                   ),
-//                   decoration: InputDecoration(
-//                     labelText: 'Auction Amount',
-//                     labelStyle: TextStyle(
-//                       color: dialogueAuctionAmountNode.hasFocus
-//                           ? primarycolor
-//                           : textFormUnFocusColor,
-//                       fontWeight: FontWeight.w600,
-//                       fontSize: FontSize15,
-//                       fontFamily: 'Urbanist',
-//                     ),
-//                     // prefixIcon: Container(
-//                     //   height: scrWidth * 0.045,
-//                     //   width: 10,
-//                     //   padding: EdgeInsets.all(
-//                     //       scrWidth * 0.033),
-//                     //   child: SvgPicture.asset(
-//                     //     'assets/icons/subscription.svg',
-//                     //     fit: BoxFit.contain,
-//                     //     color: textFormUnFocusColor,
-//                     //   ),
-//                     // ),
-//                     fillColor: textFormFieldFillColor,
-//                     filled: true,
-//                     contentPadding: EdgeInsets.only(
-//                         top: 5,
-//                         bottom: scrWidth * 0.033,
-//                         left: scrWidth * 0.033),
-//                     disabledBorder: InputBorder.none,
-//                     enabledBorder: InputBorder.none,
-//                     errorBorder: InputBorder.none,
-//                     border: InputBorder.none,
-//                     focusedBorder: UnderlineInputBorder(
-//                       borderSide: BorderSide(
-//                         color: primarycolor,
-//                         width: 2,
-//                       ),
-//                     ),
-//                   ),
-//                 ),
-//               ),
-//               SizedBox(
-//                 height: scrWidth * 0.03,
-//               ),
-//               Container(
-//                 width: scrWidth,
-//                 height: textFormFieldHeight45,
-//                 padding: EdgeInsets.symmetric(
-//                   horizontal: scrWidth * 0.015,
-//                   vertical: 2,
-//                 ),
-//                 decoration: BoxDecoration(
-//                   color: textFormFieldFillColor,
-//                   borderRadius: BorderRadius.circular(scrWidth * 0.026),
-//                 ),
-//                 child: TextFormField(
-//                   focusNode: dialoguePayableAmountNode,
-//                   cursorHeight: scrWidth * 0.055,
-//                   cursorWidth: 1,
-//                   cursorColor: Colors.black,
-//                   style: TextStyle(
-//                     color: Colors.black,
-//                     fontWeight: FontWeight.w600,
-//                     fontSize: FontSize15,
-//                     fontFamily: 'Urbanist',
-//                   ),
-//                   decoration: InputDecoration(
-//                     labelText: 'Payable Amount',
-//                     labelStyle: TextStyle(
-//                       color: dialoguePayableAmountNode.hasFocus
-//                           ? primarycolor
-//                           : textFormUnFocusColor,
-//                       fontWeight: FontWeight.w600,
-//                       fontSize: FontSize15,
-//                       fontFamily: 'Urbanist',
-//                     ),
-//                     // prefixIcon: Container(
-//                     //   height: scrWidth * 0.045,
-//                     //   width: 10,
-//                     //   padding: EdgeInsets.all(
-//                     //       scrWidth * 0.033),
-//                     //   child: SvgPicture.asset(
-//                     //     'assets/icons/subscription.svg',
-//                     //     fit: BoxFit.contain,
-//                     //     color: textFormUnFocusColor,
-//                     //   ),
-//                     // ),
-//                     fillColor: textFormFieldFillColor,
-//                     filled: true,
-//                     contentPadding: EdgeInsets.only(
-//                         top: 5,
-//                         bottom: scrWidth * 0.033,
-//                         left: scrWidth * 0.033),
-//                     disabledBorder: InputBorder.none,
-//                     enabledBorder: InputBorder.none,
-//                     errorBorder: InputBorder.none,
-//                     border: InputBorder.none,
-//                     focusedBorder: UnderlineInputBorder(
-//                       borderSide: BorderSide(
-//                         color: primarycolor,
-//                         width: 2,
-//                       ),
-//                     ),
-//                   ),
-//                 ),
-//               ),
-//               SizedBox(
-//                 height: scrWidth * 0.03,
-//               ),
-//               Container(
-//                 width: scrWidth,
-//                 height: textFormFieldHeight45,
-//                 padding: EdgeInsets.symmetric(
-//                   horizontal: scrWidth * 0.015,
-//                   vertical: 2,
-//                 ),
-//                 decoration: BoxDecoration(
-//                   color: textFormFieldFillColor,
-//                   borderRadius: BorderRadius.circular(scrWidth * 0.026),
-//                 ),
-//                 child: TextFormField(
-//                   focusNode: dialogueDividentNode,
-//                   cursorHeight: scrWidth * 0.055,
-//                   cursorWidth: 1,
-//                   cursorColor: Colors.black,
-//                   style: TextStyle(
-//                     color: Colors.black,
-//                     fontWeight: FontWeight.w600,
-//                     fontSize: FontSize15,
-//                     fontFamily: 'Urbanist',
-//                   ),
-//                   decoration: InputDecoration(
-//                     labelText: 'Divident Amount',
-//                     labelStyle: TextStyle(
-//                       color: dialogueDividentNode.hasFocus
-//                           ? primarycolor
-//                           : textFormUnFocusColor,
-//                       fontWeight: FontWeight.w600,
-//                       fontSize: FontSize15,
-//                       fontFamily: 'Urbanist',
-//                     ),
-//                     // prefixIcon: Container(
-//                     //   height: scrWidth * 0.045,
-//                     //   width: 10,
-//                     //   padding: EdgeInsets.all(
-//                     //       scrWidth * 0.033),
-//                     //   child: SvgPicture.asset(
-//                     //     'assets/icons/subscription.svg',
-//                     //     fit: BoxFit.contain,
-//                     //     color: textFormUnFocusColor,
-//                     //   ),
-//                     // ),
-//                     fillColor: textFormFieldFillColor,
-//                     filled: true,
-//                     contentPadding: EdgeInsets.only(
-//                         top: 5,
-//                         bottom: scrWidth * 0.033,
-//                         left: scrWidth * 0.033),
-//                     disabledBorder: InputBorder.none,
-//                     enabledBorder: InputBorder.none,
-//                     errorBorder: InputBorder.none,
-//                     border: InputBorder.none,
-//                     focusedBorder: UnderlineInputBorder(
-//                       borderSide: BorderSide(
-//                         color: primarycolor,
-//                         width: 2,
-//                       ),
-//                     ),
-//                   ),
-//                 ),
-//               ),
-//               SizedBox(
-//                 height: scrWidth * 0.06,
-//               ),
-//               Container(
-//                 width: scrWidth,
-//                 height: textFormFieldHeight45,
-//                 decoration: BoxDecoration(
-//                     color: primarycolor,
-//                     borderRadius: BorderRadius.circular(8)),
-//                 child: Center(
-//                   child: GestureDetector(
-//                     onTap: () {},
-//                     child: Text(
-//                       "Save",
-//                       style: TextStyle(
-//                           fontSize: FontSize16,
-//                           fontFamily: 'Urbanist',
-//                           fontWeight: FontWeight.w600,
-//                           color: Colors.white),
-//                     ),
-//                   ),
-//                 ),
-//               ),
-//             ],
-//           ),
-//         );
-//       },
-//     ),
-//   );
-// }
+                      Container(
+                        height: scrHeight * 0.029,
+                        width: scrWidth * 0.15,
+                        decoration: BoxDecoration(
+                            color: payment.verified!
+                                ? Color(0xff02B558)
+                                : Color(0xff8391A1),
+                            borderRadius: BorderRadius.circular(3)),
+                        child: Center(
+                          child: Text(
+                            payment.verified! ? 'Paid' : "Pending",
+                            style: TextStyle(
+                                fontSize: scrWidth * 0.036,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Urbanist',
+                                color: Colors.white),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: scrWidth * 0.02,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          print(payment.datePaid ?? '');
+                          GallerySaver.saveImage(payment.url!,
+                                  toDcim: true,
+                                  albumName:
+                                      '${kuri!.kuriName!}-${user.userName!}-${DateFormat('dd-MM-yyyy').format(payment.datePaid ?? DateTime.now())}')
+                              .then((success) {
+                            Navigator.pop(context);
+                            showSnackbar(context,
+                                'Download completed. Check your gallery');
+                          });
+
+                          // final taskId = await FlutterDownloader.enqueue(
+                          //   url: payment.url!,
+                          //
+                          //   savedDir: '/storage/emulated/0/Download/3MS/',
+                          //   showNotification:
+                          //       true, // show download progress in status bar (for Android)
+                          //   openFileFromNotification:
+                          //       true, // click on notification to open downloaded file (for Android)
+                          // );
+
+                          // try {
+                          //   // Saved with this method.
+                          //   var imageId = await ImageDownloader.downloadImage(
+                          //       "https://raw.githubusercontent.com/wiki/ko2ic/image_downloader/images/flutter.png");
+                          //   if (imageId == null) {
+                          //     return;
+                          //   }
+                          //
+                          //   // Below is a method of obtaining saved image information.
+                          //   var fileName =
+                          //       await ImageDownloader.findName(imageId);
+                          //   var path = await ImageDownloader.findPath(imageId);
+                          //   var size =
+                          //       await ImageDownloader.findByteSize(imageId);
+                          //   var mimeType =
+                          //       await ImageDownloader.findMimeType(imageId);
+                          // } catch (error) {
+                          //   print(error);
+                          // }
+
+                          // if (activePayment == null) {
+                          //   showSnackbar(
+                          //       context, 'There is nothing to view.');
+                          // } else {
+                          //   // Uint8List response = await http
+                          //   //     .get(Uri.parse(activePayment!.url!))
+                          //   //     .then((value) => value.bodyBytes);
+                          //
+                          //   // await launchUrl(Uri.parse(activePayment!.url!))
+                          //   //     .then((value) {
+                          //   //   showSnackbar(
+                          //   //       context, 'Successfully downloaded');
+                          //   // });
+                          // }
+                        },
+                        child: Container(
+                          height: scrHeight * 0.029,
+                          width: scrWidth * 0.26,
+                          decoration: BoxDecoration(
+                              color: Color(0xff02B558),
+                              borderRadius: BorderRadius.circular(3)),
+                          child: Center(
+                            child: Text(
+                              "View Screenshot",
+                              style: TextStyle(
+                                  fontSize: scrWidth * 0.033,
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: 'Urbanist',
+                                  color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: scrWidth * 0.06,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      if (payment.verified == false) {
+                        Navigator.pop(context);
+                        FirebaseFirestore.instance
+                            .collection('kuri')
+                            .doc(widget.id)
+                            .collection('payments')
+                            .doc(payment.paymentId)
+                            .update({'verified': true}).then((value) {
+                          FirebaseFirestore.instance
+                              .collection('kuri')
+                              .doc(widget.id)
+                              .update({
+                            'totalReceived': FieldValue.increment(
+                                double.tryParse(payment.amount.toString())!)
+                          });
+                          FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(currentuserid)
+                              .collection('incomes')
+                              .add({
+                            'amount':
+                                double.tryParse(payment.amount!.toString()),
+                            "categoryIcon": serializeIcon(icons),
+                            "IncomeCategoryName": categoryName.toString(),
+                            'date': DateTime.now(),
+                            'merchant': '',
+                          });
+
+                          showSnackbar(context,
+                              'amount of ₹${payment.amount!.truncate()} from ${user.userName} is verified');
+                        });
+                      } else {
+                        showSnackbar(
+                            context, 'This payment is already verified');
+                      }
+                    },
+                    child: Container(
+                      width: scrWidth,
+                      height: textFormFieldHeight45,
+                      decoration: BoxDecoration(
+                          color: primarycolor,
+                          borderRadius: BorderRadius.circular(8)),
+                      child: Center(
+                        child: GestureDetector(
+                          child: Text(
+                            "Verify",
+                            style: TextStyle(
+                                fontSize: FontSize16,
+                                fontFamily: 'Urbanist',
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
 }

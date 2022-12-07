@@ -29,18 +29,17 @@ class Authentication {
     currentuserid = userCredential.user?.uid;
     phone = userCredential.user?.phoneNumber ?? '';
 
-    FirebaseFirestore.instance.collection('users').doc(userDoc).set({
+    FirebaseFirestore.instance.collection('users').doc(userDoc).update({
       "userId": userDoc,
       "userName": userName,
       "userEmail": userEmail,
       "userImage": userImage,
-      "phone": phone,
     }).then((value) => Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => AddPhone(
-            id: userDoc!,
-          ),
+          builder: (context) => Rootingpage(
+              // id: userDoc!,
+              ),
         )));
 
     //     .then((value) {

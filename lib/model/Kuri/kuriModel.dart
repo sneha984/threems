@@ -85,17 +85,25 @@ class KuriModel {
 
 class Payments {
   double? amount;
-  String? datePaid;
+  DateTime? datePaid;
   bool? verified;
   String? url;
   String? userId;
+  String? paymentId;
 
-  Payments({this.amount, this.datePaid, this.verified, this.url, this.userId});
+  Payments(
+      {this.amount,
+      this.datePaid,
+      this.verified,
+      this.url,
+      this.userId,
+      this.paymentId});
 
   Payments.fromJson(Map<String, dynamic> json) {
-    amount = json['amount'];
-    datePaid = json['datePaid'];
+    amount = json['amount'].toDouble();
+    datePaid = DateTime.tryParse(json['datePaid'].toString());
     verified = json['verified'];
+    paymentId = json['paymentId'];
     url = json['url'];
     userId = json['userId'];
   }
@@ -105,6 +113,7 @@ class Payments {
     data['amount'] = amount;
     data['datePaid'] = datePaid;
     data['verified'] = verified;
+    data['paymentId'] = paymentId;
     data['url'] = url;
     data['userId'] = userId;
     return data;

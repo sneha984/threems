@@ -4,6 +4,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_iconpicker/Serialization/iconDataSerialization.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -25,6 +26,27 @@ class KuriPaymentPage extends StatefulWidget {
 }
 
 class _KuriPaymentPageState extends State<KuriPaymentPage> {
+  var icons;
+  var categoryName;
+  getIconData() {
+    FirebaseFirestore.instance
+        .collection('expenses')
+        .where('expenseName', isEqualTo: 'Kuri')
+        .snapshots()
+        .listen((event) {
+      for (DocumentSnapshot data in event.docs) {
+        icons = deserializeIcon(data['icon']);
+        categoryName = data['expenseName'];
+        // _icon = Icon(icons,color: Colors.white,size: 45,);
+
+      }
+
+      if (mounted) {
+        setState(() {});
+      }
+    });
+  }
+
   TextEditingController? amount;
 
   String? imgUrl;
@@ -64,6 +86,7 @@ class _KuriPaymentPageState extends State<KuriPaymentPage> {
     // TODO: implement initState
     super.initState();
     amount = TextEditingController();
+    getIconData();
   }
 
   @override
@@ -540,18 +563,29 @@ class _KuriPaymentPageState extends State<KuriPaymentPage> {
                   FirebaseFirestore.instance
                       .collection('kuri')
                       .doc(widget.kuri.kuriId)
-                      .update({
-                    'payments': FieldValue.arrayUnion([
-                      {
-                        'amount': double.tryParse(amount!.text),
-                        'url': imgUrl,
-                        'userId': currentuserid,
-                        'verified': false,
-                        'datePaid': DateFormat.yMMMd().format(DateTime.now()),
-                      }
-                    ]),
-                    'totalAmount':
-                        FieldValue.increment(double.tryParse(amount!.text)!)
+                      .collection('payments')
+                      .add({
+                    'amount': double.tryParse(amount!.text),
+                    'url': imgUrl,
+                    'userId': currentuserid,
+                    'verified': false,
+                    'datePaid': DateTime.now(),
+                  }).then((value) {
+                    value.update({
+                      'paymentId': value.id,
+                    });
+                  }).then((value) {
+                    FirebaseFirestore.instance
+                        .collection('users')
+                        .doc(currentuserid)
+                        .collection('expense')
+                        .add({
+                      'amount': double.tryParse(amount!.text.toString()),
+                      "categoryIcon": serializeIcon(icons),
+                      "categoryName": categoryName.toString(),
+                      'date': DateTime.now(),
+                      'merchant': '',
+                    });
                   }).then((value) {
                     Navigator.pop(context);
                   });

@@ -6,13 +6,19 @@ import '../Buy&sell/buy_and_sell.dart';
 import '../Expenses/Expense_first_page.dart';
 import '../Expenses/recentexpenses.dart';
 import '../Income/expense_income_tababr.dart';
+import '../InviteLink/ChitInvite.dart';
+import '../main.dart';
 import '../screens/home_screen.dart';
 import '../screens/Utilities/utilities.dart';
 
 class ScreenLayout extends StatefulWidget {
   final int index;
   final int tabIndex;
-  ScreenLayout({Key? key,  this.index=0,  this.tabIndex=0,}) : super(key: key);
+  ScreenLayout({
+    Key? key,
+    this.index = 0,
+    this.tabIndex = 0,
+  }) : super(key: key);
 
   @override
   State<ScreenLayout> createState() => _ScreenLayoutState();
@@ -22,17 +28,30 @@ class _ScreenLayoutState extends State<ScreenLayout> {
   // double selectedIndex = 0;
   final PageStorageBucket _bucket = PageStorageBucket();
   var _currentScreen;
-  int index=0;
+  int index = 0;
   @override
   void initState() {
     index = widget.index ?? 0;
     _currentScreen = index == 0
         ? HomeScreen()
         : index == 1
-            ? BuyAndSell(index: widget.tabIndex??0,)
+            ? BuyAndSell(
+                index: widget.tabIndex ?? 0,
+              )
             : index == 2
                 ? ExpenseIncomeTabPage()
                 : Utilities();
+    print('hehe');
+    print(inviteLinkId);
+    if (inviteLinkId != '') {
+      if (inviteLinkType == 'chit') {
+        // Navigator.push(
+        //     context,
+        //     MaterialPageRoute(
+        //       builder: (context) => ChitInvite(id: inviteLinkId),
+        //     ));
+      }
+    }
     super.initState();
   }
 
@@ -111,7 +130,9 @@ class _ScreenLayoutState extends State<ScreenLayout> {
                       onPressed: () {
                         setState(() {
                           index = 1;
-                          _currentScreen = BuyAndSell(index: widget.tabIndex??0,);
+                          _currentScreen = BuyAndSell(
+                            index: widget.tabIndex ?? 0,
+                          );
                           // _currentScreen = CreateRoomScreen();
                         });
                       },
@@ -145,7 +166,7 @@ class _ScreenLayoutState extends State<ScreenLayout> {
                         setState(() {
                           index = 2;
                           // _currentScreen = AddExpensesPage();
-                           _currentScreen = ExpenseIncomeTabPage();
+                          _currentScreen = ExpenseIncomeTabPage();
                         });
                       },
                       minWidth: scrWidth * 0.1,

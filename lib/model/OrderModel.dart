@@ -4,24 +4,26 @@ class OrderModel {
   String? orderId;
   String? userId;
   double? deliveryCharge;
+  double? total;
   int? status;
   String? storeId;
   List<OrderedItems>? orderedItems;
   OrderModel(
-      {
-        this.time,
-        this.address,
-        this.orderId,
-        this.userId,
-        this.deliveryCharge,
-        this.status,
-        this.storeId,
-        this.orderedItems});
+      {this.time,
+      this.address,
+      this.orderId,
+      this.userId,
+      this.deliveryCharge,
+      this.total,
+      this.status,
+      this.storeId,
+      this.orderedItems});
 
   OrderModel.fromJson(Map<String, dynamic> json) {
-    time = DateTime.tryParse(json['time'].toString());
-    address =
-    json['address'] != null ? new Addresses.fromJson(json['address']) : null;
+    time = json['time'].toDate();
+    address = json['address'] != null
+        ? new Addresses.fromJson(json['address'])
+        : null;
     if (json['orderedItems'] != null) {
       orderedItems = <OrderedItems>[];
       json['orderedItems'].forEach((v) {
@@ -31,17 +33,17 @@ class OrderModel {
     orderId = json['orderId'];
     userId = json['userId'];
     deliveryCharge = json['deliveryCharge'];
-    status=json['status'];
-    storeId=json['storeId'];
+    status = json['status'];
+    total = double.tryParse(json['total'].toString());
+    storeId = json['storeId'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['time'] = this.time;
-    data['status']=this.status;
+    data['status'] = this.status;
     if (this.address != null) {
       data['address'] = this.address!.toJson();
-
     }
     if (this.orderedItems != null) {
       data['orderedItems'] = this.orderedItems!.map((v) => v.toJson()).toList();
@@ -49,7 +51,8 @@ class OrderModel {
     data['orderId'] = this.orderId;
     data['userId'] = this.userId;
     data['deliveryCharge'] = this.deliveryCharge;
-    data['storeId']=this.storeId;
+    data['total'] = this.total;
+    data['storeId'] = this.storeId;
     return data;
   }
 }
@@ -64,11 +67,11 @@ class Addresses {
 
   Addresses(
       {this.flatNo,
-        this.locality,
-        this.pincode,
-        this.locationType,
-        this.phoneNumber,
-        this.name});
+      this.locality,
+      this.pincode,
+      this.locationType,
+      this.phoneNumber,
+      this.name});
 
   Addresses.fromJson(Map<String, dynamic> json) {
     flatNo = json['flatNo'];
@@ -90,6 +93,7 @@ class Addresses {
     return data;
   }
 }
+
 class OrderedItems {
   double? amount;
   int? count;

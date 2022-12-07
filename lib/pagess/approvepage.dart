@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'package:flutter_iconpicker/Serialization/iconDataSerialization.dart';
+import 'package:gallery_saver/gallery_saver.dart';
 import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -48,6 +49,7 @@ class _ApprovePageState extends State<ApprovePage> {
     }
     setState(() {});
   }
+
   getActivePayment() {
     ChitModel chit = widget.chit;
     for (var payment in paymentList) {
@@ -135,22 +137,23 @@ class _ApprovePageState extends State<ApprovePage> {
       }
     });
   }
+
   Icon? _icon;
   var icons;
   var categoryName;
-  getIconData(){
-    FirebaseFirestore.instance.collection('income').
-    where('categoryName',isEqualTo:'Chit' ).snapshots().listen((event) {
-            for(DocumentSnapshot data in event.docs){
-              icons=deserializeIcon(data['icon']);
-              categoryName=data['categoryName'];
-              // _icon = Icon(icons,color: Colors.white,size: 45,);
+  getIconData() {
+    FirebaseFirestore.instance
+        .collection('income')
+        .where('categoryName', isEqualTo: 'Chit')
+        .snapshots()
+        .listen((event) {
+      for (DocumentSnapshot data in event.docs) {
+        icons = deserializeIcon(data['icon']);
+        categoryName = data['categoryName'];
+        // _icon = Icon(icons,color: Colors.white,size: 45,);
 
-            }
-            
-    
+      }
     });
-    
   }
 
   getPayments() {
@@ -433,6 +436,16 @@ class _ApprovePageState extends State<ApprovePage> {
                               showSnackbar(
                                   context, 'There is nothing to view.');
                             } else {
+                              GallerySaver.saveImage(activePayment!.url!,
+                                      toDcim: true,
+                                      albumName:
+                                          '${widget.chit.chitName!}-${user!.userName!}-${DateFormat('dd-MM-yyyy').format(activePayment!.datePaid ?? DateTime.now())}')
+                                  .then((success) {
+                                Navigator.pop(context);
+                                showSnackbar(context,
+                                    'Download completed. Check your gallery');
+                              });
+
                               // Uint8List response = await http
                               //     .get(Uri.parse(activePayment!.url!))
                               //     .then((value) => value.bodyBytes);
@@ -622,22 +635,25 @@ class _ApprovePageState extends State<ApprovePage> {
                     onTap: () {
                       if (activePayment != null &&
                           activePayment!.verified != true) {
-
                         FirebaseFirestore.instance
                             .collection('chit')
                             .doc(widget.chit.chitId)
                             .collection('payments')
                             .doc(activePayment!.paymentId!)
                             .update({'verified': true}).then((value) {
-                          FirebaseFirestore.instance.collection('users').doc(currentuserid).collection('incomes').add({
-                            'amount':double.tryParse(activePayment!.amount!.toString()),
-                            "categoryIcon":serializeIcon(icons),
-                            "IncomeCategoryName":categoryName.toString(),
-                            'date':DateTime.now(),
-                            'merchant':'',
-
+                          FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(currentuserid)
+                              .collection('incomes')
+                              .add({
+                            'amount': double.tryParse(
+                                activePayment!.amount!.toString()),
+                            "categoryIcon": serializeIcon(icons),
+                            "IncomeCategoryName": categoryName.toString(),
+                            'date': DateTime.now(),
+                            'merchant': '',
                           });
-                              
+
                           showSnackbar(
                               context, 'Payment verified successfully');
                           Navigator.pop(context);

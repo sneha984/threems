@@ -1,5 +1,3 @@
-
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -10,17 +8,22 @@ import '../model/Buy&sell.dart';
 import '../screens/splash_screen.dart';
 import '../utils/dummy.dart';
 import 'checkout.dart';
-List cartlist=[];
-List<ProductModel> productsList=[];
+
+List cartlist = [];
+List<ProductModel> productsList = [];
+
 class StorePage extends StatefulWidget {
   final StoreDetailsModel storeDetailsModel;
-  final  String category;
+  final String category;
 
-  const StorePage({Key? key, required this.storeDetailsModel,required this.category}) : super(key: key);
+  const StorePage(
+      {Key? key, required this.storeDetailsModel, required this.category})
+      : super(key: key);
 
   @override
   State<StorePage> createState() => _StorePageState();
 }
+
 // class Items{
 //   final String categoryname;
 //   List<Map<String,dynamic>> categoryitems;
@@ -29,42 +32,39 @@ class StorePage extends StatefulWidget {
 //       );
 // }
 class _StorePageState extends State<StorePage> {
-  getProducts(){
-    FirebaseFirestore
-        .instance
+  getProducts() {
+    FirebaseFirestore.instance
         .collection('stores')
         .doc(widget.storeDetailsModel.storeId)
         .collection('products')
-        .where('storedCategorys',isEqualTo: widget.category)
-        .snapshots().listen((event) {
-          productsList=[];
-          for(DocumentSnapshot <Map<String,dynamic>> doc in event.docs){
-            productsList.add(ProductModel.fromJson(doc.data()!));
-          }
-          if(mounted){
-            setState(() {
-            });
-          }
-    });
-  }
-  Map<String,dynamic> bags={};
-  getbag(){
-    FirebaseFirestore
-        .instance
-        .collection('stores')
-        .doc(widget.storeDetailsModel.storeId)
-        .collection('products')
-        .where('storedCategorys',isEqualTo: widget.category)
+        .where('storedCategorys', isEqualTo: widget.category)
         .snapshots()
         .listen((event) {
-          for(DocumentSnapshot <Map<String,dynamic>> doc in event.docs){
-            bags[doc.get('productId')]=doc.data();
-          }
-          if(mounted){
-            setState(() {
+      productsList = [];
+      for (DocumentSnapshot<Map<String, dynamic>> doc in event.docs) {
+        productsList.add(ProductModel.fromJson(doc.data()!));
+      }
+      if (mounted) {
+        setState(() {});
+      }
+    });
+  }
 
-            });
-          }
+  Map<String, dynamic> bags = {};
+  getbag() {
+    FirebaseFirestore.instance
+        .collection('stores')
+        .doc(widget.storeDetailsModel.storeId)
+        .collection('products')
+        .where('storedCategorys', isEqualTo: widget.category)
+        .snapshots()
+        .listen((event) {
+      for (DocumentSnapshot<Map<String, dynamic>> doc in event.docs) {
+        bags[doc.get('productId')] = doc.data();
+      }
+      if (mounted) {
+        setState(() {});
+      }
     });
   }
 
@@ -73,12 +73,11 @@ class _StorePageState extends State<StorePage> {
     symbol: '₹ ',
   );
 
-  bool onclick =true;
+  bool onclick = true;
   int qty = 1;
   int? currentQty;
   bool _loadingButton = false;
   bool pressed = false;
-
 
   // int count=1;
   // int counter=1;
@@ -97,17 +96,19 @@ class _StorePageState extends State<StorePage> {
   //     count++;
   //   });
   // }
-@override
+  @override
   void initState() {
-  getProducts();
-  getbag();
+    getProducts();
+    getbag();
     // TODO: implement initState
     super.initState();
   }
+
   @override
-  void dispose(){
-  super.dispose();
+  void dispose() {
+    super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -115,11 +116,15 @@ class _StorePageState extends State<StorePage> {
         physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
-            SizedBox(height: 10,),
+            SizedBox(
+              height: 10,
+            ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(width: scrWidth*0.06,),
+                SizedBox(
+                  width: scrWidth * 0.06,
+                ),
                 InkWell(
                   onTap: () {
                     Navigator.pop(context);
@@ -131,23 +136,24 @@ class _StorePageState extends State<StorePage> {
                       // left: scrWidth * 0.07,
                     ),
                     child: Container(
-                      height: scrHeight*0.03,
-                      width: scrWidth*0.05,
+                      height: scrHeight * 0.03,
+                      width: scrWidth * 0.05,
                       child: SvgPicture.asset(
                         "assets/icons/arrow.svg",
                       ),
                     ),
                   ),
                 ),
-                SizedBox(width: scrWidth*0.04,),
-
+                SizedBox(
+                  width: scrWidth * 0.04,
+                ),
                 Padding(
-                  padding:  EdgeInsets.only(top: scrHeight * 0.075,
+                  padding: EdgeInsets.only(
+                    top: scrHeight * 0.075,
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-
                       Text(
                         widget.storeDetailsModel.storeName!,
                         style: TextStyle(
@@ -156,27 +162,32 @@ class _StorePageState extends State<StorePage> {
                             fontFamily: 'Urbanist',
                             fontWeight: FontWeight.w600),
                       ),
-                      SizedBox(height: scrHeight*0.01,),
+                      SizedBox(
+                        height: scrHeight * 0.01,
+                      ),
                       Text(
                         widget.category,
                         style: TextStyle(
-                            fontSize:scrWidth*0.027,
+                            fontSize: scrWidth * 0.027,
                             color: Color(0xff818181),
                             fontFamily: 'Urbanist',
                             fontWeight: FontWeight.w500),
                       ),
-                      SizedBox(height: scrHeight*0.002,),
+                      SizedBox(
+                        height: scrHeight * 0.002,
+                      ),
 
                       Text(
-                          widget.storeDetailsModel.storeAddress!,
-
+                        widget.storeDetailsModel.storeAddress!,
                         style: TextStyle(
-                            fontSize:scrWidth*0.027,
+                            fontSize: scrWidth * 0.027,
                             color: const Color(0xff818181),
                             fontFamily: 'Urbanist',
                             fontWeight: FontWeight.w500),
                       ),
-                      SizedBox(height: scrHeight*0.01,),
+                      SizedBox(
+                        height: scrHeight * 0.01,
+                      ),
 
                       // Container(
                       //   width:scrWidth*0.5,
@@ -195,38 +206,37 @@ class _StorePageState extends State<StorePage> {
                     ],
                   ),
                 ),
-                  SizedBox(width: scrWidth*0.17,),
+                SizedBox(
+                  width: scrWidth * 0.17,
+                ),
                 Padding(
-                  padding:  EdgeInsets.only(
+                  padding: EdgeInsets.only(
                       // left: 70,
-                    top: scrHeight*0.076
-                  ),
+                      top: scrHeight * 0.076),
                   child: Container(
-                    height:scrHeight*0.11,
-                    width:scrWidth*0.26,
+                    height: scrHeight * 0.11,
+                    width: scrWidth * 0.26,
                     decoration: BoxDecoration(
-                      image: DecorationImage(image:
-                      NetworkImage(widget.storeDetailsModel.storeImage??''),
+                      image: DecorationImage(
+                          image: NetworkImage(
+                              widget.storeDetailsModel.storeImage ?? ''),
                           fit: BoxFit.fill),
                       color: Colors.white,
-
-                      borderRadius: BorderRadius.circular(
-                          scrWidth*0.04),
+                      borderRadius: BorderRadius.circular(scrWidth * 0.04),
                     ),
                   ),
                 ),
               ],
             ),
             Padding(
-              padding:  EdgeInsets.only(top: scrHeight*0.015,left: scrWidth*0.02),
+              padding: EdgeInsets.only(
+                  top: scrHeight * 0.015, left: scrWidth * 0.02),
               child: Container(
-                height: scrHeight*0.042,
-                width: scrWidth*0.92,
+                height: scrHeight * 0.042,
+                width: scrWidth * 0.92,
                 decoration: BoxDecoration(
                     color: const Color(0xffE9EEF3),
-
-                    borderRadius: BorderRadius.circular(scrWidth*0.02)
-                ),
+                    borderRadius: BorderRadius.circular(scrWidth * 0.02)),
                 // child: Padding(
                 //   padding: const EdgeInsets.only(bottom: 5),
                 //   child: TextFormField(
@@ -255,41 +265,54 @@ class _StorePageState extends State<StorePage> {
                 // ),
               ),
             ),
-            SizedBox(height: scrHeight*0.02,),
+            SizedBox(
+              height: scrHeight * 0.02,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(width: scrWidth * 0.07,),
+                SizedBox(
+                  width: scrWidth * 0.07,
+                ),
                 SvgPicture.asset("assets/icons/staricon.svg"),
-                SizedBox(width: scrWidth * 0.03,),
-                Text("Featured Product", style: TextStyle(
-                    fontFamily: 'Urbanist',
-                    fontSize: scrWidth * 0.04,
-                    fontWeight: FontWeight.w600
-                ),)
+                SizedBox(
+                  width: scrWidth * 0.03,
+                ),
+                Text(
+                  "Featured Product",
+                  style: TextStyle(
+                      fontFamily: 'Urbanist',
+                      fontSize: scrWidth * 0.04,
+                      fontWeight: FontWeight.w600),
+                )
               ],
             ),
-            SizedBox(height: scrHeight*0.02,),
+            SizedBox(
+              height: scrHeight * 0.02,
+            ),
             Container(
               // color: Colors.blue,
               height: 600,
               child: GridView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  padding: EdgeInsets.all(10),
-                  shrinkWrap: true,
-                  itemCount:productsList.length,
-                  itemBuilder: (context, index) {
-                    final products=productsList[index];
-                    print("hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
-                    print(productsList.length);
-                    // final _isSelected=_selectedIndexs.contains(index);
-                    return ShopSingleProduct(product:products, storeId: widget.storeDetailsModel.storeId!,);
-                  }, gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                childAspectRatio: 0.6,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 20,
+                physics: const BouncingScrollPhysics(),
+                padding: EdgeInsets.all(10),
+                shrinkWrap: true,
+                itemCount: productsList.length,
+                itemBuilder: (context, index) {
+                  final products = productsList[index];
+
+                  // final _isSelected=_selectedIndexs.contains(index);
+                  return ShopSingleProduct(
+                    product: products,
+                    storeId: widget.storeDetailsModel.storeId!,
+                  );
+                },
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  childAspectRatio: 0.6,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 20,
                 ),
               ),
             ),
@@ -790,37 +813,35 @@ class _StorePageState extends State<StorePage> {
   }
 }
 
-
 class ShopSingleProduct extends StatefulWidget {
   final ProductModel product;
   final String storeId;
-  const ShopSingleProduct({Key? key, required this.product, required this.storeId}) : super(key: key);
+  const ShopSingleProduct(
+      {Key? key, required this.product, required this.storeId})
+      : super(key: key);
 
   @override
   State<ShopSingleProduct> createState() => _ShopSingleProductState();
 }
 
 class _ShopSingleProductState extends State<ShopSingleProduct> {
-
   // ProductModel products=ProductModel();
   var currencyConvert = NumberFormat.currency(
     locale: 'HI',
     symbol: '₹ ',
   );
-  bool isCarted=false;
-  getProduct(){
-    for(int i=0;i<cartlist.length;i++){
-      if(cartlist[i]['productId'] == widget.product.productId&&cartlist[i]['storeId'] == widget.product.storeId){
-
-        isCarted=true;
+  bool isCarted = false;
+  getProduct() {
+    for (int i = 0; i < cartlist.length; i++) {
+      if (cartlist[i]['productId'] == widget.product.productId &&
+          cartlist[i]['storeId'] == widget.product.storeId) {
+        isCarted = true;
       }
     }
-    setState(() {
-
-    });
+    setState(() {});
   }
 
-  int qty=1;
+  int qty = 1;
 
   @override
   void initState() {
@@ -839,258 +860,279 @@ class _ShopSingleProductState extends State<ShopSingleProduct> {
           Expanded(
             flex: 3,
             child: InkWell(
-              onTap: (){
+              onTap: () {
                 // Navigator.push(context,MaterialPageRoute(builder: (context)=>CheckOutPage()));
               },
               child: Container(
-
                 decoration: BoxDecoration(
                     image: DecorationImage(
                         image: NetworkImage(widget.product.images![0]),
-                    fit: BoxFit.cover),
+                        fit: BoxFit.cover),
                     color: Colors.white,
-                    borderRadius: BorderRadius
-                        .circular(scrWidth*0.04),
-                    border: Border.all(
-                        color: const Color(0xffECECEC),
-                        width: 1)
-                ),
+                    borderRadius: BorderRadius.circular(scrWidth * 0.04),
+                    border:
+                        Border.all(color: const Color(0xffECECEC), width: 1)),
               ),
             ),
           ),
           Expanded(
             flex: 2,
             child: Padding(
-              padding:  EdgeInsets.only(
-                right: 5,
-                left: 5
-              ),
+              padding: EdgeInsets.only(right: 5, left: 5),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment
-                    .start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                   Expanded(
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        widget.product.productName!,maxLines: 2, textAlign: TextAlign.start,
+                        widget.product.productName!,
+                        maxLines: 2,
+                        textAlign: TextAlign.start,
                         style: TextStyle(
                             fontFamily: 'Urbanist',
-                            fontSize: scrWidth*0.03,
+                            fontSize: scrWidth * 0.03,
                             fontWeight: FontWeight.w600,
-                            color: const Color(0xff0E0E0E)),),
+                            color: const Color(0xff0E0E0E)),
+                      ),
                     ),
                   ),
-                  SizedBox(height: scrHeight*0.003,),
-
+                  SizedBox(
+                    height: scrHeight * 0.003,
+                  ),
                   Text(
-                    "${widget.product.quantity!} ${widget.product.unit!}", textAlign: TextAlign.center,
+                    "${widget.product.quantity!} ${widget.product.unit!}",
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                         fontFamily: 'Urbanist',
-                        fontSize: scrWidth*0.025,
+                        fontSize: scrWidth * 0.025,
                         fontWeight: FontWeight.w600,
-                        color: const Color(0xff818181)),),
-                  SizedBox(height: scrHeight*0.003,),
-
+                        color: const Color(0xff818181)),
+                  ),
+                  SizedBox(
+                    height: scrHeight * 0.003,
+                  ),
                   Text(
-                    currencyConvert.format(widget.product.price!).toString(), textAlign: TextAlign.center,
+                    currencyConvert.format(widget.product.price!).toString(),
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                         fontFamily: 'Urbanist',
-                        fontSize: scrWidth*0.03,
+                        fontSize: scrWidth * 0.03,
                         fontWeight: FontWeight.w700,
-                        color: const Color(0xffF10000)),),
-                  SizedBox(height: scrHeight*0.004,),
+                        color: const Color(0xffF10000)),
+                  ),
+                  SizedBox(
+                    height: scrHeight * 0.004,
+                  ),
                 ],
               ),
             ),
           ),
-          isCarted?
-          InkWell(
-            onTap: (){
-              },
-            child: Container(
+          isCarted
+              ? InkWell(
+                  onTap: () {},
+                  child: Container(
+                    height: scrHeight * 0.033,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: const Color(0xff02B558)
+                        // color: Colors.red
+                        ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              if (qty != 1) {
+                                --qty;
+                                setState(() {});
+                              }
+                              // setState(() {
+                              //   if(eachstore[index].counter <2)
+                              //   {
+                              //     eachstore[index].ShouldVisible = !eachstore[index].ShouldVisible;
+                              //   }else{
+                              //     eachstore[index].counter--;
+                              //   }
+                              //
+                              // });
+                              decrementCount(widget.product.productId!,
+                                  widget.storeId, qty);
 
-              height: scrHeight*0.033,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  color: const Color(0xff02B558)
-                // color: Colors.red
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: InkWell(
-                      onTap: (){
-                        if (qty != 1) {
-                          --qty;
-                          setState(() {
-
-                          });
-                        }
-                        // setState(() {
-                        //   if(eachstore[index].counter <2)
-                        //   {
-                        //     eachstore[index].ShouldVisible = !eachstore[index].ShouldVisible;
-                        //   }else{
-                        //     eachstore[index].counter--;
-                        //   }
-                        //
-                        // });
-                        decrementCount(widget.product.productId!, widget.storeId,qty);
-
-                        print(cartlist);
-                        final snackBar = SnackBar(
-                          backgroundColor: Colors.white,
-                          content: const Text(' item removed from cart',
-                            style: TextStyle(color: Colors.black),),
-                          action: SnackBarAction(
-
-                            textColor: Colors.blue,
-                            label: 'Go To Cart',
-                            onPressed: () {
-                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>CheckOutPage(id: widget.storeId,)));
-                              // Some code to undo the change.
+                              print(cartlist);
+                              final snackBar = SnackBar(
+                                backgroundColor: Colors.white,
+                                content: const Text(
+                                  ' item removed from cart',
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                                action: SnackBarAction(
+                                  textColor: Colors.blue,
+                                  label: 'Go To Cart',
+                                  onPressed: () {
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => CheckOutPage(
+                                                  id: widget.storeId,
+                                                )));
+                                    // Some code to undo the change.
+                                  },
+                                ),
+                              );
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackBar);
                             },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  color: Color(0xff02B558),
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(8),
+                                      bottomLeft: Radius.circular(8))),
+                              child: Padding(
+                                padding: EdgeInsets.only(bottom: 8),
+                                child: Icon(
+                                  Icons.minimize_outlined,
+                                  size: 15,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
                           ),
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
-                      },
-                      child: Container(
-
-                        decoration: BoxDecoration(
-
-                            color: Color(0xff02B558),
-                            borderRadius: BorderRadius.only(topLeft: Radius.circular(8),
-                                bottomLeft:Radius.circular(8) )),
-                        child: Padding(
-                          padding: EdgeInsets.only(bottom: 8),
-                          child: Icon(Icons.minimize_outlined,size: 15,color: Colors.white,),
                         ),
-                      ),
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Color(0xff9FFFCD),
+                            ),
+                            child: Center(
+                                child: Text(qty.toString()
+                                    // '${eachstore[index].counter}'
+                                    )),
+                          ),
+                        ),
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              // print(products.productId);
+                              // print(products.productName);
+                              qty++;
+                              incrementCount(widget.product.productId!,
+                                  widget.storeId, qty);
+                              print(cartlist);
+                              // final snackBar = SnackBar(
+                              //   backgroundColor: Colors.white,
+                              //   content: const Text(' item added to cart',
+                              //     style: TextStyle(color: Colors.black),),
+                              //   action: SnackBarAction(
+                              //
+                              //     textColor: Colors.blue,
+                              //     label: 'Go To Cart',
+                              //     onPressed: () {
+                              //       Navigator.of(context).push(MaterialPageRoute(builder: (context)=>CheckOutPage()));
+                              //       // Some code to undo the change.
+                              //     },
+                              //   ),
+                              // );
+                              // ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+                              setState(() {});
+                              print(cartlist);
+                              final snackBar = SnackBar(
+                                backgroundColor: Colors.white,
+                                content: const Text(
+                                  ' item added to cart',
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                                action: SnackBarAction(
+                                  textColor: Colors.blue,
+                                  label: 'Go To Cart',
+                                  onPressed: () {
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => CheckOutPage(
+                                                  id: '',
+                                                )));
+                                    // Some code to undo the change.
+                                  },
+                                ),
+                              );
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackBar);
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  // color: Colors.red,
+                                  color: Color(0xff02B558),
+                                  borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(8),
+                                      bottomRight: Radius.circular(8))),
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 3),
+                                child: Icon(
+                                  Icons.add,
+                                  size: 15,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Color(0xff9FFFCD),
+                )
+              : InkWell(
+                  onTap: () {
+                    addToCart(widget.product, widget.storeId);
+
+                    isCarted = true;
+                    setState(() {});
+
+                    print(cartlist);
+                    final snackBar = SnackBar(
+                      backgroundColor: Colors.white,
+                      content: const Text(
+                        ' item added to cart',
+                        style: TextStyle(color: Colors.black),
                       ),
-                      child: Center(child: Text(qty.toString()
-                        // '${eachstore[index].counter}'
-                      )),
-                    ),
-                  ),
-                  Expanded(
-                    child: InkWell(
-                      onTap: (){
-                // print(products.productId);
-                // print(products.productName);
-                qty++;
-                        incrementCount(widget.product.productId!,widget.storeId,qty );
-                        print(cartlist);
-                        // final snackBar = SnackBar(
-                        //   backgroundColor: Colors.white,
-                        //   content: const Text(' item added to cart',
-                        //     style: TextStyle(color: Colors.black),),
-                        //   action: SnackBarAction(
-                        //
-                        //     textColor: Colors.blue,
-                        //     label: 'Go To Cart',
-                        //     onPressed: () {
-                        //       Navigator.of(context).push(MaterialPageRoute(builder: (context)=>CheckOutPage()));
-                        //       // Some code to undo the change.
-                        //     },
-                        //   ),
-                        // );
-                        // ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
-
-                        setState(() {
-
-                        });
-                      print(cartlist);
-                      final snackBar = SnackBar(
-                        backgroundColor: Colors.white,
-                        content: const Text(' item added to cart',
-                          style: TextStyle(color: Colors.black),),
-                        action: SnackBarAction(
-
-                          textColor: Colors.blue,
-                          label: 'Go To Cart',
-                          onPressed: () {
-                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>CheckOutPage(id: '',)));
-                            // Some code to undo the change.
-                          },
-                        ),
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
-                      },
-                      child: Container(
-
-                        decoration: BoxDecoration(
-                          // color: Colors.red,
-                            color: Color(0xff02B558),
-                            borderRadius: BorderRadius.only(topRight: Radius.circular(8),
-                                bottomRight:Radius.circular(8) )
-
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.only(left: 3),
-                          child: Icon(Icons.add,size: 15,color: Colors.white,),
-                        ),
+                      action: SnackBarAction(
+                        textColor: Colors.blue,
+                        label: 'Go To Cart',
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => CheckOutPage(
+                                        id: widget.storeId,
+                                      )));
+                          // Some code to undo the change.
+                        },
                       ),
-                    ),
-                  ),
-
-                ],
-              ),
-
-            ),
-          ):
-          InkWell(
-            onTap: (){
-
-              addToCart(widget.product,widget.storeId);
-
-              isCarted=true;
-              setState(() {
-
-              });
-
-              print(cartlist);
-              final snackBar = SnackBar(
-                backgroundColor: Colors.white,
-                content: const Text(' item added to cart',
-                  style: TextStyle(color: Colors.black),),
-                action: SnackBarAction(
-
-                  textColor: Colors.blue,
-                  label: 'Go To Cart',
-                  onPressed: () {
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>CheckOutPage(id: widget.storeId,)));
-                    // Some code to undo the change.
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   },
+                  child: Container(
+                    width: scrWidth * 0.31,
+                    height: scrHeight * 0.033,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: Color(0xff02B558)
+                        // color: Colors.red
+                        ),
+                    child: Center(
+                      child: Text(
+                        "Add",
+                        style: TextStyle(
+                            fontFamily: 'Urbanist',
+                            fontWeight: FontWeight.w600,
+                            fontSize: 12,
+                            color: Colors.white),
+                      ),
+                    ),
+                  ),
                 ),
-              );
-              ScaffoldMessenger.of(context).showSnackBar(snackBar);
-            },
-            child: Container(
-              width: scrWidth*0.31,
-              height: scrHeight*0.033,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  color: Color(0xff02B558)
-                // color: Colors.red
-              ),
-              child: Center(
-                child: Text("Add",style: TextStyle(
-                    fontFamily: 'Urbanist',fontWeight: FontWeight.w600,fontSize: 12,color: Colors.white
-                ),),
-              ),
-            ),
-          ),
 
           // Padding(
           //   padding: EdgeInsets.only(left: 7),
@@ -1236,38 +1278,37 @@ class _ShopSingleProductState extends State<ShopSingleProduct> {
           //   ),
         ],
       ),
-    ) ;
+    );
   }
 }
 
-
-incrementCount(String productId,String storeId,int count){
-  for(int i=0;i<cartlist.length;i++){
-    if(cartlist[i]['productId'] == productId&&cartlist[i]['storeId'] == storeId){
-
-      cartlist[i]['count']=count;
+incrementCount(String productId, String storeId, int count) {
+  for (int i = 0; i < cartlist.length; i++) {
+    if (cartlist[i]['productId'] == productId &&
+        cartlist[i]['storeId'] == storeId) {
+      cartlist[i]['count'] = count;
     }
   }
-
 }
-decrementCount(String productId,String storeId,int count){
-  for(int i=0;i<cartlist.length;i++){
-    if(cartlist[i]['productId'] == productId&&cartlist[i]['storeId'] == storeId){
 
-      cartlist[i]['count']=count;
+decrementCount(String productId, String storeId, int count) {
+  for (int i = 0; i < cartlist.length; i++) {
+    if (cartlist[i]['productId'] == productId &&
+        cartlist[i]['storeId'] == storeId) {
+      cartlist[i]['count'] = count;
     }
   }
-
 }
-addToCart(ProductModel products,String storeId){
+
+addToCart(ProductModel products, String storeId) {
   cartlist.add({
     'img': products.images![0],
-    'name':products.productName,
-    'price':products.price,
-    'unit':products.unit,
-    'storeId':storeId,
-    'productId':products.productId,
-    'quantity':products.quantity,
-    'count':1,
+    'name': products.productName,
+    'price': products.price,
+    'unit': products.unit,
+    'storeId': storeId,
+    'productId': products.productId,
+    'quantity': products.quantity,
+    'count': 1,
   });
 }

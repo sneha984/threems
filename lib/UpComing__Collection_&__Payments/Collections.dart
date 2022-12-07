@@ -212,10 +212,7 @@ class _UpcomingCollectionsState extends State<UpcomingCollections> {
           .listen((event) {
         userNames![collection.userId!] = UserModel.fromJson(event.data()!);
         if (mounted) {
-          setState(() {
-            print('hereeeeeeeeeeeeeeeeee');
-            print(userNames);
-          });
+          setState(() {});
         }
       });
     }

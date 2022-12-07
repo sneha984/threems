@@ -7,7 +7,6 @@ import '../Authentication/root.dart';
 import '../model/Kuri/kuriModel.dart';
 import '../screens/splash_screen.dart';
 import '../utils/themes.dart';
-import 'addedkuriprivate.dart';
 import 'addedkuripublic.dart';
 import 'hostedkuripage.dart';
 
@@ -56,9 +55,7 @@ class _KuriViewPageState extends State<KuriViewPage> {
     final DateFormat formatter = DateFormat('dd MMMM yyyy');
     final String formatted = formatter.format(deadLine);
     double percentage = widget.kuri.totalReceived! / widget.kuri.amount!;
-    print('Hereeeeeeeeeeee');
-    print(widget.kuri.totalReceived!);
-    print(widget.kuri.amount!);
+
     return Padding(
       padding: EdgeInsets.only(top: scrHeight * 0.01),
       child: GestureDetector(
