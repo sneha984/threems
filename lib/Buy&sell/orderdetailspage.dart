@@ -4,7 +4,9 @@ import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:threems/model/OrderModel.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../screens/splash_screen.dart';
 import 'Orders/acceptedpage.dart';
@@ -99,7 +101,49 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
 
 
                         Text(
-                          "Today 05:00 PM",
+                            widget.orderModel.time!.day ==
+                                DateTime.now().day
+                                ? widget.orderModel.time!.hour >
+                                12
+                                ? "Today ${widget.orderModel.time!.hour - 12}:${widget.orderModel.time!.minute} PM"
+                                : widget.orderModel
+                                .time!
+                                .hour ==
+                                0
+                                ? "Today 12:${widget.orderModel.time!.minute} AM"
+                                : "Today ${widget.orderModel.time!.hour}:${widget.orderModel.time!.minute} AM"
+                                :
+
+                            //YESTERDAY DATE
+                            widget.orderModel.time!.day ==
+                                DateTime.now().day - 1
+                                ?widget.orderModel
+                                .time!
+                                .hour >
+                                12
+                                ? "Yesterday ${widget.orderModel.time!.hour - 12}:${widget.orderModel.time!.minute} PM"
+                                : widget.orderModel
+                                .time!
+                                .hour ==
+                                0
+                                ? "Yesterday 12:${widget.orderModel.time!.minute} AM"
+                                : "Yesterday ${widget.orderModel.time!.hour}:${widget.orderModel.time!.minute} AM"
+                                :
+
+                            //OTHER DATE
+                            widget.orderModel
+                                .time!
+                                .hour >
+                                12
+                                ? "${DateFormat('dd-MMM-yyy').format(widget.orderModel.time!)} ${widget.orderModel.time!.hour - 12}:${widget.orderModel.time!.minute} PM"
+                                : widget.orderModel
+                                .time!
+                                .hour ==
+                                0
+                                ? "${DateFormat('dd-MMM-yyy').format(widget.orderModel.time!)} 12:${widget.orderModel.time!.minute} AM"
+                                : "${DateFormat('dd-MMM-yyy')
+                                .format(widget.orderModel.time!)}"
+                                " ${widget.orderModel.time!.hour}:${widget.orderModel.time!.minute} AM",
                           style: TextStyle(
                               fontSize: 12,
                               color: Color(0xff969696),
@@ -245,7 +289,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                                 width: 30,
                               ),
                               Text(
-                                "₹345",
+                                "₹${widget.orderModel.total!.toStringAsFixed(2)}",
                                 style: TextStyle(
                                     fontSize: 12,
                                     color: Color(0xff0E0E0E),
@@ -272,7 +316,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                                 width: 30,
                               ),
                               Text(
-                                "₹64",
+                                "₹${widget.orderModel.deliveryCharge}",
                                 style: TextStyle(
                                     fontSize: 14,
                                     color: Colors.black,
@@ -328,7 +372,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                                 width: 30,
                               ),
                               Text(
-                                "₹12",
+                                "₹${widget.orderModel.deliveryCharge!+widget.orderModel.total!}",
                                 style: TextStyle(
                                     fontSize: 14,
                                     color: Color(0xff0E0E0E),
@@ -448,7 +492,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                           children: [
                             SizedBox(height: 5,),
                             Text(
-                              "sneha.m.p",
+                              widget.orderModel.address?.name??'',
                               style: TextStyle(
                                   fontSize: 16,
                                   color: Color(0xff0E0E0E),
@@ -459,7 +503,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                               height: 8,
                             ),
                             Text(
-                              "2736677888",
+                              widget.orderModel.address?.phoneNumber??'',
                               style: TextStyle(
                                   fontSize: 12,
                                   color: Color(0xff818181),
@@ -471,14 +515,21 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                         SizedBox(
                           width: 30,
                         ),
-                      CircleAvatar(
-                        radius: 25,
-                        backgroundColor: Color(0xffD9D9D9),
-                        child: Container(
-                          height: 20,width: 30,
-                          child: SvgPicture.asset("assets/icons/Vector (11).svg"),
-                        ),
+                      InkWell(
+                        onTap: (){
+                          Uri call = Uri.parse('tel://${widget.orderModel.address?.phoneNumber??0}');
 
+                          launchUrl(call);
+                        },
+                        child: CircleAvatar(
+                          radius: 25,
+                          backgroundColor: Color(0xffD9D9D9),
+                          child: Container(
+                            height: 20,width: 30,
+                            child: SvgPicture.asset("assets/icons/Vector (11).svg"),
+                          ),
+
+                        ),
                       )
                       ],
                     ),
@@ -498,7 +549,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                           ),
                           SizedBox(height: 5,),
                           Text(
-                            "sneha.m.p",
+                            "${widget.orderModel.address?.locationType??''},${widget.orderModel.address?.flatNo??''}",
                             style: TextStyle(
                                 fontSize: 16,
                                 color: Color(0xff0E0E0E),
@@ -508,7 +559,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                           SizedBox(height: 5,),
 
                           Text(
-                            "City",
+                            'City',
                             style: TextStyle(
                                 fontSize: 12,
                                 color: Color(0xffE54D3C),
@@ -518,7 +569,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                           SizedBox(height: 5,),
 
                           Text(
-                            "sneha.m.p",
+                            "${widget.orderModel.address?.locality??''},${widget.orderModel.address?.pincode??''}",
                             style: TextStyle(
                                 fontSize: 16,
                                 color: Color(0xff0E0E0E),
@@ -686,7 +737,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                   onTap: (){
                     FirebaseFirestore.instance.collection('stores').doc(widget.orderModel.storeId).collection('orders').doc(widget.orderModel.orderId).update({
                       'status':1
-                    }).then((value) => Navigator.push(context, MaterialPageRoute(builder: (context)=>AcceptedPage(orderMdl: widget.orderModel,))));
+                    }).then((value) => Navigator.pop(context));
                     
                   },
                   child: Container(

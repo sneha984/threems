@@ -815,19 +815,20 @@ class _HomeScreenState extends State<HomeScreen> {
                 onTap: () async {
                   _authentication.signOut(context);
                 },
-                child: Container(
-                  margin: EdgeInsets.symmetric(vertical: scrWidth * 0.02),
-                  width: scrWidth * 0.12,
-                  height: scrWidth * 0.16,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: AssetImage("assets/avatar.jpg"),
-                    ),
-                    color: Colors.blueGrey,
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                ),
+                child: Icon(Icons.logout,color: Colors.black,)
+                // Container(
+                //   margin: EdgeInsets.symmetric(vertical: scrWidth * 0.02),
+                //   width: scrWidth * 0.12,
+                //   height: scrWidth * 0.16,
+                //   decoration: BoxDecoration(
+                //     image: DecorationImage(
+                //       fit: BoxFit.cover,
+                //       image: AssetImage("assets/avatar.jpg"),
+                //     ),
+                //     color: Colors.blueGrey,
+                //     borderRadius: BorderRadius.circular(15),
+                //   ),
+                // ),
               ),
               SizedBox(
                 width: scrWidth * 0.059,

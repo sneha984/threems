@@ -3,7 +3,9 @@ import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:threems/model/OrderModel.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../screens/splash_screen.dart';
 
@@ -95,7 +97,51 @@ class _DeliveredPageState extends State<DeliveredPage> {
 
 
                         Text(
-                          "Today 05:00 PM",
+                            widget.order.time!.day ==
+                                DateTime.now().day
+                                ? widget.order.time!.hour >
+                                12
+                                ? "Today ${widget.order.time!.hour - 12}:${widget.order.time!.minute} PM"
+                                : widget.order
+                                .time!
+                                .hour ==
+                                0
+                                ? "Today 12:${widget.order.time!.minute} AM"
+                                : "Today ${widget.order.time!.hour}:${widget.order.time!.minute} AM"
+                                :
+
+                            //YESTERDAY DATE
+                            widget.order.time!.day ==
+                                DateTime.now().day - 1
+                                ?widget.order
+                                .time!
+                                .hour >
+                                12
+                                ? "Yesterday ${widget.order.time!.hour - 12}:${widget.order.time!.minute} PM"
+                                : widget.order
+                                .time!
+                                .hour ==
+                                0
+                                ? "Yesterday 12:${widget.order.time!.minute} AM"
+                                : "Yesterday ${widget.order.time!.hour}:${widget.order.time!.minute} AM"
+                                :
+
+                            //OTHER DATE
+                            widget.order
+                                .time!
+                                .hour >
+                                12
+                                ? "${DateFormat('dd-MMM-yyy').format(widget.order.time!)} ${widget.order.time!.hour - 12}"
+                                ":${widget.order.time!.minute} PM"
+                                : widget.order
+                                .time!
+                                .hour ==
+                                0
+                                ? "${DateFormat('dd-MMM-yyy').format(widget.order.time!)} 12:"
+                                "${widget.order.time!.minute} AM"
+                                : "${DateFormat('dd-MMM-yyy')
+                                .format(widget.order.time!)}"
+                                " ${widget.order.time!.hour}:${widget.order.time!.minute} AM",
                           style: TextStyle(
                               fontSize: 12,
                               color: Color(0xff969696),
@@ -152,7 +198,10 @@ class _DeliveredPageState extends State<DeliveredPage> {
                                   SizedBox(width: 73,),
 
                                   Text(
-                                    widget.order.orderedItems![index].amount!.toString(),
+                                    "₹${
+                                      widget.order.orderedItems![index].amount!
+                                          .toString()
+                                    }",
                                     style: TextStyle(
                                         fontSize: 16,
                                         color: Color(0xffF10000),
@@ -241,7 +290,7 @@ class _DeliveredPageState extends State<DeliveredPage> {
                                 width: 30,
                               ),
                               Text(
-                                "₹345",
+                                "₹${widget.order.total!.toStringAsFixed(2)}",
                                 style: TextStyle(
                                     fontSize: 12,
                                     color: Color(0xff0E0E0E),
@@ -268,7 +317,7 @@ class _DeliveredPageState extends State<DeliveredPage> {
                                 width: 30,
                               ),
                               Text(
-                                "₹64",
+                                "₹${widget.order.deliveryCharge}",
                                 style: TextStyle(
                                     fontSize: 14,
                                     color: Colors.black,
@@ -324,7 +373,7 @@ class _DeliveredPageState extends State<DeliveredPage> {
                                 width: 30,
                               ),
                               Text(
-                                "₹12",
+                                "₹${widget.order.deliveryCharge!+widget.order.total!}",
                                 style: TextStyle(
                                     fontSize: 14,
                                     color: Color(0xff0E0E0E),
@@ -444,7 +493,7 @@ class _DeliveredPageState extends State<DeliveredPage> {
                           children: [
                             SizedBox(height: 5,),
                             Text(
-                              "sneha.m.p",
+                              widget.order.address?.name??'',
                               style: TextStyle(
                                   fontSize: 16,
                                   color: Color(0xff0E0E0E),
@@ -455,7 +504,7 @@ class _DeliveredPageState extends State<DeliveredPage> {
                               height: 8,
                             ),
                             Text(
-                              "2736677888",
+                              widget.order.address?.phoneNumber??'',
                               style: TextStyle(
                                   fontSize: 12,
                                   color: Color(0xff818181),
@@ -467,14 +516,21 @@ class _DeliveredPageState extends State<DeliveredPage> {
                         SizedBox(
                           width: 30,
                         ),
-                        CircleAvatar(
-                          radius: 25,
-                          backgroundColor: Color(0xffD9D9D9),
-                          child: Container(
-                            height: 20,width: 30,
-                            child: SvgPicture.asset("assets/icons/Vector (11).svg"),
-                          ),
+                        InkWell(
+                          onTap: (){
+                            Uri call = Uri.parse('tel://${widget.order.address?.phoneNumber??0}');
 
+                            launchUrl(call);
+                          },
+                          child: CircleAvatar(
+                            radius: 25,
+                            backgroundColor: Color(0xffD9D9D9),
+                            child: Container(
+                              height: 20,width: 30,
+                              child: SvgPicture.asset("assets/icons/Vector (11).svg"),
+                            ),
+
+                          ),
                         )
                       ],
                     ),
@@ -494,7 +550,7 @@ class _DeliveredPageState extends State<DeliveredPage> {
                           ),
                           SizedBox(height: 5,),
                           Text(
-                            "sneha.m.p",
+                            "${widget.order.address?.locationType??''},${widget.order.address?.flatNo??''}",
                             style: TextStyle(
                                 fontSize: 16,
                                 color: Color(0xff0E0E0E),
@@ -514,7 +570,7 @@ class _DeliveredPageState extends State<DeliveredPage> {
                           SizedBox(height: 5,),
 
                           Text(
-                            "sneha.m.p",
+                            "${widget.order.address?.locality??''},${widget.order.address?.pincode??''}",
                             style: TextStyle(
                                 fontSize: 16,
                                 color: Color(0xff0E0E0E),

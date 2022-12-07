@@ -316,10 +316,10 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                 //     ),
                 //   ),
                 // );
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => PaymentPageInBuy()));
+                // Navigator.push(
+                //     context,
+                //     MaterialPageRoute(
+                //         builder: (context) => PaymentPageInBuy()));
               },
               child: SvgPicture.asset(
                 "assets/icons/locationicon.svg",
@@ -625,66 +625,71 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                               print('--------------------------');
                               print(nearestStores.length);
                               StoreDetailsModel store=nearestStores[index];
-                              return Padding(
-                                padding:
-                                    EdgeInsets.only(right: scrWidth * 0.017),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    InkWell(
-                                      child: Padding(
-                                        padding: EdgeInsets.only(
-                                            left: scrWidth * 0.03),
-                                        child: Container(
-                                          height: scrHeight * 0.09,
-                                          width: scrWidth * 0.22,
-                                          decoration: BoxDecoration(
-                                            image: DecorationImage(
-                                                image: NetworkImage(
-                                                    store.storeImage!),
-                                                fit: BoxFit.fill),
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.circular(
-                                                scrWidth * 0.03),
+                              return InkWell(
+                                onTap: (){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>StorePage(storeDetailsModel: nearestStores[index], category: '')));
+                                },
+                                child: Padding(
+                                  padding:
+                                      EdgeInsets.only(right: scrWidth * 0.017),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      InkWell(
+                                        child: Padding(
+                                          padding: EdgeInsets.only(
+                                              left: scrWidth * 0.03),
+                                          child: Container(
+                                            height: scrHeight * 0.09,
+                                            width: scrWidth * 0.22,
+                                            decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                  image: NetworkImage(
+                                                      store.storeImage!),
+                                                  fit: BoxFit.fill),
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.circular(
+                                                  scrWidth * 0.03),
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                          left: scrWidth * 0.04),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          SizedBox(
-                                            height: scrHeight * 0.002,
-                                          ),
-                                          Text(
-                                            store.storeName!,
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                fontFamily: 'Urbanist',
-                                                fontSize: scrWidth * 0.032,
-                                                fontWeight: FontWeight.w600,
-                                                color: Color(0xff0E0E0E)),
-                                          ),
-                                          SizedBox(
-                                            height: scrHeight * 0.0015,
-                                          ),
-                                          Text(
-                                            store.storeAddress!,
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                fontFamily: 'Urbanist',
-                                                fontSize: scrWidth * 0.025,
-                                                fontWeight: FontWeight.w600,
-                                                color: Color(0xff818181)),
-                                          ),
-                                        ],
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            left: scrWidth * 0.04),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            SizedBox(
+                                              height: scrHeight * 0.002,
+                                            ),
+                                            Text(
+                                              store.storeName!,
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontFamily: 'Urbanist',
+                                                  fontSize: scrWidth * 0.032,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: Color(0xff0E0E0E)),
+                                            ),
+                                            SizedBox(
+                                              height: scrHeight * 0.0015,
+                                            ),
+                                            Text(
+                                              store.storeAddress!,
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontFamily: 'Urbanist',
+                                                  fontSize: scrWidth * 0.025,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: Color(0xff818181)),
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               );
                             }),
@@ -1594,66 +1599,66 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                         SizedBox(
                                           width: 18,
                                         ),
-                                        InkWell(
-                                          onTap: () {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        CategoryPage(
-                                                          storeId:
-                                                              store[0].storeId!,
-                                                        )));
-                                          },
-                                          child: Container(
-                                            height: scrHeight * 0.1,
-                                            width: scrWidth * 0.4,
-                                            decoration: BoxDecoration(
-                                                color: Color(0xffF3F3F3),
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        scrWidth * 0.06)),
-                                            child: Padding(
-                                              padding: EdgeInsets.only(
-                                                  left: scrWidth * 0.05),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                children: [
-                                                  SizedBox(
-                                                    height: scrHeight * 0.02,
-                                                  ),
-                                                  Text(
-                                                    "Categories",
-                                                    style: TextStyle(
-                                                        fontSize:
-                                                            scrWidth * 0.035,
-                                                        fontFamily: 'Urbanist',
-                                                        fontWeight:
-                                                            FontWeight.w600),
-                                                  ),
-                                                  SizedBox(
-                                                    height: scrHeight * 0.01,
-                                                  ),
-                                                  Text(
-                                                    store[0]!
-                                                        .storeCategory!
-                                                        .length
-                                                        .toString(),
-                                                    style: TextStyle(
-                                                        fontSize:
-                                                            scrWidth * 0.06,
-                                                        fontFamily: 'Urbanist',
-                                                        fontWeight:
-                                                            FontWeight.w600),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
+                                        // InkWell(
+                                        //   onTap: () {
+                                        //     Navigator.push(
+                                        //         context,
+                                        //         MaterialPageRoute(
+                                        //             builder: (context) =>
+                                        //                 CategoryPage(
+                                        //                   storeId:
+                                        //                       store[0].storeId!,
+                                        //                 )));
+                                        //   },
+                                        //   child: Container(
+                                        //     height: scrHeight * 0.1,
+                                        //     width: scrWidth * 0.4,
+                                        //     decoration: BoxDecoration(
+                                        //         color: Color(0xffF3F3F3),
+                                        //         borderRadius:
+                                        //             BorderRadius.circular(
+                                        //                 scrWidth * 0.06)),
+                                        //     child: Padding(
+                                        //       padding: EdgeInsets.only(
+                                        //           left: scrWidth * 0.05),
+                                        //       child: Column(
+                                        //         crossAxisAlignment:
+                                        //             CrossAxisAlignment.start,
+                                        //         mainAxisAlignment:
+                                        //             MainAxisAlignment.start,
+                                        //         children: [
+                                        //           SizedBox(
+                                        //             height: scrHeight * 0.02,
+                                        //           ),
+                                        //           Text(
+                                        //             "Categories",
+                                        //             style: TextStyle(
+                                        //                 fontSize:
+                                        //                     scrWidth * 0.035,
+                                        //                 fontFamily: 'Urbanist',
+                                        //                 fontWeight:
+                                        //                     FontWeight.w600),
+                                        //           ),
+                                        //           SizedBox(
+                                        //             height: scrHeight * 0.01,
+                                        //           ),
+                                        //           Text(
+                                        //             store[0]!
+                                        //                 .storeCategory!
+                                        //                 .length
+                                        //                 .toString(),
+                                        //             style: TextStyle(
+                                        //                 fontSize:
+                                        //                     scrWidth * 0.06,
+                                        //                 fontFamily: 'Urbanist',
+                                        //                 fontWeight:
+                                        //                     FontWeight.w600),
+                                        //           ),
+                                        //         ],
+                                        //       ),
+                                        //     ),
+                                        //   ),
+                                        // ),
                                       ],
                                     ),
                                   ],

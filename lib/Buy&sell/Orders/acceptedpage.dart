@@ -3,8 +3,10 @@ import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:threems/Buy&sell/Orders/deliveredpage.dart';
 import 'package:threems/model/OrderModel.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../screens/splash_screen.dart';
 
@@ -96,7 +98,49 @@ class _AcceptedPageState extends State<AcceptedPage> {
 
 
                         Text(
-                          "Today 05:00 PM",
+                            widget.orderMdl.time!.day ==
+                                DateTime.now().day
+                                ? widget.orderMdl.time!.hour >
+                                12
+                                ? "Today ${widget.orderMdl.time!.hour - 12}:${widget.orderMdl.time!.minute} PM"
+                                : widget.orderMdl
+                                .time!
+                                .hour ==
+                                0
+                                ? "Today 12:${widget.orderMdl.time!.minute} AM"
+                                : "Today ${widget.orderMdl.time!.hour}:${widget.orderMdl.time!.minute} AM"
+                                :
+
+                            //YESTERDAY DATE
+                            widget.orderMdl.time!.day ==
+                                DateTime.now().day - 1
+                                ?widget.orderMdl
+                                .time!
+                                .hour >
+                                12
+                                ? "Yesterday ${widget.orderMdl.time!.hour - 12}:${widget.orderMdl.time!.minute} PM"
+                                : widget.orderMdl
+                                .time!
+                                .hour ==
+                                0
+                                ? "Yesterday 12:${widget.orderMdl.time!.minute} AM"
+                                : "Yesterday ${widget.orderMdl.time!.hour}:${widget.orderMdl.time!.minute} AM"
+                                :
+
+                            //OTHER DATE
+                            widget.orderMdl
+                                .time!
+                                .hour >
+                                12
+                                ? "${DateFormat('dd-MMM-yyy').format(widget.orderMdl.time!)} ${widget.orderMdl.time!.hour - 12}:${widget.orderMdl.time!.minute} PM"
+                                : widget.orderMdl
+                                .time!
+                                .hour ==
+                                0
+                                ? "${DateFormat('dd-MMM-yyy').format(widget.orderMdl.time!)} 12:${widget.orderMdl.time!.minute} AM"
+                                : "${DateFormat('dd-MMM-yyy')
+                                .format(widget.orderMdl.time!)}"
+                                " ${widget.orderMdl.time!.hour}:${widget.orderMdl.time!.minute} AM",
                           style: TextStyle(
                               fontSize: 12,
                               color: Color(0xff969696),
@@ -153,7 +197,11 @@ class _AcceptedPageState extends State<AcceptedPage> {
                                   SizedBox(width: 73,),
 
                                   Text(
-                                    widget.orderMdl.orderedItems![index].amount!.toString(),
+                                   " ₹${
+                                      widget
+                                          .orderMdl.orderedItems![index].amount!
+                                          .toString()
+                                    }",
                                     style: TextStyle(
                                         fontSize: 16,
                                         color: Color(0xffF10000),
@@ -242,7 +290,7 @@ class _AcceptedPageState extends State<AcceptedPage> {
                                 width: 30,
                               ),
                               Text(
-                                "₹345",
+                                "₹${widget.orderMdl.total!.toStringAsFixed(2)}",
                                 style: TextStyle(
                                     fontSize: 12,
                                     color: Color(0xff0E0E0E),
@@ -269,7 +317,7 @@ class _AcceptedPageState extends State<AcceptedPage> {
                                 width: 30,
                               ),
                               Text(
-                                "₹64",
+                                "₹${widget.orderMdl.deliveryCharge!.toStringAsFixed(2)}",
                                 style: TextStyle(
                                     fontSize: 14,
                                     color: Colors.black,
@@ -325,7 +373,7 @@ class _AcceptedPageState extends State<AcceptedPage> {
                                 width: 30,
                               ),
                               Text(
-                                "₹12",
+                                "₹${widget.orderMdl.total!+widget.orderMdl.deliveryCharge!}",
                                 style: TextStyle(
                                     fontSize: 14,
                                     color: Color(0xff0E0E0E),
@@ -445,7 +493,7 @@ class _AcceptedPageState extends State<AcceptedPage> {
                           children: [
                             SizedBox(height: 5,),
                             Text(
-                              "sneha.m.p",
+                              widget.orderMdl.address?.name??'',
                               style: TextStyle(
                                   fontSize: 16,
                                   color: Color(0xff0E0E0E),
@@ -456,7 +504,7 @@ class _AcceptedPageState extends State<AcceptedPage> {
                               height: 8,
                             ),
                             Text(
-                              "2736677888",
+                              widget.orderMdl.address?.phoneNumber??'',
                               style: TextStyle(
                                   fontSize: 12,
                                   color: Color(0xff818181),
@@ -468,14 +516,21 @@ class _AcceptedPageState extends State<AcceptedPage> {
                         SizedBox(
                           width: 30,
                         ),
-                        CircleAvatar(
-                          radius: 25,
-                          backgroundColor: Color(0xffD9D9D9),
-                          child: Container(
-                            height: 20,width: 30,
-                            child: SvgPicture.asset("assets/icons/Vector (11).svg"),
-                          ),
+                        InkWell(
+                          onTap: (){
+                            Uri call = Uri.parse('tel://${widget.orderMdl.address?.phoneNumber??0}');
 
+                            launchUrl(call);
+                          },
+                          child: CircleAvatar(
+                            radius: 25,
+                            backgroundColor: Color(0xffD9D9D9),
+                            child: Container(
+                              height: 20,width: 30,
+                              child: SvgPicture.asset("assets/icons/Vector (11).svg"),
+                            ),
+
+                          ),
                         )
                       ],
                     ),
@@ -495,7 +550,7 @@ class _AcceptedPageState extends State<AcceptedPage> {
                           ),
                           SizedBox(height: 5,),
                           Text(
-                            "sneha.m.p",
+                            "${widget.orderMdl.address?.locationType??''},${widget.orderMdl.address?.flatNo??''}",
                             style: TextStyle(
                                 fontSize: 16,
                                 color: Color(0xff0E0E0E),
@@ -505,7 +560,7 @@ class _AcceptedPageState extends State<AcceptedPage> {
                           SizedBox(height: 5,),
 
                           Text(
-                            "City",
+                            'City',
                             style: TextStyle(
                                 fontSize: 12,
                                 color: Color(0xffE54D3C),
@@ -515,7 +570,7 @@ class _AcceptedPageState extends State<AcceptedPage> {
                           SizedBox(height: 5,),
 
                           Text(
-                            "sneha.m.p",
+                            "${widget.orderMdl.address?.locality??''},${widget.orderMdl.address?.pincode??''}",
                             style: TextStyle(
                                 fontSize: 16,
                                 color: Color(0xff0E0E0E),
@@ -684,7 +739,7 @@ class _AcceptedPageState extends State<AcceptedPage> {
                     FirebaseFirestore.instance.collection('stores').
                     doc(widget.orderMdl.storeId).collection('orders').doc(widget.orderMdl.orderId).update({
                       'status':2
-                    }).then((value) => Navigator.push(context, MaterialPageRoute(builder: (context)=>DeliveredPage(order: widget.orderMdl,))));
+                    }).then((value) =>Navigator.pop(context));
 
                   },
                   child: Container(

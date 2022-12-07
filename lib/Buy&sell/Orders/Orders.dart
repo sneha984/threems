@@ -343,7 +343,9 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                                                                   .hour ==
                                                               0
                                                           ? "${DateFormat('dd-MMM-yyy').format(pendingList[index].time!)} 12:${pendingList[index].time!.minute} AM"
-                                                          : "${DateFormat('dd-MMM-yyy').format(pendingList[index].time!)} ${pendingList[index].time!.hour}:${pendingList[index].time!.minute} AM",
+                                                          : "${DateFormat('dd-MMM-yyy')
+                                                      .format(pendingList[index].time!)}"
+                                                      " ${pendingList[index].time!.hour}:${pendingList[index].time!.minute} AM",
                                           style: TextStyle(
                                               fontSize: 12,
                                               color: Color(0xff969696),
@@ -417,9 +419,12 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                                                   ),
 
                                                   Text(
-                                                    order.orderedItems![index2]
-                                                        .amount!
-                                                        .toString(),
+                                                    "₹${
+                                                      order
+                                                          .orderedItems![index2]
+                                                          .amount!
+                                                          .toString()
+                                                    }",
                                                     style: TextStyle(
                                                         fontSize: 16,
                                                         color:
@@ -453,7 +458,7 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                                           width: 40,
                                         ),
                                         Text(
-                                          order.total!.toStringAsFixed(2),
+                                          "₹${order.total!.toStringAsFixed(2)}",
                                           style: TextStyle(
                                               fontSize: 16,
                                               color: Color(0xff0E0E0E),
@@ -643,10 +648,12 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                                                   ),
 
                                                   Text(
-                                                    acceptedList[index]
-                                                        .orderedItems![index2]
-                                                        .count!
-                                                        .toString(),
+
+                                                      acceptedList[index]
+                                                          .orderedItems![index2]
+                                                          .count!
+                                                          .toString()
+                                                   ,
                                                     style: TextStyle(
                                                         fontSize: 16,
                                                         color: Colors.black,
@@ -659,10 +666,11 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                                                   ),
 
                                                   Text(
-                                                    acceptedList[index]
-                                                        .orderedItems![index2]
-                                                        .amount!
-                                                        .toString(),
+                                                    "₹${
+                                                      acceptedList[index]
+                                                          .orderedItems![index2]
+                                                          .amount!.toStringAsFixed(2)
+                                                    }",
                                                     style: TextStyle(
                                                         fontSize: 16,
                                                         color:
@@ -696,7 +704,7 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                                           width: 40,
                                         ),
                                         Text(
-                                          "123",
+                                          "₹${acceptedList[index].total!.toStringAsFixed(2)}",
                                           style: TextStyle(
                                               fontSize: 16,
                                               color: Color(0xff0E0E0E),
@@ -786,7 +794,50 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                                           width: 10,
                                         ),
                                         Text(
-                                          "Today 05:00 PM",
+                                            deliveredList[index].time!.day ==
+                                                DateTime.now().day
+                                                ? deliveredList[index].time!.hour >
+                                                12
+                                                ? "Today ${deliveredList[index].time!.hour - 12}:${deliveredList[index].time!.minute} PM"
+                                                : deliveredList[index]
+                                                .time!
+                                                .hour ==
+                                                0
+                                                ? "Today 12:${deliveredList[index].time!.minute} AM"
+                                                : "Today ${deliveredList[index].time!.hour}:${deliveredList[index].time!.minute} AM"
+                                                :
+
+                                            //YESTERDAY DATE
+                                            deliveredList[index].time!.day ==
+                                                DateTime.now().day - 1
+                                                ?deliveredList[index]
+                                                .time!
+                                                .hour >
+                                                12
+                                                ? "Yesterday ${deliveredList[index].time!.hour - 12}:${deliveredList[index].time!.minute} PM"
+                                                : deliveredList[index]
+                                                .time!
+                                                .hour ==
+                                                0
+                                                ? "Yesterday 12:${deliveredList[index].time!.minute} AM"
+                                                : "Yesterday ${deliveredList[index].time!.hour}:${deliveredList[index].time!.minute} AM"
+                                                :
+
+                                            //OTHER DATE
+                                            deliveredList[index]
+                                                .time!
+                                                .hour >
+                                                12
+                                                ? "${DateFormat('dd-MMM-yyy').format(deliveredList[index].time!)} ${deliveredList[index].time!.hour - 12}:"
+                                                "${deliveredList[index].time!.minute} PM"
+                                                :deliveredList[index]
+                                                .time!
+                                                .hour ==
+                                                0
+                                                ? "${DateFormat('dd-MMM-yyy').format(deliveredList[index].time!)} 12:${deliveredList[index].time!.minute} AM"
+                                                : "${DateFormat('dd-MMM-yyy')
+                                                .format(deliveredList[index].time!)}"
+                                                " ${deliveredList[index].time!.hour}:${deliveredList[index].time!.minute} AM",
                                           style: TextStyle(
                                               fontSize: 12,
                                               color: Color(0xff969696),
@@ -844,10 +895,10 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                                                   ),
 
                                                   Text(
-                                                    deliveredList[index]
-                                                        .orderedItems![index2]
-                                                        .count!
-                                                        .toString(),
+                                                   deliveredList[index]
+                                                          .orderedItems![index2]
+                                                          .count!
+                                                          .toString(),
                                                     style: TextStyle(
                                                         fontSize: 16,
                                                         color: Colors.black,
@@ -860,10 +911,10 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                                                   ),
 
                                                   Text(
-                                                    deliveredList[index]
-                                                        .orderedItems![index2]
-                                                        .amount!
-                                                        .toString(),
+                                                     " ₹${ deliveredList[index]
+                                                          .orderedItems![index2]
+                                                          .amount!
+                                                          .toString()}",
                                                     style: TextStyle(
                                                         fontSize: 16,
                                                         color:
@@ -897,7 +948,7 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                                           width: 40,
                                         ),
                                         Text(
-                                          "123",
+                                          "₹${deliveredList[index].total}",
                                           style: TextStyle(
                                               fontSize: 16,
                                               color: Color(0xff0E0E0E),
@@ -916,56 +967,43 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                           )
                         ]);
                       }),
-              Container(
-                height: scrHeight * 6,
-                child: ListView.builder(
-                    itemCount: cancelledList.length,
-                    itemBuilder: (context, index) {
-                      // final pending=pendingList[index];
-                      // return Padding(
-                      //   padding: const EdgeInsets.only(left: 15,right: 15,top: 15),
-                      //   child: InkWell(
-                      //     onTap: (){
-                      //       Navigator.push(context, MaterialPageRoute(
-                      //           builder: (context)=>CancelledPage(orderModels: cancelledList[index],)));
-                      //     },
-                      //     child:
-                      //     // Container(
-                      //     //   height: 100,
-                      //     //   width: 30,
-                      //     //   decoration: BoxDecoration(
-                      //     //       color: Colors.green,
-                      //     //       borderRadius: BorderRadius.circular(30)
-                      //     //   ),
-                      //     //   child: Padding(
-                      //     //     padding: const EdgeInsets.only(left: 20,top: 15),
-                      //     //     child: Column(
-                      //     //       crossAxisAlignment: CrossAxisAlignment.start,
-                      //     //       children: [
-                      //     //         Text("Customer Name:${cancelledList[index].address!.name}"),
-                      //     //         SizedBox(height: 5),
-                      //     //         Text("Phone Number:${cancelledList[index].address!.phoneNumber}"),
-                      //     //         SizedBox(height: 5,),
-                      //     //         Text("DateTime:${cancelledList[index].time}"),
-                      //     //       ],
-                      //     //     ),
-                      //     //   ),
-                      //     //
-                      //     // ),
-                      //   ),
-                      // );
-                      return Padding(
-                        padding: EdgeInsets.only(left: 15, right: 15, top: 20),
+              cancelledList.isEmpty
+                  ? Column(
+                children: [
+                  SizedBox(
+                    height: 150,
+                  ),
+                  SvgPicture.asset("assets/icons/Group 173.svg"),
+                  SizedBox(
+                    height: 90,
+                  ),
+                  Text(
+                    "You don't have any order yet",
+                    style: TextStyle(
+                        fontFamily: 'Urbanist',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500),
+                  )
+                ],
+              )
+                  : ListView.builder(
+                  itemCount: cancelledList.length,
+                  itemBuilder: (context, index) {
+                    return Column(children: [
+                      Padding(
+                        padding:
+                        EdgeInsets.only(left: 10, right: 10, top: 20),
                         child: InkWell(
                           onTap: () {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => CancelledPage()));
+                                    builder: (context) => CancelledPage(
+                                         orderModels:cancelledList[index],)));
                           },
                           child: Container(
-                            height: 140,
-                            width: 100,
+                            height: 150,
+                            width: 360,
                             decoration: BoxDecoration(
                                 color: Color(0xffF3F3F3),
                                 boxShadow: [
@@ -979,7 +1017,6 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                                 ],
                                 borderRadius: BorderRadius.circular(20)),
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 SizedBox(
                                   height: 10,
@@ -990,7 +1027,7 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                                       width: 20,
                                     ),
                                     Text(
-                                      "Order #1265365",
+                                      "Order ${cancelledList[index].orderId}",
                                       style: TextStyle(
                                           fontSize: 12,
                                           color: Colors.black,
@@ -1000,29 +1037,51 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                                     SizedBox(
                                       width: 10,
                                     ),
-                                    Container(
-                                      height: 15,
-                                      width: 30,
-                                      decoration: BoxDecoration(
-                                          color: Color(0xff02B558),
-                                          borderRadius:
-                                              BorderRadius.circular(5)),
-                                      child: Center(
-                                        child: Text(
-                                          "New",
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              color: Colors.white,
-                                              fontFamily: 'Urbanist',
-                                              fontWeight: FontWeight.w600),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 80,
-                                    ),
                                     Text(
-                                      "Today 05:00 PM",
+                                      cancelledList[index].time!.day ==
+                                          DateTime.now().day
+                                          ? cancelledList[index].time!.hour >
+                                          12
+                                          ? "Today ${cancelledList[index].time!.hour - 12}:${cancelledList[index].time!.minute} PM"
+                                          : cancelledList[index]
+                                          .time!
+                                          .hour ==
+                                          0
+                                          ? "Today 12:${cancelledList[index].time!.minute} AM"
+                                          : "Today ${cancelledList[index].time!.hour}:${cancelledList[index].time!.minute} AM"
+                                          :
+
+                                      //YESTERDAY DATE
+                                      cancelledList[index].time!.day ==
+                                          DateTime.now().day - 1
+                                          ?cancelledList[index]
+                                          .time!
+                                          .hour >
+                                          12
+                                          ? "Yesterday ${cancelledList[index].time!.hour - 12}:${cancelledList[index].time!.minute} PM"
+                                          : cancelledList[index]
+                                          .time!
+                                          .hour ==
+                                          0
+                                          ? "Yesterday 12:${cancelledList[index].time!.minute} AM"
+                                          : "Yesterday ${cancelledList[index].time!.hour}:${cancelledList[index].time!.minute} AM"
+                                          :
+
+                                      //OTHER DATE
+                                      cancelledList[index]
+                                          .time!
+                                          .hour >
+                                          12
+                                          ? "${DateFormat('dd-MMM-yyy').format(cancelledList[index].time!)} ${cancelledList[index].time!.hour - 12}:"
+                                          "${cancelledList[index].time!.minute} PM"
+                                          :cancelledList[index]
+                                          .time!
+                                          .hour ==
+                                          0
+                                          ? "${DateFormat('dd-MMM-yyy').format(cancelledList[index].time!)} 12:${cancelledList[index].time!.minute} AM"
+                                          : "${DateFormat('dd-MMM-yyy')
+                                          .format(cancelledList[index].time!)}"
+                                          " ${cancelledList[index].time!.hour}:${cancelledList[index].time!.minute} AM",
                                       style: TextStyle(
                                           fontSize: 12,
                                           color: Color(0xff969696),
@@ -1034,94 +1093,125 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                                 SizedBox(
                                   height: 30,
                                 ),
-                                Row(
-                                  children: [
-                                    SizedBox(
-                                      width: 20,
-                                    ),
+                                Expanded(
+                                  child: ListView.builder(
+                                      itemCount: cancelledList[index]
+                                          .orderedItems!
+                                          .length,
+                                      itemBuilder: (context, index2) {
+                                        return Padding(
+                                          padding: const EdgeInsets.only(
+                                              top: 10),
+                                          child: Row(
+                                            children: [
+                                              SizedBox(
+                                                width: 20,
+                                              ),
 
-                                    Container(
-                                      width: 150,
+                                              Container(
+                                                width: 150,
+                                                child: Text(
+                                                  cancelledList[index]
+                                                      .orderedItems![index2]
+                                                      .item!,
+                                                  style: TextStyle(
+                                                      fontSize: 16,
+                                                      color: Colors.black,
+                                                      fontFamily:
+                                                      'Urbanist',
+                                                      fontWeight:
+                                                      FontWeight.w600),
+                                                ),
+                                              ),
+                                              // SizedBox(width: 80,),
+
+                                              Text(
+                                                "x",
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    color: Colors.black,
+                                                    fontFamily: 'Urbanist',
+                                                    fontWeight:
+                                                    FontWeight.w600),
+                                              ),
+                                              SizedBox(
+                                                width: 5,
+                                              ),
+
+                                              Text(
+                                                  cancelledList[index]
+                                                      .orderedItems![index2]
+                                                      .count!
+                                                      .toString(),
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    color: Colors.black,
+                                                    fontFamily: 'Urbanist',
+                                                    fontWeight:
+                                                    FontWeight.w600),
+                                              ),
+                                              SizedBox(
+                                                width: 73,
+                                              ),
+
+                                              Text(
+                                                 " ₹${cancelledList[index]
+                                                      .orderedItems![index2]
+                                                      .amount!
+                                                      .toString()}",
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    color:
+                                                    Color(0xffF10000),
+                                                    fontFamily: 'Urbanist',
+                                                    fontWeight:
+                                                    FontWeight.w600),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      }),
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Padding(
+                                      padding:
+                                      const EdgeInsets.only(right: 90),
                                       child: Text(
-                                        "huhuuhuu",
+                                        "Total",
                                         style: TextStyle(
-                                            fontSize: 16,
-                                            color: Colors.black,
+                                            fontSize: 12,
+                                            color: Color(0xff969696),
                                             fontFamily: 'Urbanist',
                                             fontWeight: FontWeight.w600),
                                       ),
                                     ),
-                                    // SizedBox(width: 80,),
-
-                                    Text(
-                                      "x",
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          color: Colors.black,
-                                          fontFamily: 'Urbanist',
-                                          fontWeight: FontWeight.w600),
-                                    ),
                                     SizedBox(
-                                      width: 5,
+                                      width: 40,
                                     ),
-
                                     Text(
-                                      "1",
+                                      "₹${cancelledList[index].total}",
                                       style: TextStyle(
                                           fontSize: 16,
-                                          color: Colors.black,
-                                          fontFamily: 'Urbanist',
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                    SizedBox(
-                                      width: 73,
-                                    ),
-
-                                    Text(
-                                      "254",
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          color: Color(0xffF10000),
+                                          color: Color(0xff0E0E0E),
                                           fontFamily: 'Urbanist',
                                           fontWeight: FontWeight.w600),
                                     ),
                                   ],
                                 ),
                                 SizedBox(
-                                  height: 17,
+                                  height: 15,
                                 ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Text(
-                                      "Total",
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          color: Color(0xff969696),
-                                          fontFamily: 'Urbanist',
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                    SizedBox(
-                                      width: 30,
-                                    ),
-                                    Text(
-                                      "356",
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          color: Colors.black,
-                                          fontFamily: 'Urbanist',
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                  ],
-                                )
                               ],
                             ),
                           ),
                         ),
-                      );
-                    }),
-              ),
+                      )
+                    ]);
+                  }),
+
             ],
           ))
         ]),

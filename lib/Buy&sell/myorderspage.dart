@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:threems/Authentication/root.dart';
 import 'package:threems/Buy&sell/Orders/Orders.dart';
 import 'package:threems/Buy&sell/storepage.dart';
@@ -145,7 +146,50 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
 
 
                             Text(
-                              allOrders[index].time.toString(),
+                                allOrders[index].time!.day ==
+                                    DateTime.now().day
+                                    ? allOrders[index].time!.hour >
+                                    12
+                                    ? "Today ${allOrders[index].time!.hour - 12}:${allOrders[index].time!.minute} PM"
+                                    : allOrders[index]
+                                    .time!
+                                    .hour ==
+                                    0
+                                    ? "Today 12:${allOrders[index].time!.minute} AM"
+                                    : "Today ${allOrders[index].time!.hour}:${allOrders[index].time!.minute} AM"
+                                    :
+
+                                //YESTERDAY DATE
+                                allOrders[index].time!.day ==
+                                    DateTime.now().day - 1
+                                    ?allOrders[index]
+                                    .time!
+                                    .hour >
+                                    12
+                                    ? "Yesterday ${allOrders[index].time!.hour - 12}:${allOrders[index].time!.minute} PM"
+                                    : allOrders[index]
+                                    .time!
+                                    .hour ==
+                                    0
+                                    ? "Yesterday 12:${allOrders[index].time!.minute} AM"
+                                    : "Yesterday ${allOrders[index].time!.hour}:${allOrders[index].time!.minute} AM"
+                                    :
+
+                                //OTHER DATE
+                                allOrders[index]
+                                    .time!
+                                    .hour >
+                                    12
+                                    ? "${DateFormat('dd-MMM-yyy').format(allOrders[index].time!)} ${allOrders[index].time!.hour - 12}:"
+                                    "${allOrders[index].time!.minute} PM"
+                                    :allOrders[index]
+                                    .time!
+                                    .hour ==
+                                    0
+                                    ? "${DateFormat('dd-MMM-yyy').format(allOrders[index].time!)} 12:${allOrders[index].time!.minute} AM"
+                                    : "${DateFormat('dd-MMM-yyy')
+                                    .format(allOrders[index].time!)}"
+                                    " ${allOrders[index].time!.hour}:${allOrders[index].time!.minute} AM",
                               style: TextStyle(
                                   fontSize: 12,
                                   color: Color(0xff969696),
@@ -202,7 +246,12 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
                                       SizedBox(width: 73,),
 
                                       Text(
-                                        allOrders[index].orderedItems![index2].amount!.toString(),
+                                       " ₹${
+                                            allOrders[index]
+                                                .orderedItems![index2]
+                                                .amount!
+                                                .toString()
+                                          }",
                                         style: TextStyle(
                                             fontSize: 16,
                                             color: Color(0xffF10000),
@@ -233,7 +282,7 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
                             SizedBox(width: 40,),
 
                             Text(
-                              "$sum",
+                              "₹${allOrders[index].total}",
                               style: TextStyle(
                                   fontSize: 16,
                                   color: Color(0xff0E0E0E),

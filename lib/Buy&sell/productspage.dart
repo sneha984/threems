@@ -268,62 +268,62 @@ class _ProductsPageState extends State<ProductsPage> {
                                       //   child: SvgPicture.asset('assets/svg/more_ver.svg'),
                                       // ),
                                     SizedBox(width: 16,),
-                                      PopupMenuButton<MenuItem>(
-                                        constraints: BoxConstraints(
-                                            maxWidth: 100,
-                                            minWidth: 100,
-                                            maxHeight: 200,
-                                            minHeight: 100),
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(8)),
-                                        position: PopupMenuPosition.under,
-                                        itemBuilder: (context) => [
-                                          PopupMenuItem(
-                                            height: 30,
-                                            child: Center(
-                                              child: Row(
-                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                children: [
-                                                  SizedBox(
-                                                    width: scrWidth * 0.065,
-                                                  ),
-                                                  Text(
-                                                    "Edit",
-                                                    style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: scrWidth * 0.035,
-                                                      fontFamily: "Urbanist",
-                                                      fontWeight: FontWeight.w500,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                          PopupMenuItem(
-                                            height: 30,
-                                            child: Center(
-                                              child: Row(
-                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                children: [
-                                                  SizedBox(
-                                                    width: scrWidth * 0.065,
-                                                  ),
-                                                  Text(
-                                                    "Delete ",
-                                                    style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: scrWidth * 0.035,
-                                                      fontFamily: "Urbanist",
-                                                      fontWeight: FontWeight.w500,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                      // PopupMenuButton<MenuItem>(
+                                      //   constraints: BoxConstraints(
+                                      //       maxWidth: 100,
+                                      //       minWidth: 100,
+                                      //       maxHeight: 200,
+                                      //       minHeight: 100),
+                                      //   shape: RoundedRectangleBorder(
+                                      //       borderRadius: BorderRadius.circular(8)),
+                                      //   position: PopupMenuPosition.under,
+                                      //   itemBuilder: (context) => [
+                                      //     PopupMenuItem(
+                                      //       height: 30,
+                                      //       child: Center(
+                                      //         child: Row(
+                                      //           mainAxisAlignment: MainAxisAlignment.start,
+                                      //           children: [
+                                      //             SizedBox(
+                                      //               width: scrWidth * 0.065,
+                                      //             ),
+                                      //             Text(
+                                      //               "Edit",
+                                      //               style: TextStyle(
+                                      //                 color: Colors.black,
+                                      //                 fontSize: scrWidth * 0.035,
+                                      //                 fontFamily: "Urbanist",
+                                      //                 fontWeight: FontWeight.w500,
+                                      //               ),
+                                      //             ),
+                                      //           ],
+                                      //         ),
+                                      //       ),
+                                      //     ),
+                                      //     PopupMenuItem(
+                                      //       height: 30,
+                                      //       child: Center(
+                                      //         child: Row(
+                                      //           mainAxisAlignment: MainAxisAlignment.start,
+                                      //           children: [
+                                      //             SizedBox(
+                                      //               width: scrWidth * 0.065,
+                                      //             ),
+                                      //             Text(
+                                      //               "Delete ",
+                                      //               style: TextStyle(
+                                      //                 color: Colors.black,
+                                      //                 fontSize: scrWidth * 0.035,
+                                      //                 fontFamily: "Urbanist",
+                                      //                 fontWeight: FontWeight.w500,
+                                      //               ),
+                                      //             ),
+                                      //           ],
+                                      //         ),
+                                      //       ),
+                                      //     ),
+                                      //   ],
+                                      // ),
                                     ],
                                   ),
                                   Row(

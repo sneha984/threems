@@ -4,6 +4,7 @@ import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:threems/model/OrderModel.dart';
 
 import '../screens/splash_screen.dart';
@@ -96,7 +97,50 @@ class _MyOrdersDetailsPageState extends State<MyOrdersDetailsPage> {
 
 
                         Text(
-                          "Today 05:00 PM",
+                            widget.orderModel.time!.day ==
+                                DateTime.now().day
+                                ? widget.orderModel.time!.hour >
+                                12
+                                ? "Today ${widget.orderModel.time!.hour - 12}:${widget.orderModel.time!.minute} PM"
+                                : widget.orderModel
+                                .time!
+                                .hour ==
+                                0
+                                ? "Today 12:${widget.orderModel.time!.minute} AM"
+                                : "Today ${widget.orderModel.time!.hour}:${widget.orderModel.time!.minute} AM"
+                                :
+
+                            //YESTERDAY DATE
+                            widget.orderModel.time!.day ==
+                                DateTime.now().day - 1
+                                ?widget.orderModel
+                                .time!
+                                .hour >
+                                12
+                                ? "Yesterday ${widget.orderModel.time!.hour - 12}:${widget.orderModel.time!.minute} PM"
+                                : widget.orderModel
+                                .time!
+                                .hour ==
+                                0
+                                ? "Yesterday 12:${widget.orderModel.time!.minute} AM"
+                                : "Yesterday ${widget.orderModel.time!.hour}:${widget.orderModel.time!.minute} AM"
+                                :
+
+                            //OTHER DATE
+                            widget.orderModel
+                                .time!
+                                .hour >
+                                12
+                                ? "${DateFormat('dd-MMM-yyy').format(widget.orderModel.time!)} ${widget.orderModel.time!.hour - 12}:"
+                                "${widget.orderModel.time!.minute} PM"
+                                :widget.orderModel
+                                .time!
+                                .hour ==
+                                0
+                                ? "${DateFormat('dd-MMM-yyy').format(widget.orderModel.time!)} 12:${widget.orderModel.time!.minute} AM"
+                                : "${DateFormat('dd-MMM-yyy')
+                                .format(widget.orderModel.time!)}"
+                                " ${widget.orderModel.time!.hour}:${widget.orderModel.time!.minute} AM",
                           style: TextStyle(
                               fontSize: 12,
                               color: Color(0xff969696),
@@ -153,7 +197,11 @@ class _MyOrdersDetailsPageState extends State<MyOrdersDetailsPage> {
                                   SizedBox(width: 73,),
 
                                   Text(
-                                    widget.orderModel.orderedItems![index].amount!.toString(),
+                                   " ₹${
+                                      widget.orderModel.orderedItems![index]
+                                          .amount!
+                                          .toString()
+                                    }",
                                     style: TextStyle(
                                         fontSize: 16,
                                         color: Color(0xffF10000),
@@ -242,7 +290,7 @@ class _MyOrdersDetailsPageState extends State<MyOrdersDetailsPage> {
                                 width: 30,
                               ),
                               Text(
-                                "₹345",
+                                "₹${widget.orderModel.total}",
                                 style: TextStyle(
                                     fontSize: 12,
                                     color: Color(0xff0E0E0E),
@@ -269,7 +317,7 @@ class _MyOrdersDetailsPageState extends State<MyOrdersDetailsPage> {
                                 width: 30,
                               ),
                               Text(
-                                "₹64",
+                                "₹${widget.orderModel.deliveryCharge}",
                                 style: TextStyle(
                                     fontSize: 14,
                                     color: Colors.black,
@@ -325,7 +373,7 @@ class _MyOrdersDetailsPageState extends State<MyOrdersDetailsPage> {
                                 width: 30,
                               ),
                               Text(
-                                "₹12",
+                                "₹${widget.orderModel.deliveryCharge!+widget.orderModel.total!}",
                                 style: TextStyle(
                                     fontSize: 14,
                                     color: Color(0xff0E0E0E),
