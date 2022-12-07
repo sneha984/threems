@@ -5,6 +5,7 @@ import 'package:threems/Buy&sell/buy_and_sell.dart';
 
 class StoreDetailsModel {
   double? deliveryCharge;
+  double? totalSales;
   String? storeName;
   List<dynamic>? storeCategory;
   String? storeAddress;
@@ -17,51 +18,51 @@ class StoreDetailsModel {
   Map? position;
   StoreDetailsModel(
       {this.storeName,
-        this.deliveryCharge,
-         this.storeCategory,
-        this.storeAddress,
-        this.storeLocation,
+      this.deliveryCharge,
+      this.totalSales,
+      this.storeCategory,
+      this.storeAddress,
+      this.storeLocation,
       this.storeId,
       this.storeImage,
-        this.userId,
-        this.longitude,
-        this.latitude,
-        this. position
-      });
+      this.userId,
+      this.longitude,
+      this.latitude,
+      this.position});
 
   StoreDetailsModel.fromJson(Map<String, dynamic> json) {
-    deliveryCharge=json['deliveryCharge'];
+    deliveryCharge = json['deliveryCharge'];
+    totalSales = json['totalSales'];
     storeName = json['storeName'];
     storeCategory = json['storeCategory'];
     storeAddress = json['storeAddress'];
     storeLocation = json['storeLocation'];
-    storeId=json['storeId'];
-    storeImage=json['storeImage'];
-    longitude=json['longitude'];
-    latitude=json['latitude'];
-    position=json['position'];
+    storeId = json['storeId'];
+    storeImage = json['storeImage'];
+    longitude = json['longitude'];
+    latitude = json['latitude'];
+    position = json['position'];
 
-    userId=json['userId'];
+    userId = json['userId'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['deliveryCharge']=this.deliveryCharge;
+    data['deliveryCharge'] = this.deliveryCharge;
+    data['totalSales'] = this.totalSales;
     data['storeName'] = this.storeName;
     data['storeCategory'] = this.storeCategory;
     data['storeAddress'] = this.storeAddress;
     data['storeLocation'] = this.storeLocation;
-    data['storeId']=this.storeId;
-    data['storeImage']=this.storeImage;
-    data['longitude']=this.longitude;
-    data['userId']=this.userId;
-    data['latitude']=this.latitude;
-    data['position']=this.position;
+    data['storeId'] = this.storeId;
+    data['storeImage'] = this.storeImage;
+    data['longitude'] = this.longitude;
+    data['userId'] = this.userId;
+    data['latitude'] = this.latitude;
+    data['position'] = this.position;
     return data;
   }
 }
-
-
 
 class ProductModel {
   List<String>? images;
@@ -77,20 +78,19 @@ class ProductModel {
   String? details;
   // List<String> categoryName=[];
 
-
   ProductModel(
       {this.images,
-        this.productName,
-        this.productCategory,
-        this.price,
-        this.quantity,
-        this.available,
-        this.productId,
-        this.unit,
-        this.storeId,
-        this.storedCategorys,
-        // required this.categoryName,
-        this.details});
+      this.productName,
+      this.productCategory,
+      this.price,
+      this.quantity,
+      this.available,
+      this.productId,
+      this.unit,
+      this.storeId,
+      this.storedCategorys,
+      // required this.categoryName,
+      this.details});
   ProductModel.fromJson(Map<String, dynamic> json) {
     images = json['images'].cast<String>();
     productName = json['productName'];
@@ -98,9 +98,9 @@ class ProductModel {
     price = json['price'];
     available = json['available'];
     quantity = json['quantity'];
-    storedCategorys=json['storedCategorys'];
-    productId=json['productId'];
-    storeId=json['storeId'];
+    storedCategorys = json['storedCategorys'];
+    productId = json['productId'];
+    storeId = json['storeId'];
     // categoryName=json['categoryName'];
 
     unit = json['unit'];
@@ -110,17 +110,18 @@ class ProductModel {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['images'] = this.images;
     data['productName'] = this.productName;
-    data['storeId']=this.storeId;
-    data['available']=this.available;
+    data['storeId'] = this.storeId;
+    data['available'] = this.available;
     data['productCategory'] = this.productCategory;
     data['price'] = this.price;
     data['quantity'] = this.quantity;
-    data['storedCategorys']=this.storedCategorys;
-    data['storeId']=this.storeId;
+    data['storedCategorys'] = this.storedCategorys;
+    data['storeId'] = this.storeId;
 
     // data['categoryName']=this.categoryName;
     data['unit'] = this.unit;
-    data['details'] = this.details;data['productId']=this.productId;
+    data['details'] = this.details;
+    data['productId'] = this.productId;
     return data;
   }
 }

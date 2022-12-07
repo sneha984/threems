@@ -20,9 +20,10 @@ class _CheckOutPage3State extends State<CheckOutPage3> {
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
-
               children: [
-                SizedBox(height: 170,),
+                SizedBox(
+                  height: 170,
+                ),
                 Container(
                   height: 241,
                   width: 241,
@@ -33,32 +34,46 @@ class _CheckOutPage3State extends State<CheckOutPage3> {
                   child: Lottie.asset('assets/icons/payment_successful.json',
                       fit: BoxFit.contain),
                 ),
-                SizedBox(height: scrHeight*0.15,),
-
-
-                Text("Order Placed Successfully",
-                  style: TextStyle(fontSize: scrWidth*0.041,fontFamily: 'Urbanist',fontWeight: FontWeight.w500),),
-                SizedBox(height: scrHeight*0.03,),
-
-
+                SizedBox(
+                  height: scrHeight * 0.15,
+                ),
+                Text(
+                  "Order Placed Successfully",
+                  style: TextStyle(
+                      fontSize: scrWidth * 0.041,
+                      fontFamily: 'Urbanist',
+                      fontWeight: FontWeight.w500),
+                ),
+                SizedBox(
+                  height: scrHeight * 0.03,
+                ),
                 GestureDetector(
-                  onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>ScreenLayout()));
+                  onTap: () {
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => ScreenLayout()),
+                        (route) => false);
                   },
                   child: Container(
-                    height: scrHeight*0.06,
-                    width: scrWidth*0.78,
+                    height: scrHeight * 0.06,
+                    width: scrWidth * 0.78,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(17),
-                        border: Border.all(color: Color(0xffE6E6E6),width: 1)
-
-                    ),child: Center(child: Text("Go to home",
-                      style: TextStyle(color: Color(0xff888888),fontSize:  scrWidth*0.041,fontFamily: 'Outfit',fontWeight: FontWeight.w500))),),
+                        border: Border.all(color: Color(0xffE6E6E6), width: 1)),
+                    child: Center(
+                        child: Text("Go to home",
+                            style: TextStyle(
+                                color: Color(0xff888888),
+                                fontSize: scrWidth * 0.041,
+                                fontFamily: 'Outfit',
+                                fontWeight: FontWeight.w500))),
+                  ),
                 ),
-                SizedBox(height: scrHeight*0.14,),
+                SizedBox(
+                  height: scrHeight * 0.14,
+                ),
               ],
             ),
-
           )
         ],
       ),

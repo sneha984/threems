@@ -22,6 +22,7 @@ import 'package:threems/widgets/upcomming_card_widget.dart';
 
 import '../Authentication/auth.dart';
 import '../UpComing__Collection_&__Payments/Collections.dart';
+import '../UpComing__Collection_&__Payments/payments.dart';
 import '../kuri/createkuri.dart';
 import '../model/charitymodel.dart';
 import 'charity/donatepage.dart';
@@ -80,6 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
       print(contacts.length);
     });
   }
+
   double selectedIndex = 0;
   getVerifiedCharity() {
     FirebaseFirestore.instance
@@ -95,8 +97,8 @@ class _HomeScreenState extends State<HomeScreen> {
         setState(() {});
       }
     });
-
   }
+
   Position? currentLoc;
   getLocation() async {
     try {
@@ -115,6 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
       print('00000000000000000000000000000000000000000000000000000');
     }
   }
+
   @override
   void initState() {
     askPermissions();
@@ -763,597 +766,637 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     // print(" scrWidth : $scrWidth");
     // print(" scrHeight : $scrHeight");
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(kToolbarHeight),
-        child: Container(
-          decoration: BoxDecoration(boxShadow: [
-            BoxShadow(
-                color: Colors.black.withOpacity(0.05),
-                offset: Offset(0, 4),
-                blurRadius: 25),
-          ]),
-          child: AppBar(
-            elevation: 0,
-            backgroundColor: appBarColor,
-            centerTitle: false,
-            leadingWidth: 0,
-            title: Padding(
-              padding: EdgeInsets.only(top: scrHeight * 0.009),
-              child: SvgPicture.asset("assets/icons/3ms.svg"),
-            ),
-            actions: [
-              GestureDetector(
-                onTap: () {},
-                child: Container(
-                  child: SvgPicture.asset(
-                    "assets/icons/notifications.svg",
-                    //  width: 19,
-                    // height: 20,
-                    width: scrWidth * 0.059,
-                    height: scrWidth * 0.055,
-                    color: Colors.black,
+    return WillPopScope(
+      onWillPop: () async {
+        final shouldPop = await confirmQuitDialog();
+        return shouldPop ?? false;
+      },
+      child: Scaffold(
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(kToolbarHeight),
+          child: Container(
+            decoration: BoxDecoration(boxShadow: [
+              BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  offset: Offset(0, 4),
+                  blurRadius: 25),
+            ]),
+            child: AppBar(
+              elevation: 0,
+              backgroundColor: appBarColor,
+              centerTitle: false,
+              leadingWidth: 0,
+              title: Padding(
+                padding: EdgeInsets.only(top: scrHeight * 0.009),
+                child: SvgPicture.asset("assets/icons/3ms.svg"),
+              ),
+              actions: [
+                GestureDetector(
+                  onTap: () {},
+                  child: Container(
+                    child: SvgPicture.asset(
+                      "assets/icons/notifications.svg",
+                      //  width: 19,
+                      // height: 20,
+                      width: scrWidth * 0.059,
+                      height: scrWidth * 0.055,
+                      color: Colors.black,
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(
-                width: scrWidth * 0.045,
-                // width: 16,
-              ),
-              SvgPicture.asset(
-                "assets/icons/connected.svg",
-                width: scrWidth * 0.059,
-                height: scrWidth * 0.055,
-                color: Colors.black,
-                // width: 19,
-                // height: 20,
-              ),
-              SizedBox(
-                width: scrWidth * 0.045,
-              ),
-              GestureDetector(
-                onTap: () async {
-                  showDialog(
-                    context: context,
-                    builder: (ctx) => AlertDialog(
-                   content: const Text("do you want to exit this app"),
-                      actions: <Widget>[
-                        TextButton(
-                          onPressed: () {
-                            _authentication.signOut(context);                          },
-                          child: const Text("yes"),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(ctx).pop();
-                          },
-                          child: const Text("no"),
-                        ),                      ],
-                    ),
-                  );
-                },
-                child: Icon(Icons.logout,color: Colors.black,)
-                // Container(
-                //   margin: EdgeInsets.symmetric(vertical: scrWidth * 0.02),
-                //   width: scrWidth * 0.12,
-                //   height: scrWidth * 0.16,
-                //   decoration: BoxDecoration(
-                //     image: DecorationImage(
-                //       fit: BoxFit.cover,
-                //       image: AssetImage("assets/avatar.jpg"),
-                //     ),
-                //     color: Colors.blueGrey,
-                //     borderRadius: BorderRadius.circular(15),
-                //   ),
+                SizedBox(
+                  width: scrWidth * 0.045,
+                  // width: 16,
+                ),
+                // SvgPicture.asset(
+                //   "assets/icons/connected.svg",
+                //   width: scrWidth * 0.059,
+                //   height: scrWidth * 0.055,
+                //   color: Colors.black,
+                //   // width: 19,
+                //   // height: 20,
                 // ),
-              ),
-              SizedBox(
-                width: scrWidth * 0.059,
-                // width: 21,
-              ),
-            ],
+                // SizedBox(
+                //   width: scrWidth * 0.045,
+                // ),
+                GestureDetector(
+                    onTap: () async {
+                      showDialog(
+                        context: context,
+                        builder: (ctx) => AlertDialog(
+                          content: const Text("do you want to exit this app"),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(ctx).pop();
+                              },
+                              child: const Text("No"),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                _authentication.signOut(context);
+                              },
+                              child: const Text(
+                                "Yes",
+                                style: TextStyle(color: primarycolor),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                    child: Icon(
+                      Icons.logout,
+                      color: Colors.black,
+                    )
+                    // Container(
+                    //   margin: EdgeInsets.symmetric(vertical: scrWidth * 0.02),
+                    //   width: scrWidth * 0.12,
+                    //   height: scrWidth * 0.16,
+                    //   decoration: BoxDecoration(
+                    //     image: DecorationImage(
+                    //       fit: BoxFit.cover,
+                    //       image: AssetImage("assets/avatar.jpg"),
+                    //     ),
+                    //     color: Colors.blueGrey,
+                    //     borderRadius: BorderRadius.circular(15),
+                    //   ),
+                    // ),
+                    ),
+                SizedBox(
+                  width: scrWidth * 0.059,
+                  // width: 21,
+                ),
+              ],
+            ),
           ),
         ),
-      ),
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        physics: BouncingScrollPhysics(),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Column(
-              children: [
-                Container(
-                  margin: EdgeInsets.only(
-                      left: scrWidth * 0.045,
-                      right: scrWidth * 0.045,
-                      top: scrWidth * 0.025),
-                  height: scrHeight * .18,
-                  width: scrWidth * 1,
-                  child: CarouselWidget(),
-                ),
-                Container(
-                  padding: EdgeInsets.fromLTRB(
-                    scrWidth * 0.059,
-                    scrWidth * 0.015,
-                    scrWidth * 0.059,
-                    0,
+        body: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          physics: BouncingScrollPhysics(),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Column(
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(
+                        left: scrWidth * 0.045,
+                        right: scrWidth * 0.045,
+                        top: scrWidth * 0.025),
+                    height: scrHeight * .18,
+                    width: scrWidth * 1,
+                    child: CarouselWidget(),
                   ),
-                  height: scrHeight * .09,
-                  child: Center(
-                    child: Row(
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => UpcomingPayments(),
+                          ));
+                    },
+                    child: Container(
+                      padding: EdgeInsets.fromLTRB(
+                        scrWidth * 0.059,
+                        scrWidth * 0.015,
+                        scrWidth * 0.059,
+                        0,
+                      ),
+                      height: scrHeight * .09,
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            UpcommingCardWidget(
+                              image: 'assets/icons/upcoming_payments.svg',
+                              title: "Upcoming\nPayments",
+                            ),
+                            InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          UpcomingCollections(),
+                                    ));
+                              },
+                              child: UpcommingCardWidget(
+                                image: 'assets/icons/upcoming_collections.svg',
+                                title: "Upcoming\nCollections",
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: scrWidth * 0.06,
+                        vertical: scrWidth * 0.045),
+                    // color: Colors.deepOrange,
+                    height: scrWidth * 0.47,
+                    width: scrWidth,
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        UpcommingCardWidget(
-                            image: 'assets/icons/upcoming_payments.svg',
-                            title: "Upcoming\nPayments",
-                          ),
-                        InkWell(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => UpcomingCollections(),
-                                ));
-                          },
-                          child: UpcommingCardWidget(
-                            image: 'assets/icons/upcoming_collections.svg',
-                            title: "Upcoming\nCollections",
-                          ),
-                        ),
-                      ],
+                        Center(
+                          child: Container(
+                            // height: 137,
+                            height: scrWidth * 0.38,
+                            // width: 336,
+                            width: scrWidth * .9,
 
-
-                  ),
-                ),
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: scrWidth * 0.06, vertical: scrWidth * 0.045),
-                  // color: Colors.deepOrange,
-                  height: scrWidth * 0.47,
-                  width: scrWidth,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Center(
-                        child: Container(
-                          // height: 137,
-                          height: scrWidth * 0.38,
-                          // width: 336,
-                          width: scrWidth * .9,
-
-                          decoration: BoxDecoration(
-                              // color: Colors.pink,
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(68.5),
-                              border: Border.all(
-                                width: 1,
-                                color: Color(0xffF6F6F6),
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  offset: Offset(0, 2),
-                                  blurRadius: 15,
-                                  spreadRadius: 5,
-                                  color: Color(0xff000000).withOpacity(.05),
+                            decoration: BoxDecoration(
+                                // color: Colors.pink,
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(68.5),
+                                border: Border.all(
+                                  width: 1,
+                                  color: Color(0xffF6F6F6),
                                 ),
-                              ]),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              GestureDetector(
-                                onTap: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => HostedChitPage(),
-                                      // CreateNewChitScreen(),
-                                    )),
-                                child: FundingWidget(
-                                    title: "Chit Funds",
-                                    image: "assets/icons/money-bag.json"),
-                              ),
-                              VerticalDivider(
-                                thickness: scrHeight * 0.001,
-                                endIndent: scrWidth * 0.06,
-                                indent: scrWidth * 0.06,
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
+                                boxShadow: [
+                                  BoxShadow(
+                                    offset: Offset(0, 2),
+                                    blurRadius: 15,
+                                    spreadRadius: 5,
+                                    color: Color(0xff000000).withOpacity(.05),
+                                  ),
+                                ]),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                GestureDetector(
+                                  onTap: () => Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => Kuripage()));
-                                },
-                                child: FundingWidget(
-                                    title: "Kuri Funds",
-                                    image: "assets/icons/cash.json"),
-                              ),
-                            ],
+                                        builder: (context) => HostedChitPage(),
+                                        // CreateNewChitScreen(),
+                                      )),
+                                  child: FundingWidget(
+                                      title: "Chit Funds",
+                                      image: "assets/icons/money-bag.json"),
+                                ),
+                                VerticalDivider(
+                                  thickness: scrHeight * 0.001,
+                                  endIndent: scrWidth * 0.06,
+                                  indent: scrWidth * 0.06,
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => Kuripage()));
+                                  },
+                                  child: FundingWidget(
+                                      title: "Kuri Funds",
+                                      image: "assets/icons/cash.json"),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  // height: 280,
-                  height: scrWidth * 0.8,
-                  width: scrWidth,
-                  // color: Colors.deepPurple,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: scrWidth * 0.06),
-                        child: Text(
-                          "Verified Charities",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: FontSize13,
-                            fontFamily: 'Urbanist',
-                          ),
-                        ),
-                      ),
-                      GestureDetector(
-                          onTap: () {
-                            // Navigator.push(context,MaterialPageRoute(builder: (context)=>GeolocatorPage()));
-                          },
-                          child: VerifiedCharityWidget()),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: scrWidth * 0.01,
-                ),
-                Container(
-                  width: scrWidth,
-                  // height: 70,
-                  height: scrWidth * 0.2,
-                  // color: Colors.red,
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: scrWidth * 0.059,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => DonatePage()
-                                    // FlGraph()
-                                    ));
-                          },
-                          child: FundraiseAndCharityWidget(
-                            icon: 'assets/icons/don.svg',
-                            title: 'DONATE',
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => SeeMoreCharities(),
-                                ));
-                          },
-                          child: FundraiseAndCharityWidget(
-                            icon: 'assets/icons/fundraise.svg',
-                            title: 'FUNDRAISE',
-                          ),
-                        )
                       ],
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: scrWidth * 0.3,
-                ),
-              ],
-            )
-          ],
+                  Container(
+                    // height: 280,
+                    height: scrWidth * 0.8,
+                    width: scrWidth,
+                    // color: Colors.deepPurple,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Padding(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: scrWidth * 0.06),
+                          child: Text(
+                            "Verified Charities",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: FontSize13,
+                              fontFamily: 'Urbanist',
+                            ),
+                          ),
+                        ),
+                        GestureDetector(
+                            onTap: () {
+                              // Navigator.push(context,MaterialPageRoute(builder: (context)=>GeolocatorPage()));
+                            },
+                            child: VerifiedCharityWidget()),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: scrWidth * 0.01,
+                  ),
+                  Container(
+                    width: scrWidth,
+                    // height: 70,
+                    height: scrWidth * 0.2,
+                    // color: Colors.red,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: scrWidth * 0.059,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => DonatePage()
+                                      // FlGraph()
+                                      ));
+                            },
+                            child: FundraiseAndCharityWidget(
+                              icon: 'assets/icons/don.svg',
+                              title: 'DONATE',
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => SeeMoreCharities(),
+                                  ));
+                            },
+                            child: FundraiseAndCharityWidget(
+                              icon: 'assets/icons/fundraise.svg',
+                              title: 'FUNDRAISE',
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: scrWidth * 0.3,
+                  ),
+                ],
+              )
+            ],
+          ),
         ),
-      ),
-      //     floatingActionButton: Bounceable(
-      //       onTap: () {},
-      //       child: Container(
-      //         width: scrWidth * .412,
-      //         height: scrWidth * 0.12,
-      //         // width: 146,
-      //         // height: 43,
-      //         child: ElevatedButton(
-      //           // icon: Icon(Icons.add),
-      //           style: ButtonStyle(
-      //               backgroundColor: MaterialStateProperty.all(primarycolor),
-      //               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-      //                   RoundedRectangleBorder(
-      //                 borderRadius: BorderRadius.circular(16),
-      //               ))),
-      //           onPressed: () {
-      //             bottomsheets(context);
-      //           },
-      //           child: Text(
-      //             "+  Create Room",
-      //             style: TextStyle(
-      //               fontSize: FontSize15,
-      //               fontFamily: 'Urbanist',
-      //               fontWeight: FontWeight.w600,
-      //             ),
-      //           ),
-      //         ),
-      //       ),
-      //     ),
-      //     floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      //   );
-      // }
+        //     floatingActionButton: Bounceable(
+        //       onTap: () {},
+        //       child: Container(
+        //         width: scrWidth * .412,
+        //         height: scrWidth * 0.12,
+        //         // width: 146,
+        //         // height: 43,
+        //         child: ElevatedButton(
+        //           // icon: Icon(Icons.add),
+        //           style: ButtonStyle(
+        //               backgroundColor: MaterialStateProperty.all(primarycolor),
+        //               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+        //                   RoundedRectangleBorder(
+        //                 borderRadius: BorderRadius.circular(16),
+        //               ))),
+        //           onPressed: () {
+        //             bottomsheets(context);
+        //           },
+        //           child: Text(
+        //             "+  Create Room",
+        //             style: TextStyle(
+        //               fontSize: FontSize15,
+        //               fontFamily: 'Urbanist',
+        //               fontWeight: FontWeight.w600,
+        //             ),
+        //           ),
+        //         ),
+        //       ),
+        //     ),
+        //     floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        //   );
+        // }
 
-      // void bottomsheets(context) {
-      //   showModalBottomSheet(
-      //     context: context,
-      //     backgroundColor: Colors.transparent,
-      //     builder: (context) => StatefulBuilder(
-      //       builder:
-      //           (BuildContext context, void Function(void Function()) setState) {
-      //         return Container(
-      //           height: scrHeight * 0.36,
-      //           decoration: const BoxDecoration(
-      //               color: Colors.white,
-      //               borderRadius: BorderRadius.only(
-      //                 topLeft: Radius.circular(40),
-      //                 topRight: Radius.circular(40),
-      //               )),
-      //           child: Column(
-      //             mainAxisAlignment: MainAxisAlignment.start,
-      //             crossAxisAlignment: CrossAxisAlignment.start,
-      //             children: [
-      //               SizedBox(
-      //                 height: scrHeight * 0.05,
-      //               ),
-      //               Padding(
-      //                 padding: EdgeInsets.only(left: 30),
-      //                 child: Text(
-      //                   "Create New Room",
-      //                   style: TextStyle(
-      //                       fontFamily: 'Urbanist',
-      //                       fontWeight: FontWeight.w700,
-      //                       fontSize: scrWidth * 0.053),
-      //                 ),
-      //               ),
-      //               SizedBox(
-      //                 height: scrHeight * 0.03,
-      //               ),
-      //               Row(
-      //                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      //                 children: [
-      //                   InkWell(
-      //                     onTap: () {
-      //                       setState(() {
-      //                         selectedIndex = 1;
-      //                       });
-      //                     },
-      //                     child: Column(
-      //                       children: [
-      //                         Badge(
-      //                           animationType: BadgeAnimationType.slide,
-      //                           showBadge: selectedIndex == 1 ? true : false,
-      //                           padding: EdgeInsets.all(scrWidth * 0.005),
-      //                           badgeContent: Icon(
-      //                             Icons.check,
-      //                             color: primarycolor,
-      //                             size: createRoomIconSize,
-      //                           ),
-      //                           child: Container(
-      //                             width: scrWidth * 0.23,
-      //                             height: scrHeight * 0.11,
-      //                             decoration: BoxDecoration(
-      //                               shape: BoxShape.circle,
-      //                               color: Colors.grey.shade100,
-      //                               border: selectedIndex == 1
-      //                                   ? Border.all(
-      //                                       color: primarycolor,
-      //                                       width: 3,
-      //                                     )
-      //                                   : Border.all(color: Colors.transparent),
-      //                             ),
-      //                             child: Padding(
-      //                               padding: EdgeInsets.all(scrWidth * 0.05),
-      //                               child: SvgPicture.asset(
-      //                                 "assets/icons/chiti_funds.svg",
-      //                                 fit: BoxFit.contain,
-      //                               ),
-      //                             ),
-      //                           ),
-      //                           badgeColor: Colors.white,
-      //                           position: BadgePosition(
-      //                             bottom: -7,
-      //                           ),
-      //                         ),
-      //                         SizedBox(
-      //                           height: scrHeight * 0.01,
-      //                         ),
-      //                         Text(
-      //                           "Chit",
-      //                           style: TextStyle(
-      //                               fontFamily: 'Urbanist',
-      //                               fontWeight: FontWeight.w500,
-      //                               fontSize: CardFont2),
-      //                         ),
-      //                       ],
-      //                     ),
-      //                   ),
-      //                   InkWell(
-      //                     onTap: () {
-      //                       setState(() {
-      //                         selectedIndex = 0;
-      //                       });
-      //                     },
-      //                     child: Column(
-      //                       children: [
-      //                         Badge(
-      //                           animationType: BadgeAnimationType.slide,
-      //                           showBadge: selectedIndex == 0 ? true : false,
-      //                           padding: EdgeInsets.all(scrWidth * 0.005),
-      //                           badgeContent: Icon(
-      //                             Icons.check,
-      //                             color: primarycolor,
-      //                             size: createRoomIconSize,
-      //                           ),
-      //                           child: Container(
-      //                             width: scrWidth * 0.23,
-      //                             height: scrHeight * 0.11,
-      //                             decoration: BoxDecoration(
-      //                               shape: BoxShape.circle,
-      //                               color: Colors.grey.shade100,
-      //                               border: selectedIndex == 0
-      //                                   ? Border.all(
-      //                                       color: primarycolor,
-      //                                       width: 3,
-      //                                     )
-      //                                   : Border.all(color: Colors.transparent),
-      //                             ),
-      //                             child: Padding(
-      //                               padding: EdgeInsets.all(scrWidth * 0.05),
-      //                               child: SvgPicture.asset(
-      //                                 "assets/icons/kuri_funds.svg",
-      //                                 fit: BoxFit.contain,
-      //                               ),
-      //                             ),
-      //                           ),
-      //                           badgeColor: Colors.white,
-      //                           position: BadgePosition(
-      //                             bottom: -7,
-      //                           ),
-      //                         ),
-      //                         SizedBox(
-      //                           height: scrHeight * 0.01,
-      //                         ),
-      //                         Text("Kuri",
-      //                             style: TextStyle(
-      //                                 fontFamily: 'Urbanist',
-      //                                 fontWeight: FontWeight.w500,
-      //                                 fontSize: CardFont2))
-      //                       ],
-      //                     ),
-      //                   ),
-      //                   InkWell(
-      //                     onTap: () {
-      //                       setState(() {
-      //                         selectedIndex = 2;
-      //                       });
-      //                     },
-      //                     child: Column(
-      //                       children: [
-      //                         Badge(
-      //                           animationType: BadgeAnimationType.slide,
-      //                           showBadge: selectedIndex == 2 ? true : false,
-      //                           padding: EdgeInsets.all(scrWidth * 0.005),
-      //                           badgeContent: Icon(
-      //                             Icons.check,
-      //                             color: primarycolor,
-      //                             size: createRoomIconSize,
-      //                           ),
-      //                           child: Container(
-      //                             width: scrWidth * 0.23,
-      //                             height: scrHeight * 0.11,
-      //                             decoration: BoxDecoration(
-      //                               shape: BoxShape.circle,
-      //                               color: Colors.grey.shade100,
-      //                               border: selectedIndex == 2
-      //                                   ? Border.all(
-      //                                       color: primarycolor,
-      //                                       width: 3,
-      //                                     )
-      //                                   : Border.all(color: Colors.transparent),
-      //                             ),
-      //                             child: Padding(
-      //                               padding: EdgeInsets.all(scrWidth * 0.05),
-      //                               child: SvgPicture.asset(
-      //                                 "assets/icons/charity.svg",
-      //                                 fit: BoxFit.contain,
-      //                               ),
-      //                             ),
-      //                           ),
-      //                           badgeColor: Colors.white,
-      //                           position: BadgePosition(
-      //                             bottom: -7,
-      //                           ),
-      //                         ),
-      //                         SizedBox(
-      //                           height: scrHeight * 0.01,
-      //                         ),
-      //                         Text(
-      //                           "Charity",
-      //                           style: TextStyle(
-      //                               fontFamily: 'Urbanist',
-      //                               fontWeight: FontWeight.w500,
-      //                               fontSize: CardFont2),
-      //                         ),
-      //                       ],
-      //                     ),
-      //                   )
-      //                 ],
-      //               ),
-      //               SizedBox(
-      //                 height: scrHeight * 0.025,
-      //               ),
-      //               Center(
-      //                 child: Bounceable(
-      //                   onTap: () {
-      //                     Navigator.push(
-      //                         context,
-      //                         MaterialPageRoute(
-      //                           builder: (context) => CreateRoomScreen(),
-      //                         ));
-      //                   },
-      //                   child: Container(
-      //                     height: scrHeight * 0.07,
-      //                     width: scrWidth * 0.9,
-      //                     decoration: BoxDecoration(
-      //                       borderRadius: BorderRadius.circular(10),
-      //                       color: primarycolor,
-      //                     ),
-      //                     child: Center(
-      //                       child: Row(
-      //                         mainAxisAlignment: MainAxisAlignment.center,
-      //                         children: [
-      //                           Icon(
-      //                             Icons.add,
-      //                             size: createRoomIconSize,
-      //                             color: Colors.white,
-      //                           ),
-      //                           SizedBox(
-      //                             width: scrWidth * 0.01,
-      //                           ),
-      //                           Text(
-      //                             "Create Room",
-      //                             style: TextStyle(
-      //                                 color: Colors.white,
-      //                                 fontSize: FontSize17,
-      //                                 fontFamily: 'Urbanist',
-      //                                 fontWeight: FontWeight.w500),
-      //                           ),
-      //                         ],
-      //                       ),
-      //                     ),
-      //                   ),
-      //                 ),
-      //               ),
-      //               SizedBox(
-      //                 height: scrWidth * 0.005,
-      //               )
-      //             ],
-      //           ),
-      //         );
-      //       },
-      //     ),
+        // void bottomsheets(context) {
+        //   showModalBottomSheet(
+        //     context: context,
+        //     backgroundColor: Colors.transparent,
+        //     builder: (context) => StatefulBuilder(
+        //       builder:
+        //           (BuildContext context, void Function(void Function()) setState) {
+        //         return Container(
+        //           height: scrHeight * 0.36,
+        //           decoration: const BoxDecoration(
+        //               color: Colors.white,
+        //               borderRadius: BorderRadius.only(
+        //                 topLeft: Radius.circular(40),
+        //                 topRight: Radius.circular(40),
+        //               )),
+        //           child: Column(
+        //             mainAxisAlignment: MainAxisAlignment.start,
+        //             crossAxisAlignment: CrossAxisAlignment.start,
+        //             children: [
+        //               SizedBox(
+        //                 height: scrHeight * 0.05,
+        //               ),
+        //               Padding(
+        //                 padding: EdgeInsets.only(left: 30),
+        //                 child: Text(
+        //                   "Create New Room",
+        //                   style: TextStyle(
+        //                       fontFamily: 'Urbanist',
+        //                       fontWeight: FontWeight.w700,
+        //                       fontSize: scrWidth * 0.053),
+        //                 ),
+        //               ),
+        //               SizedBox(
+        //                 height: scrHeight * 0.03,
+        //               ),
+        //               Row(
+        //                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        //                 children: [
+        //                   InkWell(
+        //                     onTap: () {
+        //                       setState(() {
+        //                         selectedIndex = 1;
+        //                       });
+        //                     },
+        //                     child: Column(
+        //                       children: [
+        //                         Badge(
+        //                           animationType: BadgeAnimationType.slide,
+        //                           showBadge: selectedIndex == 1 ? true : false,
+        //                           padding: EdgeInsets.all(scrWidth * 0.005),
+        //                           badgeContent: Icon(
+        //                             Icons.check,
+        //                             color: primarycolor,
+        //                             size: createRoomIconSize,
+        //                           ),
+        //                           child: Container(
+        //                             width: scrWidth * 0.23,
+        //                             height: scrHeight * 0.11,
+        //                             decoration: BoxDecoration(
+        //                               shape: BoxShape.circle,
+        //                               color: Colors.grey.shade100,
+        //                               border: selectedIndex == 1
+        //                                   ? Border.all(
+        //                                       color: primarycolor,
+        //                                       width: 3,
+        //                                     )
+        //                                   : Border.all(color: Colors.transparent),
+        //                             ),
+        //                             child: Padding(
+        //                               padding: EdgeInsets.all(scrWidth * 0.05),
+        //                               child: SvgPicture.asset(
+        //                                 "assets/icons/chiti_funds.svg",
+        //                                 fit: BoxFit.contain,
+        //                               ),
+        //                             ),
+        //                           ),
+        //                           badgeColor: Colors.white,
+        //                           position: BadgePosition(
+        //                             bottom: -7,
+        //                           ),
+        //                         ),
+        //                         SizedBox(
+        //                           height: scrHeight * 0.01,
+        //                         ),
+        //                         Text(
+        //                           "Chit",
+        //                           style: TextStyle(
+        //                               fontFamily: 'Urbanist',
+        //                               fontWeight: FontWeight.w500,
+        //                               fontSize: CardFont2),
+        //                         ),
+        //                       ],
+        //                     ),
+        //                   ),
+        //                   InkWell(
+        //                     onTap: () {
+        //                       setState(() {
+        //                         selectedIndex = 0;
+        //                       });
+        //                     },
+        //                     child: Column(
+        //                       children: [
+        //                         Badge(
+        //                           animationType: BadgeAnimationType.slide,
+        //                           showBadge: selectedIndex == 0 ? true : false,
+        //                           padding: EdgeInsets.all(scrWidth * 0.005),
+        //                           badgeContent: Icon(
+        //                             Icons.check,
+        //                             color: primarycolor,
+        //                             size: createRoomIconSize,
+        //                           ),
+        //                           child: Container(
+        //                             width: scrWidth * 0.23,
+        //                             height: scrHeight * 0.11,
+        //                             decoration: BoxDecoration(
+        //                               shape: BoxShape.circle,
+        //                               color: Colors.grey.shade100,
+        //                               border: selectedIndex == 0
+        //                                   ? Border.all(
+        //                                       color: primarycolor,
+        //                                       width: 3,
+        //                                     )
+        //                                   : Border.all(color: Colors.transparent),
+        //                             ),
+        //                             child: Padding(
+        //                               padding: EdgeInsets.all(scrWidth * 0.05),
+        //                               child: SvgPicture.asset(
+        //                                 "assets/icons/kuri_funds.svg",
+        //                                 fit: BoxFit.contain,
+        //                               ),
+        //                             ),
+        //                           ),
+        //                           badgeColor: Colors.white,
+        //                           position: BadgePosition(
+        //                             bottom: -7,
+        //                           ),
+        //                         ),
+        //                         SizedBox(
+        //                           height: scrHeight * 0.01,
+        //                         ),
+        //                         Text("Kuri",
+        //                             style: TextStyle(
+        //                                 fontFamily: 'Urbanist',
+        //                                 fontWeight: FontWeight.w500,
+        //                                 fontSize: CardFont2))
+        //                       ],
+        //                     ),
+        //                   ),
+        //                   InkWell(
+        //                     onTap: () {
+        //                       setState(() {
+        //                         selectedIndex = 2;
+        //                       });
+        //                     },
+        //                     child: Column(
+        //                       children: [
+        //                         Badge(
+        //                           animationType: BadgeAnimationType.slide,
+        //                           showBadge: selectedIndex == 2 ? true : false,
+        //                           padding: EdgeInsets.all(scrWidth * 0.005),
+        //                           badgeContent: Icon(
+        //                             Icons.check,
+        //                             color: primarycolor,
+        //                             size: createRoomIconSize,
+        //                           ),
+        //                           child: Container(
+        //                             width: scrWidth * 0.23,
+        //                             height: scrHeight * 0.11,
+        //                             decoration: BoxDecoration(
+        //                               shape: BoxShape.circle,
+        //                               color: Colors.grey.shade100,
+        //                               border: selectedIndex == 2
+        //                                   ? Border.all(
+        //                                       color: primarycolor,
+        //                                       width: 3,
+        //                                     )
+        //                                   : Border.all(color: Colors.transparent),
+        //                             ),
+        //                             child: Padding(
+        //                               padding: EdgeInsets.all(scrWidth * 0.05),
+        //                               child: SvgPicture.asset(
+        //                                 "assets/icons/charity.svg",
+        //                                 fit: BoxFit.contain,
+        //                               ),
+        //                             ),
+        //                           ),
+        //                           badgeColor: Colors.white,
+        //                           position: BadgePosition(
+        //                             bottom: -7,
+        //                           ),
+        //                         ),
+        //                         SizedBox(
+        //                           height: scrHeight * 0.01,
+        //                         ),
+        //                         Text(
+        //                           "Charity",
+        //                           style: TextStyle(
+        //                               fontFamily: 'Urbanist',
+        //                               fontWeight: FontWeight.w500,
+        //                               fontSize: CardFont2),
+        //                         ),
+        //                       ],
+        //                     ),
+        //                   )
+        //                 ],
+        //               ),
+        //               SizedBox(
+        //                 height: scrHeight * 0.025,
+        //               ),
+        //               Center(
+        //                 child: Bounceable(
+        //                   onTap: () {
+        //                     Navigator.push(
+        //                         context,
+        //                         MaterialPageRoute(
+        //                           builder: (context) => CreateRoomScreen(),
+        //                         ));
+        //                   },
+        //                   child: Container(
+        //                     height: scrHeight * 0.07,
+        //                     width: scrWidth * 0.9,
+        //                     decoration: BoxDecoration(
+        //                       borderRadius: BorderRadius.circular(10),
+        //                       color: primarycolor,
+        //                     ),
+        //                     child: Center(
+        //                       child: Row(
+        //                         mainAxisAlignment: MainAxisAlignment.center,
+        //                         children: [
+        //                           Icon(
+        //                             Icons.add,
+        //                             size: createRoomIconSize,
+        //                             color: Colors.white,
+        //                           ),
+        //                           SizedBox(
+        //                             width: scrWidth * 0.01,
+        //                           ),
+        //                           Text(
+        //                             "Create Room",
+        //                             style: TextStyle(
+        //                                 color: Colors.white,
+        //                                 fontSize: FontSize17,
+        //                                 fontFamily: 'Urbanist',
+        //                                 fontWeight: FontWeight.w500),
+        //                           ),
+        //                         ],
+        //                       ),
+        //                     ),
+        //                   ),
+        //                 ),
+        //               ),
+        //               SizedBox(
+        //                 height: scrWidth * 0.005,
+        //               )
+        //             ],
+        //           ),
+        //         );
+        //       },
+        //     ),
+      ),
     );
   }
+
+  Future<bool?> confirmQuitDialog() => showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+            title: Text('Do You want to Quit?'),
+            actions: [
+              TextButton(
+                  onPressed: () => Navigator.pop(context, false),
+                  child: Text('No')),
+              TextButton(
+                  onPressed: () => Navigator.pop(context, true),
+                  child: Text(
+                    'Yes',
+                    style: TextStyle(color: primarycolor),
+                  )),
+            ],
+          ));
 }

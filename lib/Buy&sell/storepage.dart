@@ -33,21 +33,39 @@ class StorePage extends StatefulWidget {
 // }
 class _StorePageState extends State<StorePage> {
   getProducts() {
-    FirebaseFirestore.instance
-        .collection('stores')
-        .doc(widget.storeDetailsModel.storeId)
-        .collection('products')
-        .where('storedCategorys', isEqualTo: widget.category)
-        .snapshots()
-        .listen((event) {
-      productsList = [];
-      for (DocumentSnapshot<Map<String, dynamic>> doc in event.docs) {
-        productsList.add(ProductModel.fromJson(doc.data()!));
-      }
-      if (mounted) {
-        setState(() {});
-      }
-    });
+    if (widget.category == '') {
+      FirebaseFirestore.instance
+          .collection('stores')
+          .doc(widget.storeDetailsModel.storeId)
+          .collection('products')
+          // .where('storedCategorys', isEqualTo: widget.category)
+          .snapshots()
+          .listen((event) {
+        productsList = [];
+        for (DocumentSnapshot<Map<String, dynamic>> doc in event.docs) {
+          productsList.add(ProductModel.fromJson(doc.data()!));
+        }
+        if (mounted) {
+          setState(() {});
+        }
+      });
+    } else if (widget.category != '') {
+      FirebaseFirestore.instance
+          .collection('stores')
+          .doc(widget.storeDetailsModel.storeId)
+          .collection('products')
+          .where('storedCategorys', isEqualTo: widget.category)
+          .snapshots()
+          .listen((event) {
+        productsList = [];
+        for (DocumentSnapshot<Map<String, dynamic>> doc in event.docs) {
+          productsList.add(ProductModel.fromJson(doc.data()!));
+        }
+        if (mounted) {
+          setState(() {});
+        }
+      });
+    }
   }
 
   Map<String, dynamic> bags = {};
@@ -306,6 +324,7 @@ class _StorePageState extends State<StorePage> {
                   return ShopSingleProduct(
                     product: products,
                     storeId: widget.storeDetailsModel.storeId!,
+                    deliveryCharge: widget.storeDetailsModel.deliveryCharge!,
                   );
                 },
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -816,8 +835,12 @@ class _StorePageState extends State<StorePage> {
 class ShopSingleProduct extends StatefulWidget {
   final ProductModel product;
   final String storeId;
+  final double deliveryCharge;
   const ShopSingleProduct(
-      {Key? key, required this.product, required this.storeId})
+      {Key? key,
+      required this.product,
+      required this.storeId,
+      required this.deliveryCharge})
       : super(key: key);
 
   @override
@@ -825,6 +848,8 @@ class ShopSingleProduct extends StatefulWidget {
 }
 
 class _ShopSingleProductState extends State<ShopSingleProduct> {
+  bool confirmed = false;
+
   // ProductModel products=ProductModel();
   var currencyConvert = NumberFormat.currency(
     locale: 'HI',
@@ -973,9 +998,8 @@ class _ShopSingleProductState extends State<ShopSingleProduct> {
                                     Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => CheckOutPage(
-
-                                                )));
+                                            builder: (context) =>
+                                                CheckOutPage()));
                                     // Some code to undo the change.
                                   },
                                 ),
@@ -1051,9 +1075,8 @@ class _ShopSingleProductState extends State<ShopSingleProduct> {
                                     Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => CheckOutPage(
-
-                                                )));
+                                            builder: (context) =>
+                                                CheckOutPage()));
                                     // Some code to undo the change.
                                   },
                                 ),
@@ -1084,10 +1107,18 @@ class _ShopSingleProductState extends State<ShopSingleProduct> {
                   ),
                 )
               : InkWell(
-                  onTap: () {
-                    addToCart(widget.product, widget.storeId);
+                  onTap: () async {
+                    if (cartlist.isEmpty) {
+                      addToCart(widget.product, widget.storeId);
+                      isCarted = true;
+                    } else if (cartlist[0]['storeId'] ==
+                        widget.product.storeId) {
+                      addToCart(widget.product, widget.storeId);
+                      isCarted = true;
+                    } else {
+                      alertBoxOfCart(widget.product, widget.storeId);
+                    }
 
-                    isCarted = true;
                     setState(() {});
 
                     print(cartlist);
@@ -1104,9 +1135,7 @@ class _ShopSingleProductState extends State<ShopSingleProduct> {
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => CheckOutPage(
-
-                                      )));
+                                  builder: (context) => CheckOutPage()));
                           // Some code to undo the change.
                         },
                       ),
@@ -1280,6 +1309,109 @@ class _ShopSingleProductState extends State<ShopSingleProduct> {
       ),
     );
   }
+
+  addToCart(ProductModel products, String storeId) {
+    cartlist.add({
+      'img': products.images![0],
+      'name': products.productName,
+      'price': products.price,
+      'unit': products.unit,
+      'deliveryCharge': widget.deliveryCharge,
+      'storeId': storeId,
+      'productId': products.productId,
+      'quantity': products.quantity,
+      'count': 1,
+    });
+  }
+
+  void alertBoxOfCart(ProductModel products, String storeId) {
+    showDialog(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (BuildContext context, setstate) {
+          return AlertDialog(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            title: Text('Confirm'),
+            titleTextStyle: TextStyle(
+                fontSize: FontSize10 * 3,
+                fontFamily: 'Urbanist',
+                fontWeight: FontWeight.w600,
+                color: Color(0xff827C7C)),
+            content: Container(
+              width: scrWidth * 0.99,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                      'Your cart contains products in another store , \n Do you wish to remove and add this product.'),
+                  SizedBox(
+                    height: scrWidth * 0.06,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                          width: scrWidth * 0.2,
+                          height: textFormFieldHeight45,
+                          decoration: BoxDecoration(
+                              color: Colors.white10,
+                              borderRadius: BorderRadius.circular(8)),
+                          child: Center(
+                            child: GestureDetector(
+                              child: Text(
+                                "Cancel",
+                                style: TextStyle(
+                                    fontSize: FontSize16,
+                                    fontFamily: 'Urbanist',
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          cartlist = [];
+                          addToCart(products, storeId);
+                          Navigator.pop(context);
+                          setState(() {});
+                        },
+                        child: Container(
+                          width: scrWidth * 0.3,
+                          height: textFormFieldHeight45,
+                          decoration: BoxDecoration(
+                              color: primarycolor,
+                              borderRadius: BorderRadius.circular(8)),
+                          child: Center(
+                            child: GestureDetector(
+                              child: Text(
+                                "Add",
+                                style: TextStyle(
+                                    fontSize: FontSize16,
+                                    fontFamily: 'Urbanist',
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
 }
 
 incrementCount(String productId, String storeId, int count) {
@@ -1298,17 +1430,4 @@ decrementCount(String productId, String storeId, int count) {
       cartlist[i]['count'] = count;
     }
   }
-}
-
-addToCart(ProductModel products, String storeId) {
-  cartlist.add({
-    'img': products.images![0],
-    'name': products.productName,
-    'price': products.price,
-    'unit': products.unit,
-    'storeId': storeId,
-    'productId': products.productId,
-    'quantity': products.quantity,
-    'count': 1,
-  });
 }

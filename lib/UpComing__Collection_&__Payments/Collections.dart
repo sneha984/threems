@@ -16,7 +16,7 @@ class UpcomingCollections extends StatefulWidget {
 }
 
 class _UpcomingCollectionsState extends State<UpcomingCollections> {
-  List<ChitModel> myChits = [];
+  List<ChitModel>? myChits;
   getChits() {
     myChits = [];
     FirebaseFirestore.instance
@@ -25,10 +25,10 @@ class _UpcomingCollectionsState extends State<UpcomingCollections> {
         .snapshots()
         .listen((event) {
       for (DocumentSnapshot<Map<String, dynamic>> doc in event.docs) {
-        myChits.add(ChitModel.fromJson(doc.data()!));
+        myChits!.add(ChitModel.fromJson(doc.data()!));
       }
       if (mounted) {
-        print(myChits.length.toString() + 'oooooooooooooooo');
+        print(myChits!.length.toString() + 'oooooooooooooooo');
         getUpComingChits();
       }
     });
@@ -52,7 +52,7 @@ class _UpcomingCollectionsState extends State<UpcomingCollections> {
   List<CollectionModel> upComingCollections = [];
   getUpComingChits() {
     upComingCollections = [];
-    for (var chit in myChits) {
+    for (var chit in myChits!) {
       List paidUsers = [];
       if (chit.chitType == 'Monthly') {
         print('monthly here');
@@ -261,7 +261,7 @@ class _UpcomingCollectionsState extends State<UpcomingCollections> {
           ),
         ),
       ),
-      body: userNames == null
+      body: myChits == null
           ? Center(
               child: CircularProgressIndicator(),
             )

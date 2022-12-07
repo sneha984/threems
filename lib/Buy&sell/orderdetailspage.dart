@@ -9,12 +9,14 @@ import 'package:threems/model/OrderModel.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../screens/splash_screen.dart';
+import '../utils/themes.dart';
 import 'Orders/acceptedpage.dart';
 import 'myorderspage.dart';
 
 class OrderDetailsPage extends StatefulWidget {
   final OrderModel orderModel;
-  const OrderDetailsPage({Key? key, required this.orderModel}) : super(key: key);
+  const OrderDetailsPage({Key? key, required this.orderModel})
+      : super(key: key);
 
   @override
   State<OrderDetailsPage> createState() => _OrderDetailsPageState();
@@ -23,7 +25,6 @@ class OrderDetailsPage extends StatefulWidget {
 class _OrderDetailsPageState extends State<OrderDetailsPage> {
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: Colors.white,
 
@@ -40,11 +41,10 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
           },
           child: Padding(
             padding: EdgeInsets.only(
-                top: scrHeight*0.03,
-                left: scrWidth* 0.05,
-                bottom: scrHeight* 0.01,
-                right: scrWidth * 0.05
-            ),
+                top: scrHeight * 0.03,
+                left: scrWidth * 0.05,
+                bottom: scrHeight * 0.01,
+                right: scrWidth * 0.05),
             child: SvgPicture.asset(
               "assets/icons/arrow.svg",
             ),
@@ -66,7 +66,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 15,right: 15,top: 15),
+              padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
               child: Container(
                 height: 310,
                 width: 340,
@@ -80,14 +80,17 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                         offset: Offset(2, 3), // changes position of shadow
                       ),
                     ],
-                    borderRadius: BorderRadius.circular(20)
-                ),
+                    borderRadius: BorderRadius.circular(20)),
                 child: Column(
                   children: [
-                    SizedBox(height: 10,),
+                    SizedBox(
+                      height: 10,
+                    ),
                     Row(
                       children: [
-                        SizedBox(width: 20,),
+                        SizedBox(
+                          width: 20,
+                        ),
                         Text(
                           "Order ${widget.orderModel.orderId}",
                           style: TextStyle(
@@ -96,79 +99,64 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                               fontFamily: 'Urbanist',
                               fontWeight: FontWeight.w600),
                         ),
-                        SizedBox(width: 10,),
-
-
-
+                        SizedBox(
+                          width: 10,
+                        ),
                         Text(
-                            widget.orderModel.time!.day ==
-                                DateTime.now().day
-                                ? widget.orderModel.time!.hour >
-                                12
-                                ? "Today ${widget.orderModel.time!.hour - 12}:${widget.orderModel.time!.minute} PM"
-                                : widget.orderModel
-                                .time!
-                                .hour ==
-                                0
-                                ? "Today 12:${widget.orderModel.time!.minute} AM"
-                                : "Today ${widget.orderModel.time!.hour}:${widget.orderModel.time!.minute} AM"
-                                :
+                          widget.orderModel.time!.day == DateTime.now().day
+                              ? widget.orderModel.time!.hour > 12
+                                  ? "Today ${widget.orderModel.time!.hour - 12}:${widget.orderModel.time!.minute} PM"
+                                  : widget.orderModel.time!.hour == 0
+                                      ? "Today 12:${widget.orderModel.time!.minute} AM"
+                                      : "Today ${widget.orderModel.time!.hour}:${widget.orderModel.time!.minute} AM"
+                              :
 
-                            //YESTERDAY DATE
-                            widget.orderModel.time!.day ==
-                                DateTime.now().day - 1
-                                ?widget.orderModel
-                                .time!
-                                .hour >
-                                12
-                                ? "Yesterday ${widget.orderModel.time!.hour - 12}:${widget.orderModel.time!.minute} PM"
-                                : widget.orderModel
-                                .time!
-                                .hour ==
-                                0
-                                ? "Yesterday 12:${widget.orderModel.time!.minute} AM"
-                                : "Yesterday ${widget.orderModel.time!.hour}:${widget.orderModel.time!.minute} AM"
-                                :
+                              //YESTERDAY DATE
+                              widget.orderModel.time!.day ==
+                                      DateTime.now().day - 1
+                                  ? widget.orderModel.time!.hour > 12
+                                      ? "Yesterday ${widget.orderModel.time!.hour - 12}:${widget.orderModel.time!.minute} PM"
+                                      : widget.orderModel.time!.hour == 0
+                                          ? "Yesterday 12:${widget.orderModel.time!.minute} AM"
+                                          : "Yesterday ${widget.orderModel.time!.hour}:${widget.orderModel.time!.minute} AM"
+                                  :
 
-                            //OTHER DATE
-                            widget.orderModel
-                                .time!
-                                .hour >
-                                12
-                                ? "${DateFormat('dd-MMM-yyy').format(widget.orderModel.time!)} ${widget.orderModel.time!.hour - 12}:${widget.orderModel.time!.minute} PM"
-                                : widget.orderModel
-                                .time!
-                                .hour ==
-                                0
-                                ? "${DateFormat('dd-MMM-yyy').format(widget.orderModel.time!)} 12:${widget.orderModel.time!.minute} AM"
-                                : "${DateFormat('dd-MMM-yyy')
-                                .format(widget.orderModel.time!)}"
-                                " ${widget.orderModel.time!.hour}:${widget.orderModel.time!.minute} AM",
+                                  //OTHER DATE
+                                  widget.orderModel.time!.hour > 12
+                                      ? "${DateFormat('dd-MMM-yyy').format(widget.orderModel.time!)} ${widget.orderModel.time!.hour - 12}:${widget.orderModel.time!.minute} PM"
+                                      : widget.orderModel.time!.hour == 0
+                                          ? "${DateFormat('dd-MMM-yyy').format(widget.orderModel.time!)} 12:${widget.orderModel.time!.minute} AM"
+                                          : "${DateFormat('dd-MMM-yyy').format(widget.orderModel.time!)}"
+                                              " ${widget.orderModel.time!.hour}:${widget.orderModel.time!.minute} AM",
                           style: TextStyle(
                               fontSize: 12,
                               color: Color(0xff969696),
                               fontFamily: 'Urbanist',
                               fontWeight: FontWeight.w600),
                         ),
-
                       ],
                     ),
-                    SizedBox(height: 10,),
+                    SizedBox(
+                      height: 10,
+                    ),
                     Container(
                       height: 50,
                       child: ListView.builder(
                           itemCount: widget.orderModel.orderedItems!.length,
-                          itemBuilder: (context,index){
+                          itemBuilder: (context, index) {
                             return Padding(
                               padding: const EdgeInsets.only(top: 10),
                               child: Row(
                                 children: [
-                                  SizedBox(width: 20,),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
 
                                   Container(
                                     width: 150,
                                     child: Text(
-                                      widget.orderModel.orderedItems![index].item!,
+                                      widget.orderModel.orderedItems![index]
+                                          .item!,
                                       style: TextStyle(
                                           fontSize: 16,
                                           color: Colors.black,
@@ -186,21 +174,28 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                                         fontFamily: 'Urbanist',
                                         fontWeight: FontWeight.w600),
                                   ),
-                                  SizedBox(width: 5,),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
 
                                   Text(
-                                    widget.orderModel.orderedItems![index].count!.toString()
-                                    ,
+                                    widget
+                                        .orderModel.orderedItems![index].count!
+                                        .toString(),
                                     style: TextStyle(
                                         fontSize: 16,
                                         color: Colors.black,
                                         fontFamily: 'Urbanist',
                                         fontWeight: FontWeight.w600),
                                   ),
-                                  SizedBox(width: 73,),
+                                  SizedBox(
+                                    width: 73,
+                                  ),
 
                                   Text(
-                                    widget.orderModel.orderedItems![index].amount!.toString(),
+                                    widget
+                                        .orderModel.orderedItems![index].amount!
+                                        .toString(),
                                     style: TextStyle(
                                         fontSize: 16,
                                         color: Color(0xffF10000),
@@ -260,10 +255,12 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                     //     ),
                     //   ],
                     // ),
-                    SizedBox(height: 20,),
+                    SizedBox(
+                      height: 20,
+                    ),
                     Divider(
                       thickness: 14,
-                        color: Color(0xffF3F3F3),
+                      color: Color(0xffF3F3F3),
                     ),
 
                     Padding(
@@ -329,8 +326,8 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                             height: 10,
                           ),
                           Padding(
-                            padding:
-                            EdgeInsets.only(left: 11, right: 11, top: 3, bottom: 3),
+                            padding: EdgeInsets.only(
+                                left: 11, right: 11, top: 3, bottom: 3),
                             child: DottedLine(
                               dashColor: Colors.grey,
                               lineThickness: 0.8,
@@ -346,7 +343,9 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  SizedBox(height: 5,),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
                                   Text(
                                     "Grand Total",
                                     style: TextStyle(
@@ -372,7 +371,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                                 width: 30,
                               ),
                               Text(
-                                "₹${widget.orderModel.deliveryCharge!+widget.orderModel.total!}",
+                                "₹${widget.orderModel.deliveryCharge! + widget.orderModel.total!}",
                                 style: TextStyle(
                                     fontSize: 14,
                                     color: Color(0xff0E0E0E),
@@ -381,11 +380,13 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                               ),
                             ],
                           ),
-                          SizedBox(height: 5,),
+                          SizedBox(
+                            height: 5,
+                          ),
 
                           Padding(
-                            padding:
-                            EdgeInsets.only(left: 17, right: 17, top: 10, bottom: 10),
+                            padding: EdgeInsets.only(
+                                left: 17, right: 17, top: 10, bottom: 10),
                             child: DottedLine(
                               dashColor: Colors.grey,
                               lineThickness: 0.8,
@@ -445,26 +446,26 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                         ],
                       ),
                     ),
-
                   ],
                 ),
-
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(right: 180,top: 14),
+              padding: const EdgeInsets.only(right: 180, top: 14),
               child: Text(
                 "Current Details",
                 style: TextStyle(
-                    fontSize:16,
+                    fontSize: 16,
                     color: Colors.black,
                     fontFamily: 'Urbanist',
                     fontWeight: FontWeight.w600),
               ),
             ),
-            SizedBox(height: 8,),
+            SizedBox(
+              height: 8,
+            ),
             Container(
-              height: 220,
+              // height: 220,
               width: 325,
               decoration: BoxDecoration(
                   color: Colors.white,
@@ -476,12 +477,10 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                       offset: Offset(2, 3), // changes position of shadow
                     ),
                   ],
-                  borderRadius: BorderRadius.circular(20)
-              ),
+                  borderRadius: BorderRadius.circular(20)),
               child: Padding(
-                padding: const EdgeInsets.only(left: 20,right: 20,top: 20),
+                padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
                 child: Column(
-
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -490,9 +489,11 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(height: 5,),
+                            SizedBox(
+                              height: 5,
+                            ),
                             Text(
-                              widget.orderModel.address?.name??'',
+                              widget.orderModel.address?.name ?? '',
                               style: TextStyle(
                                   fontSize: 16,
                                   color: Color(0xff0E0E0E),
@@ -503,7 +504,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                               height: 8,
                             ),
                             Text(
-                              widget.orderModel.address?.phoneNumber??'',
+                              widget.orderModel.address?.phoneNumber ?? '',
                               style: TextStyle(
                                   fontSize: 12,
                                   color: Color(0xff818181),
@@ -515,26 +516,28 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                         SizedBox(
                           width: 30,
                         ),
-                      InkWell(
-                        onTap: (){
-                          Uri call = Uri.parse('tel://${widget.orderModel.address?.phoneNumber??0}');
+                        InkWell(
+                          onTap: () {
+                            Uri call = Uri.parse(
+                                'tel://${widget.orderModel.address?.phoneNumber ?? 0}');
 
-                          launchUrl(call);
-                        },
-                        child: CircleAvatar(
-                          radius: 25,
-                          backgroundColor: Color(0xffD9D9D9),
-                          child: Container(
-                            height: 20,width: 30,
-                            child: SvgPicture.asset("assets/icons/Vector (11).svg"),
+                            launchUrl(call);
+                          },
+                          child: CircleAvatar(
+                            radius: 25,
+                            backgroundColor: Color(0xffD9D9D9),
+                            child: Container(
+                              height: 20,
+                              width: 30,
+                              child: SvgPicture.asset(
+                                  "assets/icons/Vector (11).svg"),
+                            ),
                           ),
-
-                        ),
-                      )
+                        )
                       ],
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(right: 210,top: 30),
+                      padding: const EdgeInsets.only(right: 210, top: 30),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -547,17 +550,20 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                                 fontFamily: 'Urbanist',
                                 fontWeight: FontWeight.w600),
                           ),
-                          SizedBox(height: 5,),
+                          SizedBox(
+                            height: 5,
+                          ),
                           Text(
-                            "${widget.orderModel.address?.locationType??''},${widget.orderModel.address?.flatNo??''}",
+                            "${widget.orderModel.address?.locationType ?? ''},${widget.orderModel.address?.flatNo ?? ''}",
                             style: TextStyle(
                                 fontSize: 16,
                                 color: Color(0xff0E0E0E),
                                 fontFamily: 'Urbanist',
                                 fontWeight: FontWeight.w600),
                           ),
-                          SizedBox(height: 5,),
-
+                          SizedBox(
+                            height: 5,
+                          ),
                           Text(
                             'City',
                             style: TextStyle(
@@ -566,10 +572,11 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                                 fontFamily: 'Urbanist',
                                 fontWeight: FontWeight.w600),
                           ),
-                          SizedBox(height: 5,),
-
+                          SizedBox(
+                            height: 5,
+                          ),
                           Text(
-                            "${widget.orderModel.address?.locality??''},${widget.orderModel.address?.pincode??''}",
+                            "${widget.orderModel.address?.locality ?? ''},${widget.orderModel.address?.pincode ?? ''}",
                             style: TextStyle(
                                 fontSize: 16,
                                 color: Color(0xff0E0E0E),
@@ -579,12 +586,152 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                         ],
                       ),
                     )
-
-
                   ],
                 ),
               ),
-            )
+            ),
+
+            SizedBox(
+              height: 10,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 180, top: 14),
+              child: Text(
+                "Order Status",
+                style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
+                    fontFamily: 'Urbanist',
+                    fontWeight: FontWeight.w600),
+              ),
+            ),
+            SizedBox(
+              height: 8,
+            ),
+            Container(
+              height: 120,
+              width: 325,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Color.fromRGBO(0, 0, 0, 0.15),
+                      spreadRadius: 1,
+                      blurRadius: 3,
+                      offset: Offset(2, 3), // changes position of shadow
+                    ),
+                  ],
+                  borderRadius: BorderRadius.circular(20)),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    //ORDERED DATE
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Ordered Date",
+                          style: TextStyle(
+                              fontSize: 12,
+                              color: Color(0xffE54D3C),
+                              fontFamily: 'Urbanist',
+                              fontWeight: FontWeight.w600),
+                        ),
+                        Text(
+                          //Today Date
+                          widget.orderModel.time!.day == DateTime.now().day
+                              ? widget.orderModel.time!.hour > 12
+                                  ? "Today ${widget.orderModel.time!.hour - 12}:${widget.orderModel.time!.minute} PM"
+                                  : widget.orderModel.time!.hour == 0
+                                      ? "Today 12:${widget.orderModel.time!.minute} AM"
+                                      : "Today ${widget.orderModel.time!.hour}:${widget.orderModel.time!.minute} AM"
+                              :
+
+                              //YESTERDAY DATE
+                              widget.orderModel.time!.day ==
+                                      DateTime.now().day - 1
+                                  ? widget.orderModel.time!.hour > 12
+                                      ? "Yesterday ${widget.orderModel.time!.hour - 12}:${widget.orderModel.time!.minute} PM"
+                                      : widget.orderModel.time!.hour == 0
+                                          ? "Yesterday 12:${widget.orderModel.time!.minute} AM"
+                                          : "Yesterday ${widget.orderModel.time!.hour}:${widget.orderModel.time!.minute} AM"
+                                  :
+
+                                  //OTHER DATE
+                                  widget.orderModel.time!.hour > 12
+                                      ? "${DateFormat('dd-MMM-yyy').format(widget.orderModel.time!)} ${widget.orderModel.time!.hour - 12}"
+                                          ":${widget.orderModel.time!.minute} PM"
+                                      : widget.orderModel.time!.hour == 0
+                                          ? "${DateFormat('dd-MMM-yyy').format(widget.orderModel.time!)} 12:"
+                                              "${widget.orderModel.time!.minute} AM"
+                                          : "${DateFormat('dd-MMM-yyy').format(widget.orderModel.time!)}"
+                                              " ${widget.orderModel.time!.hour}:${widget.orderModel.time!.minute} AM",
+                          style: TextStyle(
+                              fontSize: 16,
+                              color: primarycolor,
+                              fontFamily: 'Urbanist',
+                              fontWeight: FontWeight.w600),
+                        ),
+                      ],
+                    ),
+
+                    //ACCEPTED DATE
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Accepted Date",
+                          style: TextStyle(
+                              fontSize: 12,
+                              color: Color(0xffE54D3C),
+                              fontFamily: 'Urbanist',
+                              fontWeight: FontWeight.w600),
+                        ),
+                        Text(
+                          "Pending",
+                          style: TextStyle(
+                              fontSize: 16,
+                              color: primarycolor,
+                              fontFamily: 'Urbanist',
+                              fontWeight: FontWeight.w600),
+                        ),
+                      ],
+                    ),
+
+                    //DELIVERED DATE
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Delivered Date",
+                          style: TextStyle(
+                              fontSize: 12,
+                              color: Color(0xffE54D3C),
+                              fontFamily: 'Urbanist',
+                              fontWeight: FontWeight.w600),
+                        ),
+                        Text(
+                          "Pending",
+                          style: TextStyle(
+                              fontSize: 16,
+                              color: primarycolor,
+                              fontFamily: 'Urbanist',
+                              fontWeight: FontWeight.w600),
+                        ),
+                      ],
+                    ),
+
+                    SizedBox()
+                  ],
+                ),
+              ),
+            ),
+
             // Padding(
             //   padding: const EdgeInsets.only(left: 15,right: 15,top: 15),
             //   child: Container(
@@ -711,16 +858,22 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
             //     ),
             //   ),
             // ),
-            ,SizedBox(height: 20,),
+            SizedBox(
+              height: 20,
+            ),
             Row(
               children: [
-                SizedBox(width: 39,),
-
+                SizedBox(
+                  width: 39,
+                ),
                 InkWell(
-                  onTap: (){
-                    FirebaseFirestore.instance.collection('stores').doc(widget.orderModel.storeId).collection('orders').doc(widget.orderModel.orderId).update({
-                      'status':3
-                    });
+                  onTap: () {
+                    FirebaseFirestore.instance
+                        .collection('stores')
+                        .doc(widget.orderModel.storeId)
+                        .collection('orders')
+                        .doc(widget.orderModel.orderId)
+                        .update({'status': 3});
                   },
                   child: Text(
                     "Reject Order",
@@ -732,36 +885,46 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                         fontFamily: 'Urbanist'),
                   ),
                 ),
-                SizedBox(width: 70,),
+                SizedBox(
+                  width: 70,
+                ),
                 InkWell(
-                  onTap: (){
-                    FirebaseFirestore.instance.collection('stores').doc(widget.orderModel.storeId).collection('orders').doc(widget.orderModel.orderId).update({
-                      'status':1
+                  onTap: () {
+                    FirebaseFirestore.instance
+                        .collection('stores')
+                        .doc(widget.orderModel.storeId)
+                        .collection('orders')
+                        .doc(widget.orderModel.orderId)
+                        .update({
+                      'status': 1,
+                      'acceptedDate': DateTime.now()
                     }).then((value) => Navigator.pop(context));
-                    
                   },
                   child: Container(
                     height: 40,
-                      width: 120,
-                    child: Center(child: Text("Accept Order",style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.white,
-                        fontFamily: 'Urbanist'),)),
+                    width: 120,
+                    child: Center(
+                        child: Text(
+                      "Accept Order",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                          fontFamily: 'Urbanist'),
+                    )),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Color(0xff02B558)
-                    ),
+                        borderRadius: BorderRadius.circular(10),
+                        color: Color(0xff02B558)),
                   ),
                 )
               ],
             ),
-      SizedBox(height: 20,),
-
-    ],
+            SizedBox(
+              height: 20,
+            ),
+          ],
         ),
       ),
-
     );
   }
 }
