@@ -330,7 +330,7 @@ class _ProductsPageState extends State<ProductsPage> {
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        getAllProducts[index]['price'].toString(),
+                                        "₹${getAllProducts[index]['price']}",
                                         style: GoogleFonts.urbanist(
                                             fontSize: scrWidth * 0.03,
                                             fontWeight: FontWeight.w700,

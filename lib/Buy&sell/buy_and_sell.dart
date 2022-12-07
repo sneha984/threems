@@ -370,7 +370,10 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
           InkWell(
             onTap: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => MyOrdersPage()));
+                  MaterialPageRoute(builder: (context) => MyOrdersPage(
+
+
+                  )));
             },
             child: Badge(
                 position: BadgePosition.topEnd(
@@ -582,7 +585,7 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                   fontWeight: FontWeight.w600),
                             ),
                             Text(
-                              "0 Stores available",
+                              "${nearestStores.length} Stores available",
                               style: TextStyle(
                                   fontFamily: 'Urbanist',
                                   fontSize: scrWidth * 0.025,

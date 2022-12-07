@@ -815,45 +815,172 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin{
 
                     }
                 ),
-                Container(
-                  height: scrHeight*6,
-                  child: ListView.builder(
-                      itemCount:acceptedList.length,
-                      itemBuilder: (context,index){
-                        // final pending=pendingList[index];
-                        return Padding(
-                          padding: const EdgeInsets.only(left: 15,right: 15,top: 15),
-                          child: InkWell(
-                            onTap: (){
-                              Navigator.push(context, MaterialPageRoute(
-                                  builder: (context)=>AcceptedPage(orderMdl: acceptedList[index],)));
-                            },
-                            child: Container(
-                              height: 100,
-                              width: 30,
-                              decoration: BoxDecoration(
-                                  color: Colors.green,
-                                  borderRadius: BorderRadius.circular(30)
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 20,top: 15),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text("Customer Name:${acceptedList[index].address!.name}"),
-                                    SizedBox(height: 5),
-                                    Text("Phone Number:${acceptedList[index].address!.phoneNumber}"),
-                                    SizedBox(height: 5,),
-                                    Text("DateTime:${acceptedList[index].time}"),
-                                  ],
+                deliveredList.isEmpty?
+                Column(
+                  children: [
+                    SizedBox(height: 150,),
+                    SvgPicture.asset("assets/icons/Group 173.svg"),
+                    SizedBox(height: 90,),
+
+                    Text("You don't have any order yet",style: TextStyle(
+                        fontFamily: 'Urbanist',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500
+                    ),)
+                  ],
+                ):
+                ListView.builder(
+                    itemCount: deliveredList.length,
+                    itemBuilder: (context,index){
+                      return  Column(
+                          children: [
+                            Padding(
+                              padding:  EdgeInsets.only(left: 10,right: 10,top: 20),
+                              child: InkWell(
+                                onTap: (){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>DeliveredPage(order: deliveredList[index])));
+                                },
+                                child: Container(
+                                  height: 150,
+                                  width: 360,
+                                  decoration: BoxDecoration(
+                                      color: Color(0xffF3F3F3),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Color.fromRGBO(0, 0, 0, 0.15),
+                                          spreadRadius: 1,
+                                          blurRadius: 3,
+                                          offset: Offset(2, 3), // changes position of shadow
+                                        ),
+                                      ],
+                                      borderRadius: BorderRadius.circular(20)
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      SizedBox(height: 10,),
+                                      Row(
+                                        children: [
+                                          SizedBox(width: 20,),
+                                          Text(
+                                            "Order ${deliveredList[index].orderId}",
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.black,
+                                                fontFamily: 'Urbanist',
+                                                fontWeight: FontWeight.w600),
+                                          ),
+                                          SizedBox(width: 10,),
+                                          Text(
+                                            "Today 05:00 PM",
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Color(0xff969696),
+                                                fontFamily: 'Urbanist',
+                                                fontWeight: FontWeight.w600),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(height: 30,),
+                                      Expanded(
+                                        child: ListView.builder(
+                                            itemCount: deliveredList[index].orderedItems!.length,
+                                            itemBuilder: (context,index2){
+                                              return Padding(
+                                                padding: const EdgeInsets.only(top: 10),
+                                                child: Row(
+                                                  children: [
+                                                    SizedBox(width: 20,),
+
+                                                    Container(
+                                                      width: 150,
+                                                      child: Text(
+                                                        deliveredList[index].orderedItems![index2].item!,
+                                                        style: TextStyle(
+                                                            fontSize: 16,
+                                                            color: Colors.black,
+                                                            fontFamily: 'Urbanist',
+                                                            fontWeight: FontWeight.w600),
+                                                      ),
+                                                    ),
+                                                    // SizedBox(width: 80,),
+
+                                                    Text(
+                                                      "x",
+                                                      style: TextStyle(
+                                                          fontSize: 16,
+                                                          color: Colors.black,
+                                                          fontFamily: 'Urbanist',
+                                                          fontWeight: FontWeight.w600),
+                                                    ),
+                                                    SizedBox(width: 5,),
+
+                                                    Text(
+                                                      deliveredList[index].orderedItems![index2].count!.toString()
+                                                      ,
+                                                      style: TextStyle(
+                                                          fontSize: 16,
+                                                          color: Colors.black,
+                                                          fontFamily: 'Urbanist',
+                                                          fontWeight: FontWeight.w600),
+                                                    ),
+                                                    SizedBox(width: 73,),
+
+                                                    Text(
+                                                      deliveredList[index].orderedItems![index2].amount!.toString(),
+                                                      style: TextStyle(
+                                                          fontSize: 16,
+                                                          color: Color(0xffF10000),
+                                                          fontFamily: 'Urbanist',
+                                                          fontWeight: FontWeight.w600),
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            }),
+                                      ),
+
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.only(right: 90),
+                                            child: Text(
+                                              "Total",
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Color(0xff969696),
+                                                  fontFamily: 'Urbanist',
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                          ),
+
+                                          SizedBox(width: 40,),
+
+                                          Text(
+                                            "123",
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                color: Color(0xff0E0E0E),
+                                                fontFamily: 'Urbanist',
+                                                fontWeight: FontWeight.w600),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(height: 15,),
+
+
+                                    ],
+                                  ),
+
                                 ),
                               ),
+                            )
+                          ]
+                      );
 
-                            ),
-                          ),
-                        );
-                      }),
+                    }
                 ),
+
                 Container(
                   height: scrHeight*6,
                   child: ListView.builder(

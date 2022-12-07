@@ -8,12 +8,13 @@ import 'package:threems/Buy&sell/storepage.dart';
 
 import '../model/OrderModel.dart';
 import '../screens/splash_screen.dart';
+import 'myordersdetailpage.dart';
 import 'orderdetailspage.dart';
 List <OrderModel> allOrders=[];
 
 
 class MyOrdersPage extends StatefulWidget {
-  const MyOrdersPage({Key? key}) : super(key: key);
+  const MyOrdersPage({Key? key,}) : super(key: key);
 
   @override
   State<MyOrdersPage> createState() => _MyOrdersPageState();
@@ -32,7 +33,6 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
           allOrders=[];
           for(DocumentSnapshot <Map<String,dynamic>> doc in event.docs){
             allOrders.add(OrderModel.fromJson(doc.data()!));
-
           }
           if(mounted){
             setState(() {
@@ -109,7 +109,8 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
                 padding:  EdgeInsets.only(left: 10,right: 10,top: 20),
                 child: InkWell(
                   onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>OrderDetailsPage(orderModel: allOrders[index],)));
+                    Navigator.push(context, MaterialPageRoute(builder:
+                        (context)=>MyOrdersDetailsPage(orderModel: allOrders[index],)));
                   },
                   child: Container(
 

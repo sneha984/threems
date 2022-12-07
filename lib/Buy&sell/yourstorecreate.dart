@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../model/Buy&sell.dart';
 import '../screens/splash_screen.dart';
 import '../utils/dummy.dart';
 
 class YourStoreCreatePage extends StatefulWidget {
-  const YourStoreCreatePage({Key? key}) : super(key: key);
+  const YourStoreCreatePage({Key? key, }) : super(key: key);
 
   @override
   State<YourStoreCreatePage> createState() => _YourStoreCreatePageState();
@@ -68,7 +69,7 @@ class _YourStoreCreatePageState extends State<YourStoreCreatePage> {
             Padding(
               padding:  EdgeInsets.only(right: scrWidth*0.46,top: scrHeight*0.001 ),
               child: Text(
-                "0 Stores available",
+                " Stores available",
                 style: TextStyle(
                     fontSize: scrWidth*0.025,
                     color: Color(0xff818181),
