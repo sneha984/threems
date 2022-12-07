@@ -813,7 +813,24 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               GestureDetector(
                 onTap: () async {
-                  _authentication.signOut(context);
+                  showDialog(
+                    context: context,
+                    builder: (ctx) => AlertDialog(
+                   content: const Text("do you want to exit this app"),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () {
+                            _authentication.signOut(context);                          },
+                          child: const Text("yes"),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(ctx).pop();
+                          },
+                          child: const Text("no"),
+                        ),                      ],
+                    ),
+                  );
                 },
                 child: Icon(Icons.logout,color: Colors.black,)
                 // Container(
