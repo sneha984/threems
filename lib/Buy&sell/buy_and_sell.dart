@@ -345,7 +345,7 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                   context,
                   MaterialPageRoute(
                       builder: (context) => CheckOutPage(
-                            id: store[0].storeId??'',
+
                           )));
             },
             child: Badge(

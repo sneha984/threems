@@ -974,7 +974,7 @@ class _ShopSingleProductState extends State<ShopSingleProduct> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) => CheckOutPage(
-                                                  id: widget.storeId,
+
                                                 )));
                                     // Some code to undo the change.
                                   },
@@ -1052,7 +1052,7 @@ class _ShopSingleProductState extends State<ShopSingleProduct> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) => CheckOutPage(
-                                                  id: '',
+
                                                 )));
                                     // Some code to undo the change.
                                   },
@@ -1105,7 +1105,7 @@ class _ShopSingleProductState extends State<ShopSingleProduct> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => CheckOutPage(
-                                        id: widget.storeId,
+
                                       )));
                           // Some code to undo the change.
                         },

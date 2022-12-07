@@ -18,8 +18,8 @@ import 'checkout2.dart';
 import 'checkoutpage3.dart';
 
 class CheckOutPage extends StatefulWidget {
-  final String id;
-  const CheckOutPage({Key? key, required this.id}) : super(key: key);
+   // final String id;
+  const CheckOutPage({Key? key, }) : super(key: key);
 
   @override
   State<CheckOutPage> createState() => _CheckOutPageState();
@@ -505,7 +505,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => AddAddressPage(storeid:widget.id,)));
+                                    builder: (context) => AddAddressPage()));
                           },
                           child: Container(
                             height: 40,
@@ -665,7 +665,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                     orderedItems: orders1,
                     // count: cartlist[i]['count'],
 
-                    storeId: widget.id,
+                    storeId: cartlist[0]['storeId'],
                     address: Addresses(
                         phoneNumber: addressList![0].phoneNumber!,
                         flatNo: addressList![0].flatNo!,
@@ -675,7 +675,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                         name: addressList![0].name!
                     )
                 );
-                orderPlacing(ordr,widget.id);
+                orderPlacing(ordr,cartlist[0]['storeId']);
 
 
               Navigator.push(context,MaterialPageRoute(builder: (context)=>CheckOutPage3()));
