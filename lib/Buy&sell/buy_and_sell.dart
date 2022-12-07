@@ -1313,14 +1313,14 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                         children: [
                                           InkWell(
                                             onTap: () {
-                                              // Navigator.push(
-                                              //     context,
-                                              //     MaterialPageRoute(
-                                              //         builder: (context) =>
-                                              //             Orders(
-                                              //               storeId: store[0]
-                                              //                   .storeId!,
-                                              //             )));
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          Orders(
+                                                            storeId: store[0]
+                                                                .storeId!,
+                                                          )));
                                             },
                                             child: Container(
                                               height: scrHeight * 0.11,

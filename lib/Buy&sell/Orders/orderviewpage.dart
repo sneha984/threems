@@ -135,6 +135,7 @@ class _OrderViewPageState extends State<OrderViewPage> {
               child:Text("Mark as Accepted"))
         ],
       ),
-    )]));
+    )])
+    );
   }
 }

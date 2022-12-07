@@ -139,17 +139,19 @@ class _ProductAddingPageState extends State<ProductAddingPage> {
 
     setState(() {
       _imgurl.add(value);
+      print('_imgurl');
       print(_imgurl);
     });
   }
   _pickImage() async {
     imgFile = await ImagePicker.platform.pickImage(
         source: ImageSource.gallery);
-    setState(() {
-      imgFile = File(imgFile!.path);
-      _images.add(File(imgFile!.path));
+    imgFile = File(imgFile!.path);
+    _images.add(File(imgFile!.path));
 
-      uploadImageToFirebase(context);
+    uploadImageToFirebase(context);
+    setState(() {
+
     });
   }
 
@@ -171,6 +173,7 @@ class _ProductAddingPageState extends State<ProductAddingPage> {
 
   @override
   Widget build(BuildContext context) {
+    print(_imgurl);
     return Scaffold(
       body:SingleChildScrollView(
         child: Padding(
@@ -858,6 +861,7 @@ class _ProductAddingPageState extends State<ProductAddingPage> {
                       details: productDetailsController.text,
                       storedCategorys: selectedCategoryItem,
                       storeId: widget.storeId,
+                      available: true
                       // categoryName:categoryName,
                     );
                     FirebaseFirestore.instance.collection('stores').doc(widget.storeId)

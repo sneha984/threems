@@ -32,6 +32,7 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
           allOrders=[];
           for(DocumentSnapshot <Map<String,dynamic>> doc in event.docs){
             allOrders.add(OrderModel.fromJson(doc.data()!));
+
           }
           if(mounted){
             setState(() {
@@ -99,17 +100,19 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
           ),
         ),
       ),
-      body: Column(
-        children: [
-          Padding(
+      body: ListView.builder(
+        itemCount: allOrders.length,
+        itemBuilder:(context,index){
+          return Column(
+            children: [
+              Padding(
                 padding:  EdgeInsets.only(left: 10,right: 10,top: 20),
                 child: InkWell(
                   onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>OrderDetailsPage(orderModel: allOrders[0],)));
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>OrderDetailsPage(orderModel: allOrders[index],)));
                   },
                   child: Container(
-                    height: 300,
-                    width: 360,
+
                     decoration: BoxDecoration(
                         color: Color(0xffF3F3F3),
                         boxShadow: [
@@ -129,7 +132,7 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
                           children: [
                             SizedBox(width: 20,),
                             Text(
-                              "Order #1265365",
+                              "Order ${allOrders[index].orderId}",
                               style: TextStyle(
                                   fontSize: 12,
                                   color: Colors.black,
@@ -138,29 +141,10 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
                             ),
                             SizedBox(width: 10,),
 
-                            Container(
-                              height: 15,
-                              width: 30,
-                              decoration: BoxDecoration(
-                                color: Color(0xff02B558),
-                                borderRadius: BorderRadius.circular(5)
 
-                              ),
-                              child: Center(
-                                child: Text(
-                                  "New",
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.white,
-                                      fontFamily: 'Urbanist',
-                                      fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                            ),
-                            SizedBox(width: 80,),
 
                             Text(
-                              "Today 05:00 PM",
+                              allOrders[index].time.toString(),
                               style: TextStyle(
                                   fontSize: 12,
                                   color: Color(0xff969696),
@@ -171,70 +155,68 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
                           ],
                         ),
                         SizedBox(height: 30,),
-                        Expanded(
+                        Container(
                           child: ListView.builder(
-                            itemCount: allOrders[0].orderedItems?.length??0,
-                              itemBuilder: (context,index){
-                              return Padding(
-                                padding: const EdgeInsets.only(top: 10),
-                                child: Row(
-                                  children: [
-                                    SizedBox(width: 20,),
+                              itemCount: allOrders[index].orderedItems!.length,
+                              shrinkWrap: true,
+                              itemBuilder: (context,index2){
+                                return Padding(
+                                  padding: const EdgeInsets.only(top: 10),
+                                  child: Row(
+                                    children: [
+                                      SizedBox(width: 20,),
 
-                                    Container(
-                                      width: 150,
-                                      child: Text(
-                                        allOrders[0].orderedItems![index].item!,
+                                      Container(
+                                        width: 150,
+                                        child: Text(
+                                          allOrders[index].orderedItems![index2].item!,
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.black,
+                                              fontFamily: 'Urbanist',
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                      ),
+                                      // SizedBox(width: 80,),
+
+                                      Text(
+                                        "x",
                                         style: TextStyle(
                                             fontSize: 16,
                                             color: Colors.black,
                                             fontFamily: 'Urbanist',
                                             fontWeight: FontWeight.w600),
                                       ),
-                                    ),
-                                    // SizedBox(width: 80,),
+                                      SizedBox(width: 5,),
 
-                                    Text(
-                                      "x",
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          color: Colors.black,
-                                          fontFamily: 'Urbanist',
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                    SizedBox(width: 5,),
+                                      Text(
+                                        allOrders[index].orderedItems![index2].count!.toString()
+                                        ,
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.black,
+                                            fontFamily: 'Urbanist',
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                      SizedBox(width: 73,),
 
-                                    Text(
-                                  allOrders[0].orderedItems![index].count!.toString()
-                                  ,
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          color: Colors.black,
-                                          fontFamily: 'Urbanist',
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                    SizedBox(width: 73,),
-
-                                    Text(
-                                  allOrders[0].orderedItems![index].amount!.toString(),
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          color: Color(0xffF10000),
-                                          fontFamily: 'Urbanist',
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }),
+                                      Text(
+                                        allOrders[index].orderedItems![index2].amount!.toString(),
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            color: Color(0xffF10000),
+                                            fontFamily: 'Urbanist',
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }),
                         ),
 
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-
-
-
                             Padding(
                               padding: const EdgeInsets.only(right: 90),
                               child: Text(
@@ -247,7 +229,7 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
                               ),
                             ),
 
-                          SizedBox(width: 40,),
+                            SizedBox(width: 40,),
 
                             Text(
                               "$sum",
@@ -264,8 +246,8 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
                           height: 50,
                           width: 302,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: Color(0xff02B558)
+                              borderRadius: BorderRadius.circular(15),
+                              color: Color(0xff02B558)
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -279,35 +261,35 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
                                     fontWeight: FontWeight.w600),
                               ),
                               SizedBox(width: 10,),
-                              allOrders[0].status==0?Text(
+                              allOrders[index].status==0?Text(
                                 "Pending",
                                 style: TextStyle(
                                     fontSize: 14,
                                     color: Colors.white,
                                     fontFamily: 'Urbanist',
                                     fontWeight: FontWeight.w600),
-                              ):allOrders[0].status==1?
+                              ):allOrders[index].status==1?
                               Text(
-                                "Accepted",
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.white,
-                                    fontFamily: 'Urbanist',
-                                    fontWeight: FontWeight.w600)):
-                                allOrders[0].status==2?
-                                Text(
-                                "Delivered",
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.white,
-                                    fontFamily: 'Urbanist',
-                                    fontWeight: FontWeight.w600)): Text(
-                                "Cancelled",
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.white,
-                                    fontFamily: 'Urbanist',
-                                    fontWeight: FontWeight.w600))
+                                  "Accepted",
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.white,
+                                      fontFamily: 'Urbanist',
+                                      fontWeight: FontWeight.w600)):
+                              allOrders[index].status==2?
+                              Text(
+                                  "Delivered",
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.white,
+                                      fontFamily: 'Urbanist',
+                                      fontWeight: FontWeight.w600)): Text(
+                                  "Cancelled",
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.white,
+                                      fontFamily: 'Urbanist',
+                                      fontWeight: FontWeight.w600))
 
                             ],
                           ),
@@ -320,79 +302,81 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
                   ),
                 ),
 
-              //   Column(
-              //   children: [
-              //     SizedBox(height: 10,),
-              //     Container(
-              //       height: 150,
-              //       width: scrWidth,
-              //       child: Column(
-              //         children: [
-              //           SizedBox(height: 5,),
-              //           Padding(
-              //             padding:  EdgeInsets.only(right:250 ),
-              //             child:allOrders[index].status==0
-              //                 ?Text("Pending")
-              //                 :allOrders[index].status==1
-              //                 ?Text("Accepted")
-              //                 :allOrders[index].status==2
-              //                 ?Text("Delivered"):
-              //                 Text("Cancelled"),
-              //           ),
-              //           SizedBox(height: 5,),
-              //           Container(
-              //             height: 100,
-              //             color: Colors.grey.withOpacity(0.1),
-              //             child: Row(
-              //               children: [
-              //                 SizedBox(width: 10,),
-              //                 Container(
-              //                   height: 95,
-              //                     width: 85,
-              //                   decoration: BoxDecoration(
-              //                     borderRadius: BorderRadius.circular(10),
-              //                     image: DecorationImage(
-              //
-              //                         image: NetworkImage(
-              //                             allOrders[index].itemImage!),fit: BoxFit.fill)
-              //                   ),
-              //                 ),
-              //                 SizedBox(width: 30,),
-              //                 Column(
-              //                   crossAxisAlignment: CrossAxisAlignment.start,
-              //                   children: [
-              //                     SizedBox(height: 16,),
-              //                     Text(allOrders[index].item!),
-              //                     SizedBox(height: 10,),
-              //                     Text("1 kg"),
-              //
-              //                   ],
-              //                 )
-              //               ],
-              //             ),
-              //           ),
-              //           Padding(
-              //             padding: EdgeInsets.only(left: 230,top: 5),
-              //             child: Text("Total:${allOrders[index].amount}"),
-              //           )
-              //         ],
-              //       ),
-              //     ),
-              //     Padding(
-              //       padding: const EdgeInsets.only(top: 10),
-              //       child: Divider(
-              //         // height: 30,
-              //         thickness: 12,
-              //         color: Colors.grey.withOpacity(0.15),
-              //       ),
-              //     ),
-              //
-              //   ],
-              // );
+                //   Column(
+                //   children: [
+                //     SizedBox(height: 10,),
+                //     Container(
+                //       height: 150,
+                //       width: scrWidth,
+                //       child: Column(
+                //         children: [
+                //           SizedBox(height: 5,),
+                //           Padding(
+                //             padding:  EdgeInsets.only(right:250 ),
+                //             child:allOrders[index].status==0
+                //                 ?Text("Pending")
+                //                 :allOrders[index].status==1
+                //                 ?Text("Accepted")
+                //                 :allOrders[index].status==2
+                //                 ?Text("Delivered"):
+                //                 Text("Cancelled"),
+                //           ),
+                //           SizedBox(height: 5,),
+                //           Container(
+                //             height: 100,
+                //             color: Colors.grey.withOpacity(0.1),
+                //             child: Row(
+                //               children: [
+                //                 SizedBox(width: 10,),
+                //                 Container(
+                //                   height: 95,
+                //                     width: 85,
+                //                   decoration: BoxDecoration(
+                //                     borderRadius: BorderRadius.circular(10),
+                //                     image: DecorationImage(
+                //
+                //                         image: NetworkImage(
+                //                             allOrders[index].itemImage!),fit: BoxFit.fill)
+                //                   ),
+                //                 ),
+                //                 SizedBox(width: 30,),
+                //                 Column(
+                //                   crossAxisAlignment: CrossAxisAlignment.start,
+                //                   children: [
+                //                     SizedBox(height: 16,),
+                //                     Text(allOrders[index].item!),
+                //                     SizedBox(height: 10,),
+                //                     Text("1 kg"),
+                //
+                //                   ],
+                //                 )
+                //               ],
+                //             ),
+                //           ),
+                //           Padding(
+                //             padding: EdgeInsets.only(left: 230,top: 5),
+                //             child: Text("Total:${allOrders[index].amount}"),
+                //           )
+                //         ],
+                //       ),
+                //     ),
+                //     Padding(
+                //       padding: const EdgeInsets.only(top: 10),
+                //       child: Divider(
+                //         // height: 30,
+                //         thickness: 12,
+                //         color: Colors.grey.withOpacity(0.15),
+                //       ),
+                //     ),
+                //
+                //   ],
+                // );
 
 
-          )],
-      ),
+              )],
+          );
+        },
+      )
 
 
 
