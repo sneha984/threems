@@ -157,7 +157,7 @@ class Payments {
         this.userId,
         this.amount,
         this.screenShotUrl,
-        this.date
+        this.date,
       });
 
   Payments.fromJson(Map<String, dynamic> json) {

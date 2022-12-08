@@ -45,7 +45,7 @@ class _CreateCharity3State extends State<CreateCharity3> {
   var uploadTasks;
   Future uploadImageToFirebase(BuildContext context) async {
     Reference firebaseStorageRef =
-    FirebaseStorage.instance.ref().child('deposits/${imgFile.path}');
+    FirebaseStorage.instance.ref().child('upload/${imgFile.path}');
     UploadTask uploadTask = firebaseStorageRef.putFile(imgFile);
     TaskSnapshot taskSnapshot = (await uploadTask);
     String value = await taskSnapshot.ref.getDownloadURL();
@@ -66,35 +66,6 @@ class _CreateCharity3State extends State<CreateCharity3> {
       uploadImageToFirebase(context);
     });
   }
-  // String? picUrl;
-  // var imgFile;
-  // var uploadTask;
-  // Future uploadImageToFirebase(BuildContext context) async {
-  //   Reference firebaseStorageRef =
-  //   FirebaseStorage.instance.ref().child('deposits/${imgFile.path}');
-  //   UploadTask uploadTask = firebaseStorageRef.putFile(imgFile);
-  //   TaskSnapshot taskSnapshot = (await uploadTask);
-  //   String value = await taskSnapshot.ref.getDownloadURL();
-  //
-  //   // if(value!=null){
-  //   //   imageList.add(value);
-  //   // }
-  //   setState(() {
-  //     picUrl = value;
-  //     print("=====================================================================");
-  //     print(picUrl);
-  //
-  //   });
-  // }
-  // _pickImag() async {
-  //   final imageFile = await ImagePicker.platform.pickImage(
-  //       source: ImageSource.gallery);
-  //   setState(() {
-  //     imgFile = File(imageFile!.path);
-  //     uploadImageToFirebase(context);
-  //   });
-  // }
-
   @override
   void initState() {
     accountNumberFocus.addListener(() {

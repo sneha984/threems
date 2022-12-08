@@ -475,8 +475,9 @@ class _MyOrdersDetailsPageState extends State<MyOrdersDetailsPage> {
                   color: Color(0xff02B558)
                 ),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    SizedBox(width: 25,),
+
                     Column(
                       children: [
                         SizedBox(
@@ -494,7 +495,12 @@ class _MyOrdersDetailsPageState extends State<MyOrdersDetailsPage> {
                                   child: Container(
                                       height: 27,
                                       width: 27,
-                                      ))),
+                                    child:widget.orderModel.status==0?
+                                    SvgPicture.asset("assets/icons/pending.svg"):
+                                    SvgPicture.asset("assets/icons/accepted.svg"),
+                                      ),
+                              )
+                          ),
                         ),
                         SizedBox(
                           height: scrHeight * 0.008,
@@ -502,7 +508,9 @@ class _MyOrdersDetailsPageState extends State<MyOrdersDetailsPage> {
                         Container(
                           width: scrWidth * 0.15,
                           child: Text(
-                            "Order Pending",
+                            widget.orderModel.status==0?
+                            "Order Pending":
+                            "Order Accepted",
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontSize: 12,
@@ -513,6 +521,47 @@ class _MyOrdersDetailsPageState extends State<MyOrdersDetailsPage> {
                         )
                       ],
                     ),
+                    // SizedBox(width: 18,),
+                    // Column(
+                    //   children: [
+                    //     SizedBox(
+                    //       height: scrHeight * 0.03,
+                    //     ),
+                    //     DottedBorder(
+                    //       borderType: BorderType.Circle,
+                    //       radius: Radius.circular(scrWidth * 0.1),
+                    //       dashPattern: [5, 5],
+                    //       color: Colors.white,
+                    //       strokeWidth: 1.5,
+                    //       child: Center(
+                    //           child: Padding(
+                    //               padding: EdgeInsets.all(scrWidth * 0.07),
+                    //               child: Container(
+                    //                 height: 27,
+                    //                 width: 27,
+                    //                 child: SvgPicture.asset("assets/icons/shipped.svg",
+                    //                     color: widget.orderModel.status!>1?Colors.white:
+                    //                         Colors.white38
+                    //                 ),
+                    //               ))),
+                    //     ),
+                    //     SizedBox(
+                    //       height: scrHeight * 0.008,
+                    //     ),
+                    //     Container(
+                    //       width: scrWidth * 0.15,
+                    //       child: Text(
+                    //         "Order Accepted",
+                    //         textAlign: TextAlign.center,
+                    //         style: TextStyle(
+                    //             fontSize: 12,
+                    //             fontWeight: FontWeight.w600,
+                    //             color: Colors.white,
+                    //             fontFamily: 'Urbanist'),
+                    //       ),
+                    //     )
+                    //   ],
+                    // ),
                     SizedBox(width: 18,),
                     Column(
                       children: [
@@ -531,43 +580,9 @@ class _MyOrdersDetailsPageState extends State<MyOrdersDetailsPage> {
                                   child: Container(
                                     height: 27,
                                     width: 27,
-                                  ))),
-                        ),
-                        SizedBox(
-                          height: scrHeight * 0.008,
-                        ),
-                        Container(
-                          width: scrWidth * 0.15,
-                          child: Text(
-                            "Order Shipped",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.white,
-                                fontFamily: 'Urbanist'),
-                          ),
-                        )
-                      ],
-                    ),
-                    SizedBox(width: 18,),
-                    Column(
-                      children: [
-                        SizedBox(
-                          height: scrHeight * 0.03,
-                        ),
-                        DottedBorder(
-                          borderType: BorderType.Circle,
-                          radius: Radius.circular(scrWidth * 0.1),
-                          dashPattern: [5, 5],
-                          color: Colors.white,
-                          strokeWidth: 1.5,
-                          child: Center(
-                              child: Padding(
-                                  padding: EdgeInsets.all(scrWidth * 0.07),
-                                  child: Container(
-                                    height: 27,
-                                    width: 27,
+                                    child: SvgPicture.asset("assets/icons/delivered.svg",
+                                      color: widget.orderModel.status==2?Colors.white:Colors.white70,
+                                    ),
                                   ))),
                         ),
                         SizedBox(
@@ -592,6 +607,8 @@ class _MyOrdersDetailsPageState extends State<MyOrdersDetailsPage> {
               ),
             )
             ,SizedBox(height: 20,),
+            widget.orderModel.status!>0?
+                SizedBox():
             InkWell(
               onTap: (){
                 FirebaseFirestore.instance.collection('stores').doc(widget.orderModel.storeId).collection('orders').doc(widget.orderModel.orderId).update({

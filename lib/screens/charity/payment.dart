@@ -28,6 +28,36 @@ class PaymentPage extends StatefulWidget {
 }
 
 class _PaymentPageState extends State<PaymentPage> {
+  String? imgUrl;
+  var imgFile;
+  var uploadTask;
+  var fileUrl;
+  var docUrl;
+  var uploadTasks;
+  Future uploadImageToFirebase(BuildContext context) async {
+    Reference firebaseStorageRef =
+    FirebaseStorage.instance.ref().child('upload/${imgFile.path}');
+    UploadTask uploadTask = firebaseStorageRef.putFile(imgFile);
+    TaskSnapshot taskSnapshot = (await uploadTask);
+    String value = await taskSnapshot.ref.getDownloadURL();
+
+    // if(value!=null){
+    //   imageList.add(value);
+    // }
+    setState(() {
+      imgUrl = value;
+      print(imgUrl);
+
+    });
+  }
+  _pickImage() async {
+    final imageFile = await ImagePicker.platform.pickImage(
+        source: ImageSource.gallery);
+    setState(() {
+      imgFile = File(imageFile!.path);
+      uploadImageToFirebase(context);
+    });
+  }
   var icons;
   var categoryName;
   getIconData(){
@@ -46,37 +76,7 @@ class _PaymentPageState extends State<PaymentPage> {
   }
   final FocusNode valueAmountFocus = FocusNode();
   final  TextEditingController valueAmountController =TextEditingController();
-  String? imgUrl;
-  var imgFile;
-  var uploadTask;
-  var fileUrl;
-  Future uploadImageToFirebase(BuildContext context) async {
-    Reference firebaseStorageRef =
-    FirebaseStorage.instance.ref().child('deposits/${imgFile.path}');
-    UploadTask uploadTask = firebaseStorageRef.putFile(imgFile);
-    TaskSnapshot taskSnapshot = (await uploadTask);
-    String value = await taskSnapshot.ref.getDownloadURL();
 
-    // if(value!=null){
-    //   imageList.add(value);
-    // }
-    setState(() {
-      imgUrl = value;
-      print("----=========-============-===============-=============");
-      print(imgUrl);
-      print("----=========-============-===============-=============");
-
-
-    });
-  }
-  _pickImage() async {
-    final imageFile = await ImagePicker.platform.pickImage(
-        source: ImageSource.gallery);
-    setState(() {
-      imgFile = File(imageFile!.path);
-      uploadImageToFirebase(context);
-    });
-  }
   @override
   void initState() {
 
@@ -545,7 +545,7 @@ class _PaymentPageState extends State<PaymentPage> {
                 width: scrWidth*0.85,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: FileImage(imgFile) as ImageProvider,fit: BoxFit.fill),
+                      image: FileImage(imgFile!) as ImageProvider,fit: BoxFit.fill),
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(
                     color: Color(0xffDADADA),

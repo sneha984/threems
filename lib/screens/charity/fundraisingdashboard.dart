@@ -12,6 +12,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:threems/model/charitymodel.dart';
+import 'package:threems/screens/charity/paymentdetailspage.dart';
 
 import '../../utils/themes.dart';
 import '../../widgets/flchart.dart';
@@ -902,7 +903,7 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
                   ],
                 ),
                 SizedBox(width: scrWidth*0.25,),
-                SvgPicture.asset("assets/icons/filtericon.svg"),
+                // SvgPicture.asset("assets/icons/filtericon.svg"),
               ],
             ),
             ListView.separated(
@@ -910,64 +911,70 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
                 shrinkWrap: true,
                 itemBuilder: (context,index){
                 final datas=widget.charity.payments![index];
+                List<Payments> paylist=widget.charity.payments!;
                   return Padding(
                     padding:  EdgeInsets.only(left: scrWidth*0.05,right: scrWidth*0.05),
-                    child: Container(
-                      height: scrHeight*0.11,
-                      width: scrWidth*0.89,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(9),
-                        color: Colors.white,
-                        boxShadow: const [
-                          BoxShadow(
-                              color: Color.fromRGBO(0, 0, 0, 0.1), // shadow color
-                              blurRadius: 15, // shadow radius
-                              offset: Offset(5, 10), // shadow offset
-                              spreadRadius:
-                              0.4, // The amount the box should be inflated prior to applying the blur
-                              blurStyle: BlurStyle.normal // set blur style
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        children: [
-                          SizedBox(width: scrWidth*0.045,),
-                          CircleAvatar(
-                            radius: scrWidth*0.05,
-                            backgroundImage: NetworkImage("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiuZGp08DDSD0P3PMfKSbbPu2nVmJdH74gHg&usqp=CAU"),
-                          ),
-                          SizedBox(width: scrWidth*0.05,),
+                    child: InkWell(
+                      onTap: (){
+                        // Navigator.push(context, MaterialPageRoute(builder: (context)=>PaymentDetailsPage(payments:paylist, index: index, id: widget.charity.charityId!,)));
+                      },
+                      child: Container(
+                        height: scrHeight*0.11,
+                        width: scrWidth*0.89,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(9),
+                          color: Colors.white,
+                          boxShadow: const [
+                            BoxShadow(
+                                color: Color.fromRGBO(0, 0, 0, 0.1), // shadow color
+                                blurRadius: 15, // shadow radius
+                                offset: Offset(5, 10), // shadow offset
+                                spreadRadius:
+                                0.4, // The amount the box should be inflated prior to applying the blur
+                                blurStyle: BlurStyle.normal // set blur style
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          children: [
+                            SizedBox(width: scrWidth*0.045,),
+                            CircleAvatar(
+                              radius: scrWidth*0.05,
+                              backgroundImage: NetworkImage("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiuZGp08DDSD0P3PMfKSbbPu2nVmJdH74gHg&usqp=CAU"),
+                            ),
+                            SizedBox(width: scrWidth*0.05,),
 
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(height: scrHeight*0.035,),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(height: scrHeight*0.045,),
 
 
-                              Text(datas.userName!,style: TextStyle(
-                                fontSize: scrWidth*0.043,
-                                fontFamily: 'Urbanist',
-                                fontWeight: FontWeight.w600,
-                              ),),
-                              Text("Perinthalmanna",style: TextStyle(
-                                  fontSize: scrWidth*0.03,
+                                Text(datas.userName!,style: TextStyle(
+                                  fontSize: scrWidth*0.043,
                                   fontFamily: 'Urbanist',
-                                  fontWeight: FontWeight.w500,
-                                  color: Color(0xff8B8B8B)
-                              ),),
+                                  fontWeight: FontWeight.w600,
+                                ),),
+                                // Text("Perinthalmanna",style: TextStyle(
+                                //     fontSize: scrWidth*0.03,
+                                //     fontFamily: 'Urbanist',
+                                //     fontWeight: FontWeight.w500,
+                                //     color: Color(0xff8B8B8B)
+                                // ),),
 
 
-                            ],
-                          ),
-                          SizedBox(width: scrWidth*0.26,),
-                          Text(currencyConvert.format(datas.amount!).toString(),style: TextStyle(
-                              fontSize: scrWidth*0.046,
-                              fontFamily: 'Urbanist',
-                              fontWeight: FontWeight.w700,
-                              color: primarycolor),),
+                              ],
+                            ),
+                            SizedBox(width: scrWidth*0.26,),
+                            Text(currencyConvert.format(datas.amount!).toString(),style: TextStyle(
+                                fontSize: scrWidth*0.046,
+                                fontFamily: 'Urbanist',
+                                fontWeight: FontWeight.w700,
+                                color: primarycolor),),
 
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   );
