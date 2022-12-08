@@ -488,30 +488,30 @@ class _CheckOutPageState extends State<CheckOutPage> {
                             lineThickness: 0.8,
                           ),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Delivery time",
-                              style: TextStyle(
-                                  fontSize: 12,
-                                  color: Color(0xff0E0E0E),
-                                  fontFamily: 'Urbanist',
-                                  fontWeight: FontWeight.w600),
-                            ),
-                            SizedBox(
-                              width: 30,
-                            ),
-                            Text(
-                              "5 hour",
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  color: Color(0xff0E0E0E),
-                                  fontFamily: 'Urbanist',
-                                  fontWeight: FontWeight.w600),
-                            ),
-                          ],
-                        ),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //   children: [
+                        //     Text(
+                        //       "Delivery time",
+                        //       style: TextStyle(
+                        //           fontSize: 12,
+                        //           color: Color(0xff0E0E0E),
+                        //           fontFamily: 'Urbanist',
+                        //           fontWeight: FontWeight.w600),
+                        //     ),
+                        //     SizedBox(
+                        //       width: 30,
+                        //     ),
+                        //     Text(
+                        //       "5 hour",
+                        //       style: TextStyle(
+                        //           fontSize: 14,
+                        //           color: Color(0xff0E0E0E),
+                        //           fontFamily: 'Urbanist',
+                        //           fontWeight: FontWeight.w600),
+                        //     ),
+                        //   ],
+                        // ),
                         SizedBox(
                           height: 10,
                         ),

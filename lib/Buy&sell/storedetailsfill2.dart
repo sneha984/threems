@@ -1089,28 +1089,32 @@ List productCategoryList=[];
                      height: scrWidth * 0.03,
                    ),
 
-                   Container(
-                     width: scrWidth,
-                     height: textFormFieldHeight45,
-                     decoration: BoxDecoration(
-                         color: primarycolor,
-                         borderRadius: BorderRadius.circular(12)),
-                     child: Center(
-                       child: GestureDetector(
-                         onTap: () {
-                           productCategoryList.add(productCategoryNameController.text);
-                    FirebaseFirestore.instance.collection('stores').doc(widget.data.storeId).update({
-                      'productCategory':FieldValue.arrayUnion(productCategoryList),
-                    });
-                  Navigator.pop(context);
-                         },
-                         child: Text(
-                           "Save",
-                           style: TextStyle(
-                               fontSize: FontSize16,
-                               fontFamily: 'Urbanist',
-                               fontWeight: FontWeight.w600,
-                               color: Colors.white),
+                   InkWell(
+                     onTap: () {
+                       productCategoryList.add(productCategoryNameController.text);
+                       FirebaseFirestore.instance.collection('stores').doc(widget.data.storeId).update({
+                         'productCategory':FieldValue.arrayUnion(productCategoryList),
+                       });
+                       productCategoryNameController.text='';
+                       Navigator.pop(context);
+                     },
+                     child: Container(
+                       width: scrWidth,
+                       height: textFormFieldHeight45,
+                       decoration: BoxDecoration(
+                           color: primarycolor,
+                           borderRadius: BorderRadius.circular(12)),
+                       child: Center(
+                         child: GestureDetector(
+
+                           child: Text(
+                             "Save",
+                             style: TextStyle(
+                                 fontSize: FontSize16,
+                                 fontFamily: 'Urbanist',
+                                 fontWeight: FontWeight.w600,
+                                 color: Colors.white),
+                           ),
                          ),
                        ),
                      ),

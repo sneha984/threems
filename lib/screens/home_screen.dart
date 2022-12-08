@@ -768,7 +768,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // print(" scrHeight : $scrHeight");
     return WillPopScope(
       onWillPop: () async {
-        final shouldPop = await confirmQuitDialog();
+        final shouldPop = await confirmQuitDialog(context);
         return shouldPop ?? false;
       },
       child: Scaffold(
@@ -1383,20 +1383,21 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Future<bool?> confirmQuitDialog() => showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-            title: Text('Do You want to Quit?'),
-            actions: [
-              TextButton(
-                  onPressed: () => Navigator.pop(context, false),
-                  child: Text('No')),
-              TextButton(
-                  onPressed: () => Navigator.pop(context, true),
-                  child: Text(
-                    'Yes',
-                    style: TextStyle(color: primarycolor),
-                  )),
-            ],
-          ));
+
 }
+Future<bool?> confirmQuitDialog(BuildContext context) => showDialog<bool>(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Text('Do You want to Quit?'),
+      actions: [
+        TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text('No')),
+        TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text(
+              'Yes',
+              style: TextStyle(color: primarycolor),
+            )),
+      ],
+    ));

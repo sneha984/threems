@@ -38,7 +38,7 @@ class _StorePageState extends State<StorePage> {
           .collection('stores')
           .doc(widget.storeDetailsModel.storeId)
           .collection('products')
-          // .where('storedCategorys', isEqualTo: widget.category)
+           .where('available', isEqualTo: true)
           .snapshots()
           .listen((event) {
         productsList = [];
@@ -55,6 +55,7 @@ class _StorePageState extends State<StorePage> {
           .doc(widget.storeDetailsModel.storeId)
           .collection('products')
           .where('storedCategorys', isEqualTo: widget.category)
+          .where('available', isEqualTo: true)
           .snapshots()
           .listen((event) {
         productsList = [];

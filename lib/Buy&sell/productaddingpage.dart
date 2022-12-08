@@ -187,6 +187,7 @@ class _ProductAddingPageState extends State<ProductAddingPage> {
                 children: [
                   InkWell(
                     onTap: (){
+                      Navigator.pop(context);
                       // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
                       //     ScreenLayout(index: 1,tabIndex: 1,),), (route) => false);
                     },

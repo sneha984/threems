@@ -118,170 +118,176 @@ class _UtilitiesState extends State<Utilities> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: scrHeight * 0.1,
-        shadowColor: Colors.grey,
-        leadingWidth: 50,
-        centerTitle: false,
-        elevation: 0.1,
-        backgroundColor: Colors.white,
-        leading: InkWell(
-          onTap: () {
-            // _determinePosition();
-          },
-          child: Container(
-            height: 30,
-            width: 30,
-            child: Padding(
-              padding: EdgeInsets.only(
-                top: scrHeight * 0.03,
-                left: scrWidth * 0.07,
-                bottom: scrHeight * 0.01,
-              ),
-              child: SvgPicture.asset(
-                "assets/icons/locationicon.svg",
+    return WillPopScope(
+      onWillPop: () async {
+        final shouldPop = await confirmQuitDialog(context);
+        return shouldPop ?? false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          toolbarHeight: scrHeight * 0.1,
+          shadowColor: Colors.grey,
+          leadingWidth: 50,
+          centerTitle: false,
+          elevation: 0.1,
+          backgroundColor: Colors.white,
+          leading: InkWell(
+            onTap: () {
+              // _determinePosition();
+            },
+            child: Container(
+              height: 30,
+              width: 30,
+              child: Padding(
+                padding: EdgeInsets.only(
+                  top: scrHeight * 0.03,
+                  left: scrWidth * 0.07,
+                  bottom: scrHeight * 0.01,
+                ),
+                child: SvgPicture.asset(
+                  "assets/icons/locationicon.svg",
+                ),
               ),
             ),
           ),
-        ),
-        title: Padding(
-          padding: EdgeInsets.only(top: scrHeight * 0.02),
-          child: Text(
-            currenPlace.toString(),
-            style: TextStyle(
-                fontSize: scrWidth * 0.046,
-                color: Colors.black,
-                fontFamily: 'Urbanist',
-                fontWeight: FontWeight.w600),
+          title: Padding(
+            padding: EdgeInsets.only(top: scrHeight * 0.02),
+            child: Text(
+              currenPlace.toString(),
+              style: TextStyle(
+                  fontSize: scrWidth * 0.046,
+                  color: Colors.black,
+                  fontFamily: 'Urbanist',
+                  fontWeight: FontWeight.w600),
+            ),
           ),
         ),
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Container(
-            height: scrWidth * 3,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  child: GridView.builder(
-                    shrinkWrap: true,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      childAspectRatio: 1,
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                    ),
-                    itemCount: categories!.length,
-                    padding: EdgeInsets.only(
-                        top: 25, bottom: 15, left: 20, right: 15),
-                    itemBuilder: (BuildContext context, int index) {
-                      return categories!.isEmpty
-                          ? Container(
-                              child: Center(
-                                child: Text(
-                                  "No  Category",
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontFamily: 'Urbanist',
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.black),
-                                ),
-                              ),
-                            )
-                          : InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            ServiceSubcategoryPage(
-                                              serviceCategoryName:
-                                                  categories![index]
-                                                      ['serviceCategory'],
-                                              image: categories![index]
-                                                  ['image'],
-                                              serviceId: categories![index].id,
-                                            )));
-                                // Navigator.push(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //         builder: (context) => ServiceDetailesPage(
-                                //               category: categories![index]
-                                //                   .serviceCategory!,
-                                //             )));
-                              },
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    height: 80,
-                                    width: 120,
-                                    decoration: BoxDecoration(
-                                        color: Color(0xffF3F3F3),
-                                        borderRadius:
-                                            BorderRadius.circular(20)),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        SvgPicture.network(
-                                          categories![index]['image'],
-                                          height: 55,
-                                          width: 50,
-                                        ),
-                                      ],
-                                    ),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Container(
+              height: scrWidth * 3,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    child: GridView.builder(
+                      shrinkWrap: true,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        childAspectRatio: 1,
+                        crossAxisSpacing: 10,
+                        mainAxisSpacing: 10,
+                      ),
+                      itemCount: categories!.length,
+                      padding: EdgeInsets.only(
+                          top: 25, bottom: 15, left: 20, right: 15),
+                      itemBuilder: (BuildContext context, int index) {
+                        return categories!.isEmpty
+                            ? Container(
+                                child: Center(
+                                  child: Text(
+                                    "No  Category",
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontFamily: 'Urbanist',
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.black),
                                   ),
-                                  Expanded(
-                                    child: Center(
-                                      child: Text(
-                                        categories![index]['serviceCategory'],
-                                        style: TextStyle(
-                                            fontSize: scrWidth * 0.029,
-                                            color: Colors.black,
-                                            fontFamily: 'Urbanist',
-                                            fontWeight: FontWeight.w600),
+                                ),
+                              )
+                            : InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              ServiceSubcategoryPage(
+                                                serviceCategoryName:
+                                                    categories![index]
+                                                        ['serviceCategory'],
+                                                image: categories![index]
+                                                    ['image'],
+                                                serviceId: categories![index].id,
+                                              )));
+                                  // Navigator.push(
+                                  //     context,
+                                  //     MaterialPageRoute(
+                                  //         builder: (context) => ServiceDetailesPage(
+                                  //               category: categories![index]
+                                  //                   .serviceCategory!,
+                                  //             )));
+                                },
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      height: 80,
+                                      width: 120,
+                                      decoration: BoxDecoration(
+                                          color: Color(0xffF3F3F3),
+                                          borderRadius:
+                                              BorderRadius.circular(20)),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          SvgPicture.network(
+                                            categories![index]['image'],
+                                            height: 55,
+                                            width: 50,
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            );
-                    },
+                                    Expanded(
+                                      child: Center(
+                                        child: Text(
+                                          categories![index]['serviceCategory'],
+                                          style: TextStyle(
+                                              fontSize: scrWidth * 0.029,
+                                              color: Colors.black,
+                                              fontFamily: 'Urbanist',
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                      },
+                    ),
                   ),
-                ),
-                SizedBox(
-                  height: scrWidth * 0.01,
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                      left: scrWidth * 0.045, right: scrWidth * 0.045),
-                  child: Text(
-                    "Sponsered Ads",
-                    style: TextStyle(
-                        fontSize: scrWidth * 0.046,
-                        color: Colors.black,
-                        fontFamily: 'Urbanist',
-                        fontWeight: FontWeight.w600),
+                  SizedBox(
+                    height: scrWidth * 0.01,
                   ),
-                ),
-                SizedBox(
-                  height: scrWidth * 0.01,
-                ),
-                Container(
-                  margin: EdgeInsets.only(
-                      left: scrWidth * 0.045,
-                      right: scrWidth * 0.045,
-                      top: scrWidth * 0.025),
-                  height: scrHeight * .18,
-                  width: scrWidth * 1,
-                  child: ImageSlide(),
-                ),
-              ],
+                  Padding(
+                    padding: EdgeInsets.only(
+                        left: scrWidth * 0.045, right: scrWidth * 0.045),
+                    child: Text(
+                      "Sponsered Ads",
+                      style: TextStyle(
+                          fontSize: scrWidth * 0.046,
+                          color: Colors.black,
+                          fontFamily: 'Urbanist',
+                          fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                  SizedBox(
+                    height: scrWidth * 0.01,
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(
+                        left: scrWidth * 0.045,
+                        right: scrWidth * 0.045,
+                        top: scrWidth * 0.025),
+                    height: scrHeight * .18,
+                    width: scrWidth * 1,
+                    child: ImageSlide(),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
