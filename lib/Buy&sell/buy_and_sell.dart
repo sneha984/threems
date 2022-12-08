@@ -115,13 +115,15 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
         //print(categorys[doc['categoryName']]);
         // print(doc.get('categoryImage'));
         grids.add(InkWell(
-          onTap: () {
-            Navigator.push(
+          onTap: () async {
+            await Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) => CategoryStores(
                           categoryname: doc.get('categoryName'),
                         )));
+
+            setState(() {});
           },
           child: Container(
             height: scrWidth * 0.3,
@@ -340,9 +342,11 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
           ),
           actions: [
             InkWell(
-              onTap: () {
-                Navigator.push(context,
+              onTap: () async {
+                await Navigator.push(context,
                     MaterialPageRoute(builder: (context) => CheckOutPage()));
+
+                setState(() {});
               },
               child: Badge(
                   position: BadgePosition.topEnd(
@@ -354,8 +358,8 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                   badgeColor: Colors.black,
                   badgeContent: Text(
                     '${cartlist.length}',
-                    style:
-                        TextStyle(color: Colors.white, fontSize: scrWidth * 0.02),
+                    style: TextStyle(
+                        color: Colors.white, fontSize: scrWidth * 0.02),
                   ),
                   child: Padding(
                     padding: EdgeInsets.only(
@@ -364,9 +368,11 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                   )),
             ),
             InkWell(
-              onTap: () {
-                Navigator.push(context,
+              onTap: () async {
+                await Navigator.push(context,
                     MaterialPageRoute(builder: (context) => MyOrdersPage()));
+
+                setState(() {});
               },
               child: Badge(
                   position: BadgePosition.topEnd(
@@ -378,8 +384,8 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                   badgeColor: Colors.black,
                   badgeContent: Text(
                     '${allOrders.length}',
-                    style:
-                        TextStyle(color: Colors.white, fontSize: scrWidth * 0.02),
+                    style: TextStyle(
+                        color: Colors.white, fontSize: scrWidth * 0.02),
                   ),
                   child: Padding(
                     padding: EdgeInsets.only(
@@ -395,8 +401,8 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
               height: scrHeight * 0.015,
             ),
             Padding(
-              padding:
-                  EdgeInsets.only(left: scrWidth * 0.05, right: scrWidth * 0.05),
+              padding: EdgeInsets.only(
+                  left: scrWidth * 0.05, right: scrWidth * 0.05),
               child: Container(
                 height: scrHeight * 0.05,
                 decoration: BoxDecoration(
@@ -616,18 +622,20 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                 print(nearestStores.length);
                                 StoreDetailsModel store = nearestStores[index];
                                 return InkWell(
-                                  onTap: () {
-                                    Navigator.push(
+                                  onTap: () async {
+                                    await Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) => StorePage(
                                                 storeDetailsModel:
                                                     nearestStores[index],
                                                 category: '')));
+
+                                    setState(() {});
                                   },
                                   child: Padding(
-                                    padding:
-                                        EdgeInsets.only(right: scrWidth * 0.017),
+                                    padding: EdgeInsets.only(
+                                        right: scrWidth * 0.017),
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -878,11 +886,13 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                             height: scrHeight * 0.03,
                           ),
                           GestureDetector(
-                            onTap: () {
-                              Navigator.push(
+                            onTap: () async {
+                              await Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => StoreDetails()));
+
+                              setState(() {});
                             },
                             child: Container(
                               height: scrHeight * 0.05,
@@ -959,7 +969,8 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                       width: scrWidth * 0.77,
                                       percent: 0.5,
                                       alignment: MainAxisAlignment.start,
-                                      barRadius: Radius.circular(scrWidth * 0.2),
+                                      barRadius:
+                                          Radius.circular(scrWidth * 0.2),
                                       progressColor: primarycolor,
                                       backgroundColor: Color(0xffD9D9D9),
                                     ),
@@ -1051,21 +1062,25 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                 height: scrHeight * 0.02,
                               ),
                               GestureDetector(
-                                onTap: () {
+                                onTap: () async {
                                   print(filteredShops.length);
-                                  Navigator.push(
+                                  await Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => StoreDetailsFill2(
+                                          builder: (context) =>
+                                              StoreDetailsFill2(
                                                 data: store[0],
                                               )));
+
+                                  setState(() {});
                                 },
                                 child: Container(
                                   height: scrHeight * 0.055,
                                   width: scrWidth * 0.55,
                                   decoration: BoxDecoration(
                                       color: primarycolor,
-                                      borderRadius: BorderRadius.circular(21.5)),
+                                      borderRadius:
+                                          BorderRadius.circular(21.5)),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
@@ -1156,7 +1171,8 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                     height: scrHeight * 0.02,
                                   ),
                                   Padding(
-                                    padding: EdgeInsets.only(left: 10, right: 10),
+                                    padding:
+                                        EdgeInsets.only(left: 10, right: 10),
                                     child: Container(
                                       height: scrHeight * 0.32,
                                       width: scrWidth * 0.8,
@@ -1292,14 +1308,17 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                           MainAxisAlignment.spaceAround,
                                       children: [
                                         InkWell(
-                                          onTap: () {
-                                            Navigator.push(
+                                          onTap: () async {
+                                            await Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
-                                                    builder: (context) => Orders(
+                                                    builder: (context) =>
+                                                        Orders(
                                                           storeId:
                                                               store[0].storeId!,
                                                         )));
+
+                                            setState(() {});
                                           },
                                           child: Container(
                                             height: scrHeight * 0.11,
@@ -1322,7 +1341,8 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                                   Text(
                                                     "Orders",
                                                     style: TextStyle(
-                                                        fontSize: scrWidth * 0.04,
+                                                        fontSize:
+                                                            scrWidth * 0.04,
                                                         color: Colors.white,
                                                         fontFamily: 'Urbanist',
                                                         fontWeight:
@@ -1334,7 +1354,8 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                                   Row(
                                                     children: [
                                                       Text(
-                                                        orders.length.toString(),
+                                                        orders.length
+                                                            .toString(),
                                                         style: TextStyle(
                                                             fontSize:
                                                                 scrWidth * 0.07,
@@ -1342,7 +1363,8 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                                             fontFamily:
                                                                 'Urbanist',
                                                             fontWeight:
-                                                                FontWeight.w700),
+                                                                FontWeight
+                                                                    .w700),
                                                       ),
                                                       SizedBox(
                                                         width: scrWidth * 0.18,
@@ -1388,7 +1410,8 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                                           fontSize:
                                                               scrWidth * 0.04,
                                                           color: Colors.white,
-                                                          fontFamily: 'Urbanist',
+                                                          fontFamily:
+                                                              'Urbanist',
                                                           fontWeight:
                                                               FontWeight.w600),
                                                     ),
@@ -1407,8 +1430,8 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                                                 fontSize:
                                                                     scrWidth *
                                                                         0.05,
-                                                                color:
-                                                                    Colors.white,
+                                                                color: Colors
+                                                                    .white,
                                                                 fontFamily:
                                                                     'Urbanist',
                                                                 fontWeight:
@@ -1497,8 +1520,8 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                         width: scrWidth * 0.08,
                                       ),
                                       InkWell(
-                                        onTap: () {
-                                          Navigator.push(
+                                        onTap: () async {
+                                          await Navigator.push(
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
@@ -1506,14 +1529,17 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                                         storeId:
                                                             store[0].storeId!,
                                                       )));
+
+                                          setState(() {});
                                         },
                                         child: Container(
                                           height: scrHeight * 0.1,
                                           width: scrWidth * 0.4,
                                           decoration: BoxDecoration(
                                               color: Color(0xffF3F3F3),
-                                              borderRadius: BorderRadius.circular(
-                                                  scrWidth * 0.06)),
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      scrWidth * 0.06)),
                                           child: Padding(
                                             padding: EdgeInsets.only(
                                                 left: scrWidth * 0.05),
@@ -1529,7 +1555,8 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                                 Text(
                                                   "Products",
                                                   style: TextStyle(
-                                                      fontSize: scrWidth * 0.035,
+                                                      fontSize:
+                                                          scrWidth * 0.035,
                                                       fontFamily: 'Urbanist',
                                                       fontWeight:
                                                           FontWeight.w600),
