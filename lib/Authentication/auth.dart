@@ -34,13 +34,12 @@ class Authentication {
       "userName": userName,
       "userEmail": userEmail,
       "userImage": userImage,
-    }).then((value) => Navigator.push(
+    }).then((value) => Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
-          builder: (context) => Rootingpage(
-              // id: userDoc!,
-              ),
-        )));
+          builder: (context) => Rootingpage(),
+        ),
+        (route) => false));
 
     //     .then((value) {
     //   Navigator.pushReplacement(
