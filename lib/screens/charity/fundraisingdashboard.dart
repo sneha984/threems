@@ -3,6 +3,7 @@ import 'dart:core';
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -32,6 +33,16 @@ class FundRaisingDashboard extends StatefulWidget {
 }
 
 class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerProviderStateMixin {
+
+
+  String? _linkMessage;
+  bool _isCreatingLink = false;
+
+  FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
+
+  final String dynamicLink = 'https://threems.page.link';
+  final String link = 'https://threems.page.link/kuri_Invite';
+
   late  TabController _tabControllerrs;
   double progressvalue=270.0  ;
   late  TabController _tabController;
@@ -222,9 +233,16 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
                                     ),
                                   ),
                                   // SizedBox(width: 30,),
-                                  Padding(
-                                    padding:  EdgeInsets.only(left: scrWidth*0.2),
-                                    child: SvgPicture.asset("assets/icons/shareicon.svg",),
+                                  InkWell(
+                                    onTap: () async {
+                                      await _createDynamicLink(false);
+                                      Share.share(
+                                          'Inviting you to join *${widget.charity.charityDetailes}* \n \n \n $_linkMessage');
+                                    },
+                                    child: Padding(
+                                      padding:  EdgeInsets.only(left: scrWidth*0.2),
+                                      child: SvgPicture.asset("assets/icons/shareicon.svg",),
+                                    ),
                                   ),
                                 ],
                               )
@@ -1010,4 +1028,44 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
       )
     );
   }
+
+  Future<void> _createDynamicLink(bool short) async {
+    setState(() {
+      _isCreatingLink = true;
+    });
+
+    final DynamicLinkParameters parameters = DynamicLinkParameters(
+      uriPrefix: 'https://threems.page.link/kuri_Invite',
+      longDynamicLink: Uri.parse(
+        'https://threems.page.link/chit_invite?chitId=${widget.charity.charityId}&referralId=${widget.charity.userId}',
+      ),
+      link: Uri.parse(dynamicLink),
+      androidParameters: const AndroidParameters(
+        packageName: 'com.firstlogicmetalab.threems',
+        minimumVersion: 0,
+      ),
+      iosParameters: const IOSParameters(
+        bundleId: 'io.flutter.plugins.firebase.dynamiclinksexample',
+        minimumVersion: '0',
+      ),
+    );
+
+    Uri url;
+    if (short) {
+      final ShortDynamicLink shortLink =
+      await dynamicLinks.buildShortLink(parameters);
+      url = shortLink.shortUrl;
+    } else {
+      url = await dynamicLinks.buildLink(parameters);
+    }
+
+    setState(() {
+      _linkMessage = url.toString();
+      _isCreatingLink = false;
+
+      print(_linkMessage);
+    });
+  }
+
+
 }
