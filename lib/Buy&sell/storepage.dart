@@ -38,7 +38,7 @@ class _StorePageState extends State<StorePage> {
           .collection('stores')
           .doc(widget.storeDetailsModel.storeId)
           .collection('products')
-           .where('available', isEqualTo: true)
+          .where('available', isEqualTo: true)
           .snapshots()
           .listen((event) {
         productsList = [];
@@ -972,6 +972,18 @@ class _ShopSingleProductState extends State<ShopSingleProduct> {
                               if (qty != 1) {
                                 --qty;
                                 setState(() {});
+                              } else {
+                                isCarted = false;
+                                final snackBar = SnackBar(
+                                  backgroundColor: Colors.white,
+                                  content: const Text(
+                                    ' item removed from cart',
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                );
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(snackBar);
+                                setState(() {});
                               }
                               // setState(() {
                               //   if(eachstore[index].counter <2)
@@ -986,27 +998,6 @@ class _ShopSingleProductState extends State<ShopSingleProduct> {
                                   widget.storeId, qty);
 
                               print(cartlist);
-                              final snackBar = SnackBar(
-                                backgroundColor: Colors.white,
-                                content: const Text(
-                                  ' item removed from cart',
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                                action: SnackBarAction(
-                                  textColor: Colors.blue,
-                                  label: 'Go To Cart',
-                                  onPressed: () {
-                                    Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                CheckOutPage()));
-                                    // Some code to undo the change.
-                                  },
-                                ),
-                              );
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(snackBar);
                             },
                             child: Container(
                               decoration: BoxDecoration(
@@ -1062,28 +1053,6 @@ class _ShopSingleProductState extends State<ShopSingleProduct> {
                               // ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
                               setState(() {});
-                              print(cartlist);
-                              final snackBar = SnackBar(
-                                backgroundColor: Colors.white,
-                                content: const Text(
-                                  ' item added to cart',
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                                action: SnackBarAction(
-                                  textColor: Colors.blue,
-                                  label: 'Go To Cart',
-                                  onPressed: () {
-                                    Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                CheckOutPage()));
-                                    // Some code to undo the change.
-                                  },
-                                ),
-                              );
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(snackBar);
                             },
                             child: Container(
                               decoration: BoxDecoration(
@@ -1117,31 +1086,16 @@ class _ShopSingleProductState extends State<ShopSingleProduct> {
                       addToCart(widget.product, widget.storeId);
                       isCarted = true;
                     } else {
-                      alertBoxOfCart(widget.product, widget.storeId);
+                      bool? pressed = await cartAlert();
+
+                      if (pressed == true) {
+                        cartlist = [];
+                        addToCart(widget.product, widget.storeId);
+                        isCarted = true;
+                      }
                     }
 
                     setState(() {});
-
-                    print(cartlist);
-                    final snackBar = SnackBar(
-                      backgroundColor: Colors.white,
-                      content: const Text(
-                        ' item added to cart',
-                        style: TextStyle(color: Colors.black),
-                      ),
-                      action: SnackBarAction(
-                        textColor: Colors.blue,
-                        label: 'Go To Cart',
-                        onPressed: () {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => CheckOutPage()));
-                          // Some code to undo the change.
-                        },
-                      ),
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   },
                   child: Container(
                     width: scrWidth * 0.31,
@@ -1323,96 +1277,105 @@ class _ShopSingleProductState extends State<ShopSingleProduct> {
       'quantity': products.quantity,
       'count': 1,
     });
-  }
 
-  void alertBoxOfCart(ProductModel products, String storeId) {
-    showDialog(
-      context: context,
-      builder: (context) => StatefulBuilder(
-        builder: (BuildContext context, setstate) {
-          return AlertDialog(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            title: Text('Confirm'),
-            titleTextStyle: TextStyle(
-                fontSize: FontSize10 * 3,
-                fontFamily: 'Urbanist',
-                fontWeight: FontWeight.w600,
-                color: Color(0xff827C7C)),
-            content: Container(
-              width: scrWidth * 0.99,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                      'Your cart contains products in another store , \n Do you wish to remove and add this product.'),
-                  SizedBox(
-                    height: scrWidth * 0.06,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: Container(
-                          width: scrWidth * 0.2,
-                          height: textFormFieldHeight45,
-                          decoration: BoxDecoration(
-                              color: Colors.white10,
-                              borderRadius: BorderRadius.circular(8)),
-                          child: Center(
-                            child: GestureDetector(
-                              child: Text(
-                                "Cancel",
-                                style: TextStyle(
-                                    fontSize: FontSize16,
-                                    fontFamily: 'Urbanist',
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.black),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          cartlist = [];
-                          addToCart(products, storeId);
-                          Navigator.pop(context);
-                          setState(() {});
-                        },
-                        child: Container(
-                          width: scrWidth * 0.3,
-                          height: textFormFieldHeight45,
-                          decoration: BoxDecoration(
-                              color: primarycolor,
-                              borderRadius: BorderRadius.circular(8)),
-                          child: Center(
-                            child: GestureDetector(
-                              child: Text(
-                                "Add",
-                                style: TextStyle(
-                                    fontSize: FontSize16,
-                                    fontFamily: 'Urbanist',
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.white),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          );
+    final snackBar = SnackBar(
+      backgroundColor: Colors.white,
+      content: const Text(
+        ' item added to cart',
+        style: TextStyle(color: Colors.black),
+      ),
+      action: SnackBarAction(
+        textColor: Colors.blue,
+        label: 'Go To Cart',
+        onPressed: () {
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => CheckOutPage()));
+          // Some code to undo the change.
         },
       ),
     );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
+
+  Future<bool?> cartAlert() => showDialog(
+        context: context,
+        builder: (context) => StatefulBuilder(
+          builder: (BuildContext context, setstate) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8)),
+              title: Text('Confirm'),
+              titleTextStyle: TextStyle(
+                  fontSize: FontSize10 * 3,
+                  fontFamily: 'Urbanist',
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xff827C7C)),
+              content: Container(
+                width: scrWidth * 0.99,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                        'Your cart contains products in another store , \n Do you wish to remove and add this product.'),
+                    SizedBox(
+                      height: scrWidth * 0.06,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        InkWell(
+                          onTap: () => Navigator.pop(context, false),
+                          child: Container(
+                            width: scrWidth * 0.2,
+                            height: textFormFieldHeight45,
+                            decoration: BoxDecoration(
+                                color: Colors.white10,
+                                borderRadius: BorderRadius.circular(8)),
+                            child: Center(
+                              child: GestureDetector(
+                                child: Text(
+                                  "Cancel",
+                                  style: TextStyle(
+                                      fontSize: FontSize16,
+                                      fontFamily: 'Urbanist',
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.black),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () => Navigator.pop(context, true),
+                          child: Container(
+                            width: scrWidth * 0.3,
+                            height: textFormFieldHeight45,
+                            decoration: BoxDecoration(
+                                color: primarycolor,
+                                borderRadius: BorderRadius.circular(8)),
+                            child: Center(
+                              child: GestureDetector(
+                                child: Text(
+                                  "Add",
+                                  style: TextStyle(
+                                      fontSize: FontSize16,
+                                      fontFamily: 'Urbanist',
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.white),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+      );
 }
 
 incrementCount(String productId, String storeId, int count) {
@@ -1428,7 +1391,11 @@ decrementCount(String productId, String storeId, int count) {
   for (int i = 0; i < cartlist.length; i++) {
     if (cartlist[i]['productId'] == productId &&
         cartlist[i]['storeId'] == storeId) {
-      cartlist[i]['count'] = count;
+      if (cartlist[i]['count'] > 1) {
+        cartlist[i]['count'] = count;
+      } else {
+        cartlist.removeAt(i);
+      }
     }
   }
 }
