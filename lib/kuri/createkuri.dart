@@ -25,28 +25,34 @@ class _CreateKuriPageState extends State<CreateKuriPage> {
 
   List<MultiSelect> multiselect = [
     MultiSelect(
-        image: "assets/icons/gpay.svg",
-        payname: "Google Pay",
-        isSelected: false),
+      image: "assets/icons/gpay.svg",
+      payname: "Google Pay",
+      type: 'svg',
+      isSelected: false,
+    ),
     MultiSelect(
-      image: "assets/images/whatsapp.svg",
+      image: "assets/images/whatsapp.png",
       payname: "Whatsapp Pay",
       isSelected: false,
+      type: 'png',
     ),
     MultiSelect(
       image: "assets/icons/paytmimage.svg",
       payname: "Paytm",
       isSelected: false,
+      type: 'svg',
     ),
     MultiSelect(
       image: "assets/images/phonepe.svg",
       payname: "Phonepe",
       isSelected: false,
+      type: 'svg',
     ),
     MultiSelect(
-      image: "assets/pay/amazon pe.svg",
+      image: "assets/images/amazon pe.svg",
       payname: "Amazon Pay",
       isSelected: false,
+      type: 'svg',
     ),
   ];
   List<MultiSelect> selectedPayments = [];
@@ -747,6 +753,7 @@ class _CreateKuriPageState extends State<CreateKuriPage> {
                                     multiselect[index].payname,
                                     multiselect[index].isSelected,
                                     index,
+                                    multiselect[index].type,
                                   );
                                 })),
                         Padding(
@@ -1496,6 +1503,7 @@ class _CreateKuriPageState extends State<CreateKuriPage> {
                                     multiselect[index].payname,
                                     multiselect[index].isSelected,
                                     index,
+                                    multiselect[index].type,
                                   );
                                 })),
                         Padding(
@@ -1867,14 +1875,15 @@ class _CreateKuriPageState extends State<CreateKuriPage> {
     );
   }
 
-  Widget PayItem(String image, String payname, bool isSelected, int index) {
+  Widget PayItem(
+      String image, String payname, bool isSelected, int index, String type) {
     return GestureDetector(
       onTap: () {
         setState(() {
           multiselect[index].isSelected = !multiselect[index].isSelected;
           if (multiselect[index].isSelected == true) {
-            selectedPayments.add(
-                MultiSelect(image: image, payname: payname, isSelected: true));
+            selectedPayments.add(MultiSelect(
+                image: image, payname: payname, isSelected: true, type: type));
             upiApps.add(multiselect[index].payname);
           } else if (multiselect[index].isSelected == false) {
             selectedPayments.removeWhere(
@@ -1905,7 +1914,9 @@ class _CreateKuriPageState extends State<CreateKuriPage> {
                         : Border.all(color: Colors.transparent)),
                 child: Padding(
                   padding: EdgeInsets.all(13.0),
-                  child: SvgPicture.asset(image),
+                  child: type == 'svg'
+                      ? SvgPicture.asset(image)
+                      : Image(image: AssetImage(image)),
                 ),
               ),
               SizedBox(

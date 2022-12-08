@@ -38,28 +38,34 @@ class _PaymentDetailsState extends State<PaymentDetails> {
 
   List<MultiSelect> multiselect = [
     MultiSelect(
-        image: "assets/pay/googlepaysvg.svg",
-        payname: "Google Pay",
-        isSelected: false),
+      image: "assets/icons/gpay.svg",
+      payname: "Google Pay",
+      type: 'svg',
+      isSelected: false,
+    ),
     MultiSelect(
-      image: "assets/pay/whatsappapysvg.svg",
+      image: "assets/images/whatsapp.png",
       payname: "Whatsapp Pay",
       isSelected: false,
+      type: 'png',
     ),
     MultiSelect(
-      image: "assets/pay/paytmpaysvg.svg",
+      image: "assets/icons/paytmimage.svg",
       payname: "Paytm",
       isSelected: false,
+      type: 'svg',
     ),
     MultiSelect(
-      image: "assets/pay/phonepesvg.svg",
+      image: "assets/images/phonepe.svg",
       payname: "Phonepe",
       isSelected: false,
+      type: 'svg',
     ),
     MultiSelect(
-      image: "assets/pay/amazonepaysvg.svg",
+      image: "assets/images/amazon pe.svg",
       payname: "Amazon Pay",
       isSelected: false,
+      type: 'svg',
     ),
   ];
   List<MultiSelect> selectedPayments = [];
@@ -106,6 +112,7 @@ class _PaymentDetailsState extends State<PaymentDetails> {
         selectedPayments.add(MultiSelect(
             image: multiselect[i].image,
             payname: multiselect[i].payname,
+            type: multiselect[i].type,
             isSelected: true));
         multiselect[i].isSelected = true;
         // upiApps.add(multiselect[index].payname);
@@ -295,6 +302,7 @@ class _PaymentDetailsState extends State<PaymentDetails> {
                           multiselect[index].payname,
                           multiselect[index].isSelected,
                           index,
+                          multiselect[index].type,
                         );
                       })),
               Padding(
@@ -712,14 +720,15 @@ class _PaymentDetailsState extends State<PaymentDetails> {
     );
   }
 
-  Widget PayItem(String image, String payname, bool isSelected, int index) {
+  Widget PayItem(
+      String image, String payname, bool isSelected, int index, String type) {
     return InkWell(
       onTap: () {
         setState(() {
           multiselect[index].isSelected = !multiselect[index].isSelected;
           if (multiselect[index].isSelected == true) {
-            selectedPayments.add(
-                MultiSelect(image: image, payname: payname, isSelected: true));
+            selectedPayments.add(MultiSelect(
+                image: image, payname: payname, isSelected: true, type: type));
             upiApps.add(multiselect[index].payname);
           } else if (multiselect[index].isSelected == false) {
             selectedPayments.removeWhere(
@@ -748,7 +757,9 @@ class _PaymentDetailsState extends State<PaymentDetails> {
                     border: isSelected == true
                         ? Border.all(color: primarycolor, width: 1.5)
                         : Border.all(color: Colors.transparent)),
-                child: SvgPicture.asset(multiselect[index].image),
+                child: type == 'svg'
+                    ? SvgPicture.asset(image)
+                    : Image(image: AssetImage(image)),
               ),
               SizedBox(
                 height: 5,

@@ -109,11 +109,13 @@ class _KuriViewPageState extends State<KuriViewPage> {
                     height: scrHeight * 0.065,
                     width: scrWidth * 0.15,
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(11),
-                        image: DecorationImage(
-                            image: NetworkImage(
-                                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0wRDAivyQVAx54eks-rILb0NY6HcuSKkPEw&usqp=CAU"),
-                            fit: BoxFit.fill)),
+                      borderRadius: BorderRadius.circular(11),
+                    ),
+                    child: widget.kuri.purpose == 'Marriage'
+                        ? SvgPicture.asset("assets/icons/marriageimage.svg")
+                        : widget.kuri.purpose == 'Hospital'
+                            ? SvgPicture.asset("assets/icons/hospitalimage.svg")
+                            : SvgPicture.asset("assets/icons/otherimage.svg"),
                   ),
                   SizedBox(
                     width: scrWidth * 0.024,
