@@ -35,7 +35,7 @@ class _VerifiedCharityWidgetState extends State<VerifiedCharityWidget> {
   );
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return verifiedcharity.isEmpty?Center(child: Text('No Charities Found')): Container(
       // height: 277,
       height: scrWidth * .68,
       width: scrWidth,

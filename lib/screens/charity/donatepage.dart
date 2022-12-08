@@ -287,46 +287,54 @@ class _DonatePageState extends State<DonatePage>with TickerProviderStateMixin {
                           // bottom: scrHeight*0.02,
                           right: scrWidth*0.05),
                       child:Container(
-                        width: scrWidth*0.04,
-                          height: scrHeight*0.03,
+                        width: scrWidth*0.06,
+                          height: scrHeight*0.05,
                           child: SvgPicture.asset("assets/icons/arrow.svg",)),
                     ),
                   ),
                   Padding(
-                    padding:  EdgeInsets.only(top: scrHeight*0.1,),
-                    child: Container(
-                      height: scrHeight*0.042,
-                      width: scrWidth*0.75,
-                      decoration: BoxDecoration(
-                          color: Color(0xffE9EEF3),
-
-                          borderRadius: BorderRadius.circular(17)
-                      ),
-                      child: TextFormField(
-                        decoration:  InputDecoration(
-                            prefixIcon: Padding(
-                              padding: EdgeInsets.only(
-                                  top: scrHeight*0.01,
-                                  left: scrWidth*0.04,
-                                  bottom: scrHeight*0.01,
-                                  right: scrWidth*0.05),
-                              child:SvgPicture.asset("assets/icons/Vector (4).svg",),
-                            ),
-                            border: InputBorder.none,
-                            hintText: "Search Campaigns",
-                            hintStyle: TextStyle(
-                              fontFamily: 'Urbanist',fontWeight: FontWeight.w500,
-                              fontSize: scrWidth*0.042,
-                              color: Color(0xff8391A1),
-                            )
-                        ),
-                        cursorColor: Colors.black,
-                        cursorHeight: 20,
-                        cursorWidth: 0.5,
-
-                      ),
-                    ),
-                  )
+                    padding: const EdgeInsets.only(top: 80),
+                    child: Text("Donate Now",style: TextStyle(
+                        fontSize: scrWidth*0.045,
+                        color: Colors.black,
+                        fontFamily: 'Urbanist',
+                        fontWeight: FontWeight.w700),),
+                  ),
+                  // Padding(
+                  //   padding:  EdgeInsets.only(top: scrHeight*0.1,),
+                  //   child: Container(
+                  //     height: scrHeight*0.042,
+                  //     width: scrWidth*0.75,
+                  //     decoration: BoxDecoration(
+                  //         color: Color(0xffE9EEF3),
+                  //
+                  //         borderRadius: BorderRadius.circular(17)
+                  //     ),
+                  //     child: TextFormField(
+                  //       decoration:  InputDecoration(
+                  //           prefixIcon: Padding(
+                  //             padding: EdgeInsets.only(
+                  //                 top: scrHeight*0.01,
+                  //                 left: scrWidth*0.04,
+                  //                 bottom: scrHeight*0.01,
+                  //                 right: scrWidth*0.05),
+                  //             child:SvgPicture.asset("assets/icons/Vector (4).svg",),
+                  //           ),
+                  //           border: InputBorder.none,
+                  //           hintText: "Search Campaigns",
+                  //           hintStyle: TextStyle(
+                  //             fontFamily: 'Urbanist',fontWeight: FontWeight.w500,
+                  //             fontSize: scrWidth*0.042,
+                  //             color: Color(0xff8391A1),
+                  //           )
+                  //       ),
+                  //       cursorColor: Colors.black,
+                  //       cursorHeight: 20,
+                  //       cursorWidth: 0.5,
+                  //
+                  //     ),
+                  //   ),
+                  // )
                 ],
               ),
             ),

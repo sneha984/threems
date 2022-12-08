@@ -30,7 +30,7 @@ class CharityModel {
   String? otherDocument;
   String? videoLink;
   String? docNme;
-   String? qrImage;
+  String? qrImage;
   List<Payments>? payments;
   CharityModel(
       {this.accountHolderName,

@@ -485,7 +485,7 @@ class _PaymentPageState extends State<PaymentPage> {
                 borderRadius: BorderRadius.circular(20),
                   image: DecorationImage(
                       image: NetworkImage(
-                          widget.charitymodel.qrImage??''),fit: BoxFit.fill)
+                          widget.charitymodel.qrImage!),fit: BoxFit.fill)
               ),
             ),
          SizedBox(height: 20,),

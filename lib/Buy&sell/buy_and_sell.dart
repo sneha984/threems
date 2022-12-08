@@ -634,8 +634,8 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                     setState(() {});
                                   },
                                   child: Padding(
-                                    padding: EdgeInsets.only(
-                                        right: scrWidth * 0.017),
+                                    padding:
+                                        EdgeInsets.only(right: scrWidth * 0.017),
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -969,8 +969,7 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                       width: scrWidth * 0.77,
                                       percent: 0.5,
                                       alignment: MainAxisAlignment.start,
-                                      barRadius:
-                                          Radius.circular(scrWidth * 0.2),
+                                      barRadius: Radius.circular(scrWidth * 0.2),
                                       progressColor: primarycolor,
                                       backgroundColor: Color(0xffD9D9D9),
                                     ),
@@ -1168,13 +1167,13 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                     ),
                                   ),
                                   SizedBox(
-                                    height: scrHeight * 0.02,
+                                    height: scrHeight * 0.005,
                                   ),
                                   Padding(
                                     padding:
                                         EdgeInsets.only(left: 10, right: 10),
                                     child: Container(
-                                      height: scrHeight * 0.32,
+                                      height: scrHeight * 0.4,
                                       width: scrWidth * 0.8,
                                       decoration: BoxDecoration(
                                           color: Color(0xffF3F3F3),
@@ -1231,7 +1230,7 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                           horizontalStepperHeight: 200,
                                           stepperDirection: Axis.vertical,
                                           inActiveBarColor: Colors.grey,
-                                          activeIndex: 1,
+                                          activeIndex: 2,
                                           barThickness: 2,
                                           activeBarColor: primarycolor,
                                         ),
@@ -1341,8 +1340,7 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                                   Text(
                                                     "Orders",
                                                     style: TextStyle(
-                                                        fontSize:
-                                                            scrWidth * 0.04,
+                                                        fontSize: scrWidth * 0.04,
                                                         color: Colors.white,
                                                         fontFamily: 'Urbanist',
                                                         fontWeight:
@@ -1354,8 +1352,7 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                                   Row(
                                                     children: [
                                                       Text(
-                                                        orders.length
-                                                            .toString(),
+                                                        orders.length.toString(),
                                                         style: TextStyle(
                                                             fontSize:
                                                                 scrWidth * 0.07,
@@ -1363,8 +1360,7 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                                             fontFamily:
                                                                 'Urbanist',
                                                             fontWeight:
-                                                                FontWeight
-                                                                    .w700),
+                                                                FontWeight.w700),
                                                       ),
                                                       SizedBox(
                                                         width: scrWidth * 0.18,
@@ -1410,8 +1406,7 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                                           fontSize:
                                                               scrWidth * 0.04,
                                                           color: Colors.white,
-                                                          fontFamily:
-                                                              'Urbanist',
+                                                          fontFamily: 'Urbanist',
                                                           fontWeight:
                                                               FontWeight.w600),
                                                     ),
@@ -1430,8 +1425,8 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                                                 fontSize:
                                                                     scrWidth *
                                                                         0.05,
-                                                                color: Colors
-                                                                    .white,
+                                                                color:
+                                                                    Colors.white,
                                                                 fontFamily:
                                                                     'Urbanist',
                                                                 fontWeight:
@@ -1537,9 +1532,8 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                           width: scrWidth * 0.4,
                                           decoration: BoxDecoration(
                                               color: Color(0xffF3F3F3),
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      scrWidth * 0.06)),
+                                              borderRadius: BorderRadius.circular(
+                                                  scrWidth * 0.06)),
                                           child: Padding(
                                             padding: EdgeInsets.only(
                                                 left: scrWidth * 0.05),
@@ -1555,8 +1549,7 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                                 Text(
                                                   "Products",
                                                   style: TextStyle(
-                                                      fontSize:
-                                                          scrWidth * 0.035,
+                                                      fontSize: scrWidth * 0.035,
                                                       fontFamily: 'Urbanist',
                                                       fontWeight:
                                                           FontWeight.w600),

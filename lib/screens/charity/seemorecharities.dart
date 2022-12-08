@@ -103,25 +103,25 @@ class _SeeMoreCharitiesState extends State<SeeMoreCharities>
                             SizedBox(
                               height: scrHeight * 0.02,
                             ),
-                            Padding(
-                              padding:  EdgeInsets.only(top: 5,bottom: 6),
-                              child: LinearPercentIndicator(
-                                //leaner progress bar
-                                animation: true,
-                                animationDuration: 1000,
-                                lineHeight: 3,
-                                width: 189,
-                                percent: charity.totalReceived??0/charity.valueAmount!,
-                                alignment: MainAxisAlignment.start,
-                                barRadius: Radius.circular(1.5),
-
-                                progressColor: Color(0xff343434),
-                                backgroundColor: Color(0xffE9F6FF),
-                              ),
-                            ),
-                            SizedBox(
-                              height: scrHeight * 0.02,
-                            ),
+                            // Padding(
+                            //   padding:  EdgeInsets.only(top: 5,bottom: 6),
+                            //   child: LinearPercentIndicator(
+                            //     //leaner progress bar
+                            //     animation: true,
+                            //     animationDuration: 1000,
+                            //     lineHeight: 3,
+                            //     width: 189,
+                            //     percent: charity.totalReceived??0/charity.valueAmount!,
+                            //     alignment: MainAxisAlignment.start,
+                            //     barRadius: Radius.circular(1.5),
+                            //
+                            //     progressColor: Color(0xff343434),
+                            //     backgroundColor: Color(0xffE9F6FF),
+                            //   ),
+                            // ),
+                            // SizedBox(
+                            //   height: scrHeight * 0.02,
+                            // ),
                             Text(
                               currencyConvert
                                   .format(charity.valueAmount??0)

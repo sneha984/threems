@@ -31,16 +31,18 @@ class _CreateCharity3State extends State<CreateCharity3> {
   final FocusNode accountHolderNameFocus = FocusNode();
   final FocusNode bankNameFocus = FocusNode();
   final FocusNode ifscCodeFocus = FocusNode();
-
   final  TextEditingController accountnumcontroller =TextEditingController();
   final  TextEditingController confirmaccountcontroller =TextEditingController();
   final  TextEditingController accountholdernamecontroller =TextEditingController();
   final  TextEditingController banknamecontroller =TextEditingController();
   final  TextEditingController ifsccodecontroller =TextEditingController();
   final  TextEditingController youtubelinkcontroller=TextEditingController();
-  String? picUrl;
+  String? imgUrl;
   var imgFile;
   var uploadTask;
+  var fileUrl;
+  var docUrl;
+  var uploadTasks;
   Future uploadImageToFirebase(BuildContext context) async {
     Reference firebaseStorageRef =
     FirebaseStorage.instance.ref().child('deposits/${imgFile.path}');
@@ -52,13 +54,11 @@ class _CreateCharity3State extends State<CreateCharity3> {
     //   imageList.add(value);
     // }
     setState(() {
-      picUrl = value;
-      print("=====================================================================");
-      print(picUrl);
+      imgUrl = value;
 
     });
   }
-  _pickImag() async {
+  _pickImage() async {
     final imageFile = await ImagePicker.platform.pickImage(
         source: ImageSource.gallery);
     setState(() {
@@ -66,6 +66,34 @@ class _CreateCharity3State extends State<CreateCharity3> {
       uploadImageToFirebase(context);
     });
   }
+  // String? picUrl;
+  // var imgFile;
+  // var uploadTask;
+  // Future uploadImageToFirebase(BuildContext context) async {
+  //   Reference firebaseStorageRef =
+  //   FirebaseStorage.instance.ref().child('deposits/${imgFile.path}');
+  //   UploadTask uploadTask = firebaseStorageRef.putFile(imgFile);
+  //   TaskSnapshot taskSnapshot = (await uploadTask);
+  //   String value = await taskSnapshot.ref.getDownloadURL();
+  //
+  //   // if(value!=null){
+  //   //   imageList.add(value);
+  //   // }
+  //   setState(() {
+  //     picUrl = value;
+  //     print("=====================================================================");
+  //     print(picUrl);
+  //
+  //   });
+  // }
+  // _pickImag() async {
+  //   final imageFile = await ImagePicker.platform.pickImage(
+  //       source: ImageSource.gallery);
+  //   setState(() {
+  //     imgFile = File(imageFile!.path);
+  //     uploadImageToFirebase(context);
+  //   });
+  // }
 
   @override
   void initState() {
@@ -507,7 +535,7 @@ class _CreateCharity3State extends State<CreateCharity3> {
 
                     InkWell(
                       onTap: (){
-                        _pickImag();
+                        _pickImage();
                       },
                       child: Container(
                         height:scrHeight*0.25,
@@ -594,7 +622,7 @@ class _CreateCharity3State extends State<CreateCharity3> {
                           "accountHolderName": accountholdernamecontroller.text,
                           "bankName": banknamecontroller.text,
                           "ifscCode": ifsccodecontroller.text,
-                          "qrImage":picUrl,
+                          "qrImage":imgUrl,
                         }
 
 
