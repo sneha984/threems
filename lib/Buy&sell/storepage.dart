@@ -48,6 +48,7 @@ class _StorePageState extends State<StorePage> {
         if (mounted) {
           setState(() {});
         }
+
       });
     } else if (widget.category != '') {
       FirebaseFirestore.instance
