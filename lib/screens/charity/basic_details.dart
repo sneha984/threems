@@ -93,7 +93,6 @@ class _BasicDetailsState extends State<BasicDetails> {
   getReasons() async {
     FirebaseFirestore.instance.collection('dropdown').snapshots().listen((event) {
       dropdownItemList = [];
-
       for( DocumentSnapshot <Map<String ,dynamic>> doc in event.docs){
         dropdownItemList.add(doc);
       }
