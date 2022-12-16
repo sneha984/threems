@@ -32,10 +32,9 @@ class _ExpenseReportPageState extends State<ExpenseReportPage> {
   var icons;
   String
   catName='';
-
-  List expenseList=[];
   List categoryNameList=[];
   List singleCategoryList=[];
+  List expenseList=[];
   String? selectedValue;
   String? selectedCategory;
   List expenseCategory=[];
@@ -73,30 +72,30 @@ class _ExpenseReportPageState extends State<ExpenseReportPage> {
       }
     });
   }
- List monthlyReports=[];
- List months=[];
+ List monthlyExpenseReports=[];
+ List monthExpenseList=[];
   getYearMonthExpenses(){
     FirebaseFirestore.instance.collection('users').doc(currentuserid).collection('expense').
       snapshots().listen((event) {
       if(event.docs.isNotEmpty) {
-        months=[];
-        monthlyReports=[];
+        monthExpenseList=[];
+        monthlyExpenseReports=[];
         for (DocumentSnapshot data in event.docs) {
-          if(months.contains(data['date'].toDate().toString().substring(0,7))){
-           Map<String,dynamic> item=monthlyReports[months.indexOf(data['date'].toDate().toString().substring(0,7))];
+          if(monthExpenseList.contains(data['date'].toDate().toString().substring(0,7))){
+           Map<String,dynamic> item=monthlyExpenseReports[monthExpenseList.indexOf(data['date'].toDate().toString().substring(0,7))];
            double amount=item['amount'];
            amount+=data['amount'];
            item['amount']=amount;
             // expenseList.removeAt(expenseCategory.indexOf(data['date'].toDate().toString().substring(5,7)));
             // expenseList.insert(expenseCategory.indexOf(data['date'].toDate().toString().substring(5,7)), item);
-            monthlyReports.removeAt(months.indexOf(data['date'].toDate().toString().substring(0,7)));
-            monthlyReports.insert(months.indexOf(data['date'].toDate().toString().substring(0,7)), item);
+            monthlyExpenseReports.removeAt(monthExpenseList.indexOf(data['date'].toDate().toString().substring(0,7)));
+            monthlyExpenseReports.insert(monthExpenseList.indexOf(data['date'].toDate().toString().substring(0,7)), item);
 
           }else{
             // expenseCategory.add(data['date'].toDate().toString().substring(5,7));
             // expenseList.add(data);
-            months.add(data['date'].toDate().toString().substring(0,7));
-            monthlyReports.add({
+            monthExpenseList.add(data['date'].toDate().toString().substring(0,7));
+            monthlyExpenseReports.add({
               'date':data['date'],
               'amount':data['amount']
             });
@@ -107,7 +106,7 @@ class _ExpenseReportPageState extends State<ExpenseReportPage> {
 
       }
       print('1234567890-');
-      print(monthlyReports);
+      print(monthlyExpenseReports);
 
       if(mounted){
         setState(() {
@@ -615,7 +614,7 @@ class _ExpenseReportPageState extends State<ExpenseReportPage> {
                         padding:  EdgeInsets.only(top: scrWidth*0.2),
                         child: Container(
                           child: ListView.builder(
-                    itemCount: monthlyReports.length,
+                    itemCount: monthlyExpenseReports.length,
                     shrinkWrap: true,
                     itemBuilder: (context,index){
                           return Column(
@@ -636,14 +635,14 @@ class _ExpenseReportPageState extends State<ExpenseReportPage> {
                                         crossAxisAlignment: CrossAxisAlignment.center,
                                         children: [
 
-                                          Text(DateFormat('MMM,yyyy').format(monthlyReports[index]['date'].toDate()),
+                                          Text(DateFormat('MMM,yyyy').format(monthlyExpenseReports[index]['date'].toDate()),
                                            style: TextStyle(
                                             fontSize: 18,
                                             fontFamily: 'Urbanist',
                                             color: Colors.black
                                         ),),
                                           SizedBox(width: scrWidth*0.02,),
-                                          Text(monthlyReports[index]['amount'].toString(),
+                                          Text(monthlyExpenseReports[index]['amount'].toString(),
                                             style: TextStyle(
                                               fontSize: 18,
                                               fontFamily: 'Urbanist',

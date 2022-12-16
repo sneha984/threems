@@ -605,9 +605,10 @@ class _AddIncomePageState extends State<AddIncomePage> {
                                   FirebaseFirestore.instance.collection('users').doc(currentuserid).collection('incomes').add({
                                     'amount':double.tryParse(amount!.text.toString()),
                                     "categoryIcon":serializeIcon(xyz),
-                                    "IncomeCategoryName":category.toString(),
+                                    "categoryName":category.toString(),
                                     'date':selectedDate,
                                     'merchant':merchantName.toString()??"",
+                                    'income':true,
 
                                   });
                                   Navigator.pop(context);

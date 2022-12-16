@@ -30,30 +30,29 @@ class _IncomeReportByDateState extends State<IncomeReportByDate> {
   String? selectedValue;
   String? selectedCategory;
   DateTime? toDate;
-  double totalExpense=0.00;
-  double amount=0.00;
-  List dateReports=[];
-  List dateExpense=[];
+  double totalIncome=0.00;
+  List dateIncomeReports=[];
+  List dateIncome=[];
   getCategoryWiseIncomeByDate(){
     FirebaseFirestore.instance.collection('users').doc(currentuserid).collection('incomes').
     orderBy('date',descending: true).  where('date',isGreaterThanOrEqualTo:fromDate).
     where('date',isLessThanOrEqualTo:toDate).snapshots().listen((event) {
       if(event.docs.isNotEmpty) {
-        totalExpense=0.00;
-        dateReports=[];
-        dateExpense=[];
+        totalIncome=0.00;
+        dateIncomeReports=[];
+        dateIncome=[];
         for (DocumentSnapshot data in event.docs) {
-          totalExpense+=double.tryParse(data['amount'].toString())??0;
-          if(dateExpense.contains(data['IncomeCategoryName'])){
-            Map item=dateReports[dateExpense.indexOf(data['IncomeCategoryName'])].data();
+          totalIncome+=double.tryParse(data['amount'].toString())??0;
+          if(dateIncome.contains(data['categoryName'])){
+            Map item=dateIncomeReports[dateIncome.indexOf(data['categoryName'])].data();
             double amount=item['amount'];
             amount+=data['amount'];
             item['amount']=amount;
-            dateReports.removeAt(dateExpense.indexOf(data['IncomeCategoryName']));
-            dateReports.insert(dateExpense.indexOf(data['IncomeCategoryName']), item);
+            dateIncomeReports.removeAt(dateIncome.indexOf(data['categoryName']));
+            dateIncomeReports.insert(dateIncome.indexOf(data['categoryName']), item);
           }else{
-            dateExpense.add(data['IncomeCategoryName']);
-            dateReports.add(data);
+            dateIncome.add(data['categoryName']);
+            dateIncomeReports.add(data);
           }
 
 
@@ -67,7 +66,7 @@ class _IncomeReportByDateState extends State<IncomeReportByDate> {
       }
     });
   }
-  List monthlyReports=[];
+  List monthlyIncomeReports=[];
   List months=[];
   getMonthWiseIncomesByDate(){
     FirebaseFirestore.instance.collection('users').doc(currentuserid).collection('incomes').
@@ -76,23 +75,23 @@ class _IncomeReportByDateState extends State<IncomeReportByDate> {
     snapshots().listen((event) {
       if(event.docs.isNotEmpty) {
         months=[];
-        monthlyReports=[];
+        monthlyIncomeReports=[];
         for (DocumentSnapshot data in event.docs) {
           if(months.contains(data['date'].toDate().toString().substring(0,7))){
-            Map<String,dynamic> item=monthlyReports[months.indexOf(data['date'].toDate().toString().substring(0,7))];
+            Map<String,dynamic> item=monthlyIncomeReports[months.indexOf(data['date'].toDate().toString().substring(0,7))];
             double amount=item['amount'];
             amount+=data['amount'];
             item['amount']=amount;
             // expenseList.removeAt(expenseCategory.indexOf(data['date'].toDate().toString().substring(5,7)));
             // expenseList.insert(expenseCategory.indexOf(data['date'].toDate().toString().substring(5,7)), item);
-            monthlyReports.removeAt(months.indexOf(data['date'].toDate().toString().substring(0,7)));
-            monthlyReports.insert(months.indexOf(data['date'].toDate().toString().substring(0,7)), item);
+            monthlyIncomeReports.removeAt(months.indexOf(data['date'].toDate().toString().substring(0,7)));
+            monthlyIncomeReports.insert(months.indexOf(data['date'].toDate().toString().substring(0,7)), item);
 
           }else{
             // expenseCategory.add(data['date'].toDate().toString().substring(5,7));
             // expenseList.add(data);
             months.add(data['date'].toDate().toString().substring(0,7));
-            monthlyReports.add({
+            monthlyIncomeReports.add({
               'date':data['date'],
               'amount':data['amount']
             });
@@ -103,7 +102,7 @@ class _IncomeReportByDateState extends State<IncomeReportByDate> {
 
       }
       print('1234567890-');
-      print(monthlyReports);
+      print(monthlyIncomeReports);
 
       if(mounted){
         setState(() {
@@ -398,7 +397,7 @@ class _IncomeReportByDateState extends State<IncomeReportByDate> {
                 Container(
                   height: scrWidth*1.5,
                   child:selectedCategory==categryItems[0]?
-                  dateReports.length==0?Container(
+                  dateIncomeReports.length==0?Container(
                     child:Center(
                       child: Text(
                         "No expenses under this Category",
@@ -411,13 +410,13 @@ class _IncomeReportByDateState extends State<IncomeReportByDate> {
                     ),
                   ):
                   ListView.builder(
-                      itemCount: dateReports!.length,
+                      itemCount: dateIncomeReports!.length,
                       shrinkWrap: true,
                       padding: EdgeInsets.only(top: scrWidth*0.2),
                       scrollDirection: Axis.vertical,
                       physics: BouncingScrollPhysics(),
                       itemBuilder: (context,index) {
-                        icons=deserializeIcon(dateReports![index]['categoryIcon']);
+                        icons=deserializeIcon(dateIncomeReports![index]['categoryIcon']);
                         _icon = Icon(icons,size: 30,color: Colors.white,);
                         return Column(
                           children: [
@@ -447,7 +446,7 @@ class _IncomeReportByDateState extends State<IncomeReportByDate> {
                                         // ),
                                         SizedBox(width: scrWidth*0.02,),
                                         Center(
-                                          child: Text(dateReports[index]['IncomeCategoryName'].toString(),style: TextStyle(
+                                          child: Text(dateIncomeReports[index]['categoryName'].toString(),style: TextStyle(
                                               fontSize: 16,
                                               fontFamily: 'Urbanist',
                                               color: Colors.black,
@@ -467,7 +466,7 @@ class _IncomeReportByDateState extends State<IncomeReportByDate> {
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
-                                        Text('₹ '+dateReports[index]['amount'].toString(),style: TextStyle(
+                                        Text('₹ '+dateIncomeReports[index]['amount'].toString(),style: TextStyle(
                                             fontSize: 17,
                                             fontFamily: 'Urbanist',
                                             color: Colors.black,
@@ -574,7 +573,7 @@ class _IncomeReportByDateState extends State<IncomeReportByDate> {
                     padding:  EdgeInsets.only(top: scrWidth*0.2),
                     child: Container(
                       child: ListView.builder(
-                        itemCount: monthlyReports.length,
+                        itemCount: monthlyIncomeReports.length,
                         shrinkWrap: true,
                         itemBuilder: (context,index){
                           return Column(
@@ -595,14 +594,14 @@ class _IncomeReportByDateState extends State<IncomeReportByDate> {
                                         crossAxisAlignment: CrossAxisAlignment.center,
                                         children: [
 
-                                          Text(DateFormat('MMM,yyyy').format(monthlyReports[index]['date'].toDate()),
+                                          Text(DateFormat('MMM,yyyy').format(monthlyIncomeReports[index]['date'].toDate()),
                                             style: TextStyle(
                                                 fontSize: 18,
                                                 fontFamily: 'Urbanist',
                                                 color: Colors.black
                                             ),),
                                           SizedBox(width: scrWidth*0.02,),
-                                          Text(monthlyReports[index]['amount'].toString(),
+                                          Text(monthlyIncomeReports[index]['amount'].toString(),
                                             style: TextStyle(
                                                 fontSize: 18,
                                                 fontFamily: 'Urbanist',
@@ -634,7 +633,7 @@ class _IncomeReportByDateState extends State<IncomeReportByDate> {
                       ),
                     ),
                   ):
-                  dateReports.isEmpty?Container(
+                  dateIncomeReports.isEmpty?Container(
                     child:Center(
                       child: Text(
                         "No expenses",
@@ -647,13 +646,13 @@ class _IncomeReportByDateState extends State<IncomeReportByDate> {
                     ),
                   ):
                   ListView.builder(
-                      itemCount: dateReports!.length,
+                      itemCount: dateIncomeReports!.length,
                       shrinkWrap: true,
                       padding: EdgeInsets.only(top: scrWidth*0.2),
                       scrollDirection: Axis.vertical,
                       physics: BouncingScrollPhysics(),
                       itemBuilder: (context,index) {
-                        icons=deserializeIcon(dateReports![index]['categoryIcon']);
+                        icons=deserializeIcon(dateIncomeReports![index]['categoryIcon']);
                         _icon = Icon(icons,size: 30,color: Colors.white,);
                         return Column(
                           children: [
@@ -683,7 +682,7 @@ class _IncomeReportByDateState extends State<IncomeReportByDate> {
                                         // ),
                                         SizedBox(width: scrWidth*0.02,),
                                         Center(
-                                          child: Text(dateReports[index]['IncomeCategoryName'].toString(),style: TextStyle(
+                                          child: Text(dateIncomeReports[index]['categoryName'].toString(),style: TextStyle(
                                               fontSize: 16,
                                               fontFamily: 'Urbanist',
                                               color: Colors.black,
@@ -703,7 +702,7 @@ class _IncomeReportByDateState extends State<IncomeReportByDate> {
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
-                                        Text('₹ '+dateReports[index]['amount'].toString(),style: TextStyle(
+                                        Text('₹ '+dateIncomeReports[index]['amount'].toString(),style: TextStyle(
                                             fontSize: 17,
                                             fontFamily: 'Urbanist',
                                             color: Colors.black,
@@ -765,7 +764,7 @@ class _IncomeReportByDateState extends State<IncomeReportByDate> {
                       ),
                       SizedBox(height: 12,),
                       Text(
-                        " ₹"+totalExpense.toString(),
+                        " ₹"+totalIncome.toString(),
                         style: TextStyle(
                             fontSize: scrWidth*0.055,
                             color: Colors.black,

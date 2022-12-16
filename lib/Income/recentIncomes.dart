@@ -116,7 +116,7 @@ class _RecentIncomePageState extends State<RecentIncomePage> {
 
                                     ),
                                     child: Center(
-                                      child: Text(incomeList[index]['IncomeCategoryName'].toString(),style: TextStyle(
+                                      child: Text(incomeList[index]['categoryName'].toString(),style: TextStyle(
                                           fontSize: 10,
                                           fontFamily: 'Urbanist',
                                           color: Colors.white

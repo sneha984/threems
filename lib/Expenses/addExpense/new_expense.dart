@@ -613,6 +613,7 @@ class _NewExpensePageState extends State<NewExpensePage> {
                                     "categoryIcon":serializeIcon(xyz),
                                     "categoryName":category.toString(),
                                     'date':selectedDate,
+                                    'income':false,
                                     'merchant':merchantName.toString(),
 
                                   });
