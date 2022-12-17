@@ -773,7 +773,18 @@ class _IncomeExpenseByDatePageState extends State<IncomeExpenseByDatePage> {
                   //     }
                   //
                   // )
-                      :selectedCategory==categryItems[1]?Padding(
+                      :selectedCategory==categryItems[1]?ExpenseIncomeList.length==0?Container(
+                    child:Center(
+                      child: Text(
+                        "No List found",
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontFamily: 'Urbanist',
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black),
+                      ),
+                    ),
+                  ):Padding(
                     padding:  EdgeInsets.only(top: scrWidth*0.2),
                     child: Column(
                       children: [

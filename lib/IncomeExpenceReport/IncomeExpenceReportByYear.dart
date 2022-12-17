@@ -1421,7 +1421,21 @@ sortList(){
                   //     }
                   //
                   // )
-                      :selectedCategory==categryItems[1]?Padding(
+                      :selectedCategory==categryItems[1]?IncomeExpenseMonthList.length==0?
+                  Container(
+                    child: Center(
+                      child: Text(
+                        "No Report found",
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontFamily: 'Urbanist',
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black),
+                      ),
+                    ),
+
+                  ):
+                  Padding(
                     padding:  EdgeInsets.only(top: scrWidth*0.2,),
                         child: Column(
                           children: [
