@@ -400,7 +400,7 @@ class _IncomeReportByDateState extends State<IncomeReportByDate> {
                   dateIncomeReports.length==0?Container(
                     child:Center(
                       child: Text(
-                        "No expenses under this Category",
+                        "No Reports found",
                         style: TextStyle(
                             fontSize: 15,
                             fontFamily: 'Urbanist',

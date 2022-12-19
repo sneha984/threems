@@ -45,6 +45,7 @@ class _AddIncomePageState extends State<AddIncomePage> {
   // }
   TextEditingController amount = TextEditingController();
   TextEditingController merchant = TextEditingController();
+  TextEditingController description = TextEditingController();
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? datePicked = await showDatePickerCustom(
         cancelText: 'Cancel',
@@ -577,6 +578,60 @@ class _AddIncomePageState extends State<AddIncomePage> {
                             ),
                           ),
                         ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 22.0,right: 18,top: 10),
+                          child: Container(
+                            width: scrWidth*0.8,
+                            height: scrWidth*0.12,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                border: Border.all(color: primarycolor)
+                            ),
+                            child: TextFormField(
+                              controller:  description,
+                              cursorColor: Colors.black,
+                              style: TextStyle(
+                                color: primarycolor,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 15,
+                                fontFamily: 'urbanist',
+                              ),
+                              keyboardType: TextInputType.text,
+                              decoration:  InputDecoration(
+                                hintText: 'Description',
+                                hintStyle: TextStyle(
+                                  color: textFormUnFocusColor,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 15,
+                                  fontFamily: 'Urbanist',
+                                ),
+                                fillColor: textFormFieldFillColor,
+                                filled: true,
+                                disabledBorder: InputBorder.none,
+                                enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color:primarycolor, width: 1.0),
+                                    borderRadius: BorderRadius.circular(15)
+                                ),
+                                errorBorder: InputBorder.none,
+                                border: InputBorder.none,
+
+                                focusedBorder: UnderlineInputBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                  borderSide: BorderSide(
+                                    color: primarycolor,
+                                    width: 2,
+                                  ),
+                                ),
+
+                                //
+                                // border: OutlineInputBorder(),
+                                // focusedBorder: OutlineInputBorder(
+                                //     borderSide: BorderSide(color: Color(0xff034a82),width: 2)
+                                // ),
+                              ),
+                            ),
+                          ),
+                        ),
 
                       ],
                     ),
@@ -608,6 +663,7 @@ class _AddIncomePageState extends State<AddIncomePage> {
                                     "categoryName":category.toString(),
                                     'date':selectedDate,
                                     'merchant':merchantName.toString()??"",
+                                    'description':description.toString()??"",
                                     'income':true,
 
                                   });
@@ -617,6 +673,7 @@ class _AddIncomePageState extends State<AddIncomePage> {
 
                                   Navigator.push(context, MaterialPageRoute(builder: (context)=>IncomeSuccessPage()));
                                   amount?.clear();
+                                  description?.clear();
                                   category=='';
                                   selectedDate=null;
                                   xyz='';

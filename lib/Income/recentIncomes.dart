@@ -131,6 +131,20 @@ class _RecentIncomePageState extends State<RecentIncomePage> {
 
                                 ],
                               ),
+                              Padding(
+                                padding:  EdgeInsets.only(top: scrWidth*0.05),
+                                child: Container(
+                                  height:scrWidth*0.5,
+                                  width:scrWidth*0.25,
+                                  color:Colors.grey,
+                                  child: Text(incomeList[index]['description'].toString(),style: TextStyle(
+                                      fontSize: 10,
+                                      fontFamily: 'Urbanist',
+                                      color:Colors.black,
+                                      fontWeight: FontWeight.w700
+                                  ),),
+                                ),
+                              ),
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -140,7 +154,8 @@ class _RecentIncomePageState extends State<RecentIncomePage> {
                                       fontFamily: 'Urbanist',
                                       color:primarycolor,
                                       fontWeight: FontWeight.w700
-                                  ),),
+                                  ),
+                                  ),
 
                                 ],
                               ),

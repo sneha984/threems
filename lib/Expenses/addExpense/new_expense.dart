@@ -35,20 +35,39 @@ class _NewExpensePageState extends State<NewExpensePage> {
   var xyz;
   Icon? selectedIcons;
   var selectedDate;
-  // getIcon() async {
-  //   DocumentSnapshot doc =await FirebaseFirestore.instance
-  //       .collection('expenses')
-  //       .doc('cn3myFOpRZrE8NLKC8fg')
-  //       .get();
-  //   icons=deserializeIcon(doc['serviceCity']);
-  //   _icon = Icon(icons);
+  // getdd(){
+  //   FirebaseFirestore.instance.collection('users').snapshots().listen((event) {
+  //     for(DocumentSnapshot doc in event.docs){
+  //       FirebaseFirestore.instance.collection('users').
+  //       doc(doc.id).collection('expense').snapshots().listen((event) {
+  //         for(DocumentSnapshot abc in event.docs){
+  //           FirebaseFirestore.instance.collection('users').
+  //           doc(doc.id).collection('expense').doc(abc.id).update({
+  //             'description':''
+  //           });
   //
-  //   setState(() {
+  //         }
+  //       });
+  //
+  //     }
   //
   //   });
   // }
+  getIcon() async {
+    DocumentSnapshot doc =await FirebaseFirestore.instance
+        .collection('expenses')
+        .doc('cn3myFOpRZrE8NLKC8fg')
+        .get();
+    icons=deserializeIcon(doc['serviceCity']);
+    _icon = Icon(icons);
+
+    setState(() {
+
+    });
+  }
   TextEditingController amount = TextEditingController();
   TextEditingController merchant = TextEditingController();
+  TextEditingController description = TextEditingController();
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? datePicked = await showDatePickerCustom(
         cancelText: 'Cancel',
@@ -70,6 +89,7 @@ class _NewExpensePageState extends State<NewExpensePage> {
 
   @override
   void initState() {
+    // getdd();
     print(currentuserid);
     selectedDate=DateTime.now();
     // TODO: implement initState
@@ -198,7 +218,7 @@ class _NewExpensePageState extends State<NewExpensePage> {
                     height: scrWidth * 0.035,
                   ),
                   Container(
-                    height: scrWidth*0.5,
+                    height: scrWidth*0.6,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
@@ -583,6 +603,60 @@ class _NewExpensePageState extends State<NewExpensePage> {
                             ),
                           ),
                         ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 22.0,right: 18,top: 10),
+                          child: Container(
+                            width: scrWidth*0.8,
+                            height: scrWidth*0.12,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                border: Border.all(color: primarycolor)
+                            ),
+                            child: TextFormField(
+                              controller:  description,
+                              cursorColor: Colors.black,
+                              style: TextStyle(
+                                color: primarycolor,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 15,
+                                fontFamily: 'urbanist',
+                              ),
+                              keyboardType: TextInputType.text,
+                              decoration:  InputDecoration(
+                                hintText: 'Description',
+                                hintStyle: TextStyle(
+                                  color: textFormUnFocusColor,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 15,
+                                  fontFamily: 'Urbanist',
+                                ),
+                                fillColor: textFormFieldFillColor,
+                                filled: true,
+                                disabledBorder: InputBorder.none,
+                                enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color:primarycolor, width: 1.0),
+                                    borderRadius: BorderRadius.circular(15)
+                                ),
+                                errorBorder: InputBorder.none,
+                                border: InputBorder.none,
+
+                                focusedBorder: UnderlineInputBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                  borderSide: BorderSide(
+                                    color: primarycolor,
+                                    width: 2,
+                                  ),
+                                ),
+
+                                //
+                                // border: OutlineInputBorder(),
+                                // focusedBorder: OutlineInputBorder(
+                                //     borderSide: BorderSide(color: Color(0xff034a82),width: 2)
+                                // ),
+                              ),
+                            ),
+                          ),
+                        ),
 
                       ],
                     ),
@@ -615,6 +689,7 @@ class _NewExpensePageState extends State<NewExpensePage> {
                                     'date':selectedDate,
                                     'income':false,
                                     'merchant':merchantName.toString(),
+                                    'description':description.text.toString()??'',
 
                                   });
                                   Navigator.pop(context);
@@ -624,10 +699,12 @@ class _NewExpensePageState extends State<NewExpensePage> {
                                   Navigator.push(context, MaterialPageRoute(builder: (context)=>ExpenseSuccesPage()));
                                   amount?.clear();
                                   category=='';
+
                                   selectedDate=null;
                                   xyz='';
                                   _icon=null;
                                   merchantName='';
+                                  description.text='';
                                   setState(() {
 
                                   });
