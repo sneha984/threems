@@ -148,7 +148,6 @@ class _AcceptedPageState extends State<AcceptedPage> {
                                   SizedBox(
                                     width: 20,
                                   ),
-
                                   Container(
                                     width: 150,
                                     child: Text(

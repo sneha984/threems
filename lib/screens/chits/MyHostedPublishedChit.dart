@@ -969,7 +969,8 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
                                       ),
                                       Text(
                                         chit!.chitType == 'Monthly'
-                                            ? DateTime(DateTime.now().year, DateTime.now().month, chit!.chitDate!, int.parse(chit!.chitTime!.split(':')[0]), int.parse(chit!.chitTime!.split(':')[1]))
+                                            ? DateTime(DateTime.now().year, DateTime.now().month,
+                                            chit!.chitDate!, int.parse(chit!.chitTime!.split(':')[0]), int.parse(chit!.chitTime!.split(':')[1]))
                                                     .isAfter(DateTime.now())
                                                 ? DateFormat('dd MMM yyyy')
                                                     .format(DateTime(

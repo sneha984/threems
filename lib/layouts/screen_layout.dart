@@ -192,6 +192,7 @@ class _ScreenLayoutState extends State<ScreenLayout> {
                         ],
                       ),
                     ),
+
                     MaterialButton(
                       splashColor: Colors.transparent,
                       highlightColor: Colors.transparent,

@@ -7,8 +7,10 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:threems/Notes/notes.dart';
 import 'package:threems/kuri/kuripage.dart';
 import 'package:threems/model/usermodel.dart';
+import 'package:threems/phonebook/phone_book.dart';
 import 'package:threems/screens/charity/basic_details.dart';
 import 'package:threems/screens/chits/hostedchits.dart';
 import 'package:threems/screens/flgraph.dart';
@@ -21,10 +23,13 @@ import 'package:threems/widgets/funding_widget.dart';
 import 'package:threems/widgets/upcomming_card_widget.dart';
 
 import '../Authentication/auth.dart';
+import '../Authentication/root.dart';
 import '../UpComing__Collection_&__Payments/Collections.dart';
 import '../UpComing__Collection_&__Payments/payments.dart';
 import '../kuri/createkuri.dart';
 import '../model/charitymodel.dart';
+import '../topbar/prifilepage.dart';
+import '../topbar/settings.dart';
 import 'charity/donatepage.dart';
 import 'charity/seemorecharities.dart';
 
@@ -117,9 +122,26 @@ class _HomeScreenState extends State<HomeScreen> {
       print('00000000000000000000000000000000000000000000000000000');
     }
   }
+  List<UserModel> user=[];
+  getCurrentUserDet(){
+    FirebaseFirestore.instance.collection('users')
+        .where('userId',isEqualTo: currentuserid).snapshots().listen((event) {
+      user=[];
+      for(DocumentSnapshot<Map<String,dynamic>> doc in event.docs){
+        user.add(UserModel.fromJson(doc.data()!));
+      }
+      if(mounted){
+        setState(() {
+
+        });
+      }
+    });
+  }
 
   @override
   void initState() {
+    getCurrentUserDet();
+
     askPermissions();
     getVerifiedCharity();
     getLocation();
@@ -760,7 +782,7 @@ class _HomeScreenState extends State<HomeScreen> {
   //     ),
   //   );
   // }
-  final Authentication _authentication = Authentication();
+  // final Authentication _authentication = Authentication();
 
   @override
   Widget build(BuildContext context) {
@@ -772,6 +794,134 @@ class _HomeScreenState extends State<HomeScreen> {
         return shouldPop ?? false;
       },
       child: Scaffold(
+        endDrawer: Drawer(
+           elevation: 10.0,
+          child: ListView(
+            children: <Widget>[
+              InkWell(
+                onTap: (){
+                  Navigator.push(context,
+                                 MaterialPageRoute(builder: (context) => ProfilePage(user: user![0],)));
+
+                },
+                child: DrawerHeader(
+                  decoration: BoxDecoration(color: primarycolor),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      CircleAvatar(
+                        backgroundImage:
+                            NetworkImage(currentuser?.userImage??''),
+                        radius: 30.0,
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                        currentuser?.userName??'',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                fontSize: 22.0),
+                          ),
+                          SizedBox(height: 10.0),
+                          Flexible(
+                            child: Container(
+                              width: 160,
+                              child: Text(
+                                currentuser?.userEmail??'',
+                                style: TextStyle(
+                                    overflow: TextOverflow.ellipsis,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                    fontSize: 14.0),
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ),
+
+              //Here you place your menu items
+              ListTile(
+                 leading:Container(
+                           height: 30,
+                           width: 34,
+                           decoration: BoxDecoration(
+                               image: DecorationImage(image:
+                               NetworkImage(
+                                   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdlgdYbuGqOnWzk_isI5q_in4KYYbFwO1lCw&usqp=CAU"),fit: BoxFit.fill)
+                           ),
+                         ),
+                title: Text('Settings', style: TextStyle(fontSize: 18)),
+                onTap: () {
+                           Navigator.push(context,MaterialPageRoute(builder: (context)=>SettingsPage()));
+
+                  // Here you can give your route to navigate
+                },
+              ),
+              Divider(height: 3.0),
+              ListTile(
+                 leading:Padding(
+                   padding: const EdgeInsets.only(left: 6),
+                   child: Container(
+                             height: 20,
+                               width: 26,
+                             decoration: BoxDecoration(
+                               image: DecorationImage(image:
+                               NetworkImage(
+                                   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxfOzBxK8ISdCdErcVR0EFWHPL1I_SNQvEOw&usqp=CAU"),fit: BoxFit.fill)
+                             ),
+                           ),
+                 ),
+                title: Text('Diary', style: TextStyle(fontSize: 18)),
+                onTap: () {
+                         Navigator.push(context,MaterialPageRoute(builder: (context)=>NotesPage()));
+
+
+                  // Here you can give your route to navigate
+                },
+              ),
+              Divider(height: 3.0),
+              ListTile(
+                leading:Padding(
+                  padding: const EdgeInsets.only(left: 6),
+                  child: Container(
+                    height: 23,
+                    width: 24,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(image:
+                        NetworkImage(
+                            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgDNYGs8jqizlcPof-wNOx2dLJmmoioCfEZw&usqp=CAU"),fit: BoxFit.fill)
+                    ),
+                  ),
+                ),
+                title: Text('Phone Book', style: TextStyle(fontSize: 18)),
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>PhoneBookPage()));
+
+
+                  // Here you can give your route to navigate
+                },
+              ),
+              Divider(height: 3.0),
+
+              ListTile(
+                leading: Icon(Icons.close),
+                title: Text('Close Drawer', style: TextStyle(fontSize: 18)),
+                onTap: () {
+                  // Here you can give your route to navigate
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        ),
+
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(kToolbarHeight),
           child: Container(
@@ -782,6 +932,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   blurRadius: 25),
             ]),
             child: AppBar(
+              iconTheme: IconThemeData(color: Colors.grey),
+              leading: Icon(Icons.arrow_back,color: Colors.white,),
               elevation: 0,
               backgroundColor: appBarColor,
               centerTitle: false,
@@ -790,84 +942,129 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: EdgeInsets.only(top: scrHeight * 0.009),
                 child: SvgPicture.asset("assets/icons/3ms.svg"),
               ),
-              actions: [
-                GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                    child: SvgPicture.asset(
-                      "assets/icons/notifications.svg",
-                      //  width: 19,
-                      // height: 20,
-                      width: scrWidth * 0.059,
-                      height: scrWidth * 0.055,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: scrWidth * 0.045,
-                  // width: 16,
-                ),
-                // SvgPicture.asset(
-                //   "assets/icons/connected.svg",
-                //   width: scrWidth * 0.059,
-                //   height: scrWidth * 0.055,
-                //   color: Colors.black,
-                //   // width: 19,
-                //   // height: 20,
-                // ),
-                // SizedBox(
-                //   width: scrWidth * 0.045,
-                // ),
-                GestureDetector(
-                    onTap: () async {
-                      showDialog(
-                        context: context,
-                        builder: (ctx) => AlertDialog(
-                          content: const Text("do you want to exit this app"),
-                          actions: <Widget>[
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(ctx).pop();
-                              },
-                              child: const Text("No"),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                _authentication.signOut(context);
-                              },
-                              child: const Text(
-                                "Yes",
-                                style: TextStyle(color: primarycolor),
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                    child: Icon(
-                      Icons.logout,
-                      color: Colors.black,
-                    )
-                    // Container(
-                    //   margin: EdgeInsets.symmetric(vertical: scrWidth * 0.02),
-                    //   width: scrWidth * 0.12,
-                    //   height: scrWidth * 0.16,
-                    //   decoration: BoxDecoration(
-                    //     image: DecorationImage(
-                    //       fit: BoxFit.cover,
-                    //       image: AssetImage("assets/avatar.jpg"),
-                    //     ),
-                    //     color: Colors.blueGrey,
-                    //     borderRadius: BorderRadius.circular(15),
-                    //   ),
-                    // ),
-                    ),
-                SizedBox(
-                  width: scrWidth * 0.059,
-                  // width: 21,
-                ),
-              ],
+              // actions: [
+              //   // GestureDetector(
+              //   //   onTap: () {},
+              //   //   child: Container(
+              //   //     child: SvgPicture.asset(
+              //   //       "assets/icons/notifications.svg",
+              //   //       //  width: 19,
+              //   //       // height: 20,
+              //   //       width: scrWidth * 0.059,
+              //   //       height: scrWidth * 0.055,
+              //   //       color: Colors.black,
+              //   //     ),
+              //   //   ),
+              //   // ),
+              //   Padding(
+              //     padding: const EdgeInsets.only(top: 16,bottom: 14),
+              //     child: InkWell(
+              //       onTap: (){
+              //         Navigator.push(context,MaterialPageRoute(builder: (context)=>NotesPage()));
+              //       },
+              //       child: Container(
+              //         height: 5,
+              //           width: 26,
+              //         decoration: BoxDecoration(
+              //           image: DecorationImage(image:
+              //           NetworkImage(
+              //               "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxfOzBxK8ISdCdErcVR0EFWHPL1I_SNQvEOw&usqp=CAU"),fit: BoxFit.fill)
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              //   SizedBox(width: 10,),
+              //   Padding(
+              //     padding: const EdgeInsets.only(top: 10,bottom: 10),
+              //     child: InkWell(
+              //       onTap: (){
+              //         Navigator.push(context,MaterialPageRoute(builder: (context)=>SettingsPage()));
+              //       },
+              //       child: Container(
+              //         height: 10,
+              //         width: 34,
+              //         decoration: BoxDecoration(
+              //             image: DecorationImage(image:
+              //             NetworkImage(
+              //                 "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdlgdYbuGqOnWzk_isI5q_in4KYYbFwO1lCw&usqp=CAU"),fit: BoxFit.fill)
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              //   // SizedBox(
+              //   //   width: scrWidth * 0.045,
+              //   //   // width: 16,
+              //   // ),
+              //   // SvgPicture.asset(
+              //   //   "assets/icons/connected.svg",
+              //   //   width: scrWidth * 0.059,
+              //   //   height: scrWidth * 0.055,
+              //   //   color: Colors.black,
+              //   //   // width: 19,
+              //   //   // height: 20,
+              //   // ),
+              //   // SizedBox(
+              //   //   width: scrWidth * 0.045,
+              //   // ),
+              //   // GestureDetector(
+              //   //     onTap: () async {
+              //   //       // showDialog(
+              //   //       //   context: context,
+              //   //       //   builder: (ctx) => AlertDialog(
+              //   //       //     content: const Text("do you want to exit this app"),
+              //   //       //     actions: <Widget>[
+              //   //       //       TextButton(
+              //   //       //         onPressed: () {
+              //   //       //           Navigator.of(ctx).pop();
+              //   //       //         },
+              //   //       //         child: const Text("No"),
+              //   //       //       ),
+              //   //       //       TextButton(
+              //   //       //         onPressed: () {
+              //   //       //           _authentication.signOut(context);
+              //   //       //         },
+              //   //       //         child: const Text(
+              //   //       //           "Yes",
+              //   //       //           style: TextStyle(color: primarycolor),
+              //   //       //         ),
+              //   //       //       ),
+              //   //       //     ],
+              //   //       //   ),
+              //   //       // );
+              //   //     },
+              //   //     child: Icon(
+              //   //       Icons.logout,
+              //   //       color: Colors.black,
+              //   //     )),
+              //   SizedBox(
+              //     width: scrWidth * 0.02,
+              //     // width: 21,
+              //   ),
+              //   InkWell(
+              //     onTap: () {
+              //       Navigator.push(context,
+              //           MaterialPageRoute(builder: (context) => ProfilePage()));
+              //     },
+              //     child: Container(
+              //       margin: EdgeInsets.symmetric(vertical: scrWidth * 0.02),
+              //       width: scrWidth * 0.12,
+              //       height: scrWidth * 0.16,
+              //       decoration: BoxDecoration(
+              //         image: DecorationImage(
+              //           fit: BoxFit.cover,
+              //           image: NetworkImage(currentuser?.userImage ?? ''),
+              //           // AssetImage("assets/avatar.jpg"),
+              //         ),
+              //         color: Colors.blueGrey,
+              //         borderRadius: BorderRadius.circular(15),
+              //       ),
+              //     ),
+              //   ),
+              //   SizedBox(
+              //     width: scrWidth * 0.03,
+              //     // width: 21,
+              //   ),
+              // ],
             ),
           ),
         ),
@@ -1382,22 +1579,21 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-
-
 }
+
 Future<bool?> confirmQuitDialog(BuildContext context) => showDialog<bool>(
     context: context,
     builder: (context) => AlertDialog(
-      title: Text('Do You want to Quit?'),
-      actions: [
-        TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: Text('No')),
-        TextButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: Text(
-              'Yes',
-              style: TextStyle(color: primarycolor),
-            )),
-      ],
-    ));
+          title: Text('Do You want to Quit?'),
+          actions: [
+            TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: Text('No')),
+            TextButton(
+                onPressed: () => Navigator.pop(context, true),
+                child: Text(
+                  'Yes',
+                  style: TextStyle(color: primarycolor),
+                )),
+          ],
+        ));

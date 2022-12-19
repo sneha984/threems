@@ -8,6 +8,7 @@ import '../model/Buy&sell.dart';
 import '../screens/splash_screen.dart';
 import '../utils/dummy.dart';
 import 'checkout.dart';
+import 'imagezoom.dart';
 
 List cartlist = [];
 List<ProductModel> productsList = [];
@@ -888,7 +889,15 @@ class _ShopSingleProductState extends State<ShopSingleProduct> {
             flex: 3,
             child: InkWell(
               onTap: () {
-                // Navigator.push(context,MaterialPageRoute(builder: (context)=>CheckOutPage()));
+                 Navigator.push(context,MaterialPageRoute(builder: (context)=>ImageZoomPage(
+                   image: widget.product.images![0],
+                   productname: widget.product.productName!,
+                   productprice: widget.product.price!.toString(),
+                   productquantity: widget.product.quantity!.toString(),
+                   producunit: widget.product.unit!,
+                   productDetails: widget.product.details!,
+
+                 )));
               },
               child: Container(
                 decoration: BoxDecoration(

@@ -64,7 +64,7 @@ class _KuripageState extends State<Kuripage> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 2, vsync: this);
     _tabController.addListener(_handleTabSelection);
 
     getAddedKuri();

@@ -9,6 +9,7 @@ import 'package:threems/Authentication/root.dart';
 import 'package:threems/Buy&sell/buy_and_sell.dart';
 import 'package:threems/Buy&sell/productaddingpage.dart';
 import 'package:threems/Buy&sell/storedetailsfill2.dart';
+import 'package:threems/model/Buy&sell.dart';
 
 import '../screens/splash_screen.dart';
 import '../utils/themes.dart';
@@ -22,6 +23,7 @@ class ProductsPage extends StatefulWidget {
 }
 
 class _ProductsPageState extends State<ProductsPage> {
+  ProductModel? prodct;
   List getAllProducts=[];
   getProductsAll(){
     FirebaseFirestore
@@ -153,7 +155,11 @@ class _ProductsPageState extends State<ProductsPage> {
                   children: [
                     Row(
                       children: [
-                        SvgPicture.asset('assets/svg/back.svg'),
+                        InkWell(
+                          onTap: (){
+                            Navigator.pop(context);
+                          },
+                            child: SvgPicture.asset('assets/icons/back.svg',color: Colors.white,)),
                         SizedBox(
                           width: scrWidth * 0.039,
                         ),
@@ -169,7 +175,9 @@ class _ProductsPageState extends State<ProductsPage> {
                     InkWell(
                       onTap: (){
                         Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => ProductAddingPage(storeId: widget.storeId)));
+                        MaterialPageRoute(builder: (context) => ProductAddingPage(
+                          storeId: widget.storeId,
+                          productModel: prodct,)));
 
                       },
                       child: Container(
@@ -287,13 +295,19 @@ class _ProductsPageState extends State<ProductsPage> {
                                       //             SizedBox(
                                       //               width: scrWidth * 0.065,
                                       //             ),
-                                      //             Text(
-                                      //               "Edit",
-                                      //               style: TextStyle(
-                                      //                 color: Colors.black,
-                                      //                 fontSize: scrWidth * 0.035,
-                                      //                 fontFamily: "Urbanist",
-                                      //                 fontWeight: FontWeight.w500,
+                                      //             InkWell(
+                                      //               onTap: (){
+                                      //                 Navigator.push(context, MaterialPageRoute
+                                      //                   (builder: (context)=>ProductAddingPage(storeId: widget.storeId, productModel: prodct,)));
+                                      //               },
+                                      //               child: Text(
+                                      //                 "Edit",
+                                      //                 style: TextStyle(
+                                      //                   color: Colors.black,
+                                      //                   fontSize: scrWidth * 0.035,
+                                      //                   fontFamily: "Urbanist",
+                                      //                   fontWeight: FontWeight.w500,
+                                      //                 ),
                                       //               ),
                                       //             ),
                                       //           ],

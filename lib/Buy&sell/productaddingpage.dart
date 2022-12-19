@@ -16,8 +16,9 @@ import '../utils/themes.dart';
 
 class ProductAddingPage extends StatefulWidget {
   final String storeId;
+  final ProductModel? productModel;
   // final String storecategory;
-  const ProductAddingPage({Key? key, required this.storeId,}) : super(key: key);
+  const ProductAddingPage({Key? key, required this.storeId, required this.productModel}) : super(key: key);
 
   @override
   State<ProductAddingPage> createState() => _ProductAddingPageState();
@@ -52,7 +53,6 @@ class _ProductAddingPageState extends State<ProductAddingPage> {
   List productCategory=[];
   List addCategory=[];
   List storecategorynames=[];
-
 
   getUnit(){
     FirebaseFirestore.instance.collection('productUnit').snapshots().listen((event) {
@@ -118,7 +118,14 @@ class _ProductAddingPageState extends State<ProductAddingPage> {
       }
     });
   }
+  String imageurl='';
 
+    // getDatas(){
+    //   productNameController.text=widget.productModel!.productName!;
+    //   productPriceController.text=widget.productModel!.price!.toString();
+    //   // imageurl=widget.productModel!.images! as String;
+    //   productNameController.text=widget.productModel!.productName!;
+    // }
   List productCategoryList=[];
   List _images=[];
   List<String> _imgurl=[];
@@ -164,6 +171,7 @@ class _ProductAddingPageState extends State<ProductAddingPage> {
     // TODO: implement initState
     // selectCategory=widget.data['storeCategory'];
     super.initState();
+    // getDatas();
   }
   @override
   void dispose() {
