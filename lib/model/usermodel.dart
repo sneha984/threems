@@ -12,7 +12,7 @@ class UserModel {
   String? userImage;
   String? userId;
   String? phone;
-  List<Cart>? cart;
+  // Timestamp? dateTime;
   List<Address>? address;
 
   UserModel(
@@ -21,13 +21,14 @@ class UserModel {
       this.userImage,
       this.userId,
       this.phone,
-      this.cart,
+      // this.dateTime,
       this.address});
   UserModel.fromJson(Map<String, dynamic> json) {
     userName = json['userName'];
     userEmail = json['userEmail'];
     userImage = json['userImage'];
     userId = json['userId'];
+    // dateTime=json['dateTime'].toDate();
     phone = json['phone'] ?? '';
     if (json['address'] != null) {
       address = <Address>[];
@@ -35,12 +36,7 @@ class UserModel {
         address!.add(new Address.fromJson(v));
       });
     }
-    if (json['cart'] != null) {
-      cart = <Cart>[];
-      json['cart'].forEach((v) {
-        cart!.add(new Cart.fromJson(v));
-      });
-    }
+
   }
 
   Map<String, dynamic> toJson() {
@@ -50,12 +46,11 @@ class UserModel {
     data['userImage'] = this.userImage;
     data['userId'] = this.userId;
     data['phone'] = this.phone;
+    // data['dateTime']=this.dateTime;
     if (this.address != null) {
       data['address'] = this.address!.map((v) => v.toJson()).toList();
     }
-    if (this.cart != null) {
-      data['cart'] = this.cart!.map((v) => v.toJson()).toList();
-    }
+
     return data;
   }
 }
@@ -108,25 +103,6 @@ class Address {
     return data;
   }
 }
+ 
 
-class Cart {
-  String? productId;
-  String? storeId;
-  int? qty;
 
-  Cart({this.productId, this.storeId, this.qty});
-
-  Cart.fromJson(Map<String, dynamic> json) {
-    productId = json['productId'];
-    storeId = json['storeId'];
-    qty = json['qty'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['productId'] = this.productId;
-    data['storeId'] = this.storeId;
-    data['qty'] = this.qty;
-    return data;
-  }
-}

@@ -1,10 +1,13 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:threems/Authentication/root.dart';
 import 'package:threems/utils/themes.dart';
 import 'InviteLink/ChitInvite.dart';
 import 'screens/splash_screen.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+FlutterLocalNotificationsPlugin();
 
 String inviteLinkId = '';
 String inviteLinkType = '';

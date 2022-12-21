@@ -99,7 +99,16 @@ dependencies:
   audioplayers: ^1.1.1
   just_audio: ^0.9.30
   mime_type: ^1.0.0
+  scoped_model: ^2.0.0
+  #  moor_flutter: ^2.0.0
+  simple_animations: ^5.0.0+3
+  flutter_local_notifications: ^13.0.0
+  flutter_local_notifications_linux: ^3.0.0
+  datetime_picker_formfield:
+  flutter_native_timezone: ^2.0.0
 
+
+  dio: ^4.0.6
 
 
 

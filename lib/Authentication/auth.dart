@@ -11,6 +11,7 @@ var userImage;
 var userEmail;
 var phone;
 String? userDoc;
+Timestamp? dateTime;
 
 class Authentication {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -27,12 +28,15 @@ class Authentication {
     userDoc = userCredential.user?.uid;
     currentuserid = userCredential.user?.uid;
     phone = userCredential.user?.phoneNumber ?? '';
+    // dateTime=DateTime.now() as Timestamp?;
+
 
     FirebaseFirestore.instance.collection('users').doc(userDoc).update({
       "userId": userDoc,
       "userName": userName,
       "userEmail": userEmail,
       "userImage": userImage,
+      // "dateTime":dateTime,
     }).then((value) => Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(

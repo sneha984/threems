@@ -15,6 +15,7 @@
 
 
 
+
     <application
         android:label="threems"
         android:name="${applicationName}"
@@ -37,6 +38,11 @@
               android:name="io.flutter.embedding.android.NormalTheme"
               android:resource="@style/NormalTheme"
               />
+
+            <intent-filter>
+                <action android:name="FLUTTER_nOTIFICATON_CLICK"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

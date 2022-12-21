@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
+
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -16,12 +17,13 @@ import 'package:threems/Notes/notes.dart';
 import 'package:just_audio/just_audio.dart' as ap;
 
 import '../customPackage/date_picker.dart';
-import '../screens/charity/verification_details.dart';
+import '../customPackage/time_picker.dart';
 import '../screens/splash_screen.dart';
 import '../utils/themes.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'audio_player.dart';
+import 'notifications.dart';
 String storagePath(String uid, String filePath, bool isVideo) {
   final timestamp = DateTime.now().microsecondsSinceEpoch;
   // Workaround fixed by https://github.com/flutter/plugins/pull/3685
@@ -93,6 +95,8 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
   FocusNode contentFocus=FocusNode();
 
   DateTime selectedDate;
+  TimeOfDay selectedTime;
+
 
 //DatePick----------------
   Future<void> _selectDate(BuildContext context) async {
@@ -119,12 +123,37 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
       });
     }
   }
+  //TimePick--------
+  Future<void> _selectTime(BuildContext context) async {
+    final TimeOfDay timePicked = await showTimePickerCustom(
+        cancelText: 'Cancel',
+        confirmText: 'Select',
+        context: context,
+        initialTime: TimeOfDay.now(),
+        builder: (context, child) => Theme(
+            data: ThemeData(
+                colorScheme: ColorScheme.light(primary: Colors.green)),
+            child: child));
+    if (timePicked != null && timePicked != selectedTime) {
+      setState(() {
+        selectedTime = timePicked;
+      });
+    }
+  }
+
+
+
+
   getData(){
     if(widget.update){
       selectedDate=widget.notes['date'].toDate();
       titleController.text=widget.notes['title'];
       contentController.text=widget.notes['content'];
        audioUrl=widget.notes['audio'];
+
+       selectedTime=TimeOfDay(
+           hour: int.parse(widget.notes['time'].split(':')[0]),
+           minute: int.parse(widget.notes['time'].split(':')[1]));
 
     }
   }
@@ -352,33 +381,44 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
                                 onPressed: () {
 
                                     if(widget.update){
+                                      DateTime date=DateTime(selectedDate.year,
+                                        selectedDate.month,selectedDate.day,
+                                        int.parse(selectedTime.hour.toString()),
+                                        int.parse(selectedTime.minute.toString()),
+                                      );
                                       FirebaseFirestore
                                           .instance
                                           .collection('users')
                                           .doc(currentuserid)
                                           .collection('notes').doc(widget.notes['noteId']).update
                                           ({
-                                        'date':selectedDate,
+                                        'date':date,
                                         'title':titleController.text,
                                         'content':contentController.text,
-                                        'audio':audioUrl
+                                        'audio':audioUrl,
+                                        'time':'${selectedTime.hour.toString()}:${selectedTime.minute.toString()}'
                                       });
                                       Navigator.pushAndRemoveUntil(context,
                                           MaterialPageRoute(builder: (context)=>NotesPage()),
                                               (route) => false);
-
                                     }else{
+                                      DateTime date=DateTime(selectedDate.year,
+                                        selectedDate.month,selectedDate.day,
+                                        int.parse(selectedTime.hour.toString()),
+                                        int.parse(selectedTime.minute.toString()),
+                                      );
                                       FirebaseFirestore
                                           .instance
                                           .collection('users')
                                           .doc(currentuserid)
                                           .collection('notes')
                                           .add({
-                                        'date':selectedDate,
+                                        'date':date,
                                         'title':titleController.text,
                                         'content':contentController.text,
-                                        'audio':audioUrl
-                                      }).then((value) =>
+                                        'audio':audioUrl,
+                                        'time':'${selectedTime.hour.toString()}:${selectedTime.minute.toString()}'
+                                          }).then((value) =>
                                           value.update({'noteId':value.id}));
                                       Navigator.pushAndRemoveUntil(context,
                                           MaterialPageRoute(builder: (context)=>NotesPage()),
@@ -395,7 +435,6 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
                         );
 
                   }, icon:Icon(Icons.check_outlined,color: Colors.white,)),
-
                   // IconButton(onPressed: (){}, icon:Icon(Icons.mic,color: Colors.white,))
                 ],
               ),
@@ -408,50 +447,104 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
                 padding:  EdgeInsets.only(left: scrWidth*0.034,right: scrWidth*0.034),
                 child: Column(
                   children: [
-                    GestureDetector(
-                      onTap: () {
-                        _selectDate(context);
-                      },
-                      child: Container(
-                        width: scrWidth,
-                        height: textFormFieldHeight45,
-                        padding: EdgeInsets.symmetric(
-                          horizontal: scrWidth * 0.015,
-                          vertical: scrWidth * 0.002,
-                        ),
-                        decoration: BoxDecoration(
-                          color: textFormFieldFillColor,
-                          border: Border.all(
-                            color: Color(0xffDADADA),
+                    Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            _selectDate(context);
+                          },
+                          child: Container(
+                            width: scrWidth*0.44,
+                            // width: scrWidth,
+                            height: textFormFieldHeight45,
+                            padding: EdgeInsets.symmetric(
+                              horizontal: scrWidth * 0.015,
+                              vertical: scrWidth * 0.002,
+                            ),
+                            decoration: BoxDecoration(
+                              color: textFormFieldFillColor,
+                              border: Border.all(
+                                color: Color(0xffDADADA),
+                              ),
+                              borderRadius: BorderRadius.circular(scrWidth * 0.026),
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: scrWidth * 0.03),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    selectedDate == null
+                                        ? "Date"
+                                        : DateFormat.yMMMd().format(selectedDate),
+                                    style: TextStyle(
+                                      color: selectedDate == null
+                                          ? Colors.grey
+                                          : Colors.black,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: FontSize15,
+                                      fontFamily: 'Urbanist',
+                                    ),
+                                  ),
+                                  SvgPicture.asset(
+                                    'assets/icons/date.svg',
+                                    color: Color(0xff8391A1),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
-                          borderRadius: BorderRadius.circular(scrWidth * 0.026),
                         ),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: scrWidth * 0.03),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                selectedDate == null
-                                    ? "Date"
-                                    : DateFormat.yMMMd().format(selectedDate),
-                                style: TextStyle(
-                                  color: selectedDate == null
-                                      ? Colors.grey
-                                      : Colors.black,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: FontSize15,
-                                  fontFamily: 'Urbanist',
+                        SizedBox(width: 15,),
+                        GestureDetector(
+                          onTap: () {
+                             _selectTime(context);
+                            // print(selectedTime.toString());
+                          },
+                          child: Container(
+                            // color: Colors.pink,
+                            width: scrWidth * 0.44,
+                            // width: 160,
+                            height: textFormFieldHeight45,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Color(0xffDADADA),
+                              ),
+                              color: textFormFieldFillColor,
+                              borderRadius:
+                              BorderRadius.circular(scrWidth * 0.033),
+                            ),
+                            padding:
+                            EdgeInsets.symmetric(horizontal: padding15),
+                            child: Row(
+                              mainAxisAlignment:
+                              MainAxisAlignment.spaceAround,
+                              children: [
+                                Text(
+                                  selectedTime == null
+                                      ? "Draw Time"
+                                      : "${selectedTime.hour.toString()}: ${selectedTime.minute.toString().length == 1 ? '0${selectedTime.minute.toString()}' : selectedTime.minute.toString()}",
+                                  style: TextStyle(
+                                    color: selectedTime == null
+                                        ? Color(0xffB0B0B0)
+                                        : Colors.black,
+                                    fontSize: FontSize14,
+                                    fontFamily: 'Urbanist',
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
-                              ),
-                              SvgPicture.asset(
-                                'assets/icons/date.svg',
-                                color: Color(0xff8391A1),
-                              ),
-                            ],
+                                SizedBox(
+                                  width: scrWidth * 0.04,
+                                ),
+                                SvgPicture.asset(
+                                  'assets/icons/time.svg',
+                                  color: Color(0xffB0B0B0),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
+                      ],
                     ),
                     SizedBox(height: scrHeight*0.023,),
                     Container(
@@ -608,7 +701,6 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
                         width: 358,
                         decoration: BoxDecoration(
                           color: primarycolor.withOpacity(0.2),
-
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: AudioPlayer(
@@ -616,6 +708,7 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
                           onDelete: null,
                           message: true,
                         ),
+
                       ),
                     ),
 
@@ -663,7 +756,17 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
                 ),
               ),
             ),
-          )
+          ),
+          // ElevatedButton(
+          //     onPressed: () => _selectDate(context),
+          //     child:  Text("Add reminder")
+          // ),
+          ElevatedButton(onPressed: (){
+            // Navigator.push(context,MaterialPageRoute(builder: (context)=>LocalNotifications()));
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                NotificationPage(not: widget.notes,)));
+            }, child: Text("uygy")),
+          // ElevatedButton(onPressed: (){}, child: Text("Add Rem"))
 
 
 

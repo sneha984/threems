@@ -44,7 +44,6 @@ class _CheckPhoneNumberState extends State<CheckPhoneNumber> {
 
   @override
   Widget build(BuildContext context) {
-    print('as');
     scrHeight = MediaQuery.of(context).size.height;
     scrWidth = MediaQuery.of(context).size.width;
     return loading == true
