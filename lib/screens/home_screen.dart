@@ -137,6 +137,8 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     });
   }
+  final Authentication _authentication = Authentication();
+
 
   @override
   void initState() {
@@ -908,15 +910,52 @@ class _HomeScreenState extends State<HomeScreen> {
                   // Here you can give your route to navigate
                 },
               ),
-              Divider(height: 3.0),
+              SizedBox(height: scrHeight*0.3,),
 
-              ListTile(
-                leading: Icon(Icons.close),
-                title: Text('Close Drawer', style: TextStyle(fontSize: 18)),
-                onTap: () {
-                  // Here you can give your route to navigate
+
+              InkWell(
+                onTap: (){
                   Navigator.of(context).pop();
+                  showDialog(
+                    context: context,
+                    builder: (ctx) => AlertDialog(
+                      content: const Text("do you want to exit this app"),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(ctx).pop();
+                          },
+                          child: const Text("No"),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            _authentication.signOut(context);
+                          },
+                          child: const Text(
+                            "Yes",
+                            style: TextStyle(color: primarycolor),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
                 },
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 17,right: 17),
+                  child: Container(
+                    height: 45,
+                    width: scrWidth*0.3,
+                    // color: Colors.grey,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: Colors.black)
+                    ),
+                    child: Center(
+                      child: Text("Logout"),
+
+                    ),
+                  ),
+                ),
               ),
             ],
           ),

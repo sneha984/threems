@@ -206,7 +206,6 @@ class _IncomeFirstPageState extends State<IncomeFirstPage> {
                                     fontFamily: 'Urbanist',
                                     color: Colors.white
                                 ),),
-
                               ],
                             ),
                             Column(
@@ -303,7 +302,8 @@ class _IncomeFirstPageState extends State<IncomeFirstPage> {
                         ),
                       ),
                     )
-                ): ListView.builder(
+                )
+                    : ListView.builder(
                     itemCount: incomeList!.length,
                     shrinkWrap: true,
                     scrollDirection: Axis.vertical,

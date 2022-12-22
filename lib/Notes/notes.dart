@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:threems/Authentication/root.dart';
@@ -10,7 +11,8 @@ import 'package:threems/screens/home_screen.dart';
 
 import '../screens/splash_screen.dart';
 import '../utils/themes.dart';
-
+import 'package:timezone/timezone.dart' as tz;
+import 'package:timezone/data/latest.dart' as tz;
 class NotesPage extends StatefulWidget {
   const NotesPage({Key? key}) : super(key: key);
 
@@ -32,6 +34,9 @@ class _NotesPageState extends State<NotesPage> {
           getAllNotes=[];
           for(DocumentSnapshot <Map<String,dynamic>> doc in event.docs){
             getAllNotes.add(doc.data()!);
+            if(doc['remainder']==true){
+              showNotification(doc.data()!);
+            }
           }
           if (mounted) {
             setState(() {
@@ -43,11 +48,75 @@ class _NotesPageState extends State<NotesPage> {
     });
 
   }
+  DateTime dateTime = DateTime.now();
+
+
+
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+  FlutterLocalNotificationsPlugin();
+
+
   @override
   void initState() {
+    const AndroidInitializationSettings androidInitializationSettings =
+    AndroidInitializationSettings("@mipmap/ic_launcher");
+
+    const DarwinInitializationSettings iosInitializationSettings =DarwinInitializationSettings();
+
+    const InitializationSettings initializationSettings =
+    InitializationSettings(
+      android: androidInitializationSettings,
+      iOS: iosInitializationSettings,
+      macOS: null,
+      linux: null,
+    );
+
+    flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+      // onSelectNotification: (dataYouNeedToUseWhenNotificationIsClicked) {},
+    );
     getNotes();
     // TODO: implement initState
     super.initState();
+  }
+
+  showNotification(Map notes) {
+
+    String s=notes['remainderTime'];
+    var t=notes['rDate'].toDate();
+
+    TimeOfDay _startTime = TimeOfDay(hour:int.parse(s.split(":")[0]),minute: int.parse(s.split(":")[1]));
+    dateTime=DateTime(
+      t.year,
+      t.month,
+      t.day,
+      _startTime.hour,
+      _startTime.minute,
+    );
+    print("************************************************${dateTime.toString()}");
+
+    const AndroidNotificationDetails androidNotificationDetails =
+    AndroidNotificationDetails(
+      "ScheduleNotification001",
+      "Notify Me",
+      importance: Importance.high,
+    );
+
+    const DarwinNotificationDetails iosNotificationDetails =DarwinNotificationDetails();
+    const NotificationDetails notificationDetails = NotificationDetails(
+      android: androidNotificationDetails,
+      iOS: iosNotificationDetails,
+      macOS: null,
+      linux: null,
+    );
+    tz.initializeTimeZones();
+    final tz.TZDateTime scheduledAt = tz.TZDateTime.from(dateTime, tz.local);
+    flutterLocalNotificationsPlugin.zonedSchedule(
+        01,notes['title'],notes['content'], scheduledAt, notificationDetails,
+        uiLocalNotificationDateInterpretation:
+        UILocalNotificationDateInterpretation.wallClockTime,
+        androidAllowWhileIdle: true,
+        payload: 'Ths is the data');
   }
 
   @override

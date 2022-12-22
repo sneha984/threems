@@ -106,8 +106,7 @@ dependencies:
   flutter_local_notifications_linux: ^3.0.0
   datetime_picker_formfield:
   flutter_native_timezone: ^2.0.0
-
-
+  flutter_datetime_picker: ^1.2.0
   dio: ^4.0.6
 
 

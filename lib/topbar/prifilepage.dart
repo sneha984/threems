@@ -72,7 +72,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
 
 
-   final Authentication _authentication = Authentication();
 
   @override
   void initState() {
@@ -109,7 +108,8 @@ class _ProfilePageState extends State<ProfilePage> {
             Container(
               height: 140,
               width: 400,
-              color: Color(0xfff0f4f7),
+              // color: Color(0xfff0f4f7),
+              color: primarycolor.withOpacity(0.1),
               child: Row(
                 children: [
                   Padding(
@@ -137,7 +137,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 fontFamily: 'Urbanist',
                                 fontWeight: FontWeight.w700,
                                 color: Colors.black),),
-                            SizedBox(width: 130,),
+                            SizedBox(width: scrWidth*0.3,),
                             InkWell(
                               onTap: (){
                                 nameController.text=widget.user.userName??'';
@@ -473,10 +473,12 @@ class _ProfilePageState extends State<ProfilePage> {
                                     ));
                               },
                               child: Text("Edit", style: TextStyle(
-                                  fontSize: 15,
+                                  fontSize: 16,
                                   fontFamily: 'Urbanist',
                                   fontWeight: FontWeight.w700,
-                                  color: Color(0xff1c5f89)),),
+                                  // color: Color(0xff1c5f89)
+                                color: primarycolor
+                              ),),
                             ),
                           ],
                         ),
@@ -502,46 +504,7 @@ class _ProfilePageState extends State<ProfilePage> {
             SizedBox(height: 10,),
 
     SizedBox(height: 10,),
-    InkWell(
-        onTap: (){
-          showDialog(
-            context: context,
-            builder: (ctx) => AlertDialog(
-              content: const Text("do you want to exit this app"),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(ctx).pop();
-                  },
-                  child: const Text("No"),
-                ),
-                TextButton(
-                  onPressed: () {
-                    _authentication.signOut(context);
-                  },
-                  child: const Text(
-                    "Yes",
-                    style: TextStyle(color: primarycolor),
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
-        child: Container(
-            height: 45,
-            width: 350,
-            // color: Colors.grey,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: Colors.black)
-            ),
-            child: Center(
-              child: Text("Logout"),
 
-            ),
-          ),
-    ),
 
             // InkWell(
             //   onTap: (){

@@ -303,7 +303,7 @@ class _IncomeExpenseYearReportState extends State<IncomeExpenseYearReport> {
       }
     });
   }
-  
+
   // getCategoryName(){
   //   FirebaseFirestore.instance.collection('expenses').snapshots().listen((event) {
   //     if(event.docs.isNotEmpty) {
@@ -371,10 +371,10 @@ class _IncomeExpenseYearReportState extends State<IncomeExpenseYearReport> {
   ];
 
 
-sortList(){
-  IncomeExpenseList.sort((a,b)=>b['date'].microsecondsSinceEpoch.compareTo(a['date'].microsecondsSinceEpoch));
-  IncomeExpenseMonthList.sort((a,b)=>b['date'].microsecondsSinceEpoch.compareTo(a['date'].microsecondsSinceEpoch));
-}
+  sortList(){
+    IncomeExpenseList.sort((a,b)=>b['date'].microsecondsSinceEpoch.compareTo(a['date'].microsecondsSinceEpoch));
+    IncomeExpenseMonthList.sort((a,b)=>b['date'].microsecondsSinceEpoch.compareTo(a['date'].microsecondsSinceEpoch));
+  }
   @override
   void initState() {
     // getCategoryName();
@@ -1437,119 +1437,119 @@ sortList(){
                   ):
                   Padding(
                     padding:  EdgeInsets.only(top: scrWidth*0.2,),
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding:  EdgeInsets.only(left: scrWidth*0.08,right:  scrWidth*0.08,),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding:  EdgeInsets.only(left: scrWidth*0.08,right:  scrWidth*0.08,),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
+                            children: [
+
+                              Text('Month'.toString(),
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontFamily: 'Urbanist',
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold
+                                ),),
+                              Text('Expense'.toString(),
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontFamily: 'Urbanist',
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold
+
+                                ),),
+
+                              Text('Income'.toString(),
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontFamily: 'Urbanist',
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold
+
+                                ),),
+
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding:  EdgeInsets.only(left: scrWidth*0.06,right:  scrWidth*0.06,bottom: 10),
+                          child: Container(child: Divider(thickness: 0.5,color: Colors.grey,)),
+                        ),
+                        Container(
+                          child: ListView.builder(
+                            itemCount:  IncomeExpenseMonthList.length,
+                            shrinkWrap: true,
+                            itemBuilder: (context,index){
+                              print(IncomeExpenseMonthList);
+                              return Column(
                                 children: [
+                                  // Padding(
+                                  //   padding: const EdgeInsets.only(top: 50),
+                                  //   child: Text('${monthlyReports[index]['date'].toDate().toString().substring(0,10)},  :  ${monthlyReports[index]['amount']}'),
+                                  // ),
+                                  Padding(
+                                    padding:  EdgeInsets.only(left: scrWidth*0.08,right:  scrWidth*0.08,),
+                                    child: Container(
+                                      height: scrWidth*0.15,
+                                      child: Column(
 
-                                  Text('Month'.toString(),
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontFamily: 'Urbanist',
-                                        color: Colors.black,
-                                      fontWeight: FontWeight.bold
-                                    ),),
-                                  Text('Expense'.toString(),
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontFamily: 'Urbanist',
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold
 
-                                    ),),
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
 
-                                  Text('Income'.toString(),
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontFamily: 'Urbanist',
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold
+                                              Text(DateFormat('MMM,yyyy').format(IncomeExpenseMonthList[index]['date'].toDate()).toString(),
+                                                style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontFamily: 'Urbanist',
+                                                    color: Colors.black
+                                                ),),
 
-                                    ),),
+                                              Text('-'+
+                                                  IncomeExpenseMonthList[index]['expAmount'].toString(),
+                                                style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontFamily: 'Urbanist',
+                                                    color: Colors.red
+                                                ),),
+                                              Text('-'+IncomeExpenseMonthList[index]['incAmount'].toString(),
+                                                style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontFamily: 'Urbanist',
+                                                    color: Colors.green
+                                                ),),
+
+                                              // Text(DateFormat('dd MMM,yyyy').format( expenseList[index]['date'].toDate()),style: TextStyle(
+                                              //     fontSize: 13,
+                                              //     fontFamily: 'Urbanist',
+                                              //     color: Colors.grey
+                                              // ),),
+
+                                            ],
+                                          ),
+                                          Padding(
+                                            padding:  EdgeInsets.only(left: scrWidth*0.02,right:  scrWidth*0.02,bottom: 10),
+                                            child: Container(child: Divider(thickness: 0.5,color: Colors.grey,)),
+                                          ),
+
+
+                                        ],
+                                      ),
+                                    ),
+                                  ),
 
                                 ],
-                              ),
-                            ),
-                            Padding(
-                              padding:  EdgeInsets.only(left: scrWidth*0.06,right:  scrWidth*0.06,bottom: 10),
-                              child: Container(child: Divider(thickness: 0.5,color: Colors.grey,)),
-                            ),
-                            Container(
-                                    child: ListView.builder(
-                                      itemCount:  IncomeExpenseMonthList.length,
-                                      shrinkWrap: true,
-                                      itemBuilder: (context,index){
-                                        print(IncomeExpenseMonthList);
-                                        return Column(
-                                          children: [
-                                            // Padding(
-                                            //   padding: const EdgeInsets.only(top: 50),
-                                            //   child: Text('${monthlyReports[index]['date'].toDate().toString().substring(0,10)},  :  ${monthlyReports[index]['amount']}'),
-                                            // ),
-                                            Padding(
-                                              padding:  EdgeInsets.only(left: scrWidth*0.08,right:  scrWidth*0.08,),
-                                              child: Container(
-                                                height: scrWidth*0.15,
-                                                child: Column(
-
-
-                                                  children: [
-                                                    Row(
-                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                      children: [
-
-                                                        Text(DateFormat('MMM,yyyy').format(IncomeExpenseMonthList[index]['date'].toDate()).toString(),
-                                                          style: TextStyle(
-                                                              fontSize: 14,
-                                                              fontFamily: 'Urbanist',
-                                                              color: Colors.black
-                                                          ),),
-
-                                                        Text('-'+
-                                                            IncomeExpenseMonthList[index]['expAmount'].toString(),
-                                                          style: TextStyle(
-                                                              fontSize: 14,
-                                                              fontFamily: 'Urbanist',
-                                                              color: Colors.red
-                                                          ),),
-                                                        Text('-'+IncomeExpenseMonthList[index]['incAmount'].toString(),
-                                                          style: TextStyle(
-                                                              fontSize: 14,
-                                                              fontFamily: 'Urbanist',
-                                                              color: Colors.green
-                                                          ),),
-
-                                                        // Text(DateFormat('dd MMM,yyyy').format( expenseList[index]['date'].toDate()),style: TextStyle(
-                                                        //     fontSize: 13,
-                                                        //     fontFamily: 'Urbanist',
-                                                        //     color: Colors.grey
-                                                        // ),),
-
-                                                      ],
-                                                    ),
-                                                    Padding(
-                                                      padding:  EdgeInsets.only(left: scrWidth*0.02,right:  scrWidth*0.02,bottom: 10),
-                                                      child: Container(child: Divider(thickness: 0.5,color: Colors.grey,)),
-                                                    ),
-
-
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-
-                                          ],
-                                        );
-                                      },
-                                    ),
-                            ),
-                          ],
+                              );
+                            },
+                          ),
                         ),
-                      ):
+                      ],
+                    ),
+                  ):
                   IncomeExpenseList.isEmpty?Container(
                     child:Center(
                       child: Text(
@@ -2062,7 +2062,7 @@ class _SelectDatePageState extends State<SelectDatePage> {
                             )));
                       }else{
                         fromDate==null?showUploadMessage(context, 'Choose from date ...'):
-                     showUploadMessage(context, 'Choose to date ...');
+                        showUploadMessage(context, 'Choose to date ...');
 
                       }
                     },

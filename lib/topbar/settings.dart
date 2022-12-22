@@ -41,22 +41,19 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
           Padding(
             padding: const EdgeInsets.only(left: 20,right: 20),
-            child: InkWell(
-              onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>SubscriptionPage()));
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Subscription',style: TextStyle(
+                    fontSize: 17,
+                    fontFamily: 'Urbanist',
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black),),
+                IconButton(onPressed: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>SubscriptionPage()));
 
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('Subscription',style: TextStyle(
-                      fontSize: 17,
-                      fontFamily: 'Urbanist',
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black),),
-                  IconButton(onPressed: (){}, icon: Icon(Icons.arrow_forward_ios,size: 15,))
-                ],
-              ),
+                }, icon: Icon(Icons.arrow_forward_ios,size: 15,))
+              ],
             ),
           ),
           Divider(
@@ -65,22 +62,19 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
           Padding(
             padding: const EdgeInsets.only(left: 20,right: 20),
-            child: InkWell(
-              onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>Terms()));
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Terms & Conditions',style: TextStyle(
+                    fontSize: 17,
+                    fontFamily: 'Urbanist',
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black),),
+                IconButton(onPressed: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>Terms()));
 
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('Terms & Conditions',style: TextStyle(
-                      fontSize: 17,
-                      fontFamily: 'Urbanist',
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black),),
-                  IconButton(onPressed: (){}, icon: Icon(Icons.arrow_forward_ios,size: 15,))
-                ],
-              ),
+                }, icon: Icon(Icons.arrow_forward_ios,size: 15,))
+              ],
             ),
           ),
           Divider(
@@ -89,22 +83,19 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
           Padding(
             padding: const EdgeInsets.only(left: 20,right: 20),
-            child: InkWell(
-              onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>FAQuestions()));
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('FAQs',style: TextStyle(
+                    fontSize: 17,
+                    fontFamily: 'Urbanist',
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black),),
+                IconButton(onPressed: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>FAQuestions()));
 
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('FAQs',style: TextStyle(
-                      fontSize: 17,
-                      fontFamily: 'Urbanist',
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black),),
-                  IconButton(onPressed: (){}, icon: Icon(Icons.arrow_forward_ios,size: 15,))
-                ],
-              ),
+                }, icon: Icon(Icons.arrow_forward_ios,size: 15,))
+              ],
             ),
           ),
           Divider(
@@ -113,22 +104,19 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
           Padding(
             padding: const EdgeInsets.only(left: 20,right: 20),
-            child: InkWell(
-              onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>HowToUse()));
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('How To Use',style: TextStyle(
+                    fontSize: 17,
+                    fontFamily: 'Urbanist',
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black),),
+                IconButton(onPressed: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>HowToUse()));
 
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('How To Use',style: TextStyle(
-                      fontSize: 17,
-                      fontFamily: 'Urbanist',
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black),),
-                  IconButton(onPressed: (){}, icon: Icon(Icons.arrow_forward_ios,size: 15,))
-                ],
-              ),
+                }, icon: Icon(Icons.arrow_forward_ios,size: 15,))
+              ],
             ),
           ),
           Divider(
@@ -137,22 +125,19 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
           Padding(
             padding: const EdgeInsets.only(left: 20,right: 20),
-            child: InkWell(
-              onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>PrivacyPolicy()));
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Privacy Policy',style: TextStyle(
+                    fontSize: 17,
+                    fontFamily: 'Urbanist',
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black),),
+                IconButton(onPressed: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>PrivacyPolicy()));
 
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('Privacy Policy',style: TextStyle(
-                      fontSize: 17,
-                      fontFamily: 'Urbanist',
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black),),
-                  IconButton(onPressed: (){}, icon: Icon(Icons.arrow_forward_ios,size: 15,))
-                ],
-              ),
+                }, icon: Icon(Icons.arrow_forward_ios,size: 15,))
+              ],
             ),
           ),
           Divider(

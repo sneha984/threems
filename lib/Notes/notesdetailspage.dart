@@ -3,9 +3,12 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:timezone/timezone.dart' as tz;
+import 'package:timezone/data/latest.dart' as tz;
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
@@ -23,6 +26,7 @@ import '../utils/themes.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'audio_player.dart';
+import 'noti.dart';
 import 'notifications.dart';
 String storagePath(String uid, String filePath, bool isVideo) {
   final timestamp = DateTime.now().microsecondsSinceEpoch;
@@ -83,6 +87,8 @@ class NotesDetailPage extends StatefulWidget {
 }
 
 class _NotesDetailPageState extends State<NotesDetailPage> {
+  Timestamp rDate;
+
   final record = Record();
   Timer _timer;
   Timer _ampTimer;
@@ -96,6 +102,7 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
 
   DateTime selectedDate;
   TimeOfDay selectedTime;
+  DateTime datetime=DateTime.now();
 
 
 //DatePick----------------
@@ -120,6 +127,7 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
     if (datePicked != null && datePicked != selectedDate) {
       setState(() {
         selectedDate = datePicked;
+        datetime=selectedDate;
       });
     }
   }
@@ -135,11 +143,15 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
                 colorScheme: ColorScheme.light(primary: Colors.green)),
             child: child));
     if (timePicked != null && timePicked != selectedTime) {
+
       setState(() {
         selectedTime = timePicked;
+        // datetime=selectedTime as DateTime;
       });
+
     }
   }
+  bool _remainder=false;
 
 
 
@@ -149,11 +161,15 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
       selectedDate=widget.notes['date'].toDate();
       titleController.text=widget.notes['title'];
       contentController.text=widget.notes['content'];
-       audioUrl=widget.notes['audio'];
-
-       selectedTime=TimeOfDay(
+      savedVoice=widget.notes['audio'];
+      _audioUrl=widget.notes['audio'];
+      selectedTime=TimeOfDay(
            hour: int.parse(widget.notes['time'].split(':')[0]),
            minute: int.parse(widget.notes['time'].split(':')[1]));
+      _time.text=widget.notes['remainderTime'];
+      _date.text=widget.notes['remainderDate'];
+      _remainder=widget.notes['remainder'];
+
 
     }
   }
@@ -166,14 +182,94 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
   //   // contentController?.text=widget.notes!['content'].toString()??'';
   //   }
   // }
+  DateTime dateTime = DateTime.now();
+  final TextEditingController _time = TextEditingController();
+  final TextEditingController _date=TextEditingController();
+
+
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+  FlutterLocalNotificationsPlugin();
+
   @override
   void initState() {
-
-
-      getData();
-    // TODO: implement initState
+    getData();
     super.initState();
+    const AndroidInitializationSettings androidInitializationSettings =
+    AndroidInitializationSettings("@mipmap/ic_launcher");
+
+    const DarwinInitializationSettings iosInitializationSettings =DarwinInitializationSettings();
+
+    const InitializationSettings initializationSettings =
+    InitializationSettings(
+      android: androidInitializationSettings,
+      iOS: iosInitializationSettings,
+      macOS: null,
+      linux: null,
+    );
+
+    flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+      // onSelectNotification: (dataYouNeedToUseWhenNotificationIsClicked) {},
+    );
+    print('sneha'+widget.notes['rDate'].toString());
+    if(widget.notes!=null){
+      for(int i=0;i<2;i++){
+        showNotification();
+
+
+      }
+    }
+
   }
+
+  showNotification() {
+    if (widget.notes['title'].isEmpty || widget.notes['time'].isEmpty) {
+      return;
+    }
+    String s=widget.notes['remainderTime'];
+     var t=widget.notes['rDate'].toDate();
+
+    TimeOfDay _startTime = TimeOfDay(hour:int.parse(s.split(":")[0]),minute: int.parse(s.split(":")[1]));
+    dateTime=DateTime(
+      t.year,
+      t.month,
+      t.day,
+      _startTime.hour,
+      _startTime.minute,
+    );
+    print("************************************************${dateTime.toString()}");
+
+    const AndroidNotificationDetails androidNotificationDetails =
+    AndroidNotificationDetails(
+      "ScheduleNotification001",
+      "Notify Me",
+      importance: Importance.high,
+    );
+
+    const DarwinNotificationDetails iosNotificationDetails =DarwinNotificationDetails();
+    const NotificationDetails notificationDetails = NotificationDetails(
+      android: androidNotificationDetails,
+      iOS: iosNotificationDetails,
+      macOS: null,
+      linux: null,
+    );
+    tz.initializeTimeZones();
+    final tz.TZDateTime scheduledAt = tz.TZDateTime.from(dateTime, tz.local);
+    flutterLocalNotificationsPlugin.zonedSchedule(
+        01,widget.notes['title'],widget.notes['content'], scheduledAt, notificationDetails,
+        uiLocalNotificationDateInterpretation:
+        UILocalNotificationDateInterpretation.wallClockTime,
+        androidAllowWhileIdle: true,
+        payload: 'Ths is the data');
+  }
+  // @override
+  // void initState() {
+  //
+  //
+  //     getData();
+  //   // TODO: implement initState
+  //   super.initState();
+  // }
   bool _isRecording = false;
   bool _isPaused = false;
   int _recordDuration = 0;
@@ -265,6 +361,9 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
   }
 
 
+List _audioUrl=[];
+  List Path=[];
+  List savedVoice=[];
 
   String audioUrl="";
   Future<void> _stop() async {
@@ -273,8 +372,16 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
     final path = await _audioRecorder.stop();
 
     // widget.onStop(path);
-    audioSource = ap.AudioSource.uri(Uri.parse(path));
+
+    setState((){
+      audioSource = ap.AudioSource.uri(Uri.parse(path));
+
+      Path.add(audioSource);
+
+    });
+
     File audio =File(path);
+    Path.add(audio);
     Uint8List bytes=await audio.readAsBytes();
     if (validateFileFormat(path,context)) {
       // showUploadMessage(
@@ -284,8 +391,13 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
       ScaffoldMessenger.of(context)
           .hideCurrentSnackBar();
       if (downloadUrl != null) {
-        setState(() =>
-        audioUrl = downloadUrl);
+        setState(() {
+          audioUrl = downloadUrl;
+          _audioUrl.add(audioUrl);
+          savedVoice.add(audioUrl);
+        }
+
+        );
         // showUploadMessage(
         //     context, 'Success');
       } else {
@@ -293,7 +405,7 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
         //     'Failed to upload media');
       }
     }
-    showPlayer = true;
+    showPlayer = false;
     _isRecording = false;
     setState(() {
     }
@@ -336,6 +448,8 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
   }
   @override
   Widget build(BuildContext context) {
+    print('player'+showPlayer.toString());
+    print('record'+_isRecording.toString());
     return Scaffold(
       body: Column(
         children: [
@@ -362,79 +476,102 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
                         fontSize: scrWidth * 0.045,
                         color: Colors.white),
                   ),
-                  SizedBox(width: scrWidth*0.5,),
-                  IconButton(
-                      onPressed: () {
-                        print(currentuserid);
-                        showDialog(
-                          context: context,
-                          builder: (ctx) => AlertDialog(
-                            content: const Text("Do You Want to save this"),
-                            actions: <Widget>[
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(ctx).pop();
-                                },
-                                child: const Text("No"),
-                              ),
-                              TextButton(
-                                onPressed: () {
-
-                                    if(widget.update){
-                                      DateTime date=DateTime(selectedDate.year,
-                                        selectedDate.month,selectedDate.day,
-                                        int.parse(selectedTime.hour.toString()),
-                                        int.parse(selectedTime.minute.toString()),
-                                      );
-                                      FirebaseFirestore
-                                          .instance
-                                          .collection('users')
-                                          .doc(currentuserid)
-                                          .collection('notes').doc(widget.notes['noteId']).update
-                                          ({
-                                        'date':date,
-                                        'title':titleController.text,
-                                        'content':contentController.text,
-                                        'audio':audioUrl,
-                                        'time':'${selectedTime.hour.toString()}:${selectedTime.minute.toString()}'
-                                      });
-                                      Navigator.pushAndRemoveUntil(context,
-                                          MaterialPageRoute(builder: (context)=>NotesPage()),
-                                              (route) => false);
-                                    }else{
-                                      DateTime date=DateTime(selectedDate.year,
-                                        selectedDate.month,selectedDate.day,
-                                        int.parse(selectedTime.hour.toString()),
-                                        int.parse(selectedTime.minute.toString()),
-                                      );
-                                      FirebaseFirestore
-                                          .instance
-                                          .collection('users')
-                                          .doc(currentuserid)
-                                          .collection('notes')
-                                          .add({
-                                        'date':date,
-                                        'title':titleController.text,
-                                        'content':contentController.text,
-                                        'audio':audioUrl,
-                                        'time':'${selectedTime.hour.toString()}:${selectedTime.minute.toString()}'
-                                          }).then((value) =>
-                                          value.update({'noteId':value.id}));
-                                      Navigator.pushAndRemoveUntil(context,
-                                          MaterialPageRoute(builder: (context)=>NotesPage()),
-                                              (route) => false);
-                                    }
+                   Expanded(child: SizedBox(width: scrWidth*0.5,)),
+                  Row(
+                    children: [
+                      Checkbox(
+                        value: _remainder,
+                        onChanged: (bool value) {
+                          setState(() {
+                            _remainder = value;
+                            print(_remainder);
+                          });
+                        },
+                      ),
+                      IconButton(
+                          onPressed: () {
+                            print(currentuserid);
+                            showDialog(
+                              context: context,
+                              builder: (ctx) => AlertDialog(
+                                content: const Text("Do You Want to save this"),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pushAndRemoveUntil(context,MaterialPageRoute(builder: (context)=>NotesPage()), (route) => false);
                                     },
-                                child: const Text(
-                                  "Yes",
-                                  style: TextStyle(color: primarycolor),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
+                                    child: const Text("No"),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
 
-                  }, icon:Icon(Icons.check_outlined,color: Colors.white,)),
+
+                                      if(widget.update){
+                                          DateTime date=DateTime(selectedDate.year,
+                                            selectedDate.month,selectedDate.day,
+                                            int.parse(selectedTime.hour.toString()),
+                                            int.parse(selectedTime.minute.toString()),
+                                          );
+                                          FirebaseFirestore
+                                              .instance
+                                              .collection('users')
+                                              .doc(currentuserid)
+                                              .collection('notes').doc(widget.notes['noteId']).update
+                                              ({
+                                            'rDate':dateTime,
+                                            'remainder':_remainder,
+                                            'remainderDate':_date.text,
+                                            'remainderTime':_time.text,
+                                            'date':date,
+                                            'title':titleController.text,
+                                            'content':contentController.text,
+                                            'audio':_audioUrl,
+                                            'time':'${selectedTime.hour.toString()}:${selectedTime.minute.toString()}'
+                                          });
+                                          Navigator.pushAndRemoveUntil(context,
+                                              MaterialPageRoute(builder: (context)=>NotesPage()),
+                                                  (route) => false);
+                                        }else{
+                                          DateTime date=DateTime(selectedDate.year,
+                                            selectedDate.month,selectedDate.day,
+                                            int.parse(selectedTime.hour.toString()),
+                                            int.parse(selectedTime.minute.toString()),
+                                          );
+                                          FirebaseFirestore
+                                              .instance
+                                              .collection('users')
+                                              .doc(currentuserid)
+                                              .collection('notes')
+                                              .add({
+                                            'rDate':dateTime,
+
+                                            'remainder':_remainder,
+                                            'remainderDate':_date.text,
+                                            'remainderTime':_time.text,
+                                            'date':date,
+                                            'title':titleController.text,
+                                            'content':contentController.text,
+                                            'audio':_audioUrl,
+                                            'time':'${selectedTime.hour.toString()}:${selectedTime.minute.toString()}'
+                                              }).then((value) =>
+                                              value.update({'noteId':value.id}));
+                                          Navigator.pushAndRemoveUntil(context,
+                                              MaterialPageRoute(builder: (context)=>NotesPage()),
+                                                  (route) => false);
+                                        }
+                                        },
+                                    child: const Text(
+                                      "Yes",
+                                      style: TextStyle(color: primarycolor),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+
+                      }, icon:Icon(Icons.check_outlined,color: Colors.white,)),
+                    ],
+                  ),
                   // IconButton(onPressed: (){}, icon:Icon(Icons.mic,color: Colors.white,))
                 ],
               ),
@@ -606,6 +743,7 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
                     Center(
                       child: Container(
                         width: scrWidth * 0.94,
+
                         height: textFormFieldHeight45,
                         // padding: EdgeInsets.only(
                         //   left: scrWidth*0.025,
@@ -624,7 +762,8 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
                           onDelete: () {
                             setState(() => showPlayer = false);
                           },
-                        ) : _isRecording==false?
+                        ) :
+                        _isRecording==false?
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
@@ -680,37 +819,126 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
                           borderRadius: BorderRadius.circular(scrWidth * 0.026),
                           borderSide: BorderSide(color:  Color(0xffDADADA),)
                         ),
-
-
                         contentPadding: EdgeInsets.only(
                             left: scrWidth * 0.03,
                             top: scrHeight * 0.006,
                             bottom: scrWidth * 0.033),
                       ),
-
                       // maxLines: null,
                       // //expands: true,
                       // keyboardType: TextInputType.multiline,
                     ),
+                    SizedBox(height: 10,),
 
+                   _remainder==true? TextField(
+                      controller: _time,
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.0),
+                          ),
+                          suffixIcon: InkWell(
+                            child: const Icon(
+                              Icons.timer_outlined,
+                            ),
+                            onTap: () async {
+                              final TimeOfDay slectedTime = await showTimePicker(
+                                  context: context,
+                                  initialTime: TimeOfDay.now()
+                              );
 
-                    Padding(
-                      padding:  EdgeInsets.only(top: 20),
-                      child: Container(
-                        height: 50,
-                        width: 358,
-                        decoration: BoxDecoration(
-                          color: primarycolor.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: AudioPlayer(
-                          source: ap.AudioSource.uri(Uri.tryParse(audioUrl)),
-                          onDelete: null,
-                          message: true,
-                        ),
+                              if (slectedTime == null) {
+                                return;
+                              }
 
-                      ),
+                              _time.text =
+                              "${slectedTime.hour}:${slectedTime.minute}:${slectedTime.period.toString()}";
+
+                              DateTime newDT = DateTime(
+                                dateTime.year,
+                                dateTime.month,
+                                dateTime.day,
+                                slectedTime.hour,
+                                slectedTime.minute,
+                              );
+                              setState(() {
+                                dateTime = newDT;
+                              });
+                            },
+                          ),
+                          label: Text("Time")),
+                    ):Container(),
+                    SizedBox(height: 10,),
+                    _remainder==true?TextField(
+                      controller: _date,
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.0),
+                          ),
+                          suffixIcon: InkWell(
+                            child: Icon(Icons.date_range),
+                            onTap: () async {
+                              final DateTime newlySelectedDate =
+                              await showDatePicker(
+                                context: context,
+                                initialDate: dateTime,
+                                firstDate: DateTime.now(),
+                                lastDate: DateTime(2095),
+                              );
+
+                              if (newlySelectedDate == null) {
+                                return;
+                              }
+
+                              setState(() {
+                                dateTime = newlySelectedDate;
+                                _date.text =
+                                "${dateTime.year}/${dateTime.month}/${dateTime.day}";
+                              });
+                            },
+                          ),
+                          label: Text("Date")),
+                    ):Container(),
+                    Container(
+                      child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount:_audioUrl.length,
+                          itemBuilder: (context,index){
+                            return Padding(
+                              padding:  EdgeInsets.only(top: 20),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Container(
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                        color: primarycolor.withOpacity(0.2),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: AudioPlayer(
+                                        source: ap.AudioSource.uri(Uri.tryParse(_audioUrl[index])),
+                                        onDelete: null,
+                                        message: true,
+                                      ),
+
+                                    ),
+                                  ),
+                                  IconButton(onPressed: (){
+                                    _audioUrl.remove(_audioUrl[index]);
+                                    // savedVoice.remove(savedVoice[index]);
+                                    setState(() {
+
+                                    });
+
+                                  }, icon: Icon(Icons.delete))
+                                ],
+                              ),
+                            );
+                          }),
+
                     ),
+
+
+
 
                     // SizedBox(
                     //   height: scrHeight*0.65,
@@ -762,9 +990,9 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
           //     child:  Text("Add reminder")
           // ),
           ElevatedButton(onPressed: (){
-            // Navigator.push(context,MaterialPageRoute(builder: (context)=>LocalNotifications()));
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>
-                NotificationPage(not: widget.notes,)));
+             Navigator.push(context,MaterialPageRoute(builder: (context)=>LocalNotifications()));
+            // Navigator.push(context, MaterialPageRoute(builder: (context)=>
+            //     NotificationPage(not: widget.notes,)));
             }, child: Text("uygy")),
           // ElevatedButton(onPressed: (){}, child: Text("Add Rem"))
 
