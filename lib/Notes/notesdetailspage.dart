@@ -211,7 +211,7 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
       initializationSettings,
       // onSelectNotification: (dataYouNeedToUseWhenNotificationIsClicked) {},
     );
-    print('sneha'+widget.notes['rDate'].toString());
+    // print('sneha'+widget.notes['rDate'].toString());
     if(widget.notes!=null){
       for(int i=0;i<2;i++){
         showNotification();
@@ -989,11 +989,11 @@ List _audioUrl=[];
           //     onPressed: () => _selectDate(context),
           //     child:  Text("Add reminder")
           // ),
-          ElevatedButton(onPressed: (){
-             Navigator.push(context,MaterialPageRoute(builder: (context)=>LocalNotifications()));
-            // Navigator.push(context, MaterialPageRoute(builder: (context)=>
-            //     NotificationPage(not: widget.notes,)));
-            }, child: Text("uygy")),
+          // ElevatedButton(onPressed: (){
+          //    Navigator.push(context,MaterialPageRoute(builder: (context)=>LocalNotifications()));
+          //   // Navigator.push(context, MaterialPageRoute(builder: (context)=>
+          //   //     NotificationPage(not: widget.notes,)));
+          //   }, child: Text("uygy")),
           // ElevatedButton(onPressed: (){}, child: Text("Add Rem"))
 
 
