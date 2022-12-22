@@ -633,7 +633,8 @@ class _IncomeReportByDateState extends State<IncomeReportByDate> {
                       ),
                     ),
                   ):
-                  dateIncomeReports.isEmpty?Container(
+                  dateIncomeReports.isEmpty?
+                  Container(
                     child:Center(
                       child: Text(
                         "No expenses",

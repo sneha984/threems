@@ -603,6 +603,7 @@ class _NewExpensePageState extends State<NewExpensePage> {
                             ),
                           ),
                         ),
+
                         Padding(
                           padding: const EdgeInsets.only(left: 22.0,right: 18,top: 10),
                           child: Container(

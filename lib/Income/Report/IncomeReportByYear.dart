@@ -307,7 +307,7 @@ class _IncomeReportPageState extends State<IncomeReportPage> {
                                 scrollbarRadius: Radius.circular(10),
                                 scrollbarThickness: 3,
                                 scrollbarAlwaysShow: true,
-                                offset: const Offset(-20, 0),
+                                offset: const Offset(-20, -5),
                               ),
                             ),
                             // Row(
@@ -722,14 +722,7 @@ class _IncomeReportPageState extends State<IncomeReportPage> {
                                           backgroundColor: Colors.primaries[Random().nextInt(Colors.primaries.length)],
                                           child: _icon ,
                                         ),
-                                        // Container(
-                                        //   height: 100,
-                                        //   decoration: BoxDecoration(
-                                        //       color: Colors.primaries[Random().nextInt(Colors.primaries.length)],
-                                        //       shape: BoxShape.circle
-                                        //   ),
-                                        //   child: _icon,
-                                        // ),
+
                                         SizedBox(width: scrWidth*0.02,),
                                         Center(
                                           child: Text(incomeList[index]['categoryName'].toString(),style: TextStyle(

@@ -167,6 +167,7 @@ class _AddIncomePageState extends State<AddIncomePage> {
                           fontSize: 35,
                           fontFamily: 'Urbanist',
                         ),
+
                         fillColor: textFormFieldFillColor,
                         filled: true,
                         disabledBorder: InputBorder.none,

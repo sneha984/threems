@@ -136,12 +136,12 @@ class _RecentIncomePageState extends State<RecentIncomePage> {
                                 child: Container(
                                   height:scrWidth*0.5,
                                   width:scrWidth*0.25,
-                                  color:Colors.grey,
                                   child: Text(incomeList[index]['description'].toString(),style: TextStyle(
                                       fontSize: 10,
                                       fontFamily: 'Urbanist',
                                       color:Colors.black,
                                       fontWeight: FontWeight.w700
+
                                   ),),
                                 ),
                               ),

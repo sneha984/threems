@@ -288,6 +288,7 @@ class _IncomeFirstPageState extends State<IncomeFirstPage> {
               ),
             ),
             SizedBox(height: scrWidth*0.02,),
+
             SingleChildScrollView(
               child: Container(
                 height: scrWidth*0.8,

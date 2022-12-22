@@ -1,11 +1,9 @@
 import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:threems/Authentication/root.dart';
-
 import '../../screens/charity/verification_details.dart';
 import '../../screens/splash_screen.dart';
 import '../../utils/themes.dart';
@@ -21,6 +19,7 @@ class IncomeCategoryPage extends StatefulWidget {
 class _IncomeCategoryPageState extends State<IncomeCategoryPage> {
   Icon? _icon;
   var icons;
+
   _pickIcon() async {
     IconData? icon = await FlutterIconPicker.showIconPicker(context,
         // iconPackModes: [IconPack.cupertino]);
@@ -93,7 +92,6 @@ class _IncomeCategoryPageState extends State<IncomeCategoryPage> {
                     ),
                   ),
                 ),
-
               ]),
         ),
         body: TabBarView(

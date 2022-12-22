@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
@@ -12,6 +11,7 @@ class IncomeSuccessPage extends StatefulWidget {
 
   @override
   State<IncomeSuccessPage> createState() => _IncomeSuccessPageState();
+
 }
 
 class _IncomeSuccessPageState extends State<IncomeSuccessPage> {
