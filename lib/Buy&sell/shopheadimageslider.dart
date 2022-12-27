@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,11 +17,31 @@ class ImageSlide extends StatefulWidget {
 }
 
 class _ImageSlideState extends State<ImageSlide> {
+  List utilityImages=[];
+  getUtiltyImages(){
+    FirebaseFirestore.instance.collection('ads').
+    where('type',isEqualTo: 'utilities').snapshots().listen((event) {
+
+      utilityImages=[];
+      for(var doc in event.docs){
+        utilityImages.add(doc['image']);
+      }
+      if(mounted) {
+        setState(() {
+
+      });
+      }
+
+
+
+    });
+  }
   PageController pageController = PageController(viewportFraction: 1);
   var _currentPageValue = 0.0;
 
   @override
   void initState() {
+    getUtiltyImages();
     // TODO: implement initState
     super.initState();
     pageController.addListener(() {
@@ -74,7 +95,7 @@ class _ImageSlideState extends State<ImageSlide> {
                   borderRadius: BorderRadius.circular(scrWidth * 0.04),
                   child: CachedNetworkImage(
                     fit: BoxFit.fill,
-                    imageUrl: carouselImage[index],
+                    imageUrl: utilityImages[index],
                   ),
                 ),
               );
@@ -82,7 +103,7 @@ class _ImageSlideState extends State<ImageSlide> {
           ),
         ),
         DotsIndicator(
-          dotsCount: carouselImages.isEmpty ? 1 : carouselImages.length,
+          dotsCount: utilityImages.isEmpty ? 1 : utilityImages.length,
           position: _currentPageValue,
           decorator: DotsDecorator(
             spacing: EdgeInsets.all(scrWidth * 0.01),
