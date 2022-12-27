@@ -17,25 +17,23 @@ class ImageSlide extends StatefulWidget {
 }
 
 class _ImageSlideState extends State<ImageSlide> {
-  List utilityImages=[];
-  getUtiltyImages(){
-    FirebaseFirestore.instance.collection('ads').
-    where('type',isEqualTo: 'utilities').snapshots().listen((event) {
-
-      utilityImages=[];
-      for(var doc in event.docs){
+  List utilityImages = [];
+  getUtiltyImages() {
+    FirebaseFirestore.instance
+        .collection('ads')
+        .where('type', isEqualTo: 'utilities')
+        .snapshots()
+        .listen((event) {
+      utilityImages = [];
+      for (var doc in event.docs) {
         utilityImages.add(doc['image']);
       }
-      if(mounted) {
-        setState(() {
-
-      });
+      if (mounted) {
+        setState(() {});
       }
-
-
-
     });
   }
+
   PageController pageController = PageController(viewportFraction: 1);
   var _currentPageValue = 0.0;
 
@@ -57,9 +55,10 @@ class _ImageSlideState extends State<ImageSlide> {
     super.dispose();
     pageController.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
-    return  Column(
+    return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Container(
@@ -95,7 +94,7 @@ class _ImageSlideState extends State<ImageSlide> {
                   borderRadius: BorderRadius.circular(scrWidth * 0.04),
                   child: CachedNetworkImage(
                     fit: BoxFit.fill,
-                    imageUrl: utilityImages[index],
+                    imageUrl: utilityImages.isEmpty ? '' : utilityImages[index],
                   ),
                 ),
               );
@@ -110,13 +109,13 @@ class _ImageSlideState extends State<ImageSlide> {
             activeColor: dotIndicatorColor,
             color: dotIndicatorColor,
             size: Size(
-              // 6,
-              // 4,
+                // 6,
+                // 4,
                 scrWidth * 0.017,
                 scrWidth * 0.011),
             activeSize: Size(
-              // 61,
-              //4,
+                // 61,
+                //4,
                 scrWidth * 0.168,
                 scrWidth * 0.011),
             activeShape: RoundedRectangleBorder(
