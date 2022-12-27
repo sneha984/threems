@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
+import '../../Authentication/root.dart';
+import '../../kuri/createkuri.dart';
 import '../../model/ChitModel.dart';
 import '../../model/usermodel.dart';
 import '../../utils/customclip2.dart';
@@ -37,7 +39,7 @@ class _YourChitPageState extends State<YourChitPage> {
   Map<String, UserModel> userIdByName = {};
   Map<String, Winners>? mapOfWinners;
   Map<String, Payments>? mapOfCurrentPayments;
-
+  double total = 0;
   getActivePayments() {
     mapOfCurrentPayments = {};
 
@@ -63,7 +65,9 @@ class _YourChitPageState extends State<YourChitPage> {
             .where('datePaid', isGreaterThan: dateInTimeStamp)
             .snapshots()
             .listen((event) {
+          total = 0;
           for (DocumentSnapshot<Map<String, dynamic>> doc in event.docs) {
+            total += doc['amount'];
             mapOfCurrentPayments![doc['userId']] =
                 Payments.fromJson(doc.data()!);
           }
@@ -86,7 +90,9 @@ class _YourChitPageState extends State<YourChitPage> {
             .where('datePaid', isGreaterThan: dateInTimeStamp)
             .snapshots()
             .listen((event) {
+          total = 0;
           for (DocumentSnapshot<Map<String, dynamic>> doc in event.docs) {
+            total += doc['amount'];
             mapOfCurrentPayments![doc['userId']] =
                 Payments.fromJson(doc.data()!);
           }
@@ -113,7 +119,9 @@ class _YourChitPageState extends State<YourChitPage> {
             .where('datePaid', isGreaterThan: dateInTimeStamp)
             .snapshots()
             .listen((event) {
+          total = 0;
           for (DocumentSnapshot<Map<String, dynamic>> doc in event.docs) {
+            total += doc['amount'];
             mapOfCurrentPayments![doc['userId']] =
                 Payments.fromJson(doc.data()!);
           }
@@ -135,7 +143,9 @@ class _YourChitPageState extends State<YourChitPage> {
             .where('datePaid', isGreaterThan: dateInTimeStamp)
             .snapshots()
             .listen((event) {
+          total = 0;
           for (DocumentSnapshot<Map<String, dynamic>> doc in event.docs) {
+            total += doc['amount'];
             mapOfCurrentPayments![doc['userId']] =
                 Payments.fromJson(doc.data()!);
           }
@@ -1549,15 +1559,19 @@ class _YourChitPageState extends State<YourChitPage> {
                         SizedBox(
                           width: scrWidth * 0.04,
                         ),
-                        GestureDetector(
+                        InkWell(
                           onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ChitPaymentPage(
-                                    chit: chit!,
-                                  ),
-                                ));
+                            if (mapOfWinners!.keys.contains(currentuserid!)) {
+                              showSnackbar(context, 'Already paid this month');
+                            } else {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ChitPaymentPage(
+                                      chit: chit!,
+                                    ),
+                                  ));
+                            }
 
                             // Navigator.push(context, MaterialPageRoute(builder: (context)=>VacantChitJoinPage()));
                           },
@@ -1565,7 +1579,9 @@ class _YourChitPageState extends State<YourChitPage> {
                             height: scrHeight * 0.045,
                             width: scrWidth * 0.25,
                             decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: mapOfWinners!.keys.contains(currentuserid!)
+                                  ? Colors.grey
+                                  : Colors.white,
                               borderRadius: BorderRadius.circular(11),
                             ),
                             child: Center(

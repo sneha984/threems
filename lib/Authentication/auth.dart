@@ -43,27 +43,17 @@ class Authentication {
 
     // dateTime=DateTime.now() as Timestamp?;
 
-    print('HERE TRY ');
-    FirebaseFirestore.instance.collection('users').doc(userDoc).update({
-      "userId": userDoc,
-      "userName": userName,
-      "userEmail": userEmail,
-      "userImage": userImage,
-      "phone": '',
-      "dateTime": DateTime.now(),
-    }).onError((error, stackTrace) {
-      print('HERE TRY ERROR');
-      print(error.toString());
-
-      FirebaseFirestore.instance.collection('users').doc(userDoc).set({
+    try {
+      print('HERE TRY ');
+      FirebaseFirestore.instance.collection('users').doc(userDoc).update({
         "userId": userDoc,
         "userName": userName,
         "userEmail": userEmail,
         "userImage": userImage,
-        "phone": '',
+        // "phone": '',
         "dateTime": DateTime.now(),
-      }).then((value) {
-        print('Success');
+      }).whenComplete(() {
+        print('COMPLETED');
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
@@ -71,7 +61,24 @@ class Authentication {
             ),
             (route) => false);
       });
-    });
+    } catch (err) {
+      FirebaseFirestore.instance.collection('users').doc(userDoc).set({
+        "userId": userDoc,
+        "userName": userName,
+        "userEmail": userEmail,
+        "userImage": userImage,
+        "phone": '',
+        "dateTime": DateTime.now(),
+      }).whenComplete(() {
+        print('COMPLETED');
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Rootingpage(),
+            ),
+            (route) => false);
+      });
+    }
 
     // Navigator.pushAndRemoveUntil(
     //     context,

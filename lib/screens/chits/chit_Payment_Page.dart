@@ -87,7 +87,7 @@ class _ChitPaymentPageState extends State<ChitPaymentPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    amount = TextEditingController();
+    amount = TextEditingController(text: widget.chit.amount!.toString());
     getIconData();
   }
 
@@ -210,6 +210,7 @@ class _ChitPaymentPageState extends State<ChitPaymentPage> {
                           width: scrWidth * 0.4,
                           child: TextFormField(
                             controller: amount,
+                            readOnly: true,
                             cursorHeight: scrWidth * 0.055,
                             cursorWidth: 1,
                             cursorColor: Colors.black,

@@ -50,6 +50,8 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
   Map<String, Winners>? mapOfWinners;
   Map<String, Payments>? mapOfCurrentPayments;
 
+  double total = 0;
+
   getActivePayments() {
     mapOfCurrentPayments = {};
 
@@ -75,7 +77,9 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
             .where('datePaid', isGreaterThan: dateInTimeStamp)
             .snapshots()
             .listen((event) {
+          total = 0;
           for (DocumentSnapshot<Map<String, dynamic>> doc in event.docs) {
+            total += doc['amount'];
             mapOfCurrentPayments![doc['userId']] =
                 Payments.fromJson(doc.data()!);
           }
@@ -98,7 +102,9 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
             .where('datePaid', isGreaterThan: dateInTimeStamp)
             .snapshots()
             .listen((event) {
+          total = 0;
           for (DocumentSnapshot<Map<String, dynamic>> doc in event.docs) {
+            total += doc['amount'];
             mapOfCurrentPayments![doc['userId']] =
                 Payments.fromJson(doc.data()!);
           }
@@ -126,7 +132,9 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
             .where('datePaid', isGreaterThan: dateInTimeStamp)
             .snapshots()
             .listen((event) {
+          total = 0;
           for (DocumentSnapshot<Map<String, dynamic>> doc in event.docs) {
+            total += doc['amount'];
             mapOfCurrentPayments![doc['userId']] =
                 Payments.fromJson(doc.data()!);
           }
@@ -148,7 +156,9 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
             .where('datePaid', isGreaterThan: dateInTimeStamp)
             .snapshots()
             .listen((event) {
+          total = 0;
           for (DocumentSnapshot<Map<String, dynamic>> doc in event.docs) {
+            total += doc['amount'];
             mapOfCurrentPayments![doc['userId']] =
                 Payments.fromJson(doc.data()!);
           }
@@ -969,8 +979,7 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
                                       ),
                                       Text(
                                         chit!.chitType == 'Monthly'
-                                            ? DateTime(DateTime.now().year, DateTime.now().month,
-                                            chit!.chitDate!, int.parse(chit!.chitTime!.split(':')[0]), int.parse(chit!.chitTime!.split(':')[1]))
+                                            ? DateTime(DateTime.now().year, DateTime.now().month, chit!.chitDate!, int.parse(chit!.chitTime!.split(':')[0]), int.parse(chit!.chitTime!.split(':')[1]))
                                                     .isAfter(DateTime.now())
                                                 ? DateFormat('dd MMM yyyy')
                                                     .format(DateTime(
@@ -1719,7 +1728,7 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
                               height: scrHeight * 0.002,
                             ),
                             Text(
-                              "₹35,000/50,000",
+                              "₹${total.toInt()}/${_formatNumber(((chit!.subscriptionAmount!.toInt()) * chit!.membersCount!).toString())}",
                               style: TextStyle(
                                   fontFamily: 'Urbanist',
                                   fontSize: scrWidth * 0.044,

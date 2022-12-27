@@ -800,295 +800,304 @@ class _HostedChitPageState extends State<HostedChitPage>
               //HOSTED CHITS
               Container(
                   color: Colors.white,
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: scrHeight * 0.01,
-                      ),
-                      ListView.builder(
-                          padding: EdgeInsets.only(
-                            left: scrHeight * 0.02,
-                            right: scrHeight * 0.02,
-                            bottom: scrHeight * 0.02,
-                          ),
-                          scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                          // physics: NeverScrollableScrollPhysics(),
-                          itemCount: hostedChits.length, // the length
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: EdgeInsets.only(top: scrHeight * 0.015),
-                              child: InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                hostedChits[index].status == 0
-                                                    ? HostedDraftPage(
-                                                        id: hostedChits[index]
-                                                            .chitId!,
-                                                      )
-                                                    : MyHostedPublishedChit(
-                                                        id: hostedChits[index]
-                                                            .chitId!)));
-                                  });
-                                },
-                                child: Container(
-                                  height: scrHeight * 0.17,
-                                  width: scrWidth * 0.95,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Colors.white,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey.shade300,
-                                        offset: const Offset(
-                                          2.0,
-                                          2.0,
-                                        ),
-                                        blurRadius: 20.0,
-                                        spreadRadius: 1.0,
-                                      ), //BoxShadow
-                                    ],
-                                  ),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: scrHeight * 0.01,
+                        ),
+                        ListView.builder(
+                            padding: EdgeInsets.only(
+                              left: scrHeight * 0.02,
+                              right: scrHeight * 0.02,
+                              bottom: scrHeight * 0.02,
+                            ),
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: hostedChits.length, // the length
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding:
+                                    EdgeInsets.only(top: scrHeight * 0.015),
+                                child: InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  hostedChits[index].status == 0
+                                                      ? HostedDraftPage(
+                                                          id: hostedChits[index]
+                                                              .chitId!,
+                                                        )
+                                                      : MyHostedPublishedChit(
+                                                          id: hostedChits[index]
+                                                              .chitId!)));
+                                    });
+                                  },
+                                  child: Container(
+                                    height: scrHeight * 0.17,
+                                    width: scrWidth * 0.95,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: Colors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.shade300,
+                                          offset: const Offset(
+                                            2.0,
+                                            2.0,
+                                          ),
+                                          blurRadius: 20.0,
+                                          spreadRadius: 1.0,
+                                        ), //BoxShadow
+                                      ],
+                                    ),
 
-                                  // height: 147,
-                                  // width: 339,
-                                  child: Column(
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding: EdgeInsets.only(
-                                                left: scrWidth * 0.025,
-                                                right: scrWidth * 0.025,
-                                                // bottom: scrWidth*0.025,
-                                                top: scrWidth * 0.03),
-                                            child: Container(
-                                              width: scrWidth * 0.15,
-                                              height: scrHeight * 0.07,
-                                              decoration: BoxDecoration(
-                                                image: DecorationImage(
-                                                    image: NetworkImage(
-                                                        hostedChits[index]
-                                                            .profile!)),
-                                                borderRadius:
-                                                    BorderRadius.circular(14),
-                                                color: Colors.grey
-                                                    .withOpacity(0.1),
+                                    // height: 147,
+                                    // width: 339,
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsets.only(
+                                                  left: scrWidth * 0.025,
+                                                  right: scrWidth * 0.022,
+                                                  // bottom: scrWidth*0.025,
+                                                  top: scrWidth * 0.03),
+                                              child: Container(
+                                                width: scrWidth * 0.15,
+                                                height: scrHeight * 0.07,
+                                                decoration: BoxDecoration(
+                                                  image: DecorationImage(
+                                                      image: NetworkImage(
+                                                          hostedChits[index]
+                                                              .profile!)),
+                                                  borderRadius:
+                                                      BorderRadius.circular(14),
+                                                  color: Colors.grey
+                                                      .withOpacity(0.1),
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              SizedBox(
-                                                height: scrHeight * 0.015,
-                                              ),
-                                              Row(
-                                                children: [
-                                                  Text("Name",
-                                                      style: chitcardone10),
-                                                  SizedBox(
-                                                    width: scrWidth * 0.467,
-                                                  ),
-                                                  CustomPaint(
-                                                    size: Size(
-                                                        scrWidth * 0.4,
-                                                        (scrWidth * 0.04)
-                                                            .toDouble()), //You can Replace [WIDTH] with your desired width for Custom Paint and height will be calculated automatically
-                                                    painter: hostedChits[index]
-                                                                .status !=
-                                                            2
-                                                        ? RCustomPainter()
-                                                        : RPSCustomPainter(),
-                                                    child: Container(
-                                                      width: scrWidth * 0.17,
-                                                      height: scrHeight * 0.023,
-                                                      padding: EdgeInsets.only(
-                                                          left:
-                                                              scrWidth * 0.01),
-                                                      child: Center(
-                                                        child: hostedChits[
-                                                                        index]
-                                                                    .status ==
-                                                                0
-                                                            ? Text(
-                                                                "Draft",
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .black,
-                                                                    fontSize:
-                                                                        scrWidth *
-                                                                            0.027,
-                                                                    fontFamily:
-                                                                        'Urbanist',
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w600),
-                                                              )
-                                                            : hostedChits[index]
-                                                                        .status ==
-                                                                    1
-                                                                ? Text(
-                                                                    "Vacant",
-                                                                    style: TextStyle(
-                                                                        color: Colors
-                                                                            .black,
-                                                                        fontSize:
-                                                                            scrWidth *
-                                                                                0.027,
-                                                                        fontFamily:
-                                                                            'Urbanist',
-                                                                        fontWeight:
-                                                                            FontWeight.w600),
-                                                                  )
-                                                                : Text(
-                                                                    "Published",
-                                                                    style: TextStyle(
-                                                                        color: Colors
-                                                                            .white,
-                                                                        fontSize:
-                                                                            scrWidth *
-                                                                                0.027,
-                                                                        fontFamily:
-                                                                            'Urbanist',
-                                                                        fontWeight:
-                                                                            FontWeight.w600),
-                                                                  ),
-                                                      ),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                SizedBox(
+                                                  height: scrHeight * 0.015,
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    Text("Name",
+                                                        style: chitcardone10),
+                                                    SizedBox(
+                                                      width: scrWidth * 0.467,
                                                     ),
-                                                  ),
-                                                ],
-                                              ),
-                                              Text(hostedChits[index].chitName!,
-                                                  style: chitcard15),
-                                              Padding(
-                                                padding: EdgeInsets.only(
-                                                    left: scrWidth * 0.55),
-                                                child: Text("Value",
-                                                    style: chitcardone10),
-                                              ),
-                                              Row(
-                                                children: [
-                                                  Row(
-                                                    children: [
-                                                      Padding(
+                                                    CustomPaint(
+                                                      size: Size(
+                                                          scrWidth * 0.4,
+                                                          (scrWidth * 0.04)
+                                                              .toDouble()), //You can Replace [WIDTH] with your desired width for Custom Paint and height will be calculated automatically
+                                                      painter: hostedChits[
+                                                                      index]
+                                                                  .status !=
+                                                              2
+                                                          ? RCustomPainter()
+                                                          : RPSCustomPainter(),
+                                                      child: Container(
+                                                        width: scrWidth * 0.17,
+                                                        height:
+                                                            scrHeight * 0.023,
                                                         padding:
                                                             EdgeInsets.only(
-                                                                right:
-                                                                    scrWidth *
-                                                                        0.01),
-                                                        child: SvgPicture.asset(
-                                                          "assets/icons/timericon.svg",
+                                                                left: scrWidth *
+                                                                    0.01),
+                                                        child: Center(
+                                                          child: hostedChits[
+                                                                          index]
+                                                                      .status ==
+                                                                  0
+                                                              ? Text(
+                                                                  "Draft",
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .black,
+                                                                      fontSize:
+                                                                          scrWidth *
+                                                                              0.027,
+                                                                      fontFamily:
+                                                                          'Urbanist',
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w600),
+                                                                )
+                                                              : hostedChits[index]
+                                                                          .status ==
+                                                                      1
+                                                                  ? Text(
+                                                                      "Vacant",
+                                                                      style: TextStyle(
+                                                                          color: Colors
+                                                                              .black,
+                                                                          fontSize: scrWidth *
+                                                                              0.027,
+                                                                          fontFamily:
+                                                                              'Urbanist',
+                                                                          fontWeight:
+                                                                              FontWeight.w600),
+                                                                    )
+                                                                  : Text(
+                                                                      "Published",
+                                                                      style: TextStyle(
+                                                                          color: Colors
+                                                                              .white,
+                                                                          fontSize: scrWidth *
+                                                                              0.027,
+                                                                          fontFamily:
+                                                                              'Urbanist',
+                                                                          fontWeight:
+                                                                              FontWeight.w600),
+                                                                    ),
                                                         ),
                                                       ),
-                                                      Text(
-                                                          "${hostedChits[index].duration} Months",
-                                                          style: tenmonthsfont),
-                                                    ],
-                                                  ),
-                                                  SizedBox(
-                                                    width: scrHeight * 0.135,
-                                                  ),
-                                                  Text(
-                                                      '$_currency ${_formatNumber(
-                                                        hostedChits[index]
-                                                            .amount!
-                                                            .truncate()
-                                                            .toString()
-                                                            .replaceAll(
-                                                                ',', ''),
-                                                      )}',
-                                                      style: valuefontchit)
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                      const Divider(
-                                        indent: 30,
-                                        endIndent: 30,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          Container(
-                                            width: scrWidth * 0.28,
-                                            height: scrHeight * 0.03,
-                                            decoration: BoxDecoration(
-                                                color: Color(0xffECECEC),
-                                                borderRadius:
-                                                    BorderRadius.circular(16)),
-                                            child: Row(
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsets.only(
-                                                    left: scrWidth * 0.03,
-                                                    right: scrWidth * 0.035,
-                                                  ),
-                                                  child: SvgPicture.asset(
-                                                    "assets/icons/people.svg",
-                                                  ),
+                                                    ),
+                                                  ],
                                                 ),
                                                 Text(
-                                                    "${hostedChits[index].members!.length}/${hostedChits[index].membersCount} Users",
-                                                    style: tenbytenfont)
+                                                    hostedChits[index]
+                                                        .chitName!,
+                                                    style: chitcard15),
+                                                Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: scrWidth * 0.55),
+                                                  child: Text("Value",
+                                                      style: chitcardone10),
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    Row(
+                                                      children: [
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                                  right:
+                                                                      scrWidth *
+                                                                          0.01),
+                                                          child:
+                                                              SvgPicture.asset(
+                                                            "assets/icons/timericon.svg",
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                            "${hostedChits[index].duration} Months",
+                                                            style:
+                                                                tenmonthsfont),
+                                                      ],
+                                                    ),
+                                                    SizedBox(
+                                                      width: scrHeight * 0.135,
+                                                    ),
+                                                    Text(
+                                                        '$_currency ${_formatNumber(
+                                                          hostedChits[index]
+                                                              .amount!
+                                                              .truncate()
+                                                              .toString()
+                                                              .replaceAll(
+                                                                  ',', ''),
+                                                        )}',
+                                                        style: valuefontchit)
+                                                  ],
+                                                ),
                                               ],
                                             ),
-                                          ),
-                                          SizedBox(
-                                            width: scrWidth * 0.1,
-                                          ),
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.end,
-                                            children: [
-                                              Text("Subscription",
-                                                  style: chitcardone10),
-                                              SizedBox(
-                                                height: scrHeight * 0.001,
-                                              ),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.end,
+                                          ],
+                                        ),
+                                        const Divider(
+                                          indent: 30,
+                                          endIndent: 30,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            Container(
+                                              width: scrWidth * 0.28,
+                                              height: scrHeight * 0.03,
+                                              decoration: BoxDecoration(
+                                                  color: Color(0xffECECEC),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          16)),
+                                              child: Row(
                                                 children: [
+                                                  Padding(
+                                                    padding: EdgeInsets.only(
+                                                      left: scrWidth * 0.03,
+                                                      right: scrWidth * 0.035,
+                                                    ),
+                                                    child: SvgPicture.asset(
+                                                      "assets/icons/people.svg",
+                                                    ),
+                                                  ),
                                                   Text(
-                                                      '$_currency ${_formatNumber(
-                                                        hostedChits[index]
-                                                            .subscriptionAmount!
-                                                            .truncate()
-                                                            .toString()
-                                                            .replaceAll(
-                                                                ',', ''),
-                                                      )}',
-                                                      style: valuefontchit),
-                                                  Text(
-                                                      "/${hostedChits[index].chitType == 'Monthly' ? 'Month' : 'Week'}",
-                                                      style:
-                                                          chitcardtwomonth10),
+                                                      "${hostedChits[index].members!.length}/${hostedChits[index].membersCount} Users",
+                                                      style: tenbytenfont)
                                                 ],
-                                              )
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ],
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: scrWidth * 0.1,
+                                            ),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.end,
+                                              children: [
+                                                Text("Subscription",
+                                                    style: chitcardone10),
+                                                SizedBox(
+                                                  height: scrHeight * 0.001,
+                                                ),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.end,
+                                                  children: [
+                                                    Text(
+                                                        '$_currency ${_formatNumber(
+                                                          hostedChits[index]
+                                                              .subscriptionAmount!
+                                                              .truncate()
+                                                              .toString()
+                                                              .replaceAll(
+                                                                  ',', ''),
+                                                        )}',
+                                                        style: valuefontchit),
+                                                    Text(
+                                                        "/${hostedChits[index].chitType == 'Monthly' ? 'Month' : 'Week'}",
+                                                        style:
+                                                            chitcardtwomonth10),
+                                                  ],
+                                                )
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            );
-                          })
-                    ],
+                              );
+                            })
+                      ],
+                    ),
                   )),
             ],
           ))
