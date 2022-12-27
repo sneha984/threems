@@ -36,7 +36,6 @@ class UserModel {
         address!.add(new Address.fromJson(v));
       });
     }
-
   }
 
   Map<String, dynamic> toJson() {
@@ -57,13 +56,14 @@ class UserModel {
 
 StreamSubscription? listenUserSub;
 getcurrentuser() {
+  print('Here');
+  print(currentuserid);
   listenUserSub = FirebaseFirestore.instance
       .collection('users')
       .doc(currentuserid)
       .snapshots()
       .listen((event) {
     currentuser = UserModel.fromJson(event.data()!);
-
   });
 }
 
@@ -103,6 +103,3 @@ class Address {
     return data;
   }
 }
- 
-
-

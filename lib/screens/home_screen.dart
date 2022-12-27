@@ -1,10 +1,13 @@
+import 'package:badges/badges.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:contacts_service/contacts_service.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:threems/Notes/notes.dart';
@@ -21,7 +24,7 @@ import 'package:threems/widgets/verified_charity_widget.dart';
 import 'package:threems/widgets/head_image_slider.dart';
 import 'package:threems/widgets/funding_widget.dart';
 import 'package:threems/widgets/upcomming_card_widget.dart';
-
+import 'dart:io';
 import '../Authentication/auth.dart';
 import '../Authentication/root.dart';
 import '../UpComing__Collection_&__Payments/Collections.dart';
@@ -48,6 +51,44 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final FocusNode nameFocus = FocusNode();
+  final FocusNode emailFocus = FocusNode();
+  final FocusNode phoneFocus = FocusNode();
+  String? imgUrl;
+  var imgFile;
+  var uploadTask;
+  var fileUrl;
+  Future uploadImageToFirebase(BuildContext context) async {
+    Reference firebaseStorageRef =
+        FirebaseStorage.instance.ref().child('deposits/${imgFile.path}');
+    UploadTask uploadTask = firebaseStorageRef.putFile(imgFile);
+    TaskSnapshot taskSnapshot = (await uploadTask);
+    String value = await taskSnapshot.ref.getDownloadURL();
+    print(value);
+
+    // if(value!=null){
+    //   imageList.add(value);
+    // }
+    setState(() {
+      imgUrl = value;
+      user[0].userImage = imgUrl;
+      print(imgUrl);
+    });
+    setState(() {});
+  }
+
+  _pickImage() async {
+    final imageFile =
+        await ImagePicker.platform.pickImage(source: ImageSource.gallery);
+    setState(() {
+      imgFile = File(imageFile!.path);
+      uploadImageToFirebase(context);
+    });
+  }
+
   askPermissions() async {
     PermissionStatus permission = await getContactPermission();
     if (permission == PermissionStatus.granted) {
@@ -122,23 +163,25 @@ class _HomeScreenState extends State<HomeScreen> {
       print('00000000000000000000000000000000000000000000000000000');
     }
   }
-  List<UserModel> user=[];
-  getCurrentUserDet(){
-    FirebaseFirestore.instance.collection('users')
-        .where('userId',isEqualTo: currentuserid).snapshots().listen((event) {
-      user=[];
-      for(DocumentSnapshot<Map<String,dynamic>> doc in event.docs){
+
+  List<UserModel> user = [];
+  getCurrentUserDet() {
+    FirebaseFirestore.instance
+        .collection('users')
+        .where('userId', isEqualTo: currentuserid)
+        .snapshots()
+        .listen((event) {
+      user = [];
+      for (DocumentSnapshot<Map<String, dynamic>> doc in event.docs) {
         user.add(UserModel.fromJson(doc.data()!));
       }
-      if(mounted){
-        setState(() {
-
-        });
+      if (mounted) {
+        setState(() {});
       }
     });
   }
-  final Authentication _authentication = Authentication();
 
+  final Authentication _authentication = Authentication();
 
   @override
   void initState() {
@@ -797,14 +840,367 @@ class _HomeScreenState extends State<HomeScreen> {
       },
       child: Scaffold(
         endDrawer: Drawer(
-           elevation: 10.0,
+          elevation: 10.0,
           child: ListView(
             children: <Widget>[
               InkWell(
-                onTap: (){
-                  Navigator.push(context,
-                                 MaterialPageRoute(builder: (context) => ProfilePage(user: user![0],)));
+                onTap: () {
+                  // Navigator.push(context,
+                  //                MaterialPageRoute(builder: (context) => ProfilePage(user: user![0],)));
 
+                  nameController.text = user[0].userName ?? '';
+                  phoneController.text = user[0].phone ?? '';
+                  emailController.text = user[0].userEmail ?? '';
+                  imgUrl = user[0].userImage ?? '';
+
+                  showDialog(
+                    context: context,
+                    builder: (context) => StatefulBuilder(
+                      builder: (BuildContext context,
+                          void Function(void Function()) setState) {
+                        return Scaffold(
+                          backgroundColor: Colors.transparent,
+                          body: Dialog(
+                            child: Container(
+                              height: 450,
+                              decoration: BoxDecoration(
+                                // color: Colors.red,
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              // color: Colors.grey,
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 15, right: 15),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Container(
+                                        margin: EdgeInsets.only(top: 16),
+                                        height: 25,
+                                        width: 25,
+                                        decoration: BoxDecoration(
+                                            color: Colors.grey.withOpacity(0.2),
+                                            borderRadius:
+                                                BorderRadius.circular(20)),
+                                        child: Center(child: Text("X")),
+                                      ),
+                                    ),
+                                    // Container(
+                                    //   height:90,
+                                    //   width:90,
+                                    //   decoration: BoxDecoration(
+                                    //       borderRadius: BorderRadius.circular(70),
+                                    //       color: Colors.grey,
+                                    //       image: DecorationImage(image: NetworkImage(currentuser?.userImage??''),fit: BoxFit.fill)
+                                    //   ),
+                                    // ),
+                                    SizedBox(
+                                      height: 15,
+                                    ),
+                                    Center(
+                                      child: Badge(
+                                        elevation: 0, //icon style
+                                        badgeContent: Container(
+                                            height: scrHeight * 0.03,
+                                            width: scrWidth * 0.07,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(30),
+                                                color: primarycolor),
+                                            child: Icon(
+                                              Icons
+                                                  .add_photo_alternate_outlined,
+                                              color: Colors.white,
+                                              size: 15,
+                                            )),
+                                        badgeColor: Colors.white,
+                                        // position: BadgePosition(start:5 ),
+                                        child: InkWell(
+                                          onTap: (() async {
+                                            // pickLogo();
+                                            await _pickImage();
+                                            setState(() {});
+                                          }),
+                                          child: CircleAvatar(
+                                            radius: 40,
+                                            backgroundImage:
+                                                // NetworkImage(currentuser?.userImage??'')
+                                                imgUrl == null
+                                                    ? NetworkImage(
+                                                        user[0].userImage ?? '',
+                                                      )
+                                                    : NetworkImage(imgUrl!),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+
+                                    SizedBox(
+                                      height: 30,
+                                    ),
+                                    Container(
+                                      width: scrWidth,
+                                      height: textFormFieldHeight45,
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: scrWidth * 0.015,
+                                        vertical: scrHeight * 0.002,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: Color(0xffDADADA),
+                                        ),
+                                        color: textFormFieldFillColor,
+                                        borderRadius: BorderRadius.circular(
+                                            scrWidth * 0.026),
+                                      ),
+                                      child: TextFormField(
+                                        controller: nameController,
+                                        focusNode: nameFocus,
+                                        cursorHeight: scrWidth * 0.055,
+                                        cursorWidth: 1,
+                                        cursorColor: Colors.black,
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: FontSize15,
+                                          fontFamily: 'Urbanist',
+                                        ),
+                                        decoration: InputDecoration(
+                                          labelText: 'Name',
+                                          labelStyle: TextStyle(
+                                            color: nameFocus.hasFocus
+                                                ? primarycolor
+                                                : textFormUnFocusColor,
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: FontSize15,
+                                            fontFamily: 'Urbanist',
+                                          ),
+                                          fillColor: textFormFieldFillColor,
+                                          filled: true,
+                                          contentPadding: EdgeInsets.only(
+                                              left: scrWidth * 0.03,
+                                              top: scrHeight * 0.006,
+                                              bottom: scrWidth * 0.033),
+                                          disabledBorder: InputBorder.none,
+                                          enabledBorder: InputBorder.none,
+                                          errorBorder: InputBorder.none,
+                                          border: InputBorder.none,
+                                          focusedBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: primarycolor,
+                                              width: 2,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+
+                                    // TextFormField(
+                                    //   controller: nameController,
+                                    //   decoration: InputDecoration(
+                                    //     labelText: "name",
+                                    //     border: OutlineInputBorder(
+                                    //       borderRadius: BorderRadius.circular(20),
+                                    //     ),
+                                    //   ),
+                                    // ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Container(
+                                      width: scrWidth,
+                                      height: textFormFieldHeight45,
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: scrWidth * 0.015,
+                                        vertical: scrHeight * 0.002,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: Color(0xffDADADA),
+                                        ),
+                                        color: textFormFieldFillColor,
+                                        borderRadius: BorderRadius.circular(
+                                            scrWidth * 0.026),
+                                      ),
+                                      child: TextFormField(
+                                        controller: emailController,
+                                        focusNode: emailFocus,
+                                        cursorHeight: scrWidth * 0.055,
+                                        cursorWidth: 1,
+                                        cursorColor: Colors.black,
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: FontSize15,
+                                          fontFamily: 'Urbanist',
+                                        ),
+                                        decoration: InputDecoration(
+                                          labelText: 'Email',
+                                          labelStyle: TextStyle(
+                                            color: emailFocus.hasFocus
+                                                ? primarycolor
+                                                : textFormUnFocusColor,
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: FontSize15,
+                                            fontFamily: 'Urbanist',
+                                          ),
+                                          fillColor: textFormFieldFillColor,
+                                          filled: true,
+                                          contentPadding: EdgeInsets.only(
+                                              left: scrWidth * 0.03,
+                                              top: scrHeight * 0.006,
+                                              bottom: scrWidth * 0.033),
+                                          disabledBorder: InputBorder.none,
+                                          enabledBorder: InputBorder.none,
+                                          errorBorder: InputBorder.none,
+                                          border: InputBorder.none,
+                                          focusedBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: primarycolor,
+                                              width: 2,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+
+                                    // TextFormField(
+                                    //   controller: emailController,
+                                    //   decoration: InputDecoration(
+                                    //     labelText: "email",
+                                    //     border: OutlineInputBorder(
+                                    //       borderRadius: BorderRadius.circular(20),
+                                    //     ),
+                                    //   ),
+                                    // ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Container(
+                                      width: scrWidth,
+                                      height: textFormFieldHeight45,
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: scrWidth * 0.015,
+                                        vertical: scrHeight * 0.002,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: Color(0xffDADADA),
+                                        ),
+                                        color: textFormFieldFillColor,
+                                        borderRadius: BorderRadius.circular(
+                                            scrWidth * 0.026),
+                                      ),
+                                      child: TextFormField(
+                                        keyboardType: TextInputType.number,
+                                        controller: phoneController,
+                                        focusNode: phoneFocus,
+                                        cursorHeight: scrWidth * 0.055,
+                                        cursorWidth: 1,
+                                        cursorColor: Colors.black,
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: FontSize15,
+                                          fontFamily: 'Urbanist',
+                                        ),
+                                        decoration: InputDecoration(
+                                          labelText: 'Phone No',
+                                          labelStyle: TextStyle(
+                                            color: phoneFocus.hasFocus
+                                                ? primarycolor
+                                                : textFormUnFocusColor,
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: FontSize15,
+                                            fontFamily: 'Urbanist',
+                                          ),
+                                          fillColor: textFormFieldFillColor,
+                                          filled: true,
+                                          contentPadding: EdgeInsets.only(
+                                              left: scrWidth * 0.03,
+                                              top: scrHeight * 0.006,
+                                              bottom: scrWidth * 0.033),
+                                          disabledBorder: InputBorder.none,
+                                          enabledBorder: InputBorder.none,
+                                          errorBorder: InputBorder.none,
+                                          border: InputBorder.none,
+                                          focusedBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: primarycolor,
+                                              width: 2,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    // TextFormField(
+                                    //   controller: phoneController,
+                                    //   decoration: InputDecoration(
+                                    //     labelText: "phoneNumber",
+                                    //     border: OutlineInputBorder(
+                                    //       borderRadius: BorderRadius.circular(20),
+                                    //     ),
+                                    //   ),
+                                    // ),
+                                    SizedBox(
+                                      height: 30,
+                                    ),
+                                    // ElevatedButton(onPressed: (){
+                                    //   FirebaseFirestore.instance.collection('users').doc(currentuserid).update({
+                                    //     'userName':nameController.text,
+                                    //     'userEmail':emailController.text,
+                                    //     'phone':phoneController.text,
+                                    //   });
+                                    //   Navigator.pop(context);
+                                    //
+                                    // }, child:Text("Update"))
+                                    InkWell(
+                                      onTap: () {
+                                        FirebaseFirestore.instance
+                                            .collection('users')
+                                            .doc(currentuserid)
+                                            .update({
+                                          'userName': nameController.text,
+                                          'userEmail': emailController.text,
+                                          'phone': phoneController.text,
+                                          'userImage': imgUrl,
+                                        });
+                                        Navigator.pop(context);
+                                      },
+                                      child: Center(
+                                        child: Container(
+                                          height: 45,
+                                          width: 230,
+                                          decoration: BoxDecoration(
+                                            color: primarycolor,
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              "Update",
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w700,
+                                                  color: Colors.white,
+                                                  fontFamily: 'Urbanist'),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  );
                 },
                 child: DrawerHeader(
                   decoration: BoxDecoration(color: primarycolor),
@@ -813,7 +1209,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: <Widget>[
                       CircleAvatar(
                         backgroundImage:
-                            NetworkImage(currentuser?.userImage??''),
+                            NetworkImage(currentuser?.userImage ?? ''),
                         radius: 30.0,
                       ),
                       Column(
@@ -821,7 +1217,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                        currentuser?.userName??'',
+                            currentuser?.userName ?? '',
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
@@ -832,7 +1228,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: Container(
                               width: 160,
                               child: Text(
-                                currentuser?.userEmail??'',
+                                currentuser?.userEmail ?? '',
                                 style: TextStyle(
                                     overflow: TextOverflow.ellipsis,
                                     fontWeight: FontWeight.bold,
@@ -850,71 +1246,73 @@ class _HomeScreenState extends State<HomeScreen> {
 
               //Here you place your menu items
               ListTile(
-                 leading:Container(
-                           height: 30,
-                           width: 34,
-                           decoration: BoxDecoration(
-                               image: DecorationImage(image:
-                               NetworkImage(
-                                   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdlgdYbuGqOnWzk_isI5q_in4KYYbFwO1lCw&usqp=CAU"),fit: BoxFit.fill)
-                           ),
-                         ),
+                leading: Container(
+                  height: 30,
+                  width: 34,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: NetworkImage(
+                              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdlgdYbuGqOnWzk_isI5q_in4KYYbFwO1lCw&usqp=CAU"),
+                          fit: BoxFit.fill)),
+                ),
                 title: Text('Settings', style: TextStyle(fontSize: 18)),
                 onTap: () {
-                           Navigator.push(context,MaterialPageRoute(builder: (context)=>SettingsPage()));
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => SettingsPage()));
 
                   // Here you can give your route to navigate
                 },
               ),
               Divider(height: 3.0),
               ListTile(
-                 leading:Padding(
-                   padding: const EdgeInsets.only(left: 6),
-                   child: Container(
-                             height: 20,
-                               width: 26,
-                             decoration: BoxDecoration(
-                               image: DecorationImage(image:
-                               NetworkImage(
-                                   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxfOzBxK8ISdCdErcVR0EFWHPL1I_SNQvEOw&usqp=CAU"),fit: BoxFit.fill)
-                             ),
-                           ),
-                 ),
+                leading: Padding(
+                  padding: const EdgeInsets.only(left: 6),
+                  child: Container(
+                    height: 20,
+                    width: 26,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: NetworkImage(
+                                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxfOzBxK8ISdCdErcVR0EFWHPL1I_SNQvEOw&usqp=CAU"),
+                            fit: BoxFit.fill)),
+                  ),
+                ),
                 title: Text('Diary', style: TextStyle(fontSize: 18)),
                 onTap: () {
-                         // Navigator.push(context,MaterialPageRoute(builder: (context)=>NotesPage()));
-
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => NotesPage()));
 
                   // Here you can give your route to navigate
                 },
               ),
               Divider(height: 3.0),
               ListTile(
-                leading:Padding(
+                leading: Padding(
                   padding: const EdgeInsets.only(left: 6),
                   child: Container(
                     height: 23,
                     width: 24,
                     decoration: BoxDecoration(
-                        image: DecorationImage(image:
-                        NetworkImage(
-                            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgDNYGs8jqizlcPof-wNOx2dLJmmoioCfEZw&usqp=CAU"),fit: BoxFit.fill)
-                    ),
+                        image: DecorationImage(
+                            image: NetworkImage(
+                                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgDNYGs8jqizlcPof-wNOx2dLJmmoioCfEZw&usqp=CAU"),
+                            fit: BoxFit.fill)),
                   ),
                 ),
                 title: Text('Phone Book', style: TextStyle(fontSize: 18)),
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>PhoneBookPage()));
-
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => PhoneBookPage()));
 
                   // Here you can give your route to navigate
                 },
               ),
-              SizedBox(height: scrHeight*0.3,),
-
+              SizedBox(
+                height: scrHeight * 0.3,
+              ),
 
               InkWell(
-                onTap: (){
+                onTap: () {
                   Navigator.of(context).pop();
                   showDialog(
                     context: context,
@@ -941,18 +1339,16 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 },
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 17,right: 17),
+                  padding: const EdgeInsets.only(left: 17, right: 17),
                   child: Container(
                     height: 45,
-                    width: scrWidth*0.3,
+                    width: scrWidth * 0.3,
                     // color: Colors.grey,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: Colors.black)
-                    ),
+                        border: Border.all(color: Colors.black)),
                     child: Center(
                       child: Text("Logout"),
-
                     ),
                   ),
                 ),
@@ -972,7 +1368,10 @@ class _HomeScreenState extends State<HomeScreen> {
             ]),
             child: AppBar(
               iconTheme: IconThemeData(color: Colors.grey),
-              leading: Icon(Icons.arrow_back,color: Colors.white,),
+              leading: Icon(
+                Icons.arrow_back,
+                color: Colors.white,
+              ),
               elevation: 0,
               backgroundColor: appBarColor,
               centerTitle: false,

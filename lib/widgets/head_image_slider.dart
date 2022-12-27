@@ -1,10 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:threems/utils/themes.dart';
 
 import '../screens/splash_screen.dart';
-import '../utils/dummy.dart';
 
 class CarouselWidget extends StatefulWidget {
   const CarouselWidget({Key? key}) : super(key: key);
@@ -17,10 +17,32 @@ class _CarouselWidgetState extends State<CarouselWidget> {
   PageController pageController = PageController(viewportFraction: 1);
   var _currentPageValue = 0.0;
 
+  List<String> carouselImages = [];
+  getImages() {
+    FirebaseFirestore.instance
+        .collection('banners')
+        .doc('banners')
+        .snapshots()
+        .listen((event) {
+      carouselImages = [];
+      var doc = event.data();
+      List images = doc!['images'];
+      for (var item in images) {
+        carouselImages.add(item['imgUrl']);
+      }
+      if (mounted) {
+        setState(() {});
+      }
+    });
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    getImages();
+    print(carouselImages.length);
+    // print(carouselImages[0]);
     pageController.addListener(() {
       setState(() {
         _currentPageValue = pageController.page!;

@@ -912,12 +912,12 @@ class _HostedKuriPageState extends State<HostedKuriPage> {
                                     ),
                                     InkWell(
                                       onTap: () {
-                                        // Navigator.push(
-                                        //     context,
-                                        //     MaterialPageRoute(
-                                        //       builder: (context) =>
-                                        //           AddMembersearch(kuri: kuri!),
-                                        //     ));
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  AddMembersearch(kuri: kuri!),
+                                            ));
                                       },
                                       child: Container(
                                         height: scrHeight * 0.056,

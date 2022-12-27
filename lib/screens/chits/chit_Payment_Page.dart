@@ -29,20 +29,21 @@ class ChitPaymentPage extends StatefulWidget {
 class _ChitPaymentPageState extends State<ChitPaymentPage> {
   var icons;
   var categoryName;
-  getIconData(){
-    FirebaseFirestore.instance.collection('expenses').
-    where('expenseName',isEqualTo:'Chit' ).snapshots().listen((event) {
-      for(DocumentSnapshot data in event.docs){
-        icons=deserializeIcon(data['icon']);
-        categoryName=data['expenseName'];
+  getIconData() {
+    FirebaseFirestore.instance
+        .collection('expenses')
+        .where('expenseName', isEqualTo: 'Chit')
+        .snapshots()
+        .listen((event) {
+      for (DocumentSnapshot data in event.docs) {
+        icons = deserializeIcon(data['icon']);
+        categoryName = data['expenseName'];
         // _icon = Icon(icons,color: Colors.white,size: 45,);
 
       }
-
-
     });
-
   }
+
   TextEditingController? amount;
 
   String? imgUrl;
@@ -584,18 +585,27 @@ class _ChitPaymentPageState extends State<ChitPaymentPage> {
                       //   FieldValue.increment(double.tryParse(amount!.text)!)
                       // })
                       .then((value) {
-                    value.update({"paymentId": value.id}).then((value) {
-                      FirebaseFirestore.instance.collection('users').doc(currentuserid).collection('expense').add({
-                        'amount':double.tryParse(amount!.text.toString()),
-                        "categoryIcon":serializeIcon(icons),
-                        "categoryName":categoryName.toString(),
-                        'date':DateTime.now(),
-                        'merchant':'',
-
+                    value.update({"paymentId": value.id}).then((value) async {
+                      FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(currentuserid)
+                          .collection('expense')
+                          .add({
+                        'amount': double.tryParse(amount!.text.toString()),
+                        "categoryIcon": serializeIcon(icons),
+                        "categoryName": categoryName.toString(),
+                        'date': DateTime.now(),
+                        'merchant': '',
                       });
                       showSnackbar(context, 'Payment Completed Successfully');
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>ChitSucessPaidPage()));
+
+                      await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ChitSucessPaidPage()));
+                      Navigator.pop(context);
                       // Navigator.pushAndRemoveUntil(
+
                       //     context,
                       //     MaterialPageRoute(
                       //       builder: (context) => ScreenLayout(),

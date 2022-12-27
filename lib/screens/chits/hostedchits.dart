@@ -813,12 +813,11 @@ class _HostedChitPageState extends State<HostedChitPage>
                           ),
                           scrollDirection: Axis.vertical,
                           shrinkWrap: true,
-                          physics: BouncingScrollPhysics(),
+                          // physics: NeverScrollableScrollPhysics(),
                           itemCount: hostedChits.length, // the length
                           itemBuilder: (context, index) {
                             return Padding(
-                              padding:
-                                  EdgeInsets.only(top: scrHeight * 0.015),
+                              padding: EdgeInsets.only(top: scrHeight * 0.015),
                               child: InkWell(
                                 onTap: () {
                                   setState(() {
@@ -905,20 +904,17 @@ class _HostedChitPageState extends State<HostedChitPage>
                                                         scrWidth * 0.4,
                                                         (scrWidth * 0.04)
                                                             .toDouble()), //You can Replace [WIDTH] with your desired width for Custom Paint and height will be calculated automatically
-                                                    painter: hostedChits[
-                                                                    index]
+                                                    painter: hostedChits[index]
                                                                 .status !=
                                                             2
                                                         ? RCustomPainter()
                                                         : RPSCustomPainter(),
                                                     child: Container(
                                                       width: scrWidth * 0.17,
-                                                      height:
-                                                          scrHeight * 0.023,
-                                                      padding:
-                                                          EdgeInsets.only(
-                                                              left: scrWidth *
-                                                                  0.01),
+                                                      height: scrHeight * 0.023,
+                                                      padding: EdgeInsets.only(
+                                                          left:
+                                                              scrWidth * 0.01),
                                                       child: Center(
                                                         child: hostedChits[
                                                                         index]
@@ -946,8 +942,9 @@ class _HostedChitPageState extends State<HostedChitPage>
                                                                     style: TextStyle(
                                                                         color: Colors
                                                                             .black,
-                                                                        fontSize: scrWidth *
-                                                                            0.027,
+                                                                        fontSize:
+                                                                            scrWidth *
+                                                                                0.027,
                                                                         fontFamily:
                                                                             'Urbanist',
                                                                         fontWeight:
@@ -958,8 +955,9 @@ class _HostedChitPageState extends State<HostedChitPage>
                                                                     style: TextStyle(
                                                                         color: Colors
                                                                             .white,
-                                                                        fontSize: scrWidth *
-                                                                            0.027,
+                                                                        fontSize:
+                                                                            scrWidth *
+                                                                                0.027,
                                                                         fontFamily:
                                                                             'Urbanist',
                                                                         fontWeight:
@@ -970,9 +968,7 @@ class _HostedChitPageState extends State<HostedChitPage>
                                                   ),
                                                 ],
                                               ),
-                                              Text(
-                                                  hostedChits[index]
-                                                      .chitName!,
+                                              Text(hostedChits[index].chitName!,
                                                   style: chitcard15),
                                               Padding(
                                                 padding: EdgeInsets.only(
@@ -990,15 +986,13 @@ class _HostedChitPageState extends State<HostedChitPage>
                                                                 right:
                                                                     scrWidth *
                                                                         0.01),
-                                                        child:
-                                                            SvgPicture.asset(
+                                                        child: SvgPicture.asset(
                                                           "assets/icons/timericon.svg",
                                                         ),
                                                       ),
                                                       Text(
                                                           "${hostedChits[index].duration} Months",
-                                                          style:
-                                                              tenmonthsfont),
+                                                          style: tenmonthsfont),
                                                     ],
                                                   ),
                                                   SizedBox(
@@ -1034,8 +1028,7 @@ class _HostedChitPageState extends State<HostedChitPage>
                                             decoration: BoxDecoration(
                                                 color: Color(0xffECECEC),
                                                 borderRadius:
-                                                    BorderRadius.circular(
-                                                        16)),
+                                                    BorderRadius.circular(16)),
                                             child: Row(
                                               children: [
                                                 Padding(

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -255,9 +256,21 @@ class _GetOtpPageState extends State<GetOtpPage> {
                       height: scrHeight * 0.047,
                     ),
                     GestureDetector(
-                      onTap: () {
+                      onTap: () async {
                         if (_formkey.currentState!.validate()) {
-                          verifyPhoneNumber(context);
+                          bool loged = await FirebaseFirestore.instance
+                              .collection('users')
+                              .where('phone', isEqualTo: phoneNumber.text)
+                              .snapshots()
+                              .isEmpty;
+
+                          if (loged) {
+                            verifyPhoneNumber(context);
+                          } else {
+                            showSnackbar(
+                                context, 'Already a User, Please login');
+                            Navigator.pop(context);
+                          }
                         }
                       },
                       child: Container(
@@ -280,11 +293,15 @@ class _GetOtpPageState extends State<GetOtpPage> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        _auth.signInWithGoogle(context);
+                        try {
+                          _auth.signInWithGoogle(context);
 
-                        loading = true;
+                          loading = true;
 
-                        setState(() {});
+                          setState(() {});
+                        } catch (e) {
+                          print(e.toString());
+                        }
                       },
                       child: Container(
                         height: scrHeight * 0.055,

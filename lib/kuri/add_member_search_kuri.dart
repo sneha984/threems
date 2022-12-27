@@ -84,17 +84,19 @@ class _AddMembersearchState extends State<AddMembersearch> {
           child: AppBar(
             elevation: 0,
             backgroundColor: Colors.white,
-            leading: GestureDetector(
+            leading: InkWell(
               onTap: () {
                 Navigator.pop(context);
               },
               child: Padding(
                 padding: EdgeInsets.only(
-                    top: scrHeight * 0.04,
+                    top: scrHeight * 0.02,
                     left: scrWidth * 0.07,
                     right: scrWidth * 0.05),
-                child: SvgPicture.asset(
-                  "assets/icons/arrow.svg",
+                child: Icon(
+                  Icons.arrow_back,
+                  size: 22,
+                  color: Colors.black,
                 ),
               ),
             ),
@@ -398,38 +400,38 @@ class _AddMembersearchState extends State<AddMembersearch> {
           },
         ),
       ),
-      bottomNavigationBar: InkWell(
-        onTap: () {
-          Navigator.pop(context);
-          // addMember = [];
-          // for (int i = 0; i < addFriend.length; i++) {
-          //   addMember.add(useridByPhone[addFriend[i]]);
-          // }
-          // Navigator.pushReplacement(
-          //     context,
-          //     MaterialPageRoute(
-          //         builder: (context) => AddMembersKuri(
-          //               kuri: widget.kuri,
-          //             )));
-          // setState(() {});
-        },
-        child: Container(
-          width: 100,
-          height: 50,
-          decoration: BoxDecoration(
-              color: primarycolor, borderRadius: BorderRadius.circular(17)),
-          margin: EdgeInsets.symmetric(vertical: 10, horizontal: 50),
-          child: Center(
-              child: Text(
-            "Done",
-            style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 15,
-                fontFamily: 'Outfit',
-                color: Colors.white),
-          )),
-        ),
-      ),
+      // bottomNavigationBar: InkWell(
+      //   onTap: () {
+      //     Navigator.pop(context);
+      //     // addMember = [];
+      //     // for (int i = 0; i < addFriend.length; i++) {
+      //     //   addMember.add(useridByPhone[addFriend[i]]);
+      //     // }
+      //     // Navigator.pushReplacement(
+      //     //     context,
+      //     //     MaterialPageRoute(
+      //     //         builder: (context) => AddMembersKuri(
+      //     //               kuri: widget.kuri,
+      //     //             )));
+      //     // setState(() {});
+      //   },
+      //   child: Container(
+      //     width: 100,
+      //     height: 50,
+      //     decoration: BoxDecoration(
+      //         color: primarycolor, borderRadius: BorderRadius.circular(17)),
+      //     margin: EdgeInsets.symmetric(vertical: 10, horizontal: 50),
+      //     child: Center(
+      //         child: Text(
+      //       "Done",
+      //       style: TextStyle(
+      //           fontWeight: FontWeight.w500,
+      //           fontSize: 15,
+      //           fontFamily: 'Outfit',
+      //           color: Colors.white),
+      //     )),
+      //   ),
+      // ),
     );
   }
 

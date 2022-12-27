@@ -83,6 +83,22 @@ class _ChatScreenState extends State<ChatScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                InkWell(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                        top: scrHeight * 0.02,
+                        left: scrWidth * 0.01,
+                        bottom: scrHeight * 0.02,
+                        right: scrWidth * 0.05),
+                    child: SvgPicture.asset(
+                      "assets/icons/arrow.svg",
+                      width: 15,
+                    ),
+                  ),
+                ),
                 Expanded(
                   child: Text(
                     widget.name,

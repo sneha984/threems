@@ -219,7 +219,7 @@ class _LoginPageState extends State<LoginPage> {
               height: scrHeight * 0.085,
             ),
             GestureDetector(
-              onTap: () {
+              onTap: () async {
                 if (_formkey.currentState!.validate()) {
                   verifyPhoneNumber();
                 }

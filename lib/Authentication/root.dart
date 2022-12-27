@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:threems/layouts/screen_layout.dart';
 import 'package:threems/model/usermodel.dart';
 import 'package:threems/pagess/getotppage.dart';
@@ -62,6 +63,7 @@ class _RootingpageState extends State<Rootingpage> {
   @override
   void initState() {
     super.initState();
+    // signOut(context);
     getLoginStatus();
   }
 
@@ -94,4 +96,16 @@ class _RootingpageState extends State<Rootingpage> {
     //   ),
     // );
   }
+}
+
+signOut(BuildContext context) async {
+  GoogleSignIn().disconnect();
+  await FirebaseAuth.instance
+      .signOut()
+      .then((value) => Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => OnBoarding(),
+          ),
+          (route) => false));
 }

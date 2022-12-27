@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/cupertino.dart';
@@ -5,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../kuri/createkuri.dart';
 import '../screens/home_screen.dart';
 import '../screens/splash_screen.dart';
 import '../utils/themes.dart';
@@ -19,6 +21,22 @@ class PhoneBookPage extends StatefulWidget {
 class _PhoneBookPageState extends State<PhoneBookPage> {
   List<Contact> totalContactsSearch = [];
   List<Contact> totalContacts = [];
+
+  List<String> userList = [];
+  getUsers() {
+    FirebaseFirestore.instance.collection('users').snapshots().listen((event) {
+      userList = [];
+      for (var doc in event.docs) {
+        userList.add(
+            doc['phone'].toString().replaceAll(' ', '').replaceAll('+91', ''));
+      }
+      if (mounted) {
+        setState(() {
+          print(userList.length);
+        });
+      }
+    });
+  }
 
   String? _linkMessage;
   bool _isCreatingLink = false;
@@ -40,7 +58,6 @@ class _PhoneBookPageState extends State<PhoneBookPage> {
           .toLowerCase()
           .contains(txt.toLowerCase())) {
         totalContactsSearch.add(totalContacts[i]);
-
       }
     }
     setState(() {});
@@ -53,7 +70,9 @@ class _PhoneBookPageState extends State<PhoneBookPage> {
 
     // TODO: implement initState
     super.initState();
+    getUsers();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -218,83 +237,108 @@ class _PhoneBookPageState extends State<PhoneBookPage> {
         ),
       ),
       body: Padding(
-        padding:
-        EdgeInsets.symmetric(horizontal: scrWidth * 0.059),
-        child: ListView.separated(
-          separatorBuilder: (context, index) => SizedBox(
-            height: scrWidth * 0.02,
-          ),
+        padding: EdgeInsets.symmetric(horizontal: scrWidth * 0.059),
+        child: ListView.builder(
           physics: BouncingScrollPhysics(),
           itemCount: totalContactsSearch.length,
           shrinkWrap: true,
           itemBuilder: (context, index) {
             return totalContactsSearch[index].phones!.isEmpty
-                ? SizedBox()
-                : Container(
-              width: 328,
-              height: textFormFieldHeight45,
-              padding: EdgeInsets.symmetric(
-                horizontal: scrWidth * 0.015,
-                vertical: 2,
-              ),
-              decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Color(0xffDADADA),
-                    width: 1,
-                  ),
-                  borderRadius: BorderRadius.circular(scrWidth * 0.026)),
-              child: Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.only(left: 8),
-                        child: CircleAvatar(
-                          radius: 15,
-                          backgroundColor: Colors.grey,
-                          backgroundImage: NetworkImage("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFzJQ6mTB2vG53lTC7SR6w9FBSdbyK6SQoOg&usqp=CAU")
-                          // MemoryImage(totalContactsSearch[index].avatar!),
-                        ),
+                ? SizedBox(
+                    // width: 0.0001,
+                    // height: 0.0001,
+                    )
+                : Padding(
+                    padding: EdgeInsets.all(scrWidth * 0.01),
+                    child: Container(
+                      width: 328,
+                      height: textFormFieldHeight45,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: scrWidth * 0.015,
+                        vertical: 2,
                       ),
-                      Center(
-                        child: Text(
-                          totalContactsSearch[index].displayName!,
-                          style: TextStyle(
-                              fontSize: FontSize16,
-                              fontFamily: 'Urbanist',
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () async {
-                          await _createDynamicLink(false);
-                          Share.share(
-                              'Inviting you to join  3MS App\n \n \n $_linkMessage');
-                        },
-                        child: Container(
-                          // width: 50,
-                          height: 27,
-                          margin: EdgeInsets.only(right: 8),
-                          padding: EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                              color: primarycolor,
-                              borderRadius: BorderRadius.circular(8)),
-                          child: Center(
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Color(0xffDADADA),
+                            width: 1,
+                          ),
+                          borderRadius:
+                              BorderRadius.circular(scrWidth * 0.026)),
+                      child: Center(
+                          child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(left: 8),
+                            child: CircleAvatar(
+                                radius: 15,
+                                backgroundColor: Colors.grey,
+                                backgroundImage: NetworkImage(
+                                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFzJQ6mTB2vG53lTC7SR6w9FBSdbyK6SQoOg&usqp=CAU")
+                                // MemoryImage(totalContactsSearch[index].avatar!),
+                                ),
+                          ),
+                          Center(
                             child: Text(
-                              'Invite',
+                              totalContactsSearch[index].displayName!,
                               style: TextStyle(
-                                  fontSize: FontSize14,
+                                  fontSize: FontSize16,
                                   fontFamily: 'Urbanist',
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.white),
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black),
                             ),
                           ),
-                        ),
-                      ),
-                    ],
-                  )),
-            );
+                          GestureDetector(
+                            onTap: () async {
+                              print(totalContactsSearch[index]
+                                  .phones![0]
+                                  .value
+                                  .toString());
+
+                              if (userList.contains(totalContactsSearch[index]
+                                  .phones![0]
+                                  .value
+                                  .toString()
+                                  .replaceAll(' ', '')
+                                  .replaceAll('+91', ''))) {
+                                showSnackbar(context, 'Already a user.');
+                              } else {
+                                await _createDynamicLink(false);
+                                Share.share(
+                                    'Inviting you to join  3MS App\n \n \n $_linkMessage');
+                              }
+                            },
+                            child: Container(
+                              // width: 50,
+                              height: 27,
+                              margin: EdgeInsets.only(right: 8),
+                              padding: EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                  color: primarycolor,
+                                  borderRadius: BorderRadius.circular(8)),
+                              child: Center(
+                                child: Text(
+                                  userList.contains(totalContactsSearch[index]
+                                          .phones![0]
+                                          .value
+                                          .toString()
+                                          .replaceAll(' ', '')
+                                          .replaceAll('+91', ''))
+                                      ? 'Joined'
+                                      : 'Invite',
+                                  style: TextStyle(
+                                      fontSize: FontSize14,
+                                      fontFamily: 'Urbanist',
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.white),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      )),
+                    ),
+                  );
           },
         ),
       ),
@@ -321,8 +365,8 @@ class _PhoneBookPageState extends State<PhoneBookPage> {
       //   ),
       // ),
     );
-
   }
+
   Future<void> _createDynamicLink(bool short) async {
     setState(() {
       _isCreatingLink = true;
@@ -347,7 +391,7 @@ class _PhoneBookPageState extends State<PhoneBookPage> {
     Uri url;
     if (short) {
       final ShortDynamicLink shortLink =
-      await dynamicLinks.buildShortLink(parameters);
+          await dynamicLinks.buildShortLink(parameters);
       url = shortLink.shortUrl;
     } else {
       url = await dynamicLinks.buildLink(parameters);

@@ -22,28 +22,63 @@ class Authentication {
         accessToken: googleAuth?.accessToken, idToken: googleAuth?.idToken);
     UserCredential userCredential =
         await FirebaseAuth.instance.signInWithCredential(credential);
+    print('1');
     userName = userCredential.user?.displayName;
+    print('2');
+
     userImage = userCredential.user?.photoURL;
+    print('3');
+
     userEmail = userCredential.user?.email;
+    print('4');
+
     userDoc = userCredential.user?.uid;
+    print('5');
+
     currentuserid = userCredential.user?.uid;
+    print('6');
+
     phone = userCredential.user?.phoneNumber ?? '';
+    print('7');
+
     // dateTime=DateTime.now() as Timestamp?;
 
-
+    print('HERE TRY ');
     FirebaseFirestore.instance.collection('users').doc(userDoc).update({
       "userId": userDoc,
       "userName": userName,
       "userEmail": userEmail,
       "userImage": userImage,
-      // "dateTime":dateTime,
-    }).then((value) => Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Rootingpage(),
-        ),
-        (route) => false));
+      "phone": '',
+      "dateTime": DateTime.now(),
+    }).onError((error, stackTrace) {
+      print('HERE TRY ERROR');
+      print(error.toString());
 
+      FirebaseFirestore.instance.collection('users').doc(userDoc).set({
+        "userId": userDoc,
+        "userName": userName,
+        "userEmail": userEmail,
+        "userImage": userImage,
+        "phone": '',
+        "dateTime": DateTime.now(),
+      }).then((value) {
+        print('Success');
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Rootingpage(),
+            ),
+            (route) => false);
+      });
+    });
+
+    // Navigator.pushAndRemoveUntil(
+    //     context,
+    //     MaterialPageRoute(
+    //       builder: (context) => Rootingpage(),
+    //     ),
+    //     (route) => false);
     //     .then((value) {
     //   Navigator.pushReplacement(
     //       context,
