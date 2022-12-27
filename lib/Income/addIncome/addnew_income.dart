@@ -661,7 +661,7 @@ class _AddIncomePageState extends State<AddIncomePage> {
                                     "categoryName":category.toString(),
                                     'date':selectedDate,
                                     'merchant':merchantName.toString()??"",
-                                    'description':description.toString()??"",
+                                    'description':description.text,
                                     'income':true,
 
                                   });
@@ -671,7 +671,7 @@ class _AddIncomePageState extends State<AddIncomePage> {
 
                                   Navigator.push(context, MaterialPageRoute(builder: (context)=>IncomeSuccessPage()));
                                   amount?.clear();
-                                  description?.clear();
+                                  description.text='';
                                   category=='';
                                   selectedDate=null;
                                   xyz='';
