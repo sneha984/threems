@@ -280,34 +280,40 @@ class _AddServicePageState extends State<AddServicePage>  with TickerProviderSta
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: ()async {
-        return !await  showDialog(
-            context: context,
-            builder: (context) =>
-                AlertDialog(
-                    backgroundColor: Colors.white,
-                    title: Text('Are you sure you want to back\n?', style: GoogleFonts.poppins(
-                        fontSize: 14,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w400
-                    ),), actions: <Widget>[
-                  ElevatedButton(
-                    // color: Colors.transparent,
-                    // shape: ShapeBorder.lerp(Border.all(color: Colors.red), Border.all(color: Colors.green), 50),
-                      child: Text('Yes', style: GoogleFonts.poppins(
-                          color: Colors.white
-                      ),),
-                      onPressed: () => Navigator.of(context).pop(false)),
-                  ElevatedButton(
-                    // color: Colors.transparent,
-                    // shape: ShapeBorder.lerp(Border.all(color: Colors.red), Border.all(color: Colors.green), 5),
+      onWillPop: () async {
+        if(name?.text!=''){
+          return !await  showDialog(
+              context: context,
+              builder: (context) =>
+                  AlertDialog(
+                      backgroundColor: Colors.white,
+                      title: Text('Are you sure you want to exit ?', style: GoogleFonts.urbanist(
+                          fontSize: 14,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w400
+                      ),), actions: <Widget>[
+                    ElevatedButton(
+                      // color: Colors.transparent,
+                      // shape: ShapeBorder.lerp(Border.all(color: Colors.red), Border.all(color: Colors.green), 50),
+                        child: Text('Yes', style: GoogleFonts.urbanist(
+                            color: Colors.white
+                        ),),
+                        onPressed: () => Navigator.of(context).pop(false)),
+                    ElevatedButton(
+                      // color: Colors.transparent,
+                      // shape: ShapeBorder.lerp(Border.all(color: Colors.red), Border.all(color: Colors.green), 5),
 
-                      child: Text('No', style: GoogleFonts.poppins(
-                          color: Colors.white
-                      ),),
+                        child: Text('No', style: GoogleFonts.urbanist(
+                            color: Colors.white
+                        ),),
 
-                      onPressed: () => Navigator.of(context).pop(true)),
-                ]));
+                        onPressed: () => Navigator.of(context).pop(true)),
+                  ]));
+        }else{
+          Navigator.pop(context);
+        }
+        return null!;
+
 
       },
       child: Scaffold(
@@ -1758,11 +1764,7 @@ class _AddServicePageState extends State<AddServicePage>  with TickerProviderSta
                                                 title: Text('Delete'),
                                                 content: Text('Are you sure?'),
                                                 actions: [
-                                                  TextButton(onPressed: () {
 
-                                                    Navigator.pop(context);
-                                                  },
-                                                      child: Text('Cancel')),
                                                   TextButton(onPressed: ()  {
 
                                                     // FirebaseFirestore.instance.collection('services').doc(data![index].id).delete();
@@ -1775,6 +1777,11 @@ class _AddServicePageState extends State<AddServicePage>  with TickerProviderSta
                                                   },
 
                                                       child: Text('Delete')),
+                                                  TextButton(onPressed: () {
+
+                                                    Navigator.pop(context);
+                                                  },
+                                                      child: Text('Cancel')),
 
                                                 ],
                                               );
