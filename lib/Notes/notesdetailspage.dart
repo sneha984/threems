@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:flutter/cupertino.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 
@@ -21,6 +22,7 @@ import 'package:just_audio/just_audio.dart' as ap;
 
 import '../customPackage/date_picker.dart';
 import '../customPackage/time_picker.dart';
+import '../screens/home_screen.dart';
 import '../screens/splash_screen.dart';
 import '../utils/themes.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -236,7 +238,7 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
       t.day,
       _startTime.hour,
       _startTime.minute,
-    );
+    ).add(Duration(seconds: 1));
     print("************************************************${dateTime.toString()}");
 
     const AndroidNotificationDetails androidNotificationDetails =
@@ -254,9 +256,13 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
       linux: null,
     );
     tz.initializeTimeZones();
-    final tz.TZDateTime scheduledAt = tz.TZDateTime.from(dateTime, tz.local);
+    final tz.TZDateTime scheduledAt =
+    tz.TZDateTime.from(dateTime, tz.local)
+        .add(const Duration(seconds: 10));
     flutterLocalNotificationsPlugin.zonedSchedule(
-        01,widget.notes['title'],widget.notes['content'], scheduledAt, notificationDetails,
+        01,widget.notes['title'],
+        widget.notes['content'],
+        scheduledAt, notificationDetails,
         uiLocalNotificationDateInterpretation:
         UILocalNotificationDateInterpretation.wallClockTime,
         androidAllowWhileIdle: true,
@@ -450,555 +456,750 @@ List _audioUrl=[];
   Widget build(BuildContext context) {
     print('player'+showPlayer.toString());
     print('record'+_isRecording.toString());
-    return Scaffold(
-      body: Column(
-        children: [
-          SizedBox(height: scrHeight*0.05,),
-          Container(
-            color: Color(0xff008036),
-            width: scrWidth,
-            height: scrHeight * 0.07,
-            child: Padding(
-              padding: EdgeInsets.symmetric(),
-              child: Row(
-                children: [
-                  IconButton(onPressed: (){
-                    Navigator.pop(context);
-                  }, icon: Icon(Icons.arrow_back_ios_outlined,size: 17,color: Colors.white,)),
-                  // SvgPicture.asset('assets/svg/back.svg'),
-                  // SizedBox(
-                  //   width: scrWidth * 0.039,
-                  // ),
-                  Text(
-                    "Write Note",
-                    style: GoogleFonts.urbanist(
-                        fontWeight: FontWeight.w500,
-                        fontSize: scrWidth * 0.045,
-                        color: Colors.white),
-                  ),
-                   Expanded(child: SizedBox(width: scrWidth*0.5,)),
-                  Row(
-                    children: [
-                      Checkbox(
-                        value: _remainder,
-                        onChanged: (bool value) {
-                          setState(() {
-                            _remainder = value;
-                            print(_remainder);
-                          });
-                        },
-                      ),
-                      IconButton(
-                          onPressed: () {
-                            print(currentuserid);
-                            showDialog(
-                              context: context,
-                              builder: (ctx) => AlertDialog(
-                                content: const Text("Do You Want to save this"),
-                                actions: <Widget>[
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pushAndRemoveUntil(context,MaterialPageRoute(builder: (context)=>NotesPage()), (route) => false);
-                                    },
-                                    child: const Text("No"),
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-
-
-                                      if(widget.update){
-                                          DateTime date=DateTime(selectedDate.year,
-                                            selectedDate.month,selectedDate.day,
-                                            int.parse(selectedTime.hour.toString()),
-                                            int.parse(selectedTime.minute.toString()),
-                                          );
-                                          FirebaseFirestore
-                                              .instance
-                                              .collection('users')
-                                              .doc(currentuserid)
-                                              .collection('notes').doc(widget.notes['noteId']).update
-                                              ({
-                                            'rDate':dateTime,
-                                            'remainder':_remainder,
-                                            'remainderDate':_date.text,
-                                            'remainderTime':_time.text,
-                                            'date':date,
-                                            'title':titleController.text,
-                                            'content':contentController.text,
-                                            'audio':_audioUrl,
-                                            'time':'${selectedTime.hour.toString()}:${selectedTime.minute.toString()}'
-                                          });
-                                          Navigator.pushAndRemoveUntil(context,
-                                              MaterialPageRoute(builder: (context)=>NotesPage()),
-                                                  (route) => false);
-                                        }else{
-                                          DateTime date=DateTime(selectedDate.year,
-                                            selectedDate.month,selectedDate.day,
-                                            int.parse(selectedTime.hour.toString()),
-                                            int.parse(selectedTime.minute.toString()),
-                                          );
-                                          FirebaseFirestore
-                                              .instance
-                                              .collection('users')
-                                              .doc(currentuserid)
-                                              .collection('notes')
-                                              .add({
-                                            'rDate':dateTime,
-
-                                            'remainder':_remainder,
-                                            'remainderDate':_date.text,
-                                            'remainderTime':_time.text,
-                                            'date':date,
-                                            'title':titleController.text,
-                                            'content':contentController.text,
-                                            'audio':_audioUrl,
-                                            'time':'${selectedTime.hour.toString()}:${selectedTime.minute.toString()}'
-                                              }).then((value) =>
-                                              value.update({'noteId':value.id}));
-                                          Navigator.pushAndRemoveUntil(context,
-                                              MaterialPageRoute(builder: (context)=>NotesPage()),
-                                                  (route) => false);
-                                        }
-                                        },
-                                    child: const Text(
-                                      "Yes",
-                                      style: TextStyle(color: primarycolor),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
-
-                      }, icon:Icon(Icons.check_outlined,color: Colors.white,)),
-                    ],
-                  ),
-                  // IconButton(onPressed: (){}, icon:Icon(Icons.mic,color: Colors.white,))
-                ],
-              ),
-            ),
-          ),
-          SizedBox(height: scrHeight*0.03,),
-          Expanded(
-            child: SingleChildScrollView(
+    return WillPopScope(
+      onWillPop: () async {
+        final shouldPop = await confirmQuitDialog(context);
+        return shouldPop ?? false;
+      },
+      child: Scaffold(
+        body: Column(
+          children: [
+            SizedBox(height: scrHeight*0.05,),
+            Container(
+              color: Color(0xff008036),
+              width: scrWidth,
+              height: scrHeight * 0.07,
               child: Padding(
-                padding:  EdgeInsets.only(left: scrWidth*0.034,right: scrWidth*0.034),
-                child: Column(
+                padding: EdgeInsets.symmetric(),
+                child: Row(
                   children: [
+                    IconButton(onPressed: (){
+                      Navigator.pop(context);
+                    }, icon: Icon(Icons.arrow_back_ios_outlined,size: 17,color: Colors.white,)),
+                    // SvgPicture.asset('assets/svg/back.svg'),
+                    // SizedBox(
+                    //   width: scrWidth * 0.039,
+                    // ),
+                    Text(
+                      "Write Note",
+                      style: GoogleFonts.urbanist(
+                          fontWeight: FontWeight.w500,
+                          fontSize: scrWidth * 0.045,
+                          color: Colors.white),
+                    ),
+                     Expanded(child: SizedBox(width: scrWidth*0.5,)),
                     Row(
                       children: [
-                        GestureDetector(
-                          onTap: () {
-                            _selectDate(context);
-                          },
-                          child: Container(
-                            width: scrWidth*0.44,
-                            // width: scrWidth,
-                            height: textFormFieldHeight45,
-                            padding: EdgeInsets.symmetric(
-                              horizontal: scrWidth * 0.015,
-                              vertical: scrWidth * 0.002,
-                            ),
-                            decoration: BoxDecoration(
-                              color: textFormFieldFillColor,
-                              border: Border.all(
-                                color: Color(0xffDADADA),
-                              ),
-                              borderRadius: BorderRadius.circular(scrWidth * 0.026),
-                            ),
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: scrWidth * 0.03),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    selectedDate == null
-                                        ? "Date"
-                                        : DateFormat.yMMMd().format(selectedDate),
-                                    style: TextStyle(
-                                      color: selectedDate == null
-                                          ? Colors.grey
-                                          : Colors.black,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: FontSize15,
-                                      fontFamily: 'Urbanist',
+                        // Checkbox(
+                        //   value: _remainder,
+                        //   onChanged: (bool value) {
+                        //     setState(() {
+                        //       _remainder = value;
+                        //       print(_remainder);
+                        //     });
+                        //   },
+                        // ),
+
+                        IconButton(
+                            onPressed: () {
+                              print(currentuserid);
+                              showDialog(
+                                context: context,
+                                builder: (ctx) => AlertDialog(
+                                  content: const Text("Do You Want to save this"),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pushAndRemoveUntil(
+                                            context,MaterialPageRoute(builder: (context)=>NotesPage()), (route) => false);
+                                      },
+                                      child: const Text("No"),
                                     ),
-                                  ),
-                                  SvgPicture.asset(
-                                    'assets/icons/date.svg',
-                                    color: Color(0xff8391A1),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 15,),
-                        GestureDetector(
-                          onTap: () {
-                             _selectTime(context);
-                            // print(selectedTime.toString());
-                          },
-                          child: Container(
-                            // color: Colors.pink,
-                            width: scrWidth * 0.44,
-                            // width: 160,
-                            height: textFormFieldHeight45,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Color(0xffDADADA),
-                              ),
-                              color: textFormFieldFillColor,
-                              borderRadius:
-                              BorderRadius.circular(scrWidth * 0.033),
-                            ),
-                            padding:
-                            EdgeInsets.symmetric(horizontal: padding15),
-                            child: Row(
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceAround,
-                              children: [
-                                Text(
-                                  selectedTime == null
-                                      ? "Draw Time"
-                                      : "${selectedTime.hour.toString()}: ${selectedTime.minute.toString().length == 1 ? '0${selectedTime.minute.toString()}' : selectedTime.minute.toString()}",
-                                  style: TextStyle(
-                                    color: selectedTime == null
-                                        ? Color(0xffB0B0B0)
-                                        : Colors.black,
-                                    fontSize: FontSize14,
-                                    fontFamily: 'Urbanist',
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                                    TextButton(
+                                      onPressed: () {
+
+
+                                        if(widget.update){
+                                            DateTime date=DateTime(selectedDate.year,
+                                              selectedDate.month,selectedDate.day,
+                                              int.parse(selectedTime.hour.toString()),
+                                              int.parse(selectedTime.minute.toString()),
+                                            );
+                                            FirebaseFirestore
+                                                .instance
+                                                .collection('users')
+                                                .doc(currentuserid)
+                                                .collection('notes').doc(widget.notes['noteId']).update
+                                                ({
+                                              'rDate':dateTime,
+                                              'remainder':_remainder,
+                                              'remainderDate':_date.text,
+                                              'remainderTime':_time.text,
+                                              'date':date,
+                                              'title':titleController.text,
+                                              'content':contentController.text,
+                                              'audio':_audioUrl,
+                                              'time':'${selectedTime.hour.toString()}:${selectedTime.minute.toString()}'
+                                            });
+                                            Navigator.pushAndRemoveUntil(context,
+                                                MaterialPageRoute(builder: (context)=>NotesPage()),
+                                                    (route) => false);
+                                          }else{
+                                            DateTime date=DateTime(selectedDate.year,
+                                              selectedDate.month,selectedDate.day,
+                                              int.parse(selectedTime.hour.toString()),
+                                              int.parse(selectedTime.minute.toString()),
+                                            );
+                                            FirebaseFirestore
+                                                .instance
+                                                .collection('users')
+                                                .doc(currentuserid)
+                                                .collection('notes')
+                                                .add({
+                                              'rDate':dateTime,
+
+                                              'remainder':_remainder,
+                                              'remainderDate':_date.text,
+                                              'remainderTime':_time.text,
+                                              'date':date,
+                                              'title':titleController.text,
+                                              'content':contentController.text,
+                                              'audio':_audioUrl,
+                                              'time':'${selectedTime.hour.toString()}:${selectedTime.minute.toString()}'
+                                                }).then((value) =>
+                                                value.update({'noteId':value.id}));
+                                            Navigator.pushAndRemoveUntil(context,
+                                                MaterialPageRoute(builder: (context)=>NotesPage()),
+                                                    (route) => false);
+                                          }
+                                          },
+                                      child: const Text(
+                                        "Yes",
+                                        style: TextStyle(color: primarycolor),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                SizedBox(
-                                  width: scrWidth * 0.04,
-                                ),
-                                SvgPicture.asset(
-                                  'assets/icons/time.svg',
-                                  color: Color(0xffB0B0B0),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                              );
+
+                        }, icon:Icon(Icons.check_outlined,color: Colors.white,)),
                       ],
                     ),
-                    SizedBox(height: scrHeight*0.023,),
-                    Container(
-                      width: scrWidth * 0.94,
-                      height: textFormFieldHeight45,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: scrWidth * 0.015,
-                        vertical: scrWidth * 0.002,
-                      ),
-                      decoration: BoxDecoration(
-                          color: textFormFieldFillColor,
-                          border: Border.all(
-                            color: Color(0xffDADADA),
-                          ),
-                          borderRadius: BorderRadius.circular(scrWidth * 0.026)),
-                      child: TextFormField(
-                        // keyboardType: TextInputType.number,
-                        controller: titleController,
-                         focusNode: titleFocus,
-                        cursorHeight: scrWidth * 0.055,
-                        cursorWidth: 1,
-                        cursorColor: Colors.black,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600,
-                          fontSize: FontSize15,
-                          fontFamily: 'Urbanist',
-                        ),
-                        decoration: InputDecoration(
-                          labelText: 'Title',
-                          labelStyle: TextStyle(
-                            color: titleFocus.hasFocus
-                                ? primarycolor
-                                : Color(0xffB0B0B0),
-                            fontWeight: FontWeight.w500,
-                            fontSize: FontSize15,
-                            fontFamily: 'Urbanist',
-                          ),
-                          fillColor: textFormFieldFillColor,
-                          filled: true,
-                          contentPadding: EdgeInsets.only(
-                              left: scrWidth * 0.03,
-                              top: scrHeight * 0.006,
-                              bottom: scrWidth * 0.033),
-                          disabledBorder: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          errorBorder: InputBorder.none,
-                          border: InputBorder.none,
-                          // focusedBorder: UnderlineInputBorder(
-                          //   borderSide: BorderSide(
-                          //     color: primarycolor,
-                          //     width: 2,
-                          //   ),
-                          // ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: scrWidth*0.05,),
-                    Center(
-                      child: Container(
-                        width: scrWidth * 0.94,
-
-                        height: textFormFieldHeight45,
-                        // padding: EdgeInsets.only(
-                        //   left: scrWidth*0.025,
-                        //   right: scrWidth*0.025,
-                        // ),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Color(0xffDADADA)),
-                          color:textFormFieldFillColor,
-                          borderRadius: BorderRadius.circular(scrWidth * 0.026),
-                        ),
-                        child:
-                        showPlayer
-                            ? AudioPlayer(
-                          source: audioSource,
-                          message: false,
-                          onDelete: () {
-                            setState(() => showPlayer = false);
-                          },
-                        ) :
-                        _isRecording==false?
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            showPlayer ?
-                            AudioPlayer(
-                              source: audioSource,
-                              onDelete: () {
-                                setState(() => showPlayer = false);
-                              }, message: null,
-                            ) :Container(),
-                            showPlayer?Container():
-                            showPlayer?Container():
-                            showPlayer==true?Container():
-                            _buildRecordStopControl(),
-                          ],
-                        ):Padding(
-                          padding: const EdgeInsets.only(left: 15,right: 15),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              _buildText(),
-                              _buildPauseResumeControl(),
-                              _buildRecordStopControl(),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: scrWidth*0.05,),
-
-                    TextField(
-                      controller: contentController,
-
-                      maxLines: null,
-                      //expands: true,
-                      keyboardType: TextInputType.multiline,
-                      //cursorHeight: scrWidth * 0.055,
-                      cursorWidth: 1,
-                      cursorColor: Colors.black,
-                      decoration: InputDecoration(
-                        hintText: 'Enter a message',
-                        hintStyle: TextStyle(
-                            color: Color(0xffB0B0B0)),
-                        fillColor: textFormFieldFillColor,
-                        filled: true,
-                        focusedBorder:OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(scrWidth * 0.026),
-                          borderSide: BorderSide(
-                            color:  Color(0xffDADADA),
-                          )
-                        ),
-                        enabledBorder:OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(scrWidth * 0.026),
-                          borderSide: BorderSide(color:  Color(0xffDADADA),)
-                        ),
-                        contentPadding: EdgeInsets.only(
-                            left: scrWidth * 0.03,
-                            top: scrHeight * 0.006,
-                            bottom: scrWidth * 0.033),
-                      ),
-                      // maxLines: null,
-                      // //expands: true,
-                      // keyboardType: TextInputType.multiline,
-                    ),
-                    SizedBox(height: 10,),
-
-                   _remainder==true? TextField(
-                      controller: _time,
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12.0),
-                          ),
-                          suffixIcon: InkWell(
-                            child: const Icon(
-                              Icons.timer_outlined,
-                            ),
-                            onTap: () async {
-                              final TimeOfDay slectedTime = await showTimePicker(
-                                  context: context,
-                                  initialTime: TimeOfDay.now()
-                              );
-
-                              if (slectedTime == null) {
-                                return;
-                              }
-
-                              _time.text =
-                              "${slectedTime.hour}:${slectedTime.minute}:${slectedTime.period.toString()}";
-
-                              DateTime newDT = DateTime(
-                                dateTime.year,
-                                dateTime.month,
-                                dateTime.day,
-                                slectedTime.hour,
-                                slectedTime.minute,
-                              );
-                              setState(() {
-                                dateTime = newDT;
-                              });
-                            },
-                          ),
-                          label: Text("Time")),
-                    ):Container(),
-                    SizedBox(height: 10,),
-                    _remainder==true?TextField(
-                      controller: _date,
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12.0),
-                          ),
-                          suffixIcon: InkWell(
-                            child: Icon(Icons.date_range),
-                            onTap: () async {
-                              final DateTime newlySelectedDate =
-                              await showDatePicker(
-                                context: context,
-                                initialDate: dateTime,
-                                firstDate: DateTime.now(),
-                                lastDate: DateTime(2095),
-                              );
-
-                              if (newlySelectedDate == null) {
-                                return;
-                              }
-
-                              setState(() {
-                                dateTime = newlySelectedDate;
-                                _date.text =
-                                "${dateTime.year}/${dateTime.month}/${dateTime.day}";
-                              });
-                            },
-                          ),
-                          label: Text("Date")),
-                    ):Container(),
-                    Container(
-                      child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount:_audioUrl.length,
-                          itemBuilder: (context,index){
-                            return Padding(
-                              padding:  EdgeInsets.only(top: 20),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: Container(
-                                      height: 50,
-                                      decoration: BoxDecoration(
-                                        color: primarycolor.withOpacity(0.2),
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: AudioPlayer(
-                                        source: ap.AudioSource.uri(Uri.tryParse(_audioUrl[index])),
-                                        onDelete: null,
-                                        message: true,
-                                      ),
-
-                                    ),
-                                  ),
-                                  IconButton(onPressed: (){
-                                    _audioUrl.remove(_audioUrl[index]);
-                                    // savedVoice.remove(savedVoice[index]);
-                                    setState(() {
-
-                                    });
-
-                                  }, icon: Icon(Icons.delete))
-                                ],
-                              ),
-                            );
-                          }),
-
-                    ),
-
-
-
-
-                    // SizedBox(
-                    //   height: scrHeight*0.65,
-                    //   child: Container(
-                    //     width: scrWidth * 0.94,
-                    //       height: textFormFieldHeight45,
-                    //       padding: EdgeInsets.symmetric(
-                    //         horizontal: scrWidth * 0.015,
-                    //         vertical: scrWidth * 0.002,
-                    //       ),
-                    //       decoration: BoxDecoration(
-                    //           color: textFormFieldFillColor,
-                    //           border: Border.all(
-                    //             color: Color(0xffDADADA),
-                    //           ),
-                    //           borderRadius: BorderRadius.circular(scrWidth * 0.026)),
-                    //     child: TextField(
-                    //       controller: contentController,
-                    //       cursorHeight: scrWidth * 0.055,
-                    //       cursorWidth: 1,
-                    //       cursorColor: Colors.black,
-                    //       decoration: InputDecoration(
-                    //         hintText: 'Enter a message',
-                    //         hintStyle: TextStyle(
-                    //             color: Color(0xffB0B0B0)),
-                    //         border: InputBorder.none,
-                    //         contentPadding: EdgeInsets.only(
-                    //             left: scrWidth * 0.03,
-                    //             top: scrHeight * 0.006,
-                    //             bottom: scrWidth * 0.033),
-                    //       ),
-                    //
-                    //       maxLines: null,
-                    //       expands: true,
-                    //       keyboardType: TextInputType.multiline,
-                    //     ),
-                    //   ),
-                    // )
-
-
-
+                    // IconButton(onPressed: (){}, icon:Icon(Icons.mic,color: Colors.white,))
                   ],
                 ),
               ),
             ),
-          ),
-          // ElevatedButton(
-          //     onPressed: () => _selectDate(context),
-          //     child:  Text("Add reminder")
-          // ),
-          // ElevatedButton(onPressed: (){
-          //    Navigator.push(context,MaterialPageRoute(builder: (context)=>LocalNotifications()));
-          //   // Navigator.push(context, MaterialPageRoute(builder: (context)=>
-          //   //     NotificationPage(not: widget.notes,)));
-          //   }, child: Text("uygy")),
-          // ElevatedButton(onPressed: (){}, child: Text("Add Rem"))
+            SizedBox(height: scrHeight*0.03,),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding:  EdgeInsets.only(left: scrWidth*0.034,right: scrWidth*0.034),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              _selectDate(context);
+                            },
+                            child: Container(
+                              width: scrWidth*0.44,
+                              // width: scrWidth,
+                              height: textFormFieldHeight45,
+                              padding: EdgeInsets.symmetric(
+                                horizontal: scrWidth * 0.015,
+                                vertical: scrWidth * 0.002,
+                              ),
+                              decoration: BoxDecoration(
+                                color: textFormFieldFillColor,
+                                border: Border.all(
+                                  color: Color(0xffDADADA),
+                                ),
+                                borderRadius: BorderRadius.circular(scrWidth * 0.026),
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(horizontal: scrWidth * 0.03),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      selectedDate == null
+                                          ? "Date"
+                                          : DateFormat.yMMMd().format(selectedDate),
+                                      style: TextStyle(
+                                        color: selectedDate == null
+                                            ? Colors.grey
+                                            : Colors.black,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: FontSize15,
+                                        fontFamily: 'Urbanist',
+                                      ),
+                                    ),
+                                    SvgPicture.asset(
+                                      'assets/icons/date.svg',
+                                      color: Color(0xff8391A1),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 15,),
+                          GestureDetector(
+                            onTap: () {
+                               _selectTime(context);
+                              // print(selectedTime.toString());
+                            },
+                            child: Container(
+                              // color: Colors.pink,
+                              width: scrWidth * 0.44,
+                              // width: 160,
+                              height: textFormFieldHeight45,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Color(0xffDADADA),
+                                ),
+                                color: textFormFieldFillColor,
+                                borderRadius:
+                                BorderRadius.circular(scrWidth * 0.033),
+                              ),
+                              padding:
+                              EdgeInsets.symmetric(horizontal: padding15),
+                              child: Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceAround,
+                                children: [
+                                  Text(
+                                    selectedTime == null
+                                        ? "Draw Time"
+                                        : "${selectedTime.hour.toString()}: ${selectedTime.minute.toString().length == 1 ? '0${selectedTime.minute.toString()}' : selectedTime.minute.toString()}",
+                                    style: TextStyle(
+                                      color: selectedTime == null
+                                          ? Color(0xffB0B0B0)
+                                          : Colors.black,
+                                      fontSize: FontSize14,
+                                      fontFamily: 'Urbanist',
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: scrWidth * 0.04,
+                                  ),
+                                  SvgPicture.asset(
+                                    'assets/icons/time.svg',
+                                    color: Color(0xffB0B0B0),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: scrHeight*0.023,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          // SizedBox(width: 5,),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 5),
+                            child: Text("Set Remainder",style: TextStyle(
+                              fontSize: 17,color: Colors.black,fontFamily: 'Urbanist',fontWeight: FontWeight.w600
+                            ),),
+                          ),
+                          // SizedBox(width: 8,),
+
+                          Transform.scale(
+                            scale: 0.7,
+                            child: CupertinoSwitch(
+                              thumbColor: _remainder
+                                  ? Color(0xff02B558)
+                                  : Colors.grey,
+                              activeColor: Color(0xffD9D9D9),
+                              trackColor: Color(0xffD9D9D9),
+                              value:_remainder,
+                              onChanged: ( bool value) {
+                                setState(() {
+                                  _remainder = value;
+                                  print(_remainder);
+                                });
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      _remainder==true? Container(
+                        width: scrWidth * 0.94,
+                        height: textFormFieldHeight45,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: scrWidth * 0.015,
+                          vertical: scrWidth * 0.002,
+                        ),
+                        decoration: BoxDecoration(
+                            color: textFormFieldFillColor,
+                            border: Border.all(
+                              color: Color(0xffDADADA),
+                            ),
+                            borderRadius: BorderRadius.circular(scrWidth * 0.026)),
+                        child: TextFormField(
+                          // keyboardType: TextInputType.number,
+                          controller: _time,
+                          cursorHeight: scrWidth * 0.055,
+                          cursorWidth: 1,
+                          cursorColor: Colors.black,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w600,
+                            fontSize: FontSize15,
+                            fontFamily: 'Urbanist',
+                          ),
+                          decoration: InputDecoration(
+                            suffixIcon: InkWell(
+                              child: const Icon(
+                                Icons.timer_outlined,
+                              ),
+                              onTap: () async {
+                                final TimeOfDay slectedTime = await showTimePicker(
+                                    context: context,
+                                    initialTime: TimeOfDay.now()
+                                );
+
+                                if (slectedTime == null) {
+                                  return;
+                                }
+                                _time.text =
+                                "${slectedTime.hour}:${slectedTime.minute}:${slectedTime.period.toString()}";
+
+                                DateTime newDT = DateTime(
+                                  dateTime.year,
+                                  dateTime.month,
+                                  dateTime.day,
+                                  slectedTime.hour,
+                                  slectedTime.minute,
+                                );
+                                setState(() {
+                                  dateTime = newDT;
+                                });
+                              },
+                            ),
+
+                            labelText: 'Set Time',
+                            labelStyle: TextStyle(
+                              color: Color(0xffB0B0B0),
+                              fontWeight: FontWeight.w500,
+                              fontSize: FontSize15,
+                              fontFamily: 'Urbanist',
+                            ),
+                            fillColor: textFormFieldFillColor,
+                            filled: true,
+                            contentPadding: EdgeInsets.only(
+                                left: scrWidth * 0.03,
+                                top: scrHeight * 0.006,
+                                bottom: scrWidth * 0.033),
+                            disabledBorder: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            errorBorder: InputBorder.none,
+                            border: InputBorder.none,
+                            // focusedBorder: UnderlineInputBorder(
+                            //   borderSide: BorderSide(
+                            //     color: primarycolor,
+                            //     width: 2,
+                            //   ),
+                            // ),
+                          ),
+                        ),
+                      ):Container(),
+                      SizedBox(height: scrHeight*0.023,),
+                      _remainder==true? Container(
+                        width: scrWidth * 0.94,
+                        height: textFormFieldHeight45,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: scrWidth * 0.015,
+                          vertical: scrWidth * 0.002,
+                        ),
+                        decoration: BoxDecoration(
+                            color: textFormFieldFillColor,
+                            border: Border.all(
+                              color: Color(0xffDADADA),
+                            ),
+                            borderRadius: BorderRadius.circular(scrWidth * 0.026)),
+                        child: TextFormField(
+                          // keyboardType: TextInputType.number,
+                          controller: _date,
+                          cursorHeight: scrWidth * 0.055,
+                          cursorWidth: 1,
+                          cursorColor: Colors.black,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w600,
+                            fontSize: FontSize15,
+                            fontFamily: 'Urbanist',
+                          ),
+                          decoration: InputDecoration(
+                            suffixIcon: InkWell(
+                              child: Icon(Icons.date_range),
+                              onTap: () async {
+                                final DateTime newlySelectedDate =
+                                await showDatePicker(
+                                  context: context,
+                                  initialDate: dateTime,
+                                  firstDate: DateTime.now(),
+                                  lastDate: DateTime(2095),
+                                );
+
+                                if (newlySelectedDate == null) {
+                                  return;
+                                }
+
+                                setState(() {
+                                  dateTime = newlySelectedDate;
+                                  _date.text =
+                                  "${dateTime.year}/${dateTime.month}/${dateTime.day}";
+                                });
+                              },
+                            ),
+                            labelText: 'Set Date',
+                            labelStyle: TextStyle(
+                              color:  Color(0xffB0B0B0),
+                              fontWeight: FontWeight.w500,
+                              fontSize: FontSize15,
+                              fontFamily: 'Urbanist',
+                            ),
+                            fillColor: textFormFieldFillColor,
+                            filled: true,
+                            contentPadding: EdgeInsets.only(
+                                left: scrWidth * 0.03,
+                                top: scrHeight * 0.006,
+                                bottom: scrWidth * 0.033),
+                            disabledBorder: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            errorBorder: InputBorder.none,
+                            border: InputBorder.none,
+                            // focusedBorder: UnderlineInputBorder(
+                            //   borderSide: BorderSide(
+                            //     color: primarycolor,
+                            //     width: 2,
+                            //   ),
+                            // ),
+                          ),
+                        ),
+                      ):Container(),
+                      SizedBox(height: scrHeight*0.023,),
+                      Container(
+                        width: scrWidth * 0.94,
+                        height: textFormFieldHeight45,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: scrWidth * 0.015,
+                          vertical: scrWidth * 0.002,
+                        ),
+                        decoration: BoxDecoration(
+                            color: textFormFieldFillColor,
+                            border: Border.all(
+                              color: Color(0xffDADADA),
+                            ),
+                            borderRadius: BorderRadius.circular(scrWidth * 0.026)),
+                        child: TextFormField(
+                          // keyboardType: TextInputType.number,
+                          controller: titleController,
+                           focusNode: titleFocus,
+                          cursorHeight: scrWidth * 0.055,
+                          cursorWidth: 1,
+                          cursorColor: Colors.black,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w600,
+                            fontSize: FontSize15,
+                            fontFamily: 'Urbanist',
+                          ),
+                          decoration: InputDecoration(
+                            labelText: 'Title',
+                            labelStyle: TextStyle(
+                              color: titleFocus.hasFocus
+                                  ? primarycolor
+                                  : Color(0xffB0B0B0),
+                              fontWeight: FontWeight.w500,
+                              fontSize: FontSize15,
+                              fontFamily: 'Urbanist',
+                            ),
+                            fillColor: textFormFieldFillColor,
+                            filled: true,
+                            contentPadding: EdgeInsets.only(
+                                left: scrWidth * 0.03,
+                                top: scrHeight * 0.006,
+                                bottom: scrWidth * 0.033),
+                            disabledBorder: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            errorBorder: InputBorder.none,
+                            border: InputBorder.none,
+                            // focusedBorder: UnderlineInputBorder(
+                            //   borderSide: BorderSide(
+                            //     color: primarycolor,
+                            //     width: 2,
+                            //   ),
+                            // ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: scrWidth*0.05,),
+                      Center(
+                        child: Container(
+                          width: scrWidth * 0.94,
+                          height: textFormFieldHeight45,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Color(0xffDADADA)),
+                            color:textFormFieldFillColor,
+                            borderRadius: BorderRadius.circular(scrWidth * 0.026),
+                          ),
+                          child:
+                          showPlayer
+                              ? AudioPlayer(
+                            source: audioSource,
+                            message: false,
+                            onDelete: () {
+                              setState(() => showPlayer = false);
+                            },
+                          ) :
+                          _isRecording==false?
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              showPlayer ?
+                              AudioPlayer(
+                                source: audioSource,
+                                onDelete: () {
+                                  setState(() => showPlayer = false);
+                                }, message: null,
+                              ) :Container(),
+                              showPlayer?Container():
+                              showPlayer?Container():
+                              showPlayer==true?Container():
+                              _buildRecordStopControl(),
+                                                                                        ],
+                          ):Padding(
+                            padding: const EdgeInsets.only(left: 15,right: 15),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                _buildText(),
+                                _buildPauseResumeControl(),
+                                _buildRecordStopControl(),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: scrWidth*0.05,),
+
+                      TextField(
+                        controller: contentController,
+
+                        maxLines: null,
+                        //expands: true,
+                        keyboardType: TextInputType.multiline,
+                        //cursorHeight: scrWidth * 0.055,
+                        cursorWidth: 1,
+                        cursorColor: Colors.black,
+                        decoration: InputDecoration(
+                          hintText: 'Enter a message',
+                          hintStyle: TextStyle(
+                              color: Color(0xffB0B0B0)),
+                          fillColor: textFormFieldFillColor,
+                          filled: true,
+                          focusedBorder:OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(scrWidth * 0.026),
+                            borderSide: BorderSide(
+                              color:  Color(0xffDADADA),
+                            )
+                          ),
+                          enabledBorder:OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(scrWidth * 0.026),
+                            borderSide: BorderSide(color:  Color(0xffDADADA),)
+                          ),
+                          contentPadding: EdgeInsets.only(
+                              left: scrWidth * 0.03,
+                              top: scrHeight * 0.006,
+                              bottom: scrWidth * 0.033),
+                        ),
+                        // maxLines: null,
+                        // //expands: true,
+                        // keyboardType: TextInputType.multiline,
+                      ),
+
+
+                      // SizedBox(height: 10,),
+
+                     // _remainder==true?
+                     // TextField(
+                     //    controller: _time,
+                     //    decoration: InputDecoration(
+                     //        border: OutlineInputBorder(
+                     //          borderRadius: BorderRadius.circular(12.0),
+                     //        ),
+                     //        suffixIcon: InkWell(
+                     //          child: const Icon(
+                     //            Icons.timer_outlined,
+                     //          ),
+                     //          onTap: () async {
+                     //            final TimeOfDay slectedTime = await showTimePicker(
+                     //                context: context,
+                     //                initialTime: TimeOfDay.now()
+                     //            );
+                     //
+                     //            if (slectedTime == null) {
+                     //              return;
+                     //            }
+                     //            _time.text =
+                     //            "${slectedTime.hour}:${slectedTime.minute}:${slectedTime.period.toString()}";
+                     //
+                     //            DateTime newDT = DateTime(
+                     //              dateTime.year,
+                     //              dateTime.month,
+                     //              dateTime.day,
+                     //              slectedTime.hour,
+                     //              slectedTime.minute,
+                     //            );
+                     //            setState(() {
+                     //              dateTime = newDT;
+                     //            });
+                     //          },
+                     //        ),
+                     //        label: Text("Time")),
+                     //  )
+                     //     :Container(),
+                     //  SizedBox(height: 10,),
+
+                      // _remainder==true?TextField(
+                      //   controller: _date,
+                      //   decoration: InputDecoration(
+                      //       border: OutlineInputBorder(
+                      //         borderRadius: BorderRadius.circular(12.0),
+                      //       ),
+                      //       suffixIcon: InkWell(
+                      //         child: Icon(Icons.date_range),
+                      //         onTap: () async {
+                      //           final DateTime newlySelectedDate =
+                      //           await showDatePicker(
+                      //             context: context,
+                      //             initialDate: dateTime,
+                      //             firstDate: DateTime.now(),
+                      //             lastDate: DateTime(2095),
+                      //           );
+                      //
+                      //           if (newlySelectedDate == null) {
+                      //             return;
+                      //           }
+                      //
+                      //           setState(() {
+                      //             dateTime = newlySelectedDate;
+                      //             _date.text =
+                      //             "${dateTime.year}/${dateTime.month}/${dateTime.day}";
+                      //           });
+                      //         },
+                      //       ),
+                      //       label: Text("Date")),
+                      // ):Container(),
+                      Container(
+                        child: ListView.builder(
+                            shrinkWrap: true,
+                            itemCount:_audioUrl.length,
+                            itemBuilder: (context,index){
+                              return Padding(
+                                padding:  EdgeInsets.only(top: 20),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: Container(
+                                        height: 50,
+                                        decoration: BoxDecoration(
+                                          color: primarycolor.withOpacity(0.2),
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                        child: AudioPlayer(
+                                          source: ap.AudioSource.uri(Uri.tryParse(_audioUrl[index])),
+                                          onDelete: null,
+                                          message: true,
+                                        ),
+
+                                      ),
+                                    ),
+                                    IconButton(onPressed: (){
+                                      _audioUrl.remove(_audioUrl[index]);
+                                      // savedVoice.remove(savedVoice[index]);
+                                      setState(() {
+
+                                      });
+
+                                    }, icon: Icon(Icons.delete))
+                                  ],
+                                ),
+                              );
+                            }),
+
+                      ),
 
 
 
-        ],
+
+                      // SizedBox(
+                      //   height: scrHeight*0.65,
+                      //   child: Container(
+                      //     width: scrWidth * 0.94,
+                      //       height: textFormFieldHeight45,
+                      //       padding: EdgeInsets.symmetric(
+                      //         horizontal: scrWidth * 0.015,
+                      //         vertical: scrWidth * 0.002,
+                      //       ),
+                      //       decoration: BoxDecoration(
+                      //           color: textFormFieldFillColor,
+                      //           border: Border.all(
+                      //             color: Color(0xffDADADA),
+                      //           ),
+                      //           borderRadius: BorderRadius.circular(scrWidth * 0.026)),
+                      //     child: TextField(
+                      //       controller: contentController,
+                      //       cursorHeight: scrWidth * 0.055,
+                      //       cursorWidth: 1,
+                      //       cursorColor: Colors.black,
+                      //       decoration: InputDecoration(
+                      //         hintText: 'Enter a message',
+                      //         hintStyle: TextStyle(
+                      //             color: Color(0xffB0B0B0)),
+                      //         border: InputBorder.none,
+                      //         contentPadding: EdgeInsets.only(
+                      //             left: scrWidth * 0.03,
+                      //             top: scrHeight * 0.006,
+                      //             bottom: scrWidth * 0.033),
+                      //       ),
+                      //
+                      //       maxLines: null,
+                      //       expands: true,
+                      //       keyboardType: TextInputType.multiline,
+                      //     ),
+                      //   ),
+                      // )
+
+
+
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            // ElevatedButton(
+            //     onPressed: () => _selectDate(context),
+            //     child:  Text("Add reminder")
+            // ),
+            // ElevatedButton(onPressed: (){
+            //    Navigator.push(context,MaterialPageRoute(builder: (context)=>LocalNotifications()));
+            //   // Navigator.push(context, MaterialPageRoute(builder: (context)=>
+            //   //     NotificationPage(not: widget.notes,)));
+            //   }, child: Text("uygy")),
+            // ElevatedButton(onPressed: (){}, child: Text("Add Rem"))
+
+
+
+          ],
+        ),
       ),
     );
   }

@@ -236,7 +236,9 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
   List<StoreDetailsModel> nearestStores = [];
   getNearestShop() {
     center = geo.point(latitude: lat ?? 10.98, longitude: long ?? 76.23);
-    var collectionReference = FirebaseFirestore.instance.collection('stores');
+    var collectionReference = FirebaseFirestore
+        .instance
+        .collection('stores');
     double? radius = 5;
     String field = 'position';
     geo

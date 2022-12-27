@@ -142,7 +142,10 @@ class _NotesPageState extends State<NotesPage> {
               children: [
                 InkWell(
                   onTap: () {
-                    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>ScreenLayout()), (route) => false);
+                    Navigator.pushAndRemoveUntil(
+                        context, MaterialPageRoute(builder: (context)=>ScreenLayout()),
+                            (route) => false
+                    );
                   },
                   child: Padding(
                     padding: EdgeInsets.only(
@@ -217,8 +220,7 @@ class _NotesPageState extends State<NotesPage> {
               shrinkWrap: true,
               itemCount: getAllNotes.length,
                 itemBuilder: (context,index){
-
-                  return Padding(
+                return Padding(
                     padding:  EdgeInsets.only(left: scrWidth*0.02,right:scrWidth*0.02,bottom: scrWidth*0.02 ),
                     child: InkWell(
                       onTap: (){
