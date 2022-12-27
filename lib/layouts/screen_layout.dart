@@ -93,40 +93,54 @@ class _ScreenLayoutState extends State<ScreenLayout> {
                   },
                   child: DrawerHeader(
                     decoration: BoxDecoration(color: primarycolor),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        CircleAvatar(
-                          backgroundImage:
-                              NetworkImage(currentuser?.userImage ?? ''),
-                          radius: 30.0,
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Stack(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
-                            Text(
-                              currentuser?.userName ?? '',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                  fontSize: 22.0),
+                            CircleAvatar(
+                              backgroundImage:
+                                  NetworkImage(currentuser?.userImage ?? ''),
+                              radius: 30.0,
                             ),
-                            SizedBox(height: 10.0),
-                            Flexible(
-                              child: Container(
-                                width: 160,
-                                child: Text(
-                                  currentuser?.userEmail ?? '',
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  currentuser?.userName ?? '',
                                   style: TextStyle(
-                                      overflow: TextOverflow.ellipsis,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.white,
-                                      fontSize: 14.0),
+                                      fontSize: 22.0),
                                 ),
-                              ),
-                            ),
+                                SizedBox(height: 10.0),
+                                Flexible(
+                                  child: Container(
+                                    width: 160,
+                                    child: Text(
+                                      currentuser?.userEmail ?? '',
+                                      style: TextStyle(
+                                          overflow: TextOverflow.ellipsis,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                          fontSize: 14.0),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
                           ],
+                        ),
+                        Align(
+                          alignment: Alignment.bottomLeft,
+                          child: Text(
+                            'V 1.5',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         )
                       ],
                     ),

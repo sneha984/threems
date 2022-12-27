@@ -1561,7 +1561,7 @@ class _YourChitPageState extends State<YourChitPage> {
                         ),
                         InkWell(
                           onTap: () {
-                            if (mapOfWinners!.keys.contains(currentuserid!)) {
+                            if (mapOfCurrentPayments!.keys.contains(currentuserid!)) {
                               showSnackbar(context, 'Already paid this month');
                             } else {
                               Navigator.push(
@@ -1579,7 +1579,7 @@ class _YourChitPageState extends State<YourChitPage> {
                             height: scrHeight * 0.045,
                             width: scrWidth * 0.25,
                             decoration: BoxDecoration(
-                              color: mapOfWinners!.keys.contains(currentuserid!)
+                              color:mapOfCurrentPayments==null?Colors.grey: mapOfCurrentPayments!.keys.contains(currentuserid!)
                                   ? Colors.grey
                                   : Colors.white,
                               borderRadius: BorderRadius.circular(11),
