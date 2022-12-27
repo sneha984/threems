@@ -6,8 +6,9 @@ import 'package:threems/utils/themes.dart';
 import 'InviteLink/ChitInvite.dart';
 import 'screens/splash_screen.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-FlutterLocalNotificationsPlugin();
+    FlutterLocalNotificationsPlugin();
 
 String inviteLinkId = '';
 String inviteLinkType = '';
@@ -42,7 +43,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       scaffoldMessengerKey: snackbarKey,
       debugShowCheckedModeBanner: false,
-      home: Rootingpage(),
+      home: SplashScreen(),
       theme: ThemeData(primaryColor: primarycolor),
     );
   }

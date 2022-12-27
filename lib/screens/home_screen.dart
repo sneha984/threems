@@ -1378,7 +1378,11 @@ class _HomeScreenState extends State<HomeScreen> {
               leadingWidth: 0,
               title: Padding(
                 padding: EdgeInsets.only(top: scrHeight * 0.009),
-                child: SvgPicture.asset("assets/icons/3ms.svg"),
+                child: Image.asset(
+                  "assets/icons/homeIcon.png",
+                  width: scrWidth * 0.35,
+                  height: scrWidth * 0.3,
+                ),
               ),
               // actions: [
               //   // GestureDetector(

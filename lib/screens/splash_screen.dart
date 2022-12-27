@@ -23,34 +23,39 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: 4), () {
+    Timer(const Duration(seconds: 3), () {
       Navigator.pushAndRemoveUntil(
-          context, MaterialPageRoute(
-        builder: (context) => Rootingpage(),
+          context,
+          MaterialPageRoute(
+            builder: (context) => Rootingpage(),
             // ScreenLayout(),
-      ),
-              (route) => false);
+          ),
+          (route) => false);
     });
   }
+
   @override
   Widget build(BuildContext context) {
-    scrWidth=MediaQuery.of(context).size.width;
-    scrHeight=MediaQuery.of(context).size.height;
+    scrWidth = MediaQuery.of(context).size.width;
+    scrHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       backgroundColor: primarycolor,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children:  [
+          children: [
             Padding(
-              padding:  EdgeInsets.only(bottom: scrHeight*0.062),
-              child: Image.asset("assets/icons/logo.png",height:scrHeight*0.22,),
+              padding: EdgeInsets.only(bottom: scrHeight * 0.062),
+              child: Image.asset(
+                "assets/icons/splashScreenIcon.png",
+                height: scrHeight * 0.25,
+                width: scrWidth * 0.7,
+              ),
             ),
           ],
         ),
       ),
-
     );
   }
 }

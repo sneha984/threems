@@ -97,15 +97,3 @@ class _RootingpageState extends State<Rootingpage> {
     // );
   }
 }
-
-signOut(BuildContext context) async {
-  GoogleSignIn().disconnect();
-  await FirebaseAuth.instance
-      .signOut()
-      .then((value) => Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => OnBoarding(),
-          ),
-          (route) => false));
-}
