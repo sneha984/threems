@@ -40,7 +40,7 @@ class _SplashScreenState extends State<SplashScreen> {
     scrHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: primarycolor,
+      backgroundColor: Color(0xff07380B),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
