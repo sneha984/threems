@@ -882,7 +882,7 @@ class _HomeScreenState extends State<HomeScreen> {
                  ),
                 title: Text('Diary', style: TextStyle(fontSize: 18)),
                 onTap: () {
-                         Navigator.push(context,MaterialPageRoute(builder: (context)=>NotesPage()));
+                         // Navigator.push(context,MaterialPageRoute(builder: (context)=>NotesPage()));
 
 
                   // Here you can give your route to navigate
