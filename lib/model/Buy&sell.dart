@@ -65,7 +65,7 @@ class StoreDetailsModel {
 }
 
 class ProductModel {
-  List<String>? images;
+  List<dynamic>? images;
   String? productId;
   String? storeId;
   String? productName;

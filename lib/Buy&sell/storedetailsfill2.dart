@@ -853,9 +853,9 @@ List productCategoryList=[];
                   ],
                 ),
               ),
-              Text("Unit : per ${productUnitController.text} ${selectedValue}",style: TextStyle(
-                fontFamily: 'Urbanist',fontWeight: FontWeight.w600,color: primarycolor,fontSize: 12
-              ),),
+              // Text("Unit : per ${productUnitController.text} ${selectedValue}",style: TextStyle(
+              //   fontFamily: 'Urbanist',fontWeight: FontWeight.w600,color: primarycolor,fontSize: 12
+              // ),),
               Padding(
                 padding:  EdgeInsets.only(right: scrWidth*0.053,top: scrHeight*0.02),
                 child: Container(

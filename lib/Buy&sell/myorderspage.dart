@@ -101,7 +101,59 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
           ),
         ),
       ),
-      body: ListView.builder(
+      body:allOrders.isEmpty?Column(
+        children: [
+          Row(
+            children: [
+              SizedBox(
+                width: scrWidth * 0.06,
+              ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    top: scrHeight * 0.08,
+                    // left: scrWidth * 0.07,
+                  ),
+                  child: SvgPicture.asset(
+                    "assets/icons/arrow.svg",
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 60, left: 20),
+                child: Text(
+                  "Cart Checkout",
+                  style: TextStyle(
+                      fontSize: scrWidth * 0.046,
+                      color: Colors.black,
+                      fontFamily: 'Urbanist',
+                      fontWeight: FontWeight.w600),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 26,
+          ),
+          SizedBox(
+            height: 150,
+          ),
+          SvgPicture.asset("assets/icons/Group 173.svg"),
+          SizedBox(
+            height: 90,
+          ),
+          Text(
+            "Cart is Empty",
+            style: TextStyle(
+                fontFamily: 'Urbanist',
+                fontSize: 16,
+                fontWeight: FontWeight.w500),
+          )
+        ],
+      ): ListView.builder(
         itemCount: allOrders.length,
         itemBuilder:(context,index){
           return Column(

@@ -62,6 +62,196 @@ class _DeliveredPageState extends State<DeliveredPage> {
         child: Column(
           children: [
             Padding(
+              padding: const EdgeInsets.only(right: 180, top: 14),
+              child: Text(
+                "Order Status",
+                style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
+                    fontFamily: 'Urbanist',
+                    fontWeight: FontWeight.w600),
+              ),
+            ),
+            SizedBox(
+              height: 8,
+            ),
+            Container(
+              height: 120,
+              width: 325,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Color.fromRGBO(0, 0, 0, 0.15),
+                      spreadRadius: 1,
+                      blurRadius: 3,
+                      offset: Offset(2, 3), // changes position of shadow
+                    ),
+                  ],
+                  borderRadius: BorderRadius.circular(20)),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    //ORDERED DATE
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Ordered Date",
+                          style: TextStyle(
+                              fontSize: 12,
+                              color: Color(0xffE54D3C),
+                              fontFamily: 'Urbanist',
+                              fontWeight: FontWeight.w600),
+                        ),
+                        Text(
+                          //Today Date
+                          widget.order.time!.day == DateTime.now().day
+                              ? widget.order.time!.hour > 12
+                              ? "Today ${widget.order.time!.hour - 12}:${widget.order.time!.minute} PM"
+                              : widget.order.time!.hour == 0
+                              ? "Today 12:${widget.order.time!.minute} AM"
+                              : "Today ${widget.order.time!.hour}:${widget.order.time!.minute} AM"
+                              :
+
+                          //YESTERDAY DATE
+                          widget.order.time!.day == DateTime.now().day - 1
+                              ? widget.order.time!.hour > 12
+                              ? "Yesterday ${widget.order.time!.hour - 12}:${widget.order.time!.minute} PM"
+                              : widget.order.time!.hour == 0
+                              ? "Yesterday 12:${widget.order.time!.minute} AM"
+                              : "Yesterday ${widget.order.time!.hour}:${widget.order.time!.minute} AM"
+                              :
+
+                          //OTHER DATE
+                          widget.order.time!.hour > 12
+                              ? "${DateFormat('dd-MMM-yyy').format(widget.order.time!)} ${widget.order.time!.hour - 12}"
+                              ":${widget.order.time!.minute} PM"
+                              : widget.order.time!.hour == 0
+                              ? "${DateFormat('dd-MMM-yyy').format(widget.order.time!)} 12:"
+                              "${widget.order.time!.minute} AM"
+                              : "${DateFormat('dd-MMM-yyy').format(widget.order.time!)}"
+                              " ${widget.order.time!.hour}:${widget.order.time!.minute} AM",
+                          style: TextStyle(
+                              fontSize: 16,
+                              color: primarycolor,
+                              fontFamily: 'Urbanist',
+                              fontWeight: FontWeight.w600),
+                        ),
+                      ],
+                    ),
+
+                    //ACCEPTED DATE
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Accepted Date",
+                          style: TextStyle(
+                              fontSize: 12,
+                              color: Color(0xffE54D3C),
+                              fontFamily: 'Urbanist',
+                              fontWeight: FontWeight.w600),
+                        ),
+                        Text(
+                          //Today Date
+                          widget.order.acceptedDate!.day == DateTime.now().day
+                              ? widget.order.acceptedDate!.hour > 12
+                              ? "Today ${widget.order.acceptedDate!.hour - 12}:${widget.order.acceptedDate!.minute} PM"
+                              : widget.order.acceptedDate!.hour == 0
+                              ? "Today 12:${widget.order.acceptedDate!.minute} AM"
+                              : "Today ${widget.order.acceptedDate!.hour}:${widget.order.acceptedDate!.minute} AM"
+                              :
+
+                          //YESTERDAY DATE
+                          widget.order.acceptedDate!.day ==
+                              DateTime.now().day - 1
+                              ? widget.order.acceptedDate!.hour > 12
+                              ? "Yesterday ${widget.order.acceptedDate!.hour - 12}:${widget.order.acceptedDate!.minute} PM"
+                              : widget.order.acceptedDate!.hour == 0
+                              ? "Yesterday 12:${widget.order.acceptedDate!.minute} AM"
+                              : "Yesterday ${widget.order.acceptedDate!.hour}:${widget.order.acceptedDate!.minute} AM"
+                              :
+
+                          //OTHER DATE
+                          widget.order.acceptedDate!.hour > 12
+                              ? "${DateFormat('dd-MMM-yyy').format(widget.order.acceptedDate!)} ${widget.order.acceptedDate!.hour - 12}"
+                              ":${widget.order.acceptedDate!.minute} PM"
+                              : widget.order.acceptedDate!.hour == 0
+                              ? "${DateFormat('dd-MMM-yyy').format(widget.order.acceptedDate!)} 12:"
+                              "${widget.order.acceptedDate!.minute} AM"
+                              : "${DateFormat('dd-MMM-yyy').format(widget.order.acceptedDate!)}"
+                              " ${widget.order.acceptedDate!.hour}:${widget.order.acceptedDate!.minute} AM",
+                          style: TextStyle(
+                              fontSize: 16,
+                              color: primarycolor,
+                              fontFamily: 'Urbanist',
+                              fontWeight: FontWeight.w600),
+                        ),
+                      ],
+                    ),
+
+                    //DELIVERED DATE
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Delivered Date",
+                          style: TextStyle(
+                              fontSize: 12,
+                              color: Color(0xffE54D3C),
+                              fontFamily: 'Urbanist',
+                              fontWeight: FontWeight.w600),
+                        ),
+                        Text(
+                          //Today Date
+                          widget.order.deliveryDate!.day == DateTime.now().day
+                              ? widget.order.deliveryDate!.hour > 12
+                              ? "Today ${widget.order.deliveryDate!.hour - 12}:${widget.order.deliveryDate!.minute} PM"
+                              : widget.order.deliveryDate!.hour == 0
+                              ? "Today 12:${widget.order.deliveryDate!.minute} AM"
+                              : "Today ${widget.order.deliveryDate!.hour}:${widget.order.deliveryDate!.minute} AM"
+                              :
+
+                          //YESTERDAY DATE
+                          widget.order.deliveryDate!.day ==
+                              DateTime.now().day - 1
+                              ? widget.order.deliveryDate!.hour > 12
+                              ? "Yesterday ${widget.order.deliveryDate!.hour - 12}:${widget.order.deliveryDate!.minute} PM"
+                              : widget.order.deliveryDate!.hour == 0
+                              ? "Yesterday 12:${widget.order.deliveryDate!.minute} AM"
+                              : "Yesterday ${widget.order.deliveryDate!.hour}:${widget.order.deliveryDate!.minute} AM"
+                              :
+
+                          //OTHER DATE
+                          widget.order.deliveryDate!.hour > 12
+                              ? "${DateFormat('dd-MMM-yyy').format(widget.order.deliveryDate!)} ${widget.order.deliveryDate!.hour - 12}"
+                              ":${widget.order.deliveryDate!.minute} PM"
+                              : widget.order.deliveryDate!.hour == 0
+                              ? "${DateFormat('dd-MMM-yyy').format(widget.order.deliveryDate!)} 12:"
+                              "${widget.order.deliveryDate!.minute} AM"
+                              : "${DateFormat('dd-MMM-yyy').format(widget.order.deliveryDate!)}"
+                              " ${widget.order.deliveryDate!.hour}:${widget.order.deliveryDate!.minute} AM",
+                          style: TextStyle(
+                              fontSize: 16,
+                              color: primarycolor,
+                              fontFamily: 'Urbanist',
+                              fontWeight: FontWeight.w600),
+                        ),
+                      ],
+                    ),
+
+                    SizedBox()
+                  ],
+                ),
+              ),
+            ),
+            Padding(
               padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
               child: Container(
                 height: 310,
@@ -588,196 +778,7 @@ class _DeliveredPageState extends State<DeliveredPage> {
             SizedBox(
               height: 10,
             ),
-            Padding(
-              padding: const EdgeInsets.only(right: 180, top: 14),
-              child: Text(
-                "Order Status",
-                style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.black,
-                    fontFamily: 'Urbanist',
-                    fontWeight: FontWeight.w600),
-              ),
-            ),
-            SizedBox(
-              height: 8,
-            ),
-            Container(
-              height: 120,
-              width: 325,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Color.fromRGBO(0, 0, 0, 0.15),
-                      spreadRadius: 1,
-                      blurRadius: 3,
-                      offset: Offset(2, 3), // changes position of shadow
-                    ),
-                  ],
-                  borderRadius: BorderRadius.circular(20)),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    //ORDERED DATE
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Ordered Date",
-                          style: TextStyle(
-                              fontSize: 12,
-                              color: Color(0xffE54D3C),
-                              fontFamily: 'Urbanist',
-                              fontWeight: FontWeight.w600),
-                        ),
-                        Text(
-                          //Today Date
-                          widget.order.time!.day == DateTime.now().day
-                              ? widget.order.time!.hour > 12
-                                  ? "Today ${widget.order.time!.hour - 12}:${widget.order.time!.minute} PM"
-                                  : widget.order.time!.hour == 0
-                                      ? "Today 12:${widget.order.time!.minute} AM"
-                                      : "Today ${widget.order.time!.hour}:${widget.order.time!.minute} AM"
-                              :
 
-                              //YESTERDAY DATE
-                              widget.order.time!.day == DateTime.now().day - 1
-                                  ? widget.order.time!.hour > 12
-                                      ? "Yesterday ${widget.order.time!.hour - 12}:${widget.order.time!.minute} PM"
-                                      : widget.order.time!.hour == 0
-                                          ? "Yesterday 12:${widget.order.time!.minute} AM"
-                                          : "Yesterday ${widget.order.time!.hour}:${widget.order.time!.minute} AM"
-                                  :
-
-                                  //OTHER DATE
-                                  widget.order.time!.hour > 12
-                                      ? "${DateFormat('dd-MMM-yyy').format(widget.order.time!)} ${widget.order.time!.hour - 12}"
-                                          ":${widget.order.time!.minute} PM"
-                                      : widget.order.time!.hour == 0
-                                          ? "${DateFormat('dd-MMM-yyy').format(widget.order.time!)} 12:"
-                                              "${widget.order.time!.minute} AM"
-                                          : "${DateFormat('dd-MMM-yyy').format(widget.order.time!)}"
-                                              " ${widget.order.time!.hour}:${widget.order.time!.minute} AM",
-                          style: TextStyle(
-                              fontSize: 16,
-                              color: primarycolor,
-                              fontFamily: 'Urbanist',
-                              fontWeight: FontWeight.w600),
-                        ),
-                      ],
-                    ),
-
-                    //ACCEPTED DATE
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Accepted Date",
-                          style: TextStyle(
-                              fontSize: 12,
-                              color: Color(0xffE54D3C),
-                              fontFamily: 'Urbanist',
-                              fontWeight: FontWeight.w600),
-                        ),
-                        Text(
-                          //Today Date
-                          widget.order.acceptedDate!.day == DateTime.now().day
-                              ? widget.order.acceptedDate!.hour > 12
-                                  ? "Today ${widget.order.acceptedDate!.hour - 12}:${widget.order.acceptedDate!.minute} PM"
-                                  : widget.order.acceptedDate!.hour == 0
-                                      ? "Today 12:${widget.order.acceptedDate!.minute} AM"
-                                      : "Today ${widget.order.acceptedDate!.hour}:${widget.order.acceptedDate!.minute} AM"
-                              :
-
-                              //YESTERDAY DATE
-                              widget.order.acceptedDate!.day ==
-                                      DateTime.now().day - 1
-                                  ? widget.order.acceptedDate!.hour > 12
-                                      ? "Yesterday ${widget.order.acceptedDate!.hour - 12}:${widget.order.acceptedDate!.minute} PM"
-                                      : widget.order.acceptedDate!.hour == 0
-                                          ? "Yesterday 12:${widget.order.acceptedDate!.minute} AM"
-                                          : "Yesterday ${widget.order.acceptedDate!.hour}:${widget.order.acceptedDate!.minute} AM"
-                                  :
-
-                                  //OTHER DATE
-                                  widget.order.acceptedDate!.hour > 12
-                                      ? "${DateFormat('dd-MMM-yyy').format(widget.order.acceptedDate!)} ${widget.order.acceptedDate!.hour - 12}"
-                                          ":${widget.order.acceptedDate!.minute} PM"
-                                      : widget.order.acceptedDate!.hour == 0
-                                          ? "${DateFormat('dd-MMM-yyy').format(widget.order.acceptedDate!)} 12:"
-                                              "${widget.order.acceptedDate!.minute} AM"
-                                          : "${DateFormat('dd-MMM-yyy').format(widget.order.acceptedDate!)}"
-                                              " ${widget.order.acceptedDate!.hour}:${widget.order.acceptedDate!.minute} AM",
-                          style: TextStyle(
-                              fontSize: 16,
-                              color: primarycolor,
-                              fontFamily: 'Urbanist',
-                              fontWeight: FontWeight.w600),
-                        ),
-                      ],
-                    ),
-
-                    //DELIVERED DATE
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Delivered Date",
-                          style: TextStyle(
-                              fontSize: 12,
-                              color: Color(0xffE54D3C),
-                              fontFamily: 'Urbanist',
-                              fontWeight: FontWeight.w600),
-                        ),
-                        Text(
-                          //Today Date
-                          widget.order.deliveryDate!.day == DateTime.now().day
-                              ? widget.order.deliveryDate!.hour > 12
-                                  ? "Today ${widget.order.deliveryDate!.hour - 12}:${widget.order.deliveryDate!.minute} PM"
-                                  : widget.order.deliveryDate!.hour == 0
-                                      ? "Today 12:${widget.order.deliveryDate!.minute} AM"
-                                      : "Today ${widget.order.deliveryDate!.hour}:${widget.order.deliveryDate!.minute} AM"
-                              :
-
-                              //YESTERDAY DATE
-                              widget.order.deliveryDate!.day ==
-                                      DateTime.now().day - 1
-                                  ? widget.order.deliveryDate!.hour > 12
-                                      ? "Yesterday ${widget.order.deliveryDate!.hour - 12}:${widget.order.deliveryDate!.minute} PM"
-                                      : widget.order.deliveryDate!.hour == 0
-                                          ? "Yesterday 12:${widget.order.deliveryDate!.minute} AM"
-                                          : "Yesterday ${widget.order.deliveryDate!.hour}:${widget.order.deliveryDate!.minute} AM"
-                                  :
-
-                                  //OTHER DATE
-                                  widget.order.deliveryDate!.hour > 12
-                                      ? "${DateFormat('dd-MMM-yyy').format(widget.order.deliveryDate!)} ${widget.order.deliveryDate!.hour - 12}"
-                                          ":${widget.order.deliveryDate!.minute} PM"
-                                      : widget.order.deliveryDate!.hour == 0
-                                          ? "${DateFormat('dd-MMM-yyy').format(widget.order.deliveryDate!)} 12:"
-                                              "${widget.order.deliveryDate!.minute} AM"
-                                          : "${DateFormat('dd-MMM-yyy').format(widget.order.deliveryDate!)}"
-                                              " ${widget.order.deliveryDate!.hour}:${widget.order.deliveryDate!.minute} AM",
-                          style: TextStyle(
-                              fontSize: 16,
-                              color: primarycolor,
-                              fontFamily: 'Urbanist',
-                              fontWeight: FontWeight.w600),
-                        ),
-                      ],
-                    ),
-
-                    SizedBox()
-                  ],
-                ),
-              ),
-            ),
             // Padding(
             //   padding: const EdgeInsets.only(left: 15,right: 15,top: 15),
             //   child: Container(

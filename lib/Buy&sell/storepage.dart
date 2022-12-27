@@ -891,11 +891,16 @@ class _ShopSingleProductState extends State<ShopSingleProduct> {
               onTap: () {
                  Navigator.push(context,MaterialPageRoute(builder: (context)=>ImageZoomPage(
                    image: widget.product.images![0],
-                   productname: widget.product.productName!,
-                   productprice: widget.product.price!.toString(),
-                   productquantity: widget.product.quantity!.toString(),
-                   producunit: widget.product.unit!,
-                   productDetails: widget.product.details!,
+                   pro:widget.product ,
+                   storeId: widget.product.storeId!,
+                   deliveryCharge: widget.deliveryCharge!,
+                   // productname: widget.product.productName!,
+                   // productprice: widget.product.price!.toString(),
+                   // productquantity: widget.product.quantity!.toString(),
+                   // producunit: widget.product.unit!,
+                   // productDetails: widget.product.details!,
+                   // productId: widget.product.productId!,
+                   // storeId: widget.product.storeId!,
 
                  )));
               },
@@ -964,169 +969,184 @@ class _ShopSingleProductState extends State<ShopSingleProduct> {
               ),
             ),
           ),
-          isCarted
-              ? InkWell(
-                  onTap: () {},
-                  child: Container(
-                    height: scrHeight * 0.033,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: const Color(0xff02B558)
-                        // color: Colors.red
-                        ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: InkWell(
-                            onTap: () {
-                              if (qty != 1) {
-                                --qty;
-                                setState(() {});
-                              } else {
-                                isCarted = false;
-                                final snackBar = SnackBar(
-                                  backgroundColor: Colors.white,
-                                  content: const Text(
-                                    ' item removed from cart',
-                                    style: TextStyle(color: Colors.black),
-                                  ),
-                                );
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(snackBar);
-                                setState(() {});
-                              }
-                              // setState(() {
-                              //   if(eachstore[index].counter <2)
-                              //   {
-                              //     eachstore[index].ShouldVisible = !eachstore[index].ShouldVisible;
-                              //   }else{
-                              //     eachstore[index].counter--;
-                              //   }
-                              //
-                              // });
-                              decrementCount(widget.product.productId!,
-                                  widget.storeId, qty);
-
-                              print(cartlist);
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  color: Color(0xff02B558),
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(8),
-                                      bottomLeft: Radius.circular(8))),
-                              child: Padding(
-                                padding: EdgeInsets.only(bottom: 8),
-                                child: Icon(
-                                  Icons.minimize_outlined,
-                                  size: 15,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Color(0xff9FFFCD),
-                            ),
-                            child: Center(
-                                child: Text(qty.toString()
-                                    // '${eachstore[index].counter}'
-                                    )),
-                          ),
-                        ),
-                        Expanded(
-                          child: InkWell(
-                            onTap: () {
-                              // print(products.productId);
-                              // print(products.productName);
-                              qty++;
-                              incrementCount(widget.product.productId!,
-                                  widget.storeId, qty);
-                              print(cartlist);
-                              // final snackBar = SnackBar(
-                              //   backgroundColor: Colors.white,
-                              //   content: const Text(' item added to cart',
-                              //     style: TextStyle(color: Colors.black),),
-                              //   action: SnackBarAction(
-                              //
-                              //     textColor: Colors.blue,
-                              //     label: 'Go To Cart',
-                              //     onPressed: () {
-                              //       Navigator.of(context).push(MaterialPageRoute(builder: (context)=>CheckOutPage()));
-                              //       // Some code to undo the change.
-                              //     },
-                              //   ),
-                              // );
-                              // ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
-                              setState(() {});
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  // color: Colors.red,
-                                  color: Color(0xff02B558),
-                                  borderRadius: BorderRadius.only(
-                                      topRight: Radius.circular(8),
-                                      bottomRight: Radius.circular(8))),
-                              child: Padding(
-                                padding: EdgeInsets.only(left: 3),
-                                child: Icon(
-                                  Icons.add,
-                                  size: 15,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                )
-              : InkWell(
-                  onTap: () async {
-                    if (cartlist.isEmpty) {
-                      addToCart(widget.product, widget.storeId);
-                      isCarted = true;
-                    } else if (cartlist[0]['storeId'] ==
-                        widget.product.storeId) {
-                      addToCart(widget.product, widget.storeId);
-                      isCarted = true;
-                    } else {
-                      bool? pressed = await cartAlert();
-
-                      if (pressed == true) {
-                        cartlist = [];
-                        addToCart(widget.product, widget.storeId);
-                        isCarted = true;
-                      }
-                    }
-
-                    setState(() {});
-                  },
-                  child: Container(
-                    width: scrWidth * 0.31,
-                    height: scrHeight * 0.033,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: Color(0xff02B558)
-                        // color: Colors.red
-                        ),
-                    child: Center(
-                      child: Text(
-                        "Add",
-                        style: TextStyle(
-                            fontFamily: 'Urbanist',
-                            fontWeight: FontWeight.w600,
-                            fontSize: 12,
-                            color: Colors.white),
-                      ),
-                    ),
-                  ),
-                ),
+          /////////////////////////////////////////////////
+          // isCarted
+          //     ? InkWell(
+          //         onTap: () {},
+          //         child: Container(
+          //           height: scrHeight * 0.033,
+          //           decoration: BoxDecoration(
+          //               borderRadius: BorderRadius.circular(8),
+          //               color: const Color(0xff02B558)
+          //               // color: Colors.red
+          //               ),
+          //           child: Row(
+          //             children: [
+          //               // Expanded(
+          //               //   child: InkWell(
+          //               //     onTap: () {
+          //               //       if (qty != 1) {
+          //               //         --qty;
+          //               //         setState(() {});
+          //               //       } else {
+          //               //         isCarted = false;
+          //               //         final snackBar = SnackBar(
+          //               //           backgroundColor: Colors.white,
+          //               //           content: const Text(
+          //               //             ' item removed from cart',
+          //               //             style: TextStyle(color: Colors.black),
+          //               //           ),
+          //               //         );
+          //               //         ScaffoldMessenger.of(context)
+          //               //             .showSnackBar(snackBar);
+          //               //         setState(() {});
+          //               //       }
+          //               //       // setState(() {
+          //               //       //   if(eachstore[index].counter <2)
+          //               //       //   {
+          //               //       //     eachstore[index].ShouldVisible = !eachstore[index].ShouldVisible;
+          //               //       //   }else{
+          //               //       //     eachstore[index].counter--;
+          //               //       //   }
+          //               //       //
+          //               //       // });
+          //               //       decrementCount(widget.product.productId!,
+          //               //           widget.storeId, qty);
+          //               //
+          //               //       print(cartlist);
+          //               //     },
+          //               //     child: Container(
+          //               //       decoration: BoxDecoration(
+          //               //           color: Color(0xff02B558),
+          //               //           borderRadius: BorderRadius.only(
+          //               //               topLeft: Radius.circular(8),
+          //               //               bottomLeft: Radius.circular(8))),
+          //               //       child: Padding(
+          //               //         padding: EdgeInsets.only(bottom: 8),
+          //               //         child: Icon(
+          //               //           Icons.minimize_outlined,
+          //               //           size: 15,
+          //               //           color: Colors.white,
+          //               //         ),
+          //               //       ),
+          //               //     ),
+          //               //   ),
+          //               // ),
+          //               // Expanded(
+          //               //   child: Container(
+          //               //     decoration: BoxDecoration(
+          //               //       color: Color(0xff9FFFCD),
+          //               //     ),
+          //               //     child: Center(
+          //               //         child: Text(qty.toString()
+          //               //             // '${eachstore[index].counter}'
+          //               //             )),
+          //               //   ),
+          //               // ),
+          //               Expanded(
+          //                 child: InkWell(
+          //                   onTap: () {
+          //                     // print(products.productId);
+          //                     // print(products.productName);
+          //
+          //
+          //
+          //
+                              // qty++;
+          //                     // incrementCount(widget.product.productId!,
+          //                     //     widget.storeId, qty);
+          //                     // print(cartlist);
+          //
+          //
+          //
+          //                     // final snackBar = SnackBar(
+          //                     //   backgroundColor: Colors.white,
+          //                     //   content: const Text(' item added to cart',
+          //                     //     style: TextStyle(color: Colors.black),),
+          //                     //   action: SnackBarAction(
+          //                     //
+          //                     //     textColor: Colors.blue,
+          //                     //     label: 'Go To Cart',
+          //                     //     onPressed: () {
+          //                     //       Navigator.of(context).push(MaterialPageRoute(builder: (context)=>CheckOutPage()));
+          //                     //       // Some code to undo the change.
+          //                     //     },
+          //                     //   ),
+          //                     // );
+          //                     // ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          //
+          //                      setState(() {});
+          //                     Navigator.pushReplacement(
+          //                         context, MaterialPageRoute(builder: (context) => CheckOutPage()));
+          //
+          //                   },
+          //                   child: Container(
+          //                     decoration: BoxDecoration(
+          //                         // color: Colors.red,
+          //                         color: Color(0xff02B558),
+          //                         borderRadius: BorderRadius.only(
+          //                             topRight: Radius.circular(8),
+          //                             bottomRight: Radius.circular(8),topLeft: Radius.circular(8),
+          //                             bottomLeft: Radius.circular(8))),
+          //                     child:Center(
+          //                       child: Text(
+          //                         "Go To Cart",
+          //                         style: TextStyle(
+          //                             fontFamily: 'Urbanist',
+          //                             fontWeight: FontWeight.w600,
+          //                             fontSize: 12,
+          //                             color: Colors.white),
+          //                       ),
+          //                     ),
+          //                   ),
+          //                 ),
+          //               ),
+          //             ],
+          //           ),
+          //         ),
+          //       )
+          //     : InkWell(
+          //         onTap: () async {
+          //           if (cartlist.isEmpty) {
+          //             addToCart(widget.product, widget.storeId);
+          //             isCarted = true;
+          //           } else if (cartlist[0]['storeId'] ==
+          //               widget.product.storeId) {
+          //             addToCart(widget.product, widget.storeId);
+          //             isCarted = true;
+          //           } else {
+          //             bool? pressed = await cartAlert();
+          //
+          //             if (pressed == true) {
+          //               cartlist = [];
+          //               addToCart(widget.product, widget.storeId);
+          //               isCarted = true;
+          //             }
+          //           }
+          //
+          //           setState(() {});
+          //         },
+          //         child: Container(
+          //           width: scrWidth * 0.31,
+          //           height: scrHeight * 0.033,
+          //           decoration: BoxDecoration(
+          //               borderRadius: BorderRadius.circular(8),
+          //               color: Color(0xff02B558)
+          //               // color: Colors.red
+          //               ),
+          //           child: Center(
+          //             child: Text(
+          //               "Add",
+          //               style: TextStyle(
+          //                   fontFamily: 'Urbanist',
+          //                   fontWeight: FontWeight.w600,
+          //                   fontSize: 12,
+          //                   color: Colors.white),
+          //             ),
+          //           ),
+          //         ),
+          //       ),
+          /////////////////////////////////////////////////
 
           // Padding(
           //   padding: EdgeInsets.only(left: 7),

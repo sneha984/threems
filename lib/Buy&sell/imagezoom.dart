@@ -1,22 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:threems/Buy&sell/storepage.dart';
+import 'package:threems/utils/themes.dart';
 
+import '../model/Buy&sell.dart';
 import '../screens/splash_screen.dart';
+import 'checkout.dart';
 
 class ImageZoomPage extends StatefulWidget {
+  final ProductModel pro;
+  final String storeId;
+  final double deliveryCharge;
    final String image;
-   final String productname;
-   final String productprice;
-   final String producunit;
-   final String productquantity;
-   final String productDetails;
-  const ImageZoomPage({Key? key, required this.image, required this.productname, required this.productprice, required this.producunit, required this.productquantity, required this.productDetails}) : super(key: key);
+   // final String productname;
+   // final String productprice;
+   // final String producunit;
+   // final String productquantity;
+   // final String productDetails;
+   // final String productId;
+  const ImageZoomPage({Key? key, required this.image, required this.storeId, required this.pro, required this.deliveryCharge}) : super(key: key);
 
   @override
   State<ImageZoomPage> createState() => _ImageZoomPageState();
 }
 
 class _ImageZoomPageState extends State<ImageZoomPage> with SingleTickerProviderStateMixin {
+  bool isCarted = false;
+  int qty = 1;
+
+  getProduct() {
+    for (int i = 0; i < cartlist.length; i++) {
+      if (cartlist[i]['productId'] == widget.pro.productId &&
+          cartlist[i]['storeId'] == widget.storeId) {
+        isCarted = true;
+      }
+    }
+    setState(() {});
+  }
   // final double minScale=1;
   // final double maxScale=4;
   // late TransformationController controller;
@@ -36,6 +56,12 @@ class _ImageZoomPageState extends State<ImageZoomPage> with SingleTickerProvider
   //   animationController.dispose();
   //   super.dispose();
   // }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getProduct();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,7 +88,7 @@ class _ImageZoomPageState extends State<ImageZoomPage> with SingleTickerProvider
         ),
         title: Padding(
           padding: EdgeInsets.only(top: scrHeight * 0.02),
-          child: Text(widget.productname,
+          child: Text(widget.pro.productName??'',
             style: TextStyle(
                 fontSize: scrWidth * 0.045,
                 color: Colors.black,
@@ -78,19 +104,30 @@ class _ImageZoomPageState extends State<ImageZoomPage> with SingleTickerProvider
 
           SizedBox(height: 67,),
           Center(
-            child:
-            InteractiveViewer(
-              panEnabled: false, // Set it to false
-              // boundaryMargin: EdgeInsets.all(100),
+            child:InteractiveViewer(
+              panEnabled: false, // Set it to false to prevent panning.
+              boundaryMargin: EdgeInsets.all(80),
               minScale: 0.5,
-              maxScale: 2,
-              child: Image.network(
-                widget?.image??'',
-                width: 400,
-                height: 300,
-                fit: BoxFit.cover,
-              ),
+              maxScale: 4,
+              child:Image.network(
+                    widget?.image??'',
+                    width: 400,
+                    height: 300,
+                    fit: BoxFit.cover,
+                  ),
             ),
+            // InteractiveViewer(
+            //   panEnabled: false, // Set it to false
+            //   // boundaryMargin: EdgeInsets.all(100),
+            //   minScale: 0.5,
+            //   maxScale: 2,
+            //   child: Image.network(
+            //     widget?.image??'',
+            //     width: 400,
+            //     height: 300,
+            //     fit: BoxFit.cover,
+            //   ),
+            // ),
 
             // InteractiveViewer(
             //   clipBehavior: Clip.none,
@@ -120,10 +157,10 @@ class _ImageZoomPageState extends State<ImageZoomPage> with SingleTickerProvider
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('₹${widget.productprice} Rs',style: TextStyle(
+                    Text('₹${widget.pro.price} Rs',style: TextStyle(
                         fontSize: 18,color: Colors.red,fontWeight: FontWeight.w600,fontFamily: 'Urbanist'
                     ),),
-                    Text('${widget.productquantity} ${widget.producunit}',style: TextStyle(
+                    Text('${widget.pro.quantity} ${widget.pro.unit}',style: TextStyle(
                         fontSize: 18,fontWeight: FontWeight.w600,fontFamily: 'Urbanist'
                     ),),
                   ],
@@ -137,18 +174,220 @@ class _ImageZoomPageState extends State<ImageZoomPage> with SingleTickerProvider
                 ),),
                 SizedBox(height: 15,),
 
-                Text(widget?.productDetails??'no Details',style: TextStyle(
+                Text(widget?.pro.details??'no Details',style: TextStyle(
                     fontSize: 14,fontWeight: FontWeight.w600,fontFamily: 'Urbanist',color: Colors.grey
                 ),)
               ],
             ),
-          )
+          ),SizedBox(
+            height: 70,
+          ),
+
+          // Container(
+          //   height: 70,
+          //   width: 170,
+          //   decoration: BoxDecoration(
+          //       color: primarycolor,
+          //
+          //       borderRadius: BorderRadius.circular(15)
+          //   ),
+          //   child: Center(
+          //     child: Text("Add To Cart",style: TextStyle(color: Colors.white),),
+          //   ),
+          // )
+          isCarted
+              ? InkWell(
+                onTap: () {
+
+
+                  setState(() {});
+                  Navigator.pushReplacement(
+                      context, MaterialPageRoute(builder: (context) => CheckOutPage()));
+
+                },
+                child: Container(
+                  width: scrWidth * 0.6,
+                  height: scrHeight * 0.09,
+                  decoration: BoxDecoration(
+                    // color: Colors.red,
+                      color: Color(0xff02B558),
+                      borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(8),
+                          bottomRight: Radius.circular(8),topLeft: Radius.circular(8),
+                          bottomLeft: Radius.circular(8))),
+                  child:Center(
+                    child: Text(
+                      "Go To Cart",
+                      style: TextStyle(
+                          fontFamily: 'Urbanist',
+                          fontWeight: FontWeight.w600,
+                          fontSize: 18,
+                          color: Colors.white),
+                    ),
+                  ),
+                ),
+              )
+              : InkWell(
+            onTap: () async {
+              if (cartlist.isEmpty) {
+                addToCart(widget.pro, widget.storeId);
+                isCarted = true;
+              } else if (cartlist[0]['storeId'] ==
+                  widget.pro.storeId ) {
+
+                addToCart(widget.pro, widget.storeId);
+
+                isCarted = true;
+              }
+              else {
+                bool? pressed = await cartAlert();
+
+                if (pressed == true) {
+                  cartlist = [];
+                  addToCart(widget.pro, widget.storeId);
+                  isCarted = true;
+                }
+              }
+
+              setState(() {});
+            },
+            child: Container(
+              width: scrWidth * 0.6,
+              height: scrHeight * 0.09,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Color(0xff02B558)
+                // color: Colors.red
+              ),
+              child: Center(
+                child: Text(
+                  "Add",
+                  style: TextStyle(
+                      fontFamily: 'Urbanist',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 18,
+                      color: Colors.white),
+                ),
+              ),
+            ),
+          ),
 
 
         ],
       ) ,
     );
   }
+  addToCart(ProductModel products, String storeId) {
+    cartlist.add({
+      'img': products.images![0],
+      'name': products.productName,
+      'price': products.price,
+      'unit': products.unit,
+      'deliveryCharge': widget.deliveryCharge,
+      'storeId': storeId,
+      'productId': products.productId,
+      'quantity': products.quantity,
+      'count': 1,
+    });
+
+    final snackBar = SnackBar(
+      backgroundColor: Colors.white,
+      content: const Text(
+        ' item added to cart',
+        style: TextStyle(color: Colors.black),
+      ),
+      action: SnackBarAction(
+        textColor: Colors.blue,
+        label: 'Go To Cart',
+        onPressed: () {
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => CheckOutPage()));
+          // Some code to undo the change.
+        },
+      ),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  Future<bool?> cartAlert() => showDialog(
+    context: context,
+    builder: (context) => StatefulBuilder(
+      builder: (BuildContext context, setstate) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8)),
+          title: Text('Confirm'),
+          titleTextStyle: TextStyle(
+              fontSize: FontSize10 * 3,
+              fontFamily: 'Urbanist',
+              fontWeight: FontWeight.w600,
+              color: Color(0xff827C7C)),
+          content: Container(
+            width: scrWidth * 0.99,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                    'Your cart contains products in another store , \n Do you wish to remove and add this product.'),
+                SizedBox(
+                  height: scrWidth * 0.06,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    InkWell(
+                      onTap: () => Navigator.pop(context, false),
+                      child: Container(
+                        width: scrWidth * 0.2,
+                        height: textFormFieldHeight45,
+                        decoration: BoxDecoration(
+                            color: Colors.white10,
+                            borderRadius: BorderRadius.circular(8)),
+                        child: Center(
+                          child: GestureDetector(
+                            child: Text(
+                              "Cancel",
+                              style: TextStyle(
+                                  fontSize: FontSize16,
+                                  fontFamily: 'Urbanist',
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () => Navigator.pop(context, true),
+                      child: Container(
+                        width: scrWidth * 0.3,
+                        height: textFormFieldHeight45,
+                        decoration: BoxDecoration(
+                            color: primarycolor,
+                            borderRadius: BorderRadius.circular(8)),
+                        child: Center(
+                          child: GestureDetector(
+                            child: Text(
+                              "Add",
+                              style: TextStyle(
+                                  fontSize: FontSize16,
+                                  fontFamily: 'Urbanist',
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    ),
+  );
   // void resetAnimation(){
   //   animation=Matrix4Tween(
   //     begin: controller.value,

@@ -15,9 +15,8 @@ import '../screens/home_screen.dart';
 import '../utils/themes.dart';
 
 class VerifiedCharityWidget extends StatefulWidget {
-  const VerifiedCharityWidget({
-    super.key,
-  });
+
+  const VerifiedCharityWidget({super.key,});
 
   @override
   State<VerifiedCharityWidget> createState() => _VerifiedCharityWidgetState();
@@ -29,6 +28,7 @@ class _VerifiedCharityWidgetState extends State<VerifiedCharityWidget> {
     print("hiiiiiiiiiiiiiiiiiiii");
     print(verifiedcharity);
     super.initState();
+
   }
 
   var currencyConvert = NumberFormat.currency(
@@ -191,3 +191,4 @@ class _VerifiedCharityWidgetState extends State<VerifiedCharityWidget> {
           );
   }
 }
+

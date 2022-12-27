@@ -21,7 +21,7 @@ import '../../model/servicesModel.dart';
 import '../../model/usermodel.dart';
 import '../../utils/themes.dart';
 import '../charity/verification_details.dart';
-import '../splash_screen.dart';
+ import '../splash_screen.dart';
 import 'details.dart';
  final geo = Geoflutterfire();
 

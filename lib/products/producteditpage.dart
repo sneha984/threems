@@ -1,157 +1,154 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:io';
-
-import 'package:threems/Buy&sell/storedetailsfill2.dart';
 
 import '../kuri/createkuri.dart';
 import '../model/Buy&sell.dart';
 import '../screens/splash_screen.dart';
+import 'dart:io';
+
 import '../utils/themes.dart';
 
-class ProductAddingPage extends StatefulWidget {
+class ProductEditPage extends StatefulWidget {
   final String storeId;
-  final ProductModel? productModel;
+  final Map? productModel;
   final bool? update;
-  // final String storecategory;
-  const ProductAddingPage({Key? key, required this.storeId, required this.productModel, this.update}) : super(key: key);
+  const ProductEditPage(
+      {Key? key, required this.storeId,  this.productModel, this.update})
+      : super(key: key);
 
   @override
-  State<ProductAddingPage> createState() => _ProductAddingPageState();
+  State<ProductEditPage> createState() => _ProductEditPageState();
 }
 
-class _ProductAddingPageState extends State<ProductAddingPage> {
+class _ProductEditPageState extends State<ProductEditPage> {
   String? selectedCategoryItem;
   String? productCategoryItem;
-  bool finished=true;
-  final FocusNode categoryFocusNode=FocusNode();
-  final FocusNode productNameFocus= FocusNode();
-  final FocusNode productPriceFocus= FocusNode();
-  final FocusNode productUnitFocus= FocusNode();
-  final FocusNode productDetails=FocusNode();
-  final FocusNode productCategoryName=FocusNode();
-  final TextEditingController productCategoryNameController=TextEditingController();
-  final TextEditingController categoryNameController=TextEditingController();
-  final  TextEditingController productNameController =TextEditingController();
-  final  TextEditingController productPriceController =TextEditingController();
-  final  TextEditingController productUnitController =TextEditingController();
-  final  TextEditingController productDetailsController =TextEditingController();
-  String? selectedValuee;
-  String? selectedValue;
+  bool finished = true;
+  final FocusNode categoryFocusNode = FocusNode();
+  final FocusNode productNameFocus = FocusNode();
+  final FocusNode productPriceFocus = FocusNode();
+  final FocusNode productUnitFocus = FocusNode();
+  final FocusNode productDetails = FocusNode();
+  final FocusNode productCategoryName = FocusNode();
+  final TextEditingController productCategoryNameController =
+      TextEditingController();
+  final TextEditingController categoryNameController = TextEditingController();
+  final TextEditingController productNameController = TextEditingController();
+  final TextEditingController productPriceController = TextEditingController();
+  final TextEditingController productUnitController = TextEditingController();
+  final TextEditingController productDetailsController = TextEditingController();
+  // String? selectedValuee;
+  String? selectedValues;
 
-  bool loading=false;
+  bool loading = false;
   refreshPage() {
     setState(() {
       loading = false;
     });
   }
-  List productUnit=[];
-  List productCategory=[];
-  List addCategory=[];
-  List storecategorynames=[];
 
-  getUnit(){
-    FirebaseFirestore.instance.collection('productUnit').snapshots().listen((event) {
-      productUnit=[];
-      for(DocumentSnapshot <Map<String,dynamic>> doc in event.docs){
-        print("---====--=--9022222222222222222222222222222222222222222222222222222222222222222");
+  List productUnit = [];
+  List productCategory = [];
+  List addCategory = [];
+  List storecategorynames = [];
+
+  getUnit() {
+    FirebaseFirestore.instance
+        .collection('productUnit')
+        .snapshots()
+        .listen((event) {
+      productUnit = [];
+      for (DocumentSnapshot<Map<String, dynamic>> doc in event.docs) {
+        print(
+            "---====--=--902222222ssssssssssssssssssssssssssssssssssssssss22222222222222222222");
         print('${doc['unit']}');
         print('${event.docs[1]['unit']}');
         // categoryListAll.add(doc.data()!);
         productUnit.add(doc['unit']);
       }
       print(productUnit);
-      if(mounted){
-        setState(() {
-
-        });
+      if (mounted) {
+        setState(() {});
       }
     });
   }
-  getProductCat(){
-    FirebaseFirestore
-        .instance
+
+
+  getProductCat() {
+    FirebaseFirestore.instance
         .collection('stores')
         .doc(widget.storeId)
-        .snapshots().listen((event) {
-      productCategory=event.get('productCategory');
-      print(productCategory);
-      if(mounted){
-        setState(() {
-
-        });
-      }
-    });
-  }
-  getCategory(){
-    FirebaseFirestore.instance.collection('stores').doc(widget.storeId).snapshots().listen((event) {
-      addCategory=event.get('storeCategory');
-      if(mounted){
-        setState(() {
-
-        });
-      }
-    });
-  }
-  getStores(){
-    FirebaseFirestore
-        .instance
-        .collection('stores')
-        .where('storeCategory',arrayContains:addCategory )
         .snapshots()
         .listen((event) {
-      storecategorynames=[];
-      for(DocumentSnapshot <Map<String,dynamic>> doc in event.docs){
+      productCategory = event.get('productCategory');
+      print(productCategory);
+      if (mounted) {
+        setState(() {});
+      }
+    });
+  }
+
+
+  dynamic unit;
+  getCategory() {
+    FirebaseFirestore.instance
+        .collection('stores')
+        .doc(widget.storeId)
+        .snapshots()
+        .listen((event) {
+      addCategory = event.get('storeCategory');
+      if (mounted) {
+        setState(() {});
+      }
+    });
+  }
+
+  getStores() {
+    FirebaseFirestore.instance
+        .collection('stores')
+        .where('storeCategory', arrayContains: addCategory)
+        .snapshots()
+        .listen((event) {
+      storecategorynames = [];
+      for (DocumentSnapshot<Map<String, dynamic>> doc in event.docs) {
         storecategorynames.add(StoreDetailsModel.fromJson(doc.data()!));
       }
-      if(mounted){
+      if (mounted) {
         setState(() {
           print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%');
           print(storecategorynames.length);
           print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%');
-
         });
       }
     });
   }
-  void _showToast(BuildContext context) {
-    final scaffold = ScaffoldMessenger.of(context);
-    scaffold.showSnackBar(
-      SnackBar(
-        content: const Text('Scuccesfully Added'),
-        // action: SnackBarAction(
-        //     label: 'UNDO', onPressed: scaffold.hideCurrentSnackBar),
-      ),
-    );
-  }
-  String imageurl='';
+  
 
-    // getDatas(){
-    //   productNameController.text=widget.productModel!.productName!;
-    //   productPriceController.text=widget.productModel!.price!.toString();
-    //   // imageurl=widget.productModel!.images! as String;
-    //   productNameController.text=widget.productModel!.productName!;
-    // }
-  List productCategoryList=[];
-  List _images=[];
-  List<dynamic> _imgurl=[];
+  String imageurl = '';
+
+  // getDatas(){
+  //   productNameController.text=widget.productModel!.productName!;
+  //   productPriceController.text=widget.productModel!.price!.toString();
+  //   // imageurl=widget.productModel!.images! as String;
+  //   productNameController.text=widget.productModel!.productName!;
+  // }
+  List productCategoryList = [];
+  List _images = [];
+  List<dynamic> _imgurl = [];
   String? imgUrl;
   var imgFile;
   var uploadTask;
   var fileUrl;
   Future uploadImageToFirebase(BuildContext context) async {
     Reference firebaseStorageRef =
-    FirebaseStorage.instance.ref().child('deposits/$imgFile');
+        FirebaseStorage.instance.ref().child('deposits/$imgFile');
     UploadTask uploadTask = firebaseStorageRef.putFile(imgFile);
     TaskSnapshot taskSnapshot = (await uploadTask);
     String value = await taskSnapshot.ref.getDownloadURL();
-
 
     print("####################################################");
     print("####################################################");
@@ -162,20 +159,46 @@ class _ProductAddingPageState extends State<ProductAddingPage> {
       print(_imgurl);
     });
   }
+
   _pickImage() async {
-    imgFile = await ImagePicker.platform.pickImage(
-        source: ImageSource.gallery);
+    imgFile = await ImagePicker.platform.pickImage(source: ImageSource.gallery);
     imgFile = File(imgFile!.path);
     _images.add(File(imgFile!.path));
 
     uploadImageToFirebase(context);
-    setState(() {
-
-    });
+    setState(() {});
   }
+  getData(){
+    if(widget.update!){
+        _imgurl=widget.productModel!['images'];
+      productNameController.text=widget.productModel!['productName'];
+      selectedCategoryItem=widget.productModel!['storedCategorys'];
+       productCategoryItem=widget.productModel!['productCategory'];
+      productPriceController.text=widget.productModel!['price'].toString();
+      productUnitController.text=widget.productModel!['quantity'].toString();
+      selectedValues=widget.productModel!['unit'];
+      productDetailsController.text=widget.productModel!['details'];
+
+      // selectedDate=widget.notes['date'].toDate();
+      // titleController.text=widget.notes['title'];
+      // contentController.text=widget.notes['content'];
+      // savedVoice=widget.notes['audio'];
+      // _audioUrl=widget.notes['audio'];
+      // selectedTime=TimeOfDay(
+      //     hour: int.parse(widget.notes['time'].split(':')[0]),
+      //     minute: int.parse(widget.notes['time'].split(':')[1]));
+      // _time.text=widget.notes['remainderTime'];
+      // _date.text=widget.notes['remainderDate'];
+      // _remainder=widget.notes['remainder'];
+
+
+    }
+  }
+  String? dropdownValue;
 
   @override
   void initState() {
+    getData();
     getUnit();
     getCategory();
     getStores();
@@ -185,6 +208,7 @@ class _ProductAddingPageState extends State<ProductAddingPage> {
     super.initState();
     // getDatas();
   }
+
   @override
   void dispose() {
     categoryFocusNode.dispose();
@@ -193,109 +217,222 @@ class _ProductAddingPageState extends State<ProductAddingPage> {
 
   @override
   Widget build(BuildContext context) {
-    print(_imgurl);
     return Scaffold(
-      body:SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Padding(
-          padding:  EdgeInsets.only(left: scrWidth*0.05),
+          padding: EdgeInsets.only(left: scrWidth * 0.05),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: scrHeight*0.08,),
+              SizedBox(
+                height: scrHeight * 0.08,
+              ),
               Row(
                 children: [
                   InkWell(
-                    onTap: (){
+                    onTap: () {
                       Navigator.pop(context);
                       // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
                       //     ScreenLayout(index: 1,tabIndex: 1,),), (route) => false);
                     },
-                    child:Container(
+                    child: Container(
                         height: 20,
                         width: 20,
-                        child: SvgPicture.asset("assets/icons/arrowmark.svg",)),
+                        child: SvgPicture.asset(
+                          "assets/icons/arrowmark.svg",
+                        )),
                   ),
-                  SizedBox(width: scrWidth*0.04,),
+                  SizedBox(
+                    width: scrWidth * 0.04,
+                  ),
                   Text(
                     "Add Product",
                     style: TextStyle(
-                        fontSize: scrWidth*0.046,
+                        fontSize: scrWidth * 0.046,
                         color: Colors.black,
                         fontFamily: 'Urbanist',
                         fontWeight: FontWeight.w600),
                   ),
                 ],
               ),
-              SizedBox(height: scrHeight*0.03,),
+              SizedBox(
+                height: scrHeight * 0.03,
+              ),
               Container(
-                height:100,
-                child: ListView.builder(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemCount:_images.length==5?_images.length:_images.length+1 ,
-                    itemBuilder: (context,index){
-                      return index==_images.length?InkWell(
-                        onTap: (){
-                          _pickImage();
+                 width:800,
+                height: 100,
+                // height: 300,
+                child: Row(
+                  children: [
+                    ListView.builder(
+                      shrinkWrap: true,
+                         scrollDirection: Axis.horizontal,
+                        itemCount: widget.productModel!['images'].length,
+                        itemBuilder: (context,index){
+                          return Padding(
+                            padding: EdgeInsets.only(right: 2),
+                            child: Container(
+                              height: 30,width:70,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
+                                    color: Color(0xffDADADA),
+                                  ),
+                                  image: DecorationImage(image: NetworkImage(widget.productModel!['images'][index]),fit: BoxFit.fill)
+                              ),
+                            ),
+                          );
+                      }),
+                InkWell(
+                        onTap: () async{
+                          await _pickImage();
+                          setState(() {
+
+                          });
                         },
                         child: Padding(
-                          padding:  EdgeInsets.only(left: 10),
+                          padding: EdgeInsets.only(left: 10),
                           child: Container(
-                              height:scrHeight*0.11,
-                              width: scrWidth*0.28,
-                              decoration: BoxDecoration(
-                                color: textFormFieldFillColor,
-                                borderRadius:
-                                BorderRadius.circular(scrWidth * 0.04),
+                              height: scrHeight * 0.11,
+                              width: scrWidth * 0.28,
+                            decoration: BoxDecoration(
+                              // image: DecorationImage(
+                              //    image: imgFile == null
+                              //        ? NetworkImage(
+                              //      widget.productModel!['images'][0],
+                              //    )
+                              //        :
+                              //    FileImage(imgFile!) as ImageProvider,),
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                color: Color(0xffDADADA),
                               ),
-                              child:  Center(
-                                  child: SvgPicture.asset(
-                                      "assets/icons/bigcamera.svg"))),
-                        ),
-                      ):Padding(
-                        padding:  EdgeInsets.only(left: 10),
-                        child: Container(
-                          height:scrHeight*0.11,
-                          width: scrWidth*0.28,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image:FileImage(_images[index]),
-                                // FileImage(imgFile!) as ImageProvider,
-                                fit: BoxFit.fill),
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(
-                              color: Color(0xffDADADA),
                             ),
-                          ),
+                            child:  Center(
+                                                            child: SvgPicture.asset(
+                                                                "assets/icons/bigcamera.svg"))
+                              ),
                         ),
-                      );
-                    }),
+                      ),
 
+                  ],
+                ) ,
               ),
 
-              SizedBox(height: scrHeight*0.01,),
-              Text(
-                "Add product images (upto 5)",
-                style: TextStyle(
-                    fontSize: 12,
-                    color: Color(0xffB0B0B0),
-                    fontFamily: 'Urbanist',
-                    fontWeight: FontWeight.w600),
+              // Row(
+              //   children: [
+              //     InkWell(
+              //       onTap: () async{
+              //         await _pickImage();
+              //         setState(() {
+              //
+              //         });
+              //       },
+              //       child: Padding(
+              //         padding: EdgeInsets.only(left: 10),
+              //         child: Container(
+              //             height: scrHeight * 0.11,
+              //             width: scrWidth * 0.28,
+              //           decoration: BoxDecoration(
+              //             image: DecorationImage(
+              //                image: imgFile == null
+              //                    ? NetworkImage(
+              //                  widget.productModel!['images'][0],
+              //                )
+              //                    :
+              //                FileImage(imgFile!) as ImageProvider,),
+              //             borderRadius: BorderRadius.circular(8),
+              //             border: Border.all(
+              //               color: Color(0xffDADADA),
+              //             ),
+              //           ),
+              //             ),
+              //       ),
+              //     ),
+              //
+              //     // Container(
+              //     //   height: 100,
+              //     //   child: ListView.builder(
+              //     //       shrinkWrap: true,
+              //     //       scrollDirection: Axis.horizontal,
+              //     //       itemCount: 1,
+              //     //       itemBuilder: (context, index) {
+              //     //         return index == _images.length
+              //     //             ? InkWell(
+              //     //                 onTap: () async{
+              //     //                  await _pickImage();
+              //     //                  setState(() {
+              //     //
+              //     //                  });
+              //     //                 },
+              //     //                 child: Padding(
+              //     //                   padding: EdgeInsets.only(left: 10),
+              //     //                   child: Container(
+              //     //                       height: scrHeight * 0.11,
+              //     //                       width: scrWidth * 0.28,
+              //     //                       decoration: BoxDecoration(
+              //     //                         color: textFormFieldFillColor,
+              //     //                         borderRadius: BorderRadius.circular(
+              //     //                             scrWidth * 0.04),
+              //     //                       ),
+              //     //                       child: Center(
+              //     //                           child: SvgPicture.asset(
+              //     //                               "assets/icons/bigcamera.svg"))),
+              //     //                 ),
+              //     //               )
+              //     //             : Padding(
+              //     //                 padding: EdgeInsets.only(left: 10),
+              //     //                 child: Container(
+              //     //                   height: scrHeight * 0.11,
+              //     //                   width: scrWidth * 0.28,
+              //     //                   decoration: BoxDecoration(
+              //     //                     image: DecorationImage(
+              //     //                         image:  imgFile == null
+              //     //                             ? NetworkImage(
+              //     //                           widget.productModel!['images'],
+              //     //                         )
+              //     //                             :
+              //     //                         FileImage(imgFile!) as ImageProvider,
+              //     //                         // FileImage(_images[index]),
+              //     //                         // FileImage(imgFile!) as ImageProvider,
+              //     //                         fit: BoxFit.fill),
+              //     //                     borderRadius: BorderRadius.circular(8),
+              //     //                     border: Border.all(
+              //     //                       color: Color(0xffDADADA),
+              //     //                     ),
+              //     //                   ),
+              //     //                 ),
+              //     //               );
+              //     //       }),
+              //     // ),
+              //   ],
+              // ),
+              SizedBox(
+                height: scrHeight * 0.01,
               ),
-              SizedBox(height: scrHeight*0.036,),
+              // Text(
+              //   "Add product images (upto 5)",
+              //   style: TextStyle(
+              //       fontSize: 12,
+              //       color: Color(0xffB0B0B0),
+              //       fontFamily: 'Urbanist',
+              //       fontWeight: FontWeight.w600),
+              // ),
+              SizedBox(
+                height: scrHeight * 0.036,
+              ),
               Padding(
-                padding:  EdgeInsets.only(right: scrWidth*0.053),
+                padding: EdgeInsets.only(right: scrWidth * 0.053),
                 child: Container(
                   height: textFormFieldHeight45,
                   padding: EdgeInsets.symmetric(
                     horizontal: scrWidth * 0.015,
-                    vertical: scrHeight*0.002,
+                    vertical: scrHeight * 0.002,
                   ),
                   decoration: BoxDecoration(
                     color: textFormFieldFillColor,
-                    borderRadius:
-                    BorderRadius.circular(scrWidth * 0.026),
+                    borderRadius: BorderRadius.circular(scrWidth * 0.026),
                   ),
                   child: TextFormField(
                     controller: productNameController,
@@ -322,8 +459,7 @@ class _ProductAddingPageState extends State<ProductAddingPage> {
                       prefixIcon: Container(
                         height: scrWidth * 0.045,
                         width: 10,
-                        padding: EdgeInsets.all(
-                            scrWidth * 0.033),
+                        padding: EdgeInsets.all(scrWidth * 0.033),
                         child: SvgPicture.asset(
                           'assets/icons/storename.svg',
                           fit: BoxFit.contain,
@@ -332,8 +468,8 @@ class _ProductAddingPageState extends State<ProductAddingPage> {
                       ),
                       fillColor: textFormFieldFillColor,
                       filled: true,
-                      contentPadding: EdgeInsets.only(
-                          top: 5, bottom: scrWidth * 0.033),
+                      contentPadding:
+                          EdgeInsets.only(top: 5, bottom: scrWidth * 0.033),
                       disabledBorder: InputBorder.none,
                       enabledBorder: InputBorder.none,
                       errorBorder: InputBorder.none,
@@ -348,8 +484,9 @@ class _ProductAddingPageState extends State<ProductAddingPage> {
                   ),
                 ),
               ),
-              SizedBox(height: scrHeight*0.02,),
-
+              SizedBox(
+                height: scrHeight * 0.02,
+              ),
               Container(
                 width: scrWidth * 0.9,
                 height: textFormFieldHeight45,
@@ -357,7 +494,6 @@ class _ProductAddingPageState extends State<ProductAddingPage> {
                   color: textFormFieldFillColor,
                   borderRadius: BorderRadius.circular(scrWidth * 0.033),
                 ),
-
                 child: Row(
                   children: [
                     SizedBox(
@@ -383,25 +519,24 @@ class _ProductAddingPageState extends State<ProductAddingPage> {
                         ),
                         items: addCategory
                             .map((item) => DropdownMenuItem<String>(
-                          value: item,
-                          child: Text(
-                            item.toString(),
-                            // overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 14,
-                                fontFamily: 'Urbanist'),
-                          ),
-                        ))
+                                  value: item,
+                                  child: Text(
+                                    item.toString(),
+                                    // overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 14,
+                                        fontFamily: 'Urbanist'),
+                                  ),
+                                ))
                             .toList(),
                         value: selectedCategoryItem,
                         onChanged: (value) {
                           setState(() {
                             selectedCategoryItem = value as String;
-
                           });
                         },
-                        icon:  Icon(
+                        icon: Icon(
                           Icons.arrow_drop_down,
                         ),
                         iconSize: 18,
@@ -435,7 +570,9 @@ class _ProductAddingPageState extends State<ProductAddingPage> {
                   ],
                 ),
               ),
-              SizedBox(height: scrHeight*0.02,),
+              SizedBox(
+                height: scrHeight * 0.02,
+              ),
               Container(
                 width: scrWidth * 0.9,
                 height: textFormFieldHeight45,
@@ -443,7 +580,6 @@ class _ProductAddingPageState extends State<ProductAddingPage> {
                   color: textFormFieldFillColor,
                   borderRadius: BorderRadius.circular(scrWidth * 0.033),
                 ),
-
                 child: Row(
                   children: [
                     SizedBox(
@@ -518,41 +654,108 @@ class _ProductAddingPageState extends State<ProductAddingPage> {
                         offset: const Offset(-20, 0),
                       ),
                     ),
+
+
+                    // DropdownButtonHideUnderline(
+                    //   child: DropdownButton2(
+                    //     isExpanded: true,
+                    //     hint: Text(
+                    //       "Product Category",
+                    //       style: TextStyle(
+                    //           fontSize: FontSize15,
+                    //           fontFamily: 'Urbanist',
+                    //           fontWeight: FontWeight.w600,
+                    //           color: Color(0xffB0B0B0)),
+                    //     ),
+                    //     items: testList
+                    //         .map((item) => DropdownMenuItem<String>(
+                    //               value: 'tesr',
+                    //               child: Text(
+                    //                 item.toString(),
+                    //                 // overflow: TextOverflow.ellipsis,
+                    //                 style: TextStyle(
+                    //                     fontWeight: FontWeight.w600,
+                    //                     fontSize: 14,
+                    //                     fontFamily: 'Urbanist'),
+                    //               ),
+                    //             ))
+                    //         .toList(),
+                    //     value: 'tesr',
+                    //     // onChanged: (value) {
+                    //     //   setState(() {
+                    //     //     productCategoryItem = value as String;
+                    //     //   });
+                    //     // },
+                    //     icon: Icon(
+                    //       Icons.arrow_drop_down,
+                    //     ),
+                    //     iconSize: 18,
+                    //     iconEnabledColor: Colors.black,
+                    //     iconDisabledColor: Colors.blue,
+                    //     buttonHeight: 50,
+                    //     buttonWidth: 247,
+                    //     // buttonPadding: const EdgeInsets.only(),
+                    //     buttonDecoration: BoxDecoration(
+                    //       borderRadius: BorderRadius.circular(14),
+                    //       color: textFormFieldFillColor,
+                    //     ),
+                    //     // buttonElevation: 2,
+                    //     itemHeight: 40,
+                    //     itemPadding: const EdgeInsets.only(),
+                    //     dropdownMaxHeight: 260,
+                    //     dropdownWidth: 300,
+                    //     dropdownPadding: EdgeInsets.only(
+                    //         left: 30, top: 15, bottom: 25, right: 30),
+                    //     dropdownDecoration: BoxDecoration(
+                    //       borderRadius: BorderRadius.circular(8),
+                    //       color: Colors.white,
+                    //     ),
+                    //     dropdownElevation: 0,
+                    //     scrollbarRadius: Radius.circular(10),
+                    //     scrollbarThickness: 3,
+                    //     scrollbarAlwaysShow: true,
+                    //     offset: const Offset(-20, 0),
+                    //   ),
+                    // ),
+
+
                   ],
                 ),
               ),
-
               GestureDetector(
-                onTap: (){
+                onTap: () {
                   pay();
                 },
                 child: Padding(
-                  padding:  EdgeInsets.only(left: scrWidth*0.62,top: scrHeight*0.01),
+                  padding: EdgeInsets.only(
+                      left: scrWidth * 0.62, top: scrHeight * 0.01),
                   child: Text(
-                    "Add new category",textAlign: TextAlign.end,
+                    "Add new category",
+                    textAlign: TextAlign.end,
                     style: TextStyle(
                         fontSize: 12,
                         fontFamily: 'Urbanist',
                         fontWeight: FontWeight.w600,
-                        color:primarycolor
-                    ),
+                        color: primarycolor),
                   ),
                 ),
               ),
-              SizedBox(height: scrHeight*0.02,),
-
+              SizedBox(
+                height: scrHeight * 0.02,
+              ),
               Padding(
-                padding:  EdgeInsets.only(right: scrWidth*0.053,),
+                padding: EdgeInsets.only(
+                  right: scrWidth * 0.053,
+                ),
                 child: Container(
                   height: textFormFieldHeight45,
                   padding: EdgeInsets.symmetric(
                     horizontal: scrWidth * 0.015,
-                    vertical: scrHeight*0.002,
+                    vertical: scrHeight * 0.002,
                   ),
                   decoration: BoxDecoration(
                     color: textFormFieldFillColor,
-                    borderRadius:
-                    BorderRadius.circular(scrWidth * 0.026),
+                    borderRadius: BorderRadius.circular(scrWidth * 0.026),
                   ),
                   child: TextFormField(
                     keyboardType: TextInputType.number,
@@ -580,8 +783,7 @@ class _ProductAddingPageState extends State<ProductAddingPage> {
                       prefixIcon: Container(
                         height: scrWidth * 0.045,
                         width: 10,
-                        padding: EdgeInsets.all(
-                            scrWidth * 0.033),
+                        padding: EdgeInsets.all(scrWidth * 0.033),
                         child: SvgPicture.asset(
                           'assets/icons/priceicons.svg',
                           fit: BoxFit.contain,
@@ -590,8 +792,8 @@ class _ProductAddingPageState extends State<ProductAddingPage> {
                       ),
                       fillColor: textFormFieldFillColor,
                       filled: true,
-                      contentPadding: EdgeInsets.only(
-                          top: 5, bottom: scrWidth * 0.033),
+                      contentPadding:
+                          EdgeInsets.only(top: 5, bottom: scrWidth * 0.033),
                       disabledBorder: InputBorder.none,
                       enabledBorder: InputBorder.none,
                       errorBorder: InputBorder.none,
@@ -606,22 +808,21 @@ class _ProductAddingPageState extends State<ProductAddingPage> {
                   ),
                 ),
               ),
-
               Padding(
-                padding:  EdgeInsets.only(right: scrWidth*0.053,top: scrHeight*0.02),
+                padding: EdgeInsets.only(
+                    right: scrWidth * 0.053, top: scrHeight * 0.02),
                 child: Row(
                   children: [
                     Container(
                       height: textFormFieldHeight45,
-                      width: scrWidth*0.42,
+                      width: scrWidth * 0.42,
                       padding: EdgeInsets.symmetric(
                         horizontal: scrWidth * 0.015,
-                        vertical: scrHeight*0.002,
+                        vertical: scrHeight * 0.002,
                       ),
                       decoration: BoxDecoration(
                         color: textFormFieldFillColor,
-                        borderRadius:
-                        BorderRadius.circular(scrWidth * 0.026),
+                        borderRadius: BorderRadius.circular(scrWidth * 0.026),
                       ),
                       child: TextFormField(
                         keyboardType: TextInputType.number,
@@ -649,8 +850,7 @@ class _ProductAddingPageState extends State<ProductAddingPage> {
                           prefixIcon: Container(
                             height: scrWidth * 0.045,
                             width: 10,
-                            padding: EdgeInsets.all(
-                                scrWidth * 0.033),
+                            padding: EdgeInsets.all(scrWidth * 0.033),
                             child: SvgPicture.asset(
                               'assets/icons/priceicons.svg',
                               fit: BoxFit.contain,
@@ -659,8 +859,8 @@ class _ProductAddingPageState extends State<ProductAddingPage> {
                           ),
                           fillColor: textFormFieldFillColor,
                           filled: true,
-                          contentPadding: EdgeInsets.only(
-                              top: 5, bottom: scrWidth * 0.033),
+                          contentPadding:
+                              EdgeInsets.only(top: 5, bottom: scrWidth * 0.033),
                           disabledBorder: InputBorder.none,
                           enabledBorder: InputBorder.none,
                           errorBorder: InputBorder.none,
@@ -674,24 +874,27 @@ class _ProductAddingPageState extends State<ProductAddingPage> {
                         ),
                       ),
                     ),
-                    SizedBox(width: scrWidth*0.0478,),
+                    SizedBox(
+                      width: scrWidth * 0.0478,
+                    ),
                     Container(
                       width: scrWidth * 0.425,
                       height: textFormFieldHeight45,
                       decoration: BoxDecoration(
                         color: textFormFieldFillColor,
-                        borderRadius:
-                        BorderRadius.circular(scrWidth * 0.033),
+                        borderRadius: BorderRadius.circular(scrWidth * 0.033),
                       ),
                       child: Row(
                         children: [
                           SizedBox(
-                            width: scrWidth*0.057,
+                            width: scrWidth * 0.057,
                           ),
                           SvgPicture.asset(
                             'assets/icons/storecategory.svg',
                           ),
-                          SizedBox(width: scrWidth*0.06,),
+                          SizedBox(
+                            width: scrWidth * 0.06,
+                          ),
                           DropdownButtonHideUnderline(
                             child: DropdownButton2(
                               isExpanded: true,
@@ -715,12 +918,11 @@ class _ProductAddingPageState extends State<ProductAddingPage> {
                                       fontFamily: 'Urbanist'
                                   ),
                                 ),
-                              ))
-                                  .toList(),
-                              value: selectedValue,
+                              )).toList(),
+                              value:  selectedValues,
                               onChanged: (value) {
                                 setState(() {
-                                  selectedValue = value as String;
+                                  selectedValues = value as String;
                                 });
                               },
                               icon: const Icon(
@@ -754,29 +956,37 @@ class _ProductAddingPageState extends State<ProductAddingPage> {
                               offset: const Offset(-20, 0),
                             ),
                           ),
+
+
+
+
+
                         ],
                       ),
                     ),
                   ],
                 ),
               ),
-              // (productUnitController.text.isEmpty  && selectedValue!.isEmpty)?
-              // Container():
-              // Text("Unit : per ${productUnitController.text} ${selectedValue}",style: TextStyle(
-              //     fontFamily: 'Urbanist',fontWeight: FontWeight.w600,color: primarycolor,fontSize: 12
-              // ),),
+              // Text(
+              //   "Unit : per ${productUnitController.text} ${selectedValues}",
+              //   style: TextStyle(
+              //       fontFamily: 'Urbanist',
+              //       fontWeight: FontWeight.w600,
+              //       color: primarycolor,
+              //       fontSize: 12),
+              // ),
               Padding(
-                padding:  EdgeInsets.only(right: scrWidth*0.053,top: scrHeight*0.02),
+                padding: EdgeInsets.only(
+                    right: scrWidth * 0.053, top: scrHeight * 0.02),
                 child: Container(
                   height: textFormFieldHeight45,
                   padding: EdgeInsets.symmetric(
                     horizontal: scrWidth * 0.015,
-                    vertical: scrHeight*0.002,
+                    vertical: scrHeight * 0.002,
                   ),
                   decoration: BoxDecoration(
                     color: textFormFieldFillColor,
-                    borderRadius:
-                    BorderRadius.circular(scrWidth * 0.026),
+                    borderRadius: BorderRadius.circular(scrWidth * 0.026),
                   ),
                   child: TextFormField(
                     controller: productDetailsController,
@@ -803,8 +1013,7 @@ class _ProductAddingPageState extends State<ProductAddingPage> {
                       prefixIcon: Container(
                         height: scrWidth * 0.045,
                         width: 10,
-                        padding: EdgeInsets.all(
-                            scrWidth * 0.033),
+                        padding: EdgeInsets.all(scrWidth * 0.033),
                         child: SvgPicture.asset(
                           'assets/icons/storename.svg',
                           fit: BoxFit.contain,
@@ -813,8 +1022,8 @@ class _ProductAddingPageState extends State<ProductAddingPage> {
                       ),
                       fillColor: textFormFieldFillColor,
                       filled: true,
-                      contentPadding: EdgeInsets.only(
-                          top: 5, bottom: scrWidth * 0.033),
+                      contentPadding:
+                          EdgeInsets.only(top: 5, bottom: scrWidth * 0.033),
                       disabledBorder: InputBorder.none,
                       enabledBorder: InputBorder.none,
                       errorBorder: InputBorder.none,
@@ -829,100 +1038,108 @@ class _ProductAddingPageState extends State<ProductAddingPage> {
                   ),
                 ),
               ),
-              SizedBox(height: scrHeight*0.1,),
-              finished==false?Padding(
-                padding:  EdgeInsets.only(right: scrWidth*0.053),
-                child: Container(
-                  height: textFormFieldHeight45,
-                  width: scrWidth,
-                  decoration: BoxDecoration(
-                      color: Color.fromRGBO(0, 128, 54, 0.33),
-                      borderRadius: BorderRadius.circular(21.5)),
-                  child: Center(
-                    child: Text(
-                      "Add Product",
-                      style: TextStyle(color: Colors.white,
-                          fontFamily: 'Urbanist',
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                ),
-              ) :GestureDetector(
-                onTap: ()async{
-                  setState(() {
-                    loading=true;
-                  });
-                  // if(imgUrl==null){
-                  //   refreshPage();
-                  //   return showSnackbar(context,"add product images upto 5");
-                  // }
-                  if(productNameController.text.isEmpty){
-                    refreshPage();
-                    return showSnackbar(context,"Must Provide Product Name");
-                  }
-                  if(productPriceController.text.isEmpty){
-                    refreshPage();
-                    return showSnackbar(context,"Must Provide product price");
-                  }
-                  if(productUnitController.text.isEmpty){
-                    refreshPage();
-                    return showSnackbar(context,"Must Provide product unit");
-                  }
-                  // if(categoryNameController.text.isEmpty){
-                  //   refreshPage();
-                  //   return showSnackbar(context,"Must Provide category name");
-                  // }
-                  else{
-                    final proDat=ProductModel(
-                      images:_imgurl,
-                      productName: productNameController.text,
-                      productCategory:productCategoryItem,
-                      price:double.tryParse(productPriceController.text),
-                      unit:selectedValue ,
-                      quantity:int.tryParse(productUnitController.text) ,
-                      details: productDetailsController.text,
-                      storedCategorys: selectedCategoryItem,
-                      storeId: widget.storeId,
-                      available: true
-                      // categoryName:categoryName,
-                    );
-                    FirebaseFirestore.instance.collection('stores').doc(widget.storeId)
-                        .collection('products').add(proDat.toJson()).then((value) =>
-                        value.update({'productId':value.id}));
-                    print(proDat);
-                    print(productPriceController.text);
-                    Navigator.pop(context);
-                    // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>SuccesfullyAdded(data: widget.data)));
-                  }
-                  // print(widget.id);
-                },
-                child: Padding(
-                  padding:  EdgeInsets.only(right: scrWidth*0.053),
-                  child: Container(
-                    height: textFormFieldHeight45,
-                    width: scrWidth,
-                    decoration: BoxDecoration(
-                        color: primarycolor,
-                        borderRadius: BorderRadius.circular(21.5)),
-                    child: Center(
-                      child: Text(
-                        "Add Product",
-                        style: TextStyle(color: Colors.white,
-                            fontFamily: 'Urbanist',
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700),
+              SizedBox(
+                height: scrHeight * 0.1,
+              ),
+              finished == false
+                  ? Padding(
+                      padding: EdgeInsets.only(right: scrWidth * 0.053),
+                      child: Container(
+                        height: textFormFieldHeight45,
+                        width: scrWidth,
+                        decoration: BoxDecoration(
+                            color: Color.fromRGBO(0, 128, 54, 0.33),
+                            borderRadius: BorderRadius.circular(21.5)),
+                        child: Center(
+                          child: Text(
+                            "Add Product",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'Urbanist',
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700),
+                          ),
+                        ),
+                      ),
+                    )
+                  : GestureDetector(
+                      onTap: () async {
+                        setState(() {
+                          loading = true;
+                        });
+                        // if(imgUrl==null){
+                        //   refreshPage();
+                        //   return showSnackbar(context,"add product images upto 5");
+                        // }
+                        if (productNameController.text.isEmpty) {
+                          refreshPage();
+                          return showSnackbar(
+                              context, "Must Provide Product Name");
+                        }
+                        if (productPriceController.text.isEmpty) {
+                          refreshPage();
+                          return showSnackbar(
+                              context, "Must Provide product price");
+                        }
+                        if (productUnitController.text.isEmpty) {
+                          refreshPage();
+                          return showSnackbar(
+                              context, "Must Provide product unit");
+                        }
+                        // if(categoryNameController.text.isEmpty){
+                        //   refreshPage();
+                        //   return showSnackbar(context,"Must Provide category name");
+                        // }
+                        else {
+                          FirebaseFirestore
+                              .instance
+                              .collection('stores').doc(widget.storeId).collection('products')
+                              .doc(widget.productModel!['productId']).update({
+                            'images':_imgurl,
+                            'details':productDetailsController.text,
+                            'quantity':productUnitController.text,
+                            'unit':selectedValues,
+                            'productName':productNameController.text,
+                            'productCategory':productCategoryItem,
+                            'storedCategorys':selectedCategoryItem,
+                            'price':productPriceController.text,
+                          });
+
+
+                          print(productPriceController.text);
+                          Navigator.pop(context);
+                          // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>SuccesfullyAdded(data: widget.data)));
+                        }
+                        // print(widget.id);
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.only(right: scrWidth * 0.053),
+                        child: Container(
+                          height: textFormFieldHeight45,
+                          width: scrWidth,
+                          decoration: BoxDecoration(
+                              color: primarycolor,
+                              borderRadius: BorderRadius.circular(21.5)),
+                          child: Center(
+                            child: Text(
+                              "Update",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Urbanist',
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-              ),
             ],
           ),
         ),
       ),
     );
   }
+
   void pay() {
     showDialog(
       context: context,
@@ -933,10 +1150,10 @@ class _ProductAddingPageState extends State<ProductAddingPage> {
           // });
           return AlertDialog(
             shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
             title: Text("Add New Category"),
             titleTextStyle: TextStyle(
-                fontSize:17,
+                fontSize: 17,
                 fontFamily: 'Urbanist',
                 fontWeight: FontWeight.w600,
                 color: Colors.black),
@@ -998,7 +1215,6 @@ class _ProductAddingPageState extends State<ProductAddingPage> {
                 SizedBox(
                   height: scrWidth * 0.03,
                 ),
-
                 Container(
                   width: scrWidth,
                   height: textFormFieldHeight45,
@@ -1008,13 +1224,16 @@ class _ProductAddingPageState extends State<ProductAddingPage> {
                   child: Center(
                     child: GestureDetector(
                       onTap: () {
-                        productCategoryList.add(productCategoryNameController.text);
-                        FirebaseFirestore.instance.collection('stores').doc(widget.storeId).update({
-                          'productCategory':FieldValue.arrayUnion(productCategoryList),
+                        productCategoryList
+                            .add(productCategoryNameController.text);
+                        FirebaseFirestore.instance
+                            .collection('stores')
+                            .doc(widget.storeId)
+                            .update({
+                          'productCategory':
+                              FieldValue.arrayUnion(productCategoryList),
                         });
                         Navigator.pop(context);
-                        _showToast(context);
-
                       },
                       child: Text(
                         "Save",

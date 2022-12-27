@@ -63,6 +63,171 @@ class _AcceptedPageState extends State<AcceptedPage> {
         child: Column(
           children: [
             Padding(
+              padding: const EdgeInsets.only(right: 180, top: 14),
+              child: Text(
+                "Order Status",
+                style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
+                    fontFamily: 'Urbanist',
+                    fontWeight: FontWeight.w600),
+              ),
+            ),
+            SizedBox(
+              height: 8,
+            ),
+            Container(
+              height: 120,
+              width: 325,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Color.fromRGBO(0, 0, 0, 0.15),
+                      spreadRadius: 1,
+                      blurRadius: 3,
+                      offset: Offset(2, 3), // changes position of shadow
+                    ),
+                  ],
+                  borderRadius: BorderRadius.circular(20)),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    //ORDERED DATE
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Ordered Date",
+                          style: TextStyle(
+                              fontSize: 12,
+                              color: Color(0xffE54D3C),
+                              fontFamily: 'Urbanist',
+                              fontWeight: FontWeight.w600),
+                        ),
+                        Text(
+                          //Today Date
+                          widget.orderMdl.time!.day == DateTime.now().day
+                              ? widget.orderMdl.time!.hour > 12
+                              ? "Today ${widget.orderMdl.time!.hour - 12}:${widget.orderMdl.time!.minute} PM"
+                              : widget.orderMdl.time!.hour == 0
+                              ? "Today 12:${widget.orderMdl.time!.minute} AM"
+                              : "Today ${widget.orderMdl.time!.hour}:${widget.orderMdl.time!.minute} AM"
+                              :
+
+                          //YESTERDAY DATE
+                          widget.orderMdl.time!.day ==
+                              DateTime.now().day - 1
+                              ? widget.orderMdl.time!.hour > 12
+                              ? "Yesterday ${widget.orderMdl.time!.hour - 12}:${widget.orderMdl.time!.minute} PM"
+                              : widget.orderMdl.time!.hour == 0
+                              ? "Yesterday 12:${widget.orderMdl.time!.minute} AM"
+                              : "Yesterday ${widget.orderMdl.time!.hour}:${widget.orderMdl.time!.minute} AM"
+                              :
+
+                          //OTHER DATE
+                          widget.orderMdl.time!.hour > 12
+                              ? "${DateFormat('dd-MMM-yyy').format(widget.orderMdl.time!)} ${widget.orderMdl.time!.hour - 12}"
+                              ":${widget.orderMdl.time!.minute} PM"
+                              : widget.orderMdl.time!.hour == 0
+                              ? "${DateFormat('dd-MMM-yyy').format(widget.orderMdl.time!)} 12:"
+                              "${widget.orderMdl.time!.minute} AM"
+                              : "${DateFormat('dd-MMM-yyy').format(widget.orderMdl.time!)}"
+                              " ${widget.orderMdl.time!.hour}:${widget.orderMdl.time!.minute} AM",
+                          style: TextStyle(
+                              fontSize: 16,
+                              color: primarycolor,
+                              fontFamily: 'Urbanist',
+                              fontWeight: FontWeight.w600),
+                        ),
+                      ],
+                    ),
+
+                    //ACCEPTED DATE
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Accepted Date",
+                          style: TextStyle(
+                              fontSize: 12,
+                              color: Color(0xffE54D3C),
+                              fontFamily: 'Urbanist',
+                              fontWeight: FontWeight.w600),
+                        ),
+                        Text(
+                          //Today Date
+                          widget.orderMdl.acceptedDate!.day ==
+                              DateTime.now().day
+                              ? widget.orderMdl.acceptedDate!.hour > 12
+                              ? "Today ${widget.orderMdl.acceptedDate!.hour - 12}:${widget.orderMdl.acceptedDate!.minute} PM"
+                              : widget.orderMdl.acceptedDate!.hour == 0
+                              ? "Today 12:${widget.orderMdl.acceptedDate!.minute} AM"
+                              : "Today ${widget.orderMdl.acceptedDate!.hour}:${widget.orderMdl.acceptedDate!.minute} AM"
+                              :
+
+                          //YESTERDAY DATE
+                          widget.orderMdl.acceptedDate!.day ==
+                              DateTime.now().day - 1
+                              ? widget.orderMdl.acceptedDate!.hour > 12
+                              ? "Yesterday ${widget.orderMdl.acceptedDate!.hour - 12}:${widget.orderMdl.acceptedDate!.minute} PM"
+                              : widget.orderMdl.acceptedDate!.hour == 0
+                              ? "Yesterday 12:${widget.orderMdl.acceptedDate!.minute} AM"
+                              : "Yesterday ${widget.orderMdl.acceptedDate!.hour}:${widget.orderMdl.acceptedDate!.minute} AM"
+                              :
+
+                          //OTHER DATE
+                          widget.orderMdl.acceptedDate!.hour > 12
+                              ? "${DateFormat('dd-MMM-yyy').format(widget.orderMdl.acceptedDate!)} ${widget.orderMdl.acceptedDate!.hour - 12}"
+                              ":${widget.orderMdl.acceptedDate!.minute} PM"
+                              : widget.orderMdl.acceptedDate!.hour == 0
+                              ? "${DateFormat('dd-MMM-yyy').format(widget.orderMdl.acceptedDate!)} 12:"
+                              "${widget.orderMdl.acceptedDate!.minute} AM"
+                              : "${DateFormat('dd-MMM-yyy').format(widget.orderMdl.acceptedDate!)}"
+                              " ${widget.orderMdl.acceptedDate!.hour}:${widget.orderMdl.acceptedDate!.minute} AM",
+                          style: TextStyle(
+                              fontSize: 16,
+                              color: primarycolor,
+                              fontFamily: 'Urbanist',
+                              fontWeight: FontWeight.w600),
+                        ),
+                      ],
+                    ),
+
+                    //DELIVERED DATE
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Delivered Date",
+                          style: TextStyle(
+                              fontSize: 12,
+                              color: Color(0xffE54D3C),
+                              fontFamily: 'Urbanist',
+                              fontWeight: FontWeight.w600),
+                        ),
+                        Text(
+                          'Pending',
+                          style: TextStyle(
+                              fontSize: 16,
+                              color: primarycolor,
+                              fontFamily: 'Urbanist',
+                              fontWeight: FontWeight.w600),
+                        ),
+                      ],
+                    ),
+
+                    SizedBox()
+                  ],
+                ),
+              ),
+            ),
+            Padding(
               padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
               child: Container(
                 height: 310,
@@ -88,17 +253,21 @@ class _AcceptedPageState extends State<AcceptedPage> {
                         SizedBox(
                           width: 20,
                         ),
-                        Text(
-                          "Order ${widget.orderMdl.orderId}",
-                          style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.black,
-                              fontFamily: 'Urbanist',
-                              fontWeight: FontWeight.w600),
+                        Container(
+                          width: 190,
+                          child: Text(
+                            "Order ${widget.orderMdl.orderId}",
+                            style: TextStyle(
+                              overflow: TextOverflow.ellipsis,
+                                fontSize: 12,
+                                color: Colors.black,
+                                fontFamily: 'Urbanist',
+                                fontWeight: FontWeight.w600),
+                          ),
                         ),
-                        SizedBox(
-                          width: 10,
-                        ),
+                        // SizedBox(
+                        //   width: 10,
+                        // ),
                         Text(
                           widget.orderMdl.time!.day == DateTime.now().day
                               ? widget.orderMdl.time!.hour > 12
@@ -586,171 +755,7 @@ class _AcceptedPageState extends State<AcceptedPage> {
             SizedBox(
               height: 10,
             ),
-            Padding(
-              padding: const EdgeInsets.only(right: 180, top: 14),
-              child: Text(
-                "Order Status",
-                style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.black,
-                    fontFamily: 'Urbanist',
-                    fontWeight: FontWeight.w600),
-              ),
-            ),
-            SizedBox(
-              height: 8,
-            ),
-            Container(
-              height: 120,
-              width: 325,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Color.fromRGBO(0, 0, 0, 0.15),
-                      spreadRadius: 1,
-                      blurRadius: 3,
-                      offset: Offset(2, 3), // changes position of shadow
-                    ),
-                  ],
-                  borderRadius: BorderRadius.circular(20)),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    //ORDERED DATE
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Ordered Date",
-                          style: TextStyle(
-                              fontSize: 12,
-                              color: Color(0xffE54D3C),
-                              fontFamily: 'Urbanist',
-                              fontWeight: FontWeight.w600),
-                        ),
-                        Text(
-                          //Today Date
-                          widget.orderMdl.time!.day == DateTime.now().day
-                              ? widget.orderMdl.time!.hour > 12
-                                  ? "Today ${widget.orderMdl.time!.hour - 12}:${widget.orderMdl.time!.minute} PM"
-                                  : widget.orderMdl.time!.hour == 0
-                                      ? "Today 12:${widget.orderMdl.time!.minute} AM"
-                                      : "Today ${widget.orderMdl.time!.hour}:${widget.orderMdl.time!.minute} AM"
-                              :
 
-                              //YESTERDAY DATE
-                              widget.orderMdl.time!.day ==
-                                      DateTime.now().day - 1
-                                  ? widget.orderMdl.time!.hour > 12
-                                      ? "Yesterday ${widget.orderMdl.time!.hour - 12}:${widget.orderMdl.time!.minute} PM"
-                                      : widget.orderMdl.time!.hour == 0
-                                          ? "Yesterday 12:${widget.orderMdl.time!.minute} AM"
-                                          : "Yesterday ${widget.orderMdl.time!.hour}:${widget.orderMdl.time!.minute} AM"
-                                  :
-
-                                  //OTHER DATE
-                                  widget.orderMdl.time!.hour > 12
-                                      ? "${DateFormat('dd-MMM-yyy').format(widget.orderMdl.time!)} ${widget.orderMdl.time!.hour - 12}"
-                                          ":${widget.orderMdl.time!.minute} PM"
-                                      : widget.orderMdl.time!.hour == 0
-                                          ? "${DateFormat('dd-MMM-yyy').format(widget.orderMdl.time!)} 12:"
-                                              "${widget.orderMdl.time!.minute} AM"
-                                          : "${DateFormat('dd-MMM-yyy').format(widget.orderMdl.time!)}"
-                                              " ${widget.orderMdl.time!.hour}:${widget.orderMdl.time!.minute} AM",
-                          style: TextStyle(
-                              fontSize: 16,
-                              color: primarycolor,
-                              fontFamily: 'Urbanist',
-                              fontWeight: FontWeight.w600),
-                        ),
-                      ],
-                    ),
-
-                    //ACCEPTED DATE
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Accepted Date",
-                          style: TextStyle(
-                              fontSize: 12,
-                              color: Color(0xffE54D3C),
-                              fontFamily: 'Urbanist',
-                              fontWeight: FontWeight.w600),
-                        ),
-                        Text(
-                          //Today Date
-                          widget.orderMdl.acceptedDate!.day ==
-                                  DateTime.now().day
-                              ? widget.orderMdl.acceptedDate!.hour > 12
-                                  ? "Today ${widget.orderMdl.acceptedDate!.hour - 12}:${widget.orderMdl.acceptedDate!.minute} PM"
-                                  : widget.orderMdl.acceptedDate!.hour == 0
-                                      ? "Today 12:${widget.orderMdl.acceptedDate!.minute} AM"
-                                      : "Today ${widget.orderMdl.acceptedDate!.hour}:${widget.orderMdl.acceptedDate!.minute} AM"
-                              :
-
-                              //YESTERDAY DATE
-                              widget.orderMdl.acceptedDate!.day ==
-                                      DateTime.now().day - 1
-                                  ? widget.orderMdl.acceptedDate!.hour > 12
-                                      ? "Yesterday ${widget.orderMdl.acceptedDate!.hour - 12}:${widget.orderMdl.acceptedDate!.minute} PM"
-                                      : widget.orderMdl.acceptedDate!.hour == 0
-                                          ? "Yesterday 12:${widget.orderMdl.acceptedDate!.minute} AM"
-                                          : "Yesterday ${widget.orderMdl.acceptedDate!.hour}:${widget.orderMdl.acceptedDate!.minute} AM"
-                                  :
-
-                                  //OTHER DATE
-                                  widget.orderMdl.acceptedDate!.hour > 12
-                                      ? "${DateFormat('dd-MMM-yyy').format(widget.orderMdl.acceptedDate!)} ${widget.orderMdl.acceptedDate!.hour - 12}"
-                                          ":${widget.orderMdl.acceptedDate!.minute} PM"
-                                      : widget.orderMdl.acceptedDate!.hour == 0
-                                          ? "${DateFormat('dd-MMM-yyy').format(widget.orderMdl.acceptedDate!)} 12:"
-                                              "${widget.orderMdl.acceptedDate!.minute} AM"
-                                          : "${DateFormat('dd-MMM-yyy').format(widget.orderMdl.acceptedDate!)}"
-                                              " ${widget.orderMdl.acceptedDate!.hour}:${widget.orderMdl.acceptedDate!.minute} AM",
-                          style: TextStyle(
-                              fontSize: 16,
-                              color: primarycolor,
-                              fontFamily: 'Urbanist',
-                              fontWeight: FontWeight.w600),
-                        ),
-                      ],
-                    ),
-
-                    //DELIVERED DATE
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Delivered Date",
-                          style: TextStyle(
-                              fontSize: 12,
-                              color: Color(0xffE54D3C),
-                              fontFamily: 'Urbanist',
-                              fontWeight: FontWeight.w600),
-                        ),
-                        Text(
-                          'Pending',
-                          style: TextStyle(
-                              fontSize: 16,
-                              color: primarycolor,
-                              fontFamily: 'Urbanist',
-                              fontWeight: FontWeight.w600),
-                        ),
-                      ],
-                    ),
-
-                    SizedBox()
-                  ],
-                ),
-              ),
-            ),
 
             // Padding(
             //   padding: const EdgeInsets.only(left: 15,right: 15,top: 15),

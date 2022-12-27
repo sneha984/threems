@@ -18,8 +18,8 @@ import 'cancelledpage.dart';
 import 'orderviewpage.dart';
 
 class Orders extends StatefulWidget {
-  final String storeId;
-  const Orders({Key? key, required this.storeId}) : super(key: key);
+  final String? storeId;
+  const Orders({Key? key,  this.storeId}) : super(key: key);
 
   @override
   State<Orders> createState() => _OrdersState();

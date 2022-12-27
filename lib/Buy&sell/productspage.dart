@@ -10,6 +10,7 @@ import 'package:threems/Buy&sell/buy_and_sell.dart';
 import 'package:threems/Buy&sell/productaddingpage.dart';
 import 'package:threems/Buy&sell/storedetailsfill2.dart';
 import 'package:threems/model/Buy&sell.dart';
+import 'package:threems/products/producteditpage.dart';
 
 import '../screens/splash_screen.dart';
 import '../utils/themes.dart';
@@ -175,7 +176,7 @@ class _ProductsPageState extends State<ProductsPage> {
                     InkWell(
                       onTap: (){
                         Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => ProductAddingPage(
+                        MaterialPageRoute(builder: (context) => ProductAddingPage(update: false,
                           storeId: widget.storeId,
                           productModel: prodct,)));
 
@@ -276,68 +277,73 @@ class _ProductsPageState extends State<ProductsPage> {
                                       //   child: SvgPicture.asset('assets/svg/more_ver.svg'),
                                       // ),
                                     SizedBox(width: 16,),
-                                      // PopupMenuButton<MenuItem>(
-                                      //   constraints: BoxConstraints(
-                                      //       maxWidth: 100,
-                                      //       minWidth: 100,
-                                      //       maxHeight: 200,
-                                      //       minHeight: 100),
-                                      //   shape: RoundedRectangleBorder(
-                                      //       borderRadius: BorderRadius.circular(8)),
-                                      //   position: PopupMenuPosition.under,
-                                      //   itemBuilder: (context) => [
-                                      //     PopupMenuItem(
-                                      //       height: 30,
-                                      //       child: Center(
-                                      //         child: Row(
-                                      //           mainAxisAlignment: MainAxisAlignment.start,
-                                      //           children: [
-                                      //             SizedBox(
-                                      //               width: scrWidth * 0.065,
-                                      //             ),
-                                      //             InkWell(
-                                      //               onTap: (){
-                                      //                 Navigator.push(context, MaterialPageRoute
-                                      //                   (builder: (context)=>ProductAddingPage(storeId: widget.storeId, productModel: prodct,)));
-                                      //               },
-                                      //               child: Text(
-                                      //                 "Edit",
-                                      //                 style: TextStyle(
-                                      //                   color: Colors.black,
-                                      //                   fontSize: scrWidth * 0.035,
-                                      //                   fontFamily: "Urbanist",
-                                      //                   fontWeight: FontWeight.w500,
-                                      //                 ),
-                                      //               ),
-                                      //             ),
-                                      //           ],
-                                      //         ),
-                                      //       ),
-                                      //     ),
-                                      //     PopupMenuItem(
-                                      //       height: 30,
-                                      //       child: Center(
-                                      //         child: Row(
-                                      //           mainAxisAlignment: MainAxisAlignment.start,
-                                      //           children: [
-                                      //             SizedBox(
-                                      //               width: scrWidth * 0.065,
-                                      //             ),
-                                      //             Text(
-                                      //               "Delete ",
-                                      //               style: TextStyle(
-                                      //                 color: Colors.black,
-                                      //                 fontSize: scrWidth * 0.035,
-                                      //                 fontFamily: "Urbanist",
-                                      //                 fontWeight: FontWeight.w500,
-                                      //               ),
-                                      //             ),
-                                      //           ],
-                                      //         ),
-                                      //       ),
-                                      //     ),
-                                      //   ],
-                                      // ),
+                                      PopupMenuButton<MenuItem>(
+                                        constraints: BoxConstraints(
+                                            maxWidth: 100,
+                                            minWidth: 100,
+                                            maxHeight: 200,
+                                            minHeight: 100),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(8)),
+                                        position: PopupMenuPosition.under,
+                                        itemBuilder: (context) => [
+                                          PopupMenuItem(
+                                            height: 30,
+                                            child: Center(
+                                              child: InkWell(
+                                                onTap: (){
+                                                  // print(prodct!.productName);
+                                                  Navigator.push(context, MaterialPageRoute
+                                                    (builder: (context)=>ProductEditPage(storeId: widget.storeId,
+                                                    productModel: getAllProducts[index],update: true,)));
+                                                },
+                                                child: Container(
+                                                  height: 50,width: 100,
+                                                  child: Center(
+                                                    child: Text(
+                                                      "Edit",
+                                                      style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: scrWidth * 0.035,
+                                                        fontFamily: "Urbanist",
+                                                        fontWeight: FontWeight.w500,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          PopupMenuItem(
+                                            height: 30,
+                                            child: InkWell(
+                                              onTap: (){
+                                                Navigator.pop(context);
+                                                FirebaseFirestore
+                                                    .instance
+                                                    .collection('stores')
+                                                    .doc(widget.storeId)
+                                                    .collection('products')
+                                                    .doc(getAllProducts[index]['productId']).delete();
+                                              },
+                                              child: Container(
+                                                height: 50,width: 100,
+                                                child: Center(
+                                                  child: Text(
+                                                    "Delete",
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: scrWidth * 0.035,
+                                                      fontFamily: "Urbanist",
+                                                      fontWeight: FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ],
                                   ),
                                   Row(
