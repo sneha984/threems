@@ -1936,7 +1936,7 @@ class _SelectDatePageState extends State<SelectDatePage> {
             child: child!));
     if (datePicked != null && datePicked != toDate) {
       setState(() {
-        date=datePicked;
+        date=datePicked.add(Duration(hours: 23,minutes: 59,seconds: 59));
         toDate = datePicked;
       });
     }
@@ -1973,7 +1973,6 @@ class _SelectDatePageState extends State<SelectDatePage> {
                               setState((){});
 
                             },
-
                             child: Container(
                               height:scrWidth*0.1,
                               width:scrWidth*0.32,

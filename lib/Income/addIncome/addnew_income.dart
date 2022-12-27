@@ -195,7 +195,7 @@ class _AddIncomePageState extends State<AddIncomePage> {
                     height: scrWidth * 0.035,
                   ),
                   Container(
-                    height: scrWidth*0.5,
+                    height: scrWidth*0.7,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
@@ -653,10 +653,7 @@ class _AddIncomePageState extends State<AddIncomePage> {
                               title: const Text('Add income '),
                               content: const Text('Do you want to Add?'),
                               actions: [
-                                TextButton(onPressed: (){
-                                  Navigator.pop(context);
-                                },
-                                    child: const Text('Cancel')),
+
                                 TextButton(onPressed: (){
                                   FirebaseFirestore.instance.collection('users').doc(currentuserid).collection('incomes').add({
                                     'amount':double.tryParse(amount!.text.toString()),
@@ -688,6 +685,10 @@ class _AddIncomePageState extends State<AddIncomePage> {
                                   // Navigator.pushAndRemoveUntil(context, CupertinoPageRoute(builder: (context) => CharityCatogoryPage(),), (route) => false);
                                 },
                                     child: const Text('Yes')),
+                                TextButton(onPressed: (){
+                                  Navigator.pop(context);
+                                },
+                                    child: const Text('Cancel')),
                               ],
                             );
 

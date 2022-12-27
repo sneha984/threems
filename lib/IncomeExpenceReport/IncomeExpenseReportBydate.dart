@@ -39,7 +39,7 @@ class _IncomeExpenseByDatePageState extends State<IncomeExpenseByDatePage> {
   getCategoryWiseExpenseByDate(){
     FirebaseFirestore.instance.collection('users').doc(currentuserid).collection('expense').
     orderBy('date',descending: true).  where('date',isGreaterThanOrEqualTo:fromDate).
-    where('date',isLessThanOrEqualTo:toDate).snapshots().listen((event) {
+    where('date',isLessThanOrEqualTo:DateTime(toDate!.year,toDate!.month,toDate!.day,23,59,59)).snapshots().listen((event) {
       ExpenseIncomeList=[];
       if(event.docs.isNotEmpty) {
         totalExpense=0.00;
@@ -76,7 +76,7 @@ class _IncomeExpenseByDatePageState extends State<IncomeExpenseByDatePage> {
   getMonthWiseExpensesByDate(){
     FirebaseFirestore.instance.collection('users').doc(currentuserid).collection('expense').
     where('date',isGreaterThanOrEqualTo:fromDate).
-    where('date',isLessThanOrEqualTo:toDate).
+    where('date',isLessThanOrEqualTo:DateTime(toDate!.year,toDate!.month,toDate!.day,23,59,59)).
     snapshots().listen((event) {
 
       if(event.docs.isNotEmpty) {
@@ -150,7 +150,7 @@ class _IncomeExpenseByDatePageState extends State<IncomeExpenseByDatePage> {
   getCategoryWiseIncomeByDate(){
     FirebaseFirestore.instance.collection('users').doc(currentuserid).collection('incomes').
     orderBy('date',descending: true).  where('date',isGreaterThanOrEqualTo:fromDate).
-    where('date',isLessThanOrEqualTo:toDate).snapshots().listen((event) {
+    where('date',isLessThanOrEqualTo:DateTime(toDate!.year,toDate!.month,toDate!.day,23,59,59)).snapshots().listen((event) {
       if(event.docs.isNotEmpty) {
         totalIncome=0.00;
         dateIncomeReports=[];
@@ -187,7 +187,7 @@ class _IncomeExpenseByDatePageState extends State<IncomeExpenseByDatePage> {
   getMonthWiseIncomesByDate(){
     FirebaseFirestore.instance.collection('users').doc(currentuserid).collection('incomes').
     where('date',isGreaterThanOrEqualTo:fromDate).
-    where('date',isLessThanOrEqualTo:toDate).
+    where('date',isLessThanOrEqualTo:DateTime(toDate!.year,toDate!.month,toDate!.day,23,59,59)).
     snapshots().listen((event) {
       if(event.docs.isNotEmpty) {
         months=[];
@@ -901,7 +901,7 @@ class _IncomeExpenseByDatePageState extends State<IncomeExpenseByDatePage> {
                   ExpenseIncomeList.isEmpty?Container(
                     child:Center(
                       child: Text(
-                        "No expenses",
+                        "No list found",
                         style: TextStyle(
                             fontSize: 15,
                             fontFamily: 'Urbanist',
