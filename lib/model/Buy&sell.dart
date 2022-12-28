@@ -15,6 +15,8 @@ class StoreDetailsModel {
   String? userId;
   double? latitude;
   double? longitude;
+  bool? online;
+
   Map? position;
   StoreDetailsModel(
       {this.storeName,
@@ -28,7 +30,7 @@ class StoreDetailsModel {
       this.userId,
       this.longitude,
       this.latitude,
-      this.position});
+      this.position,this.online});
 
   StoreDetailsModel.fromJson(Map<String, dynamic> json) {
     deliveryCharge = json['deliveryCharge'];
@@ -42,6 +44,7 @@ class StoreDetailsModel {
     longitude = json['longitude'];
     latitude = json['latitude'];
     position = json['position'];
+    online=json['online'];
 
     userId = json['userId'];
   }
@@ -60,6 +63,8 @@ class StoreDetailsModel {
     data['userId'] = this.userId;
     data['latitude'] = this.latitude;
     data['position'] = this.position;
+    data['online']=this.online;
+
     return data;
   }
 }

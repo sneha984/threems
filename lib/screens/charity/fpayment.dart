@@ -50,24 +50,24 @@ class _PaymentSucessfulState extends State<PaymentSucessful> {
             SizedBox(
               height: scrHeight*0.035,
             ),
-            Container(
-              height: scrHeight*0.06,
-              width: scrWidth*0.78,
-              decoration: BoxDecoration(
-                color: primarycolor,
-                borderRadius: BorderRadius.circular(17),
-              ),
-              child: Center(
-                child: Text(
-                  "Share",
-                  style: TextStyle(
-                      fontSize: FontSize15,
-                      fontFamily: 'Outfit',
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white),
-                ),
-              ),
-            ),
+            // Container(
+            //   height: scrHeight*0.06,
+            //   width: scrWidth*0.78,
+            //   decoration: BoxDecoration(
+            //     color: primarycolor,
+            //     borderRadius: BorderRadius.circular(17),
+            //   ),
+            //   child: Center(
+            //     child: Text(
+            //       "Share",
+            //       style: TextStyle(
+            //           fontSize: FontSize15,
+            //           fontFamily: 'Outfit',
+            //           fontWeight: FontWeight.w500,
+            //           color: Colors.white),
+            //     ),
+            //   ),
+            // ),
             SizedBox(
               height: scrWidth * 0.03,
             ),

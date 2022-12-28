@@ -18,7 +18,7 @@ class StorePage extends StatefulWidget {
   final String category;
 
   const StorePage(
-      {Key? key, required this.storeDetailsModel, required this.category})
+      {Key? key, required this.storeDetailsModel, required this.category,})
       : super(key: key);
 
   @override
@@ -39,7 +39,7 @@ class _StorePageState extends State<StorePage> {
           .collection('stores')
           .doc(widget.storeDetailsModel.storeId)
           .collection('products')
-          .where('available', isEqualTo: true)
+          // .where('available', isEqualTo: true)
           .snapshots()
           .listen((event) {
         productsList = [];
@@ -57,7 +57,7 @@ class _StorePageState extends State<StorePage> {
           .doc(widget.storeDetailsModel.storeId)
           .collection('products')
           .where('storedCategorys', isEqualTo: widget.category)
-          .where('available', isEqualTo: true)
+          // .where('available', isEqualTo: true)
           .snapshots()
           .listen((event) {
         productsList = [];
@@ -157,7 +157,7 @@ class _StorePageState extends State<StorePage> {
                       // left: scrWidth * 0.07,
                     ),
                     child: Container(
-                      height: scrHeight * 0.03,
+                      height: scrHeight * 0.05,
                       width: scrWidth * 0.05,
                       child: SvgPicture.asset(
                         "assets/icons/arrow.svg",
@@ -207,7 +207,15 @@ class _StorePageState extends State<StorePage> {
                             fontWeight: FontWeight.w500),
                       ),
                       SizedBox(
-                        height: scrHeight * 0.01,
+                        height: scrHeight * 0.002,
+                      ),
+                      Text(
+                        widget.storeDetailsModel.online!?'Available':'Closed',
+                        style: TextStyle(
+                            fontSize: scrWidth * 0.035,
+                            color: widget.storeDetailsModel.online!?primarycolor: Colors.red,
+                            fontFamily: 'Urbanist',
+                            fontWeight: FontWeight.w500),
                       ),
 
                       // Container(
@@ -253,7 +261,7 @@ class _StorePageState extends State<StorePage> {
               padding: EdgeInsets.only(
                   top: scrHeight * 0.015, left: scrWidth * 0.02),
               child: Container(
-                height: scrHeight * 0.042,
+                height: scrHeight * 0.02,
                 width: scrWidth * 0.92,
                 decoration: BoxDecoration(
                     color: const Color(0xffE9EEF3),
@@ -328,6 +336,7 @@ class _StorePageState extends State<StorePage> {
                     product: products,
                     storeId: widget.storeDetailsModel.storeId!,
                     deliveryCharge: widget.storeDetailsModel.deliveryCharge!,
+                    storeavailable:widget.storeDetailsModel.online!
                   );
                 },
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -839,11 +848,13 @@ class ShopSingleProduct extends StatefulWidget {
   final ProductModel product;
   final String storeId;
   final double deliveryCharge;
+  final bool storeavailable;
   const ShopSingleProduct(
       {Key? key,
       required this.product,
       required this.storeId,
-      required this.deliveryCharge})
+      required this.deliveryCharge,
+        required this.storeavailable})
       : super(key: key);
 
   @override
@@ -894,6 +905,7 @@ class _ShopSingleProductState extends State<ShopSingleProduct> {
                    pro:widget.product ,
                    storeId: widget.product.storeId!,
                    deliveryCharge: widget.deliveryCharge!,
+                   on: widget.storeavailable!,
                    // productname: widget.product.productName!,
                    // productprice: widget.product.price!.toString(),
                    // productquantity: widget.product.quantity!.toString(),
@@ -908,11 +920,12 @@ class _ShopSingleProductState extends State<ShopSingleProduct> {
                 decoration: BoxDecoration(
                     image: DecorationImage(
                         image: NetworkImage(widget.product.images![0]),
-                        fit: BoxFit.cover),
-                    color: Colors.white,
+                        fit: BoxFit.cover,colorFilter: widget.product.available!&&widget.storeavailable!?
+                    ColorFilter.mode(Colors.transparent, BlendMode.saturation):
+                    ColorFilter.mode(Colors.grey, BlendMode.saturation),),
+
                     borderRadius: BorderRadius.circular(scrWidth * 0.04),
-                    border:
-                        Border.all(color: const Color(0xffECECEC), width: 1)),
+                    border:Border.all(color: const Color(0xffECECEC), width: 1)),
               ),
             ),
           ),

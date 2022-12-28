@@ -108,6 +108,8 @@ dependencies:
   flutter_native_timezone: ^2.0.0
   flutter_datetime_picker: ^1.2.0
   dio: ^4.0.6
+  email_validator: ^1.0.0
+
 
 
 

@@ -13,7 +13,8 @@ List<StoreDetailsModel> filteredShops=[];
 List<StoreDetailsModel> shops=[];
 class CategoryStores extends StatefulWidget {
   String categoryname;
-   CategoryStores({Key? key,required this.categoryname}) : super(key: key);
+  String categoryImage;
+   CategoryStores({Key? key,required this.categoryname,required this.categoryImage}) : super(key: key);
 
   @override
   State<CategoryStores> createState() => _CategoryStoresState();
@@ -108,8 +109,8 @@ class _CategoryStoresState extends State<CategoryStores> {
                       left: scrWidth * 0.07,
                     ),
                     child: Container(
-                      height: scrHeight*0.04,
-                      width: scrWidth*0.04,
+                      height: scrHeight*0.05,
+                      width: scrWidth*0.05,
                       child: SvgPicture.asset(
                         "assets/icons/arrow.svg",
                       ),
@@ -118,7 +119,7 @@ class _CategoryStoresState extends State<CategoryStores> {
                 ),
                 Padding(
                   padding:  EdgeInsets.only(top: scrHeight*0.078,left:scrWidth*0.03),
-                  child: SvgPicture.asset("assets/icons/grocery.svg",height: 25,width: 25,),
+                  child: SvgPicture.network(widget.categoryImage,height: 25,width: 25,),
                 ),
                 Padding(
                   padding:  EdgeInsets.only(left: scrWidth*0.02,top:scrHeight * 0.08 ),
@@ -210,7 +211,8 @@ class _CategoryStoresState extends State<CategoryStores> {
                     children: [
                       InkWell(
                         onTap: (){
-                          Navigator.push(context,MaterialPageRoute(builder: (context)=>StorePage(storeDetailsModel: shoplist, category: widget.categoryname,)));
+                          Navigator.push(context,MaterialPageRoute(builder: (context)=>
+                              StorePage(storeDetailsModel: shoplist, category: widget.categoryname,)));
                         },
                         child: Padding(
                           padding:  EdgeInsets.only(
@@ -221,8 +223,9 @@ class _CategoryStoresState extends State<CategoryStores> {
                             decoration: BoxDecoration(
                               image: DecorationImage(image:
                               NetworkImage(shoplist.storeImage??''),
-                                  fit: BoxFit.fill),
-                              color: Colors.white,
+                                  fit: BoxFit.fill,colorFilter:shoplist.online!?
+                                  ColorFilter.mode(Colors.transparent, BlendMode.saturation):
+                                  ColorFilter.mode(Colors.grey, BlendMode.saturation)),
 
                               borderRadius: BorderRadius.circular(
                                   scrWidth*0.03),

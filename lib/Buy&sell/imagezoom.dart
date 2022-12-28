@@ -12,13 +12,14 @@ class ImageZoomPage extends StatefulWidget {
   final String storeId;
   final double deliveryCharge;
    final String image;
+   final bool on;
    // final String productname;
    // final String productprice;
    // final String producunit;
    // final String productquantity;
    // final String productDetails;
    // final String productId;
-  const ImageZoomPage({Key? key, required this.image, required this.storeId, required this.pro, required this.deliveryCharge}) : super(key: key);
+  const ImageZoomPage({Key? key, required this.image, required this.storeId, required this.pro, required this.deliveryCharge, required this.on}) : super(key: key);
 
   @override
   State<ImageZoomPage> createState() => _ImageZoomPageState();
@@ -71,7 +72,7 @@ class _ImageZoomPageState extends State<ImageZoomPage> with SingleTickerProvider
         centerTitle: false,
         elevation: 0.1,
         backgroundColor: Colors.white,
-        leading: GestureDetector(
+        leading: InkWell(
           onTap: () {
             Navigator.pop(context);
           },
@@ -81,8 +82,11 @@ class _ImageZoomPageState extends State<ImageZoomPage> with SingleTickerProvider
                 left: scrWidth * 0.07,
                 bottom: scrHeight * 0.02,
                 right: scrWidth * 0.05),
-            child: SvgPicture.asset(
-              "assets/icons/arrow.svg",
+            child: Container(
+              height: 35,width: 35,
+              child: SvgPicture.asset(
+                "assets/icons/arrow.svg",
+              ),
             ),
           ),
         ),
@@ -195,6 +199,7 @@ class _ImageZoomPageState extends State<ImageZoomPage> with SingleTickerProvider
           //     child: Text("Add To Cart",style: TextStyle(color: Colors.white),),
           //   ),
           // )
+          widget.pro.available!&&widget.on!?
           isCarted
               ? InkWell(
                 onTap: () {
@@ -206,8 +211,8 @@ class _ImageZoomPageState extends State<ImageZoomPage> with SingleTickerProvider
 
                 },
                 child: Container(
-                  width: scrWidth * 0.6,
-                  height: scrHeight * 0.09,
+                  width: scrWidth * 0.55,
+                  height: scrHeight * 0.06,
                   decoration: BoxDecoration(
                     // color: Colors.red,
                       color: Color(0xff02B558),
@@ -252,8 +257,8 @@ class _ImageZoomPageState extends State<ImageZoomPage> with SingleTickerProvider
               setState(() {});
             },
             child: Container(
-              width: scrWidth * 0.6,
-              height: scrHeight * 0.09,
+              width: scrWidth * 0.55,
+              height: scrHeight * 0.06,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
                   color: Color(0xff02B558)
@@ -268,6 +273,24 @@ class _ImageZoomPageState extends State<ImageZoomPage> with SingleTickerProvider
                       fontSize: 18,
                       color: Colors.white),
                 ),
+              ),
+            ),
+          ):Container(
+            width: scrWidth * 0.55,
+            height: scrHeight * 0.06,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: Colors.grey
+              // color: Colors.red
+            ),
+            child: Center(
+              child: Text(
+                "Out Of Stock",
+                style: TextStyle(
+                    fontFamily: 'Urbanist',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 18,
+                    color: Colors.white),
               ),
             ),
           ),

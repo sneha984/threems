@@ -10,7 +10,8 @@ import '../utils/dummy.dart';
 import '../utils/themes.dart';
 
 class ImageSlide extends StatefulWidget {
-  const ImageSlide({Key? key}) : super(key: key);
+  final String type;
+  const ImageSlide({Key? key, required this.type}) : super(key: key);
 
   @override
   State<ImageSlide> createState() => _ImageSlideState();
@@ -21,7 +22,7 @@ class _ImageSlideState extends State<ImageSlide> {
   getUtiltyImages() {
     FirebaseFirestore.instance
         .collection('ads')
-        .where('type', isEqualTo: 'utilities')
+        .where('type', isEqualTo: widget.type)
         .snapshots()
         .listen((event) {
       utilityImages = [];

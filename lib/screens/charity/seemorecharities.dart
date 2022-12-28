@@ -296,8 +296,12 @@ class _SeeMoreCharitiesState extends State<SeeMoreCharities>
                             left: scrWidth * 0.07,
                             // bottom: scrHeight*0.02,
                             right: scrWidth * 0.04),
-                        child: SvgPicture.asset(
-                          "assets/icons/arrow.svg",
+                        child: Container(
+                          width: 20,
+                          height: 20,
+                          child: SvgPicture.asset(
+                            "assets/icons/arrow.svg",
+                          ),
                         ),
                       ),
                     ),

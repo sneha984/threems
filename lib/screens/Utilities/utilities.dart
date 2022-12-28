@@ -286,7 +286,7 @@ class _UtilitiesState extends State<Utilities> {
                         top: scrWidth * 0.025),
                     height: scrHeight * .18,
                     width: scrWidth * 1,
-                    child: ImageSlide(),
+                    child: ImageSlide(type: 'utilities'),
                   ),
                 ],
               ),

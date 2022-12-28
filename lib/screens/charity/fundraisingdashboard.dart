@@ -134,7 +134,7 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
                               padding: EdgeInsets.only(
                                   left: scrWidth*0.06,
                                   right: scrWidth*0.03),
-                              child:SvgPicture.asset("assets/icons/arrow.svg",),
+                              child:Container(width:30,height:30,child: SvgPicture.asset("assets/icons/arrow.svg",)),
                             ),
                           ),
                           Text("Fundraise Dashboard",style: TextStyle(
@@ -659,17 +659,17 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
                                     ),
                                   ),
                                   // SizedBox(width: 30,),
-                                  InkWell(
-                                    onTap: (){
-
-                            Share.share(
-                                'Welcome to First Logic Meta Lab https://firstlogicmetalab.com');
-                                    },
-                                    child: Padding(
-                                      padding:  EdgeInsets.only(left: scrWidth*0.2),
-                                      child: SvgPicture.asset("assets/icons/shareicon.svg",),
-                                    ),
-                                  ),
+                            //       InkWell(
+                            //         onTap: (){
+                            //
+                            // Share.share(
+                            //     'Welcome to First Logic Meta Lab https://firstlogicmetalab.com');
+                            //         },
+                            //         child: Padding(
+                            //           padding:  EdgeInsets.only(left: scrWidth*0.2),
+                            //           child: SvgPicture.asset("assets/icons/shareicon.svg",),
+                            //         ),
+                            //       ),
 
                                 ],
                               )
@@ -934,7 +934,9 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
                     padding:  EdgeInsets.only(left: scrWidth*0.05,right: scrWidth*0.05),
                     child: InkWell(
                       onTap: (){
-                        // Navigator.push(context, MaterialPageRoute(builder: (context)=>PaymentDetailsPage(payments:paylist, index: index, id: widget.charity.charityId!,)));
+                         Navigator.push(context, MaterialPageRoute(builder: (context)=>PaymentDetailsPage(
+                           payments:paylist, index: index,
+                           id: widget.charity.charityId!,)));
                       },
                       child: Container(
                         height: scrHeight*0.11,
@@ -967,13 +969,14 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 SizedBox(height: scrHeight*0.045,),
-
-
-                                Text(datas.userName!,style: TextStyle(
-                                  fontSize: scrWidth*0.043,
-                                  fontFamily: 'Urbanist',
-                                  fontWeight: FontWeight.w600,
-                                ),),
+                                Container(
+                                  width: 130,
+                                  child: Text(datas.userName!,style: TextStyle(
+                                    fontSize: scrWidth*0.043,
+                                    fontFamily: 'Urbanist',
+                                    fontWeight: FontWeight.w600,
+                                  ),),
+                                ),
                                 // Text("Perinthalmanna",style: TextStyle(
                                 //     fontSize: scrWidth*0.03,
                                 //     fontFamily: 'Urbanist',
@@ -984,7 +987,7 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
 
                               ],
                             ),
-                            SizedBox(width: scrWidth*0.26,),
+                            SizedBox(width: scrWidth*0.08,),
                             Text(currencyConvert.format(datas.amount!).toString(),style: TextStyle(
                                 fontSize: scrWidth*0.046,
                                 fontFamily: 'Urbanist',

@@ -1692,12 +1692,39 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                 ),
                 InkWell(
                   onTap: () {
-                    FirebaseFirestore.instance
-                        .collection('stores')
-                        .doc(widget.orderModel.storeId)
-                        .collection('orders')
-                        .doc(widget.orderModel.orderId)
-                        .update({'status': 3});
+                    // Navigator.of(context).pop();
+                    showDialog(
+                      context: context,
+                      builder: (ctx) => AlertDialog(
+                        content: const Text("Do You Want to Cancel this order?"),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(ctx).pop();
+                            },
+                            child: const Text("No"),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                              FirebaseFirestore.instance
+                                  .collection('stores')
+                                  .doc(widget.orderModel.storeId)
+                                  .collection('orders')
+                                  .doc(widget.orderModel.orderId)
+                                  .update({'status': 3});
+                              Navigator.pop(context);
+                            },
+                            child: const Text(
+                              "Yes",
+                              style: TextStyle(color: primarycolor),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+
+
                   },
                   child: Text(
                     "Reject Order",

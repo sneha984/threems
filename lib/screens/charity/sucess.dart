@@ -38,19 +38,19 @@ class _SucesspageState extends State<Sucesspage> {
                 style: TextStyle(fontSize: scrWidth*0.041,fontFamily: 'Urbanist',fontWeight: FontWeight.w500),),
               SizedBox(height: scrHeight*0.015,),
 
-              GestureDetector(
-                onTap: (){
-                  // Navigator.push(context, MaterialPageRoute(builder: (context)=>SeeMoreCharities()));
-                },
-                child: Container(
-                  height: scrHeight*0.06,
-                  width: scrWidth*0.78,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(17),
-                    color: primarycolor,
-                  ),child: Center(child: Text("Share this charity to others ",
-                  style: TextStyle(color: Colors.white,fontSize: scrWidth*0.041,fontFamily: 'Outfit',fontWeight: FontWeight.w500),)),),
-              ),
+              // GestureDetector(
+              //   onTap: (){
+              //     // Navigator.push(context, MaterialPageRoute(builder: (context)=>SeeMoreCharities()));
+              //   },
+              //   child: Container(
+              //     height: scrHeight*0.06,
+              //     width: scrWidth*0.78,
+              //     decoration: BoxDecoration(
+              //       borderRadius: BorderRadius.circular(17),
+              //       color: primarycolor,
+              //     ),child: Center(child: Text("Share this charity to others ",
+              //     style: TextStyle(color: Colors.white,fontSize: scrWidth*0.041,fontFamily: 'Outfit',fontWeight: FontWeight.w500),)),),
+              // ),
               SizedBox(height: scrHeight*0.011,),
               GestureDetector(
                 onTap: (){

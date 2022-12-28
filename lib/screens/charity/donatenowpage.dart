@@ -77,14 +77,6 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
   }
 
 
-  List <String> _items=[
-    "https://templatelab.com/wp-content/uploads/2016/03/Company-Letterhead-Template-1-TemplateLab-Exclusive-e1487297202368-790x1022.jpg",
-    "https://templatelab.com/wp-content/uploads/2016/03/Company-Letterhead-Template-1-TemplateLab-Exclusive-e1487297202368-790x1022.jpg",
-    "https://templatelab.com/wp-content/uploads/2016/03/Company-Letterhead-Template-1-TemplateLab-Exclusive-e1487297202368-790x1022.jpg",
-    "https://templatelab.com/wp-content/uploads/2016/03/Company-Letterhead-Template-1-TemplateLab-Exclusive-e1487297202368-790x1022.jpg",
-    "https://templatelab.com/wp-content/uploads/2016/03/Company-Letterhead-Template-1-TemplateLab-Exclusive-e1487297202368-790x1022.jpg",
-    "https://templatelab.com/wp-content/uploads/2016/03/Company-Letterhead-Template-1-TemplateLab-Exclusive-e1487297202368-790x1022.jpg",
-  ];
   late  TabController _tabControllerr;
 
   @override
@@ -168,7 +160,10 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                  // bottom: scrHeight*0.02,
                   right: scrWidth*0.05
             ),
-            child:SvgPicture.asset("assets/icons/arrow.svg",),
+            child:Container(
+              width: 30,
+                height: 30,
+                child: SvgPicture.asset("assets/icons/arrow.svg",)),
           ),
         ),
         title: Padding(
@@ -1008,10 +1003,10 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                                               fontWeight: FontWeight.w700,
                                               color: primarycolor),),
                                           SizedBox(width: scrWidth*0.01,),
-                                          (data.userId==currentuserid)?
+                                          (data.verified==false)?
                                           InkWell(
                                             onTap: (){
-                                              bottomsheets(context);
+                                              // bottomsheets(context);
                                             },
                                             child: Container(
                                               height:25,
@@ -1021,7 +1016,7 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                                               ),
 
                                             ),
-                                          ) :SvgPicture.asset("assets/icons/Frame (1).svg"),
+                                          ) :Container(),
 
                                           SizedBox(width: scrWidth*0.02,)
                                         ],
@@ -1044,48 +1039,51 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
           ],
         ),
       ),
-      bottomNavigationBar: GestureDetector(
-        onTap: (){
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.only(bottom: 15),
+        child: GestureDetector(
+          onTap: (){
 
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>PaymentPage(charitymodel: widget.charities,)));
-        },
-        child: Container(
-          height: scrHeight*0.073,
-          color: Colors.white,
-          child: Row(
-            children: [
-              SizedBox(width: scrWidth*0.035,),
-              Container(
-                height: scrHeight*0.06,
-                width: scrWidth*0.9,
-                decoration: BoxDecoration(
-                  color: primarycolor,
-                  borderRadius: BorderRadius.circular(17)
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>PaymentPage(charitymodel: widget.charities,)));
+          },
+          child: Container(
+            height: scrHeight*0.073,
+            color: Colors.white,
+            child: Row(
+              children: [
+                SizedBox(width: scrWidth*0.035,),
+                Container(
+                  height: scrHeight*0.06,
+                  width: scrWidth*0.9,
+                  decoration: BoxDecoration(
+                    color: primarycolor,
+                    borderRadius: BorderRadius.circular(17)
+                  ),
+                  child:Center(
+                    child: Text("DONATE NOW",style: TextStyle(
+                        fontSize: scrWidth*0.035,
+                        fontFamily: 'Urbanist',
+                        fontWeight: FontWeight.w800,
+                        color: Color(0xffFFFFFF)
+                    ),),
+                  ),
                 ),
-                child:Center(
-                  child: Text("DONATE NOW",style: TextStyle(
-                      fontSize: scrWidth*0.035,
-                      fontFamily: 'Urbanist',
-                      fontWeight: FontWeight.w800,
-                      color: Color(0xffFFFFFF)
-                  ),),
-                ),
-              ),
-              SizedBox(width: scrWidth*0.028,),
-              // Container(
-              //   height: scrHeight*0.06,
-              //   width: scrWidth*0.14,
-              //   decoration: BoxDecoration(
-              //       color: primarycolor,
-              //       borderRadius: BorderRadius.circular(17),
-              //
-              //   ),
-              //   child: Padding(
-              //     padding:  EdgeInsets.only(top: scrHeight*0.015,bottom: scrHeight*0.015),
-              //     child: SvgPicture.asset("assets/icons/share.svg"),
-              //   ),
-              // ),
-            ],
+                SizedBox(width: scrWidth*0.04,),
+                // Container(
+                //   height: scrHeight*0.06,
+                //   width: scrWidth*0.14,
+                //   decoration: BoxDecoration(
+                //       color: primarycolor,
+                //       borderRadius: BorderRadius.circular(17),
+                //
+                //   ),
+                //   child: Padding(
+                //     padding:  EdgeInsets.only(top: scrHeight*0.015,bottom: scrHeight*0.015),
+                //     child: SvgPicture.asset("assets/icons/share.svg"),
+                //   ),
+                // ),
+              ],
+            ),
           ),
         ),
       ),

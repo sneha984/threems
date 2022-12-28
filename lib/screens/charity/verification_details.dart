@@ -198,6 +198,7 @@ class _VerificationDetailsState extends State<VerificationDetails> {
 
   @override
   Widget build(BuildContext context) {
+    print(charityDetails);
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight),

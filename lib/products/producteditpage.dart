@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../kuri/createkuri.dart';
 import '../model/Buy&sell.dart';
+import '../screens/home_screen.dart';
 import '../screens/splash_screen.dart';
 import 'dart:io';
 
@@ -126,7 +127,16 @@ class _ProductEditPageState extends State<ProductEditPage> {
       }
     });
   }
-  
+  void _showToast(BuildContext context) {
+    final scaffold = ScaffoldMessenger.of(context);
+    scaffold.showSnackBar(
+      SnackBar(
+        content: const Text('Scuccesfully Added'),
+        // action: SnackBarAction(
+        //     label: 'UNDO', onPressed: scaffold.hideCurrentSnackBar),
+      ),
+    );
+  }
 
   String imageurl = '';
 
@@ -217,912 +227,863 @@ class _ProductEditPageState extends State<ProductEditPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.only(left: scrWidth * 0.05),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: scrHeight * 0.08,
-              ),
-              Row(
-                children: [
-                  InkWell(
-                    onTap: () {
-                      Navigator.pop(context);
-                      // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                      //     ScreenLayout(index: 1,tabIndex: 1,),), (route) => false);
-                    },
-                    child: Container(
-                        height: 20,
-                        width: 20,
-                        child: SvgPicture.asset(
-                          "assets/icons/arrowmark.svg",
-                        )),
-                  ),
-                  SizedBox(
-                    width: scrWidth * 0.04,
-                  ),
-                  Text(
-                    "Add Product",
-                    style: TextStyle(
-                        fontSize: scrWidth * 0.046,
-                        color: Colors.black,
-                        fontFamily: 'Urbanist',
-                        fontWeight: FontWeight.w600),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: scrHeight * 0.03,
-              ),
-              Container(
-                 width:800,
-                height: 100,
-                // height: 300,
-                child: Row(
-                  children: [
-                    ListView.builder(
-                      shrinkWrap: true,
-                         scrollDirection: Axis.horizontal,
-                        itemCount: widget.productModel!['images'].length,
-                        itemBuilder: (context,index){
-                          return Padding(
-                            padding: EdgeInsets.only(right: 2),
-                            child: Container(
-                              height: 30,width:70,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  border: Border.all(
-                                    color: Color(0xffDADADA),
-                                  ),
-                                  image: DecorationImage(image: NetworkImage(widget.productModel!['images'][index]),fit: BoxFit.fill)
-                              ),
-                            ),
-                          );
-                      }),
-                InkWell(
-                        onTap: () async{
-                          await _pickImage();
-                          setState(() {
-
-                          });
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.only(left: 10),
-                          child: Container(
-                              height: scrHeight * 0.11,
-                              width: scrWidth * 0.28,
-                            decoration: BoxDecoration(
-                              // image: DecorationImage(
-                              //    image: imgFile == null
-                              //        ? NetworkImage(
-                              //      widget.productModel!['images'][0],
-                              //    )
-                              //        :
-                              //    FileImage(imgFile!) as ImageProvider,),
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(
-                                color: Color(0xffDADADA),
-                              ),
-                            ),
-                            child:  Center(
-                                                            child: SvgPicture.asset(
-                                                                "assets/icons/bigcamera.svg"))
-                              ),
-                        ),
-                      ),
-
-                  ],
-                ) ,
-              ),
-
-              // Row(
-              //   children: [
-              //     InkWell(
-              //       onTap: () async{
-              //         await _pickImage();
-              //         setState(() {
-              //
-              //         });
-              //       },
-              //       child: Padding(
-              //         padding: EdgeInsets.only(left: 10),
-              //         child: Container(
-              //             height: scrHeight * 0.11,
-              //             width: scrWidth * 0.28,
-              //           decoration: BoxDecoration(
-              //             image: DecorationImage(
-              //                image: imgFile == null
-              //                    ? NetworkImage(
-              //                  widget.productModel!['images'][0],
-              //                )
-              //                    :
-              //                FileImage(imgFile!) as ImageProvider,),
-              //             borderRadius: BorderRadius.circular(8),
-              //             border: Border.all(
-              //               color: Color(0xffDADADA),
-              //             ),
-              //           ),
-              //             ),
-              //       ),
-              //     ),
-              //
-              //     // Container(
-              //     //   height: 100,
-              //     //   child: ListView.builder(
-              //     //       shrinkWrap: true,
-              //     //       scrollDirection: Axis.horizontal,
-              //     //       itemCount: 1,
-              //     //       itemBuilder: (context, index) {
-              //     //         return index == _images.length
-              //     //             ? InkWell(
-              //     //                 onTap: () async{
-              //     //                  await _pickImage();
-              //     //                  setState(() {
-              //     //
-              //     //                  });
-              //     //                 },
-              //     //                 child: Padding(
-              //     //                   padding: EdgeInsets.only(left: 10),
-              //     //                   child: Container(
-              //     //                       height: scrHeight * 0.11,
-              //     //                       width: scrWidth * 0.28,
-              //     //                       decoration: BoxDecoration(
-              //     //                         color: textFormFieldFillColor,
-              //     //                         borderRadius: BorderRadius.circular(
-              //     //                             scrWidth * 0.04),
-              //     //                       ),
-              //     //                       child: Center(
-              //     //                           child: SvgPicture.asset(
-              //     //                               "assets/icons/bigcamera.svg"))),
-              //     //                 ),
-              //     //               )
-              //     //             : Padding(
-              //     //                 padding: EdgeInsets.only(left: 10),
-              //     //                 child: Container(
-              //     //                   height: scrHeight * 0.11,
-              //     //                   width: scrWidth * 0.28,
-              //     //                   decoration: BoxDecoration(
-              //     //                     image: DecorationImage(
-              //     //                         image:  imgFile == null
-              //     //                             ? NetworkImage(
-              //     //                           widget.productModel!['images'],
-              //     //                         )
-              //     //                             :
-              //     //                         FileImage(imgFile!) as ImageProvider,
-              //     //                         // FileImage(_images[index]),
-              //     //                         // FileImage(imgFile!) as ImageProvider,
-              //     //                         fit: BoxFit.fill),
-              //     //                     borderRadius: BorderRadius.circular(8),
-              //     //                     border: Border.all(
-              //     //                       color: Color(0xffDADADA),
-              //     //                     ),
-              //     //                   ),
-              //     //                 ),
-              //     //               );
-              //     //       }),
-              //     // ),
-              //   ],
-              // ),
-              SizedBox(
-                height: scrHeight * 0.01,
-              ),
-              // Text(
-              //   "Add product images (upto 5)",
-              //   style: TextStyle(
-              //       fontSize: 12,
-              //       color: Color(0xffB0B0B0),
-              //       fontFamily: 'Urbanist',
-              //       fontWeight: FontWeight.w600),
-              // ),
-              SizedBox(
-                height: scrHeight * 0.036,
-              ),
-              Padding(
-                padding: EdgeInsets.only(right: scrWidth * 0.053),
-                child: Container(
-                  height: textFormFieldHeight45,
-                  padding: EdgeInsets.symmetric(
-                    horizontal: scrWidth * 0.015,
-                    vertical: scrHeight * 0.002,
-                  ),
-                  decoration: BoxDecoration(
-                    color: textFormFieldFillColor,
-                    borderRadius: BorderRadius.circular(scrWidth * 0.026),
-                  ),
-                  child: TextFormField(
-                    controller: productNameController,
-                    focusNode: productNameFocus,
-                    cursorHeight: scrWidth * 0.055,
-                    cursorWidth: 1,
-                    cursorColor: Colors.black,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w600,
-                      fontSize: FontSize15,
-                      fontFamily: 'Urbanist',
-                    ),
-                    decoration: InputDecoration(
-                      labelText: 'Product Name',
-                      labelStyle: TextStyle(
-                        color: productNameFocus.hasFocus
-                            ? primarycolor
-                            : Color(0xffB0B0B0),
-                        fontWeight: FontWeight.w600,
-                        fontSize: FontSize15,
-                        fontFamily: 'Urbanist',
-                      ),
-                      prefixIcon: Container(
-                        height: scrWidth * 0.045,
-                        width: 10,
-                        padding: EdgeInsets.all(scrWidth * 0.033),
-                        child: SvgPicture.asset(
-                          'assets/icons/storename.svg',
-                          fit: BoxFit.contain,
-                          color: Color(0xffB0B0B0),
-                        ),
-                      ),
-                      fillColor: textFormFieldFillColor,
-                      filled: true,
-                      contentPadding:
-                          EdgeInsets.only(top: 5, bottom: scrWidth * 0.033),
-                      disabledBorder: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      errorBorder: InputBorder.none,
-                      border: InputBorder.none,
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                          color: primarycolor,
-                          width: 2,
-                        ),
-                      ),
-                    ),
-                  ),
+    return WillPopScope(
+      onWillPop: () async {
+        final shouldPop = await confirmQuitDialog(context);
+        return shouldPop ?? false;
+      },
+      child: Scaffold(
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.only(left: scrWidth * 0.05),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: scrHeight * 0.08,
                 ),
-              ),
-              SizedBox(
-                height: scrHeight * 0.02,
-              ),
-              Container(
-                width: scrWidth * 0.9,
-                height: textFormFieldHeight45,
-                decoration: BoxDecoration(
-                  color: textFormFieldFillColor,
-                  borderRadius: BorderRadius.circular(scrWidth * 0.033),
-                ),
-                child: Row(
+                Row(
                   children: [
-                    SizedBox(
-                      width: scrWidth * 0.057,
-                    ),
-                    SvgPicture.asset(
-                      'assets/icons/storecategory.svg',
-                      // fit: BoxFit.contain,
+                    InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                        // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                        //     ScreenLayout(index: 1,tabIndex: 1,),), (route) => false);
+                      },
+                      child: Container(
+                          height: 30,
+                          width: 30,
+                          child: SvgPicture.asset(
+                            "assets/icons/arrowmark.svg",
+                          )),
                     ),
                     SizedBox(
                       width: scrWidth * 0.04,
                     ),
-                    DropdownButtonHideUnderline(
-                      child: DropdownButton2(
-                        isExpanded: true,
-                        hint: Text(
-                          "Store Category",
-                          style: TextStyle(
-                              fontSize: FontSize15,
-                              fontFamily: 'Urbanist',
-                              fontWeight: FontWeight.w600,
-                              color: Color(0xffB0B0B0)),
-                        ),
-                        items: addCategory
-                            .map((item) => DropdownMenuItem<String>(
-                                  value: item,
-                                  child: Text(
-                                    item.toString(),
-                                    // overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 14,
-                                        fontFamily: 'Urbanist'),
-                                  ),
-                                ))
-                            .toList(),
-                        value: selectedCategoryItem,
-                        onChanged: (value) {
-                          setState(() {
-                            selectedCategoryItem = value as String;
-                          });
-                        },
-                        icon: Icon(
-                          Icons.arrow_drop_down,
-                        ),
-                        iconSize: 18,
-                        iconEnabledColor: Colors.black,
-                        iconDisabledColor: Colors.blue,
-                        buttonHeight: 50,
-                        buttonWidth: 247,
-                        // buttonPadding: const EdgeInsets.only(),
-                        buttonDecoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(14),
-                          color: textFormFieldFillColor,
-                        ),
-                        // buttonElevation: 2,
-                        itemHeight: 40,
-                        itemPadding: const EdgeInsets.only(),
-                        dropdownMaxHeight: 260,
-                        dropdownWidth: 300,
-                        dropdownPadding: EdgeInsets.only(
-                            left: 30, top: 15, bottom: 25, right: 30),
-                        dropdownDecoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          color: Colors.white,
-                        ),
-                        dropdownElevation: 0,
-                        scrollbarRadius: Radius.circular(10),
-                        scrollbarThickness: 3,
-                        scrollbarAlwaysShow: true,
-                        offset: const Offset(-20, 0),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: scrHeight * 0.02,
-              ),
-              Container(
-                width: scrWidth * 0.9,
-                height: textFormFieldHeight45,
-                decoration: BoxDecoration(
-                  color: textFormFieldFillColor,
-                  borderRadius: BorderRadius.circular(scrWidth * 0.033),
-                ),
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: scrWidth * 0.057,
-                    ),
-                    SvgPicture.asset(
-                      'assets/icons/storecategory.svg',
-                      // fit: BoxFit.contain,
-                    ),
-                    SizedBox(
-                      width: scrWidth * 0.04,
-                    ),
-                    DropdownButtonHideUnderline(
-                      child: DropdownButton2(
-                        isExpanded: true,
-                        hint: Text(
-                          "Product Category",
-                          style: TextStyle(
-                              fontSize: FontSize15,
-                              fontFamily: 'Urbanist',
-                              fontWeight: FontWeight.w600,
-                              color: Color(0xffB0B0B0)),
-                        ),
-                        items: productCategory
-                            .map((item) => DropdownMenuItem<String>(
-                          value: item,
-                          child: Text(
-                            item.toString(),
-                            // overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 14,
-                                fontFamily: 'Urbanist'),
-                          ),
-                        ))
-                            .toList(),
-                        value: productCategoryItem,
-                        onChanged: (value) {
-                          setState(() {
-                            productCategoryItem  = value as String;
-
-                          });
-                        },
-                        icon:  Icon(
-                          Icons.arrow_drop_down,
-                        ),
-                        iconSize: 18,
-                        iconEnabledColor: Colors.black,
-                        iconDisabledColor: Colors.blue,
-                        buttonHeight: 50,
-                        buttonWidth: 247,
-                        // buttonPadding: const EdgeInsets.only(),
-                        buttonDecoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(14),
-                          color: textFormFieldFillColor,
-                        ),
-                        // buttonElevation: 2,
-                        itemHeight: 40,
-                        itemPadding: const EdgeInsets.only(),
-                        dropdownMaxHeight: 260,
-                        dropdownWidth: 300,
-                        dropdownPadding: EdgeInsets.only(
-                            left: 30, top: 15, bottom: 25, right: 30),
-                        dropdownDecoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          color: Colors.white,
-                        ),
-                        dropdownElevation: 0,
-                        scrollbarRadius: Radius.circular(10),
-                        scrollbarThickness: 3,
-                        scrollbarAlwaysShow: true,
-                        offset: const Offset(-20, 0),
-                      ),
-                    ),
-
-
-                    // DropdownButtonHideUnderline(
-                    //   child: DropdownButton2(
-                    //     isExpanded: true,
-                    //     hint: Text(
-                    //       "Product Category",
-                    //       style: TextStyle(
-                    //           fontSize: FontSize15,
-                    //           fontFamily: 'Urbanist',
-                    //           fontWeight: FontWeight.w600,
-                    //           color: Color(0xffB0B0B0)),
-                    //     ),
-                    //     items: testList
-                    //         .map((item) => DropdownMenuItem<String>(
-                    //               value: 'tesr',
-                    //               child: Text(
-                    //                 item.toString(),
-                    //                 // overflow: TextOverflow.ellipsis,
-                    //                 style: TextStyle(
-                    //                     fontWeight: FontWeight.w600,
-                    //                     fontSize: 14,
-                    //                     fontFamily: 'Urbanist'),
-                    //               ),
-                    //             ))
-                    //         .toList(),
-                    //     value: 'tesr',
-                    //     // onChanged: (value) {
-                    //     //   setState(() {
-                    //     //     productCategoryItem = value as String;
-                    //     //   });
-                    //     // },
-                    //     icon: Icon(
-                    //       Icons.arrow_drop_down,
-                    //     ),
-                    //     iconSize: 18,
-                    //     iconEnabledColor: Colors.black,
-                    //     iconDisabledColor: Colors.blue,
-                    //     buttonHeight: 50,
-                    //     buttonWidth: 247,
-                    //     // buttonPadding: const EdgeInsets.only(),
-                    //     buttonDecoration: BoxDecoration(
-                    //       borderRadius: BorderRadius.circular(14),
-                    //       color: textFormFieldFillColor,
-                    //     ),
-                    //     // buttonElevation: 2,
-                    //     itemHeight: 40,
-                    //     itemPadding: const EdgeInsets.only(),
-                    //     dropdownMaxHeight: 260,
-                    //     dropdownWidth: 300,
-                    //     dropdownPadding: EdgeInsets.only(
-                    //         left: 30, top: 15, bottom: 25, right: 30),
-                    //     dropdownDecoration: BoxDecoration(
-                    //       borderRadius: BorderRadius.circular(8),
-                    //       color: Colors.white,
-                    //     ),
-                    //     dropdownElevation: 0,
-                    //     scrollbarRadius: Radius.circular(10),
-                    //     scrollbarThickness: 3,
-                    //     scrollbarAlwaysShow: true,
-                    //     offset: const Offset(-20, 0),
-                    //   ),
-                    // ),
-
-
-                  ],
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  pay();
-                },
-                child: Padding(
-                  padding: EdgeInsets.only(
-                      left: scrWidth * 0.62, top: scrHeight * 0.01),
-                  child: Text(
-                    "Add new category",
-                    textAlign: TextAlign.end,
-                    style: TextStyle(
-                        fontSize: 12,
-                        fontFamily: 'Urbanist',
-                        fontWeight: FontWeight.w600,
-                        color: primarycolor),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: scrHeight * 0.02,
-              ),
-              Padding(
-                padding: EdgeInsets.only(
-                  right: scrWidth * 0.053,
-                ),
-                child: Container(
-                  height: textFormFieldHeight45,
-                  padding: EdgeInsets.symmetric(
-                    horizontal: scrWidth * 0.015,
-                    vertical: scrHeight * 0.002,
-                  ),
-                  decoration: BoxDecoration(
-                    color: textFormFieldFillColor,
-                    borderRadius: BorderRadius.circular(scrWidth * 0.026),
-                  ),
-                  child: TextFormField(
-                    keyboardType: TextInputType.number,
-                    controller: productPriceController,
-                    focusNode: productPriceFocus,
-                    cursorHeight: scrWidth * 0.055,
-                    cursorWidth: 1,
-                    cursorColor: Colors.black,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w600,
-                      fontSize: FontSize15,
-                      fontFamily: 'Urbanist',
-                    ),
-                    decoration: InputDecoration(
-                      labelText: 'Price',
-                      labelStyle: TextStyle(
-                        color: productPriceFocus.hasFocus
-                            ? primarycolor
-                            : Color(0xffB0B0B0),
-                        fontWeight: FontWeight.w600,
-                        fontSize: FontSize15,
-                        fontFamily: 'Urbanist',
-                      ),
-                      prefixIcon: Container(
-                        height: scrWidth * 0.045,
-                        width: 10,
-                        padding: EdgeInsets.all(scrWidth * 0.033),
-                        child: SvgPicture.asset(
-                          'assets/icons/priceicons.svg',
-                          fit: BoxFit.contain,
-                          color: Color(0xffB0B0B0),
-                        ),
-                      ),
-                      fillColor: textFormFieldFillColor,
-                      filled: true,
-                      contentPadding:
-                          EdgeInsets.only(top: 5, bottom: scrWidth * 0.033),
-                      disabledBorder: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      errorBorder: InputBorder.none,
-                      border: InputBorder.none,
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                          color: primarycolor,
-                          width: 2,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(
-                    right: scrWidth * 0.053, top: scrHeight * 0.02),
-                child: Row(
-                  children: [
-                    Container(
-                      height: textFormFieldHeight45,
-                      width: scrWidth * 0.42,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: scrWidth * 0.015,
-                        vertical: scrHeight * 0.002,
-                      ),
-                      decoration: BoxDecoration(
-                        color: textFormFieldFillColor,
-                        borderRadius: BorderRadius.circular(scrWidth * 0.026),
-                      ),
-                      child: TextFormField(
-                        keyboardType: TextInputType.number,
-                        controller: productUnitController,
-                        focusNode: productUnitFocus,
-                        cursorHeight: scrWidth * 0.055,
-                        cursorWidth: 1,
-                        cursorColor: Colors.black,
-                        style: TextStyle(
+                    Text(
+                      "Add Product",
+                      style: TextStyle(
+                          fontSize: scrWidth * 0.046,
                           color: Colors.black,
+                          fontFamily: 'Urbanist',
+                          fontWeight: FontWeight.w600),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: scrHeight * 0.03,
+                ),
+                Container(
+                   width:800,
+                  height: scrHeight * 0.11,
+                  // height: 300,
+                  child: Row(
+                    children: [
+                      ListView.builder(
+                        shrinkWrap: true,
+                           scrollDirection: Axis.horizontal,
+                          itemCount: widget.productModel!['images'].length,
+                          itemBuilder: (context,index){
+                            return Padding(
+                              padding: EdgeInsets.only(right: 2),
+                              child: InkWell(
+                                onLongPress: (){
+                                  widget.productModel!['images']
+                                      .remove(widget.productModel!['images'][index]);
+                                  setState(() {
+
+                                  });
+                                  // widget.productModel!['images'].remove();
+                                  // setState(() {
+                                  //
+                                  // });
+
+                                },
+                                child: Container(
+                                  height: scrHeight * 0.11,
+                                  width: scrWidth * 0.23,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8),
+                                      border: Border.all(
+                                        color: Color(0xffDADADA),
+                                      ),
+                                      image: DecorationImage(
+                                          image: NetworkImage(widget.productModel!['images'][index]),fit: BoxFit.fill)
+                                  ),
+                                ),
+                              ),
+                            );
+                        }),
+                  InkWell(
+                          onTap: () async{
+                            await _pickImage();
+                            setState(() {
+
+                            });
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.only(left: 10),
+                            child: Container(
+                                height: scrHeight * 0.11,
+                                width: scrWidth * 0.23,
+                              decoration: BoxDecoration(
+                                // image: DecorationImage(
+                                //    image: imgFile == null
+                                //        ? NetworkImage(
+                                //      widget.productModel!['images'][0],
+                                //    )
+                                //        :
+                                //    FileImage(imgFile!) as ImageProvider,),
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(
+                                  color: Color(0xffDADADA),
+                                ),
+                              ),
+                              child:  Center(
+                                                              child: SvgPicture.asset(
+                                                                  "assets/icons/bigcamera.svg"))
+                                ),
+                          ),
+                        ),
+
+                    ],
+                  ) ,
+                ),
+
+                // Row(
+                //   children: [
+                //     InkWell(
+                //       onTap: () async{
+                //         await _pickImage();
+                //         setState(() {
+                //
+                //         });
+                //       },
+                //       child: Padding(
+                //         padding: EdgeInsets.only(left: 10),
+                //         child: Container(
+                //             height: scrHeight * 0.11,
+                //             width: scrWidth * 0.28,
+                //           decoration: BoxDecoration(
+                //             image: DecorationImage(
+                //                image: imgFile == null
+                //                    ? NetworkImage(
+                //                  widget.productModel!['images'][0],
+                //                )
+                //                    :
+                //                FileImage(imgFile!) as ImageProvider,),
+                //             borderRadius: BorderRadius.circular(8),
+                //             border: Border.all(
+                //               color: Color(0xffDADADA),
+                //             ),
+                //           ),
+                //             ),
+                //       ),
+                //     ),
+                //
+                //     // Container(
+                //     //   height: 100,
+                //     //   child: ListView.builder(
+                //     //       shrinkWrap: true,
+                //     //       scrollDirection: Axis.horizontal,
+                //     //       itemCount: 1,
+                //     //       itemBuilder: (context, index) {
+                //     //         return index == _images.length
+                //     //             ? InkWell(
+                //     //                 onTap: () async{
+                //     //                  await _pickImage();
+                //     //                  setState(() {
+                //     //
+                //     //                  });
+                //     //                 },
+                //     //                 child: Padding(
+                //     //                   padding: EdgeInsets.only(left: 10),
+                //     //                   child: Container(
+                //     //                       height: scrHeight * 0.11,
+                //     //                       width: scrWidth * 0.28,
+                //     //                       decoration: BoxDecoration(
+                //     //                         color: textFormFieldFillColor,
+                //     //                         borderRadius: BorderRadius.circular(
+                //     //                             scrWidth * 0.04),
+                //     //                       ),
+                //     //                       child: Center(
+                //     //                           child: SvgPicture.asset(
+                //     //                               "assets/icons/bigcamera.svg"))),
+                //     //                 ),
+                //     //               )
+                //     //             : Padding(
+                //     //                 padding: EdgeInsets.only(left: 10),
+                //     //                 child: Container(
+                //     //                   height: scrHeight * 0.11,
+                //     //                   width: scrWidth * 0.28,
+                //     //                   decoration: BoxDecoration(
+                //     //                     image: DecorationImage(
+                //     //                         image:  imgFile == null
+                //     //                             ? NetworkImage(
+                //     //                           widget.productModel!['images'],
+                //     //                         )
+                //     //                             :
+                //     //                         FileImage(imgFile!) as ImageProvider,
+                //     //                         // FileImage(_images[index]),
+                //     //                         // FileImage(imgFile!) as ImageProvider,
+                //     //                         fit: BoxFit.fill),
+                //     //                     borderRadius: BorderRadius.circular(8),
+                //     //                     border: Border.all(
+                //     //                       color: Color(0xffDADADA),
+                //     //                     ),
+                //     //                   ),
+                //     //                 ),
+                //     //               );
+                //     //       }),
+                //     // ),
+                //   ],
+                // ),
+                SizedBox(
+                  height: scrHeight * 0.01,
+                ),
+                // Text(
+                //   "Add product images (upto 5)",
+                //   style: TextStyle(
+                //       fontSize: 12,
+                //       color: Color(0xffB0B0B0),
+                //       fontFamily: 'Urbanist',
+                //       fontWeight: FontWeight.w600),
+                // ),
+                SizedBox(
+                  height: scrHeight * 0.036,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(right: scrWidth * 0.053),
+                  child: Container(
+                    height: textFormFieldHeight45,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: scrWidth * 0.015,
+                      vertical: scrHeight * 0.002,
+                    ),
+                    decoration: BoxDecoration(
+                      color: textFormFieldFillColor,
+                      borderRadius: BorderRadius.circular(scrWidth * 0.026),
+                    ),
+                    child: TextFormField(
+                      controller: productNameController,
+                      focusNode: productNameFocus,
+                      cursorHeight: scrWidth * 0.055,
+                      cursorWidth: 1,
+                      cursorColor: Colors.black,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w600,
+                        fontSize: FontSize15,
+                        fontFamily: 'Urbanist',
+                      ),
+                      decoration: InputDecoration(
+                        labelText: 'Product Name',
+                        labelStyle: TextStyle(
+                          color: productNameFocus.hasFocus
+                              ? primarycolor
+                              : Color(0xffB0B0B0),
                           fontWeight: FontWeight.w600,
                           fontSize: FontSize15,
                           fontFamily: 'Urbanist',
                         ),
-                        decoration: InputDecoration(
-                          labelText: 'Quantity',
-                          labelStyle: TextStyle(
-                            color: productUnitFocus.hasFocus
-                                ? primarycolor
-                                : Color(0xffB0B0B0),
-                            fontWeight: FontWeight.w600,
-                            fontSize: FontSize15,
-                            fontFamily: 'Urbanist',
+                        prefixIcon: Container(
+                          height: scrWidth * 0.045,
+                          width: 10,
+                          padding: EdgeInsets.all(scrWidth * 0.033),
+                          child: SvgPicture.asset(
+                            'assets/icons/storename.svg',
+                            fit: BoxFit.contain,
+                            color: Color(0xffB0B0B0),
                           ),
-                          prefixIcon: Container(
-                            height: scrWidth * 0.045,
-                            width: 10,
-                            padding: EdgeInsets.all(scrWidth * 0.033),
-                            child: SvgPicture.asset(
-                              'assets/icons/priceicons.svg',
-                              fit: BoxFit.contain,
-                              color: Color(0xffB0B0B0),
-                            ),
-                          ),
-                          fillColor: textFormFieldFillColor,
-                          filled: true,
-                          contentPadding:
-                              EdgeInsets.only(top: 5, bottom: scrWidth * 0.033),
-                          disabledBorder: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          errorBorder: InputBorder.none,
-                          border: InputBorder.none,
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                              color: primarycolor,
-                              width: 2,
-                            ),
+                        ),
+                        fillColor: textFormFieldFillColor,
+                        filled: true,
+                        contentPadding:
+                            EdgeInsets.only(top: 5, bottom: scrWidth * 0.033),
+                        disabledBorder: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        errorBorder: InputBorder.none,
+                        border: InputBorder.none,
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: primarycolor,
+                            width: 2,
                           ),
                         ),
                       ),
                     ),
-                    SizedBox(
-                      width: scrWidth * 0.0478,
-                    ),
-                    Container(
-                      width: scrWidth * 0.425,
-                      height: textFormFieldHeight45,
-                      decoration: BoxDecoration(
-                        color: textFormFieldFillColor,
-                        borderRadius: BorderRadius.circular(scrWidth * 0.033),
-                      ),
-                      child: Row(
-                        children: [
-                          SizedBox(
-                            width: scrWidth * 0.057,
-                          ),
-                          SvgPicture.asset(
-                            'assets/icons/storecategory.svg',
-                          ),
-                          SizedBox(
-                            width: scrWidth * 0.06,
-                          ),
-                          DropdownButtonHideUnderline(
-                            child: DropdownButton2(
-                              isExpanded: true,
-                              hint: Text(
-                                "Unit",
-                                style: TextStyle(
-                                    fontSize: FontSize15,
-                                    fontFamily: 'Urbanist',
-                                    fontWeight: FontWeight.w600,
-                                    color:Color(0xffB0B0B0)
-                                ),
-                              ),
-                              items: productUnit
-                                  .map((item) => DropdownMenuItem<String>(
-                                value: item,
-                                child:  Text(
-                                  item.toString(),
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 14,
-                                      fontFamily: 'Urbanist'
-                                  ),
-                                ),
-                              )).toList(),
-                              value:  selectedValues,
-                              onChanged: (value) {
-                                setState(() {
-                                  selectedValues = value as String;
-                                });
-                              },
-                              icon: const Icon(
-                                Icons.arrow_drop_down,
-                              ),
-                              iconSize: 18,
-                              iconEnabledColor: Colors.black,
-                              iconDisabledColor: Colors.blue,
-                              buttonHeight: 50,
-                              buttonWidth:70,
-                              // buttonPadding: const EdgeInsets.only(right: 10),
-                              buttonDecoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(14),
-                                color: textFormFieldFillColor,
-                              ),
-                              // buttonElevation: 2,
-                              itemHeight: 40,
-                              itemPadding: const EdgeInsets.only(),
-                              dropdownMaxHeight: 200,
-                              dropdownWidth: 100,
-                              dropdownPadding: EdgeInsets.only(left: 10,top: 15,bottom: 25,right: 30),
-                              dropdownDecoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: Colors.white,
-                              ),
-                              dropdownElevation: 0,
-
-                              scrollbarRadius:  Radius.circular(10),
-                              scrollbarThickness: 3,
-                              scrollbarAlwaysShow: true,
-                              offset: const Offset(-20, 0),
-                            ),
-                          ),
-
-
-
-
-
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              // Text(
-              //   "Unit : per ${productUnitController.text} ${selectedValues}",
-              //   style: TextStyle(
-              //       fontFamily: 'Urbanist',
-              //       fontWeight: FontWeight.w600,
-              //       color: primarycolor,
-              //       fontSize: 12),
-              // ),
-              Padding(
-                padding: EdgeInsets.only(
-                    right: scrWidth * 0.053, top: scrHeight * 0.02),
-                child: Container(
-                  height: textFormFieldHeight45,
-                  padding: EdgeInsets.symmetric(
-                    horizontal: scrWidth * 0.015,
-                    vertical: scrHeight * 0.002,
                   ),
+                ),
+                SizedBox(
+                  height: scrHeight * 0.02,
+                ),
+                Container(
+                  width: scrWidth * 0.9,
+                  height: textFormFieldHeight45,
                   decoration: BoxDecoration(
                     color: textFormFieldFillColor,
-                    borderRadius: BorderRadius.circular(scrWidth * 0.026),
+                    borderRadius: BorderRadius.circular(scrWidth * 0.033),
                   ),
-                  child: TextFormField(
-                    controller: productDetailsController,
-                    focusNode: productDetails,
-                    cursorHeight: scrWidth * 0.055,
-                    cursorWidth: 1,
-                    cursorColor: Colors.black,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w600,
-                      fontSize: FontSize15,
-                      fontFamily: 'Urbanist',
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: scrWidth * 0.057,
+                      ),
+                      SvgPicture.asset(
+                        'assets/icons/storecategory.svg',
+                        // fit: BoxFit.contain,
+                      ),
+                      SizedBox(
+                        width: scrWidth * 0.04,
+                      ),
+                      DropdownButtonHideUnderline(
+                        child: DropdownButton2(
+                          isExpanded: true,
+                          hint: Text(
+                            "Store Category",
+                            style: TextStyle(
+                                fontSize: FontSize15,
+                                fontFamily: 'Urbanist',
+                                fontWeight: FontWeight.w600,
+                                color: Color(0xffB0B0B0)),
+                          ),
+                          items: addCategory
+                              .map((item) => DropdownMenuItem<String>(
+                                    value: item,
+                                    child: Text(
+                                      item.toString(),
+                                      // overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 14,
+                                          fontFamily: 'Urbanist'),
+                                    ),
+                                  ))
+                              .toList(),
+                          value: selectedCategoryItem,
+                          onChanged: (value) {
+                            setState(() {
+                              selectedCategoryItem = value as String;
+                            });
+                          },
+                          icon: Icon(
+                            Icons.arrow_drop_down,
+                          ),
+                          iconSize: 18,
+                          iconEnabledColor: Colors.black,
+                          iconDisabledColor: Colors.blue,
+                          buttonHeight: 50,
+                          buttonWidth: 247,
+                          // buttonPadding: const EdgeInsets.only(),
+                          buttonDecoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(14),
+                            color: textFormFieldFillColor,
+                          ),
+                          // buttonElevation: 2,
+                          itemHeight: 40,
+                          itemPadding: const EdgeInsets.only(),
+                          dropdownMaxHeight: 260,
+                          dropdownWidth: 300,
+                          dropdownPadding: EdgeInsets.only(
+                              left: 30, top: 15, bottom: 25, right: 30),
+                          dropdownDecoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: Colors.white,
+                          ),
+                          dropdownElevation: 0,
+                          scrollbarRadius: Radius.circular(10),
+                          scrollbarThickness: 3,
+                          scrollbarAlwaysShow: true,
+                          offset: const Offset(-20, 0),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: scrHeight * 0.02,
+                ),
+                Container(
+                  width: scrWidth * 0.9,
+                  height: textFormFieldHeight45,
+                  decoration: BoxDecoration(
+                    color: textFormFieldFillColor,
+                    borderRadius: BorderRadius.circular(scrWidth * 0.033),
+                  ),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: scrWidth * 0.057,
+                      ),
+                      SvgPicture.asset(
+                        'assets/icons/storecategory.svg',
+                        // fit: BoxFit.contain,
+                      ),
+                      SizedBox(
+                        width: scrWidth * 0.04,
+                      ),
+                      DropdownButtonHideUnderline(
+                        child: DropdownButton2(
+                          isExpanded: true,
+                          hint: Text(
+                            "Product Category",
+                            style: TextStyle(
+                                fontSize: FontSize15,
+                                fontFamily: 'Urbanist',
+                                fontWeight: FontWeight.w600,
+                                color: Color(0xffB0B0B0)),
+                          ),
+                          items: productCategory
+                              .map((item) => DropdownMenuItem<String>(
+                            value: item,
+                            child: Text(
+                              item.toString(),
+                              // overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14,
+                                  fontFamily: 'Urbanist'),
+                            ),
+                          ))
+                              .toList(),
+                          value: productCategoryItem,
+                          onChanged: (value) {
+                            setState(() {
+                              productCategoryItem  = value as String;
+
+                            });
+                          },
+                          icon:  Icon(
+                            Icons.arrow_drop_down,
+                          ),
+                          iconSize: 18,
+                          iconEnabledColor: Colors.black,
+                          iconDisabledColor: Colors.blue,
+                          buttonHeight: 50,
+                          buttonWidth: 247,
+                          // buttonPadding: const EdgeInsets.only(),
+                          buttonDecoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(14),
+                            color: textFormFieldFillColor,
+                          ),
+                          // buttonElevation: 2,
+                          itemHeight: 40,
+                          itemPadding: const EdgeInsets.only(),
+                          dropdownMaxHeight: 260,
+                          dropdownWidth: 300,
+                          dropdownPadding: EdgeInsets.only(
+                              left: 30, top: 15, bottom: 25, right: 30),
+                          dropdownDecoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: Colors.white,
+                          ),
+                          dropdownElevation: 0,
+                          scrollbarRadius: Radius.circular(10),
+                          scrollbarThickness: 3,
+                          scrollbarAlwaysShow: true,
+                          offset: const Offset(-20, 0),
+                        ),
+                      ),
+
+
+                      // DropdownButtonHideUnderline(
+                      //   child: DropdownButton2(
+                      //     isExpanded: true,
+                      //     hint: Text(
+                      //       "Product Category",
+                      //       style: TextStyle(
+                      //           fontSize: FontSize15,
+                      //           fontFamily: 'Urbanist',
+                      //           fontWeight: FontWeight.w600,
+                      //           color: Color(0xffB0B0B0)),
+                      //     ),
+                      //     items: testList
+                      //         .map((item) => DropdownMenuItem<String>(
+                      //               value: 'tesr',
+                      //               child: Text(
+                      //                 item.toString(),
+                      //                 // overflow: TextOverflow.ellipsis,
+                      //                 style: TextStyle(
+                      //                     fontWeight: FontWeight.w600,
+                      //                     fontSize: 14,
+                      //                     fontFamily: 'Urbanist'),
+                      //               ),
+                      //             ))
+                      //         .toList(),
+                      //     value: 'tesr',
+                      //     // onChanged: (value) {
+                      //     //   setState(() {
+                      //     //     productCategoryItem = value as String;
+                      //     //   });
+                      //     // },
+                      //     icon: Icon(
+                      //       Icons.arrow_drop_down,
+                      //     ),
+                      //     iconSize: 18,
+                      //     iconEnabledColor: Colors.black,
+                      //     iconDisabledColor: Colors.blue,
+                      //     buttonHeight: 50,
+                      //     buttonWidth: 247,
+                      //     // buttonPadding: const EdgeInsets.only(),
+                      //     buttonDecoration: BoxDecoration(
+                      //       borderRadius: BorderRadius.circular(14),
+                      //       color: textFormFieldFillColor,
+                      //     ),
+                      //     // buttonElevation: 2,
+                      //     itemHeight: 40,
+                      //     itemPadding: const EdgeInsets.only(),
+                      //     dropdownMaxHeight: 260,
+                      //     dropdownWidth: 300,
+                      //     dropdownPadding: EdgeInsets.only(
+                      //         left: 30, top: 15, bottom: 25, right: 30),
+                      //     dropdownDecoration: BoxDecoration(
+                      //       borderRadius: BorderRadius.circular(8),
+                      //       color: Colors.white,
+                      //     ),
+                      //     dropdownElevation: 0,
+                      //     scrollbarRadius: Radius.circular(10),
+                      //     scrollbarThickness: 3,
+                      //     scrollbarAlwaysShow: true,
+                      //     offset: const Offset(-20, 0),
+                      //   ),
+                      // ),
+
+
+                    ],
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    pay();
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                        left: scrWidth * 0.62, top: scrHeight * 0.01),
+                    child: Text(
+                      "Add new category",
+                      textAlign: TextAlign.end,
+                      style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'Urbanist',
+                          fontWeight: FontWeight.w600,
+                          color: primarycolor),
                     ),
-                    decoration: InputDecoration(
-                      labelText: 'Details',
-                      labelStyle: TextStyle(
-                        color: productDetails.hasFocus
-                            ? primarycolor
-                            : Color(0xffB0B0B0),
+                  ),
+                ),
+                SizedBox(
+                  height: scrHeight * 0.02,
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                    right: scrWidth * 0.053,
+                  ),
+                  child: Container(
+                    height: textFormFieldHeight45,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: scrWidth * 0.015,
+                      vertical: scrHeight * 0.002,
+                    ),
+                    decoration: BoxDecoration(
+                      color: textFormFieldFillColor,
+                      borderRadius: BorderRadius.circular(scrWidth * 0.026),
+                    ),
+                    child: TextFormField(
+                      keyboardType: TextInputType.number,
+                      controller: productPriceController,
+                      focusNode: productPriceFocus,
+                      cursorHeight: scrWidth * 0.055,
+                      cursorWidth: 1,
+                      cursorColor: Colors.black,
+                      style: TextStyle(
+                        color: Colors.black,
                         fontWeight: FontWeight.w600,
                         fontSize: FontSize15,
                         fontFamily: 'Urbanist',
                       ),
-                      prefixIcon: Container(
-                        height: scrWidth * 0.045,
-                        width: 10,
-                        padding: EdgeInsets.all(scrWidth * 0.033),
-                        child: SvgPicture.asset(
-                          'assets/icons/storename.svg',
-                          fit: BoxFit.contain,
-                          color: Color(0xffB0B0B0),
+                      decoration: InputDecoration(
+                        labelText: 'Price',
+                        labelStyle: TextStyle(
+                          color: productPriceFocus.hasFocus
+                              ? primarycolor
+                              : Color(0xffB0B0B0),
+                          fontWeight: FontWeight.w600,
+                          fontSize: FontSize15,
+                          fontFamily: 'Urbanist',
                         ),
-                      ),
-                      fillColor: textFormFieldFillColor,
-                      filled: true,
-                      contentPadding:
-                          EdgeInsets.only(top: 5, bottom: scrWidth * 0.033),
-                      disabledBorder: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      errorBorder: InputBorder.none,
-                      border: InputBorder.none,
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                          color: primarycolor,
-                          width: 2,
+                        prefixIcon: Container(
+                          height: scrWidth * 0.045,
+                          width: 10,
+                          padding: EdgeInsets.all(scrWidth * 0.033),
+                          child: SvgPicture.asset(
+                            'assets/icons/priceicons.svg',
+                            fit: BoxFit.contain,
+                            color: Color(0xffB0B0B0),
+                          ),
+                        ),
+                        fillColor: textFormFieldFillColor,
+                        filled: true,
+                        contentPadding:
+                            EdgeInsets.only(top: 5, bottom: scrWidth * 0.033),
+                        disabledBorder: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        errorBorder: InputBorder.none,
+                        border: InputBorder.none,
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: primarycolor,
+                            width: 2,
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              SizedBox(
-                height: scrHeight * 0.1,
-              ),
-              finished == false
-                  ? Padding(
-                      padding: EdgeInsets.only(right: scrWidth * 0.053),
-                      child: Container(
+                Padding(
+                  padding: EdgeInsets.only(
+                      right: scrWidth * 0.053, top: scrHeight * 0.02),
+                  child: Row(
+                    children: [
+                      Container(
                         height: textFormFieldHeight45,
-                        width: scrWidth,
+                        width: scrWidth * 0.42,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: scrWidth * 0.015,
+                          vertical: scrHeight * 0.002,
+                        ),
                         decoration: BoxDecoration(
-                            color: Color.fromRGBO(0, 128, 54, 0.33),
-                            borderRadius: BorderRadius.circular(21.5)),
-                        child: Center(
-                          child: Text(
-                            "Add Product",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'Urbanist',
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700),
+                          color: textFormFieldFillColor,
+                          borderRadius: BorderRadius.circular(scrWidth * 0.026),
+                        ),
+                        child: TextFormField(
+                          keyboardType: TextInputType.number,
+                          controller: productUnitController,
+                          focusNode: productUnitFocus,
+                          cursorHeight: scrWidth * 0.055,
+                          cursorWidth: 1,
+                          cursorColor: Colors.black,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w600,
+                            fontSize: FontSize15,
+                            fontFamily: 'Urbanist',
+                          ),
+                          decoration: InputDecoration(
+                            labelText: 'Quantity',
+                            labelStyle: TextStyle(
+                              color: productUnitFocus.hasFocus
+                                  ? primarycolor
+                                  : Color(0xffB0B0B0),
+                              fontWeight: FontWeight.w600,
+                              fontSize: FontSize15,
+                              fontFamily: 'Urbanist',
+                            ),
+                            prefixIcon: Container(
+                              height: scrWidth * 0.045,
+                              width: 10,
+                              padding: EdgeInsets.all(scrWidth * 0.033),
+                              child: SvgPicture.asset(
+                                'assets/icons/priceicons.svg',
+                                fit: BoxFit.contain,
+                                color: Color(0xffB0B0B0),
+                              ),
+                            ),
+                            fillColor: textFormFieldFillColor,
+                            filled: true,
+                            contentPadding:
+                                EdgeInsets.only(top: 5, bottom: scrWidth * 0.033),
+                            disabledBorder: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            errorBorder: InputBorder.none,
+                            border: InputBorder.none,
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: primarycolor,
+                                width: 2,
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    )
-                  : GestureDetector(
-                      onTap: () async {
-                        setState(() {
-                          loading = true;
-                        });
-                        // if(imgUrl==null){
-                        //   refreshPage();
-                        //   return showSnackbar(context,"add product images upto 5");
-                        // }
-                        if (productNameController.text.isEmpty) {
-                          refreshPage();
-                          return showSnackbar(
-                              context, "Must Provide Product Name");
-                        }
-                        if (productPriceController.text.isEmpty) {
-                          refreshPage();
-                          return showSnackbar(
-                              context, "Must Provide product price");
-                        }
-                        if (productUnitController.text.isEmpty) {
-                          refreshPage();
-                          return showSnackbar(
-                              context, "Must Provide product unit");
-                        }
-                        // if(categoryNameController.text.isEmpty){
-                        //   refreshPage();
-                        //   return showSnackbar(context,"Must Provide category name");
-                        // }
-                        else {
-                          FirebaseFirestore
-                              .instance
-                              .collection('stores').doc(widget.storeId).collection('products')
-                              .doc(widget.productModel!['productId']).update({
-                            'images':_imgurl,
-                            'details':productDetailsController.text,
-                            'quantity':productUnitController.text,
-                            'unit':selectedValues,
-                            'productName':productNameController.text,
-                            'productCategory':productCategoryItem,
-                            'storedCategorys':selectedCategoryItem,
-                            'price':productPriceController.text,
-                          });
+                      SizedBox(
+                        width: scrWidth * 0.0478,
+                      ),
+                      Container(
+                        width: scrWidth * 0.425,
+                        height: textFormFieldHeight45,
+                        decoration: BoxDecoration(
+                          color: textFormFieldFillColor,
+                          borderRadius: BorderRadius.circular(scrWidth * 0.033),
+                        ),
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: scrWidth * 0.057,
+                            ),
+                            SvgPicture.asset(
+                              'assets/icons/storecategory.svg',
+                            ),
+                            SizedBox(
+                              width: scrWidth * 0.06,
+                            ),
+                            DropdownButtonHideUnderline(
+                              child: DropdownButton2(
+                                isExpanded: true,
+                                hint: Text(
+                                  "Unit",
+                                  style: TextStyle(
+                                      fontSize: FontSize15,
+                                      fontFamily: 'Urbanist',
+                                      fontWeight: FontWeight.w600,
+                                      color:Color(0xffB0B0B0)
+                                  ),
+                                ),
+                                items: productUnit
+                                    .map((item) => DropdownMenuItem<String>(
+                                  value: item,
+                                  child:  Text(
+                                    item.toString(),
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 14,
+                                        fontFamily: 'Urbanist'
+                                    ),
+                                  ),
+                                )).toList(),
+                                value:  selectedValues,
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectedValues = value as String;
+                                  });
+                                },
+                                icon: const Icon(
+                                  Icons.arrow_drop_down,
+                                ),
+                                iconSize: 18,
+                                iconEnabledColor: Colors.black,
+                                iconDisabledColor: Colors.blue,
+                                buttonHeight: 50,
+                                buttonWidth:70,
+                                // buttonPadding: const EdgeInsets.only(right: 10),
+                                buttonDecoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(14),
+                                  color: textFormFieldFillColor,
+                                ),
+                                // buttonElevation: 2,
+                                itemHeight: 40,
+                                itemPadding: const EdgeInsets.only(),
+                                dropdownMaxHeight: 200,
+                                dropdownWidth: 100,
+                                dropdownPadding: EdgeInsets.only(left: 10,top: 15,bottom: 25,right: 30),
+                                dropdownDecoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  color: Colors.white,
+                                ),
+                                dropdownElevation: 0,
+
+                                scrollbarRadius:  Radius.circular(10),
+                                scrollbarThickness: 3,
+                                scrollbarAlwaysShow: true,
+                                offset: const Offset(-20, 0),
+                              ),
+                            ),
 
 
-                          print(productPriceController.text);
-                          Navigator.pop(context);
-                          // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>SuccesfullyAdded(data: widget.data)));
-                        }
-                        // print(widget.id);
-                      },
-                      child: Padding(
+
+
+
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                // Text(
+                //   "Unit : per ${productUnitController.text} ${selectedValues}",
+                //   style: TextStyle(
+                //       fontFamily: 'Urbanist',
+                //       fontWeight: FontWeight.w600,
+                //       color: primarycolor,
+                //       fontSize: 12),
+                // ),
+                Padding(
+                  padding: EdgeInsets.only(
+                      right: scrWidth * 0.053, top: scrHeight * 0.02),
+                  child: Container(
+                    height: textFormFieldHeight45,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: scrWidth * 0.015,
+                      vertical: scrHeight * 0.002,
+                    ),
+                    decoration: BoxDecoration(
+                      color: textFormFieldFillColor,
+                      borderRadius: BorderRadius.circular(scrWidth * 0.026),
+                    ),
+                    child: TextFormField(
+                      controller: productDetailsController,
+                      focusNode: productDetails,
+                      cursorHeight: scrWidth * 0.055,
+                      cursorWidth: 1,
+                      cursorColor: Colors.black,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w600,
+                        fontSize: FontSize15,
+                        fontFamily: 'Urbanist',
+                      ),
+                      decoration: InputDecoration(
+                        labelText: 'Details',
+                        labelStyle: TextStyle(
+                          color: productDetails.hasFocus
+                              ? primarycolor
+                              : Color(0xffB0B0B0),
+                          fontWeight: FontWeight.w600,
+                          fontSize: FontSize15,
+                          fontFamily: 'Urbanist',
+                        ),
+                        prefixIcon: Container(
+                          height: scrWidth * 0.045,
+                          width: 10,
+                          padding: EdgeInsets.all(scrWidth * 0.033),
+                          child: SvgPicture.asset(
+                            'assets/icons/storename.svg',
+                            fit: BoxFit.contain,
+                            color: Color(0xffB0B0B0),
+                          ),
+                        ),
+                        fillColor: textFormFieldFillColor,
+                        filled: true,
+                        contentPadding:
+                            EdgeInsets.only(top: 5, bottom: scrWidth * 0.033),
+                        disabledBorder: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        errorBorder: InputBorder.none,
+                        border: InputBorder.none,
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: primarycolor,
+                            width: 2,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: scrHeight * 0.1,
+                ),
+                finished == false
+                    ? Padding(
                         padding: EdgeInsets.only(right: scrWidth * 0.053),
                         child: Container(
                           height: textFormFieldHeight45,
                           width: scrWidth,
                           decoration: BoxDecoration(
-                              color: primarycolor,
+                              color: Color.fromRGBO(0, 128, 54, 0.33),
                               borderRadius: BorderRadius.circular(21.5)),
                           child: Center(
                             child: Text(
-                              "Update",
+                              "Add Product",
                               style: TextStyle(
                                   color: Colors.white,
                                   fontFamily: 'Urbanist',
@@ -1131,9 +1092,80 @@ class _ProductEditPageState extends State<ProductEditPage> {
                             ),
                           ),
                         ),
+                      )
+                    : GestureDetector(
+                        onTap: () async {
+                          setState(() {
+                            loading = true;
+                          });
+                          // if(imgUrl==null){
+                          //   refreshPage();
+                          //   return showSnackbar(context,"add product images upto 5");
+                          // }
+                          if (productNameController.text.isEmpty) {
+                            refreshPage();
+                            return showSnackbar(
+                                context, "Must Provide Product Name");
+                          }
+                          if (productPriceController.text.isEmpty) {
+                            refreshPage();
+                            return showSnackbar(
+                                context, "Must Provide product price");
+                          }
+                          if (productUnitController.text.isEmpty) {
+                            refreshPage();
+                            return showSnackbar(
+                                context, "Must Provide product unit");
+                          }
+                          // if(categoryNameController.text.isEmpty){
+                          //   refreshPage();
+                          //   return showSnackbar(context,"Must Provide category name");
+                          // }
+                          else {
+                            FirebaseFirestore
+                                .instance
+                                .collection('stores').doc(widget.storeId).collection('products')
+                                .doc(widget.productModel!['productId']).update({
+                              'images':_imgurl,
+                              'details':productDetailsController.text,
+                              'quantity':productUnitController.text,
+                              'unit':selectedValues,
+                              'productName':productNameController.text,
+                              'productCategory':productCategoryItem,
+                              'storedCategorys':selectedCategoryItem,
+                              'price':productPriceController.text,
+                            });
+
+
+                            print(productPriceController.text);
+                            Navigator.pop(context);
+                            // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>SuccesfullyAdded(data: widget.data)));
+                          }
+                          // print(widget.id);
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.only(right: scrWidth * 0.053),
+                          child: Container(
+                            height: textFormFieldHeight45,
+                            width: scrWidth,
+                            decoration: BoxDecoration(
+                                color: primarycolor,
+                                borderRadius: BorderRadius.circular(21.5)),
+                            child: Center(
+                              child: Text(
+                                "Update",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: 'Urbanist',
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -1234,6 +1266,7 @@ class _ProductEditPageState extends State<ProductEditPage> {
                               FieldValue.arrayUnion(productCategoryList),
                         });
                         Navigator.pop(context);
+                        _showToast(context);
                       },
                       child: Text(
                         "Save",

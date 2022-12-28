@@ -159,629 +159,567 @@ class _StoreDetailsState extends State<StoreDetails> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 84,
-        shadowColor: Colors.grey,
-        leadingWidth: 35,
-        centerTitle: false,
-        elevation: 0.1,
-        backgroundColor: Colors.white,
-        leading: InkWell(
-          onTap: () {
-            Navigator.pop(context);
-                  },
-          child: Padding(
-            padding: EdgeInsets.only(
-                top: scrHeight * 0.03,
-                left: scrWidth * 0.045,
-                bottom: scrHeight * 0.01,
-                right: scrWidth * 0.0),
-            child: SvgPicture.asset(
-              "assets/icons/arrowmark.svg",
+    return WillPopScope(
+      onWillPop: () async {
+        final shouldPop = await confirmQuitDialog(context);
+        return shouldPop ?? false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          toolbarHeight: 84,
+          shadowColor: Colors.grey,
+          leadingWidth: 35,
+          centerTitle: false,
+          elevation: 0.1,
+          backgroundColor: Colors.white,
+          leading: InkWell(
+            onTap: () {
+              Navigator.pop(context);
+                    },
+            child: Padding(
+              padding: EdgeInsets.only(
+                  top: scrHeight * 0.03,
+                  left: scrWidth * 0.045,
+                  bottom: scrHeight * 0.01,
+                  right: scrWidth * 0.0),
+              child: SvgPicture.asset(
+                "assets/icons/arrowmark.svg",
+              ),
+            ),
+          ),
+          title: Padding(
+            padding: EdgeInsets.only(top: scrHeight * 0.02),
+            child: Text(
+              "Enter Store Details",
+              style: TextStyle(
+                  fontSize: scrWidth * 0.046,
+                  color: Colors.black,
+                  fontFamily: 'Urbanist',
+                  fontWeight: FontWeight.w600),
             ),
           ),
         ),
-        title: Padding(
-          padding: EdgeInsets.only(top: scrHeight * 0.02),
-          child: Text(
-            "Enter Store Details",
-            style: TextStyle(
-                fontSize: scrWidth * 0.046,
-                color: Colors.black,
-                fontFamily: 'Urbanist',
-                fontWeight: FontWeight.w600),
-          ),
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding:
-              EdgeInsets.only(left: scrWidth * 0.06, right: scrWidth * 0.06),
-          child: Column(
-            children: [
-              Padding(
-                padding:  EdgeInsets.only(right: 220,top: 18),
-                child: InkWell(
-                  onTap: (){
-                    _pickImage();
-                  },
-                  child: Container(
-                    height: scrHeight * 0.11,
-                    width: scrWidth * 0.25,
-                    decoration: BoxDecoration(
-                      color: textFormFieldFillColor,
-                      borderRadius: BorderRadius.circular(scrWidth * 0.04),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding:
+                EdgeInsets.only(left: scrWidth * 0.06, right: scrWidth * 0.06),
+            child: Column(
+              children: [
+                Padding(
+                  padding:  EdgeInsets.only(right: 220,top: 18),
+                  child: InkWell(
+                    onTap: (){
+                      _pickImage();
+                    },
+                    child: Container(
+                      height: scrHeight * 0.11,
+                      width: scrWidth * 0.25,
+                      decoration: BoxDecoration(
+                        color: textFormFieldFillColor,
+                        borderRadius: BorderRadius.circular(scrWidth * 0.04),
+                      ),
+                      child: Center(
+                          child: imgFile==null?Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Center(
+                                  child: SvgPicture.asset(
+                                      "assets/icons/bigcamera.svg"))
+                            ],
+                          ):Container(
+                            height:scrHeight*0.11,
+                            width: scrWidth*0.28,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image: FileImage(imgFile!) as ImageProvider,fit: BoxFit.fill),
+                              borderRadius: BorderRadius.circular(8),
+                              // border: Border.all(
+                              //   color: Color(0xffDADADA),
+                              // ),
+                            ),
+
+                          )
+                      ),
                     ),
-                    child: Center(
-                        child: imgFile==null?Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Center(
-                                child: SvgPicture.asset(
-                                    "assets/icons/bigcamera.svg"))
-                          ],
-                        ):Container(
-                          height:scrHeight*0.11,
-                          width: scrWidth*0.28,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: FileImage(imgFile!) as ImageProvider,fit: BoxFit.fill),
-                            borderRadius: BorderRadius.circular(8),
-                            // border: Border.all(
-                            //   color: Color(0xffDADADA),
-                            // ),
+                  ),
+                ),
+                SizedBox(
+                  height: scrHeight * 0.03,
+                ),
+                Container(
+                  height: textFormFieldHeight45,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: scrWidth * 0.015,
+                    vertical: scrHeight * 0.002,
+                  ),
+                  decoration: BoxDecoration(
+                    color: textFormFieldFillColor,
+                    borderRadius: BorderRadius.circular(scrWidth * 0.026),
+                  ),
+                  child: TextFormField(
+                    controller: storeNameController,
+                    focusNode: storeNameFocus,
+                    cursorHeight: scrWidth * 0.055,
+                    cursorWidth: 1,
+                    cursorColor: Colors.black,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                      fontSize: FontSize15,
+                      fontFamily: 'Urbanist',
+                    ),
+                    decoration: InputDecoration(
+                      labelText: 'Store Name',
+                      labelStyle: TextStyle(
+                        color: storeNameFocus.hasFocus
+                            ? primarycolor
+                            : Color(0xffB0B0B0),
+                        fontWeight: FontWeight.w600,
+                        fontSize: FontSize15,
+                        fontFamily: 'Urbanist',
+                      ),
+                      prefixIcon: Container(
+                        height: scrWidth * 0.045,
+                        width: 10,
+                        padding: EdgeInsets.all(scrWidth * 0.033),
+                        child: SvgPicture.asset(
+                          'assets/icons/storename.svg',
+                          fit: BoxFit.contain,
+                          color: Color(0xffB0B0B0),
+                        ),
+                      ),
+                      fillColor: textFormFieldFillColor,
+                      filled: true,
+                      contentPadding:
+                          EdgeInsets.only(top: 5, bottom: scrWidth * 0.033),
+                      disabledBorder: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                      border: InputBorder.none,
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: primarycolor,
+                          width: 2,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: scrHeight * 0.02,
+                ),
+                // Container(
+                //   width: scrWidth * 0.9,
+                //   height: textFormFieldHeight45,
+                //   decoration: BoxDecoration(
+                //     color: textFormFieldFillColor,
+                //     borderRadius: BorderRadius.circular(scrWidth * 0.033),
+                //   ),
+                //
+                //   child: Row(
+                //     children: [
+                //       SizedBox(
+                //         width: scrWidth * 0.057,
+                //       ),
+                //       SvgPicture.asset(
+                //         'assets/icons/storecategory.svg',
+                //         // fit: BoxFit.contain,
+                //       ),
+                //       SizedBox(
+                //         width: scrWidth * 0.04,
+                //       ),
+                //       DropdownButtonHideUnderline(
+                //         child: DropdownButton2(
+                //           isExpanded: true,
+                //           hint: Text(
+                //             "Store Category",
+                //             style: TextStyle(
+                //                 fontSize: FontSize15,
+                //                 fontFamily: 'Urbanist',
+                //                 fontWeight: FontWeight.w600,
+                //                 color: Color(0xffB0B0B0)),
+                //           ),
+                //           items: categoryList
+                //               .map((item) => DropdownMenuItem<String>(
+                //                     value: item,
+                //                     child: Text(
+                //                       item.toString(),
+                //                       // overflow: TextOverflow.ellipsis,
+                //                       style: TextStyle(
+                //                           fontWeight: FontWeight.w600,
+                //                           fontSize: 14,
+                //                           fontFamily: 'Urbanist'),
+                //                     ),
+                //                   ))
+                //               .toList(),
+                //           value: selectedValue,
+                //           onChanged: (value) {
+                //             setState(() {
+                //               selectedValue = value as String;
+                //
+                //             });
+                //           },
+                //           icon:  Icon(
+                //             Icons.arrow_drop_down,
+                //           ),
+                //           iconSize: 18,
+                //           iconEnabledColor: Colors.black,
+                //           iconDisabledColor: Colors.blue,
+                //           buttonHeight: 50,
+                //           buttonWidth: 247,
+                //           // buttonPadding: const EdgeInsets.only(),
+                //           buttonDecoration: BoxDecoration(
+                //             borderRadius: BorderRadius.circular(14),
+                //             color: textFormFieldFillColor,
+                //           ),
+                //           // buttonElevation: 2,
+                //           itemHeight: 40,
+                //           itemPadding: const EdgeInsets.only(),
+                //           dropdownMaxHeight: 260,
+                //           dropdownWidth: 300,
+                //           dropdownPadding: EdgeInsets.only(
+                //               left: 30, top: 15, bottom: 25, right: 30),
+                //           dropdownDecoration: BoxDecoration(
+                //             borderRadius: BorderRadius.circular(8),
+                //             color: Colors.white,
+                //           ),
+                //           dropdownElevation: 0,
+                //           scrollbarRadius: Radius.circular(10),
+                //           scrollbarThickness: 3,
+                //           scrollbarAlwaysShow: true,
+                //           offset: const Offset(-20, 0),
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                Container(
+                  width: scrWidth*27,
+                  decoration: BoxDecoration(
+                      color: textFormFieldFillColor,
+                      borderRadius: BorderRadius.circular(scrWidth * 0.026)),
+                  child: GFMultiSelect(
+                    items: categoryList,
+                    onSelect: (value) {
+                      selectedValue=value.toString();
+                      selectCategory=[];
+                      for(int i=0;i<value.length;i++){
+                        selectCategory.add(categoryList[value[i]].toString());
+                      }
+                      print('selected $value ');
+                      print(selectCategory);
+                    },
+
+                    dropdownTitleTileText: 'Store Category',
+                    // dropdownTitleTileHintText: 'Store Category',
+                    // dropdownTitleTileHintTextStyle: TextStyle(
+                    //  color: Color(0xffB0B0B0),
+                    //   fontWeight: FontWeight.w600,
+                    //   fontSize: FontSize15,
+                    //   fontFamily: 'Urbanist',
+                    //
+                    // ),
+                    dropdownTitleTileColor: textFormFieldFillColor,
+                     dropdownTitleTilePadding: EdgeInsets.only(left: 9),
+                    dropdownTitleTileMargin: EdgeInsets.only(
+                        top: 22, left: 18, right: 18, bottom: 14),
+                    //  dropdownTitleTilePadding: EdgeInsets.all(10),
+                    dropdownUnderlineBorder: const BorderSide(
+                        color: Colors.transparent, width: 2),
+                    // dropdownTitleTileBorder:
+                    // Border.all(color:Colors.red, width: 1),
+                    dropdownTitleTileBorderRadius: BorderRadius.circular(10),
+                    expandedIcon: const Icon(
+                      Icons.arrow_drop_down,
+                      color: Colors.black,
+                    ),
+                    collapsedIcon: const Icon(
+                      Icons.arrow_drop_up,
+                      color: Colors.black,
+                    ),
+                    submitButton: Text('OK'),
+
+                    dropdownTitleTileTextStyle:  TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                        fontFamily: 'Urbanist'),
+                    padding: const EdgeInsets.all(6),
+                    margin: const EdgeInsets.all(6),
+                    type: GFCheckboxType.square,
+                    activeBgColor: Colors.green.withOpacity(0.5),
+                    inactiveBorderColor:primarycolor,
+                  ),
+                ),
+                SizedBox(
+                  height: scrHeight * 0.02,
+                ),
+                Container(
+                  height: textFormFieldHeight45,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: scrWidth * 0.015,
+                    vertical: scrHeight * 0.002,
+                  ),
+                  decoration: BoxDecoration(
+                    color: textFormFieldFillColor,
+                    borderRadius: BorderRadius.circular(scrWidth * 0.026),
+                  ),
+                  child: TextFormField(
+                    keyboardType: TextInputType.number,
+                    controller: deliveryChargeController,
+                    focusNode: delivereyChargeFocus,
+                    cursorHeight: scrWidth * 0.055,
+                    cursorWidth: 1,
+                    cursorColor: Colors.black,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                      fontSize: FontSize15,
+                      fontFamily: 'Urbanist',
+                    ),
+                    decoration: InputDecoration(
+                      labelText: 'Delivery Charge',
+                      labelStyle: TextStyle(
+                        color: delivereyChargeFocus.hasFocus
+                            ? primarycolor
+                            : Color(0xffB0B0B0),
+                        fontWeight: FontWeight.w600,
+                        fontSize: FontSize15,
+                        fontFamily: 'Urbanist',
+                      ),
+                      prefixIcon: Container(
+                        height: scrWidth * 0.045,
+                        width: 10,
+                        padding: EdgeInsets.all(scrWidth * 0.033),
+                        child: SvgPicture.asset(
+                          'assets/icons/storename.svg',
+                          fit: BoxFit.contain,
+                          color: Color(0xffB0B0B0),
+                        ),
+                      ),
+                      fillColor: textFormFieldFillColor,
+                      filled: true,
+                      contentPadding:
+                          EdgeInsets.only(top: 5, bottom: scrWidth * 0.033),
+                      disabledBorder: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                      border: InputBorder.none,
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: primarycolor,
+                          width: 2,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: scrHeight * 0.02,
+                ),
+                Container(
+                  height: textFormFieldHeight45,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: scrWidth * 0.015,
+                    vertical: scrHeight * 0.002,
+                  ),
+                  decoration: BoxDecoration(
+                    color: textFormFieldFillColor,
+                    borderRadius: BorderRadius.circular(scrWidth * 0.026),
+                  ),
+                  child: TextFormField(
+                    controller: storeAddressController,
+                    focusNode: storeAddressFocus,
+                    cursorHeight: scrWidth * 0.055,
+                    cursorWidth: 1,
+                    cursorColor: Colors.black,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                      fontSize: FontSize15,
+                      fontFamily: 'Urbanist',
+                    ),
+                    decoration: InputDecoration(
+                      labelText: 'Store Address',
+                      labelStyle: TextStyle(
+                        color: storeAddressFocus.hasFocus
+                            ? primarycolor
+                            : Color(0xffB0B0B0),
+                        fontWeight: FontWeight.w600,
+                        fontSize: FontSize15,
+                        fontFamily: 'Urbanist',
+                      ),
+                      prefixIcon: Container(
+                        height: scrWidth * 0.045,
+                        width: 10,
+                        padding: EdgeInsets.all(scrWidth * 0.033),
+                        child: SvgPicture.asset(
+                          'assets/icons/storename.svg',
+                          fit: BoxFit.contain,
+                          color: Color(0xffB0B0B0),
+                        ),
+                      ),
+                      fillColor: textFormFieldFillColor,
+                      filled: true,
+                      contentPadding:
+                      EdgeInsets.only(top: 5, bottom: scrWidth * 0.033),
+                      disabledBorder: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                      border: InputBorder.none,
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: primarycolor,
+                          width: 2,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: scrHeight * 0.02,
+                ),
+                Row(
+                  children: [
+                    Container(
+                      width: scrWidth*0.88,
+                      height: textFormFieldHeight45,
+                      // padding: EdgeInsets.symmetric(
+                      //   horizontal: scrWidth * 0.015,
+                      //   vertical:scrHeight*0.002,
+                      // ),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Color(0xffDADADA),
+                        ),
+                        color: textFormFieldFillColor,
+                        borderRadius: BorderRadius.circular(scrWidth * 0.026),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Text('Location: '+serviceLocation.toString(),style: GoogleFonts.outfit(),)
+                              // Text('Lattitude:'+latitude!.text),
+                              // Text('Longitude:'+longitude!.text),
+                            ],
                           ),
 
-                        )
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: scrHeight * 0.03,
-              ),
-              Container(
-                height: textFormFieldHeight45,
-                padding: EdgeInsets.symmetric(
-                  horizontal: scrWidth * 0.015,
-                  vertical: scrHeight * 0.002,
-                ),
-                decoration: BoxDecoration(
-                  color: textFormFieldFillColor,
-                  borderRadius: BorderRadius.circular(scrWidth * 0.026),
-                ),
-                child: TextFormField(
-                  controller: storeNameController,
-                  focusNode: storeNameFocus,
-                  cursorHeight: scrWidth * 0.055,
-                  cursorWidth: 1,
-                  cursorColor: Colors.black,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600,
-                    fontSize: FontSize15,
-                    fontFamily: 'Urbanist',
-                  ),
-                  decoration: InputDecoration(
-                    labelText: 'Store Name',
-                    labelStyle: TextStyle(
-                      color: storeNameFocus.hasFocus
-                          ? primarycolor
-                          : Color(0xffB0B0B0),
-                      fontWeight: FontWeight.w600,
-                      fontSize: FontSize15,
-                      fontFamily: 'Urbanist',
-                    ),
-                    prefixIcon: Container(
-                      height: scrWidth * 0.045,
-                      width: 10,
-                      padding: EdgeInsets.all(scrWidth * 0.033),
-                      child: SvgPicture.asset(
-                        'assets/icons/storename.svg',
-                        fit: BoxFit.contain,
-                        color: Color(0xffB0B0B0),
-                      ),
-                    ),
-                    fillColor: textFormFieldFillColor,
-                    filled: true,
-                    contentPadding:
-                        EdgeInsets.only(top: 5, bottom: scrWidth * 0.033),
-                    disabledBorder: InputBorder.none,
-                    enabledBorder: InputBorder.none,
-                    errorBorder: InputBorder.none,
-                    border: InputBorder.none,
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                        color: primarycolor,
-                        width: 2,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: scrHeight * 0.02,
-              ),
-              // Container(
-              //   width: scrWidth * 0.9,
-              //   height: textFormFieldHeight45,
-              //   decoration: BoxDecoration(
-              //     color: textFormFieldFillColor,
-              //     borderRadius: BorderRadius.circular(scrWidth * 0.033),
-              //   ),
-              //
-              //   child: Row(
-              //     children: [
-              //       SizedBox(
-              //         width: scrWidth * 0.057,
-              //       ),
-              //       SvgPicture.asset(
-              //         'assets/icons/storecategory.svg',
-              //         // fit: BoxFit.contain,
-              //       ),
-              //       SizedBox(
-              //         width: scrWidth * 0.04,
-              //       ),
-              //       DropdownButtonHideUnderline(
-              //         child: DropdownButton2(
-              //           isExpanded: true,
-              //           hint: Text(
-              //             "Store Category",
-              //             style: TextStyle(
-              //                 fontSize: FontSize15,
-              //                 fontFamily: 'Urbanist',
-              //                 fontWeight: FontWeight.w600,
-              //                 color: Color(0xffB0B0B0)),
-              //           ),
-              //           items: categoryList
-              //               .map((item) => DropdownMenuItem<String>(
-              //                     value: item,
-              //                     child: Text(
-              //                       item.toString(),
-              //                       // overflow: TextOverflow.ellipsis,
-              //                       style: TextStyle(
-              //                           fontWeight: FontWeight.w600,
-              //                           fontSize: 14,
-              //                           fontFamily: 'Urbanist'),
-              //                     ),
-              //                   ))
-              //               .toList(),
-              //           value: selectedValue,
-              //           onChanged: (value) {
-              //             setState(() {
-              //               selectedValue = value as String;
-              //
-              //             });
-              //           },
-              //           icon:  Icon(
-              //             Icons.arrow_drop_down,
-              //           ),
-              //           iconSize: 18,
-              //           iconEnabledColor: Colors.black,
-              //           iconDisabledColor: Colors.blue,
-              //           buttonHeight: 50,
-              //           buttonWidth: 247,
-              //           // buttonPadding: const EdgeInsets.only(),
-              //           buttonDecoration: BoxDecoration(
-              //             borderRadius: BorderRadius.circular(14),
-              //             color: textFormFieldFillColor,
-              //           ),
-              //           // buttonElevation: 2,
-              //           itemHeight: 40,
-              //           itemPadding: const EdgeInsets.only(),
-              //           dropdownMaxHeight: 260,
-              //           dropdownWidth: 300,
-              //           dropdownPadding: EdgeInsets.only(
-              //               left: 30, top: 15, bottom: 25, right: 30),
-              //           dropdownDecoration: BoxDecoration(
-              //             borderRadius: BorderRadius.circular(8),
-              //             color: Colors.white,
-              //           ),
-              //           dropdownElevation: 0,
-              //           scrollbarRadius: Radius.circular(10),
-              //           scrollbarThickness: 3,
-              //           scrollbarAlwaysShow: true,
-              //           offset: const Offset(-20, 0),
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
-              Container(
-                width: scrWidth*27,
-                decoration: BoxDecoration(
-                    color: textFormFieldFillColor,
-                    borderRadius: BorderRadius.circular(scrWidth * 0.026)),
-                child: GFMultiSelect(
-                  items: categoryList,
-                  onSelect: (value) {
-                    selectedValue=value.toString();
-                    selectCategory=[];
-                    for(int i=0;i<value.length;i++){
-                      selectCategory.add(categoryList[value[i]].toString());
-                    }
-                    print('selected $value ');
-                    print(selectCategory);
-                  },
+                          InkWell(
+                              onTap: ()  async {
+                                Position location = await Geolocator.getCurrentPosition(
+                                    desiredAccuracy: LocationAccuracy.high
+                                );
 
-                  dropdownTitleTileText: 'Store Category',
-                  // dropdownTitleTileHintText: 'Store Category',
-                  // dropdownTitleTileHintTextStyle: TextStyle(
-                  //  color: Color(0xffB0B0B0),
-                  //   fontWeight: FontWeight.w600,
-                  //   fontSize: FontSize15,
-                  //   fontFamily: 'Urbanist',
-                  //
-                  // ),
-                  dropdownTitleTileColor: textFormFieldFillColor,
-                   dropdownTitleTilePadding: EdgeInsets.only(left: 9),
-                  dropdownTitleTileMargin: EdgeInsets.only(
-                      top: 22, left: 18, right: 18, bottom: 14),
-                  //  dropdownTitleTilePadding: EdgeInsets.all(10),
-                  dropdownUnderlineBorder: const BorderSide(
-                      color: Colors.transparent, width: 2),
-                  // dropdownTitleTileBorder:
-                  // Border.all(color:Colors.red, width: 1),
-                  dropdownTitleTileBorderRadius: BorderRadius.circular(10),
-                  expandedIcon: const Icon(
-                    Icons.arrow_drop_down,
-                    color: Colors.black,
-                  ),
-                  collapsedIcon: const Icon(
-                    Icons.arrow_drop_up,
-                    color: Colors.black,
-                  ),
-                  submitButton: Text('OK'),
-
-                  dropdownTitleTileTextStyle:  TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 14,
-                      fontFamily: 'Urbanist'),
-                  padding: const EdgeInsets.all(6),
-                  margin: const EdgeInsets.all(6),
-                  type: GFCheckboxType.square,
-                  activeBgColor: Colors.green.withOpacity(0.5),
-                  inactiveBorderColor:primarycolor,
-                ),
-              ),
-              SizedBox(
-                height: scrHeight * 0.02,
-              ),
-              Container(
-                height: textFormFieldHeight45,
-                padding: EdgeInsets.symmetric(
-                  horizontal: scrWidth * 0.015,
-                  vertical: scrHeight * 0.002,
-                ),
-                decoration: BoxDecoration(
-                  color: textFormFieldFillColor,
-                  borderRadius: BorderRadius.circular(scrWidth * 0.026),
-                ),
-                child: TextFormField(
-                  keyboardType: TextInputType.number,
-                  controller: deliveryChargeController,
-                  focusNode: delivereyChargeFocus,
-                  cursorHeight: scrWidth * 0.055,
-                  cursorWidth: 1,
-                  cursorColor: Colors.black,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600,
-                    fontSize: FontSize15,
-                    fontFamily: 'Urbanist',
-                  ),
-                  decoration: InputDecoration(
-                    labelText: 'Delivery Charge',
-                    labelStyle: TextStyle(
-                      color: delivereyChargeFocus.hasFocus
-                          ? primarycolor
-                          : Color(0xffB0B0B0),
-                      fontWeight: FontWeight.w600,
-                      fontSize: FontSize15,
-                      fontFamily: 'Urbanist',
-                    ),
-                    prefixIcon: Container(
-                      height: scrWidth * 0.045,
-                      width: 10,
-                      padding: EdgeInsets.all(scrWidth * 0.033),
-                      child: SvgPicture.asset(
-                        'assets/icons/storename.svg',
-                        fit: BoxFit.contain,
-                        color: Color(0xffB0B0B0),
-                      ),
-                    ),
-                    fillColor: textFormFieldFillColor,
-                    filled: true,
-                    contentPadding:
-                        EdgeInsets.only(top: 5, bottom: scrWidth * 0.033),
-                    disabledBorder: InputBorder.none,
-                    enabledBorder: InputBorder.none,
-                    errorBorder: InputBorder.none,
-                    border: InputBorder.none,
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                        color: primarycolor,
-                        width: 2,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: scrHeight * 0.02,
-              ),
-              Container(
-                height: textFormFieldHeight45,
-                padding: EdgeInsets.symmetric(
-                  horizontal: scrWidth * 0.015,
-                  vertical: scrHeight * 0.002,
-                ),
-                decoration: BoxDecoration(
-                  color: textFormFieldFillColor,
-                  borderRadius: BorderRadius.circular(scrWidth * 0.026),
-                ),
-                child: TextFormField(
-                  controller: storeAddressController,
-                  focusNode: storeAddressFocus,
-                  cursorHeight: scrWidth * 0.055,
-                  cursorWidth: 1,
-                  cursorColor: Colors.black,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600,
-                    fontSize: FontSize15,
-                    fontFamily: 'Urbanist',
-                  ),
-                  decoration: InputDecoration(
-                    labelText: 'Store Address',
-                    labelStyle: TextStyle(
-                      color: storeAddressFocus.hasFocus
-                          ? primarycolor
-                          : Color(0xffB0B0B0),
-                      fontWeight: FontWeight.w600,
-                      fontSize: FontSize15,
-                      fontFamily: 'Urbanist',
-                    ),
-                    prefixIcon: Container(
-                      height: scrWidth * 0.045,
-                      width: 10,
-                      padding: EdgeInsets.all(scrWidth * 0.033),
-                      child: SvgPicture.asset(
-                        'assets/icons/storename.svg',
-                        fit: BoxFit.contain,
-                        color: Color(0xffB0B0B0),
-                      ),
-                    ),
-                    fillColor: textFormFieldFillColor,
-                    filled: true,
-                    contentPadding:
-                    EdgeInsets.only(top: 5, bottom: scrWidth * 0.033),
-                    disabledBorder: InputBorder.none,
-                    enabledBorder: InputBorder.none,
-                    errorBorder: InputBorder.none,
-                    border: InputBorder.none,
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                        color: primarycolor,
-                        width: 2,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: scrHeight * 0.02,
-              ),
-              Row(
-                children: [
-                  Container(
-                    width: scrWidth*0.88,
-                    height: textFormFieldHeight45,
-                    // padding: EdgeInsets.symmetric(
-                    //   horizontal: scrWidth * 0.015,
-                    //   vertical:scrHeight*0.002,
-                    // ),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Color(0xffDADADA),
-                      ),
-                      color: textFormFieldFillColor,
-                      borderRadius: BorderRadius.circular(scrWidth * 0.026),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Text('Location: '+serviceLocation.toString(),style: GoogleFonts.outfit(),)
-                            // Text('Lattitude:'+latitude!.text),
-                            // Text('Longitude:'+longitude!.text),
-                          ],
-                        ),
-
-                        InkWell(
-                            onTap: ()  async {
-                              Position location = await Geolocator.getCurrentPosition(
-                                  desiredAccuracy: LocationAccuracy.high
-                              );
-
-                              await   Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      gMapPlacePicker.PlacePicker(
-                                        apiKey: "AIzaSyCUZFUZ1yMpkzh6QUnKj54Q2N4L2iT4tBY",
-                                        initialPosition: gMap.LatLng(
-                                            location.latitude,location.longitude
+                                await   Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        gMapPlacePicker.PlacePicker(
+                                          apiKey: "AIzaSyCUZFUZ1yMpkzh6QUnKj54Q2N4L2iT4tBY",
+                                          initialPosition: gMap.LatLng(
+                                              location.latitude,location.longitude
+                                          ),
+                                          // Put YOUR OWN KEY here.
+                                          searchForInitialValue: false,
+                                          selectInitialPosition: true,
+                                          // initialPosition: LatLng(currentLoc==null?0:currentLoc!.latitude,currentLoc==null?0:currentLoc!.longitude),
+                                          onPlacePicked: (res) async {
+                                            Navigator.of(context).pop();
+                                            // GeoCode geoCode = GeoCode();
+                                            // Address address=await geoCode.reverseGeocoding(latitude: res.geometry!.location.lat,longitude: res.geometry!.location.lng);
+                                            result=res;
+                                            latitude!.text=res.geometry!.location.lat.toString();
+                                            longitude!.text=res.geometry!.location.lng.toString();
+                                            List<Placemark> placemarks = await placemarkFromCoordinates(
+                                                res.geometry!.location.lat, res.geometry!.location.lng);
+                                            Placemark place = placemarks[0];
+                                            serviceLocation = place.locality!;
+                                            // longitude!.text=res.geometry!.location.lng.toString();
+                                            // lat=result.geometry!.location.lat;
+                                            // long=result.geometry!.location.lng;
+                                            set();
+                                          },
+                                          useCurrentLocation: true,
                                         ),
-                                        // Put YOUR OWN KEY here.
-                                        searchForInitialValue: false,
-                                        selectInitialPosition: true,
-                                        // initialPosition: LatLng(currentLoc==null?0:currentLoc!.latitude,currentLoc==null?0:currentLoc!.longitude),
-                                        onPlacePicked: (res) async {
-                                          Navigator.of(context).pop();
-                                          // GeoCode geoCode = GeoCode();
-                                          // Address address=await geoCode.reverseGeocoding(latitude: res.geometry!.location.lat,longitude: res.geometry!.location.lng);
-                                          result=res;
-                                          latitude!.text=res.geometry!.location.lat.toString();
-                                          longitude!.text=res.geometry!.location.lng.toString();
-                                          List<Placemark> placemarks = await placemarkFromCoordinates(
-                                              res.geometry!.location.lat, res.geometry!.location.lng);
-                                          Placemark place = placemarks[0];
-                                          serviceLocation = place.locality!;
-                                          // longitude!.text=res.geometry!.location.lng.toString();
-                                          // lat=result.geometry!.location.lat;
-                                          // long=result.geometry!.location.lng;
-                                          set();
-                                        },
-                                        useCurrentLocation: true,
-                                      ),
-                                ),
-                              );
-                            },
-                            child: Icon(Icons.location_on,color: Colors.red,size: 30,)),
+                                  ),
+                                );
+                              },
+                              child: Icon(Icons.location_on,color: Colors.red,size: 30,)),
 
-                      ],
-                    ),
-                  ),
-
-                ],
-              ),
-              SizedBox(
-                height: scrHeight * 0.25,
-              ),
-              // trackedlocation == false
-              //     ? Container(
-              //         height: textFormFieldHeight45,
-              //         width: scrWidth,
-              //         decoration: BoxDecoration(
-              //             color: primarycolor,
-              //             borderRadius: BorderRadius.circular(8)),
-              //         child: Row(
-              //           mainAxisAlignment: MainAxisAlignment.center,
-              //           children: [
-              //             SvgPicture.asset("assets/icons/crtlocation.svg"),
-              //             SizedBox(
-              //               width: scrWidth * 0.03,
-              //             ),
-              //             Text(
-              //               "Set Store Location",
-              //               style: TextStyle(
-              //                   color: Colors.white,
-              //                   fontFamily: 'Urbanist',
-              //                   fontSize: 16,
-              //                   fontWeight: FontWeight.w600),
-              //             ),
-              //           ],
-              //         ),
-              //       )
-              //     : Padding(
-              //         padding: EdgeInsets.only(right: scrWidth * 0.2),
-              //         child: Column(
-              //           crossAxisAlignment: CrossAxisAlignment.start,
-              //           children: [
-              //             SizedBox(
-              //               height: scrHeight * 0.003,
-              //             ),
-              //             Text(
-              //               "Tracked location",
-              //               style: TextStyle(
-              //                   color: Color(0xffB0B0B0),
-              //                   fontFamily: 'Urbanist',
-              //                   fontSize: 14,
-              //                   fontWeight: FontWeight.w600),
-              //             ),
-              //             SizedBox(
-              //               height: scrHeight * 0.008,
-              //             ),
-              //             Text(
-              //               "Angadippuram, Perintalmanna",
-              //               style: TextStyle(
-              //                   color: Color(0xff232323),
-              //                   fontFamily: 'Urbanist',
-              //                   fontSize: 16,
-              //                   fontWeight: FontWeight.w600),
-              //             ),
-              //           ],
-              //         ),
-              //       ),
-
-
-              finish
-                  ? Container(
-                      height: textFormFieldHeight45,
-                      width: scrWidth,
-                      decoration: BoxDecoration(
-                          color: Color.fromRGBO(0, 128, 54, 0.33),
-                          borderRadius: BorderRadius.circular(21.5)),
-                      child: Center(
-                        child: Text(
-                          "Finish",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'Urbanist',
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700),
-                        ),
+                        ],
                       ),
-                    )
-                  : GestureDetector(
-                      onTap: () async {
-                        setState(() {
-                          loading=true;
-                        });
-                        if(imgFile==null){
-                          refreshPage();
-                          return showSnackbar(context,"Must Provide  image");
-                        }
-                        if(storeNameController.text.isEmpty){
-                          refreshPage();
-                          return showSnackbar(context,"Must Provide StoreName");
-                        }
-                        if(selectCategory.isEmpty){
-                          refreshPage();
-                          return showSnackbar(context,"Must select category");
-                        }
-                        if(storeAddressController.text.isEmpty){
-                          refreshPage();
-                          return showSnackbar(context,"Must Provide StoreAddress");
-                        }else{
-                          GeoFirePoint myLocation = geo.point(latitude:double.tryParse(latitude!.text)??0, longitude: double.tryParse(longitude!.text)??0);
+                    ),
 
-                          // List<String> ids=[];
-                          // for(var item in selectCategory){
-                          //   ids.add(categoryListAll[item]);
-                          // }
-                          // print(ids);
-                          final strDat = StoreDetailsModel(
-                            storeImage: imgUrl,
-                            latitude: lat,
-                            longitude:long ,
-                            deliveryCharge: double.tryParse(deliveryChargeController.text),
-                            // categoryId:,
-                            userId: currentuserid,
-                            storeName: storeNameController.text,
-                            storeCategory: selectCategory,
-                            storeAddress: storeAddressController.text,
-                            storeLocation: "ncsunuscns",
-                            position: myLocation.data
+                  ],
+                ),
+                SizedBox(
+                  height: scrHeight * 0.25,
+                ),
+                // trackedlocation == false
+                //     ? Container(
+                //         height: textFormFieldHeight45,
+                //         width: scrWidth,
+                //         decoration: BoxDecoration(
+                //             color: primarycolor,
+                //             borderRadius: BorderRadius.circular(8)),
+                //         child: Row(
+                //           mainAxisAlignment: MainAxisAlignment.center,
+                //           children: [
+                //             SvgPicture.asset("assets/icons/crtlocation.svg"),
+                //             SizedBox(
+                //               width: scrWidth * 0.03,
+                //             ),
+                //             Text(
+                //               "Set Store Location",
+                //               style: TextStyle(
+                //                   color: Colors.white,
+                //                   fontFamily: 'Urbanist',
+                //                   fontSize: 16,
+                //                   fontWeight: FontWeight.w600),
+                //             ),
+                //           ],
+                //         ),
+                //       )
+                //     : Padding(
+                //         padding: EdgeInsets.only(right: scrWidth * 0.2),
+                //         child: Column(
+                //           crossAxisAlignment: CrossAxisAlignment.start,
+                //           children: [
+                //             SizedBox(
+                //               height: scrHeight * 0.003,
+                //             ),
+                //             Text(
+                //               "Tracked location",
+                //               style: TextStyle(
+                //                   color: Color(0xffB0B0B0),
+                //                   fontFamily: 'Urbanist',
+                //                   fontSize: 14,
+                //                   fontWeight: FontWeight.w600),
+                //             ),
+                //             SizedBox(
+                //               height: scrHeight * 0.008,
+                //             ),
+                //             Text(
+                //               "Angadippuram, Perintalmanna",
+                //               style: TextStyle(
+                //                   color: Color(0xff232323),
+                //                   fontFamily: 'Urbanist',
+                //                   fontSize: 16,
+                //                   fontWeight: FontWeight.w600),
+                //             ),
+                //           ],
+                //         ),
+                //       ),
 
-                          );
-                          await createStore(strDat);
-                        }
-                        print("---------------------------------------------------------");
-                        print(imgUrl);
-                        print("---------------------------------------------------------");
-                        // print('eferjnferngirjtgurj${strDat.storeId}');
-                        
-                        },
-                      child: Container(
+
+                finish
+                    ? Container(
                         height: textFormFieldHeight45,
                         width: scrWidth,
                         decoration: BoxDecoration(
-                            color: primarycolor,
+                            color: Color.fromRGBO(0, 128, 54, 0.33),
                             borderRadius: BorderRadius.circular(21.5)),
                         child: Center(
                           child: Text(
@@ -793,9 +731,78 @@ class _StoreDetailsState extends State<StoreDetails> {
                                 fontWeight: FontWeight.w700),
                           ),
                         ),
+                      )
+                    : GestureDetector(
+                        onTap: () async {
+                          setState(() {
+                            loading=true;
+                          });
+                          if(imgFile==null){
+                            refreshPage();
+                            return showSnackbar(context,"Must Provide  image");
+                          }
+                          if(storeNameController.text.isEmpty){
+                            refreshPage();
+                            return showSnackbar(context,"Must Provide StoreName");
+                          }
+                          if(selectCategory.isEmpty){
+                            refreshPage();
+                            return showSnackbar(context,"Must select category");
+                          }
+                          if(storeAddressController.text.isEmpty){
+                            refreshPage();
+                            return showSnackbar(context,"Must Provide StoreAddress");
+                          }else{
+                            GeoFirePoint myLocation = geo.point(latitude:double.tryParse(latitude!.text)??0, longitude: double.tryParse(longitude!.text)??0);
+
+                            // List<String> ids=[];
+                            // for(var item in selectCategory){
+                            //   ids.add(categoryListAll[item]);
+                            // }
+                            // print(ids);
+                            final strDat = StoreDetailsModel(
+                              online:false,
+                              storeImage: imgUrl,
+                              latitude: lat,
+                              longitude:long ,
+                              deliveryCharge: double.tryParse(deliveryChargeController.text),
+                              // categoryId:,
+                              userId: currentuserid,
+                              storeName: storeNameController.text,
+                              storeCategory: selectCategory,
+                              storeAddress: storeAddressController.text,
+                              storeLocation: "ncsunuscns",
+                              position: myLocation.data
+
+                            );
+                            await createStore(strDat);
+                          }
+                          print("---------------------------------------------------------");
+                          print(imgUrl);
+                          print("---------------------------------------------------------");
+                          // print('eferjnferngirjtgurj${strDat.storeId}');
+
+                          },
+                        child: Container(
+                          height: textFormFieldHeight45,
+                          width: scrWidth,
+                          decoration: BoxDecoration(
+                              color: primarycolor,
+                              borderRadius: BorderRadius.circular(21.5)),
+                          child: Center(
+                            child: Text(
+                              "Finish",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Urbanist',
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

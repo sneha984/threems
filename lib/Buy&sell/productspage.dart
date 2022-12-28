@@ -160,7 +160,8 @@ class _ProductsPageState extends State<ProductsPage> {
                           onTap: (){
                             Navigator.pop(context);
                           },
-                            child: SvgPicture.asset('assets/icons/back.svg',color: Colors.white,)),
+                            child: Container(
+                                width:20,height:20,child: SvgPicture.asset('assets/icons/back.svg',color: Colors.white,))),
                         SizedBox(
                           width: scrWidth * 0.039,
                         ),
@@ -293,6 +294,7 @@ class _ProductsPageState extends State<ProductsPage> {
                                               child: InkWell(
                                                 onTap: (){
                                                   // print(prodct!.productName);
+                                                  Navigator.pop(context);
                                                   Navigator.push(context, MaterialPageRoute
                                                     (builder: (context)=>ProductEditPage(storeId: widget.storeId,
                                                     productModel: getAllProducts[index],update: true,)));
@@ -324,7 +326,8 @@ class _ProductsPageState extends State<ProductsPage> {
                                                     .collection('stores')
                                                     .doc(widget.storeId)
                                                     .collection('products')
-                                                    .doc(getAllProducts[index]['productId']).delete();
+                                                    .doc(getAllProducts[index]['productId'])
+                                                    .delete().whenComplete(() => Navigator.pop(context));
                                               },
                                               child: Container(
                                                 height: 50,width: 100,

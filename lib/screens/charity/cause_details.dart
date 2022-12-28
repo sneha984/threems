@@ -21,6 +21,8 @@ class CauseDetails extends StatefulWidget {
 }
 
 class _CauseDetailsState extends State<CauseDetails> {
+  final _formKey = GlobalKey<FormState>();
+
   final FocusNode valueAmountFocus = FocusNode();
   final FocusNode nameFocus = FocusNode();
   final FocusNode locationFocus = FocusNode();
@@ -232,6 +234,12 @@ class _CauseDetailsState extends State<CauseDetails> {
                         fontWeight: FontWeight.w500,
                         color: Color(0xff8391A1)),
                   ),
+                  Form(
+                    key: _formKey,
+                      autovalidateMode:AutovalidateMode.always,
+                      child: Column(children: [
+
+                  ],)),
                   Container(
                     width: scrWidth * 0.63,
                     height: textFormFieldHeight45,
@@ -482,6 +490,7 @@ class _CauseDetailsState extends State<CauseDetails> {
                 ),
                 child: TextFormField(
                   keyboardType: TextInputType.number,
+                  validator: validateMobile,
 
                   controller: phonenumbercontroller,
                   focusNode: phoneNumeberFocus,
@@ -696,5 +705,16 @@ class _CauseDetailsState extends State<CauseDetails> {
         ),
       ),
     );
+  }
+  String? validateMobile(String? value) {
+    String patttern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
+    RegExp regExp = new RegExp(patttern);
+    if (value?.length == 0) {
+      return 'Please enter mobile number';
+    }
+    else if (!regExp.hasMatch(value!)) {
+      return 'Please enter valid mobile number';
+    }
+    return null;
   }
 }

@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:threems/model/OrderModel.dart';
 
 import '../screens/splash_screen.dart';
+import '../utils/themes.dart';
 
 class MyOrdersDetailsPage extends StatefulWidget {
   final OrderModel orderModel;
@@ -18,6 +19,7 @@ class MyOrdersDetailsPage extends StatefulWidget {
 }
 
 class _MyOrdersDetailsPageState extends State<MyOrdersDetailsPage> {
+  final TextEditingController _reasonController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,9 +95,6 @@ class _MyOrdersDetailsPageState extends State<MyOrdersDetailsPage> {
                               fontWeight: FontWeight.w600),
                         ),
                         SizedBox(width: 10,),
-
-
-
                         Text(
                             widget.orderModel.time!.day ==
                                 DateTime.now().day
@@ -610,11 +609,10 @@ class _MyOrdersDetailsPageState extends State<MyOrdersDetailsPage> {
             widget.orderModel.status!>0?
                 SizedBox():
             InkWell(
-              onTap: (){
-                FirebaseFirestore.instance.collection('stores').doc(widget.orderModel.storeId).collection('orders').doc(widget.orderModel.orderId).update({
-                  'status':3
-                });
-              },
+              onTap: ()async{
+                await pay();
+                Navigator.pop(context);
+                },
               child: Text(
                 "Cancel Order",
                 textAlign: TextAlign.center,
@@ -631,6 +629,125 @@ class _MyOrdersDetailsPageState extends State<MyOrdersDetailsPage> {
         ),
       ),
 
+    );
+  }
+   pay() {
+    showDialog(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (BuildContext context, setState) {
+          // payableAmountNode.addListener(() {
+          //   setState(() {});
+          // });
+          return AlertDialog(
+            shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+            title: Text("Enter Reason"),
+            titleTextStyle: TextStyle(
+                fontSize:17,
+                fontFamily: 'Urbanist',
+                fontWeight: FontWeight.w600,
+                color: Colors.black),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: scrWidth,
+                  height: textFormFieldHeight45,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: scrWidth * 0.015,
+                    vertical: 2,
+                  ),
+                  decoration: BoxDecoration(
+                    color: textFormFieldFillColor,
+                    borderRadius: BorderRadius.circular(scrWidth * 0.03),
+                  ),
+                  child: TextFormField(
+                    // focusNode: ,
+                    controller: _reasonController,
+                    cursorHeight: scrWidth * 0.055,
+                    cursorWidth: 1,
+                    cursorColor: Colors.black,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                      fontSize: FontSize15,
+                      fontFamily: 'Urbanist',
+                    ),
+                    decoration: InputDecoration(
+                      labelText: 'Enter Reason',
+                      labelStyle: TextStyle(
+                        // color: productCategoryName.hasFocus
+                        //     ? primarycolor
+                        //     : textFormUnFocusColor,
+                        fontWeight: FontWeight.w600,
+                        fontSize: FontSize15,
+                        fontFamily: 'Urbanist',
+                      ),
+                      fillColor: textFormFieldFillColor,
+                      filled: true,
+                      contentPadding: EdgeInsets.only(
+                          top: 5,
+                          bottom: scrWidth * 0.033,
+                          left: scrWidth * 0.033),
+                      disabledBorder: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                      border: InputBorder.none,
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: primarycolor,
+                          width: 2,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: scrWidth * 0.03,
+                ),
+
+                InkWell(
+                  onTap: () {
+                    FirebaseFirestore
+                        .instance
+                        .collection('stores')
+                        .doc(widget.orderModel.storeId)
+                        .collection('orders')
+                        .doc(widget.orderModel.orderId)
+                        .update({
+                      'status':3
+                    });
+
+                    Navigator.pop(context);
+                    // _showToast(context);
+                  },
+                  child: Container(
+                    width: scrWidth,
+                    height: textFormFieldHeight45,
+                    decoration: BoxDecoration(
+                        color: primarycolor,
+                        borderRadius: BorderRadius.circular(12)),
+                    child: Center(
+                      child: GestureDetector(
+
+                        child: Text(
+                          "Cancel Order",
+                          style: TextStyle(
+                              fontSize: FontSize16,
+                              fontFamily: 'Urbanist',
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 }

@@ -894,12 +894,42 @@ class _AcceptedPageState extends State<AcceptedPage> {
                 ),
                 InkWell(
                   onTap: () {
-                    FirebaseFirestore.instance
-                        .collection('stores')
-                        .doc(widget.orderMdl.storeId)
-                        .collection('orders')
-                        .doc(widget.orderMdl.orderId)
-                        .update({'status': 3});
+                    showDialog(
+                      context: context,
+                      builder: (ctx) => AlertDialog(
+                        content: const Text("Do You Want to Cancel this order?"),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(ctx).pop();
+                            },
+                            child: const Text("No"),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                              FirebaseFirestore.instance
+                                  .collection('stores')
+                                  .doc(widget.orderMdl.storeId)
+                                  .collection('orders')
+                                  .doc(widget.orderMdl.orderId)
+                                  .update({'status': 3});
+                              Navigator.pop(context);
+                            },
+                            child: const Text(
+                              "Yes",
+                              style: TextStyle(color: primarycolor),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                    // FirebaseFirestore.instance
+                    //     .collection('stores')
+                    //     .doc(widget.orderMdl.storeId)
+                    //     .collection('orders')
+                    //     .doc(widget.orderMdl.orderId)
+                    //     .update({'status': 3});
                   },
                   child: Text(
                     "Reject Order",

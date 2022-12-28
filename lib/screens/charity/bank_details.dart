@@ -1,6 +1,7 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -37,6 +38,33 @@ class _CreateCharity3State extends State<CreateCharity3> {
   final  TextEditingController banknamecontroller =TextEditingController();
   final  TextEditingController ifsccodecontroller =TextEditingController();
   final  TextEditingController youtubelinkcontroller=TextEditingController();
+  // String? imgUrl;
+  // var imgFile;
+  // var uploadTask;
+  // var fileUrl;
+  // var docUrl;
+  // var uploadTasks;
+  // Future uploadImageToFirebase(BuildContext context) async {
+  //   Reference firebaseStorageRef =
+  //   FirebaseStorage.instance.ref().child('upload/${imgFile.path}');
+  //   UploadTask uploadTask = firebaseStorageRef.putFile(imgFile);
+  //   TaskSnapshot taskSnapshot = (await uploadTask);
+  //   String value = await taskSnapshot.ref.getDownloadURL();
+  //
+  //
+  //   setState(() {
+  //     imgUrl = value;
+  //
+  //   });
+  // }
+  // _pickImage() async {
+  //   final imageFile = await ImagePicker.platform.pickImage(
+  //       source: ImageSource.gallery);
+  //   setState(() {
+  //     imgFile = File(imageFile!.path);
+  //     uploadImageToFirebase(context);
+  //   });
+  // }
   String? imgUrl;
   var imgFile;
   var uploadTask;
@@ -45,7 +73,7 @@ class _CreateCharity3State extends State<CreateCharity3> {
   var uploadTasks;
   Future uploadImageToFirebase(BuildContext context) async {
     Reference firebaseStorageRef =
-    FirebaseStorage.instance.ref().child('upload/${imgFile.path}');
+    FirebaseStorage.instance.ref().child('deposits/${imgFile.path}');
     UploadTask uploadTask = firebaseStorageRef.putFile(imgFile);
     TaskSnapshot taskSnapshot = (await uploadTask);
     String value = await taskSnapshot.ref.getDownloadURL();
@@ -54,11 +82,14 @@ class _CreateCharity3State extends State<CreateCharity3> {
     //   imageList.add(value);
     // }
     setState(() {
+      loading=false;
       imgUrl = value;
 
     });
   }
   _pickImage() async {
+    loading=true;
+
     final imageFile = await ImagePicker.platform.pickImage(
         source: ImageSource.gallery);
     setState(() {
@@ -146,7 +177,7 @@ class _CreateCharity3State extends State<CreateCharity3> {
           ),
         ),
       ),
-      body: Padding(
+      body:  loading?Center(child: CircularProgressIndicator(),):Padding(
         padding: EdgeInsets.only(
           left: padding15, right: padding15, top: scrWidth * 0.025,
           // vertical: scrWidth * 0.05,
@@ -429,6 +460,8 @@ class _CreateCharity3State extends State<CreateCharity3> {
                         borderRadius: BorderRadius.circular(scrWidth * 0.026),
                       ),
                       child: TextFormField(
+                        inputFormatters: [UpperCaseTextFormatter()],
+                        textCapitalization: TextCapitalization.characters,
                         controller: ifsccodecontroller,
                         focusNode: ifscCodeFocus,
                         cursorHeight: scrWidth * 0.055,
@@ -471,46 +504,97 @@ class _CreateCharity3State extends State<CreateCharity3> {
                       height: scrWidth * 0.04,
                     ),
 
-                    Row(
-                      mainAxisAlignment:
-                      imgFile==null ?  MainAxisAlignment.start:MainAxisAlignment.end ,
-                      children: [
-                        Text(
-                          "Upload QR Photo",
-                          style: TextStyle(
-                            fontSize: FontSize15,
-                            fontFamily: 'Urbanist',
-                            fontWeight: FontWeight.w500,
-                            color: imgFile==null ? Color(0xff8391A1): primarycolor ,
-                          ),
-                        ),
-                        imgFile==null ?SizedBox(): SizedBox(width: scrWidth * 0.01)  ,
-                        imgFile ==null?  SizedBox(
-                          child: SvgPicture.asset(
-                            'assets/icons/uploaded.svg',
-                            color:Color(0xff8391A1) ,
-                          ),
-                        ):SizedBox(
-                          child: SvgPicture.asset(
-                            'assets/icons/uploaded.svg',
-                            color: primarycolor,
-                          ),
-                        )
-
-
-                      ],
-                    ),
+                    // Row(
+                    //   mainAxisAlignment:
+                    //   imgFile==null ?  MainAxisAlignment.start:MainAxisAlignment.end ,
+                    //   children: [
+                    //     Text(
+                    //       "Upload QR Photo",
+                    //       style: TextStyle(
+                    //         fontSize: FontSize15,
+                    //         fontFamily: 'Urbanist',
+                    //         fontWeight: FontWeight.w500,
+                    //         color: imgFile==null ? Color(0xff8391A1): primarycolor ,
+                    //       ),
+                    //     ),
+                    //     imgFile==null ?SizedBox(): SizedBox(width: scrWidth * 0.01)  ,
+                    //     imgFile ==null?  SizedBox(
+                    //       child: SvgPicture.asset(
+                    //         'assets/icons/uploaded.svg',
+                    //         color:Color(0xff8391A1) ,
+                    //       ),
+                    //     ):SizedBox(
+                    //       child: SvgPicture.asset(
+                    //         'assets/icons/uploaded.svg',
+                    //         color: primarycolor,
+                    //       ),
+                    //     )
+                    //
+                    //
+                    //   ],
+                    // ),
                     SizedBox(
                       height: scrWidth * 0.02,
                     ),
 
+                    // InkWell(
+                    //   onTap: (){
+                    //     _pickImage();
+                    //   },
+                    //   child: Container(
+                    //     height:scrHeight*0.25,
+                    //     width: scrWidth*06,
+                    //     decoration: BoxDecoration(
+                    //       color: Color(0xffF7F8F9),
+                    //       borderRadius: BorderRadius.circular(8),
+                    //       border: Border.all(
+                    //         color: Color(0xffDADADA),
+                    //       ),
+                    //     ),
+                    //     child: Center(
+                    //         child: imgFile==null?Row(
+                    //           mainAxisAlignment: MainAxisAlignment.center,
+                    //           children: [
+                    //             SvgPicture.asset(
+                    //               'assets/icons/camera2.svg',
+                    //               color: Color(0xff8391A1),
+                    //             ),
+                    //             SizedBox(
+                    //               width: scrWidth * 0.04,
+                    //             ),
+                    //             Text(
+                    //               'Upload QR photo',
+                    //               style: TextStyle(
+                    //                 fontSize: FontSize15,
+                    //                 fontFamily: 'Urbanist',
+                    //                 fontWeight: FontWeight.w500,
+                    //                 color: Color(0xff8391A1),
+                    //               ),
+                    //             )
+                    //           ],
+                    //         ):Container(
+                    //           height:scrHeight*0.25,
+                    //           width: scrWidth*06,
+                    //           decoration: BoxDecoration(
+                    //             image: DecorationImage(
+                    //                 image: FileImage(imgFile!) as ImageProvider,fit: BoxFit.fill),
+                    //             borderRadius: BorderRadius.circular(8),
+                    //             border: Border.all(
+                    //               color: Color(0xffDADADA),
+                    //             ),
+                    //           ),
+                    //
+                    //         )
+                    //     ),
+                    //   ),
+                    // ),
                     InkWell(
                       onTap: (){
                         _pickImage();
                       },
                       child: Container(
-                        height:scrHeight*0.25,
-                        width: scrWidth*06,
+                        height:scrHeight*0.16,
+                        width: scrWidth*1,
                         decoration: BoxDecoration(
                           color: Color(0xffF7F8F9),
                           borderRadius: BorderRadius.circular(8),
@@ -530,7 +614,7 @@ class _CreateCharity3State extends State<CreateCharity3> {
                                   width: scrWidth * 0.04,
                                 ),
                                 Text(
-                                  'Upload QR photo',
+                                  'Upload Cover Photo',
                                   style: TextStyle(
                                     fontSize: FontSize15,
                                     fontFamily: 'Urbanist',
@@ -540,8 +624,8 @@ class _CreateCharity3State extends State<CreateCharity3> {
                                 )
                               ],
                             ):Container(
-                              height:scrHeight*0.25,
-                              width: scrWidth*06,
+                              height:scrHeight*0.16,
+                              width: scrWidth*1,
                               decoration: BoxDecoration(
                                 image: DecorationImage(
                                     image: FileImage(imgFile!) as ImageProvider,fit: BoxFit.fill),
@@ -634,4 +718,10 @@ class _CreateCharity3State extends State<CreateCharity3> {
     );
   }
 
+}
+class UpperCaseTextFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+    return TextEditingValue(text: newValue.text.toUpperCase(), selection: newValue.selection);
+  }
 }

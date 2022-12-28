@@ -101,8 +101,12 @@ class _CheckOutPageState extends State<CheckOutPage> {
                     top: scrHeight * 0.08,
                     // left: scrWidth * 0.07,
                   ),
-                  child: SvgPicture.asset(
-                    "assets/icons/arrow.svg",
+                  child: Container(
+                    width: 20,
+                    height: 20,
+                    child: SvgPicture.asset(
+                      "assets/icons/arrow.svg",
+                    ),
                   ),
                 ),
               ),
