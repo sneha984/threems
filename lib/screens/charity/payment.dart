@@ -531,7 +531,7 @@ class _PaymentPageState extends State<PaymentPage> {
                             width: scrWidth * 0.04,
                           ),
                           Text(
-                            'Upload  ScareenShort',
+                            'Upload  ScreenShort',
                             style: TextStyle(
                               fontSize: FontSize15,
                               fontFamily: 'Urbanist',

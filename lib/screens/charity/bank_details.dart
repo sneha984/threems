@@ -614,7 +614,7 @@ class _CreateCharity3State extends State<CreateCharity3> {
                                   width: scrWidth * 0.04,
                                 ),
                                 Text(
-                                  'Upload Cover Photo',
+                                  'Upload QR Photo',
                                   style: TextStyle(
                                     fontSize: FontSize15,
                                     fontFamily: 'Urbanist',
