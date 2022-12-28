@@ -8,6 +8,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:threems/screens/charity/cause_details.dart';
 
 import '../../kuri/createkuri.dart';
+import '../../model/charitymodel.dart';
 import '../../utils/themes.dart';
 import '../splash_screen.dart';
  List dropdownItemList = [];
@@ -15,7 +16,9 @@ import '../splash_screen.dart';
  List charityDetails=[];
  String? dropdownValue;
  class BasicDetails extends StatefulWidget {
-  const BasicDetails({super.key});
+   final CharityModel? char;
+   final bool update;
+  const BasicDetails({super.key,  this.char, required this.update});
 
   @override
   State<BasicDetails> createState() => _BasicDetailsState();
@@ -32,6 +35,7 @@ class _BasicDetailsState extends State<BasicDetails> {
    final TextEditingController charitynamecontroller =TextEditingController();
  final  TextEditingController emailcontroller =TextEditingController();
   final  TextEditingController phonecontroller =TextEditingController();
+
 
   // List dropdownItemList = [
   //   {
@@ -122,6 +126,11 @@ class _BasicDetailsState extends State<BasicDetails> {
     });
 
   }
+  // getBasicUpdate(){
+  //   if(widget.update!)
+  //
+  //
+  // }
   refreshPage() {
     setState(() {
       loading = false;

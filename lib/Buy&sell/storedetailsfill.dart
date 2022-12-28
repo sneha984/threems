@@ -655,7 +655,7 @@ class _StoreDetailsState extends State<StoreDetails> {
                   ],
                 ),
                 SizedBox(
-                  height: scrHeight * 0.25,
+                  height: scrHeight * 0.2,
                 ),
                 // trackedlocation == false
                 //     ? Container(

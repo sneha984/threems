@@ -137,11 +137,12 @@ class _StorePageState extends State<StorePage> {
         physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
-            SizedBox(
-              height: 10,
-            ),
+            // SizedBox(
+            //   height: 10,
+            // ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 SizedBox(
                   width: scrWidth * 0.06,
@@ -170,69 +171,72 @@ class _StorePageState extends State<StorePage> {
                 ),
                 Padding(
                   padding: EdgeInsets.only(
-                    top: scrHeight * 0.075,
+                    top: scrHeight * 0.087,
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.storeDetailsModel.storeName!,
-                        style: TextStyle(
-                            fontSize: scrWidth * 0.046,
-                            color: Colors.black,
-                            fontFamily: 'Urbanist',
-                            fontWeight: FontWeight.w600),
-                      ),
-                      SizedBox(
-                        height: scrHeight * 0.01,
-                      ),
-                      Text(
-                        widget.category,
-                        style: TextStyle(
-                            fontSize: scrWidth * 0.027,
-                            color: Color(0xff818181),
-                            fontFamily: 'Urbanist',
-                            fontWeight: FontWeight.w500),
-                      ),
-                      SizedBox(
-                        height: scrHeight * 0.002,
-                      ),
+                  child: Container(
+                    width: scrWidth*0.34,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.storeDetailsModel.storeName!,
+                          style: TextStyle(
+                              fontSize: scrWidth * 0.048,
+                              color: Colors.black,
+                              fontFamily: 'Urbanist',
+                              fontWeight: FontWeight.w600),
+                        ),
+                        SizedBox(
+                          height: scrHeight * 0.01,
+                        ),
+                        Text(
+                          widget.category,
+                          style: TextStyle(
+                              fontSize: scrWidth * 0.03,
+                              color: Color(0xff818181),
+                              fontFamily: 'Urbanist',
+                              fontWeight: FontWeight.w500),
+                        ),
+                        SizedBox(
+                          height: scrHeight * 0.002,
+                        ),
 
-                      Text(
-                        widget.storeDetailsModel.storeAddress!,
-                        style: TextStyle(
-                            fontSize: scrWidth * 0.027,
-                            color: const Color(0xff818181),
-                            fontFamily: 'Urbanist',
-                            fontWeight: FontWeight.w500),
-                      ),
-                      SizedBox(
-                        height: scrHeight * 0.002,
-                      ),
-                      Text(
-                        widget.storeDetailsModel.online!?'Available':'Closed',
-                        style: TextStyle(
-                            fontSize: scrWidth * 0.035,
-                            color: widget.storeDetailsModel.online!?primarycolor: Colors.red,
-                            fontFamily: 'Urbanist',
-                            fontWeight: FontWeight.w500),
-                      ),
+                        Text(
+                          widget.storeDetailsModel.storeAddress!,
+                          style: TextStyle(
+                              fontSize: scrWidth * 0.03,
+                              color: const Color(0xff818181),
+                              fontFamily: 'Urbanist',
+                              fontWeight: FontWeight.w500),
+                        ),
+                        SizedBox(
+                          height: scrHeight * 0.002,
+                        ),
+                        Text(
+                          widget.storeDetailsModel.online!?'Available':'Closed',
+                          style: TextStyle(
+                              fontSize: scrWidth * 0.04,
+                              color: widget.storeDetailsModel.online!?primarycolor: Colors.red,
+                              fontFamily: 'Urbanist',
+                              fontWeight: FontWeight.w500),
+                        ),
 
-                      // Container(
-                      //   width:scrWidth*0.5,
-                      //   height: scrHeight*0.031,
-                      //   decoration: BoxDecoration(
-                      //     borderRadius: BorderRadius.circular(scrWidth*0.02),
-                      //     color: primarycolor
-                      //   ),
-                      //   child: Center(
-                      //     child: Text("Visit Store in Map",style: TextStyle(
-                      //       fontFamily: 'Urbanist',fontWeight: FontWeight.w600,fontSize: scrWidth*0.027,color: Colors.white
-                      //     ),),
-                      //   ),
-                      //
-                      // ),
-                    ],
+                        // Container(
+                        //   width:scrWidth*0.5,
+                        //   height: scrHeight*0.031,
+                        //   decoration: BoxDecoration(
+                        //     borderRadius: BorderRadius.circular(scrWidth*0.02),
+                        //     color: primarycolor
+                        //   ),
+                        //   child: Center(
+                        //     child: Text("Visit Store in Map",style: TextStyle(
+                        //       fontFamily: 'Urbanist',fontWeight: FontWeight.w600,fontSize: scrWidth*0.027,color: Colors.white
+                        //     ),),
+                        //   ),
+                        //
+                        // ),
+                      ],
+                    ),
                   ),
                 ),
                 SizedBox(
@@ -249,7 +253,9 @@ class _StorePageState extends State<StorePage> {
                       image: DecorationImage(
                           image: NetworkImage(
                               widget.storeDetailsModel.storeImage ?? ''),
-                          fit: BoxFit.fill),
+                          fit: BoxFit.fill,colorFilter:  widget.storeDetailsModel.online!?
+                      ColorFilter.mode(Colors.transparent, BlendMode.saturation):
+                      ColorFilter.mode(Colors.grey, BlendMode.saturation),),
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(scrWidth * 0.04),
                     ),
@@ -945,7 +951,7 @@ class _ShopSingleProductState extends State<ShopSingleProduct> {
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             fontFamily: 'Urbanist',
-                            fontSize: scrWidth * 0.03,
+                            fontSize: scrWidth * 0.04,
                             fontWeight: FontWeight.w600,
                             color: const Color(0xff0E0E0E)),
                       ),
@@ -959,7 +965,7 @@ class _ShopSingleProductState extends State<ShopSingleProduct> {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontFamily: 'Urbanist',
-                        fontSize: scrWidth * 0.025,
+                        fontSize: scrWidth * 0.036,
                         fontWeight: FontWeight.w600,
                         color: const Color(0xff818181)),
                   ),
@@ -971,7 +977,7 @@ class _ShopSingleProductState extends State<ShopSingleProduct> {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontFamily: 'Urbanist',
-                        fontSize: scrWidth * 0.03,
+                        fontSize: scrWidth * 0.04,
                         fontWeight: FontWeight.w700,
                         color: const Color(0xffF10000)),
                   ),

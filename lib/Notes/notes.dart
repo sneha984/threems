@@ -140,7 +140,8 @@ class _NotesPageState extends State<NotesPage> {
               children: [
                 InkWell(
                   onTap: () {
-                    Navigator.pop(context);
+                    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>ScreenLayout()),
+                            (route) => false);
                   },
                   child: Padding(
                     padding: EdgeInsets.only(

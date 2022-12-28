@@ -134,7 +134,7 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
                               padding: EdgeInsets.only(
                                   left: scrWidth*0.06,
                                   right: scrWidth*0.03),
-                              child:Container(width:30,height:30,child: SvgPicture.asset("assets/icons/arrow.svg",)),
+                              child:Container(width:23,height:23,child: SvgPicture.asset("assets/icons/arrow.svg",)),
                             ),
                           ),
                           Text("Fundraise Dashboard",style: TextStyle(
@@ -156,17 +156,17 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
                             color: Colors.black,
                             fontFamily: 'Urbanist',
                             fontWeight: FontWeight.w500),),
-                        SizedBox(width: scrWidth*0.22,),
-                        GestureDetector(
-                          onTap: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>Flchartpage()));
-                          },
-                          child: Text("VIEW ALL",style: TextStyle(
-                              fontSize: scrWidth*0.033,
-                              color: Colors.black,
-                              fontFamily: 'Urbanist',
-                              fontWeight: FontWeight.w700),),
-                        ),
+                        SizedBox(width: scrWidth*0.39,),
+                        // GestureDetector(
+                        //   onTap: (){
+                        //      // Navigator.push(context, MaterialPageRoute(builder: (context)=>BasicDetails()));
+                        //   },
+                        //   child: Text("Edit",style: TextStyle(
+                        //       fontSize: scrWidth*0.044,
+                        //       color: Colors.black,
+                        //       fontFamily: 'Urbanist',
+                        //       fontWeight: FontWeight.w700),),
+                        // ),
                       ],
                     ),
                     SizedBox(height: scrHeight*0.015,),
@@ -192,8 +192,9 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
                           ),
 
 
-                           SizedBox(width:scrWidth*0.001),
+                           SizedBox(width:scrWidth*0.03),
                           Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               SizedBox(height: scrHeight*0.015,),
                               Container(
@@ -205,52 +206,43 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
                                     fontWeight: FontWeight.w600),),
                               ),
                               SizedBox(height: scrHeight*0.03,),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Padding(
-                                    padding:  EdgeInsets.only(left: scrWidth*0.05),
-                                    child: GestureDetector(
-                                      onTap: (){
-                                        // Navigator.push(context, MaterialPageRoute(builder: (context)=>FundRisingdashboardtwo()));
-                                      },
-                                      child: Container(
-                                        width: scrWidth*0.2,
-                                        height: scrHeight*0.023,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(5),
-                                          color: Color(0xffF14336),
+                              GestureDetector(
+                                onTap: (){
+                                  // Navigator.push(context, MaterialPageRoute(builder: (context)=>FundRisingdashboardtwo()));
+                                },
+                                child: Container(
+                                  width: scrWidth*0.2,
+                                  height: scrHeight*0.023,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: Color(0xffF14336),
 
-                                        ),
-                                        child: Center(
-                                          child: Text("IN REVIEW",style: TextStyle(
-                                              fontSize: scrWidth*0.03,
-                                              color: Colors.white,
-                                              fontFamily: 'Urbanist',
-                                              fontWeight: FontWeight.w700),),
-                                        ),
-                                      ),
-                                    ),
                                   ),
-                                  // SizedBox(width: 30,),
-                                  InkWell(
-                                    onTap: () async {
-                                      await _createDynamicLink(false);
-                                      Share.share(
-                                          'Inviting you to join *${widget.charity.charityDetailes}* \n \n \n $_linkMessage');
-                                    },
-                                    child: Padding(
-                                      padding:  EdgeInsets.only(left: scrWidth*0.2),
-                                      child: SvgPicture.asset("assets/icons/shareicon.svg",),
-                                    ),
+                                  child: Center(
+                                    child: Text("IN REVIEW",style: TextStyle(
+                                        fontSize: scrWidth*0.03,
+                                        color: Colors.white,
+                                        fontFamily: 'Urbanist',
+                                        fontWeight: FontWeight.w700),),
                                   ),
-                                ],
+                                ),
                               )
                             ],
                           )
                         ],
                       ),
                     ),
+                    // InkWell(
+                    //   onTap: () async {
+                    //     await _createDynamicLink(false);
+                    //     Share.share(
+                    //         'Inviting you to join *${widget.charity.charityDetailes}* \n \n \n $_linkMessage');
+                    //   },
+                    //   child: Padding(
+                    //     padding:  EdgeInsets.only(left: scrWidth*0.2),
+                    //     child: SvgPicture.asset("assets/icons/shareicon.svg",),
+                    //   ),
+                    // ),
                     Padding(
                       padding:  EdgeInsets.only(top: scrHeight*0.025,right: scrWidth*0.45),
                       child: Text("Recent Charity Progress",style: TextStyle(
@@ -524,7 +516,7 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
                                   left: scrWidth*0.06,
                                   // bottom: scrHeight*0.02,
                                   right: scrWidth*0.04),
-                              child:SvgPicture.asset("assets/icons/arrow.svg",),
+                              child:Container(width:23,height:23,child: SvgPicture.asset("assets/icons/arrow.svg",)),
                             ),
                           ),
                           Text("Fundraise Dashboard",style: TextStyle(
@@ -546,29 +538,40 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
                             color: Colors.black,
                             fontFamily: 'Urbanist',
                             fontWeight: FontWeight.w500),),
-                        SizedBox(width: scrWidth*0.13,),
-                        Row(
-                          children: [
-                            Text("See more ",style: TextStyle(
-                                fontSize: scrWidth*0.04,
-                                color: Colors.black,
-                                fontFamily: 'Urbanist',
-                                fontWeight: FontWeight.w600),),
-                            Container(
-                              height: scrHeight*0.018,
-                              width: scrWidth*0.04,
-                              decoration: BoxDecoration(
-                                  color: Color(0xff28B446),
-                                  borderRadius: BorderRadius.circular(30)
-                              ),
-                              child:Padding(
-                                padding:  EdgeInsets.only(top: scrHeight*0.002,bottom: scrHeight*0.002),
-                                child: SvgPicture.asset("assets/icons/smallarrowsvg.svg"),
-                              ),
-                            ),
-
-                          ],
-                        ),
+                        SizedBox(width: scrWidth*0.44,),
+                        // Row(
+                        //   children: [
+                        //     Text("See more ",style: TextStyle(
+                        //         fontSize: scrWidth*0.04,
+                        //         color: Colors.black,
+                        //         fontFamily: 'Urbanist',
+                        //         fontWeight: FontWeight.w600),),
+                        //     Container(
+                        //       height: scrHeight*0.018,
+                        //       width: scrWidth*0.04,
+                        //       decoration: BoxDecoration(
+                        //           color: Color(0xff28B446),
+                        //           borderRadius: BorderRadius.circular(30)
+                        //       ),
+                        //       child:Padding(
+                        //         padding:  EdgeInsets.only(top: scrHeight*0.002,bottom: scrHeight*0.002),
+                        //         child: SvgPicture.asset("assets/icons/smallarrowsvg.svg"),
+                        //       ),
+                        //     ),
+                        //
+                        //   ],
+                        // ),
+                        // GestureDetector(
+                        //   onTap: (){
+                        //      Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                        //          BasicDetails(char: widget.charity, update: true,)));
+                        //   },
+                        //   child: Text("Edit",style: TextStyle(
+                        //       fontSize: scrWidth*0.044,
+                        //       color: Colors.black,
+                        //       fontFamily: 'Urbanist',
+                        //       fontWeight: FontWeight.w700),),
+                        // ),
                       ],
                     ),
                     SizedBox(height: scrHeight*0.015,),
@@ -894,34 +897,29 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
             // ),
 
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    Text("Donation History",style: TextStyle(
-                        fontSize: scrWidth*0.04,
-                        color: Colors.black,
-                        fontFamily: 'Urbanist',
-                        fontWeight: FontWeight.w500),),
-                    SizedBox(width: scrWidth*0.02,),
+                SizedBox(width: scrWidth*0.065,),
+                Text("Donation History",style: TextStyle(
+                    fontSize: scrWidth*0.04,
+                    color: Colors.black,
+                    fontFamily: 'Urbanist',
+                    fontWeight: FontWeight.w500),),
+                SizedBox(width: scrWidth*0.02,),
 
-                    Container(
-                      height: scrHeight*0.018,
-                      width: scrWidth*0.04,
-                      decoration: BoxDecoration(
-                          color: Color(0xff28B446),
-                          borderRadius: BorderRadius.circular(30)
-                      ),
-                      child:Padding(
-                        padding:  EdgeInsets.only(top: scrHeight*0.002,bottom: scrHeight*0.002),
-                        child: SvgPicture.asset("assets/icons/smallarrowsvg.svg"),
-                      ),
-                    ),
-
-                  ],
+                Container(
+                  height: scrHeight*0.018,
+                  width: scrWidth*0.04,
+                  decoration: BoxDecoration(
+                      color: Color(0xff28B446),
+                      borderRadius: BorderRadius.circular(30)
+                  ),
+                  child:Padding(
+                    padding:  EdgeInsets.only(top: scrHeight*0.002,bottom: scrHeight*0.002),
+                    child: SvgPicture.asset("assets/icons/smallarrowsvg.svg"),
+                  ),
                 ),
-                SizedBox(width: scrWidth*0.25,),
-                // SvgPicture.asset("assets/icons/filtericon.svg"),
+
               ],
             ),
             ListView.separated(

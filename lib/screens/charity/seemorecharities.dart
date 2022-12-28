@@ -323,7 +323,7 @@ class _SeeMoreCharitiesState extends State<SeeMoreCharities>
                       padding:EdgeInsets.only(top: scrHeight * 0.1,),
                       child: InkWell(
                         onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>BasicDetails()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>BasicDetails( update: false,)));
 
                         },
                         child: Container(

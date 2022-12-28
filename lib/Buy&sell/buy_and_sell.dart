@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart' as gMap;
 import 'package:google_maps_place_picker/google_maps_place_picker.dart'
     as gMapPlacePicker;
@@ -1291,32 +1292,41 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                             fontSize: scrWidth * 0.045,
                                             fontFamily: 'Urbanist',
                                             fontWeight: FontWeight.w600),),
-                                        Transform.scale(
-                                          scale: 0.7,
-                                          child: CupertinoSwitch(
-                                            thumbColor:store[0].online!
-                                                ? Color(0xff02B558)
-                                                : Color(0xffE54D3C),
-                                            activeColor: Color(0xffD9D9D9),
-                                            trackColor: Color(0xffD9D9D9),
-                                            value: store[0].online!,
-                                            onChanged: (value) {
-                                              // print(widget.storeId);
+                                        Row(
+                                          children: [
+                                            Text(
+                                              store[0].online! ? "online" : "offline",
+                                              style: GoogleFonts.urbanist(
+                                                  fontSize: scrWidth * 0.028, fontWeight: FontWeight.w600),
+                                            ),
+                                            Transform.scale(
+                                              scale: 0.7,
+                                              child: CupertinoSwitch(
+                                                thumbColor:store[0].online!
+                                                    ? Color(0xff02B558)
+                                                    : Color(0xffE54D3C),
+                                                activeColor: Color(0xffD9D9D9),
+                                                trackColor: Color(0xffD9D9D9),
+                                                value: store[0].online!,
+                                                onChanged: (value) {
+                                                  // print(widget.storeId);
 
-                                              FirebaseFirestore
-                                                  .instance
-                                                  .collection('stores')
-                                                  .doc(store[0].storeId)
-                                                  .update(
-                                                  {
-                                                    'online':!store[0].online!,
-                                                  }
-                                              );
-                                              setState(() {
+                                                  FirebaseFirestore
+                                                      .instance
+                                                      .collection('stores')
+                                                      .doc(store[0].storeId)
+                                                      .update(
+                                                      {
+                                                        'online':!store[0].online!,
+                                                      }
+                                                  );
+                                                  setState(() {
 
-                                              });
-                                            },
-                                          ),
+                                                  });
+                                                },
+                                              ),
+                                            ),
+                                          ],
                                         ),
 
                                       ],

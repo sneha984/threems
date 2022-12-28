@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:threems/Buy&sell/storepage.dart';
+import 'package:threems/Buy&sell/zoom.dart';
 import 'package:threems/utils/themes.dart';
 
 import '../model/Buy&sell.dart';
@@ -107,49 +108,62 @@ class _ImageZoomPageState extends State<ImageZoomPage> with SingleTickerProvider
         children: [
 
           SizedBox(height: 67,),
-          Center(
-            child:InteractiveViewer(
-              panEnabled: false, // Set it to false to prevent panning.
-              boundaryMargin: EdgeInsets.all(80),
-              minScale: 0.5,
-              maxScale: 4,
+          InkWell(
+            onTap: (){
+               Navigator.push(context, MaterialPageRoute(builder: (context)=>ZoomPage(img: widget.image,)));
+            },
+            child: Center(
               child:Image.network(
-                    widget?.image??'',
-                    width: 400,
-                    height: 300,
-                    fit: BoxFit.cover,
-                  ),
+                widget?.image??'',
+                width: scrWidth*1,
+                height: scrHeight*0.38,
+                fit: BoxFit.cover,
+              ) ,
             ),
-            // InteractiveViewer(
-            //   panEnabled: false, // Set it to false
-            //   // boundaryMargin: EdgeInsets.all(100),
-            //   minScale: 0.5,
-            //   maxScale: 2,
-            //   child: Image.network(
-            //     widget?.image??'',
-            //     width: 400,
-            //     height: 300,
-            //     fit: BoxFit.cover,
-            //   ),
-            // ),
-
-            // InteractiveViewer(
-            //   clipBehavior: Clip.none,
-            //   transformationController: controller,
-            //   maxScale: maxScale,
-            //   minScale: minScale,
-            //   onInteractionEnd: (details){
-            //     resetAnimation();
-            //   },
-            //   panEnabled: false,
-            //   child: AspectRatio(aspectRatio: 1,child: ClipRRect(
-            //   borderRadius: BorderRadius.circular(20),
-            //   child: Image.network(widget.image,fit: BoxFit.cover,),
-            //
-            // ),
-            //   ),
-            // ),
           ),
+          // Center(
+          //   child:InteractiveViewer(
+          //     panEnabled: false, // Set it to false to prevent panning.
+          //     boundaryMargin: EdgeInsets.all(80),
+          //     minScale: 0.5,
+          //     maxScale: 4,
+          //     child:Image.network(
+          //           widget?.image??'',
+          //           width: 400,
+          //           height: 300,
+          //           fit: BoxFit.cover,
+          //         ),
+          //   ),
+          //   // InteractiveViewer(
+          //   //   panEnabled: false, // Set it to false
+          //   //   // boundaryMargin: EdgeInsets.all(100),
+          //   //   minScale: 0.5,
+          //   //   maxScale: 2,
+          //   //   child: Image.network(
+          //   //     widget?.image??'',
+          //   //     width: 400,
+          //   //     height: 300,
+          //   //     fit: BoxFit.cover,
+          //   //   ),
+          //   // ),
+          //
+          //   // InteractiveViewer(
+          //   //   clipBehavior: Clip.none,
+          //   //   transformationController: controller,
+          //   //   maxScale: maxScale,
+          //   //   minScale: minScale,
+          //   //   onInteractionEnd: (details){
+          //   //     resetAnimation();
+          //   //   },
+          //   //   panEnabled: false,
+          //   //   child: AspectRatio(aspectRatio: 1,child: ClipRRect(
+          //   //   borderRadius: BorderRadius.circular(20),
+          //   //   child: Image.network(widget.image,fit: BoxFit.cover,),
+          //   //
+          //   // ),
+          //   //   ),
+          //   // ),
+          // ),
           SizedBox(height: 20,),
           Padding(
             padding: const EdgeInsets.only(left: 15,right: 15),
