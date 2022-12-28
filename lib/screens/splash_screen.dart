@@ -47,10 +47,15 @@ class _SplashScreenState extends State<SplashScreen> {
           children: [
             Padding(
               padding: EdgeInsets.only(bottom: scrHeight * 0.062),
-              child: Image.asset(
-                "assets/icons/splashScreenIcon.png",
-                height: scrHeight * 0.25,
-                width: scrWidth * 0.7,
+              child: Column(
+                children: [
+                  Image.asset(
+                    "assets/icons/splashScreenIcon.png",
+                    height: scrHeight * 0.25,
+                    width: scrWidth * 0.7,
+                  ),
+                  CircularProgressIndicator(color: Colors.white),
+                ],
               ),
             ),
           ],

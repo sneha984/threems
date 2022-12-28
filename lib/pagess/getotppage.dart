@@ -9,6 +9,7 @@ import 'package:threems/kuri/createkuri.dart';
 import '../Authentication/auth.dart';
 import '../screens/splash_screen.dart';
 import '../utils/themes.dart';
+import 'loginpage.dart';
 import 'otppage.dart';
 
 class GetOtpPage extends StatefulWidget {
@@ -57,7 +58,7 @@ class _GetOtpPageState extends State<GetOtpPage> {
         setState(() {
           verificationId = verficationID;
         });
-        Navigator.push(
+        Navigator.pushReplacement(
             context,
             MaterialPageRoute(
                 builder: (context) => OtpPage(
@@ -90,21 +91,23 @@ class _GetOtpPageState extends State<GetOtpPage> {
             appBar: AppBar(
               backgroundColor: Colors.white,
               elevation: 0,
-              leading: GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: Padding(
-                  padding: EdgeInsets.only(
-                      top: scrHeight * 0.03,
-                      left: scrWidth * 0.07,
-                      bottom: scrHeight * 0.02,
-                      right: scrWidth * 0.05),
-                  child: SvgPicture.asset(
-                    "assets/icons/arrow.svg",
-                  ),
-                ),
-              ),
+              // leading: GestureDetector(
+              //   onTap: () {
+              //     Navigator.pop(context);
+              //   },
+              //   child: Padding(
+              //     padding: EdgeInsets.only(
+              //         top: scrHeight * 0.03,
+              //         left: scrWidth * 0.07,
+              //         bottom: scrHeight * 0.02,
+              //         right: scrWidth * 0.05),
+              //     child: Icon(
+              //       Icons.arrow_back,
+              //       color: Colors.black,
+              //       size: 25,
+              //     ),
+              //   ),
+              // ),
             ),
             body: GestureDetector(
               onTap: () {
@@ -114,7 +117,7 @@ class _GetOtpPageState extends State<GetOtpPage> {
                 FocusScope.of(context).requestFocus(new FocusNode());
               },
               child: Padding(
-                padding: EdgeInsets.only(left: scrWidth * 0.07),
+                padding: EdgeInsets.all(scrWidth * 0.07),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -244,7 +247,7 @@ class _GetOtpPageState extends State<GetOtpPage> {
                     Padding(
                       padding: EdgeInsets.only(left: scrWidth * 0.03),
                       child: Text(
-                          "don't worry your number will not share to anyone! ",
+                          "Don't worry your number will not share to anyone! ",
                           style: TextStyle(
                             fontFamily: 'Outfit',
                             fontWeight: FontWeight.w400,
@@ -255,22 +258,10 @@ class _GetOtpPageState extends State<GetOtpPage> {
                     SizedBox(
                       height: scrHeight * 0.047,
                     ),
-                    GestureDetector(
+                    InkWell(
                       onTap: () async {
                         if (_formkey.currentState!.validate()) {
-                          bool loged = await FirebaseFirestore.instance
-                              .collection('users')
-                              .where('phone', isEqualTo: phoneNumber.text)
-                              .snapshots()
-                              .isEmpty;
-
-                          if (loged) {
-                            verifyPhoneNumber(context);
-                          } else {
-                            showSnackbar(
-                                context, 'Already a User, Please login');
-                            Navigator.pop(context);
-                          }
+                          verifyPhoneNumber(context);
                         }
                       },
                       child: Container(
@@ -289,9 +280,37 @@ class _GetOtpPageState extends State<GetOtpPage> {
                       ),
                     ),
                     SizedBox(
-                      height: scrHeight * 0.03,
+                      height: scrHeight * 0.015,
                     ),
-                    GestureDetector(
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: Divider(
+                            endIndent: 10,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        Text(
+                          "OR",
+                          style: TextStyle(
+                              fontSize: scrWidth * 0.03,
+                              color: Color(0xff000000),
+                              fontFamily: 'Outfit',
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Expanded(
+                          child: Divider(
+                            indent: 10,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: scrHeight * 0.015,
+                    ),
+                    InkWell(
                       onTap: () {
                         try {
                           _auth.signInWithGoogle(context);
@@ -328,6 +347,36 @@ class _GetOtpPageState extends State<GetOtpPage> {
                         ),
                       ),
                     ),
+                    SizedBox(
+                      height: scrHeight * 0.024,
+                    ),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.center,
+                    //   children: [
+                    //     Text(
+                    //       "Already have an account? ",
+                    //       style: TextStyle(
+                    //           fontSize: scrWidth * 0.03,
+                    //           color: Color(0xff000000).withOpacity(0.3),
+                    //           fontFamily: 'Outfit',
+                    //           fontWeight: FontWeight.w400),
+                    //     ),
+                    //     InkWell(
+                    //       onTap: () {
+                    //         Navigator.pushReplacement(
+                    //             context,
+                    //             MaterialPageRoute(
+                    //                 builder: (context) => LoginPage()));
+                    //       },
+                    //       child: Text('Log In',
+                    //           style: TextStyle(
+                    //               fontSize: scrWidth * 0.03,
+                    //               color: primarycolor,
+                    //               fontFamily: 'Outfit',
+                    //               fontWeight: FontWeight.w500)),
+                    //     ),
+                    //   ],
+                    // ),
                   ],
                 ),
               ),

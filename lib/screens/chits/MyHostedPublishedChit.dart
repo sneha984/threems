@@ -410,11 +410,34 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
                                         bottom: scrHeight * 0.02),
                                     child: InkWell(
                                         onTap: () {
-                                          FirebaseFirestore.instance
-                                              .collection('chit')
-                                              .doc(widget.id)
-                                              .update({'delete': true});
-                                          Navigator.pop(context);
+
+                                          showDialog(
+                                            context: context,
+                                            builder: (ctx) => AlertDialog(
+                                              content: const Text("do you want to delete this chit"),
+                                              actions: <Widget>[
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Navigator.of(ctx).pop();
+                                                  },
+                                                  child: const Text("No"),
+                                                ),
+                                                TextButton(
+                                                  onPressed: () {
+                                                    FirebaseFirestore.instance
+                                                        .collection('chit')
+                                                        .doc(widget.id)
+                                                        .update({'delete': true});
+                                                    Navigator.pop(context);
+                                                  },
+                                                  child: const Text(
+                                                    "Yes",
+                                                    style: TextStyle(color: primarycolor),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          );
                                         },
                                         child: Icon(
                                           Icons.delete_forever,

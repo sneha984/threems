@@ -259,6 +259,7 @@ class _HostedDraftPageState extends State<HostedDraftPage> {
                                   bottom: scrHeight * 0.008),
                               child: SvgPicture.asset(
                                 "assets/icons/whitearrow.svg",
+                                width: 16,
                               ),
                             ),
                           ),
@@ -351,6 +352,51 @@ class _HostedDraftPageState extends State<HostedDraftPage> {
                                 // ),
                                 Row(
                                   children: [
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          bottom: scrHeight * 0.02),
+                                      child: InkWell(
+                                          onTap: () {
+                                            showDialog(
+                                              context: context,
+                                              builder: (ctx) => AlertDialog(
+                                                content: const Text(
+                                                    "do you want to delete this chit"),
+                                                actions: <Widget>[
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      Navigator.of(ctx).pop();
+                                                    },
+                                                    child: const Text("No"),
+                                                  ),
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      FirebaseFirestore.instance
+                                                          .collection('chit')
+                                                          .doc(widget.id)
+                                                          .update(
+                                                              {'delete': true});
+                                                      Navigator.pop(ctx);
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child: const Text(
+                                                      "Yes",
+                                                      style: TextStyle(
+                                                          color: primarycolor),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          },
+                                          child: Icon(
+                                            Icons.delete_forever,
+                                            color: Colors.white,
+                                          )),
+                                    ),
+                                    SizedBox(
+                                      width: scrWidth * 0.05,
+                                    ),
                                     Padding(
                                       padding: EdgeInsets.only(
                                           bottom: scrHeight * 0.02),

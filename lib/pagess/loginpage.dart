@@ -12,6 +12,7 @@ import 'package:flutter/services.dart';
 
 import '../screens/splash_screen.dart';
 import '../utils/themes.dart';
+import 'getotppage.dart';
 import 'otppage.dart';
 
 class LoginPage extends StatefulWidget {
@@ -64,21 +65,21 @@ class _LoginPageState extends State<LoginPage> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: Padding(
-            padding: EdgeInsets.only(
-                top: scrHeight * 0.02,
-                left: scrWidth * 0.07,
-                bottom: scrHeight * 0.02,
-                right: scrWidth * 0.05),
-            child: SvgPicture.asset(
-              "assets/icons/arrow.svg",
-            ),
-          ),
-        ),
+        // leading: GestureDetector(
+        //   onTap: () {
+        //     Navigator.pop(context);
+        //   },
+        //   child: Padding(
+        //     padding: EdgeInsets.only(
+        //         top: scrHeight * 0.02,
+        //         left: scrWidth * 0.07,
+        //         bottom: scrHeight * 0.02,
+        //         right: scrWidth * 0.05),
+        //     child: SvgPicture.asset(
+        //       "assets/icons/arrow.svg",
+        //     ),
+        //   ),
+        // ),
       ),
       body: Padding(
         padding: EdgeInsets.only(left: scrWidth * 0.07),
@@ -267,6 +268,34 @@ class _LoginPageState extends State<LoginPage> {
                   ],
                 ),
               ),
+            ),
+            SizedBox(
+              height: scrHeight * 0.024,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Don't have an account? ",
+                  style: TextStyle(
+                      fontSize: scrWidth * 0.03,
+                      color: Color(0xff000000).withOpacity(0.3),
+                      fontFamily: 'Outfit',
+                      fontWeight: FontWeight.w400),
+                ),
+                InkWell(
+                  onTap: () {
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) => GetOtpPage()));
+                  },
+                  child: Text('Sign Up',
+                      style: TextStyle(
+                          fontSize: scrWidth * 0.03,
+                          color: primarycolor,
+                          fontFamily: 'Outfit',
+                          fontWeight: FontWeight.w500)),
+                ),
+              ],
             ),
           ],
         ),

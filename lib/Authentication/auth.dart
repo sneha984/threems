@@ -6,6 +6,9 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:threems/Authentication/root.dart';
 import 'package:threems/pagess/onboardingpage.dart';
 
+import '../pagess/getotppage.dart';
+import '../pagess/loginpage.dart';
+
 var userName;
 var userImage;
 var userEmail;
@@ -159,7 +162,7 @@ class Authentication {
         .then((value) => Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
-              builder: (context) => OnBoarding(),
+              builder: (context) => GetOtpPage(),
             ),
             (route) => false));
   }

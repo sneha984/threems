@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:threems/pagess/sliderpage.dart';
 
-import '../screens/splash_screen.dart';
-import '../utils/themes.dart';
-import 'getotppage.dart';
-import 'loginpage.dart';
+import '../../screens/splash_screen.dart';
+import '../../utils/themes.dart';
+import '../getotppage.dart';
+import '../loginpage.dart';
 
 class OnBoarding extends StatefulWidget {
   const OnBoarding({Key? key}) : super(key: key);
@@ -42,23 +42,36 @@ class _OnBoardingState extends State<OnBoarding> {
             "this feature allows you to record your expenceeasily.\nOptionally you can assign a category to you expence \nin order to get dettailed statics."),
   ];
 
-  Onchange(int index) async {
-    _currentpage = index;
-    print(_currentpage);
-    print(pages.length);
+  Onchange(int index) {
+    setState(() async {
+      print('here');
+      _currentpage = index;
+      // if (_currentpage == pages.length - 1) {
+      //   // Obtain shared preferences.
+      //   final prefs = await SharedPreferences.getInstance();
+      //
+      //   prefs.setBool('viewed', true);
+      // }
+    });
+  }
 
-    if (_currentpage == pages.length - 1) {
-      final prefs = await SharedPreferences.getInstance();
+  getViewedData() async {
+    // Obtain shared preferences.
+    final prefs = await SharedPreferences.getInstance();
+    // prefs.remove('viewed');
+    print('!1');
+    print(prefs.containsKey('viewed'));
 
-      prefs.setBool('viewed', true);
+    if (prefs.containsKey('viewed')) {
+      _currentpage = pages.length - 1;
+      _controller = PageController(initialPage: _currentpage);
     }
-
-    setState(() {});
   }
 
   @override
   void initState() {
     super.initState();
+    // getViewedData();
   }
 
   @override
@@ -104,12 +117,12 @@ class _OnBoardingState extends State<OnBoarding> {
               GestureDetector(
                 onTap: () {
                   setState(() {
-                    _currentpage == pages.length - 1
-                        ? Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => GetOtpPage()))
-                        : null;
+                    if (_currentpage == pages.length - 1) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => GetOtpPage()));
+                    }
                   });
                 },
                 child: Container(
@@ -123,7 +136,7 @@ class _OnBoardingState extends State<OnBoarding> {
                   ),
                   child: Center(
                     child: Text(
-                      "SIGN UP / SIGN IN",
+                      "SIGN UP",
                       style: style,
                     ),
                   ),
@@ -133,31 +146,31 @@ class _OnBoardingState extends State<OnBoarding> {
                 height: scrHeight * 0.007,
               ),
 
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.center,
-              //   children: [
-              //     Text(
-              //       'Already have an account? ',
-              //       style: TextStyle(
-              //           fontSize: scrWidth * 0.03,
-              //           color: Color(0xff000000).withOpacity(0.3),
-              //           fontFamily: 'Outfit',
-              //           fontWeight: FontWeight.w400),
-              //     ),
-              //     InkWell(
-              //       onTap: () {
-              //         Navigator.push(context,
-              //             MaterialPageRoute(builder: (context) => LoginPage()));
-              //       },
-              //       child: Text('Login',
-              //           style: TextStyle(
-              //               fontSize: scrWidth * 0.03,
-              //               color: primarycolor,
-              //               fontFamily: 'Outfit',
-              //               fontWeight: FontWeight.w500)),
-              //     ),
-              //   ],
-              // ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Already have an account? ',
+                    style: TextStyle(
+                        fontSize: scrWidth * 0.03,
+                        color: Color(0xff000000).withOpacity(0.3),
+                        fontFamily: 'Outfit',
+                        fontWeight: FontWeight.w400),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => LoginPage()));
+                    },
+                    child: Text('Login',
+                        style: TextStyle(
+                            fontSize: scrWidth * 0.03,
+                            color: primarycolor,
+                            fontFamily: 'Outfit',
+                            fontWeight: FontWeight.w500)),
+                  ),
+                ],
+              ),
               // RichText(
               //   text: TextSpan(
               //     text: 'Already have an account? ',
