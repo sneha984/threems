@@ -133,6 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
     FirebaseFirestore.instance
         .collection('charity')
         .where('userId', isNotEqualTo: currentuser?.userId)
+        .where('status',isEqualTo: 1)
         .snapshots()
         .listen((event) {
       verifiedcharity = [];
