@@ -134,7 +134,7 @@ class _ChitPaymentPageState extends State<ChitPaymentPage> {
                       width: scrWidth * 0.04,
                     ),
                     Text(
-                      "Kuri Payment",
+                      "Chit Payment",
                       style: TextStyle(
                           fontSize: scrWidth * 0.045,
                           color: Colors.black,

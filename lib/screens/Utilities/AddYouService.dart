@@ -657,75 +657,116 @@ class _AddServicePageState extends State<AddServicePage>  with TickerProviderSta
                             ),
                             Row(
                               children: [
-                                Container(
-                                 width: scrWidth*0.91,
-                                  height: textFormFieldHeight45,
+                                InkWell(
+                                  onTap: ()  async {
+                                    Position location = await Geolocator.getCurrentPosition(
+                                        desiredAccuracy: LocationAccuracy.high
+                                    );
+
+                                    await   Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            gMapPlacePicker.PlacePicker(
+                                              apiKey: "AIzaSyCUZFUZ1yMpkzh6QUnKj54Q2N4L2iT4tBY",
+                                              initialPosition: gMap.LatLng(
+                                                  location.latitude,location.longitude
+                                              ),
+                                              // Put YOUR OWN KEY here.
+                                              searchForInitialValue: false,
+                                              selectInitialPosition: true,
+                                              // initialPosition: LatLng(currentLoc==null?0:currentLoc!.latitude,currentLoc==null?0:currentLoc!.longitude),
+                                              onPlacePicked: (res) async {
+                                                Navigator.of(context).pop();
+                                                // GeoCode geoCode = GeoCode();
+                                                // Address address=await geoCode.reverseGeocoding(latitude: res.geometry!.location.lat,longitude: res.geometry!.location.lng);
+                                                result=res;
+                                                latitude!.text=res.geometry!.location.lat.toString();
+                                                longitude!.text=res.geometry!.location.lng.toString();
+                                                List<Placemark> placemarks = await placemarkFromCoordinates(
+                                                    res.geometry!.location.lat, res.geometry!.location.lng);
+                                                Placemark place = placemarks[0];
+                                                serviceLocation = place.locality!;
+                                                // longitude!.text=res.geometry!.location.lng.toString();
+                                                // lat=result.geometry!.location.lat;
+                                                // long=result.geometry!.location.lng;
+                                                set();
+                                              },
+                                              useCurrentLocation: true,
+                                            ),
+                                      ),
+                                    );
+                                  },
+                                  child: Container(
+                                   width: scrWidth*0.9,
+                                    height: textFormFieldHeight45,
                               // padding: EdgeInsets.symmetric(
                               //   horizontal: scrWidth * 0.015,
                               //   vertical:scrHeight*0.002,
                               // ),
                               decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: Color(0xffDADADA),
-                                ),
-                                color: textFormFieldFillColor,
-                                borderRadius: BorderRadius.circular(scrWidth * 0.026),
+                                  border: Border.all(
+                                    color: Color(0xffDADADA),
+                                  ),
+                                  color: textFormFieldFillColor,
+                                  borderRadius: BorderRadius.circular(scrWidth * 0.026),
                               ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                    children: [
-                                      Column(
-                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          Text('Location: '+serviceLocation.toString(),style: GoogleFonts.outfit(),)
-                                          // Text('Lattitude:'+latitude!.text),
-                                          // Text('Longitude:'+longitude!.text),
-                                        ],
-                                      ),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                      children: [
+                                        Column(
+                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            Text('Location: '+serviceLocation.toString(),style: GoogleFonts.outfit(),)
+                                            // Text('Lattitude:'+latitude!.text),
+                                            // Text('Longitude:'+longitude!.text),
+                                          ],
+                                        ),
 
-                                      InkWell(
-                                          onTap: ()  async {
-                                            Position location = await Geolocator.getCurrentPosition(
-                                                desiredAccuracy: LocationAccuracy.high
-                                            );
+                                        InkWell(
+                                            onTap: ()  async {
+                                              Position location = await Geolocator.getCurrentPosition(
+                                                  desiredAccuracy: LocationAccuracy.high
+                                              );
 
-                                          await   Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    gMapPlacePicker.PlacePicker(
-                                                  apiKey: "AIzaSyCUZFUZ1yMpkzh6QUnKj54Q2N4L2iT4tBY",
-                                                  initialPosition: gMap.LatLng(
-                                                      location.latitude,location.longitude
+                                            await   Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      gMapPlacePicker.PlacePicker(
+                                                    apiKey: "AIzaSyCUZFUZ1yMpkzh6QUnKj54Q2N4L2iT4tBY",
+                                                    initialPosition: gMap.LatLng(
+                                                        location.latitude,location.longitude
+                                                    ),
+                                                    // Put YOUR OWN KEY here.
+                                                    searchForInitialValue: false,
+                                                    selectInitialPosition: true,
+                                                    // initialPosition: LatLng(currentLoc==null?0:currentLoc!.latitude,currentLoc==null?0:currentLoc!.longitude),
+                                                    onPlacePicked: (res) async {
+                                                      Navigator.of(context).pop();
+                                                      // GeoCode geoCode = GeoCode();
+                                                      // Address address=await geoCode.reverseGeocoding(latitude: res.geometry!.location.lat,longitude: res.geometry!.location.lng);
+                                                      result=res;
+                                                      latitude!.text=res.geometry!.location.lat.toString();
+                                                      longitude!.text=res.geometry!.location.lng.toString();
+                                                      List<Placemark> placemarks = await placemarkFromCoordinates(
+                                                          res.geometry!.location.lat, res.geometry!.location.lng);
+                                                      Placemark place = placemarks[0];
+                                                      serviceLocation = place.locality!;
+                                                      // longitude!.text=res.geometry!.location.lng.toString();
+                                                      // lat=result.geometry!.location.lat;
+                                                      // long=result.geometry!.location.lng;
+                                                      set();
+                                                    },
+                                                    useCurrentLocation: true,
                                                   ),
-                                                  // Put YOUR OWN KEY here.
-                                                  searchForInitialValue: false,
-                                                  selectInitialPosition: true,
-                                                  // initialPosition: LatLng(currentLoc==null?0:currentLoc!.latitude,currentLoc==null?0:currentLoc!.longitude),
-                                                  onPlacePicked: (res) async {
-                                                    Navigator.of(context).pop();
-                                                    // GeoCode geoCode = GeoCode();
-                                                    // Address address=await geoCode.reverseGeocoding(latitude: res.geometry!.location.lat,longitude: res.geometry!.location.lng);
-                                                    result=res;
-                                                    latitude!.text=res.geometry!.location.lat.toString();
-                                                    longitude!.text=res.geometry!.location.lng.toString();
-                                                    List<Placemark> placemarks = await placemarkFromCoordinates(
-                                                        res.geometry!.location.lat, res.geometry!.location.lng);
-                                                    Placemark place = placemarks[0];
-                                                    serviceLocation = place.locality!;
-                                                    // longitude!.text=res.geometry!.location.lng.toString();
-                                                    // lat=result.geometry!.location.lat;
-                                                    // long=result.geometry!.location.lng;
-                                                    set();
-                                                  },
-                                                  useCurrentLocation: true,
                                                 ),
-                                              ),
-                                            );
-                                          },
-                                          child: Icon(Icons.location_on,color: Colors.red,size: 30,)),
+                                              );
+                                            },
+                                            child: Icon(Icons.location_on,color: Colors.red,size: 30,)),
 
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
 
@@ -815,6 +856,7 @@ class _AddServicePageState extends State<AddServicePage>  with TickerProviderSta
                                 items: serviceCity,
                                 controller: city,
                                 excludeSelected: false,
+                                  fillColor:textFormFieldFillColor,
                                 onChanged: (value){
                                   selectedCity=value;
                                   // print( userMap[selectedUser]);
@@ -1057,6 +1099,7 @@ class _AddServicePageState extends State<AddServicePage>  with TickerProviderSta
                                     hintText: selectedUnit == '' ?'Select ' : selectedUnit,hintStyle: GoogleFonts.urbanist(),
                                     items: serviceUnit,
                                     controller: unit,
+                                    fillColor: textFormFieldFillColor,
                                     excludeSelected: false,
                                     onChanged: (value){
                                       selectedUnit=value;
@@ -1468,7 +1511,7 @@ class _AddServicePageState extends State<AddServicePage>  with TickerProviderSta
                                                 sevicesProvided!.clear();
                                                 aboutService!.clear();
                                                 setState(() {
-
+Navigator.pop(context);
                                                 });
 
                                                 // Navigator.pushAndRemoveUntil(context, CupertinoPageRoute(builder: (context) => CharityCatogoryPage(),), (route) => false);

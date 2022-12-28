@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:threems/Authentication/root.dart';
+import 'package:threems/screens/chits/toUpperCase/toUpperCase.dart';
 
 import '../../customPackage/date_picker.dart';
 import '../../kuri/createkuri.dart';
@@ -11,6 +12,7 @@ import '../../layouts/screen_layout.dart';
 import '../../model/ChitModel.dart';
 import '../../utils/themes.dart';
 import '../../widgets/list.dart';
+import '../home_screen.dart';
 import '../splash_screen.dart';
 import 'add_members.dart';
 
@@ -150,573 +152,590 @@ class _PaymentDetailsState extends State<PaymentDetails> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 84,
-        shadowColor: Colors.grey,
-        centerTitle: false,
-        elevation: 0.1,
-        backgroundColor: Colors.white,
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: Padding(
-            padding: EdgeInsets.only(
-                top: scrHeight * 0.03,
-                left: scrWidth * 0.05,
-                bottom: scrHeight * 0.01,
-                right: scrWidth * 0.05),
-            child: SvgPicture.asset(
-              "assets/icons/arrow.svg",
+    return WillPopScope(
+      onWillPop: () async {
+        final shouldPop = await confirmQuitDialog(context);
+        return shouldPop ?? false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          toolbarHeight: 84,
+          shadowColor: Colors.grey,
+          centerTitle: false,
+          elevation: 0.1,
+          backgroundColor: Colors.white,
+          leading: GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: Padding(
+              padding: EdgeInsets.only(
+                  top: scrHeight * 0.03,
+                  left: scrWidth * 0.05,
+                  bottom: scrHeight * 0.01,
+                  right: scrWidth * 0.05),
+              child: SvgPicture.asset(
+                "assets/icons/arrow.svg",
+              ),
             ),
           ),
-        ),
-        title: Padding(
-          padding: EdgeInsets.only(top: scrHeight * 0.02),
-          child: Text(
-            "Add Payment Details",
-            style: TextStyle(
-                fontSize: scrWidth * 0.046,
-                color: Colors.black,
-                fontFamily: 'Urbanist',
-                fontWeight: FontWeight.w700),
-          ),
-        ),
-      ),
-      body: Padding(
-        padding: EdgeInsets.only(
-            left: scrWidth * 0.05,
-            right: scrWidth * 0.05,
-            top: scrHeight * 0.01),
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Column(
-            children: [
-              //PAYMENT
-              Padding(
-                padding: EdgeInsets.only(
-                    right: scrWidth * 0.7,
-                    top: scrHeight * 0.016,
-                    bottom: scrHeight * 0.01),
-                child: Text(
-                  "Payment",
-                  style: TextStyle(
-                      fontFamily: 'Urbanist',
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600),
-                ),
-              ),
-              Container(
-                height: textFormFieldHeight45,
-                padding: EdgeInsets.symmetric(
-                  horizontal: scrWidth * 0.015,
-                  vertical: scrHeight * 0.002,
-                ),
-                decoration: BoxDecoration(
-                  color: textFormFieldFillColor,
-                  borderRadius: BorderRadius.circular(scrWidth * 0.026),
-                ),
-                child: TextFormField(
-                  controller: phone,
-                  focusNode: phonenumberfocus,
-                  keyboardType: TextInputType.number,
-                  // maxLength: 10,
-                  cursorHeight: scrWidth * 0.055,
-                  cursorWidth: 1,
-                  cursorColor: Colors.black,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600,
-                    fontSize: FontSize15,
-                    fontFamily: 'Urbanist',
-                  ),
-                  decoration: InputDecoration(
-                    prefixIcon: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SvgPicture.asset(
-                          'assets/icons/indflag.svg',
-                          height: scrHeight * 0.03,
-                          width: scrWidth * 0.02,
-                        ),
-                        SizedBox(
-                          width: scrWidth * 0.02,
-                        ),
-                        Text(
-                          "+91",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w400,
-                            fontSize: FontSize17,
-                            fontFamily: 'Outfit',
-                          ),
-                        ),
-                        VerticalDivider(
-                          endIndent: 6,
-                          indent: 6,
-                          color: Color(0xffDADADA),
-                          thickness: 1,
-                        ),
-                      ],
-                    ),
-                    fillColor: textFormFieldFillColor,
-                    filled: true,
-                    contentPadding:
-                        EdgeInsets.only(top: 5, bottom: scrWidth * 0.033),
-                    disabledBorder: InputBorder.none,
-                    enabledBorder: InputBorder.none,
-                    errorBorder: InputBorder.none,
-                    border: InputBorder.none,
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                        color: primarycolor,
-                        width: 2,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(
-                    right: scrWidth * 0.6,
-                    top: scrHeight * 0.025,
-                    bottom: scrHeight * 0.02),
-                child: Text(
-                  "Choose UPI apps",
-                  style: TextStyle(
-                      color: Color(0xffB0B0B0),
-                      fontFamily: 'Urbanist',
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600),
-                ),
-              ),
-              Container(
-                  height: 90,
-                  child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: multiselect.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return PayItem(
-                          multiselect[index].image,
-                          multiselect[index].payname,
-                          multiselect[index].isSelected,
-                          index,
-                          multiselect[index].type,
-                        );
-                      })),
-              Padding(
-                padding: EdgeInsets.only(
-                    right: scrWidth * 0.65,
-                    top: scrHeight * 0.026,
-                    bottom: scrHeight * 0.01),
-                child: Text(
-                  "Bank Details",
-                  style: TextStyle(
-                      color: Color(0xffB0B0B0),
-                      fontFamily: 'Urbanist',
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600),
-                ),
-              ),
-              SizedBox(
-                height: 14,
-              ),
-              Container(
-                height: textFormFieldHeight45,
-                padding: EdgeInsets.symmetric(
-                  horizontal: scrWidth * 0.015,
-                  vertical: scrHeight * 0.002,
-                ),
-                decoration: BoxDecoration(
-                  color: textFormFieldFillColor,
-                  borderRadius: BorderRadius.circular(scrWidth * 0.026),
-                ),
-                child: TextFormField(
-                  focusNode: accountnumberfocus,
-                  controller: accountNumber,
-                  cursorHeight: scrWidth * 0.055,
-                  cursorWidth: 1,
-                  keyboardType: TextInputType.number,
-                  cursorColor: Colors.black,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600,
-                    fontSize: FontSize15,
-                    fontFamily: 'Urbanist',
-                  ),
-                  decoration: InputDecoration(
-                    labelText: 'Account Number',
-                    labelStyle: TextStyle(
-                      color: accountnumberfocus.hasFocus
-                          ? primarycolor
-                          : Color(0xffB0B0B0),
-                      fontWeight: FontWeight.w600,
-                      fontSize: FontSize15,
-                      fontFamily: 'Urbanist',
-                    ),
-                    fillColor: textFormFieldFillColor,
-                    filled: true,
-                    contentPadding:
-                        EdgeInsets.only(top: 5, bottom: scrWidth * 0.033),
-                    disabledBorder: InputBorder.none,
-                    enabledBorder: InputBorder.none,
-                    errorBorder: InputBorder.none,
-                    border: InputBorder.none,
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                        color: primarycolor,
-                        width: 2,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 14,
-              ),
-              Container(
-                height: textFormFieldHeight45,
-                padding: EdgeInsets.symmetric(
-                  horizontal: scrWidth * 0.015,
-                  vertical: scrHeight * 0.002,
-                ),
-                decoration: BoxDecoration(
-                  color: textFormFieldFillColor,
-                  borderRadius: BorderRadius.circular(scrWidth * 0.026),
-                ),
-                child: TextFormField(
-                  focusNode: confirmaccountnumberfocus,
-                  controller: confirmAccountNumber,
-                  cursorHeight: scrWidth * 0.055,
-                  keyboardType: TextInputType.number,
-                  cursorWidth: 1,
-                  cursorColor: Colors.black,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600,
-                    fontSize: FontSize15,
-                    fontFamily: 'Urbanist',
-                  ),
-                  decoration: InputDecoration(
-                    labelText: 'Confirm Account Number',
-                    labelStyle: TextStyle(
-                      color: confirmaccountnumberfocus.hasFocus
-                          ? primarycolor
-                          : Color(0xffB0B0B0),
-                      fontWeight: FontWeight.w600,
-                      fontSize: FontSize15,
-                      fontFamily: 'Urbanist',
-                    ),
-                    fillColor: textFormFieldFillColor,
-                    filled: true,
-                    contentPadding:
-                        EdgeInsets.only(top: 5, bottom: scrWidth * 0.033),
-                    disabledBorder: InputBorder.none,
-                    enabledBorder: InputBorder.none,
-                    errorBorder: InputBorder.none,
-                    border: InputBorder.none,
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                        color: primarycolor,
-                        width: 2,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 14,
-              ),
-              Container(
-                height: textFormFieldHeight45,
-                padding: EdgeInsets.symmetric(
-                  horizontal: scrWidth * 0.015,
-                  vertical: scrHeight * 0.002,
-                ),
-                decoration: BoxDecoration(
-                  color: textFormFieldFillColor,
-                  borderRadius: BorderRadius.circular(scrWidth * 0.026),
-                ),
-                child: TextFormField(
-                  focusNode: accountholdernamefocus,
-                  controller: accountHolderName,
-                  cursorHeight: scrWidth * 0.055,
-                  cursorWidth: 1,
-                  cursorColor: Colors.black,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600,
-                    fontSize: FontSize15,
-                    fontFamily: 'Urbanist',
-                  ),
-                  decoration: InputDecoration(
-                    labelText: 'Account Holder Name',
-                    labelStyle: TextStyle(
-                      color: accountholdernamefocus.hasFocus
-                          ? primarycolor
-                          : Color(0xffB0B0B0),
-                      fontWeight: FontWeight.w600,
-                      fontSize: FontSize15,
-                      fontFamily: 'Urbanist',
-                    ),
-                    fillColor: textFormFieldFillColor,
-                    filled: true,
-                    contentPadding:
-                        EdgeInsets.only(top: 5, bottom: scrWidth * 0.033),
-                    disabledBorder: InputBorder.none,
-                    enabledBorder: InputBorder.none,
-                    errorBorder: InputBorder.none,
-                    border: InputBorder.none,
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                        color: primarycolor,
-                        width: 2,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 14,
-              ),
-              Container(
-                height: textFormFieldHeight45,
-                padding: EdgeInsets.symmetric(
-                  horizontal: scrWidth * 0.015,
-                  vertical: scrHeight * 0.002,
-                ),
-                decoration: BoxDecoration(
-                  color: textFormFieldFillColor,
-                  borderRadius: BorderRadius.circular(scrWidth * 0.026),
-                ),
-                child: TextFormField(
-                  focusNode: banknamefocus,
-                  controller: bankName,
-                  cursorHeight: scrWidth * 0.055,
-                  cursorWidth: 1,
-                  cursorColor: Colors.black,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600,
-                    fontSize: FontSize15,
-                    fontFamily: 'Urbanist',
-                  ),
-                  decoration: InputDecoration(
-                    labelText: 'Bank Name',
-                    labelStyle: TextStyle(
-                      color: banknamefocus.hasFocus
-                          ? primarycolor
-                          : Color(0xffB0B0B0),
-                      fontWeight: FontWeight.w600,
-                      fontSize: FontSize15,
-                      fontFamily: 'Urbanist',
-                    ),
-                    fillColor: textFormFieldFillColor,
-                    filled: true,
-                    contentPadding:
-                        EdgeInsets.only(top: 5, bottom: scrWidth * 0.033),
-                    disabledBorder: InputBorder.none,
-                    enabledBorder: InputBorder.none,
-                    errorBorder: InputBorder.none,
-                    border: InputBorder.none,
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                        color: primarycolor,
-                        width: 2,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 14,
-              ),
-              Container(
-                height: textFormFieldHeight45,
-                padding: EdgeInsets.symmetric(
-                  horizontal: scrWidth * 0.015,
-                  vertical: scrHeight * 0.002,
-                ),
-                decoration: BoxDecoration(
-                  color: textFormFieldFillColor,
-                  borderRadius: BorderRadius.circular(scrWidth * 0.026),
-                ),
-                child: TextFormField(
-                  focusNode: ifsccodefocus,
-                  controller: ifsc,
-                  cursorHeight: scrWidth * 0.055,
-                  cursorWidth: 1,
-                  cursorColor: Colors.black,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600,
-                    fontSize: FontSize15,
-                    fontFamily: 'Urbanist',
-                  ),
-                  decoration: InputDecoration(
-                    labelText: 'IFSC Code',
-                    labelStyle: TextStyle(
-                      color: ifsccodefocus.hasFocus
-                          ? primarycolor
-                          : Color(0xffB0B0B0),
-                      fontWeight: FontWeight.w600,
-                      fontSize: FontSize15,
-                      fontFamily: 'Urbanist',
-                    ),
-                    fillColor: textFormFieldFillColor,
-                    filled: true,
-                    contentPadding:
-                        EdgeInsets.only(top: 5, bottom: scrWidth * 0.033),
-                    disabledBorder: InputBorder.none,
-                    enabledBorder: InputBorder.none,
-                    errorBorder: InputBorder.none,
-                    border: InputBorder.none,
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                        color: primarycolor,
-                        width: 2,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-      floatingActionButton: GestureDetector(
-        onTap: () {
-          ChitModel local = widget.chit;
-          if (phone.text != '' &&
-              upiApps.isNotEmpty &&
-              accountNumber.text == confirmAccountNumber.text) {
-            if (widget.chit.chitId != '') {
-              final chit = ChitModel(
-                  winners: local.winners,
-                  membersCount: local.membersCount,
-                  status: local.status,
-                  subscriptionAmount: local.subscriptionAmount,
-                  profile: local.profile,
-                  duration: local.duration,
-                  drawn: local.drawn,
-                  document: local.document,
-                  dividendAmount: local.dividendAmount,
-                  createdDate: DateTime.now(),
-                  commission: local.commission,
-                  chitType: local.chitType,
-                  chitTime: local.chitTime,
-                  chitName: local.chitName,
-                  fileName: local.fileName,
-                  chitDate: local.chitDate,
-                  private: local.private,
-                  amount: local.amount,
-                  members: local.members,
-                  accountNumber: accountNumber.text,
-                  bankName: bankName.text,
-                  phone: phone.text,
-                  upiApps: upiApps,
-                  accountHolderName: accountHolderName.text,
-                  userId: currentuserid,
-                  ifsc: ifsc.text,
-                  payableAmount: local.payableAmount,
-                  chitId: local.chitId ?? '');
-
-              FirebaseFirestore.instance
-                  .collection('chit')
-                  .doc(local.chitId)
-                  .update(chit.toJson())
-                  .then((value) {
-                showSnackbar(context, 'Chit Update Successfully');
-                Navigator.pop(context);
-              });
-            } else {
-              final chit = ChitModel(
-                winners: [],
-                membersCount: local.membersCount,
-                status: local.status,
-                subscriptionAmount: local.subscriptionAmount,
-                profile: local.profile,
-                duration: local.duration,
-                drawn: local.drawn,
-                document: local.document,
-                dividendAmount: local.dividendAmount,
-                createdDate: DateTime.now(),
-                commission: local.commission,
-                chitType: local.chitType,
-                chitTime: local.chitTime,
-                chitName: local.chitName,
-                chitDate: local.chitDate,
-                private: local.private,
-                amount: local.amount,
-                members: [],
-                accountNumber: accountNumber.text,
-                bankName: bankName.text,
-                phone: phone.text,
-                upiApps: upiApps,
-                accountHolderName: accountHolderName.text,
-                userId: currentuserid,
-                payableAmount: local.subscriptionAmount,
-                chitId: local.chitId,
-                fileName: widget.fileName,
-                ifsc: ifsc.text,
-              );
-
-              FirebaseFirestore.instance
-                  .collection('chit')
-                  .add(chit.toJson())
-                  .then((value) {
-                value.update({'chitId': value.id});
-                value.collection('chats').add({
-                  "file": local.document!,
-                  "fileName": 'PROOF',
-                  "senderId": currentuserid,
-                  "sendTime": DateTime.now(),
-                  "readBy": [],
-                  "type": "file",
-                  "ext": widget.ext,
-                  "size": widget.size,
-                });
-              }).then((value) {
-                showSnackbar(context, 'Chit successfully added');
-                setState(() {
-                  loading = false;
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (context) => ScreenLayout()),
-                      (route) => false);
-                });
-              });
-            }
-          } else {
-            phone.text == ''
-                ? showSnackbar(context, 'Please Enter Phone Number')
-                : upiApps.isEmpty
-                    ? showSnackbar(context, 'Please Choose Available UPI Apps')
-                    : showSnackbar(context,
-                        'Confirm account number must be same as account number.');
-          }
-        },
-        child: Container(
-            width: 285,
-            height: 47,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(17),
-              color: primarycolor,
-            ),
-            child: Center(
-              child: Text(
-                "Create Chit",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: FontSize15,
+          title: Padding(
+            padding: EdgeInsets.only(top: scrHeight * 0.02),
+            child: Text(
+              "Add Payment Details",
+              style: TextStyle(
+                  fontSize: scrWidth * 0.046,
+                  color: Colors.black,
                   fontFamily: 'Urbanist',
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.w700),
+            ),
+          ),
+        ),
+        body: Padding(
+          padding: EdgeInsets.only(
+              left: scrWidth * 0.05,
+              right: scrWidth * 0.05,
+              top: scrHeight * 0.01),
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Column(
+              children: [
+                //PAYMENT
+                Padding(
+                  padding: EdgeInsets.only(
+                      right: scrWidth * 0.7,
+                      top: scrHeight * 0.016,
+                      bottom: scrHeight * 0.01),
+                  child: Text(
+                    "Payment",
+                    style: TextStyle(
+                        fontFamily: 'Urbanist',
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600),
+                  ),
                 ),
+                Container(
+                  height: textFormFieldHeight45,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: scrWidth * 0.015,
+                    vertical: scrHeight * 0.002,
+                  ),
+                  decoration: BoxDecoration(
+                    color: textFormFieldFillColor,
+                    borderRadius: BorderRadius.circular(scrWidth * 0.026),
+                  ),
+                  child: TextFormField(
+                    controller: phone,
+                    focusNode: phonenumberfocus,
+                    keyboardType: TextInputType.number,
+                    // maxLength: 10,
+                    cursorHeight: scrWidth * 0.055,
+                    cursorWidth: 1,
+                    cursorColor: Colors.black,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                      fontSize: FontSize15,
+                      fontFamily: 'Urbanist',
+                    ),
+                    decoration: InputDecoration(
+                      prefixIcon: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SvgPicture.asset(
+                            'assets/icons/indflag.svg',
+                            height: scrHeight * 0.03,
+                            width: scrWidth * 0.02,
+                          ),
+                          SizedBox(
+                            width: scrWidth * 0.02,
+                          ),
+                          Text(
+                            "+91",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w400,
+                              fontSize: FontSize17,
+                              fontFamily: 'Outfit',
+                            ),
+                          ),
+                          VerticalDivider(
+                            endIndent: 6,
+                            indent: 6,
+                            color: Color(0xffDADADA),
+                            thickness: 1,
+                          ),
+                        ],
+                      ),
+                      fillColor: textFormFieldFillColor,
+                      filled: true,
+                      contentPadding:
+                          EdgeInsets.only(top: 5, bottom: scrWidth * 0.033),
+                      disabledBorder: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                      border: InputBorder.none,
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: primarycolor,
+                          width: 2,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                      right: scrWidth * 0.6,
+                      top: scrHeight * 0.025,
+                      bottom: scrHeight * 0.02),
+                  child: Text(
+                    "Choose UPI apps",
+                    style: TextStyle(
+                        color: Color(0xffB0B0B0),
+                        fontFamily: 'Urbanist',
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600),
+                  ),
+                ),
+                Container(
+                    height: 90,
+                    child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: multiselect.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return PayItem(
+                            multiselect[index].image,
+                            multiselect[index].payname,
+                            multiselect[index].isSelected,
+                            index,
+                            multiselect[index].type,
+                          );
+                        })),
+                Padding(
+                  padding: EdgeInsets.only(
+                      right: scrWidth * 0.65,
+                      top: scrHeight * 0.026,
+                      bottom: scrHeight * 0.01),
+                  child: Text(
+                    "Bank Details",
+                    style: TextStyle(
+                        color: Color(0xffB0B0B0),
+                        fontFamily: 'Urbanist',
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600),
+                  ),
+                ),
+                SizedBox(
+                  height: 14,
+                ),
+                Container(
+                  height: textFormFieldHeight45,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: scrWidth * 0.015,
+                    vertical: scrHeight * 0.002,
+                  ),
+                  decoration: BoxDecoration(
+                    color: textFormFieldFillColor,
+                    borderRadius: BorderRadius.circular(scrWidth * 0.026),
+                  ),
+                  child: TextFormField(
+                    focusNode: accountnumberfocus,
+                    controller: accountNumber,
+                    cursorHeight: scrWidth * 0.055,
+                    cursorWidth: 1,
+                    keyboardType: TextInputType.number,
+                    cursorColor: Colors.black,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                      fontSize: FontSize15,
+                      fontFamily: 'Urbanist',
+                    ),
+                    decoration: InputDecoration(
+                      labelText: 'Account Number',
+                      labelStyle: TextStyle(
+                        color: accountnumberfocus.hasFocus
+                            ? primarycolor
+                            : Color(0xffB0B0B0),
+                        fontWeight: FontWeight.w600,
+                        fontSize: FontSize15,
+                        fontFamily: 'Urbanist',
+                      ),
+                      fillColor: textFormFieldFillColor,
+                      filled: true,
+                      contentPadding:
+                          EdgeInsets.only(top: 5, bottom: scrWidth * 0.033),
+                      disabledBorder: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                      border: InputBorder.none,
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: primarycolor,
+                          width: 2,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 14,
+                ),
+                Container(
+                  height: textFormFieldHeight45,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: scrWidth * 0.015,
+                    vertical: scrHeight * 0.002,
+                  ),
+                  decoration: BoxDecoration(
+                    color: textFormFieldFillColor,
+                    borderRadius: BorderRadius.circular(scrWidth * 0.026),
+                  ),
+                  child: TextFormField(
+                    focusNode: confirmaccountnumberfocus,
+                    controller: confirmAccountNumber,
+                    cursorHeight: scrWidth * 0.055,
+                    keyboardType: TextInputType.number,
+                    cursorWidth: 1,
+                    cursorColor: Colors.black,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                      fontSize: FontSize15,
+                      fontFamily: 'Urbanist',
+                    ),
+                    decoration: InputDecoration(
+                      labelText: 'Confirm Account Number',
+                      labelStyle: TextStyle(
+                        color: confirmaccountnumberfocus.hasFocus
+                            ? primarycolor
+                            : Color(0xffB0B0B0),
+                        fontWeight: FontWeight.w600,
+                        fontSize: FontSize15,
+                        fontFamily: 'Urbanist',
+                      ),
+                      fillColor: textFormFieldFillColor,
+                      filled: true,
+                      contentPadding:
+                          EdgeInsets.only(top: 5, bottom: scrWidth * 0.033),
+                      disabledBorder: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                      border: InputBorder.none,
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: primarycolor,
+                          width: 2,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 14,
+                ),
+                Container(
+                  height: textFormFieldHeight45,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: scrWidth * 0.015,
+                    vertical: scrHeight * 0.002,
+                  ),
+                  decoration: BoxDecoration(
+                    color: textFormFieldFillColor,
+                    borderRadius: BorderRadius.circular(scrWidth * 0.026),
+                  ),
+                  child: TextFormField(
+                    focusNode: accountholdernamefocus,
+                    controller: accountHolderName,
+                    cursorHeight: scrWidth * 0.055,
+                    cursorWidth: 1,
+                    cursorColor: Colors.black,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                      fontSize: FontSize15,
+                      fontFamily: 'Urbanist',
+                    ),
+                    decoration: InputDecoration(
+                      labelText: 'Account Holder Name',
+                      labelStyle: TextStyle(
+                        color: accountholdernamefocus.hasFocus
+                            ? primarycolor
+                            : Color(0xffB0B0B0),
+                        fontWeight: FontWeight.w600,
+                        fontSize: FontSize15,
+                        fontFamily: 'Urbanist',
+                      ),
+                      fillColor: textFormFieldFillColor,
+                      filled: true,
+                      contentPadding:
+                          EdgeInsets.only(top: 5, bottom: scrWidth * 0.033),
+                      disabledBorder: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                      border: InputBorder.none,
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: primarycolor,
+                          width: 2,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 14,
+                ),
+                Container(
+                  height: textFormFieldHeight45,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: scrWidth * 0.015,
+                    vertical: scrHeight * 0.002,
+                  ),
+                  decoration: BoxDecoration(
+                    color: textFormFieldFillColor,
+                    borderRadius: BorderRadius.circular(scrWidth * 0.026),
+                  ),
+                  child: TextFormField(
+                    focusNode: banknamefocus,
+                    controller: bankName,
+                    cursorHeight: scrWidth * 0.055,
+                    cursorWidth: 1,
+                    cursorColor: Colors.black,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                      fontSize: FontSize15,
+                      fontFamily: 'Urbanist',
+                    ),
+                    decoration: InputDecoration(
+                      labelText: 'Bank Name',
+                      labelStyle: TextStyle(
+                        color: banknamefocus.hasFocus
+                            ? primarycolor
+                            : Color(0xffB0B0B0),
+                        fontWeight: FontWeight.w600,
+                        fontSize: FontSize15,
+                        fontFamily: 'Urbanist',
+                      ),
+                      fillColor: textFormFieldFillColor,
+                      filled: true,
+                      contentPadding:
+                          EdgeInsets.only(top: 5, bottom: scrWidth * 0.033),
+                      disabledBorder: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                      border: InputBorder.none,
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: primarycolor,
+                          width: 2,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 14,
+                ),
+                Container(
+                  height: textFormFieldHeight45,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: scrWidth * 0.015,
+                    vertical: scrHeight * 0.002,
+                  ),
+                  decoration: BoxDecoration(
+                    color: textFormFieldFillColor,
+                    borderRadius: BorderRadius.circular(scrWidth * 0.026),
+                  ),
+                  child: TextFormField(
+                    focusNode: ifsccodefocus,
+                    controller: ifsc,
+                    textCapitalization: TextCapitalization.characters,
+                    // inputFormatters: [UpperCaseTextFormatter()],
+                    onChanged: ((val) {
+                      ifsc.value = TextEditingValue(
+                          text: val.toUpperCase(), selection: ifsc.selection);
+                      //   print('hi');
+                      //   ifsc.text = val.toUpperCase();
+                      //   // setState(() {});
+                    }),
+                    cursorHeight: scrWidth * 0.055,
+                    cursorWidth: 1,
+                    cursorColor: Colors.black,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                      fontSize: FontSize15,
+                      fontFamily: 'Urbanist',
+                    ),
+                    decoration: InputDecoration(
+                      labelText: 'IFSC Code',
+                      labelStyle: TextStyle(
+                        color: ifsccodefocus.hasFocus
+                            ? primarycolor
+                            : Color(0xffB0B0B0),
+                        fontWeight: FontWeight.w600,
+                        fontSize: FontSize15,
+                        fontFamily: 'Urbanist',
+                      ),
+                      fillColor: textFormFieldFillColor,
+                      filled: true,
+                      contentPadding:
+                          EdgeInsets.only(top: 5, bottom: scrWidth * 0.033),
+                      disabledBorder: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                      border: InputBorder.none,
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: primarycolor,
+                          width: 2,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        floatingActionButton: GestureDetector(
+          onTap: () {
+            ChitModel local = widget.chit;
+            if (phone.text != '' &&
+                upiApps.isNotEmpty &&
+                accountNumber.text == confirmAccountNumber.text) {
+              if (widget.chit.chitId != '') {
+                final chit = ChitModel(
+                    winners: local.winners,
+                    membersCount: local.membersCount,
+                    status: local.status,
+                    subscriptionAmount: local.subscriptionAmount,
+                    profile: local.profile,
+                    duration: local.duration,
+                    drawn: local.drawn,
+                    document: local.document,
+                    dividendAmount: local.dividendAmount,
+                    createdDate: DateTime.now(),
+                    commission: local.commission,
+                    chitType: local.chitType,
+                    chitTime: local.chitTime,
+                    chitName: local.chitName,
+                    fileName: local.fileName,
+                    chitDate: local.chitDate,
+                    private: local.private,
+                    amount: local.amount,
+                    members: local.members,
+                    accountNumber: accountNumber.text,
+                    bankName: bankName.text,
+                    phone: phone.text,
+                    upiApps: upiApps,
+                    accountHolderName: accountHolderName.text,
+                    userId: currentuserid,
+                    ifsc: ifsc.text,
+                    delete: false,
+                    payableAmount: local.payableAmount,
+                    chitId: local.chitId ?? '');
+
+                FirebaseFirestore.instance
+                    .collection('chit')
+                    .doc(local.chitId)
+                    .update(chit.toJson())
+                    .then((value) {
+                  showSnackbar(context, 'Chit Update Successfully');
+                  Navigator.pop(context);
+                });
+              } else {
+                final chit = ChitModel(
+                    winners: [],
+                    membersCount: local.membersCount,
+                    status: local.status,
+                    subscriptionAmount: local.subscriptionAmount,
+                    profile: local.profile,
+                    duration: local.duration,
+                    drawn: local.drawn,
+                    document: local.document,
+                    dividendAmount: local.dividendAmount,
+                    createdDate: DateTime.now(),
+                    commission: local.commission,
+                    chitType: local.chitType,
+                    chitTime: local.chitTime,
+                    chitName: local.chitName,
+                    chitDate: local.chitDate,
+                    private: local.private,
+                    amount: local.amount,
+                    members: [],
+                    accountNumber: accountNumber.text,
+                    bankName: bankName.text,
+                    phone: phone.text,
+                    upiApps: upiApps,
+                    accountHolderName: accountHolderName.text,
+                    userId: currentuserid,
+                    payableAmount: local.subscriptionAmount,
+                    chitId: local.chitId,
+                    fileName: widget.fileName,
+                    ifsc: ifsc.text,
+                    delete: false);
+
+                FirebaseFirestore.instance
+                    .collection('chit')
+                    .add(chit.toJson())
+                    .then((value) {
+                  value.update({'chitId': value.id});
+                  value.collection('chats').add({
+                    "file": local.document!,
+                    "fileName": 'PROOF',
+                    "senderId": currentuserid,
+                    "sendTime": DateTime.now(),
+                    "readBy": [],
+                    "type": "file",
+                    "ext": widget.ext,
+                    "size": widget.size,
+                  });
+                }).then((value) {
+                  showSnackbar(context, 'Chit successfully added');
+                  setState(() {
+                    loading = false;
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => ScreenLayout()),
+                        (route) => false);
+                  });
+                });
+              }
+            } else {
+              phone.text == ''
+                  ? showSnackbar(context, 'Please Enter Phone Number')
+                  : upiApps.isEmpty
+                      ? showSnackbar(
+                          context, 'Please Choose Available UPI Apps')
+                      : showSnackbar(context,
+                          'Confirm account number must be same as account number.');
+            }
+          },
+          child: Container(
+              width: 285,
+              height: 47,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(17),
+                color: primarycolor,
               ),
-            )),
+              child: Center(
+                child: Text(
+                  "Create Chit",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: FontSize15,
+                    fontFamily: 'Urbanist',
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              )),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 

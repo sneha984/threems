@@ -27,7 +27,6 @@ class Utilities extends StatefulWidget {
 }
 
 class _UtilitiesState extends State<Utilities> {
-
   // List services = [
   //   {
   //     'serviceName':'Salone & Spa',
@@ -176,7 +175,7 @@ class _UtilitiesState extends State<Utilities> {
                       shrinkWrap: true,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3,
-                        childAspectRatio: 1,
+                        childAspectRatio: 0.85,
                         crossAxisSpacing: 10,
                         mainAxisSpacing: 10,
                       ),
@@ -209,7 +208,8 @@ class _UtilitiesState extends State<Utilities> {
                                                         ['serviceCategory'],
                                                 image: categories![index]
                                                     ['image'],
-                                                serviceId: categories![index].id,
+                                                serviceId:
+                                                    categories![index].id,
                                               )));
                                   // Navigator.push(
                                   //     context,
@@ -224,7 +224,7 @@ class _UtilitiesState extends State<Utilities> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Container(
-                                      height: 80,
+                                      height: 70,
                                       width: 120,
                                       decoration: BoxDecoration(
                                           color: Color(0xffF3F3F3),
@@ -242,7 +242,8 @@ class _UtilitiesState extends State<Utilities> {
                                         ],
                                       ),
                                     ),
-                                    Expanded(
+                                    Container(
+                                      height: scrHeight * 0.04,
                                       child: Center(
                                         child: Text(
                                           categories![index]['serviceCategory'],

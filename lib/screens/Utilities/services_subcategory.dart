@@ -11,41 +11,46 @@ class ServiceSubcategoryPage extends StatefulWidget {
   final String serviceCategoryName;
   final String image;
   final String serviceId;
-  const ServiceSubcategoryPage({Key? key, required this.serviceCategoryName, required this.image, required this.serviceId,}) : super(key: key);
+  const ServiceSubcategoryPage({
+    Key? key,
+    required this.serviceCategoryName,
+    required this.image,
+    required this.serviceId,
+  }) : super(key: key);
 
   @override
   State<ServiceSubcategoryPage> createState() => _ServiceSubcategoryPageState();
 }
 
 class _ServiceSubcategoryPageState extends State<ServiceSubcategoryPage> {
-  List subcategories=[];
-  getSubCategories(){
-    FirebaseFirestore.instance.collection('serviceCategory').doc(widget.serviceId).
-    snapshots().listen((event) {
-      for(var a in event.get('subCategory')){
+  List subcategories = [];
+  getSubCategories() {
+    FirebaseFirestore.instance
+        .collection('serviceCategory')
+        .doc(widget.serviceId)
+        .snapshots()
+        .listen((event) {
+      for (var a in event.get('subCategory')) {
         subcategories.add(a);
       }
       print(subcategories);
-      if(mounted){
-        setState(() {
-
-        });
+      if (mounted) {
+        setState(() {});
       }
-    }
-    );
-
+    });
   }
+
   @override
   void initState() {
     getSubCategories();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(scrWidth * 0.15),
+        preferredSize: Size.fromHeight(scrWidth * 0.18),
         child: Container(
           /*decoration: BoxDecoration(boxShadow: [
             BoxShadow(
@@ -59,56 +64,63 @@ class _ServiceSubcategoryPageState extends State<ServiceSubcategoryPage> {
             automaticallyImplyLeading: false,
             backgroundColor: tabBarColor,
             title: Padding(
-              padding: EdgeInsets.only(top: 30,left: 15),
+              padding: EdgeInsets.only(top: 30, left: 10),
               child: Row(
                 children: [
                   InkWell(
-                    onTap: (){
+                    onTap: () {
                       Navigator.pop(context);
                     },
                     child: CircleAvatar(
                         radius: 15,
                         backgroundColor: Colors.white,
-                        child: Icon(Icons.close_outlined,color: Colors.black,size: 20,)),
+                        child: Icon(
+                          Icons.close_outlined,
+                          color: Colors.black,
+                          size: 20,
+                        )),
                   ),
-                  SizedBox(width: 15,),
-                  Text(
-                   widget.serviceCategoryName,
-                    style: TextStyle(
-                        fontSize: 19,
-                        fontFamily: 'Urbanist',
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Flexible(
+                    child: Text(
+                      widget.serviceCategoryName,
+                      overflow: TextOverflow.visible,
+                      style: TextStyle(
+                          fontSize: 19,
+                          fontFamily: 'Urbanist',
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white),
+                    ),
                   ),
                 ],
               ),
             ),
-
           ),
         ),
       ),
-     body: Container(
+      body: Container(
         height: scrHeight,
         child: Stack(
           children: [
             Column(
               children: [
                 Container(
-                  height: scrWidth*0.2,
+                  height: scrWidth * 0.2,
                   color: tabBarColor,
-
                 ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding:  EdgeInsets.only(top:scrWidth*0.1),
+                      padding: EdgeInsets.only(top: scrWidth * 0.1),
                       child: Container(
-
                         child: GridView.builder(
                           shrinkWrap: true,
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 3,
                             childAspectRatio: 1,
                             crossAxisSpacing: 15,
@@ -116,92 +128,94 @@ class _ServiceSubcategoryPageState extends State<ServiceSubcategoryPage> {
                           ),
                           itemCount: subcategories!.length,
                           padding: EdgeInsets.only(
-                              top: 25, bottom: 15, left: 20,right: 15),
+                              top: 25, bottom: 15, left: 20, right: 15),
                           itemBuilder: (BuildContext context, int index) {
-                            return  subcategories.length==0?Container(
-                              child:Center(
-                                child: Text(
-                                  "No subcategories under this Category",
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontFamily: 'Urbanist',
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.black),
-                                ),
-                              ),
-                            ):
-                            InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => ServiceDetailesPage(
-                                          subCategoryName: subcategories[index]['sub'],
-                                          category: widget.serviceCategoryName,
-
-                                          // image:categories![index]['image'],
-                                          // serviceId:categories![index].id,
-
-                                        )));
-                              },
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  // Container(
-                                  //   height:80,
-                                  //   width:120,
-                                  //   decoration: BoxDecoration(
-                                  //       color: Color(0xffF3F3F3),
-                                  //
-                                  //       borderRadius: BorderRadius.circular(20)
-                                  //   ),
-                                  //   child: Column(
-                                  //     mainAxisAlignment: MainAxisAlignment.center,
-                                  //     children: [
-                                  //       Image.network( subcategories[index]['image'].toString(),height: 55,width: 50, ),
-                                  //     ],
-                                  //   ),
-                                  // ),
-                                  CircleAvatar(
-                                    radius:40,
-                                    backgroundImage: NetworkImage(subcategories[index]['image']),
-
-                                  ),
-                                  Expanded(
-                                    child:  Center(
+                            return subcategories.length == 0
+                                ? Container(
+                                    child: Center(
                                       child: Text(
-                                        subcategories![index]['sub'],
+                                        "No subcategories under this Category",
                                         style: TextStyle(
-                                            fontSize: scrWidth * 0.029,
-                                            color: Colors.black,
+                                            fontSize: 15,
                                             fontFamily: 'Urbanist',
-                                            fontWeight: FontWeight.w600),
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.black),
                                       ),
                                     ),
-                                  ),
+                                  )
+                                : InkWell(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ServiceDetailesPage(
+                                                    subCategoryName:
+                                                        subcategories[index]
+                                                            ['sub'],
+                                                    category: widget
+                                                        .serviceCategoryName,
 
-                                ],
-                              ),
-                            );
+                                                    // image:categories![index]['image'],
+                                                    // serviceId:categories![index].id,
+                                                  )));
+                                    },
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        // Container(
+                                        //   height:80,
+                                        //   width:120,
+                                        //   decoration: BoxDecoration(
+                                        //       color: Color(0xffF3F3F3),
+                                        //
+                                        //       borderRadius: BorderRadius.circular(20)
+                                        //   ),
+                                        //   child: Column(
+                                        //     mainAxisAlignment: MainAxisAlignment.center,
+                                        //     children: [
+                                        //       Image.network( subcategories[index]['image'].toString(),height: 55,width: 50, ),
+                                        //     ],
+                                        //   ),
+                                        // ),
+                                        CircleAvatar(
+                                          radius: 40,
+                                          backgroundImage: NetworkImage(
+                                              subcategories[index]['image']),
+                                        ),
+                                        Expanded(
+                                          child: Center(
+                                            child: Text(
+                                              subcategories![index]['sub'],
+                                              style: TextStyle(
+                                                  fontSize: scrWidth * 0.029,
+                                                  color: Colors.black,
+                                                  fontFamily: 'Urbanist',
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
                           },
-
                         ),
                       ),
                     ),
-
                   ],
                 ),
               ],
             ),
             Positioned(
-                top: scrHeight*0.035,
-                left: scrWidth*0.35,
-                right: scrWidth*0.35,
-
+                top: scrHeight * 0.035,
+                left: scrWidth * 0.35,
+                right: scrWidth * 0.35,
                 child: Container(
-                  height: scrWidth*0.2,
-                  width: scrWidth*0.001,
+                  height: scrWidth * 0.2,
+                  width: scrWidth * 0.001,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
                     color: Color(0xffF3F3F3),
@@ -216,17 +230,16 @@ class _ServiceSubcategoryPageState extends State<ServiceSubcategoryPage> {
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(12.0),
-                    child: SvgPicture.network(widget.image,height: 30,width: 30,),
+                    child: SvgPicture.network(
+                      widget.image,
+                      height: 30,
+                      width: 30,
+                    ),
                   ),
-
-
-                )
-            ),
-
+                )),
           ],
         ),
       ),
-
     );
   }
 }

@@ -45,22 +45,35 @@ class Authentication {
 
     try {
       print('HERE TRY ');
-      FirebaseFirestore.instance.collection('users').doc(userDoc).update({
-        "userId": userDoc,
-        "userName": userName,
-        "userEmail": userEmail,
-        "userImage": userImage,
-        // "phone": '',
-        "dateTime": DateTime.now(),
-      }).whenComplete(() {
-        print('COMPLETED');
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (context) => Rootingpage(),
-            ),
-            (route) => false);
-      });
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(userDoc)
+          .update({
+            "userId": userDoc,
+            "userName": userName,
+            "userEmail": userEmail,
+            "userImage": userImage,
+            // "phone": '',
+            "dateTime": DateTime.now(),
+          })
+          .onError((error, stackTrace) =>
+              FirebaseFirestore.instance.collection('users').doc(userDoc).set({
+                "userId": userDoc,
+                "userName": userName,
+                "userEmail": userEmail,
+                "userImage": userImage,
+                "phone": '',
+                "dateTime": DateTime.now(),
+              }))
+          .whenComplete(() {
+            print('COMPLETED');
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Rootingpage(),
+                ),
+                (route) => false);
+          });
     } catch (err) {
       FirebaseFirestore.instance.collection('users').doc(userDoc).set({
         "userId": userDoc,

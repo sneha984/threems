@@ -33,8 +33,34 @@ class _PhoneBookPageState extends State<PhoneBookPage> {
       if (mounted) {
         setState(() {
           print(userList.length);
+          getInstalledUsers();
         });
       }
+    });
+  }
+
+  getInstalledUsers() {
+    List<Contact> installed = [];
+    List<Contact> notInstalled = [];
+    for (int i = 0; i < totalContacts.length; i++) {
+      if (totalContacts[i].phones!.isNotEmpty) {
+        if (userList.contains(totalContacts[i]
+            .phones![0]
+            .value
+            .toString()
+            .replaceAll(' ', '')
+            .replaceAll('+91', ''))) {
+          installed.add(totalContacts[i]);
+        } else {
+          notInstalled.add(totalContacts[i]);
+        }
+      }
+    }
+
+    setState(() {
+      totalContactsSearch = [];
+      totalContactsSearch.addAll(installed);
+      totalContactsSearch.addAll(notInstalled);
     });
   }
 

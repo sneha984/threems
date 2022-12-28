@@ -50,7 +50,11 @@ class _HostedChitPageState extends State<HostedChitPage>
   // }
 
   getChits() {
-    FirebaseFirestore.instance.collection('chit').snapshots().listen((event) {
+    FirebaseFirestore.instance
+        .collection('chit')
+        .where('delete', isEqualTo: false)
+        .snapshots()
+        .listen((event) {
       var docs = event.docs;
       myChits = [];
       vacantChits = [];

@@ -403,6 +403,25 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
                                         )),
                                   ),
                                   SizedBox(
+                                    width: scrWidth * 0.04,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        bottom: scrHeight * 0.02),
+                                    child: InkWell(
+                                        onTap: () {
+                                          FirebaseFirestore.instance
+                                              .collection('chit')
+                                              .doc(widget.id)
+                                              .update({'delete': true});
+                                          Navigator.pop(context);
+                                        },
+                                        child: Icon(
+                                          Icons.delete_forever,
+                                          color: Colors.white,
+                                        )),
+                                  ),
+                                  SizedBox(
                                     width: scrWidth * 0.05,
                                   ),
                                   chit!.status! < 2

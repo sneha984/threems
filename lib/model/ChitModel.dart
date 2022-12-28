@@ -27,12 +27,14 @@ class ChitModel {
   String? bankName;
   String? ifsc;
   String? fileName;
+  bool? delete;
 
   ChitModel({
     this.chitName,
     this.private,
     this.fileName,
     this.commission,
+    this.delete,
     this.members,
     this.chitId,
     this.userId,
@@ -62,6 +64,7 @@ class ChitModel {
   ChitModel.fromJson(Map<String, dynamic> json) {
     chitName = json['chitName'];
     private = json['private'];
+    delete = json['delete'];
     commission = json['commission'];
     fileName = json['fileName'];
     payableAmount = double.tryParse(json['payableAmount'].toString());
@@ -100,6 +103,7 @@ class ChitModel {
     final Map<String, dynamic> data = Map<String, dynamic>();
     data['chitName'] = chitName;
     data['private'] = private;
+    data['delete'] = delete;
     data['commission'] = commission;
     data['fileName'] = fileName;
     data['membersCount'] = membersCount;

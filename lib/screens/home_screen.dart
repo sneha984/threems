@@ -191,9 +191,23 @@ class _HomeScreenState extends State<HomeScreen> {
     getVerifiedCharity();
     getLocation();
 
+    // addFieldtoAlldoc();
+
     super.initState();
   }
 
+  // addFieldtoAlldoc() {
+  //   FirebaseFirestore.instance.collection('chit').get().then(
+  //         (value) => value.docs.forEach(
+  //           (element) {
+  //             FirebaseFirestore.instance
+  //                 .collection('chit')
+  //                 .doc(element.id)
+  //                 .update({'delete': false});
+  //           },
+  //         ),
+  //       );
+  // }
   // void pay() {
   //   showDialog(
   //     context: context,
