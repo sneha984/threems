@@ -1547,7 +1547,7 @@ class _YourChitPageState extends State<YourChitPage> {
                             ),
                             Text(
                               '$_currency ${_formatNumber(
-                                chit!.subscriptionAmount!
+                                chit!.payableAmount!
                                     .truncate()
                                     .toString()
                                     .replaceAll(',', ''),

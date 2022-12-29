@@ -288,12 +288,22 @@ class _AddMembersSearchState extends State<AddMembersSearch> {
                                       "whatsapp://send?phone=91${totalContactsSearch[index].phones![0].value.toString().replaceAll(' ', '').replaceAll('+91', '')}" +
                                           "&text=${Uri.encodeComponent(_linkMessage!)}";
                                   try {
-                                    launchUrl(Uri.tryParse(whatsappUrl)!);
+                                    launchUrl(Uri.tryParse(whatsappUrl)!)
+                                        .onError((error, stackTrace) {
+                                      Share.share(
+                                          'Inviting you to join *${widget.chit.chitName}* \n \n \n $_linkMessage');
+
+                                      return showSnackbar(
+                                          context, 'Unable to open whatsapp');
+                                    });
                                   } catch (e) {
                                     //To handle error and display error message
 
                                     showSnackbar(
                                         context, 'Unable to open whatsapp');
+
+                                    Share.share(
+                                        'Inviting you to join *${widget.chit.chitName}* \n \n \n $_linkMessage');
 
                                     // Helper.errorSnackBar(
                                     //     context: context,

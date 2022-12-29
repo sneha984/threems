@@ -136,9 +136,9 @@ class _PhoneBookPageState extends State<PhoneBookPage> {
                 },
                 child: Padding(
                   padding: EdgeInsets.only(
-                    // top: scrHeight * 0.09,
-                     left: scrWidth * 0.05,
-                    // bottom: scrHeight * 0.02,
+                      // top: scrHeight * 0.09,
+                      left: scrWidth * 0.05,
+                      // bottom: scrHeight * 0.02,
                       right: scrWidth * 0.04),
                   child: Icon(
                     Icons.arrow_back,
@@ -238,7 +238,14 @@ class _PhoneBookPageState extends State<PhoneBookPage> {
                                           "whatsapp://send?phone=91${totalContactsSearch[index].phones![0].value.toString().replaceAll(' ', '').replaceAll('+91', '')}" +
                                               "&text=${Uri.encodeComponent(_linkMessage!)}";
                                       try {
-                                        launchUrl(Uri.tryParse(whatsappUrl)!);
+                                        launchUrl(Uri.tryParse(whatsappUrl)!)
+                                            .onError((error, stackTrace) {
+                                          Share.share(
+                                              'Inviting you to join *3MS App* \n \n \n $_linkMessage');
+
+                                          return showSnackbar(context,
+                                              'Unable to open whatsapp');
+                                        });
                                       } catch (e) {
                                         //To handle error and display error message
 
