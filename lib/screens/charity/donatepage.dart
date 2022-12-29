@@ -71,6 +71,7 @@ class _DonatePageState extends State<DonatePage>with TickerProviderStateMixin {
           stream:FirebaseFirestore.instance
               .collection('charity')
               .where('userId',isNotEqualTo :currentuser!.userId)
+              .where('status',isEqualTo: 1)
               .where('cause',isEqualTo:doc.get('causeId'))
               .snapshots(),
           builder: (context, snapshot) {
@@ -202,6 +203,7 @@ class _DonatePageState extends State<DonatePage>with TickerProviderStateMixin {
                       stream: FirebaseFirestore.instance
                           .collection('charity')
                           .where('userId',isNotEqualTo :currentuser!.userId)
+                          .where('status',isEqualTo: 1)
                           .where('cause',isEqualTo:doc.get('causeId'))
                           .snapshots(),
                       builder: (context, snapshot) {
