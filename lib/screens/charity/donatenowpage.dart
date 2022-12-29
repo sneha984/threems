@@ -149,21 +149,21 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
         elevation: 0,
         toolbarHeight: 60,
         // leadingWidth:600,
-        leading: GestureDetector(
-          onTap: (){
+        leading: InkWell(
+          onTap: () {
             Navigator.pop(context);
           },
-          child:  Padding(
+          child: Padding(
             padding: EdgeInsets.only(
-                  top: scrHeight*0.01,
-                 left: scrWidth*0.06,
-                 // bottom: scrHeight*0.02,
-                  right: scrWidth*0.05
+              top: scrHeight * 0.02,
+               left: scrWidth * 0.05,
+               bottom: scrHeight * 0.01,
+                right: scrWidth * 0.04),
+            child: Icon(
+              Icons.arrow_back,
+              color: Colors.black,
+              size: 25,
             ),
-            child:Container(
-              width: 30,
-                height: 30,
-                child: SvgPicture.asset("assets/icons/arrow.svg",)),
           ),
         ),
         title: Padding(

@@ -22,11 +22,13 @@ class _PayZoomPageState extends State<PayZoomPage> {
     }, icon: Icon(Icons.arrow_back,color: Colors.black,)),
     ),
     body:   PinchZoom(
-    child: Image.network(widget.img),
-    resetDuration: const Duration(minutes: 1),
-    maxScale: 2.5,
-    onZoomStart: (){print('Start zooming');},
-    onZoomEnd: (){print('Stop zooming');},
-    ));
+      child: Image.network(widget.img),
+      resetDuration: const Duration(minutes: 1),
+      maxScale: 2.5,
+      onZoomStart: (){print('Start zooming');},
+      onZoomEnd: (){print('Stop zooming');},
+    ),
+
+    );
   }
 }

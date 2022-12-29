@@ -293,21 +293,19 @@ class _SeeMoreCharitiesState extends State<SeeMoreCharities>
                       child: Padding(
                         padding: EdgeInsets.only(
                             top: scrHeight * 0.1,
-                            left: scrWidth * 0.07,
-                            // bottom: scrHeight*0.02,
+                            left: scrWidth * 0.05,
+                            bottom: scrHeight * 0.02,
                             right: scrWidth * 0.04),
-                        child: Container(
-                          width: 20,
-                          height: 20,
-                          child: SvgPicture.asset(
-                            "assets/icons/arrow.svg",
-                          ),
+                        child: Icon(
+                          Icons.arrow_back,
+                          color: Colors.black,
+                          size: 25,
                         ),
                       ),
                     ),
                     Padding(
                       padding: EdgeInsets.only(
-                        top: scrHeight * 0.1,
+                        top: scrHeight * 0.08,
                       ),
                       child: Text(
                         "Your Charities",
@@ -320,7 +318,7 @@ class _SeeMoreCharitiesState extends State<SeeMoreCharities>
                     ),
                     SizedBox(width: scrWidth*0.28,),
                     Padding(
-                      padding:EdgeInsets.only(top: scrHeight * 0.1,),
+                      padding:EdgeInsets.only(top: scrHeight * 0.08,),
                       child: InkWell(
                         onTap: (){
                           Navigator.push(context, MaterialPageRoute(builder: (context)=>BasicDetails( update: false,)));

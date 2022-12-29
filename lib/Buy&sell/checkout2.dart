@@ -51,26 +51,25 @@ class _AddAddressPageState extends State<AddAddressPage> {
               Row(
                 children: [
                   SizedBox(width: scrWidth*0.06,),
-                  GestureDetector(
+                  InkWell(
                     onTap: () {
                       Navigator.pop(context);
                     },
                     child: Padding(
                       padding: EdgeInsets.only(
-                        top: scrHeight * 0.09,
-                         left: scrWidth * 0.03,
-                      ),
-                      child: Container(
-                        height: 20,
-                        width: 20,
-                        child: SvgPicture.asset(
-                          "assets/icons/arrow.svg",
-                        ),
+                         top: scrHeight * 0.085,
+                        // left: scrWidth * 0.05,
+                        // bottom: scrHeight * 0.02,
+                          right: scrWidth * 0.04),
+                      child: Icon(
+                        Icons.arrow_back,
+                        color: Colors.black,
+                        size: 25,
                       ),
                     ),
                   ),
                   Padding(
-                    padding:  EdgeInsets.only(top:scrHeight*0.09,left: scrWidth*0.04),
+                    padding:  EdgeInsets.only(top:scrHeight*0.087,left: scrWidth*0.04),
                     child: Text(
                       "Address",
                       style: TextStyle(

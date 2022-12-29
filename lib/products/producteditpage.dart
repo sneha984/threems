@@ -248,15 +248,19 @@ class _ProductEditPageState extends State<ProductEditPage> {
                     InkWell(
                       onTap: () {
                         Navigator.pop(context);
-                        // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                        //     ScreenLayout(index: 1,tabIndex: 1,),), (route) => false);
                       },
-                      child: Container(
-                          height: 30,
-                          width: 30,
-                          child: SvgPicture.asset(
-                            "assets/icons/arrowmark.svg",
-                          )),
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                            // top: scrHeight * 0.02,
+                            left: scrWidth * 0.01,
+                            // bottom: scrHeight * 0.02,
+                            right: scrWidth * 0.02),
+                        child: Icon(
+                          Icons.arrow_back,
+                          color: Colors.black,
+                          size: 25,
+                        ),
+                      ),
                     ),
                     SizedBox(
                       width: scrWidth * 0.04,

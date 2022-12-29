@@ -127,14 +127,20 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
                       child: Row(
                         children: [
                           InkWell(
-                            onTap: (){
+                            onTap: () {
                               Navigator.pop(context);
                             },
-                            child:  Padding(
+                            child: Padding(
                               padding: EdgeInsets.only(
-                                  left: scrWidth*0.06,
-                                  right: scrWidth*0.03),
-                              child:Container(width:23,height:23,child: SvgPicture.asset("assets/icons/arrow.svg",)),
+                                // top: scrHeight * 0.09,
+                                 left: scrWidth * 0.05,
+                                // bottom: scrHeight * 0.02,
+                                  right: scrWidth * 0.04),
+                              child: Icon(
+                                Icons.arrow_back,
+                                color: Colors.black,
+                                size: 25,
+                              ),
                             ),
                           ),
                           Text("Fundraise Dashboard",style: TextStyle(
@@ -507,16 +513,21 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
                       padding:  EdgeInsets.only( top: scrHeight*0.09,),
                       child: Row(
                         children: [
-                          GestureDetector(
-                            onTap: (){
+                          InkWell(
+                            onTap: () {
                               Navigator.pop(context);
                             },
-                            child:  Padding(
+                            child: Padding(
                               padding: EdgeInsets.only(
-                                  left: scrWidth*0.06,
-                                  // bottom: scrHeight*0.02,
-                                  right: scrWidth*0.04),
-                              child:Container(width:23,height:23,child: SvgPicture.asset("assets/icons/arrow.svg",)),
+                                // top: scrHeight * 0.09,
+                                 left: scrWidth * 0.05,
+                                // bottom: scrHeight * 0.02,
+                                  right: scrWidth * 0.04),
+                              child: Icon(
+                                Icons.arrow_back,
+                                color: Colors.black,
+                                size: 25,
+                              ),
                             ),
                           ),
                           Text("Fundraise Dashboard",style: TextStyle(

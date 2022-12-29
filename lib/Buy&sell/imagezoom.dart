@@ -79,15 +79,14 @@ class _ImageZoomPageState extends State<ImageZoomPage> with SingleTickerProvider
           },
           child: Padding(
             padding: EdgeInsets.only(
-                top: scrHeight * 0.04,
-                left: scrWidth * 0.07,
-                bottom: scrHeight * 0.02,
-                right: scrWidth * 0.05),
-            child: Container(
-              height: 35,width: 35,
-              child: SvgPicture.asset(
-                "assets/icons/arrow.svg",
-              ),
+               top: scrHeight * 0.02,
+               left: scrWidth * 0.04,
+              // bottom: scrHeight * 0.02,
+                right: scrWidth * 0.04),
+            child: Icon(
+              Icons.arrow_back,
+              color: Colors.black,
+              size: 25,
             ),
           ),
         ),

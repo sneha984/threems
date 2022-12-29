@@ -279,23 +279,24 @@ class _DonatePageState extends State<DonatePage>with TickerProviderStateMixin {
               child: Row(
                 children: [
                   InkWell(
-                    onTap: (){
+                    onTap: () {
                       Navigator.pop(context);
                     },
-                    child:  Padding(
+                    child: Padding(
                       padding: EdgeInsets.only(
-                          top: scrHeight*0.1,
-                          left: scrWidth*0.07,
-                          // bottom: scrHeight*0.02,
-                          right: scrWidth*0.05),
-                      child:Container(
-                        width: scrWidth*0.06,
-                          height: scrHeight*0.05,
-                          child: SvgPicture.asset("assets/icons/arrow.svg",)),
+                          top: scrHeight * 0.09,
+                          left: scrWidth * 0.05,
+                          bottom: scrHeight * 0.02,
+                          right: scrWidth * 0.04),
+                      child: Icon(
+                        Icons.arrow_back,
+                        color: Colors.black,
+                        size: 25,
+                      ),
                     ),
                   ),
                   Padding(
-                    padding:  EdgeInsets.only(top:scrHeight*0.1 ),
+                    padding:  EdgeInsets.only(top:scrHeight*0.07 ),
                     child: Text("Donate Now",style: TextStyle(
                         fontSize: scrWidth*0.045,
                         color: Colors.black,

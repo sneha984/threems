@@ -32,18 +32,20 @@ class _AcceptedPageState extends State<AcceptedPage> {
         centerTitle: false,
         elevation: 0.1,
         backgroundColor: Colors.white,
-        leading: GestureDetector(
+        leading: InkWell(
           onTap: () {
             Navigator.pop(context);
           },
           child: Padding(
             padding: EdgeInsets.only(
-                top: scrHeight * 0.03,
+                top: scrHeight * 0.02,
                 left: scrWidth * 0.05,
-                bottom: scrHeight * 0.01,
-                right: scrWidth * 0.05),
-            child: SvgPicture.asset(
-              "assets/icons/arrow.svg",
+                // bottom: scrHeight * 0.02,
+                right: scrWidth * 0.04),
+            child: Icon(
+              Icons.arrow_back,
+              color: Colors.black,
+              size: 25,
             ),
           ),
         ),

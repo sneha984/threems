@@ -99,13 +99,14 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                       },
                       child: Padding(
                         padding: EdgeInsets.only(
-                            top: scrHeight * 0.027, left: scrWidth * 0.03),
-                        child: Container(
-                          height: 20,
-                          width: 20,
-                          child: SvgPicture.asset(
-                            "assets/icons/whitearrow.svg",
-                          ),
+                           top: scrHeight * 0.03,
+                            left: scrWidth * 0.02,
+                            // bottom: scrHeight * 0.02,
+                            right: scrWidth * 0.02),
+                        child: Icon(
+                          Icons.arrow_back,
+                          color: Colors.white,
+                          size: 25,
                         ),
                       ),
                     ),

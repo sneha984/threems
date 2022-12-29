@@ -174,19 +174,21 @@ class _StoreDetailsState extends State<StoreDetails> {
           backgroundColor: Colors.white,
           leading: InkWell(
             onTap: () {
-              Navigator.pop(context);
-                    },
-            child: Padding(
-              padding: EdgeInsets.only(
-                  top: scrHeight * 0.03,
-                  left: scrWidth * 0.045,
-                  bottom: scrHeight * 0.01,
-                  right: scrWidth * 0.0),
-              child: SvgPicture.asset(
-                "assets/icons/arrowmark.svg",
-              ),
-            ),
+      Navigator.pop(context);
+      },
+        child: Padding(
+          padding: EdgeInsets.only(
+              top: scrHeight * 0.02,
+              left: scrWidth * 0.05,
+              // bottom: scrHeight * 0.02,
+              right: scrWidth * 0.09),
+          child: Icon(
+            Icons.arrow_back,
+            color: Colors.black,
+            size: 25,
           ),
+        ),
+      ),
           title: Padding(
             padding: EdgeInsets.only(top: scrHeight * 0.02),
             child: Text(

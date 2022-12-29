@@ -235,23 +235,20 @@ class _UpcomingCollectionsState extends State<UpcomingCollections> {
         elevation: 0.1,
         leadingWidth: scrWidth*0.2,
         backgroundColor: Colors.white,
-        leading: GestureDetector(
+        leading:  InkWell(
           onTap: () {
             Navigator.pop(context);
           },
-          child:
-          Padding(
+          child: Padding(
             padding: EdgeInsets.only(
                 top: scrHeight * 0.04,
-                left: scrWidth * 0.08,
+                left: scrWidth * 0.07,
                 bottom: scrHeight * 0.02,
                 right: scrWidth * 0.05),
-            child:
-            Container(
-              height: scrHeight*0.02,width: scrWidth*0.2,
-              child: SvgPicture.asset(
-                "assets/icons/arrow.svg",
-              ),
+            child: Icon(
+              Icons.arrow_back,
+              color: Colors.black,
+              size: 25,
             ),
           ),
         ),

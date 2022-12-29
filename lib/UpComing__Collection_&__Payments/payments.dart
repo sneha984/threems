@@ -206,21 +206,20 @@ class _UpcomingPaymentsState extends State<UpcomingPayments> {
         elevation: 0.1,
         leadingWidth: scrWidth*0.2,
         backgroundColor: Colors.white,
-        leading: GestureDetector(
+        leading: InkWell(
           onTap: () {
             Navigator.pop(context);
           },
           child: Padding(
             padding: EdgeInsets.only(
                 top: scrHeight * 0.04,
-                left: scrWidth * 0.08,
+                left: scrWidth * 0.02,
                 bottom: scrHeight * 0.02,
-                right: scrWidth * 0.05),
-            child: Container(
-              height: 30,width: 30,
-              child: SvgPicture.asset(
-                "assets/icons/arrow.svg",
-              ),
+                right: scrWidth * 0.02),
+            child: Icon(
+              Icons.arrow_back,
+              color: Colors.black,
+              size: 25,
             ),
           ),
         ),

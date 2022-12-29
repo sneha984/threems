@@ -92,26 +92,25 @@ class _CheckOutPageState extends State<CheckOutPage> {
               SizedBox(
                 width: scrWidth * 0.06,
               ),
-              GestureDetector(
+              InkWell(
                 onTap: () {
                   Navigator.pop(context);
                 },
                 child: Padding(
                   padding: EdgeInsets.only(
-                    top: scrHeight * 0.08,
-                    // left: scrWidth * 0.07,
-                  ),
-                  child: Container(
-                    width: 20,
-                    height: 20,
-                    child: SvgPicture.asset(
-                      "assets/icons/arrow.svg",
-                    ),
+                     top: scrHeight * 0.08,
+                    // left: scrWidth * 0.05,
+                    // bottom: scrHeight * 0.02,
+                      right: scrWidth * 0.04),
+                  child: Icon(
+                    Icons.arrow_back,
+                    color: Colors.black,
+                    size: 25,
                   ),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 60, left: 20),
+                padding:  EdgeInsets.only(top: scrHeight*0.08, left: scrWidth*0.03),
                 child: Text(
                   "Cart Checkout",
                   style: TextStyle(
@@ -153,22 +152,25 @@ class _CheckOutPageState extends State<CheckOutPage> {
                       SizedBox(
                         width: scrWidth * 0.06,
                       ),
-                      GestureDetector(
+                      InkWell(
                         onTap: () {
                           Navigator.pop(context);
                         },
                         child: Padding(
                           padding: EdgeInsets.only(
-                            top: scrHeight * 0.08,
-                            // left: scrWidth * 0.07,
-                          ),
-                          child: SvgPicture.asset(
-                            "assets/icons/arrow.svg",
+                             top: scrHeight * 0.08,
+                            // left: scrWidth * 0.05,
+                            // bottom: scrHeight * 0.02,
+                              right: scrWidth * 0.02),
+                          child: Icon(
+                            Icons.arrow_back,
+                            color: Colors.black,
+                            size: 25,
                           ),
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 60, left: 20),
+                        padding:  EdgeInsets.only( top: scrHeight * 0.08, left: 20),
                         child: Text(
                           "Cart Checkout",
                           style: TextStyle(

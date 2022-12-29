@@ -30,11 +30,22 @@ crossAxisAlignment: CrossAxisAlignment.start,
           children: [
 
             SizedBox(height: 36,),
-            Padding(
-              padding:  EdgeInsets.only(right: scrWidth*0.7),
-              child: IconButton(onPressed: (){
+            InkWell(
+              onTap: () {
                 Navigator.pop(context);
-              }, icon:Icon(Icons.arrow_back_ios_outlined)),
+              },
+              child: Padding(
+                padding: EdgeInsets.only(
+                  // top: scrHeight * 0.09,
+                  // left: scrWidth * 0.05,
+                  // bottom: scrHeight * 0.02,
+                    right: scrWidth * 0.04),
+                child: Icon(
+                  Icons.arrow_back,
+                  color: Colors.black,
+                  size: 25,
+                ),
+              ),
             ),
             SizedBox(height: 20,),
 

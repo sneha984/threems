@@ -153,16 +153,14 @@ class _StorePageState extends State<StorePage> {
                   },
                   child: Padding(
                     padding: EdgeInsets.only(
-                      top: scrHeight * 0.072,
-
-                      // left: scrWidth * 0.07,
-                    ),
-                    child: Container(
-                      height: scrHeight * 0.05,
-                      width: scrWidth * 0.05,
-                      child: SvgPicture.asset(
-                        "assets/icons/arrow.svg",
-                      ),
+                       top: scrHeight * 0.086,
+                      // left: scrWidth * 0.05,
+                      // bottom: scrHeight * 0.06,
+                        right: scrWidth * 0.02),
+                    child: Icon(
+                      Icons.arrow_back,
+                      color: Colors.black,
+                      size: 25,
                     ),
                   ),
                 ),

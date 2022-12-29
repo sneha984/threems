@@ -20,241 +20,207 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 50, bottom: 29),
-          child: Row(
-            children: [
-              InkWell(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: Padding(
-                  padding: EdgeInsets.only(
-                      top: scrHeight * 0.04,
-                      left: scrWidth * 0.07,
-                      bottom: scrHeight * 0.02,
-                      right: scrWidth * 0.05),
-                  child: Icon(
-                    Icons.arrow_back,
-                    color: Colors.black,
-                    size: 25,
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 50,bottom: 29),
+            child: Row(
+              children: [
+                InkWell(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                        top: scrHeight * 0.0,
+                        left: scrWidth * 0.05,
+                        // bottom: scrHeight * 0.02,
+                        right: scrWidth * 0.04),
+                    child: Icon(
+                      Icons.arrow_back,
+                      color: Colors.black,
+                      size: 25,
+                    ),
                   ),
                 ),
-              ),
-              Text(
-                "Settings",
-                style: TextStyle(
-                    fontSize: FontSize17,
-                    fontFamily: 'Urbanist',
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black),
-              ),
-            ],
+                Text(
+                  "Settings",
+                  style: TextStyle(
+                      fontSize: FontSize17,
+                      fontFamily: 'Urbanist',
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black),
+                ),
+              ],
+            ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20),
-          child: InkWell(
-            onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => SubscriptionPage()));
-            },
-            child: Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Subscription',
-                    style: TextStyle(
+          Padding(
+            padding: const EdgeInsets.only(left: 20,right: 20),
+            child: InkWell(
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>SubscriptionPage()));
+                },
+              child: Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Subscription',style: TextStyle(
                         fontSize: 17,
                         fontFamily: 'Urbanist',
                         fontWeight: FontWeight.w500,
-                        color: Colors.black),
-                  ),
-                  IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.arrow_forward_ios,
-                        size: 15,
-                      ))
-                ],
+                        color: Colors.black),),
+                    IconButton(onPressed: (){
+
+                    }, icon: Icon(Icons.arrow_forward_ios,size: 15,))
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-        Divider(
-          thickness: 2,
-          color: Color(0xfff2f2f2),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20),
-          child: InkWell(
-            onTap: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => Terms()));
-            },
-            child: Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Terms & Conditions',
-                    style: TextStyle(
+          Divider(
+            thickness: 2,
+            color: Color(0xfff2f2f2),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 20,right: 20),
+            child: InkWell(
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>Terms()));
+
+              },
+              child: Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Terms & Conditions',style: TextStyle(
                         fontSize: 17,
                         fontFamily: 'Urbanist',
                         fontWeight: FontWeight.w500,
-                        color: Colors.black),
-                  ),
-                  IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.arrow_forward_ios,
-                        size: 15,
-                      ))
-                ],
+                        color: Colors.black),),
+                    IconButton(onPressed: (){
+
+                    }, icon: Icon(Icons.arrow_forward_ios,size: 15,))
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-        Divider(
-          thickness: 2,
-          color: Color(0xfff2f2f2),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20),
-          child: InkWell(
-            onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => FAQuestions()));
-            },
-            child: Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'FAQs',
-                    style: TextStyle(
+          Divider(
+            thickness: 2,
+            color: Color(0xfff2f2f2),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 20,right: 20),
+            child: InkWell(
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>FAQuestions()));
+
+
+              },
+              child: Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('FAQs',style: TextStyle(
                         fontSize: 17,
                         fontFamily: 'Urbanist',
                         fontWeight: FontWeight.w500,
-                        color: Colors.black),
-                  ),
-                  IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.arrow_forward_ios,
-                        size: 15,
-                      ))
-                ],
+                        color: Colors.black),),
+                    IconButton(onPressed: (){
+
+                    }, icon: Icon(Icons.arrow_forward_ios,size: 15,))
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-        Divider(
-          thickness: 2,
-          color: Color(0xfff2f2f2),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20),
-          child: InkWell(
-            onTap: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => HowToUse()));
-            },
-            child: Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'How To Use',
-                    style: TextStyle(
+          Divider(
+            thickness: 2,
+            color: Color(0xfff2f2f2),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 20,right: 20),
+            child: InkWell(
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>HowToUse()));
+
+
+              },
+              child: Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('How To Use',style: TextStyle(
                         fontSize: 17,
                         fontFamily: 'Urbanist',
                         fontWeight: FontWeight.w500,
-                        color: Colors.black),
-                  ),
-                  IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.arrow_forward_ios,
-                        size: 15,
-                      ))
-                ],
+                        color: Colors.black),),
+                    IconButton(onPressed: (){
+
+                    }, icon: Icon(Icons.arrow_forward_ios,size: 15,))
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-        Divider(
-          thickness: 2,
-          color: Color(0xfff2f2f2),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20),
-          child: InkWell(
-            onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => PrivacyPolicy()));
-            },
-            child: Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Privacy Policy',
-                    style: TextStyle(
+          Divider(
+            thickness: 2,
+            color: Color(0xfff2f2f2),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 20,right: 20),
+            child: InkWell(
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>PrivacyPolicy()));
+
+              },
+              child: Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Privacy Policy',style: TextStyle(
                         fontSize: 17,
                         fontFamily: 'Urbanist',
                         fontWeight: FontWeight.w500,
-                        color: Colors.black),
-                  ),
-                  IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.arrow_forward_ios,
-                        size: 15,
-                      ))
-                ],
+                        color: Colors.black),),
+                    IconButton(onPressed: (){
+
+                    }, icon: Icon(Icons.arrow_forward_ios,size: 15,))
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-        Divider(
-          thickness: 2,
-          color: Color(0xfff2f2f2),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20),
-          child: InkWell(
-            child: Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Benifit',
-                    style: TextStyle(
+          Divider(
+            thickness: 2,
+            color: Color(0xfff2f2f2),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 20,right: 20),
+            child: InkWell(
+              child: Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Benifit',style: TextStyle(
                         fontSize: 17,
                         fontFamily: 'Urbanist',
                         fontWeight: FontWeight.w500,
-                        color: Colors.black),
-                  ),
-                  IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.arrow_forward_ios,
-                        size: 15,
-                      ))
-                ],
+                        color: Colors.black),),
+                    IconButton(onPressed: (){}, icon: Icon(Icons.arrow_forward_ios,size: 15,))
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-        Divider(
-          thickness: 2,
-          color: Color(0xfff2f2f2),
-        ),
-      ],
-    ));
+          Divider(
+            thickness: 2,
+            color: Color(0xfff2f2f2),
+          ),
+
+        ],
+      )
+    );
   }
 }
+

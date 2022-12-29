@@ -129,11 +129,22 @@ class _PaymentPageState extends State<PaymentPage> {
                 child: Row(
                   children: [
                     SizedBox(width: scrWidth*0.05,),
-                    GestureDetector(
-                      onTap: (){
+                    InkWell(
+                      onTap: () {
                         Navigator.pop(context);
                       },
-                      child:  SvgPicture.asset("assets/icons/arrow.svg",),
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                          // top: scrHeight * 0.09,
+                          // left: scrWidth * 0.05,
+                          // bottom: scrHeight * 0.02,
+                            right: scrWidth * 0.01),
+                        child: Icon(
+                          Icons.arrow_back,
+                          color: Colors.black,
+                          size: 25,
+                        ),
+                      ),
                     ),
                     SizedBox(width: scrWidth*0.05,),
 

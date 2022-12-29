@@ -157,11 +157,22 @@ class _ProductsPageState extends State<ProductsPage> {
                     Row(
                       children: [
                         InkWell(
-                          onTap: (){
+                          onTap: () {
                             Navigator.pop(context);
                           },
-                            child: Container(
-                                width:20,height:20,child: SvgPicture.asset('assets/icons/back.svg',color: Colors.white,))),
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                                top: scrHeight * 0.0,
+                                left: scrWidth * 0.01,
+                                // bottom: scrHeight * 0.02,
+                                right: scrWidth * 0.02),
+                            child: Icon(
+                              Icons.arrow_back,
+                              color: Colors.white,
+                              size: 25,
+                            ),
+                          ),
+                        ),
                         SizedBox(
                           width: scrWidth * 0.039,
                         ),

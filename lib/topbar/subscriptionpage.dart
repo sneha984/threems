@@ -20,10 +20,23 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 40,),
-            IconButton(onPressed: (){
-              Navigator.pop(context);
-
-            }, icon:Icon(Icons.arrow_back_ios_outlined,size: 20,)),
+            InkWell(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Padding(
+                padding: EdgeInsets.only(
+                    top: scrHeight * 0.02,
+                    left: scrWidth * 0.05,
+                    // bottom: scrHeight * 0.02,
+                    right: scrWidth * 0.04),
+                child: Icon(
+                  Icons.arrow_back,
+                  color: Colors.black,
+                  size: 25,
+                ),
+              ),
+            ),
             SizedBox(height: 20,),
 
             Align(

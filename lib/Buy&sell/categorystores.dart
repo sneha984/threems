@@ -105,24 +105,23 @@ class _CategoryStoresState extends State<CategoryStores> {
                   },
                   child: Padding(
                     padding: EdgeInsets.only(
-                      top: scrHeight * 0.08,
-                      left: scrWidth * 0.07,
-                    ),
-                    child: Container(
-                      height: scrHeight*0.05,
-                      width: scrWidth*0.05,
-                      child: SvgPicture.asset(
-                        "assets/icons/arrow.svg",
-                      ),
+                       top: scrHeight * 0.076,
+                       left: scrWidth * 0.05,
+                       bottom: scrHeight * 0.01,
+                        right: scrWidth * 0.04),
+                    child: Icon(
+                      Icons.arrow_back,
+                      color: Colors.black,
+                      size: 25,
                     ),
                   ),
                 ),
                 Padding(
-                  padding:  EdgeInsets.only(top: scrHeight*0.078,left:scrWidth*0.03),
+                  padding:  EdgeInsets.only(top: scrHeight*0.07,left:scrWidth*0.03),
                   child: SvgPicture.network(widget.categoryImage,height: 25,width: 25,),
                 ),
                 Padding(
-                  padding:  EdgeInsets.only(left: scrWidth*0.02,top:scrHeight * 0.08 ),
+                  padding:  EdgeInsets.only(left: scrWidth*0.02,top:scrHeight * 0.07 ),
                   child: Text(
                     widget.categoryname,
                     style: TextStyle(

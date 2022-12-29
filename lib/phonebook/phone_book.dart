@@ -136,10 +136,10 @@ class _PhoneBookPageState extends State<PhoneBookPage> {
                 },
                 child: Padding(
                   padding: EdgeInsets.only(
-                      top: scrHeight * 0.04,
-                      left: scrWidth * 0.07,
-                      bottom: scrHeight * 0.02,
-                      right: scrWidth * 0.05),
+                    // top: scrHeight * 0.09,
+                     left: scrWidth * 0.05,
+                    // bottom: scrHeight * 0.02,
+                      right: scrWidth * 0.04),
                   child: Icon(
                     Icons.arrow_back,
                     color: Colors.black,
