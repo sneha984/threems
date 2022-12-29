@@ -1158,7 +1158,7 @@ class _HostedKuriPageState extends State<HostedKuriPage> {
                             'amount':
                                 double.tryParse(payment.amount!.toString()),
                             "categoryIcon": serializeIcon(icons),
-                            "IncomeCategoryName": categoryName.toString(),
+                            "categoryName": categoryName.toString(),
                             'date': DateTime.now(),
                             'merchant': '',
                           });

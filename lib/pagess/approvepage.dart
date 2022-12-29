@@ -661,7 +661,7 @@ class _ApprovePageState extends State<ApprovePage> {
                             'amount': double.tryParse(
                                 activePayment!.amount!.toString()),
                             "categoryIcon": serializeIcon(icons),
-                            "IncomeCategoryName": categoryName.toString(),
+                            "categoryName": categoryName.toString(),
                             'date': DateTime.now(),
                             'merchant': '',
                           });

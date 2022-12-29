@@ -435,7 +435,7 @@ class _CreateKuriPageState extends State<CreateKuriPage> {
                             children: [
                               GestureDetector(
                                 onTap: () {
-                                  // _selectedDate(context);
+                                  _selectedDate(context);
                                 },
                                 child: Container(
                                     width: scrWidth * 0.7,
