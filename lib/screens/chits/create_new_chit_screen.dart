@@ -293,16 +293,16 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
                   onTap: () {
                     Navigator.pop(context);
                   },
-                  child: Container(
-                    // color: Colors.red,
-                    width: 13,
-                    height: 12,
-                    padding: EdgeInsets.all(scrWidth * 0.056),
-                    child: SvgPicture.asset(
-                      'assets/icons/back.svg',
-                      width: 13,
-                      height: 11,
-                      fit: BoxFit.contain,
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                        top: scrHeight * 0.04,
+                        left: scrWidth * 0.07,
+                        bottom: scrHeight * 0.02,
+                        right: scrWidth * 0.05),
+                    child: Icon(
+                      Icons.arrow_back,
+                      color: Colors.black,
+                      size: 25,
                     ),
                   ),
                 ),

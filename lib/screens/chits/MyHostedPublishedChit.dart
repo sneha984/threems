@@ -306,7 +306,8 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
                                 padding: EdgeInsets.only(left: scrWidth * 0.04),
                                 child: Center(
                                   child: Text(
-                                    "Registrations Closed",
+                                    chit!.status==1?"Vacant":
+                                    "Registrations Opened",
                                     style: TextStyle(
                                         color: Colors.black,
                                         fontSize: scrWidth * 0.027,

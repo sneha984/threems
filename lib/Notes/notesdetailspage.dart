@@ -191,6 +191,7 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
   //   // contentController?.text=widget.notes!['content'].toString()??'';
   //   }
   // }
+  TimeOfDay defaultTime = TimeOfDay.now();
   DateTime dateTime = DateTime.now();
   final TextEditingController _time = TextEditingController();
   final TextEditingController _date = TextEditingController();
@@ -226,6 +227,11 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
         showNotification();
       }
     }
+
+    _time.text =
+        "${defaultTime.hour == 0 ? 12 : defaultTime.hour}: ${defaultTime.minute.toString().length == 1 ? '0${defaultTime.minute.toString()}' : defaultTime.minute.toString()}";
+
+    _date.text = "${dateTime.year}/${dateTime.month}/${dateTime.day}";
   }
 
   showNotification() {
@@ -235,8 +241,7 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
     String s = widget.notes['remainderTime'];
     var t = widget.notes['rDate'].toDate();
     TimeOfDay _startTime = TimeOfDay(
-        hour: int.parse(s.split(":")[0]),
-        minute: int.parse(s.split(":")[1]));
+        hour: int.parse(s.split(":")[0]), minute: int.parse(s.split(":")[1]));
     dateTime = DateTime(
       t.year,
       t.month,
@@ -330,7 +335,6 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
       },
     );
   }
-
 
   Widget _buildText() {
     if (_isRecording || _isPaused) {
@@ -538,7 +542,8 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
                                       onPressed: () {
                                         print(widget.update);
                                         print(currentuserid);
-                                        if (titleController.text != ''&& selectedTime!=null) {
+                                        if (titleController.text != '' &&
+                                            selectedTime != null) {
                                           if (widget.update) {
                                             DateTime date = DateTime(
                                               selectedDate.year,
@@ -608,10 +613,11 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
                                           }
                                         } else {
                                           Navigator.pop(context);
-                                          titleController.text==''?
-                                          showSnackbar(
-                                              context, 'Please Enter Title'):showSnackbar(
-                                              context, 'Please Choose Time');
+                                          titleController.text == ''
+                                              ? showSnackbar(
+                                                  context, 'Please Enter Title')
+                                              : showSnackbar(context,
+                                                  'Please Choose Time');
                                         }
                                       },
                                       child: const Text(
@@ -1214,13 +1220,11 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
                                           setState(() {});
                                         },
                                         icon: Icon(Icons.delete)),
-
                                   ],
                                 ),
                               );
                             }),
                       ),
-
 
                       // SizedBox(
                       //   height: scrHeight*0.65,

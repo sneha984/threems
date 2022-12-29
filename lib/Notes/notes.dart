@@ -140,21 +140,21 @@ class _NotesPageState extends State<NotesPage> {
               children: [
                 InkWell(
                   onTap: () {
-                    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>ScreenLayout()),
-                            (route) => false);
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => ScreenLayout()),
+                        (route) => false);
                   },
                   child: Padding(
                     padding: EdgeInsets.only(
                         top: scrHeight * 0.1,
                         left: scrWidth * 0.07,
-                        // bottom: scrHeight*0.02,
+                        bottom: scrHeight * 0.01,
                         right: scrWidth * 0.03),
                     child: Container(
                       height: scrHeight * 0.02,
                       width: scrWidth * 0.06,
-                      child: SvgPicture.asset(
-                        "assets/icons/arrow.svg",
-                      ),
+                      child: Icon(Icons.arrow_back),
                     ),
                   ),
                 ),

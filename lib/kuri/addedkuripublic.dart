@@ -155,6 +155,8 @@ class _AddedKuriPublicState extends State<AddedKuriPublic> {
                             },
                             child: SvgPicture.asset(
                               "assets/icons/whitearrow.svg",
+                              width: 20,
+                              height: 15,
                             ),
                           ),
                           PopupMenuButton<MenuItem>(
