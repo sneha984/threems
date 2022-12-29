@@ -88,7 +88,7 @@ class _ChitPaymentPageState extends State<ChitPaymentPage> {
     // TODO: implement initState
     super.initState();
     amount = TextEditingController(
-        text: widget.chit.subscriptionAmount!.toInt().toString());
+        text: widget.chit.payableAmount!.toInt().toString());
     getIconData();
   }
 
