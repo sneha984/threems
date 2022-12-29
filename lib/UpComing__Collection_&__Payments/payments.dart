@@ -204,6 +204,7 @@ class _UpcomingPaymentsState extends State<UpcomingPayments> {
         shadowColor: Colors.grey,
         centerTitle: false,
         elevation: 0.1,
+        leadingWidth: scrWidth*0.2,
         backgroundColor: Colors.white,
         leading: GestureDetector(
           onTap: () {
@@ -212,11 +213,14 @@ class _UpcomingPaymentsState extends State<UpcomingPayments> {
           child: Padding(
             padding: EdgeInsets.only(
                 top: scrHeight * 0.04,
-                left: scrWidth * 0.07,
+                left: scrWidth * 0.08,
                 bottom: scrHeight * 0.02,
                 right: scrWidth * 0.05),
-            child: SvgPicture.asset(
-              "assets/icons/arrow.svg",
+            child: Container(
+              height: 30,width: 30,
+              child: SvgPicture.asset(
+                "assets/icons/arrow.svg",
+              ),
             ),
           ),
         ),

@@ -80,12 +80,15 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
           },
           child: Padding(
             padding: EdgeInsets.only(
-                top: scrHeight * 0.03,
+                top: scrHeight * 0.026,
                 left: scrWidth * 0.05,
                 bottom: scrHeight * 0.01,
                 right: scrWidth * 0.05),
-            child: SvgPicture.asset(
-              "assets/icons/arrow.svg",
+            child: Container(
+              height: 25,width: 25,
+              child: SvgPicture.asset(
+                "assets/icons/arrow.svg",
+              ),
             ),
           ),
         ),
@@ -94,7 +97,7 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
           child: Text(
             "My Orders",
             style: TextStyle(
-                fontSize: scrWidth * 0.047,
+                fontSize: scrWidth * 0.0485,
                 color: Colors.black,
                 fontFamily: 'Urbanist',
                 fontWeight: FontWeight.w700),

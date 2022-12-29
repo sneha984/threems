@@ -276,7 +276,7 @@ class _DonatePageState extends State<DonatePage>with TickerProviderStateMixin {
               ),
               child: Row(
                 children: [
-                  GestureDetector(
+                  InkWell(
                     onTap: (){
                       Navigator.pop(context);
                     },
@@ -293,7 +293,7 @@ class _DonatePageState extends State<DonatePage>with TickerProviderStateMixin {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 80),
+                    padding:  EdgeInsets.only(top:scrHeight*0.1 ),
                     child: Text("Donate Now",style: TextStyle(
                         fontSize: scrWidth*0.045,
                         color: Colors.black,
@@ -363,9 +363,11 @@ class _DonatePageState extends State<DonatePage>with TickerProviderStateMixin {
                         indicatorWeight: 0.05,
                         controller: _tabController,
                         unselectedLabelColor: Color(0xffA7A7A7),
-                        unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w500,fontFamily: 'Urbanist',fontSize: scrWidth*0.0385),
+                        unselectedLabelStyle: TextStyle(
+                            fontWeight: FontWeight.w500,fontFamily: 'Urbanist',fontSize: scrWidth*0.0385),
                         labelColor: Color(0xff0D0D0D),
-                        labelStyle: TextStyle(fontWeight: FontWeight.w500,fontFamily: 'Urbanist',fontSize: scrWidth*0.0385),
+                        labelStyle: TextStyle(
+                            fontWeight: FontWeight.w500,fontFamily: 'Urbanist',fontSize: scrWidth*0.0385),
                         // indicatorPadding: EdgeInsets.only(bottom: scrHeight*0.00,left: scrWidth*0.00,right: scrWidth*0.00),
                         indicator: BoxDecoration(
                             borderRadius: BorderRadius.circular(17.5),

@@ -1039,7 +1039,7 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
           ],
         ),
       ),
-      bottomNavigationBar: Padding(
+      bottomNavigationBar:widget.charities.status==1? Padding(
         padding: const EdgeInsets.only(bottom: 15),
         child: GestureDetector(
           onTap: (){
@@ -1086,7 +1086,7 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
             ),
           ),
         ),
-      ),
+      ):SizedBox(),
 
     );
   }

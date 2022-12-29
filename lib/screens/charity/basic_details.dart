@@ -312,7 +312,7 @@ class _BasicDetailsState extends State<BasicDetails> {
                         selectedItemPadding:
                             EdgeInsets.symmetric(vertical: 0, horizontal: scrWidth*0.03),
                         selectedItemBD: BoxDecoration(
-                            color: Colors.grey.shade300,
+                            color: Colors.white,
                             borderRadius:
                                 BorderRadius.circular(scrWidth * 0.033)),
                         resultBD: BoxDecoration(

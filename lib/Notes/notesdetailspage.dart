@@ -331,6 +331,7 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
     );
   }
 
+
   Widget _buildText() {
     if (_isRecording || _isPaused) {
       return _buildTimer();
@@ -1209,12 +1210,14 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
                                           // savedVoice.remove(savedVoice[index]);
                                           setState(() {});
                                         },
-                                        icon: Icon(Icons.delete))
+                                        icon: Icon(Icons.delete)),
+
                                   ],
                                 ),
                               );
                             }),
                       ),
+
 
                       // SizedBox(
                       //   height: scrHeight*0.65,
