@@ -173,6 +173,8 @@ crossAxisAlignment: CrossAxisAlignment.start,
                       }
                       FirebaseFirestore.instance.collection('charity').doc(widget.id).update({
                         'payments':data,
+                        'totalReceived':
+                        FieldValue.increment(widget.payments[widget.index].amount!)
                       });
                       setState(() {
 

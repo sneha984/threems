@@ -654,8 +654,7 @@ class _PaymentPageState extends State<PaymentPage> {
                 }
               ]
               ),
-              'totalReceived':
-              FieldValue.increment(double.tryParse(valueAmountController.text)!)
+
             }
 
             );
