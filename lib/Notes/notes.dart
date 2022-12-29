@@ -54,7 +54,7 @@ class _NotesPageState extends State<NotesPage> {
   @override
   void initState() {
     const AndroidInitializationSettings androidInitializationSettings =
-        AndroidInitializationSettings("@mipmap/ic_launcher");
+        AndroidInitializationSettings("@mipmap/launcher_icon");
 
     const DarwinInitializationSettings iosInitializationSettings =
         DarwinInitializationSettings();

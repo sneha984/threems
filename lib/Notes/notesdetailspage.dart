@@ -203,7 +203,7 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
     getData();
     super.initState();
     const AndroidInitializationSettings androidInitializationSettings =
-        AndroidInitializationSettings("@mipmap/ic_launcher");
+        AndroidInitializationSettings("@mipmap/launcher_icon");
 
     const DarwinInitializationSettings iosInitializationSettings =
         DarwinInitializationSettings();
@@ -234,9 +234,9 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
     }
     String s = widget.notes['remainderTime'];
     var t = widget.notes['rDate'].toDate();
-
     TimeOfDay _startTime = TimeOfDay(
-        hour: int.parse(s.split(":")[0]), minute: int.parse(s.split(":")[1]));
+        hour: int.parse(s.split(":")[0]),
+        minute: int.parse(s.split(":")[1]));
     dateTime = DateTime(
       t.year,
       t.month,
@@ -538,7 +538,7 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
                                       onPressed: () {
                                         print(widget.update);
                                         print(currentuserid);
-                                        if (titleController.text != '') {
+                                        if (titleController.text != ''&& selectedTime!=null) {
                                           if (widget.update) {
                                             DateTime date = DateTime(
                                               selectedDate.year,
@@ -607,8 +607,11 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
                                                 (route) => false);
                                           }
                                         } else {
+                                          Navigator.pop(context);
+                                          titleController.text==''?
                                           showSnackbar(
-                                              context, 'Please Enter Title');
+                                              context, 'Please Enter Title'):showSnackbar(
+                                              context, 'Please Choose Time');
                                         }
                                       },
                                       child: const Text(

@@ -2004,13 +2004,14 @@ Future<bool?> confirmQuitDialog(BuildContext context) => showDialog<bool>(
           title: Text('Do You want to Quit?'),
           actions: [
             TextButton(
-                onPressed: () => Navigator.pop(context, false),
-                child: Text('No')),
-            TextButton(
                 onPressed: () => Navigator.pop(context, true),
                 child: Text(
                   'Yes',
                   style: TextStyle(color: primarycolor),
                 )),
+            TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: Text('No')),
+
           ],
         ));

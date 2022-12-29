@@ -239,14 +239,16 @@ class _UpcomingCollectionsState extends State<UpcomingCollections> {
           onTap: () {
             Navigator.pop(context);
           },
-          child: Padding(
+          child:
+          Padding(
             padding: EdgeInsets.only(
                 top: scrHeight * 0.04,
                 left: scrWidth * 0.08,
                 bottom: scrHeight * 0.02,
                 right: scrWidth * 0.05),
-            child: Container(
-              height: 30,width: 30,
+            child:
+            Container(
+              height: scrHeight*0.02,width: scrWidth*0.2,
               child: SvgPicture.asset(
                 "assets/icons/arrow.svg",
               ),
