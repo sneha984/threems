@@ -1000,6 +1000,7 @@ List productCategoryList=[];
                         details: productDetailsController.text,
                         storedCategorys: selectedCategoryItem,
                         storeId: widget.data.storeId,
+                        delete: false,
                         // categoryName:categoryName,
                       );
                       FirebaseFirestore.instance.collection('stores').doc(widget.data.storeId)

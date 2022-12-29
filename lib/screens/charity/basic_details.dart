@@ -535,7 +535,7 @@ class _BasicDetailsState extends State<BasicDetails> {
                     height: textFormFieldHeight45,
                     padding: EdgeInsets.symmetric(
                       horizontal: scrWidth * 0.015,
-                      vertical: scrWidth*0.02,
+                      vertical: scrWidth*0.03,
                     ),
                     decoration: BoxDecoration(
                       border: Border.all(
@@ -682,7 +682,9 @@ class _BasicDetailsState extends State<BasicDetails> {
     }
     else if (!regExp.hasMatch(value!)) {
       return 'Please enter valid mobile number';
-    }
+    } else if (value?.length!=10) {
+      return 'Please enter valid mobile number';
+      }
     return null;
   }
   // showSnackbars(String msg) {

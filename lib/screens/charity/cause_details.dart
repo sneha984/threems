@@ -331,7 +331,7 @@ class _CauseDetailsState extends State<CauseDetails> {
                         children: [
                           Text(
                             selectedDate == null
-                                ? "Date"
+                                ? "Due Date"
                                 : DateFormat.yMMMd().format(selectedDate!),
                             style: TextStyle(
                               color: selectedDate == null

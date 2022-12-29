@@ -881,6 +881,7 @@ class _ProductAddingPageState extends State<ProductAddingPage> {
                   // }
                   else{
                     final proDat=ProductModel(
+                      delete: false,
                       images:_imgurl,
                       productName: productNameController.text,
                       productCategory:productCategoryItem,
@@ -891,6 +892,7 @@ class _ProductAddingPageState extends State<ProductAddingPage> {
                       storedCategorys: selectedCategoryItem,
                       storeId: widget.storeId,
                       available: true
+
                       // categoryName:categoryName,
                     );
                     FirebaseFirestore.instance.collection('stores').doc(widget.storeId)

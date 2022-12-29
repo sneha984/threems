@@ -81,6 +81,7 @@ class ProductModel {
   String? storedCategorys;
   String? unit;
   String? details;
+  bool? delete;
   // List<String> categoryName=[];
 
   ProductModel(
@@ -94,18 +95,20 @@ class ProductModel {
       this.unit,
       this.storeId,
       this.storedCategorys,
+        this.delete,
       // required this.categoryName,
       this.details});
   ProductModel.fromJson(Map<String, dynamic> json) {
     images = json['images'].cast<String>();
     productName = json['productName'];
     productCategory = json['productCategory'];
-    price = json['price'];
+    price = double.tryParse(json['price'].toString());
     available = json['available'];
-    quantity = json['quantity'];
+    quantity = int.tryParse(json['quantity'].toString());
     storedCategorys = json['storedCategorys'];
     productId = json['productId'];
     storeId = json['storeId'];
+    delete=json['delete'];
     // categoryName=json['categoryName'];
 
     unit = json['unit'];
@@ -122,6 +125,7 @@ class ProductModel {
     data['quantity'] = this.quantity;
     data['storedCategorys'] = this.storedCategorys;
     data['storeId'] = this.storeId;
+    data['delete']=this.delete;
 
     // data['categoryName']=this.categoryName;
     data['unit'] = this.unit;

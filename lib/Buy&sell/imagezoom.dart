@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:threems/Buy&sell/storepage.dart';
@@ -27,10 +28,45 @@ class ImageZoomPage extends StatefulWidget {
 }
 
 class _ImageZoomPageState extends State<ImageZoomPage> with SingleTickerProviderStateMixin {
+
+
   bool isCarted = false;
   int qty = 1;
 
+  bool shop=false;
+  bool prd=false;
+
   getProduct() {
+    FirebaseFirestore
+    .instance
+    .collection('stores')
+    .doc(widget.storeId)
+    .snapshots()
+    .listen((event) {
+      shop=event['online'];
+      if(mounted){
+        setState(() {
+
+        });
+      }
+    });
+
+    FirebaseFirestore
+        .instance
+        .collection('stores')
+        .doc(widget.storeId)
+        .collection('products')
+        .doc(widget.pro.productId)
+        .snapshots()
+        .listen((event) {
+      prd=event['available'];
+      if(mounted){
+        setState(() {
+
+        });
+      }
+    });
+
     for (int i = 0; i < cartlist.length; i++) {
       if (cartlist[i]['productId'] == widget.pro.productId &&
           cartlist[i]['storeId'] == widget.storeId) {
@@ -39,6 +75,17 @@ class _ImageZoomPageState extends State<ImageZoomPage> with SingleTickerProvider
     }
     setState(() {});
   }
+  // getEachProduct(){
+  //   FirebaseFirestore
+  //       .instance
+  //       .collection('stores')
+  //       .doc(widget.storeId)
+  //       .collection('products')
+  //       .doc(widget.pro.productId).snapshots().listen((event) {
+  //         for(DocumentSnapshot <Map<String,dynamic>>)
+  //
+  //   });
+  // }
   // final double minScale=1;
   // final double maxScale=4;
   // late TransformationController controller;
@@ -212,7 +259,7 @@ class _ImageZoomPageState extends State<ImageZoomPage> with SingleTickerProvider
           //     child: Text("Add To Cart",style: TextStyle(color: Colors.white),),
           //   ),
           // )
-          widget.pro.available!&&widget.on!?
+          shop==true&&prd==true?
           isCarted
               ? InkWell(
                 onTap: () {
@@ -245,7 +292,8 @@ class _ImageZoomPageState extends State<ImageZoomPage> with SingleTickerProvider
                   ),
                 ),
               )
-              : InkWell(
+              :
+          InkWell(
             onTap: () async {
               if (cartlist.isEmpty) {
                 addToCart(widget.pro, widget.storeId);
@@ -324,6 +372,8 @@ class _ImageZoomPageState extends State<ImageZoomPage> with SingleTickerProvider
       'productId': products.productId,
       'quantity': products.quantity,
       'count': 1,
+      'storeAvailable':widget.on,
+      'productAvailable':products.available
     });
 
     final snackBar = SnackBar(

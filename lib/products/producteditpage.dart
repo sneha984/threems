@@ -1132,12 +1132,12 @@ class _ProductEditPageState extends State<ProductEditPage> {
                                 .doc(widget.productModel!['productId']).update({
                               'images':_imgurl,
                               'details':productDetailsController.text,
-                              'quantity':productUnitController.text,
+                              'quantity':int.tryParse(productUnitController.text.toString())??0,
                               'unit':selectedValues,
                               'productName':productNameController.text,
                               'productCategory':productCategoryItem,
                               'storedCategorys':selectedCategoryItem,
-                              'price':productPriceController.text,
+                              'price':double.tryParse(productPriceController.text.toString())??0,
                             });
 
 

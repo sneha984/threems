@@ -599,8 +599,8 @@ class _CreateCharity3State extends State<CreateCharity3> {
                           _pickImage();
                         },
                         child: Container(
-                          height:scrHeight*0.16,
-                          width: scrWidth*1,
+                          height:scrHeight*0.27,
+                          width: scrWidth*0.8,
                           decoration: BoxDecoration(
                             color: Color(0xffF7F8F9),
                             borderRadius: BorderRadius.circular(8),
@@ -688,19 +688,15 @@ class _CreateCharity3State extends State<CreateCharity3> {
 
 
                       );
-                      // if (_formkey.currentState!.validate()) {
-                      //   ScaffoldMessenger.of(context).showSnackBar(
-                      //     const SnackBar(
-                      //       content: Text('succesfully completed '),
-                      //     ),
-                      //   );
-                      // }
+                      if (_formkey.currentState!.validate()) {
+                        Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                              builder: (context) => VerificationDetails(),
+                            ));
+                      }
 
-                      Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                            builder: (context) => VerificationDetails(),
-                          ));
+
                     }
 
                   },

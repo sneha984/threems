@@ -37,7 +37,42 @@ class _CheckOutPageState extends State<CheckOutPage> {
   }
 
   List<Address>? addressList;
+  bool shopAvailable = false;
+  bool prd=false;
   getAddress() {
+    print('1234');
+    print(cartlist.length);
+    if(cartlist.isNotEmpty) {
+      FirebaseFirestore.instance
+          .collection('stores')
+          .doc(cartlist[0]['storeId'])
+          .snapshots()
+          .listen((event) {
+        shopAvailable = event['online'];
+        if (mounted) {
+          setState(() {
+
+          });
+        }
+      });
+
+      FirebaseFirestore
+          .instance
+          .collection('stores')
+          .doc(cartlist[0]['storeId'])
+          .collection('products')
+          .doc(cartlist[0]['productId'])
+          .snapshots()
+          .listen((event) {
+        prd = event['available'];
+        if (mounted) {
+          setState(() {
+
+          });
+        }
+      });
+    }
+
     FirebaseFirestore.instance
         .collection('users')
         .doc(currentuserid)
@@ -55,6 +90,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
       }
     });
   }
+
 
   @override
   void initState() {
@@ -305,7 +341,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                                     ),
                                   ),
                                 ),
-                                Padding(
+                                shopAvailable==true&&prd==true?Padding(
                                   padding: EdgeInsets.only(left: 40),
                                   child: Container(
                                       width: 120,
@@ -413,7 +449,12 @@ class _CheckOutPageState extends State<CheckOutPage> {
                                           ),
                                         ],
                                       )),
-                                ),
+                                ):Container(
+                                  height: 50,
+                                  width: 100,
+                                  color: Colors.grey,
+                                  child: Center(child: Text("Not Available")),
+                                )
                               ],
                             ),
                           );
@@ -746,7 +787,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                     ),
                   ),
                 )
-              : InkWell(
+              : (shopAvailable==true&&prd==true)?InkWell(
                   onTap: () {
                     List<OrderedItems> orders1 = [];
                     double total = 0;
@@ -760,6 +801,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                       ));
                     }
                     var ordr = OrderModel(
+                      productId: cartlist[0]['productId'],
 
                         // item: cartlist[i]['name'],
                         // itemImage: cartlist[i]['img'],
@@ -772,6 +814,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                         total: total,
                         // count: cartlist[i]['count'],
 
+
                         storeId: cartlist[0]['storeId'],
                         address: Addresses(
                             phoneNumber: addressList![0].phoneNumber!,
@@ -781,6 +824,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                             locationType: addressList![0].select!,
                             name: addressList![0].name!));
                     orderPlacing(ordr, cartlist[0]['storeId']);
+
 
                     Navigator.push(
                         context,
@@ -805,7 +849,24 @@ class _CheckOutPageState extends State<CheckOutPage> {
                       ),
                     ),
                   ),
-                ),
+                ):Container(
+            height: 40,
+            width: 310,
+            decoration: BoxDecoration(
+              color: Color.fromRGBO(0, 128, 54, 0.33),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Center(
+              child: Text(
+                "Place Order",
+                style: TextStyle(
+                    fontFamily: 'Urbanist',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 12,
+                    color: Colors.white),
+              ),
+            ),
+          ),
           SizedBox(
             height: 10,
           )

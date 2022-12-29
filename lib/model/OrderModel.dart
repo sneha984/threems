@@ -1,5 +1,6 @@
 class OrderModel {
   DateTime? time;
+  String? productId;
   DateTime? acceptedDate;
   DateTime? deliveryDate;
   Addresses? address;
@@ -21,10 +22,11 @@ class OrderModel {
       this.total,
       this.status,
       this.storeId,
-      this.orderedItems});
+      this.orderedItems,this.productId});
 
   OrderModel.fromJson(Map<String, dynamic> json) {
     time = json['time'].toDate();
+    productId=json['productId'];
     acceptedDate = json['acceptedDate'] != null
         ? json['acceptedDate'].toDate()
         : DateTime.now();
@@ -51,6 +53,7 @@ class OrderModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = Map<String, dynamic>();
     data['time'] = this.time;
+    data['productId']=this.productId;
     data['acceptedDate'] = this.acceptedDate;
     data['deliveryDate'] = this.deliveryDate;
     data['status'] = this.status;

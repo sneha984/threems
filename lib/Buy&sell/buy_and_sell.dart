@@ -196,6 +196,7 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
           .collection('stores')
           .doc(data[0]['storeId'])
           .collection('products')
+          .where('delete',isEqualTo: false)
           .snapshots()
           .listen((event2) {
         products = [];

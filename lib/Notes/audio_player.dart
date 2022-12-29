@@ -59,6 +59,69 @@ class AudioPlayerState extends State<AudioPlayer> {
     _audioPlayer.dispose();
     super.dispose();
   }
+   bool _isPlaying=false;
+   bool _isPaused=true;
+  int _recordDuration = 0;
+  Timer? _timer;
+  Timer? _ampTimer;
+
+  Widget _buildText() {
+    if (_isPlaying || _isPaused) {
+      return _buildTimer();
+    }
+    return Container();
+  }
+
+  Widget _buildTimer() {
+    final String minutes = _formatNumber(_recordDuration ~/ 60);
+    final String seconds = _formatNumber(_recordDuration % 60);
+
+    return Text(
+      '$minutes : $seconds',
+      style: TextStyle(color: Colors.black),
+    );
+  }
+
+  String _formatNumber(int number) {
+    String numberStr = number.toString();
+    if (number < 10) {
+      numberStr = '0' + numberStr;
+    }
+    return numberStr;
+  }
+
+  Future<void> _start() async {
+    try {
+
+
+        setState(() {
+          _isPlaying = true;
+          _recordDuration = 0;
+        });
+        _startTimer();
+
+    } catch (e) {}
+  }
+
+  Future<void> _pause() async {
+    _timer?.cancel();
+    _ampTimer?.cancel();
+
+    setState(() => _isPaused = true);
+  }
+  Future<void> _resume() async {
+    _startTimer();
+
+    setState(() => _isPaused = false);
+  }
+  void _startTimer() {
+    _timer?.cancel();
+    _ampTimer?.cancel();
+
+    _timer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
+      setState(() => _recordDuration++);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,6 +150,8 @@ class AudioPlayerState extends State<AudioPlayer> {
                       child: Icon(Icons.delete, color: Colors.red, size: 25),
                     ),
                   ),
+
+
           ],
         );
       },
@@ -143,10 +208,24 @@ class AudioPlayerState extends State<AudioPlayer> {
   }
 
   Future<void> play() {
+    try {
+      setState(() {
+        _isPlaying = true;
+        _recordDuration = 0;
+      });
+      _startTimer();
+
+    } catch (e) {}
+
     return _audioPlayer.play();
   }
 
   Future<void> pause() {
+    _timer?.cancel();
+    _ampTimer?.cancel();
+
+    setState(() => _isPaused = true);
+
     return _audioPlayer.pause();
   }
 

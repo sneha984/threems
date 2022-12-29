@@ -32,6 +32,7 @@ class _ProductsPageState extends State<ProductsPage> {
         .collection('stores')
         .doc(widget.storeId)
         .collection('products')
+        .where('delete',isEqualTo: false)
         .snapshots()
         .listen((event) {
           getAllProducts=[];
@@ -332,13 +333,16 @@ class _ProductsPageState extends State<ProductsPage> {
                                             child: InkWell(
                                               onTap: (){
                                                 Navigator.pop(context);
+
                                                 FirebaseFirestore
                                                     .instance
                                                     .collection('stores')
                                                     .doc(widget.storeId)
                                                     .collection('products')
                                                     .doc(getAllProducts[index]['productId'])
-                                                    .delete().whenComplete(() => Navigator.pop(context));
+                                                    .update({
+                                                  'delete':true
+                                                }).whenComplete(() => Navigator.pop(context));
                                               },
                                               child: Container(
                                                 height: 50,width: 100,

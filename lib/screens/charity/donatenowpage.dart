@@ -42,6 +42,22 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
   late PlayerState _playerState;
   Duration? remainingTime;
   int count = 1;
+
+  CharityModel? chari;
+  getDonation(){
+    FirebaseFirestore
+        .instance
+        .collection('charity').doc(widget.charities.charityId).snapshots().listen((event) {
+          chari=CharityModel.fromJson(event.data()!);
+
+          if(mounted){
+            setState(() {
+
+            });
+          }
+    });
+  }
+
   getTime() async {
     DateTime deadLine = widget.charities.endDate!.toDate();
     for (int i = count; i > 0; i--) {
@@ -89,6 +105,7 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
     super.initState();
     getAmount();
     getTime();
+    getDonation();
     _controllers = YoutubePlayerController(
       initialVideoId:videoId=YoutubePlayer.convertUrlToId(widget.charities.youTubeLink!).toString(),
       flags: YoutubePlayerFlags(
@@ -997,13 +1014,13 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.end,
                                         children: [
-                                          Text(currencyConvert.format(data.amount).toString(),style: TextStyle(
-                                              fontSize: scrWidth*0.046,
-                                              fontFamily: 'Urbanist',
-                                              fontWeight: FontWeight.w700,
-                                              color: primarycolor),),
+                                          // Text(currencyConvert.format(data.amount).toString(),style: TextStyle(
+                                          //     fontSize: scrWidth*0.046,
+                                          //     fontFamily: 'Urbanist',
+                                          //     fontWeight: FontWeight.w700,
+                                          //     color: primarycolor),),
                                           SizedBox(width: scrWidth*0.01,),
-                                          (data.verified==false)?
+                                          chari==null?Container():(chari!.payments![index].verified==false)?
                                           InkWell(
                                             onTap: (){
                                               // bottomsheets(context);
@@ -1012,7 +1029,8 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                                               height:25,
                                               width: 25,
                                               decoration: BoxDecoration(
-                                                image: DecorationImage(image:AssetImage("assets/icons/warning.png"),fit: BoxFit.fill),
+                                                image: DecorationImage(image:AssetImage("assets/icons/warning.png")
+                                                    ,fit: BoxFit.fill),
                                               ),
 
                                             ),

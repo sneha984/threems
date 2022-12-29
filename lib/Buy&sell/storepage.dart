@@ -33,13 +33,28 @@ class StorePage extends StatefulWidget {
 //       );
 // }
 class _StorePageState extends State<StorePage> {
+
+
   getProducts() {
+    FirebaseFirestore.instance
+    .collection('stores')
+    .doc(widget.storeDetailsModel.storeId)
+    .snapshots()
+    .listen((event) {
+
+      shopAvailable=event['online'];
+      if(mounted){
+        setState(() {
+
+        });
+      }
+    });
     if (widget.category == '') {
       FirebaseFirestore.instance
           .collection('stores')
           .doc(widget.storeDetailsModel.storeId)
           .collection('products')
-          // .where('available', isEqualTo: true)
+          .where('delete', isEqualTo: false)
           .snapshots()
           .listen((event) {
         productsList = [];
@@ -57,6 +72,7 @@ class _StorePageState extends State<StorePage> {
           .doc(widget.storeDetailsModel.storeId)
           .collection('products')
           .where('storedCategorys', isEqualTo: widget.category)
+      .where('delete',isEqualTo: false)
           // .where('available', isEqualTo: true)
           .snapshots()
           .listen((event) {
@@ -78,6 +94,7 @@ class _StorePageState extends State<StorePage> {
         .doc(widget.storeDetailsModel.storeId)
         .collection('products')
         .where('storedCategorys', isEqualTo: widget.category)
+    .where('delete',isEqualTo: false)
         .snapshots()
         .listen((event) {
       for (DocumentSnapshot<Map<String, dynamic>> doc in event.docs) {
@@ -99,6 +116,7 @@ class _StorePageState extends State<StorePage> {
   int? currentQty;
   bool _loadingButton = false;
   bool pressed = false;
+  bool shopAvailable = false;
 
   // int count=1;
   // int counter=1;
@@ -211,10 +229,10 @@ class _StorePageState extends State<StorePage> {
                           height: scrHeight * 0.002,
                         ),
                         Text(
-                          widget.storeDetailsModel.online!?'Available':'Closed',
+                          shopAvailable?'Available':'Closed',
                           style: TextStyle(
                               fontSize: scrWidth * 0.04,
-                              color: widget.storeDetailsModel.online!?primarycolor: Colors.red,
+                              color: shopAvailable?primarycolor: Colors.red,
                               fontFamily: 'Urbanist',
                               fontWeight: FontWeight.w500),
                         ),
@@ -251,7 +269,7 @@ class _StorePageState extends State<StorePage> {
                       image: DecorationImage(
                           image: NetworkImage(
                               widget.storeDetailsModel.storeImage ?? ''),
-                          fit: BoxFit.fill,colorFilter:  widget.storeDetailsModel.online!?
+                          fit: BoxFit.fill,colorFilter:  shopAvailable?
                       ColorFilter.mode(Colors.transparent, BlendMode.saturation):
                       ColorFilter.mode(Colors.grey, BlendMode.saturation),),
                       color: Colors.white,
@@ -340,7 +358,7 @@ class _StorePageState extends State<StorePage> {
                     product: products,
                     storeId: widget.storeDetailsModel.storeId!,
                     deliveryCharge: widget.storeDetailsModel.deliveryCharge!,
-                    storeavailable:widget.storeDetailsModel.online!
+                    storeavailable:shopAvailable
                   );
                 },
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -904,7 +922,8 @@ class _ShopSingleProductState extends State<ShopSingleProduct> {
             flex: 3,
             child: InkWell(
               onTap: () {
-                 Navigator.push(context,MaterialPageRoute(builder: (context)=>ImageZoomPage(
+                 Navigator.push(context,MaterialPageRoute(builder: (context)=>
+                     ImageZoomPage(
                    image: widget.product.images![0],
                    pro:widget.product ,
                    storeId: widget.product.storeId!,
