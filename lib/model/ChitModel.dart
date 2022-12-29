@@ -142,6 +142,7 @@ class Payments {
   String? userId;
   double? amount;
   bool? verified;
+  bool? rejected;
   String? url;
   String? paymentId;
 
@@ -150,6 +151,7 @@ class Payments {
       this.userId,
       this.amount,
       this.verified,
+      this.rejected,
       this.url,
       this.paymentId});
 
@@ -159,6 +161,7 @@ class Payments {
     amount = json['amount'];
     paymentId = json['paymentId'];
     verified = json['verified'];
+    rejected = json['rejected'];
     url = json['url'];
   }
 
@@ -169,6 +172,7 @@ class Payments {
     data['amount'] = amount;
     data['paymentId'] = paymentId;
     data['verified'] = verified;
+    data['rejected'] = rejected;
     data['url'] = url;
     return data;
   }

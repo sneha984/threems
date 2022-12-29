@@ -1,3 +1,4 @@
+import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:threems/layouts/personalInfoPopUp.dart';
@@ -10,10 +11,12 @@ import '../Expenses/Expense_first_page.dart';
 import '../Expenses/recentexpenses.dart';
 import '../Income/expense_income_tababr.dart';
 import '../InviteLink/ChitInvite.dart';
+import '../kuri/createkuri.dart';
 import '../main.dart';
 import '../screens/home_screen.dart';
 import '../screens/Utilities/utilities.dart';
 import 'dart:io';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../topbar/settings.dart';
 import '../model/usermodel.dart';
@@ -22,6 +25,8 @@ import 'package:threems/phonebook/phone_book.dart';
 import '../Authentication/root.dart';
 
 import '../Notes/notes.dart';
+
+List<Contact> contacts = [];
 
 class ScreenLayout extends StatefulWidget {
   final int index;
@@ -69,6 +74,7 @@ class _ScreenLayoutState extends State<ScreenLayout> {
     }
 
     super.initState();
+    askPermissions();
   }
 
   @override
@@ -135,7 +141,7 @@ class _ScreenLayoutState extends State<ScreenLayout> {
                         Align(
                           alignment: Alignment.bottomLeft,
                           child: Text(
-                            'V 1.5',
+                            'V 1.6',
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
@@ -630,256 +636,43 @@ class _ScreenLayoutState extends State<ScreenLayout> {
     );
   }
 
-  // void bottomsheets(context) {
-  //   showModalBottomSheet(
-  //     context: context,
-  //     backgroundColor: Colors.transparent,
-  //     builder: (context) => StatefulBuilder(
-  //       builder:
-  //           (BuildContext context, void Function(void Function()) setState) {
-  //         return Container(
-  //           height: scrHeight * 0.36,
-  //           decoration: const BoxDecoration(
-  //               color: Colors.white,
-  //               borderRadius: BorderRadius.only(
-  //                 topLeft: Radius.circular(40),
-  //                 topRight: Radius.circular(40),
-  //               )),
-  //           child: Column(
-  //             mainAxisAlignment: MainAxisAlignment.start,
-  //             crossAxisAlignment: CrossAxisAlignment.start,
-  //             children: [
-  //               SizedBox(
-  //                 height: scrHeight * 0.05,
-  //               ),
-  //               Padding(
-  //                 padding: EdgeInsets.only(left: 30),
-  //                 child: Text(
-  //                   "Create New Room",
-  //                   style: TextStyle(
-  //                       fontFamily: 'Urbanist',
-  //                       fontWeight: FontWeight.w700,
-  //                       fontSize: scrWidth * 0.053),
-  //                 ),
-  //               ),
-  //               SizedBox(
-  //                 height: scrHeight * 0.03,
-  //               ),
-  //               Row(
-  //                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-  //                 children: [
-  //                   InkWell(
-  //                     onTap: () {
-  //                       setState(() {
-  //                         selectedIndex = 1;
-  //                       });
-  //                     },
-  //                     child: Column(
-  //                       children: [
-  //                         Badge(
-  //                           animationType: BadgeAnimationType.slide,
-  //                           showBadge: selectedIndex == 1 ? true : false,
-  //                           padding: EdgeInsets.all(scrWidth * 0.005),
-  //                           badgeContent: Icon(
-  //                             Icons.check,
-  //                             color: primarycolor,
-  //                             size: createRoomIconSize,
-  //                           ),
-  //                           child: Container(
-  //                             width: scrWidth * 0.23,
-  //                             height: scrHeight * 0.11,
-  //                             decoration: BoxDecoration(
-  //                               shape: BoxShape.circle,
-  //                               color: Colors.grey.shade100,
-  //                               border: selectedIndex == 1
-  //                                   ? Border.all(
-  //                                       color: primarycolor,
-  //                                       width: 3,
-  //                                     )
-  //                                   : Border.all(color: Colors.transparent),
-  //                             ),
-  //                             child: Padding(
-  //                               padding: EdgeInsets.all(scrWidth * 0.05),
-  //                               child: SvgPicture.asset(
-  //                                 "assets/icons/chiti_funds.svg",
-  //                                 fit: BoxFit.contain,
-  //                               ),
-  //                             ),
-  //                           ),
-  //                           badgeColor: Colors.white,
-  //                           position: BadgePosition(
-  //                             bottom: -7,
-  //                           ),
-  //                         ),
-  //                         SizedBox(
-  //                           height: scrHeight * 0.01,
-  //                         ),
-  //                         Text(
-  //                           "Chit",
-  //                           style: TextStyle(
-  //                               fontFamily: 'Urbanist',
-  //                               fontWeight: FontWeight.w500,
-  //                               fontSize: CardFont2),
-  //                         ),
-  //                       ],
-  //                     ),
-  //                   ),
-  //                   InkWell(
-  //                     onTap: () {
-  //                       setState(() {
-  //                         selectedIndex = 0;
-  //                       });
-  //                     },
-  //                     child: Column(
-  //                       children: [
-  //                         Badge(
-  //                           animationType: BadgeAnimationType.slide,
-  //                           showBadge: selectedIndex == 0 ? true : false,
-  //                           padding: EdgeInsets.all(scrWidth * 0.005),
-  //                           badgeContent: Icon(
-  //                             Icons.check,
-  //                             color: primarycolor,
-  //                             size: createRoomIconSize,
-  //                           ),
-  //                           child: Container(
-  //                             width: scrWidth * 0.23,
-  //                             height: scrHeight * 0.11,
-  //                             decoration: BoxDecoration(
-  //                               shape: BoxShape.circle,
-  //                               color: Colors.grey.shade100,
-  //                               border: selectedIndex == 0
-  //                                   ? Border.all(
-  //                                       color: primarycolor,
-  //                                       width: 3,
-  //                                     )
-  //                                   : Border.all(color: Colors.transparent),
-  //                             ),
-  //                             child: Padding(
-  //                               padding: EdgeInsets.all(scrWidth * 0.05),
-  //                               child: SvgPicture.asset(
-  //                                 "assets/icons/kuri_funds.svg",
-  //                                 fit: BoxFit.contain,
-  //                               ),
-  //                             ),
-  //                           ),
-  //                           badgeColor: Colors.white,
-  //                           position: BadgePosition(
-  //                             bottom: -7,
-  //                           ),
-  //                         ),
-  //                         SizedBox(
-  //                           height: scrHeight * 0.01,
-  //                         ),
-  //                         Text("Kuri",
-  //                             style: TextStyle(
-  //                                 fontFamily: 'Urbanist',
-  //                                 fontWeight: FontWeight.w500,
-  //                                 fontSize: CardFont2))
-  //                       ],
-  //                     ),
-  //                   ),
-  //                   InkWell(
-  //                     onTap: () {
-  //                       setState(() {
-  //                         selectedIndex = 2;
-  //                       });
-  //                     },
-  //                     child: Column(
-  //                       children: [
-  //                         Badge(
-  //                           animationType: BadgeAnimationType.slide,
-  //                           showBadge: selectedIndex == 2 ? true : false,
-  //                           padding: EdgeInsets.all(scrWidth * 0.005),
-  //                           badgeContent: Icon(
-  //                             Icons.check,
-  //                             color: primarycolor,
-  //                             size: createRoomIconSize,
-  //                           ),
-  //                           child: Container(
-  //                             width: scrWidth * 0.23,
-  //                             height: scrHeight * 0.11,
-  //                             decoration: BoxDecoration(
-  //                               shape: BoxShape.circle,
-  //                               color: Colors.grey.shade100,
-  //                               border: selectedIndex == 2
-  //                                   ? Border.all(
-  //                                       color: primarycolor,
-  //                                       width: 3,
-  //                                     )
-  //                                   : Border.all(color: Colors.transparent),
-  //                             ),
-  //                             child: Padding(
-  //                               padding: EdgeInsets.all(scrWidth * 0.05),
-  //                               child: SvgPicture.asset(
-  //                                 "assets/icons/charity.svg",
-  //                                 fit: BoxFit.contain,
-  //                               ),
-  //                             ),
-  //                           ),
-  //                           badgeColor: Colors.white,
-  //                           position: BadgePosition(
-  //                             bottom: -7,
-  //                           ),
-  //                         ),
-  //                         SizedBox(
-  //                           height: scrHeight * 0.01,
-  //                         ),
-  //                         Text(
-  //                           "Charity",
-  //                           style: TextStyle(
-  //                               fontFamily: 'Urbanist',
-  //                               fontWeight: FontWeight.w500,
-  //                               fontSize: CardFont2),
-  //                         ),
-  //                       ],
-  //                     ),
-  //                   )
-  //                 ],
-  //               ),
-  //               SizedBox(
-  //                 height: scrHeight * 0.025,
-  //               ),
-  //               Center(
-  //                 child: Container(
-  //                   height: scrHeight * 0.07,
-  //                   width: scrWidth * 0.9,
-  //                   decoration: BoxDecoration(
-  //                     borderRadius: BorderRadius.circular(10),
-  //                     color: primarycolor,
-  //                   ),
-  //                   child: Center(
-  //                     child: Row(
-  //                       mainAxisAlignment: MainAxisAlignment.center,
-  //                       children: [
-  //                         Icon(
-  //                           Icons.add,
-  //                           size: createRoomIconSize,
-  //                           color: Colors.white,
-  //                         ),
-  //                         SizedBox(
-  //                           width: scrWidth * 0.01,
-  //                         ),
-  //                         Text(
-  //                           "Create Room",
-  //                           style: TextStyle(
-  //                               color: Colors.white,
-  //                               fontSize: FontSize17,
-  //                               fontFamily: 'Urbanist',
-  //                               fontWeight: FontWeight.w500),
-  //                         ),
-  //                       ],
-  //                     ),
-  //                   ),
-  //                 ),
-  //               ),
-  //               SizedBox(
-  //                 height: scrWidth * 0.005,
-  //               )
-  //             ],
-  //           ),
-  //         );
-  //       },
-  //     ),
-  //   );
-  // }
+  // ACCESS CONTACTS BY REQUESTING PERMISSION
+  askPermissions() async {
+    PermissionStatus permission = await getContactPermission();
+    if (permission == PermissionStatus.granted) {
+      getContacts();
+    } else {
+      handleInvalidPermission(permission);
+    }
+  }
+
+  handleInvalidPermission(PermissionStatus permission) {
+    if (permission == PermissionStatus.denied) {
+      showSnackbar(context, 'Permission denied by user');
+    } else if (permission == PermissionStatus.permanentlyDenied) {
+      showSnackbar(context, 'Permission denied by user');
+    }
+  }
+
+  getContactPermission() async {
+    PermissionStatus permission = await Permission.contacts.status;
+    if (permission != PermissionStatus.granted &&
+        permission != PermissionStatus.permanentlyDenied) {
+      PermissionStatus permissionStatus = await Permission.contacts.request();
+      return permissionStatus;
+    } else {
+      return permission;
+    }
+  }
+
+  getContacts() async {
+    List<Contact> _contacts = await ContactsService.getContacts();
+
+    setState(() {
+      contacts = _contacts;
+
+      print('================ContactLength=================');
+      print(contacts.length);
+    });
+  }
 }

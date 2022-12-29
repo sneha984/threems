@@ -39,7 +39,6 @@ import 'charity/seemorecharities.dart';
 var currenPlace;
 double? lat;
 double? long;
-List<Contact> contacts = [];
 
 List<CharityModel> verifiedcharity = [];
 
@@ -89,51 +88,12 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  askPermissions() async {
-    PermissionStatus permission = await getContactPermission();
-    if (permission == PermissionStatus.granted) {
-      getContacts();
-    } else {
-      handleInvalidPermission(permission);
-    }
-  }
-
-  handleInvalidPermission(PermissionStatus permission) {
-    if (permission == PermissionStatus.denied) {
-      showSnackbar(context, 'Permission denied by user');
-    } else if (permission == PermissionStatus.permanentlyDenied) {
-      showSnackbar(context, 'Permission denied by user');
-    }
-  }
-
-  getContactPermission() async {
-    PermissionStatus permission = await Permission.contacts.status;
-    if (permission != PermissionStatus.granted &&
-        permission != PermissionStatus.permanentlyDenied) {
-      PermissionStatus permissionStatus = await Permission.contacts.request();
-      return permissionStatus;
-    } else {
-      return permission;
-    }
-  }
-
-  getContacts() async {
-    List<Contact> _contacts = await ContactsService.getContacts();
-
-    setState(() {
-      contacts = _contacts;
-
-      print('================ContactLength=================');
-      print(contacts.length);
-    });
-  }
-
   double selectedIndex = 0;
   getVerifiedCharity() {
     FirebaseFirestore.instance
         .collection('charity')
         .where('userId', isNotEqualTo: currentuser?.userId)
-        .where('status',isEqualTo: 1)
+        .where('status', isEqualTo: 1)
         .snapshots()
         .listen((event) {
       verifiedcharity = [];
@@ -188,7 +148,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     getCurrentUserDet();
 
-    askPermissions();
     getVerifiedCharity();
     getLocation();
 

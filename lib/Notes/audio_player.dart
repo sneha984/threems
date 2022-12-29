@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart' as ap;
 
-
 class AudioPlayer extends StatefulWidget {
   /// Path from where to play recorded audio
   final ap.AudioSource source;
@@ -24,7 +23,6 @@ class AudioPlayer extends StatefulWidget {
 }
 
 class AudioPlayerState extends State<AudioPlayer> {
-
   final _audioPlayer = ap.AudioPlayer();
   late StreamSubscription<ap.PlayerState> _playerStateChangedSubscription;
   late StreamSubscription<Duration?> _durationChangedSubscription;
@@ -34,11 +32,11 @@ class AudioPlayerState extends State<AudioPlayer> {
   void initState() {
     _playerStateChangedSubscription =
         _audioPlayer.playerStateStream.listen((state) async {
-          if (state.processingState == ap.ProcessingState.completed) {
-            await stop();
-          }
-          setState(() {});
-        });
+      if (state.processingState == ap.ProcessingState.completed) {
+        await stop();
+      }
+      setState(() {});
+    });
     _positionChangedSubscription =
         _audioPlayer.positionStream.listen((position) => setState(() {}));
     _durationChangedSubscription =
@@ -70,20 +68,25 @@ class AudioPlayerState extends State<AudioPlayer> {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            _buildControl(),
-            SizedBox(width: 5,),
-            _buildSlider(constraints.maxWidth),
-            widget.message?Container():
-            InkWell(
-              onTap:  () {
-                _audioPlayer.stop().then((value) => widget.onDelete());
-              },
-              child:  Padding(
-                padding: const EdgeInsets.only(right: 10),
-                child: Icon(Icons.delete,
-                    color: Colors.red, size: 25),
-              ),
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: SizedBox(width: 30, child: _buildControl()),
             ),
+            SizedBox(
+              width: 5,
+            ),
+            _buildSlider(constraints.maxWidth),
+            widget.message
+                ? Container()
+                : InkWell(
+                    onTap: () {
+                      _audioPlayer.stop().then((value) => widget.onDelete());
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 10),
+                      child: Icon(Icons.delete, color: Colors.red, size: 25),
+                    ),
+                  ),
           ],
         );
       },
@@ -94,16 +97,13 @@ class AudioPlayerState extends State<AudioPlayer> {
     Icon icon;
 
     if (_audioPlayer.playerState.playing) {
-      icon = Icon(
-
-          Icons.pause, color: Colors.blue, size: 34);
+      icon = Icon(Icons.pause, color: Colors.blue, size: 34);
     } else {
       icon = Icon(Icons.play_arrow, color: Colors.green, size: 39);
     }
 
     return InkWell(
-      child:
-      SizedBox(width: 15, child: icon),
+      child: SizedBox(width: 40, child: icon),
       onTap: () {
         if (_audioPlayer.playerState.playing) {
           pause();
@@ -125,9 +125,8 @@ class AudioPlayerState extends State<AudioPlayer> {
 
     return Expanded(
       child: SizedBox(
-
         child: Slider(
-          activeColor:Colors.black,
+          activeColor: Colors.black,
           inactiveColor: Colors.white,
           onChanged: (v) {
             if (duration != null) {
@@ -149,7 +148,6 @@ class AudioPlayerState extends State<AudioPlayer> {
 
   Future<void> pause() {
     return _audioPlayer.pause();
-
   }
 
   Future<void> stop() async {

@@ -565,6 +565,7 @@ class _ChitPaymentPageState extends State<ChitPaymentPage> {
                       userId: currentuserid,
                       amount: double.tryParse(amount!.text),
                       datePaid: DateTime.now(),
+                      rejected: false,
                       url: imgUrl,
                       verified: false);
 

@@ -215,7 +215,9 @@ class _YourChitPageState extends State<YourChitPage> {
       members.add(UserModel.fromJson(doc.data()!));
     }
 
-    getWinners();
+    setState(() {
+      getWinners();
+    });
   }
 
   FocusNode payableAmountNode = FocusNode();
@@ -1420,7 +1422,9 @@ class _YourChitPageState extends State<YourChitPage> {
                                                                               ? 'Due'
                                                                               : mapOfCurrentPayments![members[index].userId]!.verified!
                                                                                   ? 'Paid'
-                                                                                  : "Pending",
+                                                                                  : mapOfCurrentPayments![members[index].userId]!.rejected!
+                                                                                      ? 'Rejected'
+                                                                                      : "Pending",
                                                                           style: TextStyle(
                                                                               fontSize: scrWidth * 0.033,
                                                                               fontWeight: FontWeight.w600,
@@ -1561,8 +1565,23 @@ class _YourChitPageState extends State<YourChitPage> {
                         ),
                         InkWell(
                           onTap: () {
-                            if (mapOfCurrentPayments!.keys.contains(currentuserid!)) {
-                              showSnackbar(context, 'Already paid this month');
+                            if (mapOfCurrentPayments!.keys
+                                .contains(currentuserid!)) {
+                              bool rejected =
+                                  mapOfCurrentPayments![currentuserid]!
+                                      .rejected!;
+                              if (rejected == false) {
+                                showSnackbar(
+                                    context, 'Already paid this month');
+                              } else {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ChitPaymentPage(
+                                        chit: chit!,
+                                      ),
+                                    ));
+                              }
                             } else {
                               Navigator.push(
                                   context,
@@ -1579,9 +1598,15 @@ class _YourChitPageState extends State<YourChitPage> {
                             height: scrHeight * 0.045,
                             width: scrWidth * 0.25,
                             decoration: BoxDecoration(
-                              color:mapOfCurrentPayments==null?Colors.grey: mapOfCurrentPayments!.keys.contains(currentuserid!)
+                              color: mapOfCurrentPayments == null
                                   ? Colors.grey
-                                  : Colors.white,
+                                  : mapOfCurrentPayments!.keys
+                                          .contains(currentuserid!)
+                                      ? mapOfCurrentPayments![currentuserid]!
+                                              .rejected!
+                                          ? Colors.white
+                                          : Colors.grey
+                                      : Colors.white,
                               borderRadius: BorderRadius.circular(11),
                             ),
                             child: Center(

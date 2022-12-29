@@ -6,9 +6,12 @@ import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:threems/kuri/createkuri.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import '../layouts/screen_layout.dart';
 import '../model/Kuri/kuriModel.dart';
 import '../screens/home_screen.dart';
 import '../screens/splash_screen.dart';
@@ -66,6 +69,7 @@ class _AddMembersearchState extends State<AddMembersearch> {
     // print(numberList.length);
     // TODO: implement initState
     super.initState();
+    grabContacts();
   }
 
   @override
@@ -186,220 +190,238 @@ class _AddMembersearchState extends State<AddMembersearch> {
           ),
         ),
       ),
-      body: Padding(
-        padding:
-            EdgeInsets.symmetric(horizontal: scrWidth * 0.059, vertical: 5),
-        child: ListView.separated(
-          separatorBuilder: (context, index) => SizedBox(
-            height: scrWidth * 0.02,
-          ),
-          physics: BouncingScrollPhysics(),
-          itemCount: totalContactsSearch.length,
-          shrinkWrap: true,
-          itemBuilder: (context, index) {
-            return totalContactsSearch[index].phones!.isEmpty
-                ? SizedBox()
-                : Container(
-                    width: 328,
-                    height: textFormFieldHeight45,
-                    padding: EdgeInsets.symmetric(
-                      horizontal: scrWidth * 0.015,
-                      vertical: 2,
-                    ),
-                    decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Color(0xffDADADA),
-                          width: 1,
-                        ),
-                        borderRadius: BorderRadius.circular(scrWidth * 0.026)),
-                    child: Center(
-                        child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.only(left: 8),
-                          child: CircleAvatar(
-                            radius: 15,
-                            backgroundColor: Colors.grey,
-                            backgroundImage:
-                                MemoryImage(totalContactsSearch[index].avatar!),
+      body: totalContactsSearch.isEmpty
+          ? Center(child: CircularProgressIndicator())
+          : Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: scrWidth * 0.059, vertical: 5),
+              child: ListView.separated(
+                separatorBuilder: (context, index) => SizedBox(
+                  height: scrWidth * 0.02,
+                ),
+                physics: BouncingScrollPhysics(),
+                itemCount: totalContactsSearch.length,
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  return totalContactsSearch[index].phones!.isEmpty
+                      ? SizedBox()
+                      : Container(
+                          width: 328,
+                          height: textFormFieldHeight45,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: scrWidth * 0.015,
+                            vertical: 2,
                           ),
-                        ),
-                        Center(
-                          child: Text(
-                            totalContactsSearch[index].displayName!,
-                            style: TextStyle(
-                                fontSize: FontSize16,
-                                fontFamily: 'Urbanist',
-                                fontWeight: FontWeight.w600,
-                                color: Colors.black),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () async {
-                            await _createDynamicLink(false);
-                            Share.share(
-                                'Inviting you to join *${widget.kuri.kuriName}* \n \n \n $_linkMessage');
-                          },
-                          child: Container(
-                            // width: 50,
-                            height: 27,
-                            margin: EdgeInsets.only(right: 8),
-                            padding: EdgeInsets.all(5),
-                            decoration: BoxDecoration(
-                                color:
-                                    // addFriend.contains(
-                                    //         totalContactsSearch[index]
-                                    //             .phones!
-                                    //             .first
-                                    //             .value!
-                                    //             .trim()
-                                    //             .replaceAll(' ', ''))
-                                    //     ? Color(0xff8391A1)
-                                    //     :
-                                    primarycolor,
-                                borderRadius: BorderRadius.circular(8)),
-                            child: Center(
-                              child: Text(
-                                // addFriend.contains(totalContactsSearch[index]
-                                //         .phones!
-                                //         .first
-                                //         .value!
-                                //         .trim()
-                                //         .replaceAll(' ', ''))
-                                //     ? "Added"
-                                //     : numberList.contains(
-                                //             totalContactsSearch[index]
-                                //                 .phones!
-                                //                 .first
-                                //                 .value!
-                                //                 .trim()
-                                //                 .replaceAll(' ', ''))
-                                //         ? '+ Add'
-                                //         :
-                                'Invite',
-                                style: TextStyle(
-                                    fontSize: FontSize14,
-                                    fontFamily: 'Urbanist',
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.white),
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Color(0xffDADADA),
+                                width: 1,
                               ),
-                            ),
-                          ),
-                        )
-                      ],
-                    )),
-                  );
-            // StreamBuilder<QuerySnapshot>(
-            //         stream: FirebaseFirestore.instance
-            //             .collection('users')
-            //             .where('phone',
-            //                 isEqualTo: totalContacts[index]
-            //                     .phones!
-            //                     .first
-            //                     .value!
-            //                     .trim()
-            //                     .replaceAll(' ', ''))
-            //             .snapshots(),
-            //         builder: (context, snapshot) {
-            //           String value = '';
-            //           if (snapshot.hasData) {
-            //             value = '+ Add';
-            //           } else {
-            //             value = 'Invite';
-            //           }
-            //           return Container(
-            //             width: 328,
-            //             height: textFormFieldHeight45,
-            //             padding: EdgeInsets.symmetric(
-            //               horizontal: scrWidth * 0.015,
-            //               vertical: 2,
-            //             ),
-            //             decoration: BoxDecoration(
-            //                 border: Border.all(
-            //                   color: Color(0xffDADADA),
-            //                   width: 1,
-            //                 ),
-            //                 borderRadius:
-            //                     BorderRadius.circular(scrWidth * 0.026)),
-            //             child: Center(
-            //                 child: Row(
-            //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //               children: [
-            //                 Container(
-            //                   margin: const EdgeInsets.only(left: 8),
-            //                   child: CircleAvatar(
-            //                     radius: 15,
-            //                     backgroundColor: Colors.grey,
-            //                     child: ClipRRect(
-            //                       borderRadius: BorderRadius.circular(15),
-            //                       child: CachedNetworkImage(
-            //                         imageUrl:
-            //                             'https://pbs.twimg.com/profile_images/1392793006877540352/ytVYaEBZ_400x400.jpg',
-            //                       ),
-            //                     ),
-            //                   ),
-            //                 ),
-            //                 Center(
-            //                   child: Text(
-            //                     totalContacts[index].displayName!,
-            //                     style: TextStyle(
-            //                         fontSize: FontSize16,
-            //                         fontFamily: 'Urbanist',
-            //                         fontWeight: FontWeight.w600,
-            //                         color: Colors.black),
-            //                   ),
-            //                 ),
-            //                 GestureDetector(
-            //                   onTap: () {
-            //                     if (addFriend.contains(
-            //                         totalContacts[index].displayName)) {
-            //                       setState(() {
-            //                         addFriend.remove(
-            //                             totalContacts[index].displayName);
-            //                         print("hi: $addFriend");
-            //                       });
-            //                     } else {
-            //                       setState(() {
-            //                         addFriend
-            //                             .add(totalContacts[index].displayName!);
-            //                         print("hi: $addFriend");
-            //                       });
-            //                     }
-            //                   },
-            //                   child: Container(
-            //                     // width: 50,
-            //                     height: 27,
-            //                     margin: EdgeInsets.only(right: 8),
-            //                     padding: EdgeInsets.all(5),
-            //                     decoration: BoxDecoration(
-            //                         color: addFriend.contains(
-            //                                 totalContacts[index].displayName)
-            //                             ? Color(0xff8391A1)
-            //                             : primarycolor,
-            //                         borderRadius: BorderRadius.circular(8)),
-            //                     child: Center(
-            //                       child: Text(
-            //                         addFriend.contains(
-            //                                 totalContacts[index].displayName)
-            //                             ? "Added"
-            //                             : value,
-            //                         style: TextStyle(
-            //                             fontSize: FontSize14,
-            //                             fontFamily: 'Urbanist',
-            //                             fontWeight: FontWeight.w700,
-            //                             color: Colors.white),
-            //                       ),
-            //                     ),
-            //                   ),
-            //                 )
-            //               ],
-            //             )),
-            //           );
-            //         });
-          },
-        ),
-      ),
+                              borderRadius:
+                                  BorderRadius.circular(scrWidth * 0.026)),
+                          child: Center(
+                              child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                margin: const EdgeInsets.only(left: 8),
+                                child: CircleAvatar(
+                                  radius: 15,
+                                  backgroundColor: Colors.grey,
+                                  backgroundImage: MemoryImage(
+                                      totalContactsSearch[index].avatar!),
+                                ),
+                              ),
+                              Center(
+                                child: Text(
+                                  totalContactsSearch[index].displayName!,
+                                  style: TextStyle(
+                                      fontSize: FontSize16,
+                                      fontFamily: 'Urbanist',
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.black),
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () async {
+                                  await _createDynamicLink(false);
+                                  var whatsappUrl =
+                                      "whatsapp://send?phone=91${totalContactsSearch[index].phones![0].value.toString().replaceAll(' ', '').replaceAll('+91', '')}" +
+                                          "&text=${Uri.encodeComponent(_linkMessage!)}";
+                                  try {
+                                    launchUrl(Uri.tryParse(whatsappUrl)!);
+                                  } catch (e) {
+                                    //To handle error and display error message
+
+                                    showSnackbar(
+                                        context, 'Unable to open whatsapp');
+
+                                    // Helper.errorSnackBar(
+                                    //     context: context,
+                                    //     message: "Unable to open whatsapp");
+                                  }
+                                  // Share.share(
+                                  //     'Inviting you to join *${widget.kuri.kuriName}* \n \n \n $_linkMessage');
+                                },
+                                child: Container(
+                                  // width: 50,
+                                  height: 27,
+                                  margin: EdgeInsets.only(right: 8),
+                                  padding: EdgeInsets.all(5),
+                                  decoration: BoxDecoration(
+                                      color:
+                                          // addFriend.contains(
+                                          //         totalContactsSearch[index]
+                                          //             .phones!
+                                          //             .first
+                                          //             .value!
+                                          //             .trim()
+                                          //             .replaceAll(' ', ''))
+                                          //     ? Color(0xff8391A1)
+                                          //     :
+                                          primarycolor,
+                                      borderRadius: BorderRadius.circular(8)),
+                                  child: Center(
+                                    child: Text(
+                                      // addFriend.contains(totalContactsSearch[index]
+                                      //         .phones!
+                                      //         .first
+                                      //         .value!
+                                      //         .trim()
+                                      //         .replaceAll(' ', ''))
+                                      //     ? "Added"
+                                      //     : numberList.contains(
+                                      //             totalContactsSearch[index]
+                                      //                 .phones!
+                                      //                 .first
+                                      //                 .value!
+                                      //                 .trim()
+                                      //                 .replaceAll(' ', ''))
+                                      //         ? '+ Add'
+                                      //         :
+                                      'Invite',
+                                      style: TextStyle(
+                                          fontSize: FontSize14,
+                                          fontFamily: 'Urbanist',
+                                          fontWeight: FontWeight.w700,
+                                          color: Colors.white),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
+                          )),
+                        );
+                  // StreamBuilder<QuerySnapshot>(
+                  //         stream: FirebaseFirestore.instance
+                  //             .collection('users')
+                  //             .where('phone',
+                  //                 isEqualTo: totalContacts[index]
+                  //                     .phones!
+                  //                     .first
+                  //                     .value!
+                  //                     .trim()
+                  //                     .replaceAll(' ', ''))
+                  //             .snapshots(),
+                  //         builder: (context, snapshot) {
+                  //           String value = '';
+                  //           if (snapshot.hasData) {
+                  //             value = '+ Add';
+                  //           } else {
+                  //             value = 'Invite';
+                  //           }
+                  //           return Container(
+                  //             width: 328,
+                  //             height: textFormFieldHeight45,
+                  //             padding: EdgeInsets.symmetric(
+                  //               horizontal: scrWidth * 0.015,
+                  //               vertical: 2,
+                  //             ),
+                  //             decoration: BoxDecoration(
+                  //                 border: Border.all(
+                  //                   color: Color(0xffDADADA),
+                  //                   width: 1,
+                  //                 ),
+                  //                 borderRadius:
+                  //                     BorderRadius.circular(scrWidth * 0.026)),
+                  //             child: Center(
+                  //                 child: Row(
+                  //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //               children: [
+                  //                 Container(
+                  //                   margin: const EdgeInsets.only(left: 8),
+                  //                   child: CircleAvatar(
+                  //                     radius: 15,
+                  //                     backgroundColor: Colors.grey,
+                  //                     child: ClipRRect(
+                  //                       borderRadius: BorderRadius.circular(15),
+                  //                       child: CachedNetworkImage(
+                  //                         imageUrl:
+                  //                             'https://pbs.twimg.com/profile_images/1392793006877540352/ytVYaEBZ_400x400.jpg',
+                  //                       ),
+                  //                     ),
+                  //                   ),
+                  //                 ),
+                  //                 Center(
+                  //                   child: Text(
+                  //                     totalContacts[index].displayName!,
+                  //                     style: TextStyle(
+                  //                         fontSize: FontSize16,
+                  //                         fontFamily: 'Urbanist',
+                  //                         fontWeight: FontWeight.w600,
+                  //                         color: Colors.black),
+                  //                   ),
+                  //                 ),
+                  //                 GestureDetector(
+                  //                   onTap: () {
+                  //                     if (addFriend.contains(
+                  //                         totalContacts[index].displayName)) {
+                  //                       setState(() {
+                  //                         addFriend.remove(
+                  //                             totalContacts[index].displayName);
+                  //                         print("hi: $addFriend");
+                  //                       });
+                  //                     } else {
+                  //                       setState(() {
+                  //                         addFriend
+                  //                             .add(totalContacts[index].displayName!);
+                  //                         print("hi: $addFriend");
+                  //                       });
+                  //                     }
+                  //                   },
+                  //                   child: Container(
+                  //                     // width: 50,
+                  //                     height: 27,
+                  //                     margin: EdgeInsets.only(right: 8),
+                  //                     padding: EdgeInsets.all(5),
+                  //                     decoration: BoxDecoration(
+                  //                         color: addFriend.contains(
+                  //                                 totalContacts[index].displayName)
+                  //                             ? Color(0xff8391A1)
+                  //                             : primarycolor,
+                  //                         borderRadius: BorderRadius.circular(8)),
+                  //                     child: Center(
+                  //                       child: Text(
+                  //                         addFriend.contains(
+                  //                                 totalContacts[index].displayName)
+                  //                             ? "Added"
+                  //                             : value,
+                  //                         style: TextStyle(
+                  //                             fontSize: FontSize14,
+                  //                             fontFamily: 'Urbanist',
+                  //                             fontWeight: FontWeight.w700,
+                  //                             color: Colors.white),
+                  //                       ),
+                  //                     ),
+                  //                   ),
+                  //                 )
+                  //               ],
+                  //             )),
+                  //           );
+                  //         });
+                },
+              ),
+            ),
       // bottomNavigationBar: InkWell(
       //   onTap: () {
       //     Navigator.pop(context);
@@ -470,6 +492,59 @@ class _AddMembersearchState extends State<AddMembersearch> {
       _isCreatingLink = false;
 
       print(_linkMessage);
+    });
+  }
+
+  grabContacts() {
+    if (contacts.isNotEmpty) {
+      totalContactsSearch = contacts;
+      totalContacts = contacts;
+    } else {
+      askPermissions();
+    }
+
+    setState(() {});
+  }
+
+  // ACCESS CONTACTS BY REQUESTING PERMISSION
+  askPermissions() async {
+    PermissionStatus permission = await getContactPermission();
+    if (permission == PermissionStatus.granted) {
+      getContacts();
+    } else {
+      handleInvalidPermission(permission);
+    }
+  }
+
+  handleInvalidPermission(PermissionStatus permission) {
+    if (permission == PermissionStatus.denied) {
+      showSnackbar(context, 'Permission denied by user');
+    } else if (permission == PermissionStatus.permanentlyDenied) {
+      showSnackbar(context, 'Permission denied by user');
+    }
+  }
+
+  getContactPermission() async {
+    PermissionStatus permission = await Permission.contacts.status;
+    if (permission != PermissionStatus.granted &&
+        permission != PermissionStatus.permanentlyDenied) {
+      PermissionStatus permissionStatus = await Permission.contacts.request();
+      return permissionStatus;
+    } else {
+      return permission;
+    }
+  }
+
+  getContacts() async {
+    List<Contact> _contacts = await ContactsService.getContacts();
+
+    setState(() {
+      contacts = _contacts;
+      totalContactsSearch = _contacts;
+      totalContacts = _contacts;
+
+      print('================ContactLength=================');
+      print(contacts.length);
     });
   }
 }

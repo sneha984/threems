@@ -410,11 +410,11 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
                                         bottom: scrHeight * 0.02),
                                     child: InkWell(
                                         onTap: () {
-
                                           showDialog(
                                             context: context,
                                             builder: (ctx) => AlertDialog(
-                                              content: const Text("do you want to delete this chit"),
+                                              content: const Text(
+                                                  "do you want to delete this chit"),
                                               actions: <Widget>[
                                                 TextButton(
                                                   onPressed: () {
@@ -427,12 +427,14 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
                                                     FirebaseFirestore.instance
                                                         .collection('chit')
                                                         .doc(widget.id)
-                                                        .update({'delete': true});
+                                                        .update(
+                                                            {'delete': true});
                                                     Navigator.pop(context);
                                                   },
                                                   child: const Text(
                                                     "Yes",
-                                                    style: TextStyle(color: primarycolor),
+                                                    style: TextStyle(
+                                                        color: primarycolor),
                                                   ),
                                                 ),
                                               ],
@@ -1615,7 +1617,9 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
                                                                           ? 'Due'
                                                                           : mapOfCurrentPayments![members[index].userId]!.verified!
                                                                               ? 'Paid'
-                                                                              : "Pending",
+                                                                              : mapOfCurrentPayments![members[index].userId]!.rejected!
+                                                                                  ? "Rejected"
+                                                                                  : "Pending",
                                                                       style: TextStyle(
                                                                           fontSize: scrWidth *
                                                                               0.033,

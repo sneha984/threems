@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 
 class FileViewPage extends StatefulWidget {
   final String url;
-  final String type;
-  const FileViewPage({Key? key, required this.url, required this.type})
-      : super(key: key);
+  const FileViewPage({Key? key, required this.url}) : super(key: key);
 
   @override
   State<FileViewPage> createState() => _FileViewPageState();
@@ -22,7 +20,7 @@ class _FileViewPageState extends State<FileViewPage> {
     print(widget.url);
     return Scaffold(
         body: Center(
-      child: CachedNetworkImage(imageUrl: widget.url),
+      child: InteractiveViewer(child: CachedNetworkImage(imageUrl: widget.url)),
     ));
   }
 

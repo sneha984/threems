@@ -31,6 +31,7 @@ class CreateNewChitScreen extends StatefulWidget {
 }
 
 class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
+  bool disable = false;
   int chitTabBarIndex = 0;
   int drawnOrAuctionTabBarIndex = 0;
   final CrCalendarController calendarController = CrCalendarController();
@@ -85,6 +86,7 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
 
     setState(() {
       fileUrl = urlDownlod!;
+      disable = false;
     });
   }
 
@@ -116,7 +118,9 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
     print(bytes);
     print(size);
     uploadFileToFireBase(fileBytes);
-    setState(() {});
+    setState(() {
+      disable = true;
+    });
   }
 
   static String formatBytes(int bytes, int decimals) {
@@ -174,6 +178,7 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
       print("----=========-============-===============-=============");
       type == 'Profile' ? print(profile) : print(url);
       print("----=========-============-===============-=============");
+      disable = false;
     });
   }
 
@@ -187,6 +192,7 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
         imgFile = File(imageFile!.path);
       }
       uploadImageToFirebase(context, type);
+      disable = true;
     });
   }
 
@@ -3104,72 +3110,72 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
                                 ),
                               ),
                               (fileUrl != '' || fileUrl != null)
-                            ? Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Text(
-                              "Documents Uploaded",
-                              style: TextStyle(
-                                fontSize: FontSize15,
-                                fontFamily: 'Urbanist',
-                                fontWeight: FontWeight.w500,
-                                color: primarycolor,
-                              ),
-                            ),
-                            SizedBox(width: scrWidth * 0.01),
-                            SizedBox(
-                              child: SvgPicture.asset(
-                                'assets/icons/uploaded.svg',
-                                color: primarycolor,
-                              ),
-                            )
-                          ],
-                        )
-                            : pickFile == null
-                            ? Row(
-                          mainAxisAlignment:
-                          MainAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Upload Documents",
-                              style: TextStyle(
-                                fontSize: FontSize15,
-                                fontFamily: 'Urbanist',
-                                fontWeight: FontWeight.w500,
-                                color: Color(0xff8391A1),
-                              ),
-                            ),
-                            SizedBox(width: scrWidth * 0.01),
-                            SizedBox(
-                              child: SvgPicture.asset(
-                                'assets/icons/uploaded.svg',
-                                color: Color(0xff8391A1),
-                              ),
-                            )
-                          ],
-                        )
-                            : Row(
-                          mainAxisAlignment:
-                          MainAxisAlignment.end,
-                          children: [
-                            Text(
-                              "Documents Uploaded",
-                              style: TextStyle(
-                                fontSize: FontSize15,
-                                fontFamily: 'Urbanist',
-                                fontWeight: FontWeight.w500,
-                                color: primarycolor,
-                              ),
-                            ),
-                            SizedBox(width: scrWidth * 0.01),
-                            SizedBox(
-                              child: SvgPicture.asset(
-                                'assets/icons/uploaded.svg',
-                                color: primarycolor,
-                              ),
-                            )
-                          ],
-                        ),
+                                  ? Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Text(
+                                          "Documents Uploaded",
+                                          style: TextStyle(
+                                            fontSize: FontSize15,
+                                            fontFamily: 'Urbanist',
+                                            fontWeight: FontWeight.w500,
+                                            color: primarycolor,
+                                          ),
+                                        ),
+                                        SizedBox(width: scrWidth * 0.01),
+                                        SizedBox(
+                                          child: SvgPicture.asset(
+                                            'assets/icons/uploaded.svg',
+                                            color: primarycolor,
+                                          ),
+                                        )
+                                      ],
+                                    )
+                                  : pickFile == null
+                                      ? Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "Upload Documents",
+                                              style: TextStyle(
+                                                fontSize: FontSize15,
+                                                fontFamily: 'Urbanist',
+                                                fontWeight: FontWeight.w500,
+                                                color: Color(0xff8391A1),
+                                              ),
+                                            ),
+                                            SizedBox(width: scrWidth * 0.01),
+                                            SizedBox(
+                                              child: SvgPicture.asset(
+                                                'assets/icons/uploaded.svg',
+                                                color: Color(0xff8391A1),
+                                              ),
+                                            )
+                                          ],
+                                        )
+                                      : Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            Text(
+                                              "Documents Uploaded",
+                                              style: TextStyle(
+                                                fontSize: FontSize15,
+                                                fontFamily: 'Urbanist',
+                                                fontWeight: FontWeight.w500,
+                                                color: primarycolor,
+                                              ),
+                                            ),
+                                            SizedBox(width: scrWidth * 0.01),
+                                            SizedBox(
+                                              child: SvgPicture.asset(
+                                                'assets/icons/uploaded.svg',
+                                                color: primarycolor,
+                                              ),
+                                            )
+                                          ],
+                                        ),
                               SizedBox(
                                 height: scrWidth * 0.02,
                               ),
@@ -3985,86 +3991,92 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
           ),
           floatingActionButton: GestureDetector(
             onTap: () async {
-              if (chitName.text != '' &&
-                  dropdownValue != null &&
-                  members > 3 &&
-                  amount.text != '' &&
-                  duration.text != '' &&
-                  subscriptionAmount.text != '' &&
-                  drawTypeValue != null &&
-                  drawDateValue != null &&
-                  selectedTime != null &&
-                  (fileUrl != null || fileUrl != '')) {
-                final chit = ChitModel(
-                  amount: double.tryParse(amount.text),
-                  private: private,
-                  chitDate: int.parse(drawDateValue!),
-                  chitName: chitName.text,
-                  chitTime:
-                      '${selectedTime!.hour.toString()}:${selectedTime!.minute.toString()}',
-                  chitType: drawTypeValue,
-                  commission: dropdownValue,
-                  createdDate: DateTime.now(),
-                  dividendAmount: double.tryParse(dividend.text) ?? 0.0,
-                  document: url,
-                  drawn: false,
-                  duration: int.parse(duration.text),
-                  profile: profile,
-                  subscriptionAmount: double.tryParse(subscriptionAmount.text),
-                  status: widget.chit.status ?? 0,
-                  membersCount: members,
-                  phone: widget.chit.phone ?? '',
-                  userId: currentuserid,
-                  ifsc: widget.chit.ifsc ?? '',
-                  accountHolderName: widget.chit.accountHolderName ?? '',
-                  upiApps: widget.chit.upiApps,
-                  bankName: widget.chit.bankName ?? '',
-                  accountNumber: widget.chit.accountNumber ?? '',
-                  members: widget.chit.members ?? [],
-                  winners: widget.chit.winners ?? [],
-                  chitId: widget.chit.chitId ?? '',
-                  payableAmount: widget.chit.subscriptionAmount,
-                );
-
-                await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => PaymentDetails(
-                              chit: chit,
-                              size: size ?? '',
-                              ext: ext ?? '',
-                              bytes: bytes ?? '',
-                              fileName: fileName ?? '',
-                            )));
-
-                Navigator.pop(context);
+              print(disable);
+              if (disable == true) {
+                showSnackbar(context, 'Image / File is Uploading');
               } else {
-                chitName.text == ''
-                    ? showSnackbar(context, 'Please enter name of your chit')
-                    : dropdownValue == null
-                        ? showSnackbar(context, 'Please Choose Commission')
-                        : members < 4
-                            ? showSnackbar(
-                                context, 'Members must be greater than 3')
-                            : amount.text == ''
-                                ? showSnackbar(context, 'Please enter amount')
-                                : duration.text == ''
-                                    ? showSnackbar(
-                                        context, 'Please enter duration')
-                                    : subscriptionAmount.text == ''
-                                        ? showSnackbar(context,
-                                            'Please enter Subscription amount')
-                                        : drawTypeValue == null
-                                            ? showSnackbar(context,
-                                                'Please Choose Chit type')
-                                            : drawDateValue == null
-                                                ? showSnackbar(context,
-                                                    'Please Choose Draw Date')
-                                                : selectedTime == null
-                                                    ? showSnackbar(context,
-                                                        'Please Choose Draw Time')
-                                                    : showSnackbar(context,
-                                                        'Upload a authorised document');
+                if (chitName.text != '' &&
+                    dropdownValue != null &&
+                    members > 3 &&
+                    amount.text != '' &&
+                    duration.text != '' &&
+                    subscriptionAmount.text != '' &&
+                    drawTypeValue != null &&
+                    drawDateValue != null &&
+                    selectedTime != null &&
+                    (fileUrl != null || fileUrl != '')) {
+                  final chit = ChitModel(
+                    amount: double.tryParse(amount.text),
+                    private: private,
+                    chitDate: int.parse(drawDateValue!),
+                    chitName: chitName.text,
+                    chitTime:
+                        '${selectedTime!.hour.toString()}:${selectedTime!.minute.toString()}',
+                    chitType: drawTypeValue,
+                    commission: dropdownValue,
+                    createdDate: DateTime.now(),
+                    dividendAmount: double.tryParse(dividend.text) ?? 0.0,
+                    document: url,
+                    drawn: false,
+                    duration: int.parse(duration.text),
+                    profile: profile,
+                    subscriptionAmount:
+                        double.tryParse(subscriptionAmount.text),
+                    status: widget.chit.status ?? 0,
+                    membersCount: members,
+                    phone: widget.chit.phone ?? '',
+                    userId: currentuserid,
+                    ifsc: widget.chit.ifsc ?? '',
+                    accountHolderName: widget.chit.accountHolderName ?? '',
+                    upiApps: widget.chit.upiApps,
+                    bankName: widget.chit.bankName ?? '',
+                    accountNumber: widget.chit.accountNumber ?? '',
+                    members: widget.chit.members ?? [],
+                    winners: widget.chit.winners ?? [],
+                    chitId: widget.chit.chitId ?? '',
+                    payableAmount: widget.chit.subscriptionAmount,
+                  );
+
+                  await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => PaymentDetails(
+                                chit: chit,
+                                size: size ?? '',
+                                ext: ext ?? '',
+                                bytes: bytes ?? '',
+                                fileName: fileName ?? '',
+                              )));
+
+                  Navigator.pop(context);
+                } else {
+                  chitName.text == ''
+                      ? showSnackbar(context, 'Please enter name of your chit')
+                      : dropdownValue == null
+                          ? showSnackbar(context, 'Please Choose Commission')
+                          : members < 4
+                              ? showSnackbar(
+                                  context, 'Members must be greater than 3')
+                              : amount.text == ''
+                                  ? showSnackbar(context, 'Please enter amount')
+                                  : duration.text == ''
+                                      ? showSnackbar(
+                                          context, 'Please enter duration')
+                                      : subscriptionAmount.text == ''
+                                          ? showSnackbar(context,
+                                              'Please enter Subscription amount')
+                                          : drawTypeValue == null
+                                              ? showSnackbar(context,
+                                                  'Please Choose Chit type')
+                                              : drawDateValue == null
+                                                  ? showSnackbar(context,
+                                                      'Please Choose Draw Date')
+                                                  : selectedTime == null
+                                                      ? showSnackbar(context,
+                                                          'Please Choose Draw Time')
+                                                      : showSnackbar(context,
+                                                          'Upload a authorised document');
+                }
               }
             },
             child: Container(

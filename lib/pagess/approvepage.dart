@@ -14,6 +14,7 @@ import 'package:threems/model/usermodel.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../model/ChitModel.dart';
+import '../screens/chits/imageView.dart';
 import '../screens/splash_screen.dart';
 import '../utils/themes.dart';
 
@@ -421,7 +422,9 @@ class _ApprovePageState extends State<ApprovePage> {
                                   ? 'Due'
                                   : activePayment!.verified!
                                       ? 'Paid'
-                                      : "Pending",
+                                      : activePayment!.rejected!
+                                          ? "Rejected"
+                                          : "Pending",
                               style: TextStyle(
                                   fontSize: scrWidth * 0.036,
                                   fontWeight: FontWeight.w600,
@@ -436,15 +439,13 @@ class _ApprovePageState extends State<ApprovePage> {
                               showSnackbar(
                                   context, 'There is nothing to view.');
                             } else {
-                              GallerySaver.saveImage(activePayment!.url!,
-                                      toDcim: true,
-                                      albumName:
-                                          '${widget.chit.chitName!}-${user!.userName!}-${DateFormat('dd-MM-yyyy').format(activePayment!.datePaid ?? DateTime.now())}')
-                                  .then((success) {
-                                Navigator.pop(context);
-                                showSnackbar(context,
-                                    'Download completed. Check your gallery');
-                              });
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => FileViewPage(
+                                      url: activePayment!.url!,
+                                    ),
+                                  ));
 
                               // Uint8List response = await http
                               //     .get(Uri.parse(activePayment!.url!))
@@ -564,7 +565,10 @@ class _ApprovePageState extends State<ApprovePage> {
                                               child: Text(
                                                 paymentList[index].verified!
                                                     ? "Paid"
-                                                    : "Pending",
+                                                    : paymentList[index]
+                                                            .rejected!
+                                                        ? "Rejected"
+                                                        : "Pending",
                                                 style: TextStyle(
                                                     fontSize: scrWidth * 0.026,
                                                     fontWeight: FontWeight.w600,
@@ -631,7 +635,7 @@ class _ApprovePageState extends State<ApprovePage> {
                   SizedBox(
                     width: scrWidth * 0.04,
                   ),
-                  GestureDetector(
+                  InkWell(
                     onTap: () {
                       if (activePayment != null &&
                           activePayment!.verified != true) {
@@ -641,6 +645,14 @@ class _ApprovePageState extends State<ApprovePage> {
                             .collection('payments')
                             .doc(activePayment!.paymentId!)
                             .update({'verified': true}).then((value) {
+                          FirebaseFirestore.instance
+                              .collection('chit')
+                              .doc(widget.chit.chitId)
+                              .update({
+                            'totalReceived':
+                                FieldValue.increment(activePayment!.amount!)
+                          });
+                        }).then((value) {
                           FirebaseFirestore.instance
                               .collection('users')
                               .doc(currentuserid)
@@ -681,6 +693,53 @@ class _ApprovePageState extends State<ApprovePage> {
                       child: Center(
                           child: Text(
                         "Approve",
+                        style: TextStyle(
+                            fontSize: scrWidth * 0.047,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Urbanist'),
+                      )),
+                    ),
+                  ),
+                  SizedBox(
+                    width: scrWidth * 0.04,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      if (activePayment != null &&
+                          activePayment!.verified != true) {
+                        FirebaseFirestore.instance
+                            .collection('chit')
+                            .doc(widget.chit.chitId)
+                            .collection('payments')
+                            .doc(activePayment!.paymentId!)
+                            .update({'rejected': true}).then((value) {
+                          showSnackbar(
+                              context, 'Payment Rejected successfully');
+                          Navigator.pop(context);
+                        });
+                      } else {
+                        activePayment == null
+                            ? showSnackbar(context,
+                                '${user!.userName} is not paid this time')
+                            : showSnackbar(
+                                context, 'This Payment is already verified');
+                      }
+
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (context) => Hostedchitperspage()));
+                    },
+                    child: Container(
+                      height: scrHeight * 0.045,
+                      width: scrWidth * 0.3,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(11),
+                      ),
+                      child: Center(
+                          child: Text(
+                        "Reject",
                         style: TextStyle(
                             fontSize: scrWidth * 0.047,
                             fontWeight: FontWeight.w600,

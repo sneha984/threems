@@ -240,296 +240,292 @@ class _AddMembersKuriState extends State<AddMembersKuri> {
           ),
         ],
       ),
-      body: contacts.isEmpty || loading
-          ? Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: Container(
-                height: scrHeight * 0.8,
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    SizedBox(
-                      height: scrHeight * 0.02,
-                    ),
-                    // Padding(
-                    //   padding: EdgeInsets.only(right: scrWidth * 0.7),
-                    //   child: Text(
-                    //     "Added",
-                    //     style: TextStyle(
-                    //         fontSize: FontSize16,
-                    //         fontFamily: 'Urbanist',
-                    //         fontWeight: FontWeight.w600,
-                    //         color: Colors.black),
-                    //   ),
-                    // ),
-                    // SizedBox(
-                    //   height: scrWidth * 0.02,
-                    // ),
-                    // ListView.builder(
-                    //   // // reverse: true,
-                    //   // separatorBuilder: (context, index) => SizedBox(
-                    //   //   height: scrWidth * 0.02,
-                    //   // ),
-                    //   physics: BouncingScrollPhysics(),
-                    //   scrollDirection: Axis.vertical,
-                    //   itemCount: addMember.length,
-                    //   shrinkWrap: true,
-                    //   itemBuilder: (context, index) => Padding(
-                    //     padding: EdgeInsets.only(
-                    //         top: scrWidth * 0.02,
-                    //         left: scrWidth * 0.047,
-                    //         right: scrWidth * 0.047),
-                    //     child: Container(
-                    //       width: scrWidth * 0.2,
-                    //       height: textFormFieldHeight45,
-                    //       padding: EdgeInsets.symmetric(
-                    //         horizontal: scrWidth * 0.015,
-                    //         vertical: scrHeight * 0.01,
-                    //       ),
-                    //       decoration: BoxDecoration(
-                    //           border: Border.all(
-                    //             color: Color(0xffDADADA),
-                    //             width: scrWidth * 0.002,
-                    //           ),
-                    //           borderRadius:
-                    //               BorderRadius.circular(scrWidth * 0.026)),
-                    //       child: Center(
-                    //           child: Row(
-                    //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //         children: [
-                    //           // Container(
-                    //           //   margin: EdgeInsets.only(left: scrWidth * 0.02),
-                    //           //   child: CircleAvatar(
-                    //           //     radius: 15,
-                    //           //     backgroundColor: Colors.grey,
-                    //           //     child: ClipRRect(
-                    //           //       borderRadius:
-                    //           //           BorderRadius.circular(scrWidth * 0.04),
-                    //           //       child: CachedNetworkImage(
-                    //           //         imageUrl:
-                    //           //             'https://pbs.twimg.com/profile_images/1392793006877540352/ytVYaEBZ_400x400.jpg',
-                    //           //       ),
-                    //           //     ),
-                    //           //   ),
-                    //           // ),
-                    //           Container(
-                    //             margin: const EdgeInsets.only(left: 8),
-                    //             child: CircleAvatar(
-                    //               radius: 15,
-                    //               backgroundColor: Colors.grey,
-                    //               child: ClipRRect(
-                    //                 borderRadius: BorderRadius.circular(15),
-                    //                 child: Icon(
-                    //                   Icons.person,
-                    //                   color: Colors.white,
-                    //                 ),
-                    //               ),
-                    //             ),
-                    //           ),
-                    //           Center(
-                    //             child: Text(
-                    //               userNameById[addMember[index]],
-                    //               style: TextStyle(
-                    //                   fontSize: FontSize16,
-                    //                   fontFamily: 'Urbanist',
-                    //                   fontWeight: FontWeight.w600,
-                    //                   color: Colors.black),
-                    //             ),
-                    //           ),
-                    //           GestureDetector(
-                    //             onTap: (() {
-                    //               addMember.removeAt(index);
-                    //               setState(() {});
-                    //             }),
-                    //             child: Container(
-                    //               margin:
-                    //                   EdgeInsets.only(right: scrWidth * 0.03),
-                    //               child: SvgPicture.asset(
-                    //                 'assets/icons/delete.svg',
-                    //                 fit: BoxFit.contain,
-                    //                 color: Colors.black,
-                    //               ),
-                    //             ),
-                    //           ),
-                    //         ],
-                    //       )),
-                    //     ),
-                    //   ),
-                    // ),
-                    SizedBox(
-                      height: scrWidth * 0.04,
-                    ),
-                    Container(
-                      width: scrWidth * 0.9,
-                      height: textFormFieldHeight45,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: scrWidth * 0.015,
-                        vertical: scrWidth * 0.006,
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Container(
+          height: scrHeight * 0.8,
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              SizedBox(
+                height: scrHeight * 0.02,
+              ),
+              // Padding(
+              //   padding: EdgeInsets.only(right: scrWidth * 0.7),
+              //   child: Text(
+              //     "Added",
+              //     style: TextStyle(
+              //         fontSize: FontSize16,
+              //         fontFamily: 'Urbanist',
+              //         fontWeight: FontWeight.w600,
+              //         color: Colors.black),
+              //   ),
+              // ),
+              // SizedBox(
+              //   height: scrWidth * 0.02,
+              // ),
+              // ListView.builder(
+              //   // // reverse: true,
+              //   // separatorBuilder: (context, index) => SizedBox(
+              //   //   height: scrWidth * 0.02,
+              //   // ),
+              //   physics: BouncingScrollPhysics(),
+              //   scrollDirection: Axis.vertical,
+              //   itemCount: addMember.length,
+              //   shrinkWrap: true,
+              //   itemBuilder: (context, index) => Padding(
+              //     padding: EdgeInsets.only(
+              //         top: scrWidth * 0.02,
+              //         left: scrWidth * 0.047,
+              //         right: scrWidth * 0.047),
+              //     child: Container(
+              //       width: scrWidth * 0.2,
+              //       height: textFormFieldHeight45,
+              //       padding: EdgeInsets.symmetric(
+              //         horizontal: scrWidth * 0.015,
+              //         vertical: scrHeight * 0.01,
+              //       ),
+              //       decoration: BoxDecoration(
+              //           border: Border.all(
+              //             color: Color(0xffDADADA),
+              //             width: scrWidth * 0.002,
+              //           ),
+              //           borderRadius:
+              //               BorderRadius.circular(scrWidth * 0.026)),
+              //       child: Center(
+              //           child: Row(
+              //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //         children: [
+              //           // Container(
+              //           //   margin: EdgeInsets.only(left: scrWidth * 0.02),
+              //           //   child: CircleAvatar(
+              //           //     radius: 15,
+              //           //     backgroundColor: Colors.grey,
+              //           //     child: ClipRRect(
+              //           //       borderRadius:
+              //           //           BorderRadius.circular(scrWidth * 0.04),
+              //           //       child: CachedNetworkImage(
+              //           //         imageUrl:
+              //           //             'https://pbs.twimg.com/profile_images/1392793006877540352/ytVYaEBZ_400x400.jpg',
+              //           //       ),
+              //           //     ),
+              //           //   ),
+              //           // ),
+              //           Container(
+              //             margin: const EdgeInsets.only(left: 8),
+              //             child: CircleAvatar(
+              //               radius: 15,
+              //               backgroundColor: Colors.grey,
+              //               child: ClipRRect(
+              //                 borderRadius: BorderRadius.circular(15),
+              //                 child: Icon(
+              //                   Icons.person,
+              //                   color: Colors.white,
+              //                 ),
+              //               ),
+              //             ),
+              //           ),
+              //           Center(
+              //             child: Text(
+              //               userNameById[addMember[index]],
+              //               style: TextStyle(
+              //                   fontSize: FontSize16,
+              //                   fontFamily: 'Urbanist',
+              //                   fontWeight: FontWeight.w600,
+              //                   color: Colors.black),
+              //             ),
+              //           ),
+              //           GestureDetector(
+              //             onTap: (() {
+              //               addMember.removeAt(index);
+              //               setState(() {});
+              //             }),
+              //             child: Container(
+              //               margin:
+              //                   EdgeInsets.only(right: scrWidth * 0.03),
+              //               child: SvgPicture.asset(
+              //                 'assets/icons/delete.svg',
+              //                 fit: BoxFit.contain,
+              //                 color: Colors.black,
+              //               ),
+              //             ),
+              //           ),
+              //         ],
+              //       )),
+              //     ),
+              //   ),
+              // ),
+              SizedBox(
+                height: scrWidth * 0.04,
+              ),
+              Container(
+                width: scrWidth * 0.9,
+                height: textFormFieldHeight45,
+                padding: EdgeInsets.symmetric(
+                  horizontal: scrWidth * 0.015,
+                  vertical: scrWidth * 0.006,
+                ),
+                decoration: BoxDecoration(
+                  color: textFormFieldFillColor,
+                  borderRadius: BorderRadius.circular(scrWidth * 0.026),
+                ),
+                child: TypeAheadField(
+                  minCharsForSuggestions: 1,
+                  suggestionsCallback: (pattern) {
+                    return User.getSuggestions(pattern);
+                  },
+                  textFieldConfiguration: TextFieldConfiguration(
+                    controller: userNameController,
+                    focusNode: userNameFocus,
+                    decoration: InputDecoration(
+                      prefixIcon: Container(
+                        height: scrWidth * 0.045,
+                        width: scrWidth * 0.02,
+                        padding: EdgeInsets.all(scrWidth * 0.03),
+                        child: SvgPicture.asset(
+                          'assets/icons/chitname.svg',
+                          fit: BoxFit.contain,
+                          color: userNameFocus.hasFocus
+                              ? primarycolor
+                              : Color(0xffB0B0B0),
+                        ),
                       ),
-                      decoration: BoxDecoration(
-                        color: textFormFieldFillColor,
-                        borderRadius: BorderRadius.circular(scrWidth * 0.026),
+                      fillColor: textFormFieldFillColor,
+                      filled: true,
+                      labelText: 'User Name',
+                      labelStyle: TextStyle(
+                        color: userNameFocus.hasFocus
+                            ? primarycolor
+                            : Color(0xffB0B0B0),
+                        fontWeight: FontWeight.w600,
+                        fontSize: FontSize15,
+                        fontFamily: 'Urbanist',
                       ),
-                      child: TypeAheadField(
-                        minCharsForSuggestions: 1,
-                        suggestionsCallback: (pattern) {
-                          return User.getSuggestions(pattern);
-                        },
-                        textFieldConfiguration: TextFieldConfiguration(
-                          controller: userNameController,
-                          focusNode: userNameFocus,
-                          decoration: InputDecoration(
-                            prefixIcon: Container(
-                              height: scrWidth * 0.045,
-                              width: scrWidth * 0.02,
-                              padding: EdgeInsets.all(scrWidth * 0.03),
-                              child: SvgPicture.asset(
-                                'assets/icons/chitname.svg',
-                                fit: BoxFit.contain,
-                                color: userNameFocus.hasFocus
-                                    ? primarycolor
-                                    : Color(0xffB0B0B0),
-                              ),
-                            ),
-                            fillColor: textFormFieldFillColor,
-                            filled: true,
-                            labelText: 'User Name',
-                            labelStyle: TextStyle(
-                              color: userNameFocus.hasFocus
-                                  ? primarycolor
-                                  : Color(0xffB0B0B0),
-                              fontWeight: FontWeight.w600,
-                              fontSize: FontSize15,
-                              fontFamily: 'Urbanist',
-                            ),
-                            contentPadding: EdgeInsets.only(
-                                top: scrWidth * 0.02, bottom: scrWidth * 0.033),
-                            disabledBorder: InputBorder.none,
-                            enabledBorder: InputBorder.none,
-                            errorBorder: InputBorder.none,
-                            border: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                          ),
+                      contentPadding: EdgeInsets.only(
+                          top: scrWidth * 0.02, bottom: scrWidth * 0.033),
+                      disabledBorder: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                      border: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                    ),
+                    style: TextStyle(
+                        fontSize: FontSize16,
+                        fontFamily: 'Urbanist',
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black),
+                  ),
+                  noItemsFoundBuilder: (context) {
+                    return SizedBox(
+                      height: scrHeight * 0.03,
+                      child: Center(
+                        child: Text(
+                          "No Users Found",
                           style: TextStyle(
                               fontSize: FontSize16,
                               fontFamily: 'Urbanist',
                               fontWeight: FontWeight.w600,
                               color: Colors.black),
                         ),
-                        noItemsFoundBuilder: (context) {
-                          return SizedBox(
-                            height: scrHeight * 0.03,
-                            child: Center(
-                              child: Text(
-                                "No Users Found",
-                                style: TextStyle(
-                                    fontSize: FontSize16,
-                                    fontFamily: 'Urbanist',
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.black),
-                              ),
+                      ),
+                    );
+                  },
+                  suggestionsBoxDecoration: SuggestionsBoxDecoration(
+                      // hasScrollbar: false,
+                      elevation: 0,
+                      color: Colors.transparent,
+                      borderRadius: BorderRadius.circular(scrWidth * 0.02)),
+                  itemBuilder: (context, suggestion) {
+                    return Padding(
+                      padding: EdgeInsets.only(
+                        left: scrWidth * 0.2,
+                      ),
+                      child: Column(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.all(6),
+                            decoration: BoxDecoration(
+                              color: Color(0xff02B558),
+                              borderRadius:
+                                  BorderRadius.circular(scrWidth * 0.03),
                             ),
-                          );
-                        },
-                        suggestionsBoxDecoration: SuggestionsBoxDecoration(
-                            // hasScrollbar: false,
-                            elevation: 0,
-                            color: Colors.transparent,
-                            borderRadius:
-                                BorderRadius.circular(scrWidth * 0.02)),
-                        itemBuilder: (context, suggestion) {
-                          return Padding(
-                            padding: EdgeInsets.only(
-                              left: scrWidth * 0.2,
-                            ),
-                            child: Column(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Container(
-                                  padding: EdgeInsets.all(6),
-                                  decoration: BoxDecoration(
-                                    color: Color(0xff02B558),
-                                    borderRadius:
-                                        BorderRadius.circular(scrWidth * 0.03),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Container(
-                                        margin: EdgeInsets.only(
-                                            left: scrWidth * 0.03),
-                                        child: CircleAvatar(
-                                          radius: 15,
-                                          backgroundColor: Colors.grey,
-                                          child: ClipRRect(
-                                            borderRadius: BorderRadius.circular(
-                                                scrWidth * 0.05),
-                                            child: CachedNetworkImage(
-                                                imageUrl:
-                                                    'https://pbs.twimg.com/profile_images/1392793006877540352/ytVYaEBZ_400x400.jpg'),
-                                          ),
-                                        ),
-                                      ),
-                                      Center(
-                                        child: Text(
-                                          suggestion,
-                                          style: TextStyle(
-                                              fontSize: FontSize16,
-                                              fontFamily: 'Urbanist',
-                                              fontWeight: FontWeight.w600,
-                                              color: Colors.black),
-                                        ),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {},
-                                        child: Container(
-                                          margin: EdgeInsets.only(
-                                              right: scrWidth * 0.02),
-                                          // padding: EdgeInsets.all(1),
-                                          width: scrWidth * 0.15,
-                                          height: scrHeight * 0.03,
-                                          decoration: BoxDecoration(
-                                            color: Color(0xffF3F3F3),
-                                            borderRadius: BorderRadius.circular(
-                                                scrWidth * 0.03),
-                                          ),
-                                          child: Center(
-                                              child: Text(
-                                            "+ Add",
-                                            style: TextStyle(
-                                                fontSize: FontSize13,
-                                                fontFamily: 'Urbanist',
-                                                fontWeight: FontWeight.w600,
-                                                color: Colors.black),
-                                          )),
-                                        ),
-                                      ),
-                                    ],
+                                  margin:
+                                      EdgeInsets.only(left: scrWidth * 0.03),
+                                  child: CircleAvatar(
+                                    radius: 15,
+                                    backgroundColor: Colors.grey,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(
+                                          scrWidth * 0.05),
+                                      child: CachedNetworkImage(
+                                          imageUrl:
+                                              'https://pbs.twimg.com/profile_images/1392793006877540352/ytVYaEBZ_400x400.jpg'),
+                                    ),
                                   ),
                                 ),
-                                SizedBox(
-                                  height: scrHeight * 0.01,
+                                Center(
+                                  child: Text(
+                                    suggestion,
+                                    style: TextStyle(
+                                        fontSize: FontSize16,
+                                        fontFamily: 'Urbanist',
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.black),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {},
+                                  child: Container(
+                                    margin:
+                                        EdgeInsets.only(right: scrWidth * 0.02),
+                                    // padding: EdgeInsets.all(1),
+                                    width: scrWidth * 0.15,
+                                    height: scrHeight * 0.03,
+                                    decoration: BoxDecoration(
+                                      color: Color(0xffF3F3F3),
+                                      borderRadius: BorderRadius.circular(
+                                          scrWidth * 0.03),
+                                    ),
+                                    child: Center(
+                                        child: Text(
+                                      "+ Add",
+                                      style: TextStyle(
+                                          fontSize: FontSize13,
+                                          fontFamily: 'Urbanist',
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.black),
+                                    )),
+                                  ),
                                 ),
                               ],
                             ),
-                          );
-                        },
-                        onSuggestionSelected: (suggestion) {
-                          setState(() {
-                            userSelected = suggestion;
-                            userNameController.clear();
-                            print(userSelected);
-                            addMember.add(userSelected!);
-                            print(addMember);
-                          });
-                        },
+                          ),
+                          SizedBox(
+                            height: scrHeight * 0.01,
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
+                    );
+                  },
+                  onSuggestionSelected: (suggestion) {
+                    setState(() {
+                      userSelected = suggestion;
+                      userNameController.clear();
+                      print(userSelected);
+                      addMember.add(userSelected!);
+                      print(addMember);
+                    });
+                  },
                 ),
               ),
-            ),
+            ],
+          ),
+        ),
+      ),
       bottomNavigationBar: Padding(
         padding: EdgeInsets.only(bottom: scrHeight * 0.01),
         child: Container(
