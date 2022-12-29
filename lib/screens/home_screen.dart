@@ -15,7 +15,6 @@ import 'package:threems/kuri/kuripage.dart';
 import 'package:threems/model/usermodel.dart';
 import 'package:threems/phonebook/phone_book.dart';
 import 'package:threems/screens/charity/basic_details.dart';
-import 'package:threems/screens/chits/hostedchits.dart';
 import 'package:threems/screens/flgraph.dart';
 import 'package:threems/screens/splash_screen.dart';
 import 'package:threems/utils/themes.dart';
@@ -35,6 +34,7 @@ import '../topbar/prifilepage.dart';
 import '../topbar/settings.dart';
 import 'charity/donatepage.dart';
 import 'charity/seemorecharities.dart';
+import 'chits/chitList.dart';
 
 var currenPlace;
 double? lat;
@@ -2012,7 +2012,5 @@ Future<bool?> confirmQuitDialog(BuildContext context) => showDialog<bool>(
                   'Yes',
                   style: TextStyle(color: primarycolor),
                 )),
-
-
           ],
         ));

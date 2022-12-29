@@ -65,7 +65,7 @@ class _VacantChitJoinPageState extends State<VacantChitJoinPage> {
   void joinChit() {
     showDialog(
       context: context,
-      builder: (context) {
+      builder: (ctx) {
         return AlertDialog(
           titlePadding: EdgeInsets.only(
               top: scrHeight * 0.025,
@@ -107,7 +107,8 @@ class _VacantChitJoinPageState extends State<VacantChitJoinPage> {
                 children: [
                   InkWell(
                     onTap: () {
-                      Navigator.pop(context);
+                      Navigator.pop(ctx);
+                      // Navigator.pop(context);
                     },
                     child: Container(
                       width: scrWidth * 0.3,
@@ -152,9 +153,8 @@ class _VacantChitJoinPageState extends State<VacantChitJoinPage> {
                       }).then((value) {
                         showSnackbar(context,
                             'Successfully joined the chit named ${chit!.chitName!}');
-
-                        Navigator.pop(context);
                       });
+                      Navigator.pop(ctx);
                       Navigator.pop(context);
                     },
                     child: Container(

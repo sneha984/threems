@@ -62,11 +62,13 @@ class _HostedChitPageState extends State<HostedChitPage>
       for (DocumentSnapshot<Map<String, dynamic>> doc in docs) {
         if (doc['userId'] == currentuserid) {
           hostedChits.add(ChitModel.fromJson(doc.data()!));
-        } else if (doc['members'].toList().contains(currentuserid)) {
-          myChits.add(ChitModel.fromJson(doc.data()!));
         } else if (((doc['members'].length < doc['membersCount']) &&
             doc['status'] == 1)) {
           vacantChits.add(ChitModel.fromJson(doc.data()!));
+        }
+
+        if (doc['members'].toList().contains(currentuserid)) {
+          myChits.add(ChitModel.fromJson(doc.data()!));
         }
       }
 
@@ -142,7 +144,6 @@ class _HostedChitPageState extends State<HostedChitPage>
           ),
         ),
         actions: [
-
           Padding(
             padding: EdgeInsets.only(
                 right: scrWidth * 0.04,

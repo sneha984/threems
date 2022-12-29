@@ -599,145 +599,411 @@ class _PaymentDetailsState extends State<PaymentDetails> {
                     ),
                   ),
                 ),
+                SizedBox(
+                  height: 10,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    if (phone.text != '' &&
+                        upiApps.isNotEmpty &&
+                        accountNumber.text == confirmAccountNumber.text) {
+                      joinChit();
+                    } else {
+                      phone.text == ''
+                          ? showSnackbar(context, 'Please Enter Phone Number')
+                          : upiApps.isEmpty
+                              ? showSnackbar(
+                                  context, 'Please Choose Available UPI Apps')
+                              : showSnackbar(context,
+                                  'Confirm account number must be same as account number.');
+                    }
+                  },
+                  child: Container(
+                      width: 285,
+                      height: 47,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(17),
+                        color: primarycolor,
+                      ),
+                      child: Center(
+                        child: Text(
+                          "Create Chit",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: FontSize15,
+                            fontFamily: 'Urbanist',
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      )),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
               ],
             ),
           ),
         ),
-        floatingActionButton: GestureDetector(
-          onTap: () {
-            ChitModel local = widget.chit;
-            if (phone.text != '' &&
-                upiApps.isNotEmpty &&
-                accountNumber.text == confirmAccountNumber.text) {
-              if (widget.chit.chitId != '') {
-                final chit = ChitModel(
-                    winners: local.winners,
-                    membersCount: local.membersCount,
-                    status: local.status,
-                    subscriptionAmount: local.subscriptionAmount,
-                    profile: local.profile,
-                    duration: local.duration,
-                    drawn: local.drawn,
-                    document: local.document,
-                    dividendAmount: local.dividendAmount,
-                    createdDate: DateTime.now(),
-                    commission: local.commission,
-                    chitType: local.chitType,
-                    chitTime: local.chitTime,
-                    chitName: local.chitName,
-                    fileName: local.fileName,
-                    chitDate: local.chitDate,
-                    private: local.private,
-                    amount: local.amount,
-                    members: local.members,
-                    accountNumber: accountNumber.text,
-                    bankName: bankName.text,
-                    phone: phone.text,
-                    upiApps: upiApps,
-                    accountHolderName: accountHolderName.text,
-                    userId: currentuserid,
-                    ifsc: ifsc.text,
-                    delete: false,
-                    payableAmount: local.payableAmount,
-                    chitId: local.chitId ?? '');
-
-                FirebaseFirestore.instance
-                    .collection('chit')
-                    .doc(local.chitId)
-                    .update(chit.toJson())
-                    .then((value) {
-                  showSnackbar(context, 'Chit Update Successfully');
-                  Navigator.pop(context);
-                });
-              } else {
-                final chit = ChitModel(
-                    winners: [],
-                    membersCount: local.membersCount,
-                    status: local.status,
-                    subscriptionAmount: local.subscriptionAmount,
-                    profile: local.profile,
-                    duration: local.duration,
-                    drawn: local.drawn,
-                    document: local.document,
-                    dividendAmount: local.dividendAmount,
-                    createdDate: DateTime.now(),
-                    commission: local.commission,
-                    chitType: local.chitType,
-                    chitTime: local.chitTime,
-                    chitName: local.chitName,
-                    chitDate: local.chitDate,
-                    private: local.private,
-                    amount: local.amount,
-                    members: [],
-                    accountNumber: accountNumber.text,
-                    bankName: bankName.text,
-                    phone: phone.text,
-                    upiApps: upiApps,
-                    accountHolderName: accountHolderName.text,
-                    userId: currentuserid,
-                    payableAmount: local.subscriptionAmount,
-                    chitId: local.chitId,
-                    fileName: widget.fileName,
-                    ifsc: ifsc.text,
-                    delete: false);
-
-                FirebaseFirestore.instance
-                    .collection('chit')
-                    .add(chit.toJson())
-                    .then((value) {
-                  value.update({'chitId': value.id});
-                  value.collection('chats').add({
-                    "file": local.document!,
-                    "fileName": 'PROOF',
-                    "senderId": currentuserid,
-                    "sendTime": DateTime.now(),
-                    "readBy": [],
-                    "type": "file",
-                    "ext": widget.ext,
-                    "size": widget.size,
-                  });
-                }).then((value) {
-                  showSnackbar(context, 'Chit successfully added');
-                  setState(() {
-                    loading = false;
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (context) => ScreenLayout()),
-                        (route) => false);
-                  });
-                });
-              }
-            } else {
-              phone.text == ''
-                  ? showSnackbar(context, 'Please Enter Phone Number')
-                  : upiApps.isEmpty
-                      ? showSnackbar(
-                          context, 'Please Choose Available UPI Apps')
-                      : showSnackbar(context,
-                          'Confirm account number must be same as account number.');
-            }
-          },
-          child: Container(
-              width: 285,
-              height: 47,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(17),
-                color: primarycolor,
-              ),
-              child: Center(
-                child: Text(
-                  "Create Chit",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: FontSize15,
-                    fontFamily: 'Urbanist',
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              )),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       ),
+    );
+  }
+
+  void joinChit() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          titlePadding: EdgeInsets.only(
+              top: scrHeight * 0.025,
+              left: scrWidth * 0.05,
+              right: scrWidth * 0.02),
+          contentPadding: EdgeInsets.only(
+              top: scrHeight * 0.002,
+              bottom: scrHeight * 0.02,
+              left: scrWidth * 0.05,
+              right: scrWidth * 0.02),
+          title: Text(
+            "Do you want to join this chit as a member?",
+            style: TextStyle(
+              color: Color(0xff2C2C2C),
+              fontSize: FontSize15,
+              fontFamily: "Urbanist",
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text(
+                ' ',
+                style: TextStyle(
+                  color: Color(0xff827C7C),
+                  fontSize: FontSize10,
+                  fontFamily: "Urbanist",
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              SizedBox(
+                height: scrHeight * 0.025,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  InkWell(
+                    onTap: () {
+                      ChitModel local = widget.chit;
+                      if (phone.text != '' &&
+                          upiApps.isNotEmpty &&
+                          accountNumber.text == confirmAccountNumber.text) {
+                        if (widget.chit.chitId != '') {
+                          final chit = ChitModel(
+                            winners: local.winners,
+                            membersCount: local.membersCount,
+                            status: local.status,
+                            subscriptionAmount: local.subscriptionAmount,
+                            profile: local.profile,
+                            duration: local.duration,
+                            drawn: local.drawn,
+                            document: local.document,
+                            dividendAmount: local.dividendAmount,
+                            createdDate: DateTime.now(),
+                            commission: local.commission,
+                            chitType: local.chitType,
+                            chitTime: local.chitTime,
+                            chitName: local.chitName,
+                            fileName: local.fileName,
+                            chitDate: local.chitDate,
+                            private: local.private,
+                            amount: local.amount,
+                            members: local.members,
+                            accountNumber: accountNumber.text,
+                            bankName: bankName.text,
+                            phone: phone.text,
+                            upiApps: upiApps,
+                            accountHolderName: accountHolderName.text,
+                            userId: currentuserid,
+                            ifsc: ifsc.text,
+                            delete: false,
+                            payableAmount: local.payableAmount,
+                            chitId: local.chitId ?? '',
+                          );
+
+                          FirebaseFirestore.instance
+                              .collection('chit')
+                              .doc(local.chitId)
+                              .update(chit.toJson())
+                              .then((value) {
+                            showSnackbar(context, 'Chit Update Successfully');
+                            Navigator.pop(context);
+                          });
+                        } else {
+                          final chit = ChitModel(
+                              winners: [],
+                              membersCount: local.membersCount,
+                              status: local.status,
+                              subscriptionAmount: local.subscriptionAmount,
+                              profile: local.profile,
+                              duration: local.duration,
+                              drawn: local.drawn,
+                              document: local.document,
+                              dividendAmount: local.dividendAmount,
+                              createdDate: DateTime.now(),
+                              commission: local.commission,
+                              chitType: local.chitType,
+                              chitTime: local.chitTime,
+                              chitName: local.chitName,
+                              chitDate: local.chitDate,
+                              private: local.private,
+                              amount: local.amount,
+                              members: [],
+                              accountNumber: accountNumber.text,
+                              bankName: bankName.text,
+                              phone: phone.text,
+                              upiApps: upiApps,
+                              accountHolderName: accountHolderName.text,
+                              userId: currentuserid,
+                              payableAmount: local.subscriptionAmount,
+                              chitId: local.chitId,
+                              fileName: widget.fileName,
+                              ifsc: ifsc.text,
+                              delete: false);
+
+                          FirebaseFirestore.instance
+                              .collection('chit')
+                              .add(chit.toJson())
+                              .then((value) {
+                            value.update({'chitId': value.id});
+                            value.collection('chats').add({
+                              "file": local.document!,
+                              "fileName": 'PROOF',
+                              "senderId": currentuserid,
+                              "sendTime": DateTime.now(),
+                              "readBy": [],
+                              "type": "file",
+                              "ext": widget.ext,
+                              "size": widget.size,
+                            });
+                          }).then((value) {
+                            showSnackbar(context, 'Chit successfully added');
+                            setState(() {
+                              loading = false;
+                              Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ScreenLayout()),
+                                  (route) => false);
+                            });
+                          });
+                        }
+                      } else {
+                        phone.text == ''
+                            ? showSnackbar(context, 'Please Enter Phone Number')
+                            : upiApps.isEmpty
+                                ? showSnackbar(
+                                    context, 'Please Choose Available UPI Apps')
+                                : showSnackbar(context,
+                                    'Confirm account number must be same as account number.');
+                      }
+                    },
+                    child: Container(
+                      width: scrWidth * 0.3,
+                      height: scrHeight * 0.058,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(34),
+                        color: Color(0xffDEDEDE),
+                        boxShadow: [
+                          //
+                          BoxShadow(
+                            blurRadius: 5,
+                            spreadRadius: -4,
+                            // offset: Offset(0, -4),
+                            color: Colors.black.withOpacity(0.15),
+                          ),
+                        ],
+                      ),
+                      child: Center(
+                        child: Text(
+                          "No",
+                          style: TextStyle(
+                            color: Color(0xff2C2C2C),
+                            fontSize: FontSize16,
+                            fontFamily: "Urbanist",
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      List id = widget.chit.members!;
+                      id.add(currentuserid);
+                      print('--------------------');
+                      print(id.runtimeType);
+                      ChitModel local = widget.chit;
+                      if (phone.text != '' &&
+                          upiApps.isNotEmpty &&
+                          accountNumber.text == confirmAccountNumber.text) {
+                        if (widget.chit.chitId != '') {
+                          final chit = ChitModel(
+                            winners: local.winners,
+                            membersCount: local.membersCount,
+                            status: local.status,
+                            subscriptionAmount: local.subscriptionAmount,
+                            profile: local.profile,
+                            duration: local.duration,
+                            drawn: local.drawn,
+                            document: local.document,
+                            dividendAmount: local.dividendAmount,
+                            createdDate: DateTime.now(),
+                            commission: local.commission,
+                            chitType: local.chitType,
+                            chitTime: local.chitTime,
+                            chitName: local.chitName,
+                            fileName: local.fileName,
+                            chitDate: local.chitDate,
+                            private: local.private,
+                            amount: local.amount,
+                            members: id,
+                            accountNumber: accountNumber.text,
+                            bankName: bankName.text,
+                            phone: phone.text,
+                            upiApps: upiApps,
+                            accountHolderName: accountHolderName.text,
+                            userId: currentuserid,
+                            ifsc: ifsc.text,
+                            delete: false,
+                            payableAmount: local.payableAmount,
+                            chitId: local.chitId ?? '',
+                          );
+
+                          FirebaseFirestore.instance
+                              .collection('chit')
+                              .doc(local.chitId)
+                              .update(chit.toJson())
+                              .then((value) {
+                            showSnackbar(context, 'Chit Update Successfully');
+                            Navigator.pop(context);
+                          });
+                        } else {
+                          final chit = ChitModel(
+                              winners: [],
+                              membersCount: local.membersCount,
+                              status: local.status,
+                              subscriptionAmount: local.subscriptionAmount,
+                              profile: local.profile,
+                              duration: local.duration,
+                              drawn: local.drawn,
+                              document: local.document,
+                              dividendAmount: local.dividendAmount,
+                              createdDate: DateTime.now(),
+                              commission: local.commission,
+                              chitType: local.chitType,
+                              chitTime: local.chitTime,
+                              chitName: local.chitName,
+                              chitDate: local.chitDate,
+                              private: local.private,
+                              amount: local.amount,
+                              members: id,
+                              accountNumber: accountNumber.text,
+                              bankName: bankName.text,
+                              phone: phone.text,
+                              upiApps: upiApps,
+                              accountHolderName: accountHolderName.text,
+                              userId: currentuserid,
+                              payableAmount: local.subscriptionAmount,
+                              chitId: local.chitId,
+                              fileName: widget.fileName,
+                              ifsc: ifsc.text,
+                              delete: false);
+
+                          FirebaseFirestore.instance
+                              .collection('chit')
+                              .add(chit.toJson())
+                              .then((value) {
+                            value.update({'chitId': value.id});
+                            value.collection('chats').add({
+                              "file": local.document!,
+                              "fileName": 'PROOF',
+                              "senderId": currentuserid,
+                              "sendTime": DateTime.now(),
+                              "readBy": [],
+                              "type": "file",
+                              "ext": widget.ext,
+                              "size": widget.size,
+                            });
+                            Navigator.pop(context);
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ScreenLayout()),
+                                (route) => false);
+                          }).then((value) {
+                            // showSnackbar(context, 'Chit successfully added');
+                            print('hii');
+                          });
+                          setState(() {
+                            loading = false;
+                          });
+                        }
+                      } else {
+                        phone.text == ''
+                            ? showSnackbar(context, 'Please Enter Phone Number')
+                            : upiApps.isEmpty
+                                ? showSnackbar(
+                                    context, 'Please Choose Available UPI Apps')
+                                : showSnackbar(context,
+                                    'Confirm account number must be same as account number.');
+                      }
+                      Navigator.pop(context);
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ScreenLayout()),
+                          (route) => false);
+                    },
+                    child: Container(
+                      width: scrWidth * 0.3,
+                      height: scrHeight * 0.058,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(34),
+                        color: primarycolor,
+                        boxShadow: [
+                          BoxShadow(
+                            blurRadius: 5,
+                            spreadRadius: -4,
+                            // offset: Offset(0, -4),
+                            color: Colors.black.withOpacity(0.15),
+                          ),
+                        ],
+                      ),
+                      child: Center(
+                        child: Text(
+                          "Yes",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: FontSize16,
+                            fontFamily: "Urbanist",
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: scrWidth * 0.001,
+                  ),
+                ],
+              )
+            ],
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(34),
+          ),
+        );
+      },
     );
   }
 

@@ -504,7 +504,7 @@ class _AddMembersearchState extends State<AddMembersearch> {
 
   grabContacts() async {
     if (contacts.isNotEmpty) {
-      await getContacts();
+      getContacts();
       totalContactsSearch = contacts;
       totalContacts = contacts;
     } else {

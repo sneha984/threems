@@ -15,7 +15,8 @@ class OnBoarding extends StatefulWidget {
   State<OnBoarding> createState() => _OnBoardingState();
 }
 
-class _OnBoardingState extends State<OnBoarding> {
+class _OnBoardingState extends State<OnBoarding>
+    with SingleTickerProviderStateMixin {
   int _currentpage = 0;
   PageController _controller = PageController();
   List<Widget> pages = [
@@ -56,9 +57,20 @@ class _OnBoardingState extends State<OnBoarding> {
     setState(() {});
   }
 
+  skipFunction() {
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => GetOtpPage()));
+  }
+
+  AnimationController? anim;
+  ColorTween? animColor;
+
   @override
   void initState() {
     super.initState();
+
+    anim = AnimationController(vsync: this);
+    animColor = ColorTween(begin: Colors.transparent, end: Colors.black);
   }
 
   @override
@@ -105,7 +117,7 @@ class _OnBoardingState extends State<OnBoarding> {
                 onTap: () {
                   setState(() {
                     _currentpage == pages.length - 1
-                        ? Navigator.push(
+                        ? Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => GetOtpPage()))
@@ -176,7 +188,20 @@ class _OnBoardingState extends State<OnBoarding> {
                 height: scrHeight * 0.05,
               ),
             ],
-          )
+          ),
+          Positioned(
+            right: 10,
+            top: scrHeight * 0.09,
+            child: InkWell(
+              onTap: skipFunction,
+              child: Text(
+                'Skip',
+                style: TextStyle(
+                  fontSize: 20,
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );

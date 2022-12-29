@@ -779,7 +779,7 @@ class _HostedDraftPageState extends State<HostedDraftPage> {
                                         ),
                                         child: Container(
                                           height: scrHeight * 0.067,
-                                          width: scrWidth * 0.38,
+                                          width: scrWidth * 0.39,
                                           decoration: BoxDecoration(
                                               color: Color(0xffEEEEEE),
                                               boxShadow: [

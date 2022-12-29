@@ -94,7 +94,7 @@ class _PhoneBookPageState extends State<PhoneBookPage> {
 
   grabContacts() async {
     if (contacts.isNotEmpty) {
-      await getContacts();
+      getContacts();
       totalContactsSearch = contacts;
       totalContacts = contacts;
     } else {
@@ -108,8 +108,8 @@ class _PhoneBookPageState extends State<PhoneBookPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getUsers();
     grabContacts();
+    getUsers();
   }
 
   @override
