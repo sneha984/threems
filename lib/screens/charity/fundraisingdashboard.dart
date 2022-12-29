@@ -789,7 +789,7 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
                                   fontWeight: FontWeight.w500),),
                               SizedBox(height: scrHeight*0.006,),
 
-                              Text('₹$sum',
+                              Text(widget.charity.totalReceived.toString(),
                                 // "₹15,23,340",
                                 style: TextStyle(
                                   fontSize: scrWidth*0.05,

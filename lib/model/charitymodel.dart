@@ -92,7 +92,7 @@ class CharityModel {
     userId=json['userId'];
     userName=json['userName'];
     block=json['block'];
-    totalReceived=json['totalReceived'];
+    totalReceived=double.tryParse(json['totalReceived'].toString());
     otherDocument=json['otherDocument'];
     videoLink=json['videoLink'];
     docNme=json['docNme'];
