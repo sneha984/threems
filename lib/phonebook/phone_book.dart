@@ -396,6 +396,8 @@ class _PhoneBookPageState extends State<PhoneBookPage> {
       totalContactsSearch = _contacts;
       totalContacts = _contacts;
 
+      getInstalledUsers();
+
       print('================ContactLength=================');
       print(contacts.length);
     });
