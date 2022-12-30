@@ -114,7 +114,6 @@ class _IncomeExpenseYearReportState extends State<IncomeExpenseYearReport> {
       for(int i=0;i<monthlyExpenseReports.length;i++){
         if(monthList.contains(DateFormat('MMM,yyyy').format(monthlyExpenseReports[i]['date'].toDate())
             .toString())){
-
           Map data = IncomeExpenseMonthList[monthList.indexOf(DateFormat('MMM,yyyy')
               .format(monthlyExpenseReports[i]['date'].toDate())
               .toString())];
@@ -162,8 +161,11 @@ class _IncomeExpenseYearReportState extends State<IncomeExpenseYearReport> {
         for (DocumentSnapshot data in event.docs) {
           totalIncome+=double.tryParse(data['amount'].toString())??0;
           if(incomeCategory.contains(data['categoryName'])){
+            print('yes');
+            print(data['categoryName']);
             // Map <String,dynamic>item=incomeList[incomeCategory.indexOf(data['IncomeCategoryName'])];
             Map item=incomeList[incomeCategory.indexOf(data['categoryName'])].data();
+            print(item);
             double amount=item['amount'];
             amount+=data['amount'];
             item['amount']=amount;
@@ -1516,7 +1518,7 @@ class _IncomeExpenseYearReportState extends State<IncomeExpenseYearReport> {
                                                     fontFamily: 'Urbanist',
                                                     color: Colors.red
                                                 ),),
-                                              Text('-'+IncomeExpenseMonthList[index]['incAmount'].toString(),
+                                              Text('+'+IncomeExpenseMonthList[index]['incAmount'].toString(),
                                                 style: TextStyle(
                                                     fontSize: 14,
                                                     fontFamily: 'Urbanist',
