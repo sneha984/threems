@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/cupertino.dart';
@@ -276,15 +277,22 @@ class _CheckOutPageState extends State<CheckOutPage> {
                                       height: 80,
                                       width: 88,
                                       decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                              image: NetworkImage(
-                                                  cartlist[index]['img'])),
+                                          // image: DecorationImage(
+                                          //     image: NetworkImage(
+                                          //         cartlist[index]['img'])),
                                           color: Colors.white,
                                           borderRadius:
                                               BorderRadius.circular(15),
                                           border: Border.all(
                                               color: Color(0xffECECEC),
                                               width: 1)),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(scrWidth * 0.09),
+                                        child: CachedNetworkImage(
+                                          fit: BoxFit.cover,
+                                          imageUrl:cartlist[index]['img'],
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -502,11 +510,17 @@ class _CheckOutPageState extends State<CheckOutPage> {
                                               ),
                                             ],
                                           )),
-                                    ):Container(
-                                      height: 50,
-                                      width: 100,
-                                      color: Colors.grey,
-                                      child: Center(child: Text("Not Available")),
+                                    ):Padding(
+                                      padding:  EdgeInsets.only(left: 15),
+                                      child: Container(
+                                        height: 50,
+                                        width: 120,
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey,
+                                          borderRadius: BorderRadius.circular(17),
+                                        ),
+                                        child: Center(child: Text("Not Available",style: TextStyle(color: Colors.white),)),
+                                      ),
                                     )
                                   ],
                                 ),

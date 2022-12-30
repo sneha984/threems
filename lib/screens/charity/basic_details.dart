@@ -15,8 +15,8 @@ import '../home_screen.dart';
 import '../splash_screen.dart';
  List dropdownItemList = [];
  List dropdownItems=[];
- List charityDetails=[];
- String? dropdownValue;
+ List charityDetails=[1,2,{},{}];
+ String dropdownValue="Medical";
  class BasicDetails extends StatefulWidget {
    final CharityModel? char;
    // final bool update;
@@ -141,6 +141,9 @@ class _BasicDetailsState extends State<BasicDetails> {
 
   @override
   void initState() {
+    charityDetails=[];
+
+
     getReasons();
     orgNameFocus.addListener(() {
       setState(() {});
@@ -166,7 +169,13 @@ class _BasicDetailsState extends State<BasicDetails> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
+
         final shouldPop = await confirmQuitDialog(context);
+        if(shouldPop==true){
+          setState(() {
+            dropdownValue="Medical";
+          });
+        }
         return shouldPop ?? false;
       },
       child: Scaffold(
@@ -182,23 +191,29 @@ class _BasicDetailsState extends State<BasicDetails> {
             child: AppBar(
               elevation: 0,
               backgroundColor: Colors.white,
-              leading: InkWell(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: Padding(
-                  padding: EdgeInsets.only(
-                       // top: scrHeight * 0.09,
-                      // left: scrWidth * 0.05,
-                      // bottom: scrHeight * 0.02,
-                      right: scrWidth * 0.04),
-                  child: Icon(
-                    Icons.arrow_back,
-                    color: Colors.black,
-                    size: 25,
-                  ),
-                ),
-              ),
+              foregroundColor: Colors.black,
+              // leading: InkWell(
+              //   onTap: ()async {
+              //     setState(() {
+              //       dropdownValue="Medical";
+              //     });
+              //     final shouldPop = await confirmQuitDialog(context);
+              //      shouldPop ?? false;
+              //
+              //   },
+              //   child: Padding(
+              //     padding: EdgeInsets.only(
+              //          // top: scrHeight * 0.09,
+              //         // left: scrWidth * 0.05,
+              //         // bottom: scrHeight * 0.02,
+              //         right: scrWidth * 0.04),
+              //     child: Icon(
+              //       Icons.arrow_back,
+              //       color: Colors.black,
+              //       size: 25,
+              //     ),
+              //   ),
+              // ),
               title: Text(
                 "Create Charity",
                 style: TextStyle(
@@ -715,7 +730,7 @@ class _BasicDetailsState extends State<BasicDetails> {
                 GestureDetector(
                   onTap: ()async {
                     setState(() {
-                      loading=true;
+
                     });
                     if(orgnamecontroller.text.isEmpty
                     // &&
@@ -738,7 +753,8 @@ class _BasicDetailsState extends State<BasicDetails> {
                       return showSnackbar(context, "Please Enter Phone Number");
                     }
                     else{
-                       charityDetails.add(
+                      print(dropdownValue);
+                       Map map=
                           {
                             'cause': causeId,
                             'orgName': orgnamecontroller.text,
@@ -748,16 +764,16 @@ class _BasicDetailsState extends State<BasicDetails> {
                             'reason':dropdownValue,
 
                           }
-                       );
+                       ;
+                       charityDetails.insert(0, map);
+                       print(charityDetails);
                        Navigator.push(context, MaterialPageRoute(builder: (context)=>CauseDetails()));
                        // Navigator.push(
                        //     context,
                        //     CupertinoPageRoute(
                        //       builder: (context) => CauseDetails(),
                        //     ));
-                       print(charityDetails.toString());
-                       print(dropdownValue);
-                       print(causeId);
+
                      }
 
                   },

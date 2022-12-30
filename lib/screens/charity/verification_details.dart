@@ -199,6 +199,7 @@ class _VerificationDetailsState extends State<VerificationDetails> {
 
   @override
   Widget build(BuildContext context) {
+    print("2222222222222222222222222222222222222222222222222");
     print(charityDetails);
     return WillPopScope(
       onWillPop: () async {
@@ -744,10 +745,8 @@ class _VerificationDetailsState extends State<VerificationDetails> {
                         refreshPage();
                         return showSnackbar(context,"Please Upload YouTube Video");
                       }
-
-
-                    else {
-                        charityDetails.add(
+                      else {
+                        Map map=
                             {
                               "youTubeLink": youtubecontroller.text,
                               "image": imgUrl,
@@ -756,16 +755,17 @@ class _VerificationDetailsState extends State<VerificationDetails> {
                               "otherDocument":docUrl,
                               "videoLink":videoLinkController.text,
                               "docNme":docName
-                            }
-
-                        );
+                            };
+                        charityDetails.insert(3, map);
                         var char=CharityModel(
                             orgName: charityDetails[0]['orgName'],
                             charityDetailes: charityDetails[0]['charityDetailes'],
                             emailId: charityDetails[0]['emailId'],
                             phoneNumber: charityDetails[0]['phoneNumber'],
+                            cause: charityDetails[0]['cause']??0,
+                            reason: charityDetails[0]['reason']??'',
                             beneficiaryLocation: charityDetails[1]['beneficiaryLocation']??'',
-                            endDate: charityDetails[1]['endDate']??DateTime.now(),
+                            endDate: charityDetails[1]['endDate']??Timestamp.fromDate(DateTime.now()),
                             valueAmount: charityDetails[1]['valueAmount']??0,
                             beneficiaryName: charityDetails[1]['beneficiaryName']??'',
                             beneficiaryPhNumber: charityDetails[1]['beneficiaryPhNumber']??'',
@@ -774,24 +774,26 @@ class _VerificationDetailsState extends State<VerificationDetails> {
                             accountHolderName: charityDetails[2]['accountHolderName'],
                             bankName: charityDetails[2]['bankName'],
                             ifscCode: charityDetails[2]['ifscCode'],
+                            qrImage: charityDetails[2]['qrImage'],
                             youTubeLink: charityDetails[3]['youTubeLink'],
                             image: charityDetails[3]['image'],
                             documents: charityDetails[3]['documents'],
                             otherDocument: charityDetails[3]['otherDocument'],
+                            fileNme: charityDetails[3]['fileNme'],
                             videoLink: charityDetails[3]['videoLink']??'',
-                            status: 0,
+
                             docNme: charityDetails[3]['docNme'],
                             payments: [],
-                            cause: charityDetails[0]['cause']??0,
-                            reason: charityDetails[0]['reason']??'',
+                            status: 0,
                             userId: currentuser?.userId,
                             userName:currentuser?.userName??'',
                             block:false,
-                            qrImage: charityDetails[2]['qrImage'],
-                            fileNme: charityDetails[3]['fileNme'],
+
                             totalReceived: 0
                         );
                         createCharity(char);
+                        print(char);
+
 
                         Navigator.push(
                             context,

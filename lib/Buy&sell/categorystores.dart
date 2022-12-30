@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -221,7 +222,7 @@ class _CategoryStoresState extends State<CategoryStores> {
                             width:scrWidth*0.25,
                             decoration: BoxDecoration(
                               image: DecorationImage(image:
-                              NetworkImage(shoplist.storeImage??''),
+                              CachedNetworkImageProvider(shoplist.storeImage??''),
                                   fit: BoxFit.fill,colorFilter:shoplist.online!?
                                   ColorFilter.mode(Colors.transparent, BlendMode.saturation):
                                   ColorFilter.mode(Colors.grey, BlendMode.saturation)),
@@ -229,6 +230,7 @@ class _CategoryStoresState extends State<CategoryStores> {
                               borderRadius: BorderRadius.circular(
                                   scrWidth*0.03),
                             ),
+
                           ),
                         ),
                       ),

@@ -503,7 +503,7 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                                 SizedBox(height: scrHeight*0.006,),
 
                                 Text(currencyConvert
-                                    .format(widget.charities.totalReceived??0)
+                                    .format(chari!.totalReceived??0)
                                     .toString(),style: TextStyle(
                                     fontSize: scrWidth*0.075,
                                     color: primarycolor,
@@ -963,11 +963,11 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                       SizedBox(height: scrHeight*0.025,),
                       ListView.separated(
                         physics: NeverScrollableScrollPhysics(),
-                          itemCount: widget.charities.payments?.length??0,
+                          itemCount: chari!.payments!.length??0,
                           shrinkWrap: true,
                           itemBuilder: (context,index){
-                            print(widget.charities.payments![index].amount);
-                            final data=widget.charities.payments![index];
+                            // print(widget.charities.payments![index].amount);
+                            final data=chari!.payments![index];
                             return Padding(
                               padding:  EdgeInsets.only(left: scrWidth*0.05,right: scrWidth*0.04),
                               child: Container(

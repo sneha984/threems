@@ -150,7 +150,10 @@ List cate=[];
                               height: 27,
                               width: 27,
                               child: SvgPicture.network(
-                                  doc.get('categoryImage'))))),
+                                  doc.get('categoryImage')
+                              )
+                          )
+                      )),
                 ),
                 SizedBox(
                   height: scrHeight * 0.004,
@@ -662,8 +665,9 @@ List cate=[];
                                               width: scrWidth * 0.22,
                                               decoration: BoxDecoration(
                                                 image: DecorationImage(
-                                                    image: NetworkImage(
-                                                        store?.storeImage??''),
+                                                    image:CachedNetworkImageProvider(store?.storeImage??''),
+                                                    // NetworkImage(
+                                                    //     store?.storeImage??''),
                                                     colorFilter:store.online!?
                                                     ColorFilter.mode(Colors.transparent, BlendMode.saturation):
                                                     ColorFilter.mode(Colors.grey, BlendMode.saturation),
@@ -673,13 +677,13 @@ List cate=[];
                                                     BorderRadius.circular(
                                                         scrWidth * 0.03),
                                               ),
-                                              child: ClipRRect(
-                                                borderRadius: BorderRadius.circular(scrWidth * 0.02),
-                                                child: CachedNetworkImage(
-                                                  fit: BoxFit.cover,
-                                                  imageUrl:store?.storeImage??'',
-                                                ),
-                                              ),
+                                              // child: ClipRRect(
+                                              //   borderRadius: BorderRadius.circular(scrWidth * 0.02),
+                                              //   child: CachedNetworkImage(
+                                              //     fit: BoxFit.cover,
+                                              //     imageUrl:store?.storeImage??'',
+                                              //   ),
+                                              // ),
                                             ),
                                           ),
                                         ),

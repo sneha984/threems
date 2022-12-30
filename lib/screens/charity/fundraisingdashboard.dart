@@ -118,7 +118,7 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
     // }
     return Scaffold(
       backgroundColor: Colors.white,
-      body: (chari!.status==0)?Column(
+      body: chari==null?SizedBox():(chari!.status==0)?Column(
         mainAxisSize: MainAxisSize.max,
         children: [
           Stack(
@@ -210,7 +210,7 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
                             decoration: BoxDecoration(
                               // image: DecorationImage(image: NetworkImage(widget.charity.image??''),fit: BoxFit.fill),
                               borderRadius: BorderRadius.circular(10),
-                              color: Colors.grey,
+                              // color: Colors.grey,
 
                             ),
                             child: ClipRRect(
@@ -628,7 +628,7 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
                               // image: DecorationImage(image: NetworkImage(
                               //     widget.charity.image!),fit: BoxFit.fill),
                               borderRadius: BorderRadius.circular(10),
-                              color: Colors.grey,
+                              // color: Colors.grey,
 
                             ),
                             child: ClipRRect(
