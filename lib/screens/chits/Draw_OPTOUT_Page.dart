@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -104,7 +105,8 @@ class _OptOutPageState extends State<OptOutPage> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(16),
                         image: DecorationImage(
-                            image: NetworkImage(widget.chit.profile!),
+                            image: CachedNetworkImageProvider(
+                                widget.chit.profile!),
                             fit: BoxFit.fill),
                         color: Colors.white,
                       ),
@@ -256,7 +258,7 @@ class _OptOutPageState extends State<OptOutPage> {
                                     borderRadius: BorderRadius.circular(16),
                                     color: Colors.black,
                                     image: DecorationImage(
-                                        image: NetworkImage(widget
+                                        image: CachedNetworkImageProvider(widget
                                             .totalMembers[member]!.userImage!),
                                         fit: BoxFit.cover),
                                   ),

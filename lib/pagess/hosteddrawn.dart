@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -166,12 +167,15 @@ class _HostedDrawnPageState extends State<HostedDrawnPage> {
                           ),
                         ],
                       ),
-                      SizedBox(height: scrHeight*0.016,),
+                      SizedBox(
+                        height: scrHeight * 0.016,
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                           // SizedBox(width: scrWidth*0.1,),
-                          Text("Fixed Divident Amount", style: chitcardtwomonth10),
+                          // SizedBox(width: scrWidth*0.1,),
+                          Text("Fixed Divident Amount",
+                              style: chitcardtwomonth10),
                           SizedBox(
                             width: scrWidth * 0.0003,
                           ),
@@ -202,12 +206,13 @@ class _HostedDrawnPageState extends State<HostedDrawnPage> {
                           ),
                           Neumorphic(
                             style: NeumorphicStyle(
-                              intensity:0.5 ,
+                              intensity: 0.5,
                               surfaceIntensity: 0.3,
                               boxShape: NeumorphicBoxShape.roundRect(
                                   BorderRadius.circular(16)),
                               depth: -1,
-                              shadowLightColorEmboss: Colors.grey.withOpacity(0.9),
+                              shadowLightColorEmboss:
+                                  Colors.grey.withOpacity(0.9),
                               lightSource: LightSource.topLeft,
                               shadowDarkColorEmboss: Colors.white,
                               oppositeShadowLightSource: true,
@@ -229,7 +234,7 @@ class _HostedDrawnPageState extends State<HostedDrawnPage> {
                                     decoration: BoxDecoration(
                                         color: Color(0xff02B558),
                                         borderRadius:
-                                        BorderRadius.circular(16)),
+                                            BorderRadius.circular(16)),
                                     child: Padding(
                                       padding: EdgeInsets.all(9),
                                       child: SvgPicture.asset(
@@ -243,7 +248,7 @@ class _HostedDrawnPageState extends State<HostedDrawnPage> {
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                     children: [
                                       SizedBox(
                                         height: scrHeight * 0.013,
@@ -275,15 +280,15 @@ class _HostedDrawnPageState extends State<HostedDrawnPage> {
                           SizedBox(
                             width: scrWidth * 0.035,
                           ),
-
                           Neumorphic(
                             style: NeumorphicStyle(
-                              intensity:0.5 ,
+                              intensity: 0.5,
                               surfaceIntensity: 0.3,
                               boxShape: NeumorphicBoxShape.roundRect(
                                   BorderRadius.circular(16)),
                               depth: -1,
-                              shadowLightColorEmboss: Colors.grey.withOpacity(0.9),
+                              shadowLightColorEmboss:
+                                  Colors.grey.withOpacity(0.9),
                               lightSource: LightSource.topLeft,
                               shadowDarkColorEmboss: Colors.white,
                               oppositeShadowLightSource: true,
@@ -310,7 +315,8 @@ class _HostedDrawnPageState extends State<HostedDrawnPage> {
                                     width: scrWidth * 0.12,
                                     decoration: BoxDecoration(
                                         color: Color(0xff02B558),
-                                        borderRadius: BorderRadius.circular(16)),
+                                        borderRadius:
+                                            BorderRadius.circular(16)),
                                     child: Padding(
                                       padding: const EdgeInsets.all(10),
                                       child: SvgPicture.asset(
@@ -323,7 +329,8 @@ class _HostedDrawnPageState extends State<HostedDrawnPage> {
                                   ),
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       SizedBox(
                                         height: scrHeight * 0.015,
@@ -364,12 +371,13 @@ class _HostedDrawnPageState extends State<HostedDrawnPage> {
                           ),
                           Neumorphic(
                             style: NeumorphicStyle(
-                              intensity:0.5 ,
+                              intensity: 0.5,
                               surfaceIntensity: 0.3,
                               boxShape: NeumorphicBoxShape.roundRect(
                                   BorderRadius.circular(16)),
                               depth: -1,
-                              shadowLightColorEmboss: Colors.grey.withOpacity(0.9),
+                              shadowLightColorEmboss:
+                                  Colors.grey.withOpacity(0.9),
                               lightSource: LightSource.topLeft,
                               shadowDarkColorEmboss: Colors.white,
                               oppositeShadowLightSource: true,
@@ -396,7 +404,8 @@ class _HostedDrawnPageState extends State<HostedDrawnPage> {
                                     width: scrWidth * 0.12,
                                     decoration: BoxDecoration(
                                         color: Color(0xff02B558),
-                                        borderRadius: BorderRadius.circular(16)),
+                                        borderRadius:
+                                            BorderRadius.circular(16)),
                                     child: Padding(
                                       padding: const EdgeInsets.all(10),
                                       child: SvgPicture.asset(
@@ -409,7 +418,8 @@ class _HostedDrawnPageState extends State<HostedDrawnPage> {
                                   ),
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       SizedBox(
                                         height: scrHeight * 0.015,
@@ -443,12 +453,13 @@ class _HostedDrawnPageState extends State<HostedDrawnPage> {
                           ),
                           Neumorphic(
                             style: NeumorphicStyle(
-                              intensity:0.5 ,
+                              intensity: 0.5,
                               surfaceIntensity: 0.3,
                               boxShape: NeumorphicBoxShape.roundRect(
                                   BorderRadius.circular(16)),
                               depth: -1,
-                              shadowLightColorEmboss: Colors.grey.withOpacity(0.9),
+                              shadowLightColorEmboss:
+                                  Colors.grey.withOpacity(0.9),
                               lightSource: LightSource.topLeft,
                               shadowDarkColorEmboss: Colors.white,
                               oppositeShadowLightSource: true,
@@ -475,7 +486,8 @@ class _HostedDrawnPageState extends State<HostedDrawnPage> {
                                     width: scrWidth * 0.12,
                                     decoration: BoxDecoration(
                                         color: Color(0xff02B558),
-                                        borderRadius: BorderRadius.circular(16)),
+                                        borderRadius:
+                                            BorderRadius.circular(16)),
                                     child: Padding(
                                       padding: const EdgeInsets.all(10),
                                       child: SvgPicture.asset(
@@ -488,7 +500,8 @@ class _HostedDrawnPageState extends State<HostedDrawnPage> {
                                   ),
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       SizedBox(
                                         height: scrHeight * 0.012,
@@ -615,7 +628,6 @@ class _HostedDrawnPageState extends State<HostedDrawnPage> {
                 SizedBox(
                   height: scrHeight * 0.02,
                 ),
-
                 Expanded(
                   child: Container(
                       height: scrHeight * 0.2,
@@ -700,10 +712,10 @@ class _HostedDrawnPageState extends State<HostedDrawnPage> {
                                           height: scrHeight * 0.05,
                                           decoration: BoxDecoration(
                                             borderRadius:
-                                            BorderRadius.circular(16),
+                                                BorderRadius.circular(16),
                                             color: Colors.black,
                                             image: DecorationImage(
-                                                image: NetworkImage(
+                                                image: CachedNetworkImageProvider(
                                                     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7FtTfAHZpWXQI8X4ppt-7QKqQae6h6BYhyw&usqp=CAU"),
                                                 fit: BoxFit.cover),
                                           ),
@@ -756,33 +768,33 @@ class _HostedDrawnPageState extends State<HostedDrawnPage> {
                                                       ? Color(0xffF61C0D)
                                                       : Color(0xff02B558),
                                                   borderRadius:
-                                                  BorderRadius.circular(3)),
+                                                      BorderRadius.circular(3)),
                                               child: Center(
                                                 child: (index == 2)
                                                     ? Text(
-                                                  "Due",
-                                                  style: TextStyle(
-                                                      fontFamily:
-                                                      'Urbanist',
-                                                      fontWeight:
-                                                      FontWeight.w600,
-                                                      fontSize: scrWidth *
-                                                          0.026,
-                                                      color:
-                                                      Colors.white),
-                                                )
+                                                        "Due",
+                                                        style: TextStyle(
+                                                            fontFamily:
+                                                                'Urbanist',
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            fontSize: scrWidth *
+                                                                0.026,
+                                                            color:
+                                                                Colors.white),
+                                                      )
                                                     : Text(
-                                                  "Paid",
-                                                  style: TextStyle(
-                                                      fontFamily:
-                                                      'Urbanist',
-                                                      fontWeight:
-                                                      FontWeight.w600,
-                                                      fontSize: scrWidth *
-                                                          0.026,
-                                                      color:
-                                                      Colors.white),
-                                                ),
+                                                        "Paid",
+                                                        style: TextStyle(
+                                                            fontFamily:
+                                                                'Urbanist',
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            fontSize: scrWidth *
+                                                                0.026,
+                                                            color:
+                                                                Colors.white),
+                                                      ),
                                               ),
                                             ),
                                           )
@@ -847,9 +859,11 @@ class _HostedDrawnPageState extends State<HostedDrawnPage> {
               width: scrWidth * 0.04,
             ),
             GestureDetector(
-              onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>HostedDrawnWinner()));
-
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => HostedDrawnWinner()));
               },
               child: Container(
                 height: scrHeight * 0.045,
@@ -860,12 +874,12 @@ class _HostedDrawnPageState extends State<HostedDrawnPage> {
                 ),
                 child: Center(
                     child: Text(
-                      "Drawn",
-                      style: TextStyle(
-                          fontSize: scrWidth * 0.047,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Urbanist'),
-                    )),
+                  "Drawn",
+                  style: TextStyle(
+                      fontSize: scrWidth * 0.047,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'Urbanist'),
+                )),
               ),
             )
           ],

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -165,12 +166,15 @@ class _HostedDrawnWinnerState extends State<HostedDrawnWinner> {
                           ),
                         ],
                       ),
-                      SizedBox(height: scrHeight*0.016,),
+                      SizedBox(
+                        height: scrHeight * 0.016,
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           // SizedBox(width: scrWidth*0.1,),
-                          Text("Fixed Divident Amount", style: chitcardtwomonth10),
+                          Text("Fixed Divident Amount",
+                              style: chitcardtwomonth10),
                           SizedBox(
                             width: scrWidth * 0.0003,
                           ),
@@ -201,12 +205,13 @@ class _HostedDrawnWinnerState extends State<HostedDrawnWinner> {
                           ),
                           Neumorphic(
                             style: NeumorphicStyle(
-                              intensity:0.5 ,
+                              intensity: 0.5,
                               surfaceIntensity: 0.3,
                               boxShape: NeumorphicBoxShape.roundRect(
                                   BorderRadius.circular(16)),
                               depth: -1,
-                              shadowLightColorEmboss: Colors.grey.withOpacity(0.9),
+                              shadowLightColorEmboss:
+                                  Colors.grey.withOpacity(0.9),
                               lightSource: LightSource.topLeft,
                               shadowDarkColorEmboss: Colors.white,
                               oppositeShadowLightSource: true,
@@ -228,7 +233,7 @@ class _HostedDrawnWinnerState extends State<HostedDrawnWinner> {
                                     decoration: BoxDecoration(
                                         color: Color(0xff02B558),
                                         borderRadius:
-                                        BorderRadius.circular(16)),
+                                            BorderRadius.circular(16)),
                                     child: Padding(
                                       padding: EdgeInsets.all(9),
                                       child: SvgPicture.asset(
@@ -242,7 +247,7 @@ class _HostedDrawnWinnerState extends State<HostedDrawnWinner> {
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                     children: [
                                       SizedBox(
                                         height: scrHeight * 0.013,
@@ -274,15 +279,15 @@ class _HostedDrawnWinnerState extends State<HostedDrawnWinner> {
                           SizedBox(
                             width: scrWidth * 0.035,
                           ),
-
                           Neumorphic(
                             style: NeumorphicStyle(
-                              intensity:0.5 ,
+                              intensity: 0.5,
                               surfaceIntensity: 0.3,
                               boxShape: NeumorphicBoxShape.roundRect(
                                   BorderRadius.circular(16)),
                               depth: -1,
-                              shadowLightColorEmboss: Colors.grey.withOpacity(0.9),
+                              shadowLightColorEmboss:
+                                  Colors.grey.withOpacity(0.9),
                               lightSource: LightSource.topLeft,
                               shadowDarkColorEmboss: Colors.white,
                               oppositeShadowLightSource: true,
@@ -309,7 +314,8 @@ class _HostedDrawnWinnerState extends State<HostedDrawnWinner> {
                                     width: scrWidth * 0.12,
                                     decoration: BoxDecoration(
                                         color: Color(0xff02B558),
-                                        borderRadius: BorderRadius.circular(16)),
+                                        borderRadius:
+                                            BorderRadius.circular(16)),
                                     child: Padding(
                                       padding: const EdgeInsets.all(10),
                                       child: SvgPicture.asset(
@@ -322,7 +328,8 @@ class _HostedDrawnWinnerState extends State<HostedDrawnWinner> {
                                   ),
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       SizedBox(
                                         height: scrHeight * 0.015,
@@ -363,12 +370,13 @@ class _HostedDrawnWinnerState extends State<HostedDrawnWinner> {
                           ),
                           Neumorphic(
                             style: NeumorphicStyle(
-                              intensity:0.5 ,
+                              intensity: 0.5,
                               surfaceIntensity: 0.3,
                               boxShape: NeumorphicBoxShape.roundRect(
                                   BorderRadius.circular(16)),
                               depth: -1,
-                              shadowLightColorEmboss: Colors.grey.withOpacity(0.9),
+                              shadowLightColorEmboss:
+                                  Colors.grey.withOpacity(0.9),
                               lightSource: LightSource.topLeft,
                               shadowDarkColorEmboss: Colors.white,
                               oppositeShadowLightSource: true,
@@ -395,7 +403,8 @@ class _HostedDrawnWinnerState extends State<HostedDrawnWinner> {
                                     width: scrWidth * 0.12,
                                     decoration: BoxDecoration(
                                         color: Color(0xff02B558),
-                                        borderRadius: BorderRadius.circular(16)),
+                                        borderRadius:
+                                            BorderRadius.circular(16)),
                                     child: Padding(
                                       padding: const EdgeInsets.all(10),
                                       child: SvgPicture.asset(
@@ -408,7 +417,8 @@ class _HostedDrawnWinnerState extends State<HostedDrawnWinner> {
                                   ),
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       SizedBox(
                                         height: scrHeight * 0.015,
@@ -442,12 +452,13 @@ class _HostedDrawnWinnerState extends State<HostedDrawnWinner> {
                           ),
                           Neumorphic(
                             style: NeumorphicStyle(
-                              intensity:0.5 ,
+                              intensity: 0.5,
                               surfaceIntensity: 0.3,
                               boxShape: NeumorphicBoxShape.roundRect(
                                   BorderRadius.circular(16)),
                               depth: -1,
-                              shadowLightColorEmboss: Colors.grey.withOpacity(0.9),
+                              shadowLightColorEmboss:
+                                  Colors.grey.withOpacity(0.9),
                               lightSource: LightSource.topLeft,
                               shadowDarkColorEmboss: Colors.white,
                               oppositeShadowLightSource: true,
@@ -474,7 +485,8 @@ class _HostedDrawnWinnerState extends State<HostedDrawnWinner> {
                                     width: scrWidth * 0.12,
                                     decoration: BoxDecoration(
                                         color: Color(0xff02B558),
-                                        borderRadius: BorderRadius.circular(16)),
+                                        borderRadius:
+                                            BorderRadius.circular(16)),
                                     child: Padding(
                                       padding: const EdgeInsets.all(10),
                                       child: SvgPicture.asset(
@@ -487,7 +499,8 @@ class _HostedDrawnWinnerState extends State<HostedDrawnWinner> {
                                   ),
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       SizedBox(
                                         height: scrHeight * 0.012,
@@ -616,10 +629,10 @@ class _HostedDrawnWinnerState extends State<HostedDrawnWinner> {
                 ),
                 Neumorphic(
                   style: NeumorphicStyle(
-                    intensity:0.5 ,
+                    intensity: 0.5,
                     surfaceIntensity: 0.3,
-                    boxShape: NeumorphicBoxShape.roundRect(
-                        BorderRadius.circular(16)),
+                    boxShape:
+                        NeumorphicBoxShape.roundRect(BorderRadius.circular(16)),
                     depth: -1,
                     shadowLightColorEmboss: Colors.grey.withOpacity(0.9),
                     lightSource: LightSource.topLeft,
@@ -627,19 +640,21 @@ class _HostedDrawnWinnerState extends State<HostedDrawnWinner> {
                     oppositeShadowLightSource: true,
                   ),
                   child: Container(
-                    height: scrHeight*0.16,
-                    width: scrWidth*1,
+                    height: scrHeight * 0.16,
+                    width: scrWidth * 1,
                     decoration: BoxDecoration(
                         color: Color(0xffEEEEEE),
-                        borderRadius: BorderRadius.circular(16)
-                    ),
+                        borderRadius: BorderRadius.circular(16)),
                     child: Padding(
-                      padding:  EdgeInsets.only(left: scrWidth*0.05,right: scrWidth*0.05),
+                      padding: EdgeInsets.only(
+                          left: scrWidth * 0.05, right: scrWidth * 0.05),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SizedBox(height: scrHeight*0.01,),
+                          SizedBox(
+                            height: scrHeight * 0.01,
+                          ),
                           Text(
                             "Last month Drawn Winner",
                             style: TextStyle(
@@ -649,16 +664,20 @@ class _HostedDrawnWinnerState extends State<HostedDrawnWinner> {
                               color: Color(0xff827C7C),
                             ),
                           ),
-                          SizedBox(height: scrHeight*0.001,),
-
+                          SizedBox(
+                            height: scrHeight * 0.001,
+                          ),
                           Row(
                             children: [
                               CircleAvatar(
                                 radius: 16,
                                 // backgroundColor: Colors.grey,
-                                backgroundImage: NetworkImage("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7FtTfAHZpWXQI8X4ppt-7QKqQae6h6BYhyw&usqp=CAU"),
+                                backgroundImage: CachedNetworkImageProvider(
+                                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7FtTfAHZpWXQI8X4ppt-7QKqQae6h6BYhyw&usqp=CAU"),
                               ),
-                              SizedBox(width: scrWidth*0.02,),
+                              SizedBox(
+                                width: scrWidth * 0.02,
+                              ),
                               Text(
                                 "akhilgeorge",
                                 style: TextStyle(
@@ -666,72 +685,87 @@ class _HostedDrawnWinnerState extends State<HostedDrawnWinner> {
                                     fontWeight: FontWeight.w600,
                                     fontSize: scrWidth * 0.045),
                               ),
-                              SizedBox(width: scrWidth*0.33,),
+                              SizedBox(
+                                width: scrWidth * 0.33,
+                              ),
                               SvgPicture.asset(
                                 "assets/icons/winner.svg",
                               ),
                             ],
                           ),
-                          SizedBox(height: scrHeight*0.019,),
-
+                          SizedBox(
+                            height: scrHeight * 0.019,
+                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-
                               // SizedBox(width: scrWidth*0.16,),
 
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text("Paid Amount",style:TextStyle(
-                                      fontSize: scrWidth * 0.024,
-                                      fontWeight: FontWeight.w500,
-                                      fontFamily: 'Urbanist',
-                                      color: Color(0xff008036)),),
-                                  SizedBox(height: scrHeight*0.004,),
-
-                                  Text("₹39,000",style:TextStyle(
-                                      fontSize: scrWidth*0.045,
-                                      fontWeight: FontWeight.w600,
-                                      fontFamily: 'Urbanist',
-                                      color: Color(0xff000000))),
-                                  SizedBox(height: scrHeight*0.006,),
-
-                                  Text("after reducing commision ",style:TextStyle(
-                                      fontSize: scrWidth * 0.024,
-                                      fontWeight: FontWeight.w500,
-                                      fontFamily: 'Urbanist',
-                                      color: Color(0xff929A95))),
-
+                                  Text(
+                                    "Paid Amount",
+                                    style: TextStyle(
+                                        fontSize: scrWidth * 0.024,
+                                        fontWeight: FontWeight.w500,
+                                        fontFamily: 'Urbanist',
+                                        color: Color(0xff008036)),
+                                  ),
+                                  SizedBox(
+                                    height: scrHeight * 0.004,
+                                  ),
+                                  Text("₹39,000",
+                                      style: TextStyle(
+                                          fontSize: scrWidth * 0.045,
+                                          fontWeight: FontWeight.w600,
+                                          fontFamily: 'Urbanist',
+                                          color: Color(0xff000000))),
+                                  SizedBox(
+                                    height: scrHeight * 0.006,
+                                  ),
+                                  Text("after reducing commision ",
+                                      style: TextStyle(
+                                          fontSize: scrWidth * 0.024,
+                                          fontWeight: FontWeight.w500,
+                                          fontFamily: 'Urbanist',
+                                          color: Color(0xff929A95))),
                                 ],
                               ),
-                              SizedBox(width: scrWidth*0.19,),
+                              SizedBox(
+                                width: scrWidth * 0.19,
+                              ),
 
                               Column(
                                 children: [
-                                  Text("Divident fixed",style:TextStyle(
-                                      fontSize: scrWidth * 0.024,
-                                      fontWeight: FontWeight.w500,
-                                      fontFamily: 'Urbanist',
-                                      color: Color(0xff008036)),),
-                                  SizedBox(height: scrHeight*0.004,),
-
-
-                                  Padding(
-                                    padding:  EdgeInsets.only(left: scrWidth*0.035),
-                                    child: Text("₹1000",style:TextStyle(
-                                        fontSize: scrWidth*0.045,
-                                        fontWeight: FontWeight.w600,
+                                  Text(
+                                    "Divident fixed",
+                                    style: TextStyle(
+                                        fontSize: scrWidth * 0.024,
+                                        fontWeight: FontWeight.w500,
                                         fontFamily: 'Urbanist',
-                                        color: Color(0xff000000)),),
+                                        color: Color(0xff008036)),
                                   ),
-
+                                  SizedBox(
+                                    height: scrHeight * 0.004,
+                                  ),
+                                  Padding(
+                                    padding:
+                                        EdgeInsets.only(left: scrWidth * 0.035),
+                                    child: Text(
+                                      "₹1000",
+                                      style: TextStyle(
+                                          fontSize: scrWidth * 0.045,
+                                          fontWeight: FontWeight.w600,
+                                          fontFamily: 'Urbanist',
+                                          color: Color(0xff000000)),
+                                    ),
+                                  ),
                                 ],
                               )
                             ],
                           ),
-
                         ],
                       ),
                     ),
@@ -740,7 +774,6 @@ class _HostedDrawnWinnerState extends State<HostedDrawnWinner> {
                 SizedBox(
                   height: scrHeight * 0.015,
                 ),
-
                 Expanded(
                   child: Container(
                       height: scrHeight * 0.2,
@@ -825,10 +858,10 @@ class _HostedDrawnWinnerState extends State<HostedDrawnWinner> {
                                           height: scrHeight * 0.05,
                                           decoration: BoxDecoration(
                                             borderRadius:
-                                            BorderRadius.circular(16),
+                                                BorderRadius.circular(16),
                                             color: Colors.black,
                                             image: DecorationImage(
-                                                image: NetworkImage(
+                                                image: CachedNetworkImageProvider(
                                                     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7FtTfAHZpWXQI8X4ppt-7QKqQae6h6BYhyw&usqp=CAU"),
                                                 fit: BoxFit.cover),
                                           ),
@@ -881,33 +914,33 @@ class _HostedDrawnWinnerState extends State<HostedDrawnWinner> {
                                                       ? Color(0xffF61C0D)
                                                       : Color(0xff02B558),
                                                   borderRadius:
-                                                  BorderRadius.circular(3)),
+                                                      BorderRadius.circular(3)),
                                               child: Center(
                                                 child: (index == 2)
                                                     ? Text(
-                                                  "Due",
-                                                  style: TextStyle(
-                                                      fontFamily:
-                                                      'Urbanist',
-                                                      fontWeight:
-                                                      FontWeight.w600,
-                                                      fontSize: scrWidth *
-                                                          0.026,
-                                                      color:
-                                                      Colors.white),
-                                                )
+                                                        "Due",
+                                                        style: TextStyle(
+                                                            fontFamily:
+                                                                'Urbanist',
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            fontSize: scrWidth *
+                                                                0.026,
+                                                            color:
+                                                                Colors.white),
+                                                      )
                                                     : Text(
-                                                  "Paid",
-                                                  style: TextStyle(
-                                                      fontFamily:
-                                                      'Urbanist',
-                                                      fontWeight:
-                                                      FontWeight.w600,
-                                                      fontSize: scrWidth *
-                                                          0.026,
-                                                      color:
-                                                      Colors.white),
-                                                ),
+                                                        "Paid",
+                                                        style: TextStyle(
+                                                            fontFamily:
+                                                                'Urbanist',
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            fontSize: scrWidth *
+                                                                0.026,
+                                                            color:
+                                                                Colors.white),
+                                                      ),
                                               ),
                                             ),
                                           )
@@ -972,9 +1005,8 @@ class _HostedDrawnWinnerState extends State<HostedDrawnWinner> {
               width: scrWidth * 0.04,
             ),
             GestureDetector(
-              onTap: (){
-                 // Navigator.push(context, MaterialPageRoute(builder: (context)=>WinnerPage()));
-
+              onTap: () {
+                // Navigator.push(context, MaterialPageRoute(builder: (context)=>WinnerPage()));
               },
               child: Container(
                 height: scrHeight * 0.045,
@@ -985,12 +1017,12 @@ class _HostedDrawnWinnerState extends State<HostedDrawnWinner> {
                 ),
                 child: Center(
                     child: Text(
-                      "Drawn",
-                      style: TextStyle(
-                          fontSize: scrWidth * 0.047,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Urbanist'),
-                    )),
+                  "Drawn",
+                  style: TextStyle(
+                      fontSize: scrWidth * 0.047,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'Urbanist'),
+                )),
               ),
             )
           ],

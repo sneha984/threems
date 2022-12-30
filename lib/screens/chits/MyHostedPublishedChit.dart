@@ -339,7 +339,7 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
                                         color: Colors.white,
                                         image: DecorationImage(
                                             image:
-                                                NetworkImage(chit!.profile!))),
+                                            NetworkImage(chit!.profile!))),
                                   ),
                                   SizedBox(
                                     width: scrWidth * 0.03,
@@ -1498,7 +1498,7 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
                                                                             .black,
                                                                         image: DecorationImage(
                                                                             image:
-                                                                                NetworkImage(members[index].userImage!),
+                                                                            NetworkImage(members[index].userImage!),
                                                                             fit: BoxFit.cover),
                                                                       ),
                                                                     ),

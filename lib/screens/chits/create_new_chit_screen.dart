@@ -45,6 +45,7 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
   List drawDate = [];
   FocusNode chitNameFocus = FocusNode();
   FocusNode valueAmountFocus = FocusNode();
+  FocusNode membersFocus = FocusNode();
   FocusNode durationFocus = FocusNode();
   FocusNode subscriptionAmountFocus = FocusNode();
   FocusNode dividentAmountFocus = FocusNode();
@@ -55,6 +56,7 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
   String? dropdownValue;
 
   TextEditingController amount = TextEditingController();
+  TextEditingController membersController = TextEditingController();
   TextEditingController duration = TextEditingController();
   TextEditingController subscriptionAmount = TextEditingController();
   bool draw = true;
@@ -243,6 +245,9 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
     valueAmountFocus.addListener(() {
       setState(() {});
     });
+    membersFocus.addListener(() {
+      setState(() {});
+    });
     durationFocus.addListener(() {
       setState(() {});
     });
@@ -261,6 +266,7 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
     _drawnOrAuctionpageController.dispose();
     chitNameFocus.dispose();
     valueAmountFocus.dispose();
+    membersFocus.dispose();
     durationFocus.dispose();
     subscriptionAmountFocus.dispose();
     dividentAmountFocus.dispose();
@@ -630,7 +636,7 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
                                       children: [
                                         Container(
                                           height: scrWidth * 0.052,
-                                          width: scrWidth * 0.052,
+                                          width: scrWidth * 0.05,
                                           child: SvgPicture.asset(
                                             'assets/icons/Vector (9).svg',
                                             fit: BoxFit.contain,
@@ -638,7 +644,7 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
                                         ),
                                         Container(
                                           // color: Colors.red,
-                                          width: scrWidth * 0.23,
+                                          width: scrWidth * 0.25,
                                           height: scrWidth * 0.08,
                                           child: Row(
                                             mainAxisAlignment:
@@ -676,13 +682,18 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
                                                   ),
                                                 ),
                                               ),
-                                              Text(
-                                                members.toString(),
-                                                style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: FontSize14,
-                                                  fontFamily: 'Urbanist',
-                                                  fontWeight: FontWeight.w600,
+                                              InkWell(
+                                                onTap: () {
+                                                  updateMember();
+                                                },
+                                                child: Text(
+                                                  members.toString(),
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: FontSize14,
+                                                    fontFamily: 'Urbanist',
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
                                                 ),
                                               ),
                                               InkWell(
@@ -1306,11 +1317,9 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
                                   ),
                                 ),
                               ),
-
                               SizedBox(
                                 height: scrWidth * 0.02,
                               ),
-
                               Text(
                                 "First drawn date & time will remains for upcoming drawn dates.",
                                 style: TextStyle(
@@ -1320,8 +1329,33 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
-                              (fileUrl != '' || fileUrl != null)
+                              SizedBox(
+                                height: scrWidth * 0.02,
+                              ),
+                              pickFile == null
                                   ? Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Upload Document",
+                                          style: TextStyle(
+                                            fontSize: FontSize15,
+                                            fontFamily: 'Urbanist',
+                                            fontWeight: FontWeight.w500,
+                                            color: Color(0xff8391A1),
+                                          ),
+                                        ),
+                                        SizedBox(width: scrWidth * 0.01),
+                                        SizedBox(
+                                          child: SvgPicture.asset(
+                                            'assets/icons/uploaded.svg',
+                                            color: Color(0xff8391A1),
+                                          ),
+                                        )
+                                      ],
+                                    )
+                                  : Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
                                         Text(
@@ -1341,62 +1375,55 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
                                           ),
                                         )
                                       ],
-                                    )
-                                  : pickFile == null
-                                      ? Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "Upload Documents",
-                                              style: TextStyle(
-                                                fontSize: FontSize15,
-                                                fontFamily: 'Urbanist',
-                                                fontWeight: FontWeight.w500,
-                                                color: Color(0xff8391A1),
-                                              ),
-                                            ),
-                                            SizedBox(width: scrWidth * 0.01),
-                                            SizedBox(
-                                              child: SvgPicture.asset(
-                                                'assets/icons/uploaded.svg',
-                                                color: Color(0xff8391A1),
-                                              ),
-                                            )
-                                          ],
-                                        )
-                                      : Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: [
-                                            Text(
-                                              "Documents Uploaded",
-                                              style: TextStyle(
-                                                fontSize: FontSize15,
-                                                fontFamily: 'Urbanist',
-                                                fontWeight: FontWeight.w500,
-                                                color: primarycolor,
-                                              ),
-                                            ),
-                                            SizedBox(width: scrWidth * 0.01),
-                                            SizedBox(
-                                              child: SvgPicture.asset(
-                                                'assets/icons/uploaded.svg',
-                                                color: primarycolor,
-                                              ),
-                                            )
-                                          ],
-                                        ),
+                                    ),
                               SizedBox(
                                 height: scrWidth * 0.02,
                               ),
-
                               InkWell(
                                 onTap: () {
                                   _pickFile();
                                 },
-                                child: (fileUrl != '' || fileUrl != null)
+                                child: pickFile == null
                                     ? Container(
+                                        width: scrWidth,
+                                        height: textFormFieldHeight45,
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: scrWidth * 0.015,
+                                          vertical: scrHeight * 0.002,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: textFormFieldFillColor,
+                                          border: Border.all(
+                                            color: Color(0xffDADADA),
+                                          ),
+                                          borderRadius: BorderRadius.circular(
+                                              scrWidth * 0.026),
+                                        ),
+                                        child: Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: scrHeight * 0.03),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                "Upload Documents",
+                                                style: TextStyle(
+                                                  color: Color(0xff8391A1),
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: FontSize15,
+                                                  fontFamily: 'Urbanist',
+                                                ),
+                                              ),
+                                              SvgPicture.asset(
+                                                'assets/icons/camera2.svg',
+                                                color: Color(0xff8391A1),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      )
+                                    : Container(
                                         width: scrWidth,
                                         height: textFormFieldHeight45,
                                         padding: EdgeInsets.symmetric(
@@ -1412,7 +1439,7 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
                                               scrWidth * 0.026),
                                         ),
                                         child: Text(
-                                          fileName ?? '',
+                                          'Document Uploaded',
                                           style: TextStyle(
                                             color: Color(0xff8391A1),
                                             fontWeight: FontWeight.w500,
@@ -1420,803 +1447,8 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
                                             fontFamily: 'Urbanist',
                                           ),
                                         ),
-                                      )
-                                    : pickFile == null
-                                        ? Container(
-                                            width: scrWidth,
-                                            height: textFormFieldHeight45,
-                                            padding: EdgeInsets.symmetric(
-                                              horizontal: scrWidth * 0.015,
-                                              vertical: scrHeight * 0.002,
-                                            ),
-                                            decoration: BoxDecoration(
-                                              color: textFormFieldFillColor,
-                                              border: Border.all(
-                                                color: Color(0xffDADADA),
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      scrWidth * 0.026),
-                                            ),
-                                            child: Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: scrHeight * 0.03),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Text(
-                                                    "Upload Documents",
-                                                    style: TextStyle(
-                                                      color: Color(0xff8391A1),
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      fontSize: FontSize15,
-                                                      fontFamily: 'Urbanist',
-                                                    ),
-                                                  ),
-                                                  SvgPicture.asset(
-                                                    'assets/icons/camera2.svg',
-                                                    color: Color(0xff8391A1),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          )
-                                        : Container(
-                                            width: scrWidth,
-                                            height: textFormFieldHeight45,
-                                            padding: EdgeInsets.symmetric(
-                                              horizontal: scrWidth * 0.04,
-                                              vertical: scrHeight * 0.015,
-                                            ),
-                                            decoration: BoxDecoration(
-                                              color: textFormFieldFillColor,
-                                              border: Border.all(
-                                                color: Color(0xffDADADA),
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      scrWidth * 0.026),
-                                            ),
-                                            child: Text(
-                                              fileName!,
-                                              style: TextStyle(
-                                                color: Color(0xff8391A1),
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: FontSize15,
-                                                fontFamily: 'Urbanist',
-                                              ),
-                                            ),
-                                          ),
+                                      ),
                               ),
-                              // Container(
-                              //   width: scrWidth,
-                              //   height: scrWidth * 0.15,
-                              //   // color: Colors.red,
-                              //   child: Row(
-                              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              //     children: [
-                              //       GestureDetector(
-                              //         onTap: () {
-                              //           setState(() {
-                              //             drawnOrAuctionTabBarIndex = 0;
-                              //             draw = true;
-                              //           });
-                              //           _drawnOrAuctionpageController
-                              //               .jumpToPage(drawnOrAuctionTabBarIndex);
-                              //         },
-                              //         child: Container(
-                              //           width: scrWidth * 0.445,
-                              //           // width: 160,
-                              //           height: scrWidth * 0.1,
-                              //           decoration: BoxDecoration(
-                              //             color: drawnOrAuctionTabBarIndex == 0
-                              //                 ? tabBarColor
-                              //                 : Colors.white.withOpacity(0),
-                              //             borderRadius: BorderRadius.circular(
-                              //                 scrWidth * 0.052),
-                              //             border: Border.all(
-                              //               color: drawnOrAuctionTabBarIndex == 0
-                              //                   ? Colors.black.withOpacity(0)
-                              //                   : Colors.black.withOpacity(0.06),
-                              //             ),
-                              //           ),
-                              //           child: Row(
-                              //             mainAxisAlignment:
-                              //                 MainAxisAlignment.center,
-                              //             children: [
-                              //               SvgPicture.asset(
-                              //                 'assets/icons/drawn.svg',
-                              //                 color: drawnOrAuctionTabBarIndex == 0
-                              //                     ? Colors.white
-                              //                     : Color(0xffB3B3B3),
-                              //               ),
-                              //               SizedBox(
-                              //                 width: scrWidth * 0.04,
-                              //               ),
-                              //               Text(
-                              //                 "Drawn",
-                              //                 style: TextStyle(
-                              //                   color:
-                              //                       drawnOrAuctionTabBarIndex == 0
-                              //                           ? Colors.white
-                              //                           : Color(0xffB3B3B3),
-                              //                   fontSize: FontSize14,
-                              //                   fontFamily: 'Urbanist',
-                              //                   fontWeight: FontWeight.w600,
-                              //                 ),
-                              //               ),
-                              //             ],
-                              //           ),
-                              //         ),
-                              //       ),
-                              //       GestureDetector(
-                              //         onTap: () {
-                              //           setState(() {
-                              //             drawnOrAuctionTabBarIndex = 1;
-                              //             draw = false;
-                              //           });
-                              //           _drawnOrAuctionpageController
-                              //               .jumpToPage(drawnOrAuctionTabBarIndex);
-                              //         },
-                              //         child: Container(
-                              //           width: scrWidth * 0.445,
-                              //           // width: 160,
-                              //           height: scrWidth * 0.1,
-                              //           decoration: BoxDecoration(
-                              //             color: drawnOrAuctionTabBarIndex == 1
-                              //                 ? tabBarColor
-                              //                 : Colors.white.withOpacity(0),
-                              //             borderRadius: BorderRadius.circular(
-                              //                 scrWidth * 0.052),
-                              //             border: Border.all(
-                              //               color: drawnOrAuctionTabBarIndex == 1
-                              //                   ? Colors.black.withOpacity(0)
-                              //                   : Colors.black.withOpacity(0.06),
-                              //             ),
-                              //           ),
-                              //           child: Row(
-                              //             mainAxisAlignment:
-                              //                 MainAxisAlignment.center,
-                              //             children: [
-                              //               SvgPicture.asset(
-                              //                 'assets/icons/members.svg',
-                              //                 color: drawnOrAuctionTabBarIndex == 1
-                              //                     ? Colors.white
-                              //                     : Color(0xffB3B3B3),
-                              //               ),
-                              //               SizedBox(
-                              //                 width: scrWidth * 0.04,
-                              //               ),
-                              //               Text(
-                              //                 "Auction",
-                              //                 style: TextStyle(
-                              //                   color:
-                              //                       drawnOrAuctionTabBarIndex == 1
-                              //                           ? Colors.white
-                              //                           : Color(0xffB3B3B3),
-                              //                   fontSize: FontSize14,
-                              //                   fontFamily: 'Urbanist',
-                              //                   fontWeight: FontWeight.w600,
-                              //                 ),
-                              //               ),
-                              //             ],
-                              //           ),
-                              //         ),
-                              //       ),
-                              //     ],
-                              //   ),
-                              // ),
-                              // Container(
-                              //   // color: Colors.red[200],
-                              //   height: scrWidth * .62,
-                              //   width: scrWidth,
-                              //   child: PageView(
-                              //     physics: NeverScrollableScrollPhysics(),
-                              //     controller: _drawnOrAuctionpageController,
-                              //     children: [
-                              //       //Drawn
-                              //       Column(
-                              //         mainAxisAlignment: MainAxisAlignment.start,
-                              //         crossAxisAlignment: CrossAxisAlignment.start,
-                              //         children: [
-                              //           SizedBox(
-                              //             height: scrWidth * 0.02,
-                              //           ),
-                              //           Container(
-                              //             width: scrWidth,
-                              //             height: textFormFieldHeight45,
-                              //             padding: EdgeInsets.symmetric(
-                              //               horizontal: scrWidth * 0.015,
-                              //               vertical: 2,
-                              //             ),
-                              //             decoration: BoxDecoration(
-                              //               color: textFormFieldFillColor,
-                              //               borderRadius: BorderRadius.circular(
-                              //                   scrWidth * 0.026),
-                              //             ),
-                              //             child: TextFormField(
-                              //               focusNode: dividentAmountFocus,
-                              //               cursorHeight: scrWidth * 0.055,
-                              //               controller: dividend,
-                              //               keyboardType: TextInputType.number,
-                              //               cursorWidth: 1,
-                              //               cursorColor: Colors.black,
-                              //               style: TextStyle(
-                              //                 color: Colors.black,
-                              //                 fontWeight: FontWeight.w600,
-                              //                 fontSize: FontSize15,
-                              //                 fontFamily: 'Urbanist',
-                              //               ),
-                              //               decoration: InputDecoration(
-                              //                 labelText:
-                              //                     'Dividend Amount is fixed (Optional)',
-                              //                 labelStyle: TextStyle(
-                              //                   color: dividentAmountFocus.hasFocus
-                              //                       ? primarycolor
-                              //                       : textFormUnFocusColor,
-                              //                   fontWeight: FontWeight.w600,
-                              //                   fontSize: FontSize15,
-                              //                   fontFamily: 'Urbanist',
-                              //                 ),
-                              //                 prefixIcon: Container(
-                              //                   height: scrWidth * 0.045,
-                              //                   width: 10,
-                              //                   padding: EdgeInsets.all(
-                              //                       scrWidth * 0.033),
-                              //                   child: SvgPicture.asset(
-                              //                     'assets/icons/subscription.svg',
-                              //                     fit: BoxFit.contain,
-                              //                     color:
-                              //                         dividentAmountFocus.hasFocus
-                              //                             ? primarycolor
-                              //                             : textFormUnFocusColor,
-                              //                   ),
-                              //                 ),
-                              //                 fillColor: textFormFieldFillColor,
-                              //                 filled: true,
-                              //                 contentPadding: EdgeInsets.only(
-                              //                     top: 5, bottom: scrWidth * 0.033),
-                              //                 disabledBorder: InputBorder.none,
-                              //                 enabledBorder: InputBorder.none,
-                              //                 errorBorder: InputBorder.none,
-                              //                 border: InputBorder.none,
-                              //                 focusedBorder: UnderlineInputBorder(
-                              //                   borderSide: BorderSide(
-                              //                     color: primarycolor,
-                              //                     width: 2,
-                              //                   ),
-                              //                 ),
-                              //               ),
-                              //             ),
-                              //           ),
-                              //           SizedBox(
-                              //             height: scrWidth * 0.03,
-                              //           ),
-                              //           Row(
-                              //             mainAxisAlignment:
-                              //                 MainAxisAlignment.spaceBetween,
-                              //             children: [
-                              //               //DRAW TYPE
-                              //               Container(
-                              //                 // color: Colors.pink,
-                              //                 width: scrWidth * 0.445,
-                              //                 // width: 160,
-                              //                 height: textFormFieldHeight45,
-                              //                 decoration: BoxDecoration(
-                              //                   color: textFormFieldFillColor,
-                              //                   borderRadius: BorderRadius.circular(
-                              //                       scrWidth * 0.033),
-                              //                 ),
-                              //                 padding: EdgeInsets.only(
-                              //                     left: scrWidth * 0.051,
-                              //                     right: scrWidth * 0.04),
-                              //                 child: DropdownButton(
-                              //                   icon: Icon(
-                              //                     Icons.arrow_drop_down_rounded,
-                              //                     size: scrWidth * 0.07,
-                              //                   ),
-                              //                   iconDisabledColor:
-                              //                       Color(0xff908F8F),
-                              //                   underline: Container(),
-                              //                   isExpanded: true,
-                              //                   borderRadius: BorderRadius.circular(
-                              //                       scrWidth * 0.033),
-                              //                   style: TextStyle(
-                              //                     fontSize: FontSize15,
-                              //                     fontFamily: 'Urbanist',
-                              //                     color: Colors.black,
-                              //                     fontWeight: FontWeight.w500,
-                              //                   ),
-                              //                   hint: Container(
-                              //                     // width: 110,
-                              //                     width: scrWidth * 0.6,
-                              //                     // color: Colors.red,
-                              //                     child: Row(
-                              //                       mainAxisAlignment:
-                              //                           MainAxisAlignment
-                              //                               .spaceBetween,
-                              //                       children: [
-                              //                         SvgPicture.asset(
-                              //                           'assets/icons/Vector (8).svg',
-                              //                           fit: BoxFit.contain,
-                              //                         ),
-                              //                         Text(
-                              //                           "Draw Type",
-                              //                           style: TextStyle(
-                              //                             fontSize: FontSize15,
-                              //                             fontFamily: 'Urbanist',
-                              //                             fontWeight:
-                              //                                 FontWeight.w600,
-                              //                           ),
-                              //                         ),
-                              //                       ],
-                              //                     ),
-                              //                   ),
-                              //                   value: drawTypeValue,
-                              //                   onChanged: (value) {
-                              //                     drawTypeValue = value.toString();
-                              //                     print(value);
-                              //                     drawDate = [];
-                              //                     if (drawTypeValue == 'Weekly') {
-                              //                       for (int i = 0; i < 7; i++) {
-                              //                         drawDate
-                              //                             .add((i + 1).toString());
-                              //                       }
-                              //                     } else {
-                              //                       for (int i = 0; i < 31; i++) {
-                              //                         drawDate
-                              //                             .add((i + 1).toString());
-                              //                       }
-                              //                     }
-                              //                     setState(() {});
-                              //                   },
-                              //                   items: drawType
-                              //                       .map(
-                              //                         (value) => DropdownMenuItem(
-                              //                           value: value,
-                              //                           child:
-                              //                               Text(value.toString()),
-                              //                         ),
-                              //                       )
-                              //                       .toList(),
-                              //                 ),
-                              //               ),
-                              //
-                              //               //DRAW DATE
-                              //               Container(
-                              //                 // color: Colors.pink,
-                              //                 width: scrWidth * 0.445,
-                              //                 // width: 160,
-                              //                 height: textFormFieldHeight45,
-                              //                 decoration: BoxDecoration(
-                              //                   color: textFormFieldFillColor,
-                              //                   borderRadius: BorderRadius.circular(
-                              //                       scrWidth * 0.033),
-                              //                 ),
-                              //                 padding: EdgeInsets.only(
-                              //                     left: scrWidth * 0.051,
-                              //                     right: scrWidth * 0.04),
-                              //                 child: DropdownButton(
-                              //                   icon: Icon(
-                              //                     Icons.arrow_drop_down_rounded,
-                              //                     size: scrWidth * 0.07,
-                              //                   ),
-                              //                   iconDisabledColor:
-                              //                       Color(0xff908F8F),
-                              //                   underline: Container(),
-                              //                   isExpanded: true,
-                              //                   borderRadius: BorderRadius.circular(
-                              //                       scrWidth * 0.033),
-                              //                   style: TextStyle(
-                              //                     fontSize: FontSize15,
-                              //                     fontFamily: 'Urbanist',
-                              //                     color: Colors.black,
-                              //                     fontWeight: FontWeight.w500,
-                              //                   ),
-                              //                   hint: Container(
-                              //                     // width: 110,
-                              //                     width: scrWidth * 0.6,
-                              //                     // color: Colors.red,
-                              //                     child: Row(
-                              //                       mainAxisAlignment:
-                              //                           MainAxisAlignment
-                              //                               .spaceBetween,
-                              //                       children: [
-                              //                         SvgPicture.asset(
-                              //                           'assets/icons/Vector (8).svg',
-                              //                           fit: BoxFit.contain,
-                              //                         ),
-                              //                         Text(
-                              //                           "Draw Date",
-                              //                           style: TextStyle(
-                              //                             fontSize: FontSize15,
-                              //                             fontFamily: 'Urbanist',
-                              //                             fontWeight:
-                              //                                 FontWeight.w600,
-                              //                           ),
-                              //                         ),
-                              //                       ],
-                              //                     ),
-                              //                   ),
-                              //                   value: drawDateValue,
-                              //                   onChanged: (value) {
-                              //                     drawDateValue = value.toString();
-                              //                     print(drawDateValue);
-                              //
-                              //                     print(value);
-                              //                     setState(() {});
-                              //                   },
-                              //                   items: drawDate
-                              //                       .map(
-                              //                         (value) => DropdownMenuItem(
-                              //                           value: value,
-                              //                           child:
-                              //                               Text(value.toString()),
-                              //                         ),
-                              //                       )
-                              //                       .toList(),
-                              //                 ),
-                              //               ),
-                              //
-                              //               // //DatePicker
-                              //               // GestureDetector(
-                              //               //   onTap: () {
-                              //               //     _selectDate(context);
-                              //               //     print(selectedTime!.hour);
-                              //               //     print(selectedTime!.minute);
-                              //               //     print(selectedDate);
-                              //               //     print(selectedDate!.weekday);
-                              //               //   },
-                              //               //   child: Container(
-                              //               //     // color: Colors.pink,
-                              //               //     width: scrWidth * 0.44,
-                              //               //     // width: 160,
-                              //               //     height: textFormFieldHeight45,
-                              //               //     decoration: BoxDecoration(
-                              //               //       color: textFormFieldFillColor,
-                              //               //       borderRadius:
-                              //               //           BorderRadius.circular(
-                              //               //               scrWidth * 0.033),
-                              //               //     ),
-                              //               //     padding: EdgeInsets.symmetric(
-                              //               //         horizontal: padding15),
-                              //               //     child: Row(
-                              //               //       mainAxisAlignment:
-                              //               //           MainAxisAlignment.spaceAround,
-                              //               //       children: [
-                              //               //         Text(
-                              //               //           selectedDate == null
-                              //               //               ? "Drawn Date"
-                              //               //               : DateFormat.yMMMd()
-                              //               //                   .format(
-                              //               //                       selectedDate!),
-                              //               //           // "${selectedDate?.toLocal()}"
-                              //               //           //     .split(' ')[0],
-                              //               //           style: TextStyle(
-                              //               //             color: selectedDate == null
-                              //               //                 ? Color(0xffB0B0B0)
-                              //               //                 : Colors.black,
-                              //               //             fontSize: FontSize14,
-                              //               //             fontFamily: 'Urbanist',
-                              //               //             fontWeight: FontWeight.w600,
-                              //               //           ),
-                              //               //         ),
-                              //               //         SizedBox(
-                              //               //           width: scrWidth * 0.04,
-                              //               //         ),
-                              //               //         SvgPicture.asset(
-                              //               //           'assets/icons/date.svg',
-                              //               //           color: Color(0xffB0B0B0),
-                              //               //         ),
-                              //               //       ],
-                              //               //     ),
-                              //               //   ),
-                              //               // ),
-                              //               // //TimePicker
-                              //               // GestureDetector(
-                              //               //   onTap: () {
-                              //               //     _selectTime(context);
-                              //               //     print(selectedTime);
-                              //               //     print(selectedDate);
-                              //               //   },
-                              //               //   child: Container(
-                              //               //     // color: Colors.pink,
-                              //               //     width: scrWidth * 0.44,
-                              //               //     // width: 160,
-                              //               //     height: textFormFieldHeight45,
-                              //               //     decoration: BoxDecoration(
-                              //               //       color: textFormFieldFillColor,
-                              //               //       borderRadius:
-                              //               //           BorderRadius.circular(
-                              //               //               scrWidth * 0.033),
-                              //               //     ),
-                              //               //     padding: EdgeInsets.symmetric(
-                              //               //         horizontal: padding15),
-                              //               //     child: Row(
-                              //               //       mainAxisAlignment:
-                              //               //           MainAxisAlignment.spaceAround,
-                              //               //       children: [
-                              //               //         Text(
-                              //               //           selectedTime == null
-                              //               //               ? "Drawn Time"
-                              //               //               : "${selectedTime!.hour.toString()}: ",
-                              //               //           style: TextStyle(
-                              //               //             color: selectedTime == null
-                              //               //                 ? Color(0xffB0B0B0)
-                              //               //                 : Colors.black,
-                              //               //             fontSize: FontSize14,
-                              //               //             fontFamily: 'Urbanist',
-                              //               //             fontWeight: FontWeight.w600,
-                              //               //           ),
-                              //               //         ),
-                              //               //         SizedBox(
-                              //               //           width: scrWidth * 0.04,
-                              //               //         ),
-                              //               //         SvgPicture.asset(
-                              //               //           'assets/icons/time.svg',
-                              //               //           color: Color(0xffB0B0B0),
-                              //               //         ),
-                              //               //       ],
-                              //               //     ),
-                              //               //   ),
-                              //               // ),
-                              //             ],
-                              //           ),
-                              //           SizedBox(
-                              //             height: scrWidth * 0.02,
-                              //           ),
-                              //           GestureDetector(
-                              //             onTap: () {
-                              //               _selectTime(context);
-                              //               print(selectedTime.toString());
-                              //
-                              //             },
-                              //             child: Container(
-                              //               // color: Colors.pink,
-                              //               width: scrWidth * 0.44,
-                              //               // width: 160,
-                              //               height: textFormFieldHeight45,
-                              //               decoration: BoxDecoration(
-                              //                 color: textFormFieldFillColor,
-                              //                 borderRadius: BorderRadius.circular(
-                              //                     scrWidth * 0.033),
-                              //               ),
-                              //               padding: EdgeInsets.symmetric(
-                              //                   horizontal: padding15),
-                              //               child: Row(
-                              //                 mainAxisAlignment:
-                              //                     MainAxisAlignment.spaceAround,
-                              //                 children: [
-                              //                   Text(
-                              //                     selectedTime == null
-                              //                         ? "Draw Time"
-                              //                         : "${selectedTime!.hour.toString()}: ${selectedTime!.minute.toString()}",
-                              //                     style: TextStyle(
-                              //                       color: selectedTime == null
-                              //                           ? Color(0xffB0B0B0)
-                              //                           : Colors.black,
-                              //                       fontSize: FontSize14,
-                              //                       fontFamily: 'Urbanist',
-                              //                       fontWeight: FontWeight.w600,
-                              //                     ),
-                              //                   ),
-                              //                   SizedBox(
-                              //                     width: scrWidth * 0.04,
-                              //                   ),
-                              //                   SvgPicture.asset(
-                              //                     'assets/icons/time.svg',
-                              //                     color: Color(0xffB0B0B0),
-                              //                   ),
-                              //                 ],
-                              //               ),
-                              //             ),
-                              //           ),
-                              //           SizedBox(
-                              //             height: scrWidth * 0.02,
-                              //           ),
-                              //           Text(
-                              //             "First drawn date & time will remains for upcoming drawn dates.",
-                              //             style: TextStyle(
-                              //               color: Color(0xff827E7E),
-                              //               fontSize: FontSize10,
-                              //               fontFamily: 'Urbanist',
-                              //               fontWeight: FontWeight.w500,
-                              //             ),
-                              //           ),
-                              //           SizedBox(
-                              //             height: scrWidth * 0.04,
-                              //           ),
-                              //           DottedBorder(
-                              //             padding: EdgeInsets.all(0),
-                              //             borderType: BorderType.RRect,
-                              //             radius: Radius.circular(12),
-                              //             color: Color(0xffDADADA),
-                              //             strokeWidth: 1,
-                              //             child: Container(
-                              //               height: 73,
-                              //               width: 336,
-                              //               decoration: BoxDecoration(
-                              //                 color: Color(0xffF7F8F9),
-                              //                 borderRadius:
-                              //                     BorderRadius.circular(12),
-                              //               ),
-                              //               child: Row(
-                              //                 mainAxisAlignment:
-                              //                     MainAxisAlignment.center,
-                              //                 children: [
-                              //                   SvgPicture.asset(
-                              //                     "assets/icons/docCam.svg",
-                              //                     height: scrWidth * 0.06,
-                              //                     width: scrWidth * 0.08,
-                              //                     color: Color(0xff8391A1),
-                              //                     // height: 21,
-                              //                     // width: 25,
-                              //                   ),
-                              //                   SizedBox(
-                              //                     width: scrWidth * 0.04,
-                              //                   ),
-                              //                   Text(
-                              //                     "Upload Documents",
-                              //                     style: TextStyle(
-                              //                       color: Color(0xffB0B0B0),
-                              //                       fontSize: FontSize15,
-                              //                       fontFamily: 'Urbanist',
-                              //                       fontWeight: FontWeight.w500,
-                              //                     ),
-                              //                   ),
-                              //                 ],
-                              //               ),
-                              //             ),
-                              //           ),
-                              //         ],
-                              //       ),
-                              //       //Auction
-                              //       Column(
-                              //         mainAxisAlignment: MainAxisAlignment.start,
-                              //         crossAxisAlignment: CrossAxisAlignment.start,
-                              //         children: [
-                              //           SizedBox(
-                              //             height: scrWidth * 0.02,
-                              //           ),
-                              //           Row(
-                              //             mainAxisAlignment:
-                              //                 MainAxisAlignment.spaceBetween,
-                              //             children: [
-                              //               Container(
-                              //                 // color: Colors.pink,
-                              //                 width: scrWidth * 0.44,
-                              //                 // width: 160,
-                              //                 height: textFormFieldHeight45,
-                              //                 decoration: BoxDecoration(
-                              //                   color: textFormFieldFillColor,
-                              //                   borderRadius: BorderRadius.circular(
-                              //                       scrWidth * 0.033),
-                              //                 ),
-                              //                 padding: EdgeInsets.symmetric(
-                              //                     horizontal: padding15),
-                              //                 child: Row(
-                              //                   mainAxisAlignment:
-                              //                       MainAxisAlignment.spaceAround,
-                              //                   children: [
-                              //                     Text(
-                              //                       "Auction Date",
-                              //                       style: TextStyle(
-                              //                         color: Color(0xffB0B0B0),
-                              //                         fontSize: FontSize14,
-                              //                         fontFamily: 'Urbanist',
-                              //                         fontWeight: FontWeight.w600,
-                              //                       ),
-                              //                     ),
-                              //                     SizedBox(
-                              //                       width: scrWidth * 0.04,
-                              //                     ),
-                              //                     SvgPicture.asset(
-                              //                       'assets/icons/date.svg',
-                              //                       color: Color(0xffB0B0B0),
-                              //                     ),
-                              //                   ],
-                              //                 ),
-                              //               ),
-                              //               Container(
-                              //                 // color: Colors.pink,
-                              //                 width: scrWidth * 0.44,
-                              //                 // width: 160,
-                              //                 height: textFormFieldHeight45,
-                              //                 decoration: BoxDecoration(
-                              //                   color: textFormFieldFillColor,
-                              //                   borderRadius: BorderRadius.circular(
-                              //                       scrWidth * 0.033),
-                              //                 ),
-                              //                 padding: EdgeInsets.symmetric(
-                              //                     horizontal: padding15),
-                              //                 child: Row(
-                              //                   mainAxisAlignment:
-                              //                       MainAxisAlignment.spaceAround,
-                              //                   children: [
-                              //                     Text(
-                              //                       "Auction Time",
-                              //                       style: TextStyle(
-                              //                         color: Color(0xffB0B0B0),
-                              //                         fontSize: FontSize14,
-                              //                         fontFamily: 'Urbanist',
-                              //                         fontWeight: FontWeight.w600,
-                              //                       ),
-                              //                     ),
-                              //                     SizedBox(
-                              //                       width: scrWidth * 0.04,
-                              //                     ),
-                              //                     SvgPicture.asset(
-                              //                       'assets/icons/time.svg',
-                              //                       color: Color(0xffB0B0B0),
-                              //                     ),
-                              //                   ],
-                              //                 ),
-                              //               ),
-                              //             ],
-                              //           ),
-                              //           SizedBox(
-                              //             height: scrWidth * 0.01,
-                              //           ),
-                              //           Text(
-                              //             "First Auction date & time will remains for upcoming auction dates.",
-                              //             style: TextStyle(
-                              //               color: Color(0xff827E7E),
-                              //               fontSize: FontSize10,
-                              //               fontFamily: 'Urbanist',
-                              //               fontWeight: FontWeight.w500,
-                              //             ),
-                              //           ),
-                              //           SizedBox(
-                              //             height: scrWidth * 0.04,
-                              //           ),
-                              //           DottedBorder(
-                              //             borderType: BorderType.RRect,
-                              //             radius: Radius.circular(12),
-                              //             color: Color(0xffDADADA),
-                              //             strokeWidth: 1,
-                              //             child: Container(
-                              //               height: 73,
-                              //               width: 336,
-                              //               decoration: BoxDecoration(
-                              //                 borderRadius:
-                              //                     BorderRadius.circular(12),
-                              //               ),
-                              //               child: Row(
-                              //                 mainAxisAlignment:
-                              //                     MainAxisAlignment.center,
-                              //                 children: [
-                              //                   SvgPicture.asset(
-                              //                     "assets/icons/docCam.svg",
-                              //                     height: scrWidth * 0.06,
-                              //                     width: scrWidth * 0.08,
-                              //                     color: Color(0xff8391A1),
-                              //                     // height: 21,
-                              //                     // width: 25,
-                              //                   ),
-                              //                   SizedBox(
-                              //                     width: scrWidth * 0.04,
-                              //                   ),
-                              //                   Text(
-                              //                     "Upload Documents",
-                              //                     style: TextStyle(
-                              //                       color: Color(0xffB0B0B0),
-                              //                       fontSize: FontSize15,
-                              //                       fontFamily: 'Urbanist',
-                              //                       fontWeight: FontWeight.w500,
-                              //                     ),
-                              //                   ),
-                              //                 ],
-                              //               ),
-                              //             ),
-                              //           ),
-                              //         ],
-                              //       ),
-                              //     ],
-                              //   ),
-                              // ),
                             ],
                           ),
                         ),
@@ -3109,8 +2341,30 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
-                              (fileUrl != '' || fileUrl != null)
+                              pickFile == null
                                   ? Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Upload Document",
+                                          style: TextStyle(
+                                            fontSize: FontSize15,
+                                            fontFamily: 'Urbanist',
+                                            fontWeight: FontWeight.w500,
+                                            color: Color(0xff8391A1),
+                                          ),
+                                        ),
+                                        SizedBox(width: scrWidth * 0.01),
+                                        SizedBox(
+                                          child: SvgPicture.asset(
+                                            'assets/icons/uploaded.svg',
+                                            color: Color(0xff8391A1),
+                                          ),
+                                        )
+                                      ],
+                                    )
+                                  : Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
                                         Text(
@@ -3130,56 +2384,10 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
                                           ),
                                         )
                                       ],
-                                    )
-                                  : pickFile == null
-                                      ? Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "Upload Documents",
-                                              style: TextStyle(
-                                                fontSize: FontSize15,
-                                                fontFamily: 'Urbanist',
-                                                fontWeight: FontWeight.w500,
-                                                color: Color(0xff8391A1),
-                                              ),
-                                            ),
-                                            SizedBox(width: scrWidth * 0.01),
-                                            SizedBox(
-                                              child: SvgPicture.asset(
-                                                'assets/icons/uploaded.svg',
-                                                color: Color(0xff8391A1),
-                                              ),
-                                            )
-                                          ],
-                                        )
-                                      : Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: [
-                                            Text(
-                                              "Documents Uploaded",
-                                              style: TextStyle(
-                                                fontSize: FontSize15,
-                                                fontFamily: 'Urbanist',
-                                                fontWeight: FontWeight.w500,
-                                                color: primarycolor,
-                                              ),
-                                            ),
-                                            SizedBox(width: scrWidth * 0.01),
-                                            SizedBox(
-                                              child: SvgPicture.asset(
-                                                'assets/icons/uploaded.svg',
-                                                color: primarycolor,
-                                              ),
-                                            )
-                                          ],
-                                        ),
+                                    ),
                               SizedBox(
                                 height: scrWidth * 0.02,
                               ),
-
                               InkWell(
                                 onTap: () {
                                   _pickFile();
@@ -3240,7 +2448,7 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
                                               scrWidth * 0.026),
                                         ),
                                         child: Text(
-                                          fileName!,
+                                          'Document Uploaded',
                                           style: TextStyle(
                                             color: Color(0xff8391A1),
                                             fontWeight: FontWeight.w500,
@@ -3250,6 +2458,7 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
                                         ),
                                       ),
                               ),
+
                               // Container(
                               //   width: scrWidth,
                               //   height: scrWidth * 0.15,
@@ -4102,6 +3311,149 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
               FloatingActionButtonLocation.centerFloat,
         ),
       ),
+    );
+  }
+
+  void updateMember() {
+    showDialog(
+      context: context,
+      builder: (ctx) {
+        return AlertDialog(
+          titlePadding: EdgeInsets.only(
+              top: scrHeight * 0.025,
+              left: scrWidth * 0.05,
+              right: scrWidth * 0.02),
+          contentPadding: EdgeInsets.only(
+              top: scrHeight * 0.002,
+              bottom: scrHeight * 0.02,
+              left: scrWidth * 0.05,
+              right: scrWidth * 0.02),
+          title: Text(
+            "Please enter the number of members",
+            style: TextStyle(
+              color: Color(0xff2C2C2C),
+              fontSize: FontSize15,
+              fontFamily: "Urbanist",
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              SizedBox(height: 10),
+              Container(
+                height: textFormFieldHeight45,
+                padding: EdgeInsets.symmetric(
+                  horizontal: scrWidth * 0.015,
+                  vertical: 2,
+                ),
+                decoration: BoxDecoration(
+                  color: textFormFieldFillColor,
+                  borderRadius: BorderRadius.circular(scrWidth * 0.026),
+                ),
+                child: TextFormField(
+                  focusNode: membersFocus,
+                  controller: membersController,
+                  keyboardType: TextInputType.number,
+                  cursorHeight: scrWidth * 0.055,
+                  cursorWidth: 1,
+                  cursorColor: Colors.black,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600,
+                    fontSize: FontSize15,
+                    fontFamily: 'Urbanist',
+                  ),
+                  decoration: InputDecoration(
+                    labelText: 'Members',
+                    labelStyle: TextStyle(
+                      color: membersFocus.hasFocus
+                          ? primarycolor
+                          : Color(0xffB0B0B0),
+                      fontWeight: FontWeight.w600,
+                      fontSize: FontSize15,
+                      fontFamily: 'Urbanist',
+                    ),
+                    prefixIcon: Container(
+                      height: scrWidth * 0.045,
+                      width: 10,
+                      padding: EdgeInsets.all(scrWidth * 0.033),
+                      child: SvgPicture.asset(
+                        'assets/icons/Vector (9).svg',
+                        fit: BoxFit.contain,
+                        color: membersFocus.hasFocus
+                            ? primarycolor
+                            : Color(0xffB0B0B0),
+                      ),
+                    ),
+                    fillColor: textFormFieldFillColor,
+                    filled: true,
+                    contentPadding:
+                        EdgeInsets.only(top: 5, bottom: scrWidth * 0.033),
+                    disabledBorder: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    errorBorder: InputBorder.none,
+                    border: InputBorder.none,
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: primarycolor,
+                        width: 2,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: scrHeight * 0.025,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  InkWell(
+                    onTap: () {
+                      members = int.tryParse(membersController.text)!;
+                      Navigator.pop(ctx);
+                      setState(() {});
+                    },
+                    child: Container(
+                      width: scrWidth * 0.65,
+                      height: scrHeight * 0.058,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(34),
+                        color: primarycolor,
+                        boxShadow: [
+                          BoxShadow(
+                            blurRadius: 5,
+                            spreadRadius: -4,
+                            // offset: Offset(0, -4),
+                            color: Colors.black.withOpacity(0.15),
+                          ),
+                        ],
+                      ),
+                      child: Center(
+                        child: Text(
+                          "Update",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: FontSize16,
+                            fontFamily: "Urbanist",
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(34),
+          ),
+        );
+      },
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_iconpicker/Serialization/iconDataSerialization.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:http/http.dart' as http;
@@ -258,7 +259,8 @@ class _ApprovePageState extends State<ApprovePage> {
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(16),
                               image: DecorationImage(
-                                  image: NetworkImage(user!.userImage!),
+                                  image: CachedNetworkImageProvider(
+                                      user!.userImage!),
                                   fit: BoxFit.fill),
                               color: Colors.white,
                             ),

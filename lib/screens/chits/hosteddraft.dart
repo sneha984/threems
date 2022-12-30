@@ -2,8 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
-import 'package:threems/pagess/hostedvacantchit.dart';
-
 import '../../kuri/createkuri.dart';
 import '../../model/ChitModel.dart';
 import '../../model/usermodel.dart';

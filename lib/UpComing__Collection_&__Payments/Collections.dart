@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -233,9 +234,9 @@ class _UpcomingCollectionsState extends State<UpcomingCollections> {
         shadowColor: Colors.grey,
         centerTitle: false,
         elevation: 0.1,
-        leadingWidth: scrWidth*0.2,
+        leadingWidth: scrWidth * 0.2,
         backgroundColor: Colors.white,
-        leading:  InkWell(
+        leading: InkWell(
           onTap: () {
             Navigator.pop(context);
           },
@@ -398,9 +399,10 @@ class _UpcomingCollectionsState extends State<UpcomingCollections> {
                                                               16),
                                                       color: Colors.black,
                                                       image: DecorationImage(
-                                                          image: NetworkImage(
-                                                              item.chit!
-                                                                  .profile!),
+                                                          image:
+                                                              CachedNetworkImageProvider(
+                                                                  item.chit!
+                                                                      .profile!),
                                                           fit: BoxFit.cover),
                                                     ),
                                                   ),

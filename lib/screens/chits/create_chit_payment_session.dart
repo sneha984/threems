@@ -607,7 +607,7 @@ class _PaymentDetailsState extends State<PaymentDetails> {
                     if (phone.text != '' &&
                         upiApps.isNotEmpty &&
                         accountNumber.text == confirmAccountNumber.text) {
-                      joinChit();
+                      confirmJoinAsMember();
                     } else {
                       phone.text == ''
                           ? showSnackbar(context, 'Please Enter Phone Number')
@@ -648,7 +648,7 @@ class _PaymentDetailsState extends State<PaymentDetails> {
     );
   }
 
-  void joinChit() {
+  void confirmJoinAsMember() {
     showDialog(
       context: context,
       builder: (context) {

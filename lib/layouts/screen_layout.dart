@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -105,8 +106,8 @@ class _ScreenLayoutState extends State<ScreenLayout> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
                             CircleAvatar(
-                              backgroundImage:
-                                  NetworkImage(currentuser?.userImage ?? ''),
+                              backgroundImage: CachedNetworkImageProvider(
+                                  currentuser?.userImage ?? ''),
                               radius: 30.0,
                             ),
                             Column(
@@ -160,7 +161,7 @@ class _ScreenLayoutState extends State<ScreenLayout> {
                     width: 34,
                     decoration: BoxDecoration(
                         image: DecorationImage(
-                            image: NetworkImage(
+                            image: CachedNetworkImageProvider(
                                 "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdlgdYbuGqOnWzk_isI5q_in4KYYbFwO1lCw&usqp=CAU"),
                             fit: BoxFit.fill)),
                   ),
@@ -183,7 +184,7 @@ class _ScreenLayoutState extends State<ScreenLayout> {
                       width: 26,
                       decoration: BoxDecoration(
                           image: DecorationImage(
-                              image: NetworkImage(
+                              image: CachedNetworkImageProvider(
                                   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxfOzBxK8ISdCdErcVR0EFWHPL1I_SNQvEOw&usqp=CAU"),
                               fit: BoxFit.fill)),
                     ),
@@ -205,7 +206,7 @@ class _ScreenLayoutState extends State<ScreenLayout> {
                       width: 24,
                       decoration: BoxDecoration(
                           image: DecorationImage(
-                              image: NetworkImage(
+                              image: CachedNetworkImageProvider(
                                   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgDNYGs8jqizlcPof-wNOx2dLJmmoioCfEZw&usqp=CAU"),
                               fit: BoxFit.fill)),
                     ),

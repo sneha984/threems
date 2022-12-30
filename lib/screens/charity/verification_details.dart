@@ -1,6 +1,4 @@
-
 import 'dart:ui';
-
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
@@ -20,13 +18,14 @@ import '../home_screen.dart';
 import '../splash_screen.dart';
 import 'dart:io';
 import 'basic_details.dart';
+
 void showUploadMessage(BuildContext context, String message,
     {bool showLoading = false}) {
   ScaffoldMessenger.of(context)
     ..hideCurrentSnackBar()
     ..showSnackBar(
       SnackBar(
-        duration: showLoading?Duration(minutes: 30):Duration(seconds: 4),
+        duration: showLoading ? Duration(minutes: 30) : Duration(seconds: 4),
         content: Row(
           children: [
             if (showLoading)
@@ -40,11 +39,10 @@ void showUploadMessage(BuildContext context, String message,
       ),
     );
 }
-List userdetails=[];
+
+List userdetails = [];
 var fileName;
 var docName;
-
-
 
 class VerificationDetails extends StatefulWidget {
   const VerificationDetails({super.key});
@@ -54,10 +52,8 @@ class VerificationDetails extends StatefulWidget {
 }
 
 class _VerificationDetailsState extends State<VerificationDetails> {
-
-
-  final TextEditingController youtubecontroller=TextEditingController();
-  final TextEditingController videoLinkController=TextEditingController();
+  final TextEditingController youtubecontroller = TextEditingController();
+  final TextEditingController videoLinkController = TextEditingController();
   String? imgUrl;
   var imgFile;
   var uploadTask;
@@ -66,7 +62,7 @@ class _VerificationDetailsState extends State<VerificationDetails> {
   var uploadTasks;
   Future uploadImageToFirebase(BuildContext context) async {
     Reference firebaseStorageRef =
-    FirebaseStorage.instance.ref().child('deposits/${imgFile.path}');
+        FirebaseStorage.instance.ref().child('deposits/${imgFile.path}');
     UploadTask uploadTask = firebaseStorageRef.putFile(imgFile);
     TaskSnapshot taskSnapshot = (await uploadTask);
     String value = await taskSnapshot.ref.getDownloadURL();
@@ -76,25 +72,28 @@ class _VerificationDetailsState extends State<VerificationDetails> {
     // }
     setState(() {
       imgUrl = value;
-
     });
   }
+
   _pickImage() async {
-    final imageFile = await ImagePicker.platform.pickImage(
-        source: ImageSource.gallery);
+    final imageFile =
+        await ImagePicker.platform.pickImage(source: ImageSource.gallery);
     setState(() {
       imgFile = File(imageFile!.path);
       uploadImageToFirebase(context);
     });
   }
+
   var pickFile;
   Future uploadFileToFireBase(fileBytes) async {
     print(fileBytes);
-    uploadTask = FirebaseStorage.instance.ref('uploads/${DateTime.now()}')
+    uploadTask = FirebaseStorage.instance
+        .ref('uploads/${DateTime.now()}')
         .putData(fileBytes);
-    final snapshot= await  uploadTask?.whenComplete((){});
-    final urlDownlod = await  snapshot?.ref.getDownloadURL();
-    print("--------------------------------------------------------------------------------");
+    final snapshot = await uploadTask?.whenComplete(() {});
+    final urlDownlod = await snapshot?.ref.getDownloadURL();
+    print(
+        "--------------------------------------------------------------------------------");
 
     print(urlDownlod);
 
@@ -103,41 +102,40 @@ class _VerificationDetailsState extends State<VerificationDetails> {
     // });
 
     setState(() {
-      fileUrl=urlDownlod!;
-
+      fileUrl = urlDownlod!;
     });
-
   }
+
   _pickFile() async {
     print('      PICK FILE      ');
     final result = await FilePicker.platform.pickFiles(
-       withData: true,
+      withData: true,
     );
 
-    if(result==null) return;
+    if (result == null) return;
 
     // final fileBytes=result.files.first.bytes;
 
-    pickFile=result.files.first;
+    pickFile = result.files.first;
     final fileBytes = pickFile!.bytes;
     fileName = result.files.first.name;
 
     print(fileBytes);
     print('      PICK FILE      ');
     uploadFileToFireBase(fileBytes);
-    setState(() {
-
-    });
-
+    setState(() {});
   }
+
   var pickFiles;
   Future uploadFileToFireBases(fileBytes) async {
     print(fileBytes);
-    uploadTasks = FirebaseStorage.instance.ref('documents/${DateTime.now()}')
+    uploadTasks = FirebaseStorage.instance
+        .ref('documents/${DateTime.now()}')
         .putData(fileBytes);
-    final snapshot= await  uploadTask?.whenComplete((){});
-    final urlDownlods = await  snapshot?.ref.getDownloadURL();
-    print("--------------------------------------------------------------------------------");
+    final snapshot = await uploadTask?.whenComplete(() {});
+    final urlDownlods = await snapshot?.ref.getDownloadURL();
+    print(
+        "--------------------------------------------------------------------------------");
 
     print(urlDownlods);
 
@@ -146,35 +144,32 @@ class _VerificationDetailsState extends State<VerificationDetails> {
     // });
 
     setState(() {
-      docUrl=urlDownlods!;
-
+      docUrl = urlDownlods!;
     });
-
   }
+
   _pickFiles() async {
     print('      PICK FILE      ');
     final result = await FilePicker.platform.pickFiles(
       withData: true,
     );
 
-    if(result==null) return;
+    if (result == null) return;
 
     // final fileBytes=result.files.first.bytes;
 
-    pickFiles=result.files.first;
+    pickFiles = result.files.first;
     final fileBytes = pickFiles!.bytes;
     docName = result.files.first.name;
 
     print(fileBytes);
     print('      PICK FILE      ');
     uploadFileToFireBases(fileBytes);
-    setState(() {
-
-    });
-
+    setState(() {});
   }
+
   final FocusNode youtubeLinkNode = FocusNode();
-  final FocusNode videoLinkNode=FocusNode();
+  final FocusNode videoLinkNode = FocusNode();
   @override
   void initState() {
     youtubeLinkNode.addListener(() {
@@ -190,7 +185,8 @@ class _VerificationDetailsState extends State<VerificationDetails> {
     youtubeLinkNode.dispose();
     super.dispose();
   }
-  bool loading=false;
+
+  bool loading = false;
   refreshPage() {
     setState(() {
       loading = false;
@@ -205,7 +201,6 @@ class _VerificationDetailsState extends State<VerificationDetails> {
         final shouldPop = await confirmQuitDialog(context);
         return shouldPop ?? false;
       },
-
       child: Scaffold(
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(kToolbarHeight),
@@ -225,9 +220,9 @@ class _VerificationDetailsState extends State<VerificationDetails> {
                 },
                 child: Padding(
                   padding: EdgeInsets.only(
-                    // top: scrHeight * 0.09,
-                    // left: scrWidth * 0.05,
-                    // bottom: scrHeight * 0.02,
+                      // top: scrHeight * 0.09,
+                      // left: scrWidth * 0.05,
+                      // bottom: scrHeight * 0.02,
                       right: scrWidth * 0.04),
                   child: Icon(
                     Icons.arrow_back,
@@ -275,8 +270,9 @@ class _VerificationDetailsState extends State<VerificationDetails> {
                   height: scrWidth * 0.08,
                 ),
                 Row(
-                  mainAxisAlignment:
-                  imgFile==null ?  MainAxisAlignment.start:MainAxisAlignment.end ,
+                  mainAxisAlignment: imgFile == null
+                      ? MainAxisAlignment.start
+                      : MainAxisAlignment.end,
                   children: [
                     Text(
                       "Upload Photos",
@@ -284,84 +280,88 @@ class _VerificationDetailsState extends State<VerificationDetails> {
                         fontSize: FontSize15,
                         fontFamily: 'Urbanist',
                         fontWeight: FontWeight.w500,
-                        color: imgFile==null ? Color(0xff8391A1): primarycolor ,
+                        color:
+                            imgFile == null ? Color(0xff8391A1) : primarycolor,
                       ),
                     ),
-                    imgFile==null ?SizedBox(): SizedBox(width: scrWidth * 0.01)  ,
-                    imgFile ==null?  SizedBox(
-                      child: SvgPicture.asset(
-                        'assets/icons/uploaded.svg',
-                        color:Color(0xff8391A1) ,
-                      ),
-                    ):SizedBox(
+                    imgFile == null
+                        ? SizedBox()
+                        : SizedBox(width: scrWidth * 0.01),
+                    imgFile == null
+                        ? SizedBox(
+                            child: SvgPicture.asset(
+                              'assets/icons/uploaded.svg',
+                              color: Color(0xff8391A1),
+                            ),
+                          )
+                        : SizedBox(
                             child: SvgPicture.asset(
                               'assets/icons/uploaded.svg',
                               color: primarycolor,
                             ),
                           )
-
-
                   ],
                 ),
                 SizedBox(
                   height: scrWidth * 0.02,
                 ),
-
                 InkWell(
-                  onTap: (){
+                  onTap: () {
                     _pickImage();
                   },
                   child: Container(
-                    height:scrHeight*0.16,
-                    width: scrWidth*1,
-                          decoration: BoxDecoration(
-                            color: Color(0xffF7F8F9),
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(
-                              color: Color(0xffDADADA),
-                            ),
-                          ),
-                          child: Center(
-                            child: imgFile==null?Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SvgPicture.asset(
-                                  'assets/icons/camera2.svg',
-                                  color: Color(0xff8391A1),
-                                ),
-                                SizedBox(
-                                  width: scrWidth * 0.04,
-                                ),
-                                Text(
-                                  'Upload Cover Photo',
-                                  style: TextStyle(
-                                    fontSize: FontSize15,
-                                    fontFamily: 'Urbanist',
-                                    fontWeight: FontWeight.w500,
+                    height: scrHeight * 0.16,
+                    width: scrWidth * 1,
+                    decoration: BoxDecoration(
+                      color: Color(0xffF7F8F9),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                        color: Color(0xffDADADA),
+                      ),
+                    ),
+                    child: Center(
+                        child: imgFile == null
+                            ? Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SvgPicture.asset(
+                                    'assets/icons/camera2.svg',
                                     color: Color(0xff8391A1),
                                   ),
-                                )
-                              ],
-                            ):Container(
-                              height:scrHeight*0.16,
-                              width: scrWidth*1,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image: FileImage(imgFile!) as ImageProvider,fit: BoxFit.fill),
-                                borderRadius: BorderRadius.circular(8),
-                                border: Border.all(
-                                  color: Color(0xffDADADA),
+                                  SizedBox(
+                                    width: scrWidth * 0.04,
+                                  ),
+                                  Text(
+                                    'Upload Cover Photo',
+                                    style: TextStyle(
+                                      fontSize: FontSize15,
+                                      fontFamily: 'Urbanist',
+                                      fontWeight: FontWeight.w500,
+                                      color: Color(0xff8391A1),
+                                    ),
+                                  )
+                                ],
+                              )
+                            : Container(
+                                height: scrHeight * 0.16,
+                                width: scrWidth * 1,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      image:
+                                          FileImage(imgFile!) as ImageProvider,
+                                      fit: BoxFit.fill),
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
+                                    color: Color(0xffDADADA),
+                                  ),
                                 ),
-                              ),
-
-                            )
-                          ),
-                        ),
+                              )),
+                  ),
                 ),
                 SizedBox(
                   height: scrWidth * 0.02,
                 ),
-                pickFile==null
+                pickFile == null
                     ? Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -384,56 +384,89 @@ class _VerificationDetailsState extends State<VerificationDetails> {
                         ],
                       )
                     : Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      "Genuinity Documents Uploaded",
-                      style: TextStyle(
-                        fontSize: FontSize15,
-                        fontFamily: 'Urbanist',
-                        fontWeight: FontWeight.w500,
-                        color: primarycolor,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            "Genuinity Documents Uploaded",
+                            style: TextStyle(
+                              fontSize: FontSize15,
+                              fontFamily: 'Urbanist',
+                              fontWeight: FontWeight.w500,
+                              color: primarycolor,
+                            ),
+                          ),
+                          SizedBox(width: scrWidth * 0.01),
+                          SizedBox(
+                            child: SvgPicture.asset(
+                              'assets/icons/uploaded.svg',
+                              color: primarycolor,
+                            ),
+                          )
+                        ],
                       ),
-                    ),
-                    SizedBox(width: scrWidth * 0.01),
-                    SizedBox(
-                      child: SvgPicture.asset(
-                        'assets/icons/uploaded.svg',
-                        color: primarycolor,
-                      ),
-                    )
-                  ],
-                ),
                 SizedBox(
                   height: scrWidth * 0.02,
                 ),
-
                 InkWell(
-                  onTap: (){
+                  onTap: () {
                     _pickFile();
-
                   },
-                  child: pickFile==null?  Container(
-                    width: scrWidth,
-                    height: textFormFieldHeight45,
-                    padding: EdgeInsets.symmetric(
-                      horizontal: scrWidth * 0.015,
-                      vertical: scrHeight*0.002,
-                    ),
-                    decoration: BoxDecoration(
-                      color: textFormFieldFillColor,
-                      border: Border.all(
-                        color: Color(0xffDADADA),
-                      ),
-                      borderRadius: BorderRadius.circular(scrWidth * 0.026),
-                    ),
-                    child: Padding(
-                      padding:  EdgeInsets.symmetric(horizontal: scrHeight*0.03),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Upload Documents",
+                  child: pickFile == null
+                      ? Container(
+                          width: scrWidth,
+                          height: textFormFieldHeight45,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: scrWidth * 0.015,
+                            vertical: scrHeight * 0.002,
+                          ),
+                          decoration: BoxDecoration(
+                            color: textFormFieldFillColor,
+                            border: Border.all(
+                              color: Color(0xffDADADA),
+                            ),
+                            borderRadius:
+                                BorderRadius.circular(scrWidth * 0.026),
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: scrHeight * 0.03),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Upload Documents",
+                                  style: TextStyle(
+                                    color: Color(0xff8391A1),
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: FontSize15,
+                                    fontFamily: 'Urbanist',
+                                  ),
+                                ),
+                                SvgPicture.asset(
+                                  'assets/icons/camera2.svg',
+                                  color: Color(0xff8391A1),
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      : Container(
+                          width: scrWidth,
+                          height: textFormFieldHeight45,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: scrWidth * 0.04,
+                            vertical: scrHeight * 0.015,
+                          ),
+                          decoration: BoxDecoration(
+                            color: textFormFieldFillColor,
+                            border: Border.all(
+                              color: Color(0xffDADADA),
+                            ),
+                            borderRadius:
+                                BorderRadius.circular(scrWidth * 0.026),
+                          ),
+                          child: Text(
+                            fileName!,
                             style: TextStyle(
                               color: Color(0xff8391A1),
                               fontWeight: FontWeight.w500,
@@ -441,112 +474,117 @@ class _VerificationDetailsState extends State<VerificationDetails> {
                               fontFamily: 'Urbanist',
                             ),
                           ),
-                          SvgPicture.asset(
-                            'assets/icons/camera2.svg',
-                            color: Color(0xff8391A1),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ):Container(
-                    width: scrWidth,
-                    height: textFormFieldHeight45,
-                    padding: EdgeInsets.symmetric(
-                      horizontal: scrWidth * 0.04,
-                      vertical: scrHeight*0.015,
-                    ),
-                    decoration: BoxDecoration(
-                      color: textFormFieldFillColor,
-                      border: Border.all(
-                        color: Color(0xffDADADA),
-                      ),
-                      borderRadius: BorderRadius.circular(scrWidth * 0.026),
-                    ),
-                    child: Text(fileName!,style: TextStyle(
-                      color: Color(0xff8391A1),
-                      fontWeight: FontWeight.w500,
-                      fontSize: FontSize15,
-                      fontFamily: 'Urbanist',
-
-                    ),),
-
-                  ),
+                        ),
                 ),
                 SizedBox(
                   height: scrWidth * 0.06,
                 ),
-                pickFiles==null
+                pickFiles == null
                     ? Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Documents Upload",
-                      style: TextStyle(
-                        fontSize: FontSize15,
-                        fontFamily: 'Urbanist',
-                        fontWeight: FontWeight.w500,
-                        color: Color(0xff8391A1),
-                      ),
-                    ),
-                    SizedBox(width: scrWidth * 0.01),
-                    SizedBox(
-                      child: SvgPicture.asset(
-                        'assets/icons/uploaded.svg',
-                        color: Color(0xff8391A1),
-                      ),
-                    )
-                  ],
-                )
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Documents Upload",
+                            style: TextStyle(
+                              fontSize: FontSize15,
+                              fontFamily: 'Urbanist',
+                              fontWeight: FontWeight.w500,
+                              color: Color(0xff8391A1),
+                            ),
+                          ),
+                          SizedBox(width: scrWidth * 0.01),
+                          SizedBox(
+                            child: SvgPicture.asset(
+                              'assets/icons/uploaded.svg',
+                              color: Color(0xff8391A1),
+                            ),
+                          )
+                        ],
+                      )
                     : Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      "Documents Uploaded",
-                      style: TextStyle(
-                        fontSize: FontSize15,
-                        fontFamily: 'Urbanist',
-                        fontWeight: FontWeight.w500,
-                        color: primarycolor,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            "Documents Uploaded",
+                            style: TextStyle(
+                              fontSize: FontSize15,
+                              fontFamily: 'Urbanist',
+                              fontWeight: FontWeight.w500,
+                              color: primarycolor,
+                            ),
+                          ),
+                          SizedBox(width: scrWidth * 0.01),
+                          SizedBox(
+                            child: SvgPicture.asset(
+                              'assets/icons/uploaded.svg',
+                              color: primarycolor,
+                            ),
+                          )
+                        ],
                       ),
-                    ),
-                    SizedBox(width: scrWidth * 0.01),
-                    SizedBox(
-                      child: SvgPicture.asset(
-                        'assets/icons/uploaded.svg',
-                        color: primarycolor,
-                      ),
-                    )
-                  ],
-                ),
                 SizedBox(
                   height: scrWidth * 0.02,
                 ),
                 InkWell(
-                  onTap: (){
+                  onTap: () {
                     _pickFiles();
-
                   },
-                  child: pickFiles==null?  Container(
-                    width: scrWidth,
-                    height: textFormFieldHeight45,
-                    padding: EdgeInsets.symmetric(
-                      horizontal: scrWidth * 0.015,
-                      vertical: scrHeight*0.002,
-                    ),
-                    decoration: BoxDecoration(
-                      color: textFormFieldFillColor,
-                      border: Border.all(
-                        color: Color(0xffDADADA),
-                      ),
-                      borderRadius: BorderRadius.circular(scrWidth * 0.026),
-                    ),
-                    child: Padding(
-                      padding:  EdgeInsets.symmetric(horizontal: scrHeight*0.03),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Upload Pdf Document",
+                  child: pickFiles == null
+                      ? Container(
+                          width: scrWidth,
+                          height: textFormFieldHeight45,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: scrWidth * 0.015,
+                            vertical: scrHeight * 0.002,
+                          ),
+                          decoration: BoxDecoration(
+                            color: textFormFieldFillColor,
+                            border: Border.all(
+                              color: Color(0xffDADADA),
+                            ),
+                            borderRadius:
+                                BorderRadius.circular(scrWidth * 0.026),
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: scrHeight * 0.03),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Upload Pdf Document",
+                                  style: TextStyle(
+                                    color: Color(0xff8391A1),
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: FontSize15,
+                                    fontFamily: 'Urbanist',
+                                  ),
+                                ),
+                                SvgPicture.asset(
+                                  'assets/icons/camera2.svg',
+                                  color: Color(0xff8391A1),
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      : Container(
+                          width: scrWidth,
+                          height: textFormFieldHeight45,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: scrWidth * 0.04,
+                            vertical: scrHeight * 0.015,
+                          ),
+                          decoration: BoxDecoration(
+                            color: textFormFieldFillColor,
+                            border: Border.all(
+                              color: Color(0xffDADADA),
+                            ),
+                            borderRadius:
+                                BorderRadius.circular(scrWidth * 0.026),
+                          ),
+                          child: Text(
+                            docName!,
                             style: TextStyle(
                               color: Color(0xff8391A1),
                               fontWeight: FontWeight.w500,
@@ -554,36 +592,7 @@ class _VerificationDetailsState extends State<VerificationDetails> {
                               fontFamily: 'Urbanist',
                             ),
                           ),
-                          SvgPicture.asset(
-                            'assets/icons/camera2.svg',
-                            color: Color(0xff8391A1),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ):Container(
-                    width: scrWidth,
-                    height: textFormFieldHeight45,
-                    padding: EdgeInsets.symmetric(
-                      horizontal: scrWidth * 0.04,
-                      vertical: scrHeight*0.015,
-                    ),
-                    decoration: BoxDecoration(
-                      color: textFormFieldFillColor,
-                      border: Border.all(
-                        color: Color(0xffDADADA),
-                      ),
-                      borderRadius: BorderRadius.circular(scrWidth * 0.026),
-                    ),
-                    child: Text(docName!,style: TextStyle(
-                      color: Color(0xff8391A1),
-                      fontWeight: FontWeight.w500,
-                      fontSize: FontSize15,
-                      fontFamily: 'Urbanist',
-
-                    ),),
-
-                  ),
+                        ),
                 ),
                 SizedBox(
                   height: scrWidth * 0.06,
@@ -605,7 +614,7 @@ class _VerificationDetailsState extends State<VerificationDetails> {
                   height: textFormFieldHeight45,
                   padding: EdgeInsets.symmetric(
                     horizontal: scrWidth * 0.015,
-                    vertical: scrHeight*0.002,
+                    vertical: scrHeight * 0.002,
                   ),
                   decoration: BoxDecoration(
                     border: Border.all(
@@ -640,11 +649,13 @@ class _VerificationDetailsState extends State<VerificationDetails> {
                       filled: true,
                       prefixIcon: SvgPicture.asset(
                         'assets/icons/youtube.svg',
-                        width: scrWidth*0.03,
-                        height: scrHeight*0.02,
+                        width: scrWidth * 0.03,
+                        height: scrHeight * 0.02,
                       ),
                       contentPadding: EdgeInsets.only(
-                          left: scrWidth*0.03, top: scrHeight*0.006, bottom: scrWidth * 0.033),
+                          left: scrWidth * 0.03,
+                          top: scrHeight * 0.006,
+                          bottom: scrWidth * 0.033),
                       disabledBorder: InputBorder.none,
                       enabledBorder: InputBorder.none,
                       errorBorder: InputBorder.none,
@@ -666,7 +677,7 @@ class _VerificationDetailsState extends State<VerificationDetails> {
                   height: textFormFieldHeight45,
                   padding: EdgeInsets.symmetric(
                     horizontal: scrWidth * 0.015,
-                    vertical: scrHeight*0.002,
+                    vertical: scrHeight * 0.002,
                   ),
                   decoration: BoxDecoration(
                     border: Border.all(
@@ -705,8 +716,8 @@ class _VerificationDetailsState extends State<VerificationDetails> {
                       //   height: scrHeight*0.02,
                       // ),
                       contentPadding: EdgeInsets.only(
-                          left: scrWidth*0.03,
-                          top: scrHeight*0.006,
+                          left: scrWidth * 0.03,
+                          top: scrHeight * 0.006,
                           bottom: scrWidth * 0.02),
                       disabledBorder: InputBorder.none,
                       enabledBorder: InputBorder.none,
@@ -724,73 +735,77 @@ class _VerificationDetailsState extends State<VerificationDetails> {
                 SizedBox(
                   height: scrWidth * 0.04,
                 ),
-
                 GestureDetector(
-                    onTap: () async{
+                    onTap: () async {
                       setState(() {
-                        loading=true;
+                        loading = true;
                       });
-                      if(imgFile==null){
+                      if (imgFile == null) {
                         refreshPage();
-                        return showSnackbar(context,"Image Must Provide");
+                        return showSnackbar(context, "Image Must Provide");
                       }
-                      if(pickFile==null){
+                      if (pickFile == null) {
                         refreshPage();
-                        return showSnackbar(context,"Please Provide Supporting Documents");
-                      }if(pickFiles==null){
-                        refreshPage();
-                        return showSnackbar(context,"Please Provide Supporting Documents");
-                      }if(videoLinkController.text.isEmpty){
-                        refreshPage();
-                        return showSnackbar(context,"Please Upload YouTube Video");
+                        return showSnackbar(
+                            context, "Please Provide Supporting Documents");
                       }
-
-
-                    else {
-                        charityDetails.add(
-                            {
-                              "youTubeLink": youtubecontroller.text,
-                              "image": imgUrl,
-                              "documents": fileUrl,
-                              "fileNme": fileName,
-                              "otherDocument":docUrl,
-                              "videoLink":videoLinkController.text,
-                              "docNme":docName
-                            }
-
-                        );
-                        var char=CharityModel(
+                      if (pickFiles == null) {
+                        refreshPage();
+                        return showSnackbar(
+                            context, "Please Provide Supporting Documents");
+                      }
+                      if (videoLinkController.text.isEmpty) {
+                        refreshPage();
+                        return showSnackbar(
+                            context, "Please Upload YouTube Video");
+                      } else {
+                        charityDetails.add({
+                          "youTubeLink": youtubecontroller.text,
+                          "image": imgUrl,
+                          "documents": fileUrl,
+                          "fileNme": fileName,
+                          "otherDocument": docUrl,
+                          "videoLink": videoLinkController.text,
+                          "docNme": docName
+                        });
+                        var char = CharityModel(
                             orgName: charityDetails[0]['orgName'],
-                            charityDetailes: charityDetails[0]['charityDetailes'],
+                            charityDetailes: charityDetails[0]
+                                ['charityDetailes'],
                             emailId: charityDetails[0]['emailId'],
                             phoneNumber: charityDetails[0]['phoneNumber'],
-                            beneficiaryLocation: charityDetails[1]['beneficiaryLocation']??'',
-                            endDate: charityDetails[1]['endDate']??DateTime.now(),
-                            valueAmount: charityDetails[1]['valueAmount']??0,
-                            beneficiaryName: charityDetails[1]['beneficiaryName']??'',
-                            beneficiaryPhNumber: charityDetails[1]['beneficiaryPhNumber']??'',
+                            beneficiaryLocation:
+                                charityDetails[1]['beneficiaryLocation'] ?? '',
+                            endDate:
+                                charityDetails[1]['endDate'] ?? DateTime.now(),
+                            valueAmount: charityDetails[1]['valueAmount'] ?? 0,
+                            beneficiaryName:
+                                charityDetails[1]['beneficiaryName'] ?? '',
+                            beneficiaryPhNumber:
+                                charityDetails[1]['beneficiaryPhNumber'] ?? '',
                             accountNumber: charityDetails[2]['accountNumber'],
-                            confirmAccountNumber: charityDetails[2]['confirmAccountNumber'],
-                            accountHolderName: charityDetails[2]['accountHolderName'],
+                            confirmAccountNumber: charityDetails[2]
+                                ['confirmAccountNumber'],
+                            accountHolderName: charityDetails[2]
+                                ['accountHolderName'],
                             bankName: charityDetails[2]['bankName'],
                             ifscCode: charityDetails[2]['ifscCode'],
                             youTubeLink: charityDetails[3]['youTubeLink'],
                             image: charityDetails[3]['image'],
                             documents: charityDetails[3]['documents'],
                             otherDocument: charityDetails[3]['otherDocument'],
-                            videoLink: charityDetails[3]['videoLink']??'',
+                            videoLink: charityDetails[3]['videoLink'] ?? '',
                             status: 0,
                             docNme: charityDetails[3]['docNme'],
                             payments: [],
-                            cause: charityDetails[0]['cause']??0,
-                            reason: charityDetails[0]['reason']??'',
+                            cause: charityDetails[0]['cause'] ?? 0,
+                            reason: charityDetails[0]['reason'] ?? '',
                             userId: currentuser?.userId,
-                            userName:currentuser?.userName??'',
-                            block:false,
+                            userName: currentuser?.userName ?? '',
+                            block: false,
                             qrImage: charityDetails[2]['qrImage'],
                             fileNme: charityDetails[3]['fileNme'],
-                            totalReceived: 0
-                        );
+                            totalReceived: 0);
                         createCharity(char);
 
                         Navigator.push(
@@ -799,33 +814,37 @@ class _VerificationDetailsState extends State<VerificationDetails> {
                               builder: (context) => PaymentSucessful(),
                             ));
                       }
-                    print(fileUrl);
-                    print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
-                    print(charityDetails);
-                    print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+                      print(fileUrl);
+                      print(
+                          "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+                      print(charityDetails);
+                      print(
+                          "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
 
-                    print("------------------===========================-----------------========================================");
-                    print(fileUrl);
-                    print("------------------===========================-----------------========================================");
-                    print(imgUrl);
-                    print("===========================================================================================================");
-                    print(youtubecontroller.text);
-
-
-                  },
-                  child:Container(
-                    height: scrHeight*0.065,
-                    decoration: BoxDecoration(
-                        color: primarycolor,
-                        borderRadius: BorderRadius.circular(17)),
-                    margin: EdgeInsets.symmetric(vertical: scrWidth*0.03, horizontal: scrHeight*0.06),
-                    child: Center(
-                        child: Text(
-                          "Continue",
-                          style: TextStyle(color: Colors.white),
-                        )),
-                  )
-                ),
+                      print(
+                          "------------------===========================-----------------========================================");
+                      print(fileUrl);
+                      print(
+                          "------------------===========================-----------------========================================");
+                      print(imgUrl);
+                      print(
+                          "===========================================================================================================");
+                      print(youtubecontroller.text);
+                    },
+                    child: Container(
+                      height: scrHeight * 0.065,
+                      decoration: BoxDecoration(
+                          color: primarycolor,
+                          borderRadius: BorderRadius.circular(17)),
+                      margin: EdgeInsets.symmetric(
+                          vertical: scrWidth * 0.03,
+                          horizontal: scrHeight * 0.06),
+                      child: Center(
+                          child: Text(
+                        "Continue",
+                        style: TextStyle(color: Colors.white),
+                      )),
+                    )),
               ],
             ),
           ),
@@ -833,10 +852,12 @@ class _VerificationDetailsState extends State<VerificationDetails> {
       ),
     );
   }
-  createCharity(CharityModel char)async{
-    FirebaseFirestore.instance.collection('charity').add(char.toJson()).then((value) =>
-    value.update({'charityId':value.id})
-    );
+
+  createCharity(CharityModel char) async {
+    FirebaseFirestore.instance
+        .collection('charity')
+        .add(char.toJson())
+        .then((value) => value.update({'charityId': value.id}));
   }
   // pickLogo() async {
   //   XFile? file = await _picker.pickImage(source: ImageSource.gallery);
@@ -845,6 +866,5 @@ class _VerificationDetailsState extends State<VerificationDetails> {
   //     setState(() {});
   //   }
   // }
-
 
 }

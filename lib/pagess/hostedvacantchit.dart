@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -6,7 +7,6 @@ import 'package:flutter_svg/svg.dart';
 import '../screens/splash_screen.dart';
 import '../utils/customclip2.dart';
 import '../utils/themes.dart';
-
 
 class HostedVacantChitPage extends StatefulWidget {
   const HostedVacantChitPage({Key? key}) : super(key: key);
@@ -170,12 +170,15 @@ class _HostedVacantChitPageState extends State<HostedVacantChitPage> {
                                 ),
                               ],
                             ),
-                            SizedBox(height: scrHeight*0.016,),
+                            SizedBox(
+                              height: scrHeight * 0.016,
+                            ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 // SizedBox(width: scrWidth*0.1,),
-                                Text("Fixed Divident Amount", style: chitcardtwomonth10),
+                                Text("Fixed Divident Amount",
+                                    style: chitcardtwomonth10),
                                 SizedBox(
                                   width: scrWidth * 0.0003,
                                 ),
@@ -206,12 +209,13 @@ class _HostedVacantChitPageState extends State<HostedVacantChitPage> {
                                 ),
                                 Neumorphic(
                                   style: NeumorphicStyle(
-                                    intensity:0.5 ,
+                                    intensity: 0.5,
                                     surfaceIntensity: 0.3,
                                     boxShape: NeumorphicBoxShape.roundRect(
                                         BorderRadius.circular(16)),
                                     depth: -1,
-                                    shadowLightColorEmboss: Colors.grey.withOpacity(0.9),
+                                    shadowLightColorEmboss:
+                                        Colors.grey.withOpacity(0.9),
                                     lightSource: LightSource.topLeft,
                                     shadowDarkColorEmboss: Colors.white,
                                     oppositeShadowLightSource: true,
@@ -221,7 +225,8 @@ class _HostedVacantChitPageState extends State<HostedVacantChitPage> {
                                     width: scrWidth * 0.38,
                                     decoration: BoxDecoration(
                                         color: Color(0xffEEEEEE),
-                                        borderRadius: BorderRadius.circular(16)),
+                                        borderRadius:
+                                            BorderRadius.circular(16)),
                                     child: Row(
                                       children: [
                                         SizedBox(
@@ -233,7 +238,7 @@ class _HostedVacantChitPageState extends State<HostedVacantChitPage> {
                                           decoration: BoxDecoration(
                                               color: Color(0xff02B558),
                                               borderRadius:
-                                              BorderRadius.circular(16)),
+                                                  BorderRadius.circular(16)),
                                           child: Padding(
                                             padding: EdgeInsets.all(9),
                                             child: SvgPicture.asset(
@@ -245,9 +250,10 @@ class _HostedVacantChitPageState extends State<HostedVacantChitPage> {
                                           width: scrWidth * 0.02,
                                         ),
                                         Column(
-                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
                                           crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                              CrossAxisAlignment.start,
                                           children: [
                                             SizedBox(
                                               height: scrHeight * 0.013,
@@ -279,15 +285,15 @@ class _HostedVacantChitPageState extends State<HostedVacantChitPage> {
                                 SizedBox(
                                   width: scrWidth * 0.035,
                                 ),
-
                                 Neumorphic(
                                   style: NeumorphicStyle(
-                                    intensity:0.5 ,
+                                    intensity: 0.5,
                                     surfaceIntensity: 0.3,
                                     boxShape: NeumorphicBoxShape.roundRect(
                                         BorderRadius.circular(16)),
                                     depth: -1,
-                                    shadowLightColorEmboss: Colors.grey.withOpacity(0.9),
+                                    shadowLightColorEmboss:
+                                        Colors.grey.withOpacity(0.9),
                                     lightSource: LightSource.topLeft,
                                     shadowDarkColorEmboss: Colors.white,
                                     oppositeShadowLightSource: true,
@@ -299,11 +305,13 @@ class _HostedVacantChitPageState extends State<HostedVacantChitPage> {
                                         color: Color(0xffEEEEEE),
                                         boxShadow: [
                                           BoxShadow(
-                                            color: Color.fromRGBO(0, 0, 0, 0.05),
+                                            color:
+                                                Color.fromRGBO(0, 0, 0, 0.05),
                                             blurRadius: 5.0,
                                           ),
                                         ],
-                                        borderRadius: BorderRadius.circular(16)),
+                                        borderRadius:
+                                            BorderRadius.circular(16)),
                                     child: Row(
                                       children: [
                                         SizedBox(
@@ -314,7 +322,8 @@ class _HostedVacantChitPageState extends State<HostedVacantChitPage> {
                                           width: scrWidth * 0.12,
                                           decoration: BoxDecoration(
                                               color: Color(0xff02B558),
-                                              borderRadius: BorderRadius.circular(16)),
+                                              borderRadius:
+                                                  BorderRadius.circular(16)),
                                           child: Padding(
                                             padding: const EdgeInsets.all(10),
                                             child: SvgPicture.asset(
@@ -326,8 +335,10 @@ class _HostedVacantChitPageState extends State<HostedVacantChitPage> {
                                           width: scrWidth * 0.02,
                                         ),
                                         Column(
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             SizedBox(
                                               height: scrHeight * 0.015,
@@ -368,12 +379,13 @@ class _HostedVacantChitPageState extends State<HostedVacantChitPage> {
                                 ),
                                 Neumorphic(
                                   style: NeumorphicStyle(
-                                    intensity:0.5 ,
+                                    intensity: 0.5,
                                     surfaceIntensity: 0.3,
                                     boxShape: NeumorphicBoxShape.roundRect(
                                         BorderRadius.circular(16)),
                                     depth: -1,
-                                    shadowLightColorEmboss: Colors.grey.withOpacity(0.9),
+                                    shadowLightColorEmboss:
+                                        Colors.grey.withOpacity(0.9),
                                     lightSource: LightSource.topLeft,
                                     shadowDarkColorEmboss: Colors.white,
                                     oppositeShadowLightSource: true,
@@ -385,11 +397,13 @@ class _HostedVacantChitPageState extends State<HostedVacantChitPage> {
                                         color: Color(0xffEEEEEE),
                                         boxShadow: [
                                           BoxShadow(
-                                            color: Color.fromRGBO(0, 0, 0, 0.05),
+                                            color:
+                                                Color.fromRGBO(0, 0, 0, 0.05),
                                             blurRadius: 5.0,
                                           ),
                                         ],
-                                        borderRadius: BorderRadius.circular(16)),
+                                        borderRadius:
+                                            BorderRadius.circular(16)),
                                     child: Row(
                                       children: [
                                         SizedBox(
@@ -400,7 +414,8 @@ class _HostedVacantChitPageState extends State<HostedVacantChitPage> {
                                           width: scrWidth * 0.12,
                                           decoration: BoxDecoration(
                                               color: Color(0xff02B558),
-                                              borderRadius: BorderRadius.circular(16)),
+                                              borderRadius:
+                                                  BorderRadius.circular(16)),
                                           child: Padding(
                                             padding: const EdgeInsets.all(10),
                                             child: SvgPicture.asset(
@@ -412,8 +427,10 @@ class _HostedVacantChitPageState extends State<HostedVacantChitPage> {
                                           width: scrWidth * 0.015,
                                         ),
                                         Column(
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             SizedBox(
                                               height: scrHeight * 0.015,
@@ -447,12 +464,13 @@ class _HostedVacantChitPageState extends State<HostedVacantChitPage> {
                                 ),
                                 Neumorphic(
                                   style: NeumorphicStyle(
-                                    intensity:0.5 ,
+                                    intensity: 0.5,
                                     surfaceIntensity: 0.3,
                                     boxShape: NeumorphicBoxShape.roundRect(
                                         BorderRadius.circular(16)),
                                     depth: -1,
-                                    shadowLightColorEmboss: Colors.grey.withOpacity(0.9),
+                                    shadowLightColorEmboss:
+                                        Colors.grey.withOpacity(0.9),
                                     lightSource: LightSource.topLeft,
                                     shadowDarkColorEmboss: Colors.white,
                                     oppositeShadowLightSource: true,
@@ -464,11 +482,13 @@ class _HostedVacantChitPageState extends State<HostedVacantChitPage> {
                                         color: Color(0xffEEEEEE),
                                         boxShadow: [
                                           BoxShadow(
-                                            color: Color.fromRGBO(0, 0, 0, 0.05),
+                                            color:
+                                                Color.fromRGBO(0, 0, 0, 0.05),
                                             blurRadius: 5.0,
                                           ),
                                         ],
-                                        borderRadius: BorderRadius.circular(16)),
+                                        borderRadius:
+                                            BorderRadius.circular(16)),
                                     child: Row(
                                       children: [
                                         SizedBox(
@@ -479,7 +499,8 @@ class _HostedVacantChitPageState extends State<HostedVacantChitPage> {
                                           width: scrWidth * 0.12,
                                           decoration: BoxDecoration(
                                               color: Color(0xff02B558),
-                                              borderRadius: BorderRadius.circular(16)),
+                                              borderRadius:
+                                                  BorderRadius.circular(16)),
                                           child: Padding(
                                             padding: const EdgeInsets.all(10),
                                             child: SvgPicture.asset(
@@ -491,8 +512,10 @@ class _HostedVacantChitPageState extends State<HostedVacantChitPage> {
                                           width: scrWidth * 0.015,
                                         ),
                                         Column(
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             SizedBox(
                                               height: scrHeight * 0.012,
@@ -533,7 +556,8 @@ class _HostedVacantChitPageState extends State<HostedVacantChitPage> {
                         height: scrHeight * 0.058,
                         width: scrWidth * 1,
                         decoration: BoxDecoration(
-                            border: Border.all(color: Color(0xffF4F4F4), width: 1),
+                            border:
+                                Border.all(color: Color(0xffF4F4F4), width: 1),
                             color: Color(0xff02B558),
                             borderRadius: BorderRadius.circular(8)),
                         child: Row(
@@ -576,8 +600,6 @@ class _HostedVacantChitPageState extends State<HostedVacantChitPage> {
                                 )
                               ],
                             ),
-
-
                           ],
                         ),
                       ),
@@ -588,15 +610,14 @@ class _HostedVacantChitPageState extends State<HostedVacantChitPage> {
                         height: scrHeight * 0.25,
                         width: scrWidth * 1,
                         decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
-                                blurRadius: 25.0,
-                                offset: Offset(0, 4)),
-                          ],
-                          color: Colors.white,
-                          borderRadius:BorderRadius.circular(17.5)
-                        ),
+                            boxShadow: [
+                              BoxShadow(
+                                  color: Colors.black.withOpacity(0.1),
+                                  blurRadius: 25.0,
+                                  offset: Offset(0, 4)),
+                            ],
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(17.5)),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
@@ -656,10 +677,10 @@ class _HostedVacantChitPageState extends State<HostedVacantChitPage> {
                                         height: scrHeight * 0.05,
                                         decoration: BoxDecoration(
                                           borderRadius:
-                                          BorderRadius.circular(16),
+                                              BorderRadius.circular(16),
                                           color: Colors.black,
                                           image: DecorationImage(
-                                              image: NetworkImage(
+                                              image: CachedNetworkImageProvider(
                                                   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7FtTfAHZpWXQI8X4ppt-7QKqQae6h6BYhyw&usqp=CAU"),
                                               fit: BoxFit.cover),
                                         ),
@@ -676,17 +697,17 @@ class _HostedVacantChitPageState extends State<HostedVacantChitPage> {
                                             fontSize: scrWidth * 0.045),
                                       ),
                                     ),
-                                    trailing:  Padding(
-                                      padding:  EdgeInsets.only(
-                                          left: scrWidth*0.04),
+                                    trailing: Padding(
+                                      padding: EdgeInsets.only(
+                                          left: scrWidth * 0.04),
                                       child: Container(
-                                        height: scrHeight*0.035,
-                                        width: scrWidth*0.2,
+                                        height: scrHeight * 0.035,
+                                        width: scrWidth * 0.2,
                                         decoration: BoxDecoration(
                                             color: Color(0xff02B558),
-                                            borderRadius: BorderRadius.circular(10)
-                                        ),
-                                        child:Center(
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        child: Center(
                                           child: Text(
                                             "Accept",
                                             style: TextStyle(
@@ -698,7 +719,6 @@ class _HostedVacantChitPageState extends State<HostedVacantChitPage> {
                                         ),
                                       ),
                                     ),
-
                                   ),
                                 );
                               },
@@ -710,30 +730,25 @@ class _HostedVacantChitPageState extends State<HostedVacantChitPage> {
                                 );
                               },
                             ),
-
                           ],
                         ),
-
                       ),
                       SizedBox(
                         height: scrHeight * 0.02,
                       ),
-
                       SizedBox(
                         child: Container(
                             height: scrHeight * 0.44,
                             width: scrWidth * 1,
                             decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.black.withOpacity(0.1),
-                                    blurRadius: 25.0,
-                                    offset: Offset(0, 4)),
-                              ],
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(17.5)
-                              ),
-                            
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.black.withOpacity(0.1),
+                                      blurRadius: 25.0,
+                                      offset: Offset(0, 4)),
+                                ],
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(17.5)),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
@@ -741,7 +756,8 @@ class _HostedVacantChitPageState extends State<HostedVacantChitPage> {
                                   height: scrHeight * 0.02,
                                 ),
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
                                   children: [
                                     Text(
                                       "Members",
@@ -779,14 +795,16 @@ class _HostedVacantChitPageState extends State<HostedVacantChitPage> {
                                         right: scrWidth * 0.04,
                                         top: scrHeight * 0.003),
                                     physics: NeverScrollableScrollPhysics(),
-                                     // scrollDirection: Axis.vertical,
+                                    // scrollDirection: Axis.vertical,
                                     itemCount: 4,
-                                    itemBuilder: (BuildContext context, int index) {
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
                                       return Container(
                                         width: scrWidth * 0.02,
                                         height: scrHeight * 0.075,
                                         decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(8),
+                                            borderRadius:
+                                                BorderRadius.circular(8),
                                             color: Color(0xffF3F3F3)),
                                         child: ListTile(
                                           leading: Padding(
@@ -797,10 +815,10 @@ class _HostedVacantChitPageState extends State<HostedVacantChitPage> {
                                               height: scrHeight * 0.05,
                                               decoration: BoxDecoration(
                                                 borderRadius:
-                                                BorderRadius.circular(16),
+                                                    BorderRadius.circular(16),
                                                 color: Colors.black,
                                                 image: DecorationImage(
-                                                    image: NetworkImage(
+                                                    image: CachedNetworkImageProvider(
                                                         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7FtTfAHZpWXQI8X4ppt-7QKqQae6h6BYhyw&usqp=CAU"),
                                                     fit: BoxFit.cover),
                                               ),
@@ -860,24 +878,21 @@ class _HostedVacantChitPageState extends State<HostedVacantChitPage> {
           ],
         ),
       ),
-
       bottomNavigationBar: GestureDetector(
-        onTap: (){
+        onTap: () {
           // Navigator.push(context, MaterialPageRoute(builder: (context)=>YourChitPage()));
         },
         child: Container(
           height: scrHeight * 0.08,
           color: Color(0xff74FCAD),
-          child:
-          Center(
+          child: Center(
               child: Text(
-                "You can't publish",
-                style: TextStyle(
-                    fontSize: scrWidth * 0.047,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: 'Urbanist'),
-              )),
-
+            "You can't publish",
+            style: TextStyle(
+                fontSize: scrWidth * 0.047,
+                fontWeight: FontWeight.w600,
+                fontFamily: 'Urbanist'),
+          )),
         ),
       ),
     );

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -302,8 +303,9 @@ class _ChatScreenState extends State<ChatScreen> {
                                           ),
                                           CircleAvatar(
                                             radius: w * 0.05,
-                                            backgroundImage: NetworkImage(
-                                                chat[index]['photo']),
+                                            backgroundImage:
+                                                CachedNetworkImageProvider(
+                                                    chat[index]['photo']),
                                           ),
                                         ],
                                       ),
@@ -317,8 +319,9 @@ class _ChatScreenState extends State<ChatScreen> {
                                         children: [
                                           CircleAvatar(
                                             radius: w * 0.05,
-                                            backgroundImage: NetworkImage(
-                                                chat[index]['photo']),
+                                            backgroundImage:
+                                                CachedNetworkImageProvider(
+                                                    chat[index]['photo']),
                                           ),
                                           SizedBox(
                                             width: w * 0.025,
@@ -620,10 +623,11 @@ class _ChatScreenState extends State<ChatScreen> {
                                     children: [
                                       CircleAvatar(
                                         backgroundColor: Colors.grey.shade100,
-                                        backgroundImage: NetworkImage(widget
-                                            .members[
-                                                widget.chit.members![index]]!
-                                            .userImage!),
+                                        backgroundImage:
+                                            CachedNetworkImageProvider(widget
+                                                .members[widget
+                                                    .chit.members![index]]!
+                                                .userImage!),
                                       ),
                                       SizedBox(
                                         width: w * 0.05,
