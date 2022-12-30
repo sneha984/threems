@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -267,7 +268,7 @@ class _StorePageState extends State<StorePage> {
                     width: scrWidth * 0.26,
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                          image: NetworkImage(
+                          image: CachedNetworkImageProvider(
                               widget.storeDetailsModel.storeImage ?? ''),
                           fit: BoxFit.fill,colorFilter:  shopAvailable?
                       ColorFilter.mode(Colors.transparent, BlendMode.saturation):
@@ -275,6 +276,13 @@ class _StorePageState extends State<StorePage> {
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(scrWidth * 0.04),
                     ),
+                    // child: ClipRRect(
+                    //   borderRadius: BorderRadius.circular(scrWidth * 0.09),
+                    //   child: CachedNetworkImage(
+                    //     fit: BoxFit.cover,
+                    //     imageUrl: widget.storeDetailsModel.storeImage ?? '',
+                    //   ),
+                    // ),
                   ),
                 ),
               ],
@@ -942,7 +950,7 @@ class _ShopSingleProductState extends State<ShopSingleProduct> {
               child: Container(
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                        image: NetworkImage(widget.product.images![0]),
+                        image: CachedNetworkImageProvider(widget.product.images![0]),
                         fit: BoxFit.cover,colorFilter: widget.product.available!&&widget.storeavailable!?
                     ColorFilter.mode(Colors.transparent, BlendMode.saturation):
                     ColorFilter.mode(Colors.grey, BlendMode.saturation),),

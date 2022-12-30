@@ -73,68 +73,90 @@ class _IncomeExpenseByDatePageState extends State<IncomeExpenseByDatePage> {
   }
   List monthlyExpenseReports=[];
   List monthExpenseList=[];
+  Map monthlyIncomeExpenseMap={};
   getMonthWiseExpensesByDate(){
     FirebaseFirestore.instance.collection('users').doc(currentuserid).collection('expense').
     where('date',isGreaterThanOrEqualTo:fromDate).
     where('date',isLessThanOrEqualTo:DateTime(toDate!.year,toDate!.month,toDate!.day,23,59,59)).
-    snapshots().listen((event) {
-
+    orderBy('date').
+    get().then((event) {
+      // IncomeExpenseMonthList=[];
       if(event.docs.isNotEmpty) {
+        print(event.docs.length);
+        print(event.docs);
         monthExpenseList=[];
         monthlyExpenseReports=[];
+
         for (DocumentSnapshot data in event.docs) {
-          if(monthExpenseList.contains(data['date'].toDate().toString().substring(0,7))){
-            Map<String,dynamic> item=monthlyExpenseReports[monthExpenseList.indexOf(data['date'].toDate().toString().substring(0,7))];
+          // if(monthExpenseList.contains(data['date'].toDate().toString().substring(0,7))){
+          if(monthlyIncomeExpenseMap[data['date'].toDate().toString().substring(0,7)]==null){
+            monthlyIncomeExpenseMap[data['date'].toDate().toString().substring(0,7)]={};
+          }
+          if( monthlyIncomeExpenseMap[data['date'].toDate().toString().substring(0,7)]['expense']!=null){
+            // Map<String,dynamic> item=monthlyExpenseReports[monthExpenseList.indexOf(data['date'].toDate().toString().substring(0,7))];
+            Map<String,dynamic> item=monthlyIncomeExpenseMap[data['date'].toDate().toString().substring(0,7)]['expense'];
             double amount=item['amount'];
             amount+=data['amount'];
             item['amount']=amount;
             // expenseList.removeAt(expenseCategory.indexOf(data['date'].toDate().toString().substring(5,7)));
             // expenseList.insert(expenseCategory.indexOf(data['date'].toDate().toString().substring(5,7)), item);
-            monthlyExpenseReports.removeAt(monthExpenseList.indexOf(data['date'].toDate().toString().substring(0,7)));
-            monthlyExpenseReports.insert(monthExpenseList.indexOf(data['date'].toDate().toString().substring(0,7)), item);
+            // monthlyExpenseReports.removeAt(monthExpenseList.indexOf(data['date'].toDate().toString().substring(0,7)));
+            // monthlyExpenseReports.insert(monthExpenseList.indexOf(data['date'].toDate().toString().substring(0,7)), item);
+            monthlyIncomeExpenseMap[data['date'].toDate().toString().substring(0,7)]['expense']=item;
 
           }else{
             // expenseCategory.add(data['date'].toDate().toString().substring(5,7));
             // expenseList.add(data);
-            monthExpenseList.add(data['date'].toDate().toString().substring(0,7));
-            monthlyExpenseReports.add({
+            // monthExpenseList.add(data['date'].toDate().toString().substring(0,7));
+            // monthlyExpenseReports.add({
+            //   'date':data['date'],
+            //   'amount':data['amount']
+            // });
+            monthlyIncomeExpenseMap[data['date'].toDate().toString().substring(0,7)]['expense']={
               'date':data['date'],
               'amount':data['amount']
-            });
+            };
           }
 
 
         }
 
       }
-      for(int i=0;i<monthlyExpenseReports.length;i++){
-        if(monthList.contains(DateFormat('MMM,yyyy').format(monthlyExpenseReports[i]['date'].toDate())
-            .toString())){
-
-          Map data = IncomeExpenseMonthList[monthList.indexOf(DateFormat('MMM,yyyy')
-              .format(monthlyExpenseReports[i]['date'].toDate())
-              .toString())];
-          double expAmount = double.tryParse(data['expAmount'].toString())??0;
-          expAmount += monthlyExpenseReports[i]['amount'];
-          data['expAmount'] = expAmount;
-          IncomeExpenseMonthList.removeAt(monthList.indexOf(DateFormat('MMM,yyyy')
-              .format(monthlyExpenseReports[i]['date'].toDate())
-              .toString()));
-          IncomeExpenseMonthList.insert(monthList.indexOf(DateFormat('MMM,yyyy')
-              .format(monthlyExpenseReports[i]['date'].toDate())
-              .toString()),data);
-        }else{
-          monthList.add(DateFormat('MMM,yyyy')
-              .format(monthlyExpenseReports[i]['date'].toDate())
-              .toString());
-          IncomeExpenseMonthList.add({
-            'date': monthlyExpenseReports[i]['date'],
-            'expAmount': monthlyExpenseReports[i]['amount'],
-            'incAmount': 0.00,
-          });
-        }
-
-      }
+      // IncomeExpenseMonthList=[];
+      // for(int i=0;i<monthlyExpenseReports.length;i++){
+      //   print(monthlyExpenseReports.length.toString()+'  bbbb');
+      //   if(monthList.contains(DateFormat('MMM,yyyy').format(monthlyExpenseReports[i]['date'].toDate())
+      //       .toString())){
+      //     print('DATE before');
+      //     print(IncomeExpenseMonthList);
+      //     print(monthList);
+      //     print(DateFormat('MMM,yyyy').format(monthlyExpenseReports[i]['date'].toDate()).toString());
+      //     print(monthList.indexOf(DateFormat('MMM,yyyy').format(monthlyExpenseReports[i]['date'].toDate())));
+      //     print('DATE AFTER');
+      //     Map data = IncomeExpenseMonthList[monthList.indexOf(DateFormat('MMM,yyyy')
+      //         .format(monthlyExpenseReports[i]['date'].toDate())
+      //         .toString())];
+      //     double expAmount = double.tryParse(data['expAmount'].toString())??0;
+      //     expAmount += monthlyExpenseReports[i]['amount'];
+      //     data['expAmount'] = expAmount;
+      //     IncomeExpenseMonthList.removeAt(monthList.indexOf(DateFormat('MMM,yyyy')
+      //         .format(monthlyExpenseReports[i]['date'].toDate())
+      //         .toString()));
+      //     IncomeExpenseMonthList.insert(monthList.indexOf(DateFormat('MMM,yyyy')
+      //         .format(monthlyExpenseReports[i]['date'].toDate())
+      //         .toString()),data);
+      //   }else{
+      //     monthList.add(DateFormat('MMM,yyyy')
+      //         .format(monthlyExpenseReports[i]['date'].toDate())
+      //         .toString());
+      //     IncomeExpenseMonthList.add({
+      //       'date': monthlyExpenseReports[i]['date'],
+      //       'expAmount': monthlyExpenseReports[i]['amount'],
+      //       'incAmount': 0.00,
+      //     });
+      //   }
+      //
+      // }
 
 
       if(mounted){
@@ -184,68 +206,80 @@ class _IncomeExpenseByDatePageState extends State<IncomeExpenseByDatePage> {
   }
   List monthlyIncomeReports=[];
   List months=[];
+  Map monthlyIncomeMap={};
   getMonthWiseIncomesByDate(){
     FirebaseFirestore.instance.collection('users').doc(currentuserid).collection('incomes').
     where('date',isGreaterThanOrEqualTo:fromDate).
     where('date',isLessThanOrEqualTo:DateTime(toDate!.year,toDate!.month,toDate!.day,23,59,59)).
-    snapshots().listen((event) {
+    orderBy('date').
+    get().then((event) {
       if(event.docs.isNotEmpty) {
         months=[];
         monthlyIncomeReports=[];
         for (DocumentSnapshot data in event.docs) {
-          if(months.contains(data['date'].toDate().toString().substring(0,7))){
-            Map<String,dynamic> item=monthlyIncomeReports[months.indexOf(data['date'].toDate().toString().substring(0,7))];
+          // if(months.contains(data['date'].toDate().toString().substring(0,7))){
+          if(monthlyIncomeExpenseMap[data['date'].toDate().toString().substring(0,7)]==null){
+            monthlyIncomeExpenseMap[data['date'].toDate().toString().substring(0,7)]={};
+          }
+            if( monthlyIncomeExpenseMap[data['date'].toDate().toString().substring(0,7)]['income']!=null){
+            // Map<String,dynamic> item=monthlyIncomeReports[months.indexOf(data['date'].toDate().toString().substring(0,7))];
+            Map<String,dynamic> item=monthlyIncomeExpenseMap[data['date'].toDate().toString().substring(0,7)]['income'];
             double amount=item['amount'];
             amount+=data['amount'];
             item['amount']=amount;
             // expenseList.removeAt(expenseCategory.indexOf(data['date'].toDate().toString().substring(5,7)));
             // expenseList.insert(expenseCategory.indexOf(data['date'].toDate().toString().substring(5,7)), item);
-            monthlyIncomeReports.removeAt(months.indexOf(data['date'].toDate().toString().substring(0,7)));
-            monthlyIncomeReports.insert(months.indexOf(data['date'].toDate().toString().substring(0,7)), item);
+            // monthlyIncomeReports.removeAt(months.indexOf(data['date'].toDate().toString().substring(0,7)));
+            // monthlyIncomeReports.insert(months.indexOf(data['date'].toDate().toString().substring(0,7)), item);
+            monthlyIncomeExpenseMap[data['date'].toDate().toString().substring(0,7)]['income']=item;
 
           }else{
             // expenseCategory.add(data['date'].toDate().toString().substring(5,7));
             // expenseList.add(data);
-            months.add(data['date'].toDate().toString().substring(0,7));
-            monthlyIncomeReports.add({
+            // months.add(data['date'].toDate().toString().substring(0,7));
+            // monthlyIncomeReports.add({
+            //   'date':data['date'],
+            //   'amount':data['amount']
+            // });
+              monthlyIncomeExpenseMap[data['date'].toDate().toString().substring(0,7)]['income']={
               'date':data['date'],
               'amount':data['amount']
-            });
+            };
           }
 
 
         }
 
       }
-      for(int i=0;i<monthlyIncomeReports.length;i++){
-        if(monthList.contains(DateFormat('MMM,yyyy')
-            .format(monthlyIncomeReports[i]['date'].toDate())
-            .toString())){
-
-          Map data = IncomeExpenseMonthList[monthList.indexOf(DateFormat('MMM,yyyy')
-              .format(monthlyIncomeReports[i]['date'].toDate())
-              .toString())];
-          double incAmount = data['incAmount'];
-          incAmount += monthlyIncomeReports[i]['amount'];
-          data['incAmount'] = incAmount;
-          IncomeExpenseMonthList.removeAt(monthList.indexOf(DateFormat('MMM,yyyy')
-              .format(monthlyIncomeReports[i]['date'].toDate())
-              .toString()));
-          IncomeExpenseMonthList.insert(monthList.indexOf(DateFormat('MMM,yyyy')
-              .format(monthlyIncomeReports[i]['date'].toDate())
-              .toString()),data);
-        }else{
-          monthList.add(DateFormat('MMM,yyyy')
-              .format(monthlyIncomeReports[i]['date'].toDate())
-              .toString());
-          IncomeExpenseMonthList.add({
-            'date': monthlyIncomeReports[i]['date'],
-            'expAmount': 0.00,
-            'incAmount': monthlyIncomeReports[i]['amount'],
-          });
-        }
-
-      }
+      // for(int i=0;i<monthlyIncomeReports.length;i++){
+      //   if(monthList.contains(DateFormat('MMM,yyyy')
+      //       .format(monthlyIncomeReports[i]['date'].toDate())
+      //       .toString())){
+      //
+      //     Map data = IncomeExpenseMonthList[monthList.indexOf(DateFormat('MMM,yyyy')
+      //         .format(monthlyIncomeReports[i]['date'].toDate())
+      //         .toString())];
+      //     double incAmount = data['incAmount'];
+      //     incAmount += monthlyIncomeReports[i]['amount'];
+      //     data['incAmount'] = incAmount;
+      //     IncomeExpenseMonthList.removeAt(monthList.indexOf(DateFormat('MMM,yyyy')
+      //         .format(monthlyIncomeReports[i]['date'].toDate())
+      //         .toString()));
+      //     IncomeExpenseMonthList.insert(monthList.indexOf(DateFormat('MMM,yyyy')
+      //         .format(monthlyIncomeReports[i]['date'].toDate())
+      //         .toString()),data);
+      //   }else{
+      //     monthList.add(DateFormat('MMM,yyyy')
+      //         .format(monthlyIncomeReports[i]['date'].toDate())
+      //         .toString());
+      //     IncomeExpenseMonthList.add({
+      //       'date': monthlyIncomeReports[i]['date'],
+      //       'expAmount': 0.00,
+      //       'incAmount': monthlyIncomeReports[i]['amount'],
+      //     });
+      //   }
+      //
+      // }
 
       if(mounted){
         setState(() {
@@ -474,6 +508,8 @@ class _IncomeExpenseByDatePageState extends State<IncomeExpenseByDatePage> {
                                     // getCategoryBasedExpense();
                                   });
                                   if( selectedCategory==categryItems[1]){
+                                    IncomeExpenseMonthList=[];
+                                    monthlyIncomeExpenseMap={};
                                     getMonthWiseExpensesByDate();
                                     getMonthWiseIncomesByDate();
                                   }else{
@@ -829,9 +865,14 @@ class _IncomeExpenseByDatePageState extends State<IncomeExpenseByDatePage> {
                         ),
                         Container(
                           child:  ListView.builder(
-                            itemCount: IncomeExpenseMonthList.length,
+                            itemCount: monthlyIncomeExpenseMap.keys.toList().length,
                             shrinkWrap: true,
                             itemBuilder: (context,index){
+                              String dateKey =monthlyIncomeExpenseMap.keys.toList()[index];
+                              DateTime date=monthlyIncomeExpenseMap[dateKey]['income']!=null?monthlyIncomeExpenseMap[dateKey]['income']['date'].toDate():
+                              monthlyIncomeExpenseMap[dateKey]['expense']['date'].toDate();
+                              double income =monthlyIncomeExpenseMap[dateKey]['income']!=null?monthlyIncomeExpenseMap[dateKey]['income']['amount']:0;
+                              double expense =monthlyIncomeExpenseMap[dateKey]['expense']!=null?monthlyIncomeExpenseMap[dateKey]['expense']['amount']:0;
                               return Column(
                                 children: [
                                   // Padding(
@@ -850,7 +891,7 @@ class _IncomeExpenseByDatePageState extends State<IncomeExpenseByDatePage> {
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
 
-                                              Text(DateFormat('MMM,yyyy').format(IncomeExpenseMonthList[index]['date'].toDate()).toString(),
+                                              Text(DateFormat('MMM,yyyy').format(date).toString(),
                                                 style: TextStyle(
                                                     fontSize: 14,
                                                     fontFamily: 'Urbanist',
@@ -858,13 +899,13 @@ class _IncomeExpenseByDatePageState extends State<IncomeExpenseByDatePage> {
                                                 ),),
 
                                               Text('-'+
-                                                  IncomeExpenseMonthList[index]['expAmount'].toString(),
+                                                  expense.toString(),
                                                 style: TextStyle(
                                                     fontSize: 14,
                                                     fontFamily: 'Urbanist',
                                                     color: Colors.red
                                                 ),),
-                                              Text('-'+IncomeExpenseMonthList[index]['incAmount'].toString(),
+                                              Text('+'+income.toString(),
                                                 style: TextStyle(
                                                     fontSize: 14,
                                                     fontFamily: 'Urbanist',
@@ -1061,7 +1102,7 @@ class _IncomeExpenseByDatePageState extends State<IncomeExpenseByDatePage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(fromDate.toString().substring(0,10)+' - '+toDate.toString().substring(0,10),
+                      Text( DateFormat('dd-MM-yyyy').format(fromDate!).toString()+' - '+DateFormat('dd-MM-yyyy').format(toDate!).toString(),
                         //     date==null?DateTime.now().toString().substring(0,10):
                         // "${fromDate.toString().substring(0,10)}- ${toDate.toString().substring(0,10)}",
                         style: TextStyle(

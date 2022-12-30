@@ -106,6 +106,9 @@ class _CauseDetailsState extends State<CauseDetails> {
 
   @override
   Widget build(BuildContext context) {
+    print("---------------------------------------------");
+    print(charityDetails);
+
     return WillPopScope(
       onWillPop: () async {
         final shouldPop = await confirmQuitDialog(context);
@@ -124,23 +127,27 @@ class _CauseDetailsState extends State<CauseDetails> {
             child: AppBar(
               elevation: 0,
               backgroundColor: Colors.white,
-              leading: InkWell(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    // top: scrHeight * 0.09,
-                    // left: scrWidth * 0.05,
-                    // bottom: scrHeight * 0.02,
-                      right: scrWidth * 0.04),
-                  child: Icon(
-                    Icons.arrow_back,
-                    color: Colors.black,
-                    size: 25,
-                  ),
-                ),
-              ),
+              foregroundColor: Colors.black,
+              // leading: InkWell(
+              //   onTap: () {
+              //     setState(() {
+              //       dropdownValue="Medical";
+              //     });
+              //     Navigator.pop(context);
+              //   },
+              //   child: Padding(
+              //     padding: EdgeInsets.only(
+              //       // top: scrHeight * 0.09,
+              //       // left: scrWidth * 0.05,
+              //       // bottom: scrHeight * 0.02,
+              //         right: scrWidth * 0.04),
+              //     child: Icon(
+              //       Icons.arrow_back,
+              //       color: Colors.black,
+              //       size: 25,
+              //     ),
+              //   ),
+              // ),
               title: Text(
                 "Create Charity",
                 style: TextStyle(
@@ -677,7 +684,8 @@ class _CauseDetailsState extends State<CauseDetails> {
                         return showSnackbar(context,"Please Enter Amount");
                       }
                      else {
-                        charityDetails.add(
+
+                        Map map=
                             {
                               "endDate": Timestamp.fromDate(selectedDate!),
                               "valueAmount": double.tryParse(amountcontroller.text),
@@ -685,9 +693,8 @@ class _CauseDetailsState extends State<CauseDetails> {
                               "beneficiaryPhNumber": phonenumbercontroller.text??"",
                               "beneficiaryLocation": locationcontroller.text??'',
 
-                            }
-
-                        );
+                            };
+                        charityDetails.insert(1, map);
                         Navigator.push(
                             context,
                             CupertinoPageRoute(

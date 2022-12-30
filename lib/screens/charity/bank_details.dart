@@ -137,6 +137,8 @@ class _CreateCharity3State extends State<CreateCharity3> {
 
   @override
   Widget build(BuildContext context) {
+    print("1111111111111111111111111111111111111111111111111111111");
+    print(charityDetails);
     return WillPopScope(
       onWillPop: () async {
         final shouldPop = await confirmQuitDialog(context);
@@ -689,7 +691,7 @@ class _CreateCharity3State extends State<CreateCharity3> {
                       return showSnackbar(context,"Upload QR Image");
                     }
                     else {
-                      charityDetails.add(
+                      Map map=
                           {
                             "accountNumber": accountnumcontroller.text,
                             "confirmAccountNumber": confirmaccountcontroller.text,
@@ -697,10 +699,8 @@ class _CreateCharity3State extends State<CreateCharity3> {
                             "bankName": banknamecontroller.text,
                             "ifscCode": ifsccodecontroller.text,
                             "qrImage":imgUrl,
-                          }
-
-
-                      );
+                          };
+                      charityDetails.insert(2, map);
 
                         Navigator.push(
                             context,
