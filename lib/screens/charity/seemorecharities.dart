@@ -1,5 +1,6 @@
 import 'dart:core';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -78,9 +79,17 @@ class _SeeMoreCharitiesState extends State<SeeMoreCharities>
                           width: scrWidth * 0.285,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(30),
-                              image: DecorationImage(
-                                  image: NetworkImage(charity.image??''),
-                                  fit: BoxFit.fill)),
+                              // image: DecorationImage(
+                              //     image: NetworkImage(charity.image??''),
+                              //     fit: BoxFit.fill)
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(scrWidth * 0.09),
+                            child: CachedNetworkImage(
+                              fit: BoxFit.cover,
+                              imageUrl:charity?.image??'',
+                            ),
+                          ),
                         ),
                         SizedBox(
                           width: scrWidth * 0.05,
@@ -321,7 +330,7 @@ class _SeeMoreCharitiesState extends State<SeeMoreCharities>
                       padding:EdgeInsets.only(top: scrHeight * 0.08,),
                       child: InkWell(
                         onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>BasicDetails( update: false,)));
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>BasicDetails()));
 
                         },
                         child: Container(

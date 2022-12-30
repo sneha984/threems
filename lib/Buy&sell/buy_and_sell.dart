@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
@@ -99,7 +100,7 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
   //     });
   //   }
   // }
-
+List cate=[];
   getSpecificCategory() {
     FirebaseFirestore.instance
         .collection('storeCategory')
@@ -107,8 +108,10 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
         .listen((event) {
       cateoryNames = [];
       cateoryNamesMap = {};
+      cate=[];
       for (DocumentSnapshot<Map<String, dynamic>> doc in event.docs) {
-        categorys[doc.get('categoryName')] = doc.data();
+        categorys[doc.get('categoryId')] = doc.data();
+        cate.add(doc.get('categoryId'));
         cateoryNames.add(doc.get('categoryName'));
         cateoryNamesMap[doc.get('categoryName')] = doc.id;
         print(doc.get('categoryName'));
@@ -124,6 +127,7 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                     builder: (context) => CategoryStores(
                           categoryname: doc.get('categoryName'),
                       categoryImage: doc.get('categoryImage'),
+
                       
                         )));
 
@@ -596,7 +600,7 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                 "${nearestStores.length} Stores available",
                                 style: TextStyle(
                                     fontFamily: 'Urbanist',
-                                    fontSize: scrWidth * 0.025,
+                                    fontSize: scrWidth * 0.027,
                                     color: Color(0xff818181),
                                     fontWeight: FontWeight.w600),
                               ),
@@ -638,7 +642,7 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                             builder: (context) => StorePage(
                                                 storeDetailsModel:
                                                     nearestStores[index],
-                                                category: '')));
+                                                category:'')));
 
                                     setState(() {});
                                   },
@@ -659,7 +663,7 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                               decoration: BoxDecoration(
                                                 image: DecorationImage(
                                                     image: NetworkImage(
-                                                        store.storeImage!),
+                                                        store?.storeImage??''),
                                                     colorFilter:store.online!?
                                                     ColorFilter.mode(Colors.transparent, BlendMode.saturation):
                                                     ColorFilter.mode(Colors.grey, BlendMode.saturation),
@@ -668,6 +672,13 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                                 borderRadius:
                                                     BorderRadius.circular(
                                                         scrWidth * 0.03),
+                                              ),
+                                              child: ClipRRect(
+                                                borderRadius: BorderRadius.circular(scrWidth * 0.02),
+                                                child: CachedNetworkImage(
+                                                  fit: BoxFit.cover,
+                                                  imageUrl:store?.storeImage??'',
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -694,14 +705,21 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
                                               SizedBox(
                                                 height: scrHeight * 0.0015,
                                               ),
-                                              Text(
-                                                store.storeAddress!,
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    fontFamily: 'Urbanist',
-                                                    fontSize: scrWidth * 0.025,
-                                                    fontWeight: FontWeight.w600,
-                                                    color: Color(0xff818181)),
+                                              Padding(
+                                                padding:  EdgeInsets.only(right: 10),
+                                                child: Container(
+                                                  width: scrWidth*0.2,
+                                                  child: Text(
+                                                    store.storeAddress!,
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                      overflow: TextOverflow.ellipsis,
+                                                        fontFamily: 'Urbanist',
+                                                        fontSize: scrWidth * 0.025,
+                                                        fontWeight: FontWeight.w600,
+                                                        color: Color(0xff818181)),
+                                                  ),
+                                                ),
                                               ),
                                             ],
                                           ),

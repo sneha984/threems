@@ -366,7 +366,7 @@ class _VerificationDetailsState extends State<VerificationDetails> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                            "Documents Uploaded",
+                            "Genuinity Document Upload ",
                             style: TextStyle(
                               fontSize: FontSize15,
                               fontFamily: 'Urbanist',
@@ -387,7 +387,7 @@ class _VerificationDetailsState extends State<VerificationDetails> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text(
-                      "Documents Uploaded",
+                      "Genuinity Documents Uploaded",
                       style: TextStyle(
                         fontSize: FontSize15,
                         fontFamily: 'Urbanist',
@@ -480,7 +480,7 @@ class _VerificationDetailsState extends State<VerificationDetails> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
-                      "Documents Uploaded",
+                      "Documents Upload",
                       style: TextStyle(
                         fontSize: FontSize15,
                         fontFamily: 'Urbanist',
@@ -546,7 +546,7 @@ class _VerificationDetailsState extends State<VerificationDetails> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Upload Documents",
+                            "Upload Pdf Document",
                             style: TextStyle(
                               color: Color(0xff8391A1),
                               fontWeight: FontWeight.w500,
@@ -737,6 +737,12 @@ class _VerificationDetailsState extends State<VerificationDetails> {
                       if(pickFile==null){
                         refreshPage();
                         return showSnackbar(context,"Please Provide Supporting Documents");
+                      }if(pickFiles==null){
+                        refreshPage();
+                        return showSnackbar(context,"Please Provide Supporting Documents");
+                      }if(videoLinkController.text.isEmpty){
+                        refreshPage();
+                        return showSnackbar(context,"Please Upload YouTube Video");
                       }
 
 
@@ -753,44 +759,51 @@ class _VerificationDetailsState extends State<VerificationDetails> {
                             }
 
                         );
+                        var char=CharityModel(
+                            orgName: charityDetails[0]['orgName'],
+                            charityDetailes: charityDetails[0]['charityDetailes'],
+                            emailId: charityDetails[0]['emailId'],
+                            phoneNumber: charityDetails[0]['phoneNumber'],
+                            beneficiaryLocation: charityDetails[1]['beneficiaryLocation']??'',
+                            endDate: charityDetails[1]['endDate']??DateTime.now(),
+                            valueAmount: charityDetails[1]['valueAmount']??0,
+                            beneficiaryName: charityDetails[1]['beneficiaryName']??'',
+                            beneficiaryPhNumber: charityDetails[1]['beneficiaryPhNumber']??'',
+                            accountNumber: charityDetails[2]['accountNumber'],
+                            confirmAccountNumber: charityDetails[2]['confirmAccountNumber'],
+                            accountHolderName: charityDetails[2]['accountHolderName'],
+                            bankName: charityDetails[2]['bankName'],
+                            ifscCode: charityDetails[2]['ifscCode'],
+                            youTubeLink: charityDetails[3]['youTubeLink'],
+                            image: charityDetails[3]['image'],
+                            documents: charityDetails[3]['documents'],
+                            otherDocument: charityDetails[3]['otherDocument'],
+                            videoLink: charityDetails[3]['videoLink']??'',
+                            status: 0,
+                            docNme: charityDetails[3]['docNme'],
+                            payments: [],
+                            cause: charityDetails[0]['cause']??0,
+                            reason: charityDetails[0]['reason']??'',
+                            userId: currentuser?.userId,
+                            userName:currentuser?.userName??'',
+                            block:false,
+                            qrImage: charityDetails[2]['qrImage'],
+                            fileNme: charityDetails[3]['fileNme'],
+                            totalReceived: 0
+                        );
+                        createCharity(char);
+
+                        Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                              builder: (context) => PaymentSucessful(),
+                            ));
                       }
                     print(fileUrl);
                     print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
                     print(charityDetails);
                     print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
-                    var char=CharityModel(
-                      orgName: charityDetails[0]['orgName']??'',
-                      charityDetailes: charityDetails[0]['charityDetailes']??'',
-                      emailId: charityDetails[0]['emailId']??'',
-                      phoneNumber: charityDetails[0]['phoneNumber']??'',
-                      beneficiaryLocation: charityDetails[1]['beneficiaryLocation']??'',
-                      endDate: charityDetails[1]['endDate']??DateTime.now(),
-                      valueAmount: charityDetails[1]['valueAmount']??0,
-                      beneficiaryName: charityDetails[1]['beneficiaryName']??'',
-                      beneficiaryPhNumber: charityDetails[1]['beneficiaryPhNumber']??'',
-                      accountNumber: charityDetails[2]['accountNumber']??'',
-                      confirmAccountNumber: charityDetails[2]['confirmAccountNumber']??'',
-                      accountHolderName: charityDetails[2]['accountHolderName']??'',
-                      bankName: charityDetails[2]['bankName']??'',
-                      ifscCode: charityDetails[2]['ifscCode']??'',
-                      youTubeLink: charityDetails[3]['youTubeLink']??'',
-                      image: charityDetails[3]['image']??'',
-                      documents: charityDetails[3]['documents']??'',
-                      otherDocument: charityDetails[3]['otherDocument']??'',
-                      videoLink: charityDetails[3]['videoLink']??'',
-                      status: 0,
-                      docNme: charityDetails[3]['docNme']??'',
-                      payments: [],
-                      cause: charityDetails[0]['cause']??0,
-                      reason: charityDetails[0]['reason']??'',
-                      userId: currentuser?.userId,
-                      userName:currentuser?.userName??'',
-                      block:false,
-                      qrImage: charityDetails[2]['qrImage']??'',
-                      fileNme: charityDetails[3]['fileNme']??'',
-                      totalReceived: 0
-                    );
-                    createCharity(char);
+
                     print("------------------===========================-----------------========================================");
                     print(fileUrl);
                     print("------------------===========================-----------------========================================");
@@ -798,11 +811,7 @@ class _VerificationDetailsState extends State<VerificationDetails> {
                     print("===========================================================================================================");
                     print(youtubecontroller.text);
 
-                    Navigator.push(
-                        context,
-                        CupertinoPageRoute(
-                          builder: (context) => PaymentSucessful(),
-                        ));
+
                   },
                   child:Container(
                     height: scrHeight*0.065,

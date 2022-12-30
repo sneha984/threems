@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -105,8 +106,15 @@ class _DonatePageState extends State<DonatePage>with TickerProviderStateMixin {
                         decoration: BoxDecoration(
                           // color: Colors.grey,
                             borderRadius: BorderRadius.circular(30),
-                            image: DecorationImage(
-                                image: NetworkImage(charities.image!),fit: BoxFit.fill)
+                            // image: DecorationImage(
+                            //     image: NetworkImage(charities.image!),fit: BoxFit.fill)
+                        ),
+                        child:ClipRRect(
+                          borderRadius: BorderRadius.circular(scrWidth * 0.09),
+                          child: CachedNetworkImage(
+                            fit: BoxFit.cover,
+                            imageUrl:charities?.image??'',
+                          ),
                         ),
                       ),
                       SizedBox(width: scrWidth*0.05,),

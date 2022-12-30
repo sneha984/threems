@@ -206,7 +206,7 @@ class _StorePageState extends State<StorePage> {
                           height: scrHeight * 0.01,
                         ),
                         Text(
-                          widget.category,
+                          widget.category!,
                           style: TextStyle(
                               fontSize: scrWidth * 0.03,
                               color: Color(0xff818181),

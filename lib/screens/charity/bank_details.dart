@@ -630,8 +630,8 @@ class _CreateCharity3State extends State<CreateCharity3> {
                                   )
                                 ],
                               ):Container(
-                                height:scrHeight*0.16,
-                                width: scrWidth*1,
+                                height:scrHeight*0.27,
+                                width: scrWidth*0.8,
                                 decoration: BoxDecoration(
                                   image: DecorationImage(
                                       image: FileImage(imgFile!) as ImageProvider,fit: BoxFit.fill),
@@ -664,16 +664,29 @@ class _CreateCharity3State extends State<CreateCharity3> {
                     if (accountnumcontroller.text.isEmpty){
                       refreshPage();
                       return showSnackbar(context,"Must Provide AccountNumber");
+                    }if (confirmaccountcontroller.text.isEmpty){
+                      refreshPage();
+                      return showSnackbar(context,"Please Confirm Account Number");
                     }
                     if(confirmaccountcontroller.text!=accountnumcontroller.text){
                       refreshPage();
                       return showSnackbar(context,"AccountNumber Doesn't Match");
                     }
                     if(accountholdernamecontroller.text.isEmpty
-                        && banknamecontroller.text.isEmpty
-                        && ifsccodecontroller.text.isEmpty){
+                        // && banknamecontroller.text.isEmpty
+                        // && ifsccodecontroller.text.isEmpty
+                    ){
                       refreshPage();
-                      return showSnackbar(context,"enter all details");
+                      return showSnackbar(context,"Please Enter Account Holder Name");
+                    }if(banknamecontroller.text.isEmpty){
+                      refreshPage();
+                      return showSnackbar(context,"Please Enter Bank Name");
+                    }if(ifsccodecontroller.text.isEmpty){
+                      refreshPage();
+                      return showSnackbar(context,"Please Enter IFSC Code");
+                    }if(imgFile==null){
+                      refreshPage();
+                      return showSnackbar(context,"Upload QR Image");
                     }
                     else {
                       charityDetails.add(
@@ -688,13 +701,13 @@ class _CreateCharity3State extends State<CreateCharity3> {
 
 
                       );
-                      if (_formkey.currentState!.validate()) {
+
                         Navigator.push(
                             context,
                             CupertinoPageRoute(
                               builder: (context) => VerificationDetails(),
                             ));
-                      }
+
 
 
                     }

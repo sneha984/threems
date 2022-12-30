@@ -3,6 +3,8 @@ import 'dart:core';
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -42,6 +44,20 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
 
   final String dynamicLink = 'https://threems.page.link';
   final String link = 'https://threems.page.link/kuri_Invite';
+  CharityModel? chari;
+  getDonation(){
+    FirebaseFirestore
+        .instance
+        .collection('charity').doc(widget.charity.charityId).snapshots().listen((event) {
+      chari=CharityModel.fromJson(event.data()!);
+
+      if(mounted){
+        setState(() {
+
+        });
+      }
+    });
+  }
 
   late  TabController _tabControllerrs;
   double progressvalue=270.0  ;
@@ -69,6 +85,8 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
     _tabController.addListener(_handleTabSelection);
 
     super.initState();
+    getDonation();
+
   }
   void _handleTabSelection() {
     setState(() {
@@ -91,16 +109,16 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
   );
   @override
   Widget build(BuildContext context) {
-    double sum=0;
-    List payAmount=[];
-    for(int i=0;i<widget.charity.payments!.length;i++){
-      double x=widget.charity.payments![i].amount!;
-      payAmount.add(x);
-      sum=sum+x;
-    }
+    // double sum=0;
+    // List payAmount=[];
+    // for(int i=0;i<widget.charity.payments!.length;i++){
+    //   double x=widget.charity.payments![i].amount!;
+    //   payAmount.add(x);
+    //   sum=sum+x;
+    // }
     return Scaffold(
       backgroundColor: Colors.white,
-      body: (widget.charity.status==0)?Column(
+      body: (chari!.status==0)?Column(
         mainAxisSize: MainAxisSize.max,
         children: [
           Stack(
@@ -190,10 +208,17 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
                             width: scrWidth*0.3,
                             height: scrHeight*0.1,
                             decoration: BoxDecoration(
-                              image: DecorationImage(image: NetworkImage(widget.charity.image??''),fit: BoxFit.fill),
+                              // image: DecorationImage(image: NetworkImage(widget.charity.image??''),fit: BoxFit.fill),
                               borderRadius: BorderRadius.circular(10),
                               color: Colors.grey,
 
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(scrWidth * 0.09),
+                              child: CachedNetworkImage(
+                                fit: BoxFit.cover,
+                                imageUrl:widget.charity?.image??'',
+                              ),
                             ),
                           ),
 
@@ -600,11 +625,18 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
                             width: scrWidth*0.3,
                             height: scrHeight*0.1,
                             decoration: BoxDecoration(
-                              image: DecorationImage(image: NetworkImage(
-                                  widget.charity.image!),fit: BoxFit.fill),
+                              // image: DecorationImage(image: NetworkImage(
+                              //     widget.charity.image!),fit: BoxFit.fill),
                               borderRadius: BorderRadius.circular(10),
                               color: Colors.grey,
 
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(scrWidth * 0.09),
+                              child: CachedNetworkImage(
+                                fit: BoxFit.cover,
+                                imageUrl:widget.charity?.image??'',
+                              ),
                             ),
                           ),
 
@@ -789,7 +821,7 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
                                   fontWeight: FontWeight.w500),),
                               SizedBox(height: scrHeight*0.006,),
 
-                              Text(widget.charity.totalReceived.toString(),
+                              Text("₹${chari?.totalReceived??0}",
                                 // "₹15,23,340",
                                 style: TextStyle(
                                   fontSize: scrWidth*0.05,
@@ -934,11 +966,12 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
               ],
             ),
             ListView.separated(
-              itemCount: widget.charity.payments?.length??0,
+              itemCount: chari!.payments!.length??0,
                 shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
                 itemBuilder: (context,index){
-                final datas=widget.charity.payments![index];
-                List<Payments> paylist=widget.charity.payments!;
+                final datas=chari!.payments![index];
+                List<Payments> paylist=chari!.payments!;
                   return Padding(
                     padding:  EdgeInsets.only(left: scrWidth*0.05,right: scrWidth*0.05),
                     child: InkWell(
@@ -996,12 +1029,29 @@ class _FundRaisingDashboardState extends State<FundRaisingDashboard>with TickerP
 
                               ],
                             ),
-                            SizedBox(width: scrWidth*0.08,),
-                            Text(currencyConvert.format(datas.amount!).toString(),style: TextStyle(
+                            SizedBox(width: scrWidth*0.06,),
+                            Text(currencyConvert.format(datas.amount??0).toString(),style: TextStyle(
                                 fontSize: scrWidth*0.046,
                                 fontFamily: 'Urbanist',
                                 fontWeight: FontWeight.w700,
                                 color: primarycolor),),
+                            SizedBox(width: scrWidth*0.01,),
+                            chari==null?Container():(chari!.payments![index].verified==false)?Container(
+                              height: scrHeight*0.07,
+                              width: scrWidth*0.05,
+                              decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      image: NetworkImage("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGRuEPLzDl41yaNFb1LZEWImxseXmRcMBqkg&usqp=CAU"))
+                              ),
+                            ): Container(
+                              height: scrHeight*0.08,
+                              width: scrWidth*0.08,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    image: NetworkImage("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRM7oMFBoxJbc4nTI2k2SlW8IPQr70WMbo8OIZ92lUZVQ_jsSUp5_CFj9vug5JP0SoAsYw&usqp=CAU"))
+                              ),
+                            ),
+
 
                           ],
                         ),

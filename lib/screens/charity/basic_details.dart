@@ -3,6 +3,7 @@ import 'package:cool_dropdown/cool_dropdown.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:threems/screens/charity/cause_details.dart';
@@ -18,8 +19,8 @@ import '../splash_screen.dart';
  String? dropdownValue;
  class BasicDetails extends StatefulWidget {
    final CharityModel? char;
-   final bool update;
-  const BasicDetails({super.key,  this.char, required this.update});
+   // final bool update;
+  const BasicDetails({super.key,  this.char,});
 
   @override
   State<BasicDetails> createState() => _BasicDetailsState();
@@ -530,74 +531,166 @@ class _BasicDetailsState extends State<BasicDetails> {
                   SizedBox(
                     height: scrWidth * 0.04,
                   ),
-                  Container(
-                    width: scrWidth,
-                    height: textFormFieldHeight45,
-                    padding: EdgeInsets.symmetric(
-                      horizontal: scrWidth * 0.015,
-                      vertical: scrWidth*0.03,
-                    ),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Color(0xffDADADA),
-                      ),
-                      color: textFormFieldFillColor,
-                      borderRadius: BorderRadius.circular(scrWidth * 0.026),
-                    ),
-                    child: TextFormField(
-                      validator: validateMobile,
-                      controller: phonecontroller,
-                      keyboardType: TextInputType.phone,
-                      // focusNode: emailIdFocus,
-                      cursorHeight: scrWidth * 0.055,
-                      cursorWidth: 1,
-                      cursorColor: Colors.black,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w600,
-                        fontSize: FontSize15,
-                        fontFamily: 'Urbanist',
-                      ),
-                      decoration: InputDecoration(
-                        fillColor: textFormFieldFillColor,
-                        filled: true,
-                        prefixIcon: Row(
-                          mainAxisSize: MainAxisSize.min,
+                  // Container(
+                  //   width: scrWidth,
+                  //   height: scrWidth*0.13,
+                  //   padding: EdgeInsets.symmetric(
+                  //     horizontal: scrWidth * 0.015,
+                  //     vertical: scrWidth*0.01,
+                  //   ),
+                  //   decoration: BoxDecoration(
+                  //     border: Border.all(
+                  //       color: Color(0xffDADADA),
+                  //     ),
+                  //     color: textFormFieldFillColor,
+                  //     borderRadius: BorderRadius.circular(scrWidth * 0.026),
+                  //   ),
+                  //   child: TextFormField(
+                  //     validator: validateMobile,
+                  //     controller: phonecontroller,
+                  //     keyboardType: TextInputType.phone,
+                  //     // focusNode: emailIdFocus,
+                  //     cursorHeight: scrWidth * 0.055,
+                  //     cursorWidth: 1,
+                  //     cursorColor: Colors.black,
+                  //     style: TextStyle(
+                  //       color: Colors.black,
+                  //       fontWeight: FontWeight.w600,
+                  //       fontSize: FontSize15,
+                  //       fontFamily: 'Urbanist',
+                  //     ),
+                  //     decoration: InputDecoration(
+                  //       fillColor: textFormFieldFillColor,
+                  //       filled: true,
+                  //       prefixIcon: Row(
+                  //         mainAxisSize: MainAxisSize.min,
+                  //         children: [
+                  //           SvgPicture.asset(
+                  //             'assets/icons/indflag.svg',
+                  //             height: scrHeight*0.03,
+                  //             width: scrWidth*0.02,
+                  //           ),
+                  //           SizedBox(
+                  //             width: scrWidth*0.02,
+                  //           ),
+                  //           Text(
+                  //             "+91",
+                  //             style: TextStyle(
+                  //               color: Colors.black,
+                  //               fontWeight: FontWeight.w400,
+                  //               fontSize: FontSize17,
+                  //               fontFamily: 'Outfit',
+                  //             ),
+                  //           ),
+                  //           VerticalDivider(
+                  //             color: Color(0xffDADADA),
+                  //             thickness: 1,
+                  //           ),
+                  //         ],
+                  //       ),
+                  //       contentPadding: EdgeInsets.only(
+                  //           left: scrWidth*0.03, top: scrHeight*0.009,),
+                  //       disabledBorder: InputBorder.none,
+                  //       enabledBorder: InputBorder.none,
+                  //       errorBorder: InputBorder.none,
+                  //       border: InputBorder.none,
+                  //       focusedBorder: InputBorder.none,
+                  //     ),
+                  //   ),
+                  // ),
+                      Container(
+                        height: textFormFieldHeight45,
+                        width: scrWidth,
+                          decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Color(0xffDADADA),
+                                ),
+                                color: textFormFieldFillColor,
+                                borderRadius: BorderRadius.circular(scrWidth * 0.026),
+
+                          ),
+                        child: Row(
                           children: [
-                            SvgPicture.asset(
-                              'assets/icons/indflag.svg',
-                              height: scrHeight*0.03,
-                              width: scrWidth*0.02,
+                            SizedBox(
+                              width: scrWidth * 0.029,
+                            ),
+                            Container(
+                              height: 20,
+                              width: 30,
+                              decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      image: AssetImage(
+                                          "assets/icons/Flag_of_India 1.png"),
+                                      fit: BoxFit.fill)),
                             ),
                             SizedBox(
-                              width: scrWidth*0.02,
+                              width: scrWidth * 0.011,
                             ),
                             Text(
                               "+91",
                               style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w400,
-                                fontSize: FontSize17,
-                                fontFamily: 'Outfit',
+                                  fontSize: 18,
+                                  fontFamily: 'Outfit',
+                                  fontWeight: FontWeight.w400),
+                            ),
+                            SizedBox(
+                              width: scrWidth * 0.011,
+                            ),
+                            Container(
+                              width: scrWidth * 0.005,
+                              height: scrHeight * 0.055,
+                              color: Colors.white,
+                            ),
+                            SizedBox(
+                              width: scrWidth * 0.011,
+                            ),
+                            Container(
+                              height: 50,
+                              width: 200,
+                              child: TextFormField(
+                                validator: (value) {
+                                  String patttern =
+                                      r'(^(?:[+0]9)?[0-9]{10,12}$)';
+                                  RegExp regExp = new RegExp(patttern);
+                                  if (value!.length == 0) {
+                                    return 'Please enter mobile number';
+                                  } else if (!regExp.hasMatch(value!)) {
+                                    return 'Please enter valid mobile  number';
+                                  }
+                                  return null;
+                                },
+                                keyboardType: TextInputType.phone,
+                                inputFormatters: <TextInputFormatter>[
+                                  FilteringTextInputFormatter.allow(
+                                      RegExp(r'[0-9]')),
+                                  FilteringTextInputFormatter.digitsOnly
+                                ],
+                                autofocus: false,
+                                controller: phonecontroller,
+                                decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.only(
+                                      left: 11, right: 3, bottom: 5),
+                                  errorStyle:
+                                  TextStyle(fontSize: 9, height: 0.3),
+                                  border: InputBorder.none,
+                                  hintText: "XXXXXXXXXX",
+                                  hintStyle: TextStyle(
+                                    fontFamily: 'Outfit',
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 18,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                                cursorColor: Colors.black,
+                                cursorHeight: 20,
+                                cursorWidth: 0.5,
                               ),
-                            ),
-                            VerticalDivider(
-                              color: Color(0xffDADADA),
-                              thickness: 1,
-                            ),
+                            )
                           ],
                         ),
-                        contentPadding: EdgeInsets.only(
-                            left: scrWidth*0.03, top: scrHeight*0.009,),
-                        disabledBorder: InputBorder.none,
-                        enabledBorder: InputBorder.none,
-                        errorBorder: InputBorder.none,
-                        border: InputBorder.none,
-                        focusedBorder: InputBorder.none,
                       ),
-                    ),
-                  ),
-                  SizedBox(
+
+                      SizedBox(
                     height: scrWidth * 0.01,
                   ),
 
@@ -624,15 +717,27 @@ class _BasicDetailsState extends State<BasicDetails> {
                     setState(() {
                       loading=true;
                     });
-                     if(orgnamecontroller.text.isEmpty&&
-                         charitynamecontroller.text.isEmpty&&
-                         emailcontroller.text.isEmpty&&
-                         (phonecontroller.text.isEmpty )
+                    if(orgnamecontroller.text.isEmpty
+                    // &&
+                     //     charitynamecontroller.text.isEmpty&&
+                     //     emailcontroller.text.isEmpty&&
+                     //     (_formKey.currentState!.validate() )
 
                      ){
                        refreshPage();
-                       return showSnackbar(context,"Must Provide All Details");
-                     }else{
+                       return showSnackbar(context,"Please Enter Organization Name/Name");
+                     }if(charitynamecontroller.text.isEmpty){
+                      refreshPage();
+                      return showSnackbar(context, "Please Enter Charity Title");
+                    }
+                    if(emailcontroller.text.isEmpty){
+                      refreshPage();
+                      return showSnackbar(context, "Please Enter Email");
+                    }if(phonecontroller.text.isEmpty){
+                      refreshPage();
+                      return showSnackbar(context, "Please Enter Phone Number");
+                    }
+                    else{
                        charityDetails.add(
                           {
                             'cause': causeId,
@@ -644,15 +749,17 @@ class _BasicDetailsState extends State<BasicDetails> {
 
                           }
                        );
+                       Navigator.push(context, MaterialPageRoute(builder: (context)=>CauseDetails()));
+                       // Navigator.push(
+                       //     context,
+                       //     CupertinoPageRoute(
+                       //       builder: (context) => CauseDetails(),
+                       //     ));
                        print(charityDetails.toString());
                        print(dropdownValue);
                        print(causeId);
                      }
-                     Navigator.push(
-                        context,
-                        CupertinoPageRoute(
-                          builder: (context) => CauseDetails(),
-                        ));
+
                   },
                   child: Container(
                     height: scrHeight*0.065,

@@ -666,31 +666,35 @@ class _CauseDetailsState extends State<CauseDetails> {
                         loading=true;
                       });
                       if (
-                      amountcontroller.text.isEmpty &&
-                          namecontroller.text.isEmpty &&
-                          locationcontroller.text.isEmpty &&
-                          phonenumbercontroller.text.isEmpty)
+                      amountcontroller.text.isEmpty
+                          // &&
+                          // namecontroller.text.isEmpty &&
+                          // locationcontroller.text.isEmpty &&
+                          // phonenumbercontroller.text.isEmpty
+                      )
                       {
                         refreshPage();
-                        return showSnackbar(context,"Must Provide All Details");
-                      } else {
+                        return showSnackbar(context,"Please Enter Amount");
+                      }
+                     else {
                         charityDetails.add(
                             {
                               "endDate": Timestamp.fromDate(selectedDate!),
                               "valueAmount": double.tryParse(amountcontroller.text),
-                              "beneficiaryName": namecontroller.text,
-                              "beneficiaryPhNumber": phonenumbercontroller.text,
-                              "beneficiaryLocation": locationcontroller.text,
+                              "beneficiaryName": namecontroller.text??'',
+                              "beneficiaryPhNumber": phonenumbercontroller.text??"",
+                              "beneficiaryLocation": locationcontroller.text??'',
 
                             }
 
                         );
+                        Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                              builder: (context) => CreateCharity3(),
+                            ));
                       }
-                      Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                            builder: (context) => CreateCharity3(),
-                          ));
+
                     },
                     child: Container(
                       height: scrHeight * 0.065,

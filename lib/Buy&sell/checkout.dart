@@ -341,120 +341,176 @@ class _CheckOutPageState extends State<CheckOutPage> {
                                     ),
                                   ),
                                 ),
-                                shopAvailable==true&&prd==true?Padding(
-                                  padding: EdgeInsets.only(left: 40),
-                                  child: Container(
-                                      width: 120,
-                                      height: 30,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                          color: Color(0xff02B558)),
-                                      child: Row(
-                                        children: [
-                                          Container(
-                                            height: 30,
-                                            width: 40,
-                                            decoration: BoxDecoration(
-                                                color: Color(0xff02B558),
-                                                borderRadius: BorderRadius.only(
-                                                    topLeft: Radius.circular(8),
-                                                    bottomLeft:
-                                                        Radius.circular(8))),
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  bottom: 8),
-                                              child: InkWell(
-                                                  onTap: () {
-                                                    storeData();
-                                                    if (cartlist[index]
-                                                            ['count'] ==
-                                                        1) {
-                                                      cartlist.removeAt(index);
-                                                      setState(() {});
-                                                    } else {
-                                                      cartlist[index]
-                                                          ['count']--;
-                                                      setState(() {});
-                                                    }
-                                                    // setState(() {
-                                                    //   if(eachstore[index].counter <2)
-                                                    //   {
-                                                    //     eachstore[index].ShouldVisible = !eachstore[index].ShouldVisible;
-                                                    //   }else{
-                                                    //     eachstore[index].counter--;
-                                                    //   }
-                                                    //
-                                                    // });
-                                                  },
-                                                  child: Padding(
-                                                    padding: cartlist[index]
-                                                                ['count'] ==
-                                                            1
-                                                        ? EdgeInsets.only(
-                                                            top: 8)
-                                                        : EdgeInsets.only(),
-                                                    child: Icon(
-                                                      cartlist[index]
-                                                                  ['count'] ==
-                                                              1
-                                                          ? Icons
-                                                              .delete_outline_outlined
-                                                          : Icons
-                                                              .minimize_outlined,
-                                                      size: 15,
-                                                      color: Colors.white,
-                                                    ),
-                                                  )),
-                                            ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    IconButton(onPressed: (){
+                                      // Navigator.pop(context);
+                                      showDialog(
+                                          context: context,
+                                          builder: (ctx) => AlertDialog(
+                                        content:
+                                        const Text("Do You Want to Delete this Item from cart?"),
+                                        actions: <Widget>[
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: const Text("No"),
                                           ),
-                                          Container(
-                                            height: 30,
-                                            width: 35,
-                                            decoration: BoxDecoration(
-                                              color: Color(0xff9FFFCD),
-                                            ),
-                                            child: Center(
-                                                child: Text(
-                                                    // '${eachstore[index].counter}'
-                                                    cartlist[index]['count']
-                                                        .toString())),
-                                          ),
-                                          Container(
-                                            height: 26,
-                                            width: 30,
-                                            decoration: BoxDecoration(
-                                                color: Color(0xff02B558),
-                                                borderRadius: BorderRadius.only(
-                                                    topLeft: Radius.circular(8),
-                                                    bottomLeft:
-                                                        Radius.circular(8))),
-                                            child: InkWell(
-                                                onTap: () {
-                                                  setState(() {
-                                                    cartlist[index]['count'] =
-                                                        cartlist[index]
-                                                                ['count'] +
-                                                            1;
-                                                  });
-                                                  storeData();
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                              storeData();
+                                              if (cartlist[index]
+                                              ['count'] ==
+                                                  1) {
+                                                cartlist.removeAt(index);
+                                                setState(() {});
+                                              } else {
+                                                cartlist[index]
+                                                ['count']--;
+                                                setState(() {});
+                                              }
+                                              // setState(() {
+                                              //   if(eachstore[index].counter <2)
+                                              //   {
+                                              //     eachstore[index].ShouldVisible = !eachstore[index].ShouldVisible;
+                                              //   }else{
+                                              //     eachstore[index].counter--;
+                                              //   }
+                                              //
+                                              // });
 
-                                                  // eachstore[index].counter++;
-                                                },
-                                                child: Icon(
-                                                  Icons.add,
-                                                  size: 15,
-                                                  color: Colors.white,
-                                                )),
+
+                                            },
+                                            child: const Text(
+                                              "Yes",
+                                              style: TextStyle(color: primarycolor),
+                                            ),
                                           ),
                                         ],
-                                      )),
-                                ):Container(
-                                  height: 50,
-                                  width: 100,
-                                  color: Colors.grey,
-                                  child: Center(child: Text("Not Available")),
-                                )
+                                      ));
+
+                                    }, icon: Icon(Icons.delete)),
+                                    SizedBox(height: 10,),
+                                    shopAvailable==true&&prd==true?Padding(
+                                      padding: EdgeInsets.only(left: 40),
+                                      child: Container(
+                                          width: 120,
+                                          height: 30,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                              BorderRadius.circular(8),
+                                              color: Color(0xff02B558)),
+                                          child: Row(
+                                            children: [
+                                              Container(
+                                                height: 30,
+                                                width: 40,
+                                                decoration: BoxDecoration(
+                                                    color: Color(0xff02B558),
+                                                    borderRadius: BorderRadius.only(
+                                                        topLeft: Radius.circular(8),
+                                                        bottomLeft:
+                                                        Radius.circular(8))),
+                                                child: Padding(
+                                                  padding: const EdgeInsets.only(
+                                                      bottom: 8),
+                                                  child: InkWell(
+                                                      onTap: () {
+                                                        storeData();
+                                                        if (cartlist[index]
+                                                        ['count'] ==
+                                                            1) {
+                                                          cartlist.removeAt(index);
+                                                          setState(() {});
+                                                        } else {
+                                                          cartlist[index]
+                                                          ['count']--;
+                                                          setState(() {});
+                                                        }
+                                                        // setState(() {
+                                                        //   if(eachstore[index].counter <2)
+                                                        //   {
+                                                        //     eachstore[index].ShouldVisible = !eachstore[index].ShouldVisible;
+                                                        //   }else{
+                                                        //     eachstore[index].counter--;
+                                                        //   }
+                                                        //
+                                                        // });
+                                                      },
+                                                      child: Padding(
+                                                        padding: cartlist[index]
+                                                        ['count'] ==
+                                                            1
+                                                            ? EdgeInsets.only(
+                                                            top: 8)
+                                                            : EdgeInsets.only(),
+                                                        child: Icon(
+                                                          cartlist[index]
+                                                          ['count'] ==
+                                                              1
+                                                              ? Icons
+                                                              .delete_outline_outlined
+                                                              : Icons
+                                                              .minimize_outlined,
+                                                          size: 15,
+                                                          color: Colors.white,
+                                                        ),
+                                                      )),
+                                                ),
+                                              ),
+                                              Container(
+                                                height: 30,
+                                                width: 35,
+                                                decoration: BoxDecoration(
+                                                  color: Color(0xff9FFFCD),
+                                                ),
+                                                child: Center(
+                                                    child: Text(
+                                                      // '${eachstore[index].counter}'
+                                                        cartlist[index]['count']
+                                                            .toString())),
+                                              ),
+                                              Container(
+                                                height: 26,
+                                                width: 30,
+                                                decoration: BoxDecoration(
+                                                    color: Color(0xff02B558),
+                                                    borderRadius: BorderRadius.only(
+                                                        topLeft: Radius.circular(8),
+                                                        bottomLeft:
+                                                        Radius.circular(8))),
+                                                child: InkWell(
+                                                    onTap: () {
+                                                      setState(() {
+                                                        cartlist[index]['count'] =
+                                                            cartlist[index]
+                                                            ['count'] +
+                                                                1;
+                                                      });
+                                                      storeData();
+
+                                                      // eachstore[index].counter++;
+                                                    },
+                                                    child: Icon(
+                                                      Icons.add,
+                                                      size: 15,
+                                                      color: Colors.white,
+                                                    )),
+                                              ),
+                                            ],
+                                          )),
+                                    ):Container(
+                                      height: 50,
+                                      width: 100,
+                                      color: Colors.grey,
+                                      child: Center(child: Text("Not Available")),
+                                    )
+                                  ],
+                                ),
+
                               ],
                             ),
                           );

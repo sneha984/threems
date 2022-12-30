@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -75,8 +76,15 @@ crossAxisAlignment: CrossAxisAlignment.start,
                 height: 270,
                 width: 400,
                 decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: NetworkImage(widget.payments[widget.index].screenShotUrl??''),fit: BoxFit.fill)
+                  // image: DecorationImage(
+                  //     image: NetworkImage(widget.payments[widget.index].screenShotUrl??''),fit: BoxFit.fill)
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(scrWidth * 0.09),
+                  child: CachedNetworkImage(
+                    fit: BoxFit.cover,
+                    imageUrl:widget.payments[widget.index].screenShotUrl??'',
+                  ),
                 ),
               ),
             ),
@@ -171,6 +179,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                           'date':a.date,
                         });
                       }
+                      print(widget.id);
                       FirebaseFirestore.instance.collection('charity').doc(widget.id).update({
                         'payments':data,
                         'totalReceived':

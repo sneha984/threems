@@ -1,4 +1,5 @@
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_iconpicker/Serialization/iconDataSerialization.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:threems/kuri/createkuri.dart';
 import 'package:threems/screens/charity/sucess.dart';
 
 import '../../Authentication/root.dart';
@@ -166,8 +168,15 @@ class _PaymentPageState extends State<PaymentPage> {
                   height: scrHeight*0.15,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(scrWidth*0.09),
-                      image: DecorationImage(
-                          image: NetworkImage(widget.charitymodel.image!),fit: BoxFit.fill)
+                      // image: DecorationImage(
+                      //     image: NetworkImage(widget.charitymodel.image!),fit: BoxFit.fill)
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(scrWidth * 0.09),
+                    child: CachedNetworkImage(
+                      fit: BoxFit.cover,
+                      imageUrl:widget.charitymodel?.image??'',
+                    ),
                   ),
                 ),
                 SizedBox(width: scrWidth*0.035,),
@@ -494,19 +503,34 @@ class _PaymentPageState extends State<PaymentPage> {
                 ),
               ],
             ),
+            Padding(
+              padding:  EdgeInsets.only(right:scrWidth*0.62,bottom: scrHeight*0.02),
+              child: Text("Scan Qr Code",style: TextStyle(
+                fontSize: scrWidth*0.043,
+                fontFamily: 'Urbanist',
+                fontWeight: FontWeight.w500,
+              ),),
+            ),
             Container(
-              height: 200,
-              width:300,
+              height: scrHeight*0.4,
+              width:scrWidth*0.8,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                  image: DecorationImage(
-                      image: NetworkImage(
-                          widget.charitymodel.qrImage!),fit: BoxFit.fill)
+                // borderRadius: BorderRadius.circular(20),
+                  // image: DecorationImage(
+                  //     image: NetworkImage(
+                  //         widget.charitymodel.qrImage!),fit: BoxFit.fill)
+              ),
+              child: ClipRRect(
+                // borderRadius: BorderRadius.circular(scrWidth * 0.09),
+                child: CachedNetworkImage(
+                  fit: BoxFit.cover,
+                  imageUrl:widget.charitymodel?.qrImage??'',
+                ),
               ),
             ),
          SizedBox(height: 20,),
             Padding(
-              padding:  EdgeInsets.only(right: 98),
+              padding:  EdgeInsets.only(right: scrWidth*0.34),
               child: Text("Upload Payment Screenshot",style: TextStyle(
                 fontSize: scrWidth*0.043,
                 fontFamily: 'Urbanist',
@@ -521,7 +545,7 @@ class _PaymentPageState extends State<PaymentPage> {
               child: Padding(
                 padding: const EdgeInsets.only(left: 16,right: 16),
                 child: Container(
-                  height:scrHeight*0.16,
+                  height:scrHeight*0.25,
                   width: scrWidth*1,
                   decoration: BoxDecoration(
                     color: Color(0xffF7F8F9),
@@ -640,24 +664,43 @@ class _PaymentPageState extends State<PaymentPage> {
         ),
       ),
       floatingActionButton: GestureDetector(
-          onTap: (){
-            FirebaseFirestore.instance.collection('charity').doc(widget.charitymodel.charityId).update({
-              'payments':FieldValue.arrayUnion(
-              [
-                {
-                  'amount':double.tryParse(valueAmountController.text),
-                  'screenShotUrl':imgUrl,
-                  'userId':currentuser!.userId,
-                  'userName':currentuser!.userName,
-                  'verified':false,
-                  'date':DateFormat.yMMMd().format(DateTime.now()),
-                }
-              ]
-              ),
+          onTap: ()async{
+            setState(() {
+              loading=true;
+            });
+            if(valueAmountController.text.isEmpty){
+              refreshPage();
+              return showSnackbar(context, "Must Provide amount");
+            }if(imgFile==null){
+              refreshPage();
+              return showSnackbar(context, "Must Upload Payment Screenshort");
+
+            }else{
+              FirebaseFirestore
+                  .instance
+                  .collection('charity')
+                  .doc(widget.charitymodel.charityId)
+                  .update({
+                'payments':FieldValue.arrayUnion(
+                    [
+                      {
+                        'amount':double.tryParse(valueAmountController.text)??"",
+                        'screenShotUrl':imgUrl??'',
+                        'userId':currentuser!.userId??'',
+                        'userName':currentuser!.userName??"",
+                        'verified':false,
+                        'date':DateFormat.yMMMd().format(DateTime.now()),
+                      }
+                    ]
+                ),}
+              );
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>Sucesspage()));
+
 
             }
 
-            );
+
+
             FirebaseFirestore.instance.collection('users').doc(currentuserid).collection('expense').add({
               'amount':double.tryParse(valueAmountController.text),
               "categoryIcon":serializeIcon(icons),
@@ -667,7 +710,6 @@ class _PaymentPageState extends State<PaymentPage> {
             });
             print(imgUrl);
             print(imgFile);
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>Sucesspage()));
           },
           child: Container(
       height: scrHeight*0.055,

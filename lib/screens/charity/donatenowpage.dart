@@ -203,7 +203,7 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
               ),
               child: Center(
                 child: Text(
-                  "${widget.charities.payments?.length??0} Supporters",
+                  "${chari?.payments?.length??0} Supporters",
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: scrWidth*0.036,
@@ -217,7 +217,7 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
       ),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
-         physics: BouncingScrollPhysics(),
+         // physics: BouncingScrollPhysics(),
         child: Column(
           mainAxisSize: MainAxisSize.max,
           children: [
@@ -261,11 +261,18 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                                     blurStyle: BlurStyle.normal // set blur style
                                 ),
                               ],
-                            image: DecorationImage(
-                                image: NetworkImage(widget.charities.image!),
-                                fit: BoxFit.fill
-                            ),
+                            // image: DecorationImage(
+                            //     image: NetworkImage(widget.charities.image!),
+                            //     fit: BoxFit.fill
+                            // ),
                             borderRadius: BorderRadius.circular(20)
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(scrWidth * 0.09),
+                            child: CachedNetworkImage(
+                              fit: BoxFit.cover,
+                              imageUrl:widget.charities?.image??'',
+                            ),
                           ),
                         ),
                       ),
@@ -955,6 +962,7 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                       ),
                       SizedBox(height: scrHeight*0.025,),
                       ListView.separated(
+                        physics: NeverScrollableScrollPhysics(),
                           itemCount: widget.charities.payments?.length??0,
                           shrinkWrap: true,
                           itemBuilder: (context,index){
