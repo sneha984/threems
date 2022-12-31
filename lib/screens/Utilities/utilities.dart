@@ -165,7 +165,7 @@ class _UtilitiesState extends State<Utilities> {
         body: SafeArea(
           child: SingleChildScrollView(
             child: Container(
-              height: scrWidth * 3,
+              height: scrHeight * 0.7,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -262,13 +262,13 @@ class _UtilitiesState extends State<Utilities> {
                     ),
                   ),
                   SizedBox(
-                    height: scrWidth * 0.01,
+                    height: scrHeight * 0.05,
                   ),
                   Padding(
                     padding: EdgeInsets.only(
                         left: scrWidth * 0.045, right: scrWidth * 0.045),
                     child: Text(
-                      "Sponsered Ads",
+                      "Sponsored Ads",
                       style: TextStyle(
                           fontSize: scrWidth * 0.046,
                           color: Colors.black,
@@ -277,7 +277,7 @@ class _UtilitiesState extends State<Utilities> {
                     ),
                   ),
                   SizedBox(
-                    height: scrWidth * 0.01,
+                    height: scrHeight * 0.01,
                   ),
                   Container(
                     margin: EdgeInsets.only(
