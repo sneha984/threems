@@ -231,7 +231,7 @@ class _CreateKuriPageState extends State<CreateKuriPage> {
                           ),
                           child: Center(
                             child: Text(
-                              "Public Chit",
+                              "Public Kuri",
                               style: TextStyle(
                                 color: kuriTabBarIndex == 0
                                     ? Colors.white
@@ -271,7 +271,7 @@ class _CreateKuriPageState extends State<CreateKuriPage> {
                           ),
                           child: Center(
                             child: Text(
-                              "Private Chit",
+                              "Private Kuri",
                               style: TextStyle(
                                 color: kuriTabBarIndex == 1
                                     ? Colors.white
@@ -1435,17 +1435,95 @@ class _CreateKuriPageState extends State<CreateKuriPage> {
                               )
                             ],
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                right: scrWidth * 0.7,
-                                top: scrHeight * 0.016,
-                                bottom: scrHeight * 0.01),
-                            child: Text(
-                              "Payment",
-                              style: TextStyle(
-                                  fontFamily: 'Urbanist',
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600),
+                          Container(
+                            height: textFormFieldHeight45,
+                            width: scrWidth,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Color(0xffDADADA),
+                              ),
+                              color: textFormFieldFillColor,
+                              borderRadius:
+                                  BorderRadius.circular(scrWidth * 0.026),
+                            ),
+                            child: Row(
+                              children: [
+                                SizedBox(
+                                  width: scrWidth * 0.029,
+                                ),
+                                Container(
+                                  height: 20,
+                                  width: 30,
+                                  decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                          image: AssetImage(
+                                              "assets/icons/Flag_of_India 1.png"),
+                                          fit: BoxFit.fill)),
+                                ),
+                                SizedBox(
+                                  width: scrWidth * 0.011,
+                                ),
+                                Text(
+                                  "+91",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontFamily: 'Outfit',
+                                      fontWeight: FontWeight.w400),
+                                ),
+                                SizedBox(
+                                  width: scrWidth * 0.011,
+                                ),
+                                Container(
+                                  width: scrWidth * 0.005,
+                                  height: scrHeight * 0.055,
+                                  color: Colors.white,
+                                ),
+                                SizedBox(
+                                  width: scrWidth * 0.011,
+                                ),
+                                Container(
+                                  height: 50,
+                                  width: 200,
+                                  child: TextFormField(
+                                    validator: (value) {
+                                      String patttern =
+                                          r'(^(?:[+0]9)?[0-9]{10,12}$)';
+                                      RegExp regExp = new RegExp(patttern);
+                                      if (value!.length == 0) {
+                                        return 'Please enter mobile number';
+                                      } else if (!regExp.hasMatch(value!)) {
+                                        return 'Please enter valid mobile  number';
+                                      }
+                                      return null;
+                                    },
+                                    keyboardType: TextInputType.phone,
+                                    inputFormatters: <TextInputFormatter>[
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp(r'[0-9]')),
+                                      FilteringTextInputFormatter.digitsOnly
+                                    ],
+                                    autofocus: false,
+                                    controller: phone,
+                                    decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.only(
+                                          left: 11, right: 3, bottom: 5),
+                                      errorStyle:
+                                          TextStyle(fontSize: 9, height: 0.3),
+                                      border: InputBorder.none,
+                                      hintText: "XXXXXXXXXX",
+                                      hintStyle: TextStyle(
+                                        fontFamily: 'Outfit',
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 18,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                    cursorColor: Colors.black,
+                                    cursorHeight: 20,
+                                    cursorWidth: 0.5,
+                                  ),
+                                )
+                              ],
                             ),
                           ),
                           Container(
