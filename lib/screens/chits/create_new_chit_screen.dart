@@ -301,7 +301,7 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
                   },
                   child: Padding(
                     padding: EdgeInsets.only(
-                        top: scrHeight * 0.04,
+                        top: scrHeight * 0.025,
                         left: scrWidth * 0.07,
                         bottom: scrHeight * 0.02,
                         right: scrWidth * 0.05),

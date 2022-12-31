@@ -121,21 +121,24 @@ class _OnBoardingState extends State<OnBoarding>
                             context,
                             MaterialPageRoute(
                                 builder: (context) => GetOtpPage()))
-                        : null;
+                        : _controller.nextPage(
+                            duration: Duration(microseconds: 100),
+                            curve: Curves.linear);
                   });
                 },
                 child: Container(
                   height: scrHeight * 0.052,
                   width: scrWidth * 0.75,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: (_currentpage == (pages.length - 1))
-                        ? primarycolor
-                        : signupcolor,
-                  ),
+                      borderRadius: BorderRadius.circular(8),
+                      color: primarycolor
+                      // : signupcolor,
+                      ),
                   child: Center(
                     child: Text(
-                      "SIGN UP / SIGN IN",
+                      _currentpage == pages.length - 1
+                          ? "SIGN UP / SIGN IN"
+                          : "NEXT",
                       style: style,
                     ),
                   ),
@@ -188,19 +191,6 @@ class _OnBoardingState extends State<OnBoarding>
                 height: scrHeight * 0.05,
               ),
             ],
-          ),
-          Positioned(
-            right: 10,
-            top: scrHeight * 0.09,
-            child: InkWell(
-              onTap: skipFunction,
-              child: Text(
-                'Skip',
-                style: TextStyle(
-                  fontSize: 20,
-                ),
-              ),
-            ),
           ),
         ],
       ),

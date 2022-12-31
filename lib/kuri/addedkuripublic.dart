@@ -150,15 +150,16 @@ class _AddedKuriPublicState extends State<AddedKuriPublic> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           InkWell(
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                            child: SvgPicture.asset(
-                              "assets/icons/whitearrow.svg",
-                              width: 20,
-                              height: 15,
-                            ),
-                          ),
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                              child: Container(
+                                width: 30,
+                                child: Icon(
+                                  Icons.arrow_back,
+                                  size: 20,
+                                ),
+                              )),
                           PopupMenuButton<MenuItem>(
                             constraints: BoxConstraints(
                                 maxWidth: 150,
