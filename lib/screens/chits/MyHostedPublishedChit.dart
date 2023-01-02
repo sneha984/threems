@@ -11,7 +11,7 @@ import '../../model/usermodel.dart';
 import '../splash_screen.dart';
 import '../../utils/customclip2.dart';
 import '../../utils/themes.dart';
-import '../../pagess/approvepage.dart';
+import 'approvepage.dart';
 import 'Chit__Chat_Screen.dart';
 import 'Draw_OPTOUT_Page.dart';
 import 'add_members_search.dart';
@@ -306,8 +306,9 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
                                 padding: EdgeInsets.only(left: scrWidth * 0.04),
                                 child: Center(
                                   child: Text(
-                                    chit!.status==1?"Vacant":
-                                    "Registrations Opened",
+                                    chit!.status == 1
+                                        ? "Vacant"
+                                        : "Registrations Opened",
                                     style: TextStyle(
                                         color: Colors.black,
                                         fontSize: scrWidth * 0.027,
@@ -339,7 +340,7 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
                                         color: Colors.white,
                                         image: DecorationImage(
                                             image:
-                                            NetworkImage(chit!.profile!))),
+                                                NetworkImage(chit!.profile!))),
                                   ),
                                   SizedBox(
                                     width: scrWidth * 0.03,
@@ -1498,7 +1499,7 @@ class _MyHostedPublishedChitState extends State<MyHostedPublishedChit> {
                                                                             .black,
                                                                         image: DecorationImage(
                                                                             image:
-                                                                            NetworkImage(members[index].userImage!),
+                                                                                NetworkImage(members[index].userImage!),
                                                                             fit: BoxFit.cover),
                                                                       ),
                                                                     ),

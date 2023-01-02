@@ -14,10 +14,10 @@ import 'package:threems/model/usermodel.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 
-import '../model/ChitModel.dart';
-import '../screens/chits/imageView.dart';
-import '../screens/splash_screen.dart';
-import '../utils/themes.dart';
+import '../../model/ChitModel.dart';
+import 'imageView.dart';
+import '../splash_screen.dart';
+import '../../utils/themes.dart';
 
 class ApprovePage extends StatefulWidget {
   final String id;
@@ -666,6 +666,7 @@ class _ApprovePageState extends State<ApprovePage> {
                             "categoryName": categoryName.toString(),
                             'date': DateTime.now(),
                             'merchant': '',
+                            'income': true
                           });
 
                           showSnackbar(

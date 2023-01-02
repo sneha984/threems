@@ -599,6 +599,7 @@ class _ChitPaymentPageState extends State<ChitPaymentPage> {
                         "categoryName": categoryName.toString(),
                         'date': DateTime.now(),
                         'merchant': '',
+                        'income': false,
                       });
                       showSnackbar(context, 'Payment Completed Successfully');
 

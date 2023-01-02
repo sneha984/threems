@@ -585,6 +585,7 @@ class _KuriPaymentPageState extends State<KuriPaymentPage> {
                       "categoryName": categoryName.toString(),
                       'date': DateTime.now(),
                       'merchant': '',
+                      'income': false
                     });
                   }).then((value) {
                     Navigator.pop(context);

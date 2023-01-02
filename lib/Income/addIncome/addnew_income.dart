@@ -1039,7 +1039,7 @@ class _AddIncomePageState extends State<AddIncomePage> {
                                 Navigator.pop(context);
 
                                 showUploadMessage(
-                                    context, 'Income  added succesfully');
+                                    context, 'Income  added successfully');
 
                                 Navigator.push(
                                     context,

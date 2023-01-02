@@ -14,6 +14,7 @@ import 'package:threems/kuri/createkuri.dart';
 import '../Authentication/root.dart';
 import '../model/Kuri/kuriModel.dart';
 import '../model/usermodel.dart';
+import '../screens/chits/imageView.dart';
 import '../screens/home_screen.dart';
 import '../screens/splash_screen.dart';
 import '../utils/customclip2.dart';
@@ -1055,61 +1056,17 @@ class _HostedKuriPageState extends State<HostedKuriPage> {
                       ),
                       InkWell(
                         onTap: () {
-                          print(payment.datePaid ?? '');
-                          GallerySaver.saveImage(payment.url!,
-                                  toDcim: true,
-                                  albumName:
-                                      '${kuri!.kuriName!}-${user.userName!}-${DateFormat('dd-MM-yyyy').format(payment.datePaid ?? DateTime.now())}')
-                              .then((success) {
-                            Navigator.pop(context);
-                            showSnackbar(context,
-                                'Download completed. Check your gallery');
-                          });
-
-                          // final taskId = await FlutterDownloader.enqueue(
-                          //   url: payment.url!,
-                          //
-                          //   savedDir: '/storage/emulated/0/Download/3MS/',
-                          //   showNotification:
-                          //       true, // show download progress in status bar (for Android)
-                          //   openFileFromNotification:
-                          //       true, // click on notification to open downloaded file (for Android)
-                          // );
-
-                          // try {
-                          //   // Saved with this method.
-                          //   var imageId = await ImageDownloader.downloadImage(
-                          //       "https://raw.githubusercontent.com/wiki/ko2ic/image_downloader/images/flutter.png");
-                          //   if (imageId == null) {
-                          //     return;
-                          //   }
-                          //
-                          //   // Below is a method of obtaining saved image information.
-                          //   var fileName =
-                          //       await ImageDownloader.findName(imageId);
-                          //   var path = await ImageDownloader.findPath(imageId);
-                          //   var size =
-                          //       await ImageDownloader.findByteSize(imageId);
-                          //   var mimeType =
-                          //       await ImageDownloader.findMimeType(imageId);
-                          // } catch (error) {
-                          //   print(error);
-                          // }
-
-                          // if (activePayment == null) {
-                          //   showSnackbar(
-                          //       context, 'There is nothing to view.');
-                          // } else {
-                          //   // Uint8List response = await http
-                          //   //     .get(Uri.parse(activePayment!.url!))
-                          //   //     .then((value) => value.bodyBytes);
-                          //
-                          //   // await launchUrl(Uri.parse(activePayment!.url!))
-                          //   //     .then((value) {
-                          //   //   showSnackbar(
-                          //   //       context, 'Successfully downloaded');
-                          //   // });
-                          // }
+                          if (payment.verified == null) {
+                            showSnackbar(context, 'There is nothing to view.');
+                          } else {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => FileViewPage(
+                                    url: payment.url!,
+                                  ),
+                                ));
+                          }
                         },
                         child: Container(
                           height: scrHeight * 0.029,
@@ -1162,6 +1119,7 @@ class _HostedKuriPageState extends State<HostedKuriPage> {
                             "categoryName": categoryName.toString(),
                             'date': DateTime.now(),
                             'merchant': '',
+                            'income': true
                           });
 
                           showSnackbar(context,
