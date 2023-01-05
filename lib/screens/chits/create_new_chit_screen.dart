@@ -63,6 +63,7 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
   TextEditingController dividend = TextEditingController();
   String? drawTypeValue;
   String? drawDateValue;
+  String? drawDateValueInList;
   String profile = "";
   String url = "";
   DateTime? selectedDate;
@@ -224,6 +225,7 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
         }
       }
       drawDateValue = widget.chit.chitDate.toString() ?? '';
+      drawDateValueInList = widget.chit.chitDate.toString() ?? '';
       profile = widget.chit.profile ?? '';
       fileUrl = widget.chit.document ?? '';
       selectedTime = TimeOfDay(
@@ -259,6 +261,7 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
     });
     super.initState();
     getDatas();
+    print('initState');
   }
 
   void dispose() {
@@ -1069,12 +1072,22 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
                                       onChanged: (value) {
                                         drawTypeValue = value.toString();
                                         drawDateValue = null;
+                                        drawDateValueInList = null;
                                         print(value);
                                         drawDate = [];
                                         if (drawTypeValue == 'Weekly') {
-                                          for (int i = 0; i < 7; i++) {
-                                            drawDate.add((i + 1).toString());
-                                          }
+                                          drawDate = [
+                                            'Monday',
+                                            'Tuesday',
+                                            'Wednesday',
+                                            'Thursday',
+                                            'Friday',
+                                            'Saturday',
+                                            'Sunday'
+                                          ];
+                                          // for (int i = 0; i < 7; i++) {
+                                          //   drawDate.add((i + 1).toString());
+                                          // }
                                         } else {
                                           for (int i = 0; i < 31; i++) {
                                             drawDate.add((i + 1).toString());
@@ -1146,9 +1159,13 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
                                           ],
                                         ),
                                       ),
-                                      value: drawDateValue,
+                                      value: drawDateValueInList,
                                       onChanged: (value) {
-                                        drawDateValue = value.toString();
+                                        drawDateValueInList = value.toString();
+                                        drawDateValue = (drawDate.indexWhere(
+                                                    (item) => item == value) +
+                                                1)
+                                            .toString();
                                         print(drawDateValue);
 
                                         print(value);
@@ -2081,18 +2098,36 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
                                       value: drawTypeValue,
                                       onChanged: (value) {
                                         drawTypeValue = value.toString();
+                                        drawDateValue = null;
+                                        drawDateValueInList = null;
                                         print(value);
+                                        print(drawDate);
                                         drawDate = [];
                                         if (drawTypeValue == 'Weekly') {
-                                          for (int i = 0; i < 7; i++) {
-                                            drawDate.add((i + 1).toString());
-                                          }
+                                          drawDate = [
+                                            'Monday',
+                                            'Tuesday',
+                                            'Wednesday',
+                                            'Thursday',
+                                            'Friday',
+                                            'Saturday',
+                                            'Sunday'
+                                          ];
+
+                                          setState(() {
+                                            print(drawDate);
+                                          });
+                                          // for (int i = 0; i < 7; i++) {
+                                          //   drawDate.add((i + 1).toString());
+                                          // }
                                         } else {
                                           for (int i = 0; i < 31; i++) {
                                             drawDate.add((i + 1).toString());
                                           }
                                         }
-                                        setState(() {});
+                                        setState(() {
+                                          print(drawDate);
+                                        });
                                       },
                                       items: drawType
                                           .map(
@@ -2158,9 +2193,13 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
                                           ],
                                         ),
                                       ),
-                                      value: drawDateValue,
+                                      value: drawDateValueInList,
                                       onChanged: (value) {
-                                        drawDateValue = value.toString();
+                                        drawDateValueInList = value.toString();
+                                        drawDateValue = (drawDate.indexWhere(
+                                                    (item) => item == value) +
+                                                1)
+                                            .toString();
                                         print(drawDateValue);
 
                                         print(value);
