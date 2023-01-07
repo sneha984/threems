@@ -1061,6 +1061,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                 )
               : (shopAvailable==true&&prd==true)?InkWell(
                   onTap: () {
+
                     print(index);
                     print(imgFiles);
                     if(index==1){
