@@ -18,6 +18,8 @@ import '../../model/service category.dart';
 import '../../utils/themes.dart';
 import '../../widgets/head_image_slider.dart';
 import 'details.dart';
+import 'my_services_page/my_services_List.dart';
+bool ?editService;
 
 class Utilities extends StatefulWidget {
   const Utilities({Key? key}) : super(key: key);
@@ -26,7 +28,7 @@ class Utilities extends StatefulWidget {
   State<Utilities> createState() => _UtilitiesState();
 }
 
-class _UtilitiesState extends State<Utilities> {
+class _UtilitiesState extends State<Utilities>with TickerProviderStateMixin  {
   // List services = [
   //   {
   //     'serviceName':'Salone & Spa',
@@ -73,8 +75,9 @@ class _UtilitiesState extends State<Utilities> {
   //   },
   //
   // ];
-  String currentAddress = 'Perinthalmanna';
-
+  // String currentAddress = 'Perinthalmanna';
+   TabController ?_tabController;
+  bool isShopNotCreated = false;
   // List<ServiceCategory>? categories;
   List? categories = [];
 
@@ -114,6 +117,11 @@ class _UtilitiesState extends State<Utilities> {
   void initState() {
     super.initState();
     getCategory();
+    _tabController = TabController(length: 2, vsync: this, initialIndex: 0);
+  }
+  void dispose() {
+    super.dispose();
+    _tabController!.dispose();
   }
 
   @override
@@ -163,135 +171,189 @@ class _UtilitiesState extends State<Utilities> {
           ),
         ),
         body: SafeArea(
-          child: SingleChildScrollView(
-            child: Container(
-              height: scrHeight * 0.7,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    child: GridView.builder(
-                      shrinkWrap: true,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                        childAspectRatio: 0.85,
-                        crossAxisSpacing: 10,
-                        mainAxisSpacing: 10,
+          child: Column(
+            children: [
+              SizedBox(height: scrHeight * 0.015,),
+              Padding(
+                padding: EdgeInsets.only(
+                    left: scrWidth * 0.05, right: scrWidth * 0.05),
+                child: Container(
+                  height: scrHeight * 0.05,
+                  decoration: BoxDecoration(
+                    color: primarycolor,
+                    borderRadius: BorderRadius.circular(
+                      25.0,
+                    ),
+                  ),
+                  child: TabBar(
+                    controller: _tabController,
+                    // give the indicator a decoration (color and border radius)
+                    indicator: BoxDecoration(
+                      borderRadius: BorderRadius.circular(
+                        25.0,
                       ),
-                      itemCount: categories!.length,
-                      padding: EdgeInsets.only(
-                          top: 25, bottom: 15, left: 20, right: 15),
-                      itemBuilder: (BuildContext context, int index) {
-                        return categories!.isEmpty
-                            ? Container(
-                                child: Center(
-                                  child: Text(
-                                    "No  Category",
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        fontFamily: 'Urbanist',
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.black),
+                      color: Color(0xff02B558),
+                    ),
+                    labelColor: Colors.white,
+                    unselectedLabelColor: Colors.white,
+                    tabs: [
+                      Text("SERVICES", style: TextStyle(
+                          fontFamily: 'Urbanist',
+                          fontSize: scrWidth*0.04,
+                          fontWeight: FontWeight.w700
+                      ),),
+                      Text("MY SERVICES", style: TextStyle(
+                          fontFamily: 'Urbanist',
+                          fontSize:scrWidth*0.04 ,
+                          fontWeight: FontWeight.w700
+                      ),),
+                    ],
+                  ),
+                ),
+              ),
+              Expanded(
+                child: TabBarView(
+                    controller: _tabController,
+                    children: [
+                      SingleChildScrollView(
+                        child: Container(
+                          height: scrHeight * 0.7,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                child: GridView.builder(
+                                  shrinkWrap: true,
+                                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 3,
+                                    childAspectRatio: 0.85,
+                                    crossAxisSpacing: 10,
+                                    mainAxisSpacing: 10,
                                   ),
-                                ),
-                              )
-                            : InkWell(
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              ServiceSubcategoryPage(
-                                                serviceCategoryName:
-                                                    categories![index]
-                                                        ['serviceCategory'],
-                                                image: categories![index]
-                                                    ['image'],
-                                                serviceId:
-                                                    categories![index].id,
-                                              )));
-                                  // Navigator.push(
-                                  //     context,
-                                  //     MaterialPageRoute(
-                                  //         builder: (context) => ServiceDetailesPage(
-                                  //               category: categories![index]
-                                  //                   .serviceCategory!,
-                                  //             )));
-                                },
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      height: 70,
-                                      width: 120,
-                                      decoration: BoxDecoration(
-                                          color: Color(0xffF3F3F3),
-                                          borderRadius:
-                                              BorderRadius.circular(20)),
+                                  itemCount: categories!.length,
+                                  padding: EdgeInsets.only(
+                                      top: 25, bottom: 15, left: 20, right: 15),
+                                  itemBuilder: (BuildContext context, int index) {
+                                    return categories!.isEmpty
+                                        ? Container(
+                                      child: Center(
+                                        child: Text(
+                                          "No  Category",
+                                          style: TextStyle(
+                                              fontSize: 15,
+                                              fontFamily: 'Urbanist',
+                                              fontWeight: FontWeight.w600,
+                                              color: Colors.black),
+                                        ),
+                                      ),
+                                    )
+                                        : InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ServiceSubcategoryPage(
+                                                      serviceCategoryName:
+                                                      categories![index]
+                                                      ['serviceCategory'],
+                                                      image: categories![index]
+                                                      ['image'],
+                                                      serviceId:
+                                                      categories![index].id,
+                                                    )));
+                                        // Navigator.push(
+                                        //     context,
+                                        //     MaterialPageRoute(
+                                        //         builder: (context) => ServiceDetailesPage(
+                                        //               category: categories![index]
+                                        //                   .serviceCategory!,
+                                        //             )));
+                                      },
                                       child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
                                         children: [
-                                          SvgPicture.network(
-                                            categories![index]['image'],
-                                            height: 55,
-                                            width: 50,
+                                          Container(
+                                            height: 70,
+                                            width: 120,
+                                            decoration: BoxDecoration(
+                                                color: Color(0xffF3F3F3),
+                                                borderRadius:
+                                                BorderRadius.circular(20)),
+                                            child: Column(
+                                              mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                              children: [
+                                                SvgPicture.network(
+                                                  categories![index]['image'],
+                                                  height: 55,
+                                                  width: 50,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Container(
+                                            height: scrHeight * 0.04,
+                                            child: Center(
+                                              child: Text(
+                                                categories![index]['serviceCategory'],
+                                                style: TextStyle(
+                                                    fontSize: scrWidth * 0.029,
+                                                    color: Colors.black,
+                                                    fontFamily: 'Urbanist',
+                                                    fontWeight: FontWeight.w600),
+                                              ),
+                                            ),
                                           ),
                                         ],
                                       ),
-                                    ),
-                                    Container(
-                                      height: scrHeight * 0.04,
-                                      child: Center(
-                                        child: Text(
-                                          categories![index]['serviceCategory'],
-                                          style: TextStyle(
-                                              fontSize: scrWidth * 0.029,
-                                              color: Colors.black,
-                                              fontFamily: 'Urbanist',
-                                              fontWeight: FontWeight.w600),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+                                    );
+                                  },
                                 ),
-                              );
-                      },
-                    ),
-                  ),
-                  SizedBox(
-                    height: scrHeight * 0.05,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                        left: scrWidth * 0.045, right: scrWidth * 0.045),
-                    child: Text(
-                      "Sponsored Ads",
-                      style: TextStyle(
-                          fontSize: scrWidth * 0.046,
-                          color: Colors.black,
-                          fontFamily: 'Urbanist',
-                          fontWeight: FontWeight.w600),
-                    ),
-                  ),
-                  SizedBox(
-                    height: scrHeight * 0.01,
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(
-                        left: scrWidth * 0.045,
-                        right: scrWidth * 0.045,
-                        top: scrWidth * 0.025),
-                    height: scrHeight * .18,
-                    width: scrWidth * 1,
-                    child: ImageSlide(type: 'utilities'),
-                  ),
-                ],
-              ),
-            ),
-          ),
+                              ),
+                              SizedBox(
+                                height: scrHeight * 0.05,
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    left: scrWidth * 0.045, right: scrWidth * 0.045),
+                                child: Text(
+                                  "Sponsored Ads",
+                                  style: TextStyle(
+                                      fontSize: scrWidth * 0.046,
+                                      color: Colors.black,
+                                      fontFamily: 'Urbanist',
+                                      fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              SizedBox(
+                                height: scrHeight * 0.01,
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(
+                                    left: scrWidth * 0.045,
+                                    right: scrWidth * 0.045,
+                                    top: scrWidth * 0.025),
+                                height: scrHeight * .18,
+                                width: scrWidth * 1,
+                                child: ImageSlide(type: 'utilities'),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      MyServicesList(),
+
+
+                    ]
+                ),
+
+              )
+            ],
+          )
+
         ),
       ),
     );

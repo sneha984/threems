@@ -305,69 +305,76 @@ class _PersonalInfoPopUpState extends State<PersonalInfoPopUp> {
                 SizedBox(
                   height: 10,
                 ),
-                Container(
-                  width: scrWidth,
-                  height: textFormFieldHeight45,
-                  padding: EdgeInsets.symmetric(
-                    horizontal: scrWidth * 0.015,
-                    vertical: scrHeight * 0.002,
-                  ),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Color(0xffDADADA),
+                InkWell(
+                  // onTap: (){
+                  //   Navigator.push(context, MaterialPageRoute(
+                  //       builder: (context)=>PhoneNoChangePage(phoneNo: phoneController.text)));
+                  // },
+                  child: Container(
+                    width: scrWidth,
+                    height: textFormFieldHeight45,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: scrWidth * 0.015,
+                      vertical: scrHeight * 0.002,
                     ),
-                    color: textFormFieldFillColor,
-                    borderRadius: BorderRadius.circular(scrWidth * 0.026),
-                  ),
-                  child: TextFormField(
-                    // readOnly: true,
-                    keyboardType: TextInputType.number,
-                    controller: phoneController,
-                    focusNode: phoneFocus,
-                    cursorHeight: scrWidth * 0.055,
-                    cursorWidth: 1,
-                    cursorColor: Colors.black,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w600,
-                      fontSize: FontSize15,
-                      fontFamily: 'Urbanist',
-                    ),
-                    decoration: InputDecoration(
-                      suffixIcon: InkWell(
-                        onTap: (){
-                          // Navigator.push(context, MaterialPageRoute(
-                          //     builder: (context)=>PhoneNoChangePage(phoneNo: phoneController.text)));
-
-                        },
-                        child: Icon(
-                          Icons.edit,
-                          color: Colors.black,
-                        ),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Color(0xffDADADA),
                       ),
-                      labelText: 'Phone No',
-                      labelStyle: TextStyle(
-                        color: phoneFocus.hasFocus
-                            ? primarycolor
-                            : textFormUnFocusColor,
-                        fontWeight: FontWeight.w500,
+                      color: textFormFieldFillColor,
+                      borderRadius: BorderRadius.circular(scrWidth * 0.026),
+                    ),
+                    child: TextFormField(
+                      enabled: false,
+                      // readOnly: true,
+                      keyboardType: TextInputType.number,
+                      controller: phoneController,
+                      focusNode: phoneFocus,
+                      cursorHeight: scrWidth * 0.055,
+                      cursorWidth: 1,
+                      cursorColor: Colors.black,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w600,
                         fontSize: FontSize15,
                         fontFamily: 'Urbanist',
                       ),
-                      fillColor: textFormFieldFillColor,
-                      filled: true,
-                      contentPadding: EdgeInsets.only(
-                          left: scrWidth * 0.03,
-                          top: scrHeight * 0.006,
-                          bottom: scrWidth * 0.033),
-                      disabledBorder: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      errorBorder: InputBorder.none,
-                      border: InputBorder.none,
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                          color: primarycolor,
-                          width: 2,
+                      decoration: InputDecoration(
+                        suffixIcon: InkWell(
+                          onTap: (){
+                            // Navigator.push(context, MaterialPageRoute(
+                            //     builder: (context)=>PhoneNoChangePage(phoneNo: phoneController.text)));
+
+                          },
+                          child: Icon(
+                            Icons.edit,
+                            color: Colors.black,
+                          ),
+                        ),
+                        labelText: 'Phone No',
+                        labelStyle: TextStyle(
+                          color: phoneFocus.hasFocus
+                              ? primarycolor
+                              : textFormUnFocusColor,
+                          fontWeight: FontWeight.w500,
+                          fontSize: FontSize15,
+                          fontFamily: 'Urbanist',
+                        ),
+                        fillColor: textFormFieldFillColor,
+                        filled: true,
+                        contentPadding: EdgeInsets.only(
+                            left: scrWidth * 0.03,
+                            top: scrHeight * 0.006,
+                            bottom: scrWidth * 0.033),
+                        disabledBorder: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        errorBorder: InputBorder.none,
+                        border: InputBorder.none,
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: primarycolor,
+                            width: 2,
+                          ),
                         ),
                       ),
                     ),

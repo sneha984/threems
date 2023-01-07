@@ -7,6 +7,7 @@ import 'package:threems/Income/recentIncomes.dart';
 import 'package:threems/utils/themes.dart';
 
 import '../Authentication/root.dart';
+import '../IncomeExpenceReport/IncomeExpenseReportBydate.dart';
 import '../screens/splash_screen.dart';
 import 'addIncome/addnew_income.dart';
 class IncomeFirstPage extends StatefulWidget {
@@ -22,6 +23,9 @@ class _IncomeFirstPageState extends State<IncomeFirstPage> {
   var weekIncome=0.00;
   var totalIncome=0.00;
   var monthIncome=0.00;
+  DateTime? fromDate;
+
+  DateTime? toDate;
   getOneWeekandOneMonthIncome(){
     FirebaseFirestore.instance.collection('users').doc(currentuserid).collection('incomes').
     orderBy('date',descending: true).
@@ -62,7 +66,10 @@ class _IncomeFirstPageState extends State<IncomeFirstPage> {
   }
   getTotalIncome(){
     FirebaseFirestore.instance.collection('users').doc(currentuserid).collection('incomes').
-    snapshots().listen((event) {
+    where('date',isGreaterThanOrEqualTo:DateTime(fromDate!.year-1)).
+    where('date',isLessThanOrEqualTo:DateTime(toDate!.year,toDate!.month,toDate!.day,23,59,59)).
+    get().
+    then((event) {
 
       if(event.docs.isNotEmpty) {
         totalIncome=0.00;
@@ -100,6 +107,8 @@ class _IncomeFirstPageState extends State<IncomeFirstPage> {
   var icons;
 
   void initState() {
+    fromDate=DateTime(DateTime.now().year);
+    toDate=DateTime.now();
     getOneWeekandOneMonthIncome();
     getTotalIncome();
     getRecentIncomes();
@@ -146,11 +155,16 @@ class _IncomeFirstPageState extends State<IncomeFirstPage> {
             SizedBox(height: scrHeight*0.015,),
             Stack(
               children: [
-                Container(
-                  width: scrWidth*1,
-                  height: scrHeight*0.29,
-                  decoration: BoxDecoration(
-                      image: DecorationImage(image: AssetImage("assets/images/card desigbn.png"),fit: BoxFit.fill)
+                InkWell(
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>IncomeExpenseByDatePage()));
+                  },
+                  child: Container(
+                    width: scrWidth*1,
+                    height: scrHeight*0.29,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(image: AssetImage("assets/images/card desigbn.png"),fit: BoxFit.fill)
+                    ),
                   ),
                 ),
                 Positioned(

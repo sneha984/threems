@@ -1013,8 +1013,6 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                                         //     fontWeight: FontWeight.w500,
                                         //     color: Color(0xff8B8B8B)
                                         // ),),
-
-
                                       ],
                                     ),
                                     SizedBox(width: scrWidth*0.1,),

@@ -49,7 +49,9 @@ class _GetOtpPageState extends State<GetOtpPage> {
     await phoneAuth.verifyPhoneNumber(
       phoneNumber: '+91${phoneNumber.text}',
       verificationCompleted: (PhoneAuthCredential credential) async {
-        showSnackbar(context, 'OTP sent successfully.');
+        if(mounted) {
+          showSnackbar(context, 'OTP sent successfully.');
+        }
       },
       verificationFailed: (FirebaseAuthException e) {
         print(e.message);
@@ -67,9 +69,11 @@ class _GetOtpPageState extends State<GetOtpPage> {
                     )));
       },
       codeAutoRetrievalTimeout: (String verificationID) {
-        setState(() {
-          verificationId = verificationID;
-        });
+        if(mounted) {
+          setState(() {
+            verificationId = verificationID;
+          });
+        }
       },
       timeout: const Duration(seconds: 120),
     );

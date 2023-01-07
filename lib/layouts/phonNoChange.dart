@@ -130,6 +130,7 @@ class _PhoneNoChangePageState extends State<PhoneNoChangePage> {
                     focusNode: phoneFocus,
                     cursorHeight: scrWidth * 0.055,
                     cursorWidth: 1,
+
                     cursorColor: Colors.black,
                     style: TextStyle(
                       color: Colors.black,

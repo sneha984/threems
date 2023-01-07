@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../Authentication/root.dart';
 
 UserModel? currentuser;
-
+StreamSubscription? listenUserSub;
 class UserModel {
   String? userName;
   String? userEmail;
@@ -54,7 +54,7 @@ class UserModel {
   }
 }
 
-StreamSubscription? listenUserSub;
+
 getcurrentuser() {
   print('Here');
   print(currentuserid);
@@ -63,7 +63,9 @@ getcurrentuser() {
       .doc(currentuserid)
       .snapshots()
       .listen((event) {
-    currentuser = UserModel.fromJson(event.data()!);
+        if(event.exists) {
+          currentuser = UserModel.fromJson(event.data()!);
+        }
   });
 }
 

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -47,15 +48,44 @@ class _RootingpageState extends State<Rootingpage> {
     //   }
     // });
 
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+    FirebaseAuth.instance.authStateChanges().listen((User? user) async {
       if (user == null) {
         signedIn = false;
       } else {
+
         userdata = user;
         currentuserid = userdata.uid;
-        getcurrentuser();
+        print("root pageee");
+        print(user.phoneNumber);
+        try {
+          QuerySnapshot usrs = await FirebaseFirestore.instance
+              .collection('users')
+              .where('phone', whereIn: [
+            user.phoneNumber,
+            "+91${user.phoneNumber}",
+            "+91 ${user.phoneNumber}",
+            user.phoneNumber?.substring(3),
+         user.phoneNumber?.substring(4),
+          ])
+              .get();
+          if (usrs.docs.length > 0) {
+            currentuserid = usrs.docs[0].id;
+            while (usrs.docs[0].get('userEmail') == "") {
+              await Future.delayed(Duration(seconds: 1));
+            }
+            getcurrentuser();
+            signedIn = true;
+          } else {
+            print(currentuserid);
+            getcurrentuser();
+            signedIn = true;
+          }
+        }
+        catch(e){
+          getcurrentuser();
+          signedIn = true;
+        }
 
-        signedIn = true;
       }
 
       if (mounted) {
@@ -87,6 +117,7 @@ class _RootingpageState extends State<Rootingpage> {
     // signOut(context);
     getLoginStatus();
     getViewedData();
+
   }
 
   @override

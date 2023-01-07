@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pinput/pinput.dart';
 import 'package:threems/kuri/createkuri.dart';
+import 'package:threems/screens/charity/verification_details.dart';
 
 import '../Authentication/root.dart';
+import '../layouts/screen_layout.dart';
 import '../screens/splash_screen.dart';
 import '../utils/themes.dart';
 import 'detailspage.dart';
@@ -29,6 +31,21 @@ class _OtpPageState extends State<OtpPage> {
   final FirebaseAuth auth = FirebaseAuth.instance;
 
   TextEditingController otp = TextEditingController();
+  List phList=[];
+  // getPh(){
+  //   FirebaseFirestore.instance.collection('users').snapshots().listen((event) {
+  //     for(DocumentSnapshot doc in event.docs){
+  //       phList.add(doc.get('phone'));
+  //     }
+  //
+  //   });
+  // }
+  @override
+  void initState() {
+    // getPh();
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -107,19 +124,39 @@ class _OtpPageState extends State<OtpPage> {
             ),
             GestureDetector(
               onTap: () async {
+
                 PhoneAuthCredential credential = PhoneAuthProvider.credential(
                     verificationId: widget.verId, smsCode: otp.text);
                 await auth.signInWithCredential(credential).then((value) async {
-                  print('hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii');
                   print(value.user!.uid);
-
+                  // print('successs');
+                  // if(phList.contains (widget.number)){
+                  //
+                  //   showUploadMessage(context, 'Phone number already exist');
+                  // }else{
+                  //   FirebaseFirestore.instance.collection('users')
+                  //       .doc(currentuserid)
+                  //       .update(
+                  //       {
+                  //         'phone':widget.number,
+                  //       });
+                  //   showUploadMessage(context, 'Phone number updated successfully');
+                  //
+                  //   Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(
+                  //           builder: (context) => ScreenLayout(
+                  //             // id: value.user!.uid,
+                  //             // phone: widget.number,
+                  //           )));
+                  // }
                   Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => DetailsPage(
-                                id: value.user!.uid,
-                                phone: widget.number,
-                              )));
+                            id: value.user!.uid,
+                            phone: widget.number,
+                          )));
                   // if (currentuserid == '') {
                   //
                   // }
@@ -140,7 +177,8 @@ class _OtpPageState extends State<OtpPage> {
                   //     print(e.toString());
                   //   }
                   // }
-                }).catchError((e) {
+                }
+                ).catchError((e) {
                   print(e);
                   showSnackbar(context, 'Wrong OTP!!');
                 });

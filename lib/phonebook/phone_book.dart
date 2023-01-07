@@ -199,7 +199,7 @@ class _PhoneBookPageState extends State<PhoneBookPage> {
                                       radius: 15,
                                       backgroundColor: Colors.grey,
                                       backgroundImage: NetworkImage(
-                                          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFzJQ6mTB2vG53lTC7SR6w9FBSdbyK6SQoOg&usqp=CAU")
+                                          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFzJQ6mTB2vG53lTC7SR6w9FBSdbyK6SQoOg&usqp=CAU",)
                                       // MemoryImage(totalContactsSearch[index].avatar!),
                                       ),
                                 ),

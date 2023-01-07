@@ -25,8 +25,9 @@ class _CheckPhoneNumberState extends State<CheckPhoneNumber> {
         .listen((event) {
       if (event.exists) {
         loading = false;
+        phone = event['phone'];
       }
-      phone = event['phone'];
+
 
       print(phone);
       if (mounted) {

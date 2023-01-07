@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import '../Expenses/Expense_first_page.dart';
 import '../Expenses/Report/ExpenseReportByYear.dart';
 import '../IncomeExpenceReport/IncomeExpenceReportByYear.dart';
+import '../IncomeExpenceReport/IncomeExpenseReportBydate.dart';
 import '../screens/splash_screen.dart';
 import '../utils/themes.dart';
 import 'Report/IncomeReportByYear.dart';
@@ -57,7 +58,7 @@ class _ExpenseIncomeTabPageState extends State<ExpenseIncomeTabPage>with TickerP
             padding:  const EdgeInsets.only(right: 18.0),
             child: InkWell(
               onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>IncomeExpenseYearReport()));
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>IncomeExpenseByDatePage()));
               },
               child: Container(
                 child: SvgPicture.asset(

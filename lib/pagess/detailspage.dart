@@ -24,20 +24,37 @@ class _DetailsPageState extends State<DetailsPage> {
   final TextEditingController _namecontroller = TextEditingController();
   final TextEditingController _emailcontroller = TextEditingController();
   bool loading = true;
+  String userId="";
+  bool blankUser=false;
   getUserData() async {
-    bool logged = await FirebaseFirestore.instance
+    QuerySnapshot usrs = await FirebaseFirestore.instance
         .collection('users')
-        .where('phone', isEqualTo: widget.phone)
-        .snapshots()
-        .isEmpty;
-    if (!logged) {
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Rootingpage(),
-          ),
-          (route) => false);
+        .where('phone', whereIn:[widget.phone,"+91${widget.phone}","+91 ${widget.phone}"])
+        .get();
+
+    if (usrs.docs.length>0) {
+      print("hereeeeee");
+      print(widget.phone);
+      if(usrs.docs[0].get('userEmail')!="") {
+        print("rooting");
+        print(usrs.docs[0].get('userEmail'));
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Rootingpage(),
+            ),
+                (route) => false);
+      }
+      else{
+        print("blankUser");
+        print(usrs.docs[0].id);
+        userId =usrs.docs[0].id;
+        blankUser=true;
+        loading = false;
+        setState(() {});
+      }
     } else {
+      print("elseeeeeeeee");
       loading = false;
       setState(() {});
     }
@@ -213,24 +230,50 @@ class _DetailsPageState extends State<DetailsPage> {
                     ),
                     GestureDetector(
                       onTap: () {
+                        print("click");
+                        print(userId);
+                        print(blankUser);
                         if (_loginkey.currentState!.validate()) {
                           if (_namecontroller.text != '' &&
                               _emailcontroller.text != '') {
-                            FirebaseFirestore.instance
-                                .collection('users')
-                                .doc(widget.id)
-                                .set({
-                              "userId": widget.id,
-                              "userName": _namecontroller.text,
-                              "userEmail": _emailcontroller.text,
-                              "userImage": '',
-                              "phone": widget.phone,
-                            }).then((value) => Navigator.pushAndRemoveUntil(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => Rootingpage(),
-                                    ),
-                                    (route) => false));
+                            if(userId!="" && blankUser){
+                              FirebaseFirestore.instance
+                                  .collection('users')
+                                  .doc(userId)
+                                  .update({
+
+                                "userName": _namecontroller.text,
+                                "userEmail": _emailcontroller.text,
+                                "userImage": '',
+
+                              }).then((value) =>
+                                  Navigator.pushAndRemoveUntil(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => Rootingpage(),
+                                      ),
+                                          (route) => false));
+                            }
+                            else {
+                              FirebaseFirestore.instance
+                                  .collection('users')
+                                  .doc(widget.id)
+                                  .set({
+                                "userId": widget.id,
+                                "userName": _namecontroller.text,
+                                "userEmail": _emailcontroller.text,
+                                "userImage": '',
+                                "phone": widget.phone,
+                                "totalExpense": 0,
+                                "totalIncome": 0,
+                              }).then((value) =>
+                                  Navigator.pushAndRemoveUntil(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => Rootingpage(),
+                                      ),
+                                          (route) => false));
+                            }
                             // Navigator.push(context,
                             // MaterialPageRoute(builder: (context) => LoginPage()));
                           } else {

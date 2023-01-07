@@ -190,12 +190,12 @@ class _ScreenLayoutState extends State<ScreenLayout> {
                     ),
                   ),
                   title: Text('Diary', style: TextStyle(fontSize: 18)),
-                  onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => NotesPage()));
-
-                    // Here you can give your route to navigate
-                  },
+                  // onTap: () {
+                  //   Navigator.push(context,
+                  //       MaterialPageRoute(builder: (context) => NotesPage()));
+                  //
+                  //   // Here you can give your route to navigate
+                  // },
                 ),
                 Divider(height: 3.0),
                 ListTile(

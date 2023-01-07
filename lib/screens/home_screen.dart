@@ -1406,16 +1406,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   getContacts() async {
     List<Contact> _contacts = await ContactsService.getContacts();
-
-    setState(() {
-      contacts = _contacts;
-
-      print('================ContactLength=================');
-      print(contacts.length);
-    });
+    contacts = _contacts;
+   if(mounted){
+     setState(() {
+     });
+   }
   }
 }
-
 Future<bool?> confirmQuitDialog(BuildContext context) => showDialog<bool>(
     context: context,
     builder: (context) => AlertDialog(

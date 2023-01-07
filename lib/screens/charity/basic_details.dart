@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_dropdown/cool_dropdown.dart';
-import 'package:email_validator/email_validator.dart';
+// import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -501,7 +501,17 @@ class _BasicDetailsState extends State<BasicDetails> {
                       borderRadius: BorderRadius.circular(scrWidth * 0.026),
                     ),
                     child: TextFormField(
-                      validator: (value) => EmailValidator.validate(value) ? null : "Please enter a valid email",
+                      validator: (email) {
+                        if (email!.isEmpty) {
+                          return "Enter your email";
+                        } else if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w]{2,4}')
+                            .hasMatch(email!)) {
+                          return "Email not valid";
+                        } else {
+                          return null;
+                        }
+                      },
+                      // validator: (value) => EmailValidator.validate(value) ? null : "Please enter a valid email",
                       controller: emailcontroller,
                       keyboardType: TextInputType.emailAddress,
                       focusNode: emailIdFocus,

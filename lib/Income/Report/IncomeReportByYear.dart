@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 
 import '../../Authentication/root.dart';
 import '../../Expenses/Report/ExpenseReportByYear.dart';
+import '../../IncomeExpenceReport/IncomeExpenseReportBydate.dart';
 import '../../customPackage/date_picker.dart';
 import '../../screens/splash_screen.dart';
 import '../../utils/themes.dart';
@@ -851,9 +852,7 @@ class _IncomeReportPageState extends State<IncomeReportPage> {
   }
 
   class _SelectDatePageState extends State<SelectDatePage> {
-    DateTime? fromDate;
 
-    DateTime? toDate;
     _FromDate(BuildContext context) async {
       final DateTime? datePicked = await showDatePickerCustom(
           cancelText: 'Cancel',
@@ -1003,12 +1002,11 @@ class _IncomeReportPageState extends State<IncomeReportPage> {
                     ),
                     InkWell(
                       onTap: (){
-                        Navigator.pop(context);
-                        // Navigator.of(context).pop({"fromDate":fromDate,"toDate":toDate});
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>IncomeReportByDate(
-                            fromDate:fromDate,
-                            toDate:toDate
-                        )));
+                        Navigator.of(context).pop({"fromDate":fromDate,"toDate":toDate});
+                        // Navigator.push(context, MaterialPageRoute(builder: (context)=>IncomeReportByDate(
+                        //     fromDate:fromDate,
+                        //     toDate:toDate
+                        // )));
                       },
                       child: Center(
                         child: Container(

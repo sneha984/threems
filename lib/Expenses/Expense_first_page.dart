@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:threems/Authentication/root.dart';
 import 'package:threems/Expenses/recentexpenses.dart';
 
+import '../IncomeExpenceReport/IncomeExpenseReportBydate.dart';
 import '../screens/charity/verification_details.dart';
 import '../screens/splash_screen.dart';
 import '../utils/themes.dart';
@@ -29,6 +30,21 @@ class _AddExpensesPageState extends State<AddExpensesPage> {
   var weekexpense=0.00;
   var totalExp=0.00;
   var monthExp=0.00;
+  DateTime? fromDate;
+
+  DateTime? toDate;
+  // Update(){
+  //   FirebaseFirestore.instance.collection('users').snapshots().listen((event) {
+  //     for(DocumentSnapshot doc in event.docs){
+  //       FirebaseFirestore.instance.collection('users').doc(doc.id).update({
+  //         'totalIncome':0,
+  //         'totalExpense':0,
+  //
+  //       });
+  //     }
+  //
+  //   });
+  // }
   getRecentExpenses(){
     FirebaseFirestore.instance.collection('users').doc(currentuserid).collection('expense').
     orderBy('date',descending: true).limit(5).snapshots().listen((event) {
@@ -85,16 +101,21 @@ class _AddExpensesPageState extends State<AddExpensesPage> {
     });
   }
   getTotalExpense(){
-    FirebaseFirestore.instance.collection('users').doc(currentuserid).collection('expense').
-    snapshots().listen((event) {
+    FirebaseFirestore.instance.collection('users').doc(currentuserid).
+    // collection('expense').
+    // where('date',isGreaterThanOrEqualTo:DateTime(fromDate!.year-1)).
+    // where('date',isLessThanOrEqualTo:DateTime(toDate!.year,toDate!.month,toDate!.day,23,59,59)).
+    get().
+       then((event) {
+      totalExp=event.get('totalExpense');
 
-      if(event.docs.isNotEmpty) {
-        totalExp=0.00;
-        for (DocumentSnapshot data in event.docs) {
-          totalExp+=data['amount'];
+      // if(event.docs.isNotEmpty) {
+
+        // for (DocumentSnapshot data in event.docs) {
+        //   totalExp+=data['amount'];
           // expenseList.add(data);
-        }
-      }
+
+      // }
       if(mounted){
         setState(() {
 
@@ -102,11 +123,13 @@ class _AddExpensesPageState extends State<AddExpensesPage> {
       }
     });
   }
-
   Icon? _icon;
   var icons;
 
   void initState() {
+
+    fromDate=DateTime(DateTime.now().year);
+    toDate=DateTime.now();
     getTotalExpense();
     getRecentExpenses();
     getOneWeekandOneMonthExpense();
@@ -159,11 +182,16 @@ class _AddExpensesPageState extends State<AddExpensesPage> {
             SizedBox(height: scrHeight*0.015,),
             Stack(
               children: [
-                Container(
-                  width: scrWidth*1,
-                  height: scrHeight*0.29,
-                  decoration: BoxDecoration(
-                      image: DecorationImage(image: AssetImage("assets/images/card desigbn.png"),fit: BoxFit.fill)
+                InkWell(
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>IncomeExpenseByDatePage()));
+                  },
+                  child: Container(
+                    width: scrWidth*1,
+                    height: scrHeight*0.29,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(image: AssetImage("assets/images/card desigbn.png"),fit: BoxFit.fill)
+                    ),
                   ),
                 ),
                 Positioned(

@@ -7,6 +7,7 @@ import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:threems/screens/Utilities/utilities.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../model/servicesModel.dart';
 import '../../utils/themes.dart';
@@ -16,7 +17,6 @@ import '../splash_screen.dart';
 import 'AddYouService.dart';
 import 'detailesSinglePage.dart';
 Position? position;
-bool ?editService;
 StreamController controller = StreamController<int>.broadcast();
 class ServiceDetailesPage extends StatefulWidget {
   final String subCategoryName;
@@ -55,7 +55,6 @@ class _ServiceDetailesPageState extends State<ServiceDetailesPage> {
   // }
   int s1=0;
   getService() {
-    print("details lat and long");
     print(lat);
     print(long);
     center = geo.point(latitude: lat!, longitude: long!);

@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:another_stepper/dto/stepper_data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconpicker/Serialization/iconDataSerialization.dart';
 import 'package:flutter_svg/svg.dart';
@@ -13,6 +14,7 @@ import 'package:threems/screens/splash_screen.dart';
 import 'package:another_stepper/another_stepper.dart';
 import 'package:threems/simple.dart';
 
+import '../../Income/addIncome/addnew_income.dart';
 import '../../customPackage/date_picker.dart';
 import '../../screens/charity/verification_details.dart';
 import '../../utils/themes.dart';
@@ -29,6 +31,9 @@ class NewExpensePage extends StatefulWidget {
 }
 
 class _NewExpensePageState extends State<NewExpensePage> {
+  bool switchValue=false;
+  String phNumber = '';
+  String contactName = '';
   String category = '';
   String merchantName = '';
   Icon? _icon;
@@ -68,6 +73,51 @@ class _NewExpensePageState extends State<NewExpensePage> {
   TextEditingController amount = TextEditingController();
   TextEditingController merchant = TextEditingController();
   TextEditingController description = TextEditingController();
+  TextEditingController userName = TextEditingController();
+  String selectedUserId='';
+  getUserData() async {
+    QuerySnapshot event= await FirebaseFirestore.instance.collection('users').where('phone',whereIn: [phNumber,"+91$phNumber","+91 $phNumber"]).
+    get();
+
+    if(event.docs.isNotEmpty) {
+      for (DocumentSnapshot data in event.docs) {
+        selectedUserId=data['userId'];
+        return;
+
+      }
+    }else{
+
+      await  FirebaseFirestore.instance.collection('users').add({
+        // "userId": selectedUserId,
+        "userName": contactName,
+        "userEmail": '',
+        "userImage": '',
+        "phone": phNumber,
+        "dateTime": FieldValue.serverTimestamp(),
+
+      }).then((value) async {
+        selectedUserId=value.id;
+        value.update({
+          'userId':value.id
+
+        });
+        return;
+
+      });
+      await Future.delayed(Duration(seconds: 1));
+      return;
+
+
+    }
+    // if(mounted){
+    //   setState(() {
+    //
+    //   });
+    // }
+
+
+  }
+
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? datePicked = await showDatePickerCustom(
         cancelText: 'Cancel',
@@ -175,14 +225,16 @@ class _NewExpensePageState extends State<NewExpensePage> {
                     Text(
                       "Add new expense",
                       style: TextStyle(
-                          fontSize: 19,
+                          fontSize: 18,
                           fontFamily: 'Urbanist',
                           fontWeight: FontWeight.w600,
                           color: Colors.white),
                     ),
+
                   ],
                 ),
               ),
+
             ),
           ),
         ),
@@ -562,199 +614,457 @@ class _NewExpensePageState extends State<NewExpensePage> {
                               ),
                             ),
                           ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.only(left: 22.0, right: 18),
-                            child: InkWell(
-                              onTap: () {
-                                showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return Container(
-                                        height: 200,
-                                        child: AlertDialog(
-                                          title: Text(
-                                            'Add Merchant',
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                fontFamily: 'urbanist'),
-                                          ),
-                                          // insetPadding: EdgeInsets.only(bottom: scrWidth*0.6,top:  scrWidth*0.6,right:  scrWidth*0.09,left:  scrWidth*0.09),
-                                          // shape: RoundedRectangleBorder(
-                                          //     borderRadius: BorderRadius.all(Radius.circular(45.0))),
-                                          content: Container(
-                                            width: scrWidth * 1,
-                                            height: scrWidth * 0.5,
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(15)),
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceEvenly,
-                                              children: [
-                                                Container(
-                                                  width: scrWidth * 1,
-                                                  height: scrWidth * 0.12,
-                                                  decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              15),
-                                                      border: Border.all(
-                                                          color: primarycolor)),
-                                                  child: TextFormField(
-                                                    controller: merchant,
-                                                    cursorColor: Colors.black,
-                                                    style: TextStyle(
-                                                      color: primarycolor,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      fontSize: 15,
-                                                      fontFamily: 'urbanist',
-                                                    ),
-                                                    keyboardType:
-                                                        TextInputType.text,
-                                                    decoration: InputDecoration(
-                                                      hintText:
-                                                          'Enter merchant name',
-                                                      hintStyle: TextStyle(
-                                                        color:
-                                                            textFormUnFocusColor,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        fontSize: 15,
-                                                        fontFamily: 'Urbanist',
-                                                      ),
-                                                      fillColor:
-                                                          textFormFieldFillColor,
-                                                      filled: true,
-                                                      disabledBorder:
-                                                          InputBorder.none,
-                                                      enabledBorder:
-                                                          OutlineInputBorder(
-                                                              borderSide:
-                                                                  BorderSide(
-                                                                      color:
-                                                                          primarycolor,
-                                                                      width:
-                                                                          1.0),
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          15)),
-                                                      errorBorder:
-                                                          InputBorder.none,
-                                                      border: InputBorder.none,
-
-                                                      focusedBorder:
-                                                          UnderlineInputBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(15),
-                                                        borderSide: BorderSide(
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              switchValue==false? Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 22.0, right: 18),
+                                child: InkWell(
+                                  onTap: () {
+                                    showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return Container(
+                                            height: 200,
+                                            child: AlertDialog(
+                                              title: Text(
+                                                'Add Merchant',
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    fontFamily: 'urbanist'),
+                                              ),
+                                              // insetPadding: EdgeInsets.only(bottom: scrWidth*0.6,top:  scrWidth*0.6,right:  scrWidth*0.09,left:  scrWidth*0.09),
+                                              // shape: RoundedRectangleBorder(
+                                              //     borderRadius: BorderRadius.all(Radius.circular(45.0))),
+                                              content: Container(
+                                                width: scrWidth * 1,
+                                                height: scrWidth * 0.5,
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(15)),
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.spaceEvenly,
+                                                  children: [
+                                                    Container(
+                                                      width: scrWidth * 1,
+                                                      height: scrWidth * 0.12,
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                  15),
+                                                          border: Border.all(
+                                                              color: primarycolor)),
+                                                      child: TextFormField(
+                                                        controller: merchant,
+                                                        cursorColor: Colors.black,
+                                                        style: TextStyle(
                                                           color: primarycolor,
-                                                          width: 2,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          fontSize: 15,
+                                                          fontFamily: 'urbanist',
+                                                        ),
+                                                        keyboardType:
+                                                            TextInputType.text,
+                                                        decoration: InputDecoration(
+                                                          hintText:
+                                                              'Enter merchant name',
+                                                          hintStyle: TextStyle(
+                                                            color:
+                                                                textFormUnFocusColor,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontSize: 15,
+                                                            fontFamily: 'Urbanist',
+                                                          ),
+                                                          fillColor:
+                                                              textFormFieldFillColor,
+                                                          filled: true,
+                                                          disabledBorder:
+                                                              InputBorder.none,
+                                                          enabledBorder:
+                                                              OutlineInputBorder(
+                                                                  borderSide:
+                                                                      BorderSide(
+                                                                          color:
+                                                                              primarycolor,
+                                                                          width:
+                                                                              1.0),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              15)),
+                                                          errorBorder:
+                                                              InputBorder.none,
+                                                          border: InputBorder.none,
+
+                                                          focusedBorder:
+                                                              UnderlineInputBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(15),
+                                                            borderSide: BorderSide(
+                                                              color: primarycolor,
+                                                              width: 2,
+                                                            ),
+                                                          ),
+
+                                                          //
+                                                          // border: OutlineInputBorder(),
+                                                          // focusedBorder: OutlineInputBorder(
+                                                          //     borderSide: BorderSide(color: Color(0xff034a82),width: 2)
+                                                          // ),
                                                         ),
                                                       ),
-
-                                                      //
-                                                      // border: OutlineInputBorder(),
-                                                      // focusedBorder: OutlineInputBorder(
-                                                      //     borderSide: BorderSide(color: Color(0xff034a82),width: 2)
-                                                      // ),
                                                     ),
-                                                  ),
-                                                ),
-                                                InkWell(
-                                                  onTap: () {
-                                                    merchantName =
-                                                        merchant!.text;
-                                                    setState(() {});
-                                                    Navigator.pop(context);
-                                                  },
-                                                  child: Container(
-                                                    width: scrWidth * 0.3,
-                                                    height: scrWidth * 0.12,
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              15),
-                                                      color: primarycolor,
-                                                    ),
-                                                    child: Center(
-                                                      child: Text(
-                                                        " Ok",
-                                                        style: TextStyle(
-                                                            fontSize:
-                                                                scrWidth * 0.05,
-                                                            color: Colors.white,
-                                                            fontFamily:
-                                                                'Urbanist',
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w600),
+                                                    InkWell(
+                                                      onTap: () {
+                                                        merchantName =
+                                                            merchant!.text;
+                                                        setState(() {});
+                                                        Navigator.pop(context);
+                                                      },
+                                                      child: Container(
+                                                        width: scrWidth * 0.3,
+                                                        height: scrWidth * 0.12,
+                                                        decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                  15),
+                                                          color: primarycolor,
+                                                        ),
+                                                        child: Center(
+                                                          child: Text(
+                                                            " Ok",
+                                                            style: TextStyle(
+                                                                fontSize:
+                                                                    scrWidth * 0.05,
+                                                                color: Colors.white,
+                                                                fontFamily:
+                                                                    'Urbanist',
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600),
+                                                          ),
+                                                        ),
                                                       ),
                                                     ),
-                                                  ),
+                                                  ],
                                                 ),
-                                              ],
+                                              ),
+                                              // actions: [
+                                              //   TextButton(onPressed: (){
+                                              //     Navigator.pop(context);
+                                              //     merchantName=merchant!.text;
+                                              //     setState(() {
+                                              //
+                                              //     });
+                                              //   },
+                                              //       child: const Text('Ok')),
+                                              // ],
                                             ),
-                                          ),
-                                          // actions: [
-                                          //   TextButton(onPressed: (){
-                                          //     Navigator.pop(context);
-                                          //     merchantName=merchant!.text;
-                                          //     setState(() {
-                                          //
-                                          //     });
-                                          //   },
-                                          //       child: const Text('Ok')),
-                                          // ],
+                                          );
+                                        });
+                                  },
+                                  child: Container(
+                                    child: Row(
+                                      children: [
+                                        SizedBox(
+                                          width: 15,
                                         ),
-                                      );
-                                    });
-                              },
-                              child: Container(
+                                        CircleAvatar(
+                                          radius: 25,
+                                          backgroundColor: textFormFieldFillColor,
+                                          child: SvgPicture.asset(
+                                            'assets/icons/merchant.svg',
+                                            width: scrWidth * 0.05,
+                                            height: scrHeight * 0.03,
+                                            fit: BoxFit.contain,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 15,
+                                        ),
+                                        merchantName == ''
+                                            ? Text(
+                                                'Merchant',
+                                                style: TextStyle(
+                                                  fontSize: 17,
+                                                  fontFamily: 'Urbanist',
+                                                  fontWeight: FontWeight.w600,
+                                                  color: Colors.grey,
+                                                ),
+                                              )
+                                            : Text(
+                                                merchantName.toString(),
+                                                style: TextStyle(
+                                                  fontSize: 17,
+                                                  fontFamily: 'Urbanist',
+                                                  fontWeight: FontWeight.w600,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ): Padding(
+                                padding:
+                                const EdgeInsets.only(left: 22.0, right: 18),
+                                child: InkWell(
+                                  onTap: () async {
+                                    await Navigator.push(context, MaterialPageRoute(builder: (context)=>SelectUserWidget(
+                                      contactName:contactName??'',
+                                      phNumber:phNumber??'',
+                                    )));
+                                    if(dataIncome!=null){
+                                      contactName=dataIncome['contactName'];
+                                      phNumber=dataIncome['phNumber'];
+                                      setState(() {
+
+                                      });
+                                    }
+                                    // showDialog(
+                                    //     context: context,
+                                    //     builder: (BuildContext context) {
+                                    //       return  SelectUserWidget(
+                                    //
+                                    //       );
+                                    //       //   Container(
+                                    //       //   height: 200,
+                                    //       //   child: AlertDialog(
+                                    //       //     title: Text(
+                                    //       //       'Add User',
+                                    //       //       style: TextStyle(
+                                    //       //           fontSize: 15,
+                                    //       //           fontFamily: 'urbanist'),
+                                    //       //     ),
+                                    //       //     // insetPadding: EdgeInsets.only(bottom: scrWidth*0.6,top:  scrWidth*0.6,right:  scrWidth*0.09,left:  scrWidth*0.09),
+                                    //       //     // shape: RoundedRectangleBorder(
+                                    //       //     //     borderRadius: BorderRadius.all(Radius.circular(45.0))),
+                                    //       //     content: Container(
+                                    //       //       width: scrWidth * 1,
+                                    //       //       height: scrWidth * 0.5,
+                                    //       //       decoration: BoxDecoration(
+                                    //       //           borderRadius:
+                                    //       //           BorderRadius.circular(15)),
+                                    //       //       child: Column(
+                                    //       //         mainAxisAlignment:
+                                    //       //         MainAxisAlignment.spaceEvenly,
+                                    //       //         children: [
+                                    //       //           Container(
+                                    //       //             width: scrWidth * 1,
+                                    //       //             height: scrWidth * 0.12,
+                                    //       //             decoration: BoxDecoration(
+                                    //       //                 borderRadius:
+                                    //       //                 BorderRadius.circular(
+                                    //       //                     15),
+                                    //       //                 border: Border.all(
+                                    //       //                     color: primarycolor)),
+                                    //       //             child: TextFormField(
+                                    //       //               onChanged: (txt){
+                                    //       //                 totalContactsSearch = [];
+                                    //       //                 if (merchant.text == '') {
+                                    //       //                   totalContactsSearch.addAll(totalContacts);
+                                    //       //                 } else {
+                                    //       //                   searchContacts(merchant.text);
+                                    //       //                 }
+                                    //       //               },
+                                    //       //
+                                    //       //               controller: merchant,
+                                    //       //               cursorColor: Colors.black,
+                                    //       //               style: TextStyle(
+                                    //       //                 color: primarycolor,
+                                    //       //                 fontWeight:
+                                    //       //                 FontWeight.w600,
+                                    //       //                 fontSize: 15,
+                                    //       //                 fontFamily: 'urbanist',
+                                    //       //               ),
+                                    //       //               keyboardType:
+                                    //       //               TextInputType.text,
+                                    //       //               decoration: InputDecoration(
+                                    //       //                 hintText:
+                                    //       //                 'Enter User name',
+                                    //       //                 hintStyle: TextStyle(
+                                    //       //                   color:
+                                    //       //                   textFormUnFocusColor,
+                                    //       //                   fontWeight:
+                                    //       //                   FontWeight.w500,
+                                    //       //                   fontSize: 15,
+                                    //       //                   fontFamily: 'Urbanist',
+                                    //       //                 ),
+                                    //       //                 fillColor:
+                                    //       //                 textFormFieldFillColor,
+                                    //       //                 filled: true,
+                                    //       //                 disabledBorder:
+                                    //       //                 InputBorder.none,
+                                    //       //                 enabledBorder:
+                                    //       //                 OutlineInputBorder(
+                                    //       //                     borderSide:
+                                    //       //                     BorderSide(
+                                    //       //                         color:
+                                    //       //                         primarycolor,
+                                    //       //                         width:
+                                    //       //                         1.0),
+                                    //       //                     borderRadius:
+                                    //       //                     BorderRadius
+                                    //       //                         .circular(
+                                    //       //                         15)),
+                                    //       //                 errorBorder:
+                                    //       //                 InputBorder.none,
+                                    //       //                 border: InputBorder.none,
+                                    //       //
+                                    //       //                 focusedBorder:
+                                    //       //                 UnderlineInputBorder(
+                                    //       //                   borderRadius:
+                                    //       //                   BorderRadius
+                                    //       //                       .circular(15),
+                                    //       //                   borderSide: BorderSide(
+                                    //       //                     color: primarycolor,
+                                    //       //                     width: 2,
+                                    //       //                   ),
+                                    //       //                 ),
+                                    //       //
+                                    //       //                 //
+                                    //       //                 // border: OutlineInputBorder(),
+                                    //       //                 // focusedBorder: OutlineInputBorder(
+                                    //       //                 //     borderSide: BorderSide(color: Color(0xff034a82),width: 2)
+                                    //       //                 // ),
+                                    //       //               ),
+                                    //       //             ),
+                                    //       //           ),
+                                    //       //           InkWell(
+                                    //       //             onTap: () {
+                                    //       //               merchantName =
+                                    //       //                   merchant!.text;
+                                    //       //               setState(() {});
+                                    //       //               Navigator.pop(context);
+                                    //       //             },
+                                    //       //             child: Container(
+                                    //       //               width: scrWidth * 0.3,
+                                    //       //               height: scrWidth * 0.12,
+                                    //       //               decoration: BoxDecoration(
+                                    //       //                 borderRadius:
+                                    //       //                 BorderRadius.circular(
+                                    //       //                     15),
+                                    //       //                 color: primarycolor,
+                                    //       //               ),
+                                    //       //               child: Center(
+                                    //       //                 child: Text(
+                                    //       //                   " Ok",
+                                    //       //                   style: TextStyle(
+                                    //       //                       fontSize:
+                                    //       //                       scrWidth * 0.05,
+                                    //       //                       color: Colors.white,
+                                    //       //                       fontFamily:
+                                    //       //                       'Urbanist',
+                                    //       //                       fontWeight:
+                                    //       //                       FontWeight
+                                    //       //                           .w600),
+                                    //       //                 ),
+                                    //       //               ),
+                                    //       //             ),
+                                    //       //           ),
+                                    //       //         ],
+                                    //       //       ),
+                                    //       //     ),
+                                    //       //     // actions: [
+                                    //       //     //   TextButton(onPressed: (){
+                                    //       //     //     Navigator.pop(context);
+                                    //       //     //     merchantName=merchant!.text;
+                                    //       //     //     setState(() {
+                                    //       //     //
+                                    //       //     //     });
+                                    //       //     //   },
+                                    //       //     //       child: const Text('Ok')),
+                                    //       //     // ],
+                                    //       //   ),
+                                    //       // );
+                                    //     });
+                                  },
+                                  child: Container(
+                                    child: Row(
+                                      children: [
+                                        SizedBox(
+                                          width: 15,
+                                        ),
+                                        CircleAvatar(
+                                          radius: 25,
+                                          backgroundColor: textFormFieldFillColor,
+                                          child: SvgPicture.asset(
+                                            'assets/images/profilepic.svg',
+                                            color: primarycolor,
+                                            width: scrWidth * 0.05,
+                                            height: scrHeight * 0.03,
+                                            fit: BoxFit.contain,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 15,
+                                        ),
+
+                                        Text(
+                                          contactName==''?
+                                          'User' :contactName.toString(),
+                                          style: TextStyle(
+                                            fontSize: 17,
+                                            fontFamily: 'Urbanist',
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.grey,
+                                          ),
+                                        )
+
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+
+                              Padding(
+                                padding:  EdgeInsets.only(right: 11,),
                                 child: Row(
                                   children: [
-                                    SizedBox(
-                                      width: 15,
+                                    // ToggleSwitch(
+                                    //   changeOnTap:true,
+                                    //   // minWidth: scrWidth*0.15,
+                                    //   // minHeight:  scrWidth*0.07,
+                                    //   cornerRadius: 20.0,
+                                    //   activeBgColors: [[Colors.green[800]!], [Colors.green[800]!]],
+                                    //   activeFgColor: Colors.white,
+                                    //   inactiveBgColor: Colors.grey,
+                                    //   inactiveFgColor: Colors.white,
+                                    //   initialLabelIndex: 0,
+                                    //   totalSwitches: 2,
+                                    //   labels: [ 'Merchant','User'],
+                                    //   radiusStyle: true,
+                                    //   onToggle: (index) {
+                                    //
+                                    //      switchValue=!switchValue;
+                                    //      print(switchValue);
+                                    //
+                                    //
+                                    //                                 },
+                                    // ),
+                                    switchValue==false?Text('Merchant',style: GoogleFonts.urbanist(),):
+                                    Text('User',style: GoogleFonts.urbanist(),),
+                                    CupertinoSwitch(
+                                      trackColor: Colors.green,
+                                      thumbColor: Colors.white,
+                                      activeColor: Colors.green,
+                                      value: switchValue,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          switchValue = value;
+
+                                        });
+                                      },
                                     ),
-                                    CircleAvatar(
-                                      radius: 25,
-                                      backgroundColor: textFormFieldFillColor,
-                                      child: SvgPicture.asset(
-                                        'assets/icons/merchant.svg',
-                                        width: scrWidth * 0.05,
-                                        height: scrHeight * 0.03,
-                                        fit: BoxFit.contain,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 15,
-                                    ),
-                                    merchantName == ''
-                                        ? Text(
-                                            'Merchant',
-                                            style: TextStyle(
-                                              fontSize: 17,
-                                              fontFamily: 'Urbanist',
-                                              fontWeight: FontWeight.w600,
-                                              color: Colors.grey,
-                                            ),
-                                          )
-                                        : Text(
-                                            merchantName.toString(),
-                                            style: TextStyle(
-                                              fontSize: 17,
-                                              fontFamily: 'Urbanist',
-                                              fontWeight: FontWeight.w600,
-                                              color: Colors.black,
-                                            ),
-                                          ),
                                   ],
                                 ),
                               ),
-                            ),
+                            ],
                           ),
                           Padding(
                             padding: const EdgeInsets.only(
@@ -1030,7 +1340,7 @@ class _NewExpensePageState extends State<NewExpensePage> {
 
         floatingActionButton: Padding(
           padding: EdgeInsets.only(bottom: 2, right: scrWidth * 0.07),
-          child: InkWell(
+          child:switchValue==false? InkWell(
             onTap: () {
               if (amount.text != '' &&
                   (selectedIcons != null || selectedIcons != '') &&
@@ -1044,8 +1354,8 @@ class _NewExpensePageState extends State<NewExpensePage> {
                         content: const Text('Do you want to Add?'),
                         actions: [
                           TextButton(
-                              onPressed: () {
-                                FirebaseFirestore.instance
+                              onPressed: () async {
+                               await FirebaseFirestore.instance
                                     .collection('users')
                                     .doc(currentuserid)
                                     .collection('expense')
@@ -1060,6 +1370,11 @@ class _NewExpensePageState extends State<NewExpensePage> {
                                   'description':
                                       description.text.toString() ?? '',
                                 });
+                                await FirebaseFirestore.instance.collection('users').doc(currentuserid).update({
+                                  'totalExpense':FieldValue.increment(double.tryParse(amount!.text.toString())??0),
+
+                                });
+
                                 Navigator.pop(context);
 
                                 showUploadMessage(
@@ -1117,7 +1432,126 @@ class _NewExpensePageState extends State<NewExpensePage> {
                 ),
               ),
             ),
-          ),
+          ):InkWell(
+            onTap: () {
+              if (amount.text != '' &&
+                  (selectedIcons != null || selectedIcons != '') &&
+                  selectedDate != null &&
+                  category != '' && contactName!=''&& phNumber!='') {
+                showDialog(
+                    context: context,
+                    builder: (buildcontext) {
+                      return AlertDialog(
+                        title: const Text('Add Expense '),
+                        content: const Text('Do you want to Add?'),
+                        actions: [
+                          TextButton(
+                              onPressed: () async {
+                                await getUserData();
+                                 FirebaseFirestore.instance.runTransaction((transaction) async {
+
+                                   await  FirebaseFirestore.instance
+                                       .collection('users')
+                                       .doc(currentuserid)
+                                       .collection('expense')
+                                       .add({
+                                     'amount': double.tryParse(amount!.text.toString()),
+                                     "categoryIcon": serializeIcon(xyz),
+                                     "categoryName": category.toString(),
+                                     'date': selectedDate,
+                                     'merchant': merchantName.toString() ?? "",
+                                     'description': description.text,
+                                     'income': true,
+                                     'paymentId':selectedUserId,
+
+
+                                   });
+
+                                   await FirebaseFirestore.instance.collection('users').doc(currentuserid).update({
+                                     'totalExpense':FieldValue.increment(double.tryParse(amount!.text.toString())??0),
+
+                                   });
+
+                                   await FirebaseFirestore.instance
+                                       .collection('users')
+                                       .doc(selectedUserId)
+                                       .collection('incomes')
+                                       .add({
+                                     'amount': double.tryParse(amount!.text.toString()),
+                                     "categoryIcon": serializeIcon(xyz),
+                                     "categoryName": category.toString(),
+                                     'date': selectedDate,
+                                     'income': true,
+                                     'merchant': merchantName.toString(),
+                                     'description':
+                                     description.text.toString() ?? '',
+                                     'recieverId':currentuserid,
+                                   });
+                                   await FirebaseFirestore.instance.collection('users').doc(selectedUserId).update({
+                                     'totalIncome':FieldValue.increment(double.tryParse(amount!.text.toString())??0),
+                                   });
+
+                                 }).then((value){
+                                   Navigator.pop(context);
+
+                                   showUploadMessage(
+                                       context, 'expense  added successfully');
+
+                                   Navigator.push(
+                                       context,
+                                       MaterialPageRoute(
+                                           builder: (context) =>
+                                               ExpenseSuccesPage()));
+                                   amount?.clear();
+                                   description.text = '';
+                                   category == '';
+                                   selectedDate = null;
+                                   xyz = '';
+                                   _icon = null;
+                                   merchantName = '';
+                                   setState(() {});
+
+                                 });
+
+
+                                // Navigator.pushAndRemoveUntil(context, CupertinoPageRoute(builder: (context) => CharityCatogoryPage(),), (route) => false);
+                              },
+                              child: const Text('Yes')),
+                          TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text('Cancel')),
+                        ],
+                      );
+                    });
+              } else {
+                amount.text == ''
+                    ? showUploadMessage(context, 'Please enter amount')
+                    : category == ''
+                    ? showUploadMessage(context, 'Please choose Category')
+                    : showUploadMessage(
+                    context, 'Please enter merchant name');
+              }
+            },
+            child: Container(
+              width: scrWidth * 0.76,
+              height: scrHeight * 0.065,
+              decoration: BoxDecoration(
+                  color: Color(0xff008036),
+                  borderRadius: BorderRadius.circular(20)),
+              child: Center(
+                child: Text(
+                  " Add income",
+                  style: TextStyle(
+                      fontSize: scrWidth * 0.046,
+                      color: Colors.white,
+                      fontFamily: 'Urbanist',
+                      fontWeight: FontWeight.w600),
+                ),
+              ),
+            ),
+          )
         ),
       ),
     );

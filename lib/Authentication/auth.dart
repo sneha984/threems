@@ -6,6 +6,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:threems/Authentication/root.dart';
 import 'package:threems/pagess/onboardingpage.dart';
 
+import '../model/usermodel.dart';
 import '../pagess/getotppage.dart';
 import '../pagess/loginpage.dart';
 
@@ -47,7 +48,6 @@ class Authentication {
     // dateTime=DateTime.now() as Timestamp?;
 
     try {
-      print('HERE TRY ');
       FirebaseFirestore.instance
           .collection('users')
           .doc(userDoc)
@@ -58,6 +58,7 @@ class Authentication {
             "userImage": userImage,
             // "phone": '',
             "dateTime": DateTime.now(),
+
           })
           .onError((error, stackTrace) =>
               FirebaseFirestore.instance.collection('users').doc(userDoc).set({
@@ -67,6 +68,8 @@ class Authentication {
                 "userImage": userImage,
                 "phone": '',
                 "dateTime": DateTime.now(),
+                "totalExpense": 0,
+                "totalIncome": 0,
               }))
           .whenComplete(() {
             print('COMPLETED');
@@ -85,6 +88,8 @@ class Authentication {
         "userImage": userImage,
         "phone": '',
         "dateTime": DateTime.now(),
+        "totalExpense": 0,
+        "totalIncome": 0,
       }).whenComplete(() {
         print('COMPLETED');
         Navigator.pushAndRemoveUntil(
@@ -156,6 +161,7 @@ class Authentication {
   //   GoogleSignIn().signOut();
   // }
   signOut(BuildContext context) async {
+    await listenUserSub?.cancel();
     GoogleSignIn().disconnect();
     await FirebaseAuth.instance
         .signOut()
