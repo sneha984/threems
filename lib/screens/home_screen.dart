@@ -152,34 +152,34 @@ class _HomeScreenState extends State<HomeScreen> {
     getVerifiedCharity();
     getLocation();
 
-    addFieldToAllDoc();
+    // addFieldToAllDoc();
 
     super.initState();
 
     askPermissions();
   }
 
-  addFieldToAllDoc() {
-    FirebaseFirestore.instance.collection('users').get().then(
-          (value) => value.docs.forEach(
-            (element) {
-              FirebaseFirestore.instance
-                  .collection('users')
-                  .doc(element.id)
-                  .collection('expense')
-                  .get()
-                  .then((value) => value.docs.forEach((subDoc) {
-                        FirebaseFirestore.instance
-                            .collection('users')
-                            .doc(element.id)
-                            .collection('expense')
-                            .doc(subDoc.id)
-                            .update({'income': false});
-                      }));
-            },
-          ),
-        );
-  }
+  // addFieldToAllDoc() {
+  //   FirebaseFirestore.instance.collection('users').get().then(
+  //         (value) => value.docs.forEach(
+  //           (element) {
+  //             FirebaseFirestore.instance
+  //                 .collection('users')
+  //                 .doc(element.id)
+  //                 .collection('expense')
+  //                 .get()
+  //                 .then((value) => value.docs.forEach((subDoc) {
+  //                       FirebaseFirestore.instance
+  //                           .collection('users')
+  //                           .doc(element.id)
+  //                           .collection('expense')
+  //                           .doc(subDoc.id)
+  //                           .update({'income': false});
+  //                     }));
+  //           },
+  //         ),
+  //       );
+  // }
 
   @override
   Widget build(BuildContext context) {

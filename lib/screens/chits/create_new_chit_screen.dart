@@ -216,15 +216,26 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
           : widget.chit.dividendAmount!.toString();
       drawTypeValue = widget.chit.chitType;
       if (drawTypeValue == 'Weekly') {
-        for (int i = 0; i < 7; i++) {
-          drawDate.add((i + 1).toString());
-        }
+        drawDate = [
+          'Monday',
+          'Tuesday',
+          'Wednesday',
+          'Thursday',
+          'Friday',
+          'Saturday',
+          'Sunday'
+        ];
+        drawDateValue = widget.chit.chitDate.toString() ?? '';
+
+        drawDateValueInList = drawDate.elementAt(widget.chit.chitDate! - 1);
       } else {
         for (int i = 0; i < 31; i++) {
           drawDate.add((i + 1).toString());
+          drawDateValue = widget.chit.chitDate.toString() ?? '';
+          drawDateValueInList = widget.chit.chitDate.toString() ?? '';
         }
       }
-      drawDateValue = widget.chit.chitDate.toString() ?? '';
+
       drawDateValueInList = widget.chit.chitDate.toString() ?? '';
       profile = widget.chit.profile ?? '';
       fileUrl = widget.chit.document ?? '';
