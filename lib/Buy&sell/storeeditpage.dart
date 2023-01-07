@@ -1100,7 +1100,7 @@ class _StoreEditPageState extends State<StoreEditPage> {
                 'blockedReason':widget.storemodel!.blockedReason,
                 'status': 0,
                 'contactNumber':widget.storemodel!.contactNumber,
-                'rejected': widget.storemodel!.rejected,
+                'rejected': false,
                 'rejectedReason':widget.storemodel!.rejectedReason,
               }).whenComplete(() => Navigator.pop(context));
               // List<String> ids=[];

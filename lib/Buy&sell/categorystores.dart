@@ -241,13 +241,16 @@ class _CategoryStoresState extends State<CategoryStores> {
                               .start,
                           children: [
                             SizedBox(height: scrHeight*0.003,),
-                            Text(
-                              shoplist.storeName!, textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontFamily: 'Urbanist',
-                                  fontSize: scrWidth*0.036,
-                                  fontWeight: FontWeight.w600,
-                                  color: Color(0xff0E0E0E)),),
+                            Container(
+                              width: 80,
+                              child: Text(
+                                shoplist.storeName!, textAlign: TextAlign.center,
+                                style: TextStyle(overflow: TextOverflow.ellipsis,
+                                    fontFamily: 'Urbanist',
+                                    fontSize: scrWidth*0.036,
+                                    fontWeight: FontWeight.w600,
+                                    color: Color(0xff0E0E0E)),),
+                            ),
                             SizedBox(height: scrHeight*0.002,),
 
                             Text(

@@ -950,12 +950,14 @@ class _NearestStoreDetailPageState extends State<NearestStoreDetailPage> {
                 physics: NeverScrollableScrollPhysics(),
                 itemBuilder: (BuildContext context, int index) {
                   return ExpansionTile(
-                    title:  Text(widget.storeDetailsModel.storeCategory![index]),
+                    title:  _customTileExpanded?
+                    Text(widget.storeDetailsModel.storeCategory![index],style: TextStyle(color: Colors.green),):
+                    Text(widget.storeDetailsModel.storeCategory![index]),
                     // subtitle: const Text('Custom expansion arrow icon'),
                     trailing: Icon(
                       _customTileExpanded
                           ? Icons.arrow_drop_down_circle
-                          : Icons.arrow_drop_down,
+                          : Icons.arrow_drop_down,color: Colors.green,
                     ),
                     children:  <Widget>[
                       Container(
@@ -969,6 +971,7 @@ class _NearestStoreDetailPageState extends State<NearestStoreDetailPage> {
                             return GridView.builder(
                               itemCount: snapshot.data!.length,
                                 shrinkWrap: true,
+                                 scrollDirection: Axis.vertical,
                                  physics: NeverScrollableScrollPhysics(),
                                 gridDelegate:
                             SliverGridDelegateWithFixedCrossAxisCount(

@@ -978,12 +978,15 @@ List cate=[];
                                      borderRadius: BorderRadius.circular(20)),
                                  child: Padding(
                                    padding:
-                                   EdgeInsets.only(left: scrWidth * 0.05),
+                                   EdgeInsets.only(left: scrWidth * 0.02),
                                    child: Column(
                                        children: [
+                                         SizedBox(height: 40,),
+                                         Text("Strore Rejected",style: TextStyle(fontSize: 23,fontFamily: 'Urbanist',fontWeight: FontWeight.w600),),
                                          SizedBox(height: 30,),
-                                         // Text(store[0].rejectedReason!,)
-                                         Text("Store Rejected")
+
+
+                                         Text(store[0].rejectedReason??"",style: TextStyle(),)
                                        ],
                                    )
                                  ),
@@ -1295,7 +1298,7 @@ List cate=[];
                                   ),
                                 ],
                               )
-                            :(store[0].storeVerification==true)
+                            :(store[0].storeVerification==true&&store[0].rejected==false&&store[0].block==false)
                     ? Padding(
                               padding:  EdgeInsets.only(left: scrWidth*0.06,right: scrWidth*0.06),
                               child: Column(
@@ -1712,6 +1715,131 @@ List cate=[];
                                   ],
                                 ),
                             )
+                    :store[0].rejected==true
+                    ?Padding(
+                  padding:  EdgeInsets.only(left: scrWidth*0.06,right: scrWidth*0.06),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      SizedBox(
+                        height: scrHeight * 0.02,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(store[0].storeName!,style: TextStyle(
+                              fontSize: scrWidth * 0.045,
+                              fontFamily: 'Urbanist',
+                              fontWeight: FontWeight.w600),),
+                          Row(
+                            children: [
+                              IconButton(onPressed: (){
+                                Navigator.push(context, MaterialPageRoute(
+                                    builder: (context)=>StoreEditPage(storemodel: store[0],
+                                      update: true,)));
+                              }, icon: Icon(Icons.edit)),
+                              Text(
+                                store[0].online! ? "(online)" : "(offline)",
+                                style: GoogleFonts.urbanist(
+                                    fontSize: scrWidth * 0.028,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              Transform.scale(
+                                scale: 0.7,
+                                child: CupertinoSwitch(
+                                  thumbColor:store[0].online!
+                                      ? Color(0xff02B558)
+                                      : Color(0xffE54D3C),
+                                  activeColor: Color(0xffD9D9D9),
+                                  trackColor: Color(0xffD9D9D9),
+                                  value: store[0].online!,
+                                  onChanged: (value) {
+                                    // print(widget.storeId);
+
+                                    FirebaseFirestore
+                                        .instance
+                                        .collection('stores')
+                                        .doc(store[0].storeId)
+                                        .update(
+                                        {
+                                          'online':!store[0].online!,
+                                        }
+                                    );
+                                    setState(() {
+
+                                    });
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+
+                        ],
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 10, right: 10),
+                        child: Container(
+                          height: scrHeight * 0.3,
+                          width: scrWidth * 0.8,
+                          decoration: BoxDecoration(
+                              color: Color(0xffF3F3F3),
+                              borderRadius: BorderRadius.circular(20)),
+                          child: Padding(
+                              padding:
+                              EdgeInsets.only(left: scrWidth * 0.02),
+                              child: Column(
+                                children: [
+                                  SizedBox(height: 40,),
+                                  Text("Strore Rejected",style: TextStyle(fontSize: 23,fontFamily: 'Urbanist',fontWeight: FontWeight.w600),),
+                                  SizedBox(height: 30,),
+
+                                  Text(store[0].rejectedReason??"",)
+                                ],
+                              )
+                          ),
+                        ),
+                      )
+
+
+                        ],
+                      ),
+                )
+                    :store[0].block==true
+                    ?Padding(
+                  padding:  EdgeInsets.only(left: scrWidth*0.06,right: scrWidth*0.06),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      SizedBox(
+                        height: scrHeight * 0.02,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 10, right: 10),
+                        child: Container(
+                          height: scrHeight * 0.3,
+                          width: scrWidth * 0.8,
+                          decoration: BoxDecoration(
+                              color: Color(0xffF3F3F3),
+                              borderRadius: BorderRadius.circular(20)),
+                          child: Padding(
+                              padding:
+                              EdgeInsets.only(left: scrWidth * 0.02),
+                              child: Column(
+                                children: [
+                                  SizedBox(height: 40,),
+                                  Text("Strore Blocked",style: TextStyle(fontSize: 23,fontFamily: 'Urbanist',fontWeight: FontWeight.w600),),
+                                  SizedBox(height: 30,),
+
+
+                                  Text(store[0].blockedReason??"",style: TextStyle(),)
+                                ],
+                              )
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                )
                     :InkWell(
                   onTap: (){
                     showSnackbar(context, "Please Wait for The store Verification ");

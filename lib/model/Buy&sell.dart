@@ -148,7 +148,7 @@ class ProductModel {
       // required this.categoryName,
       this.details});
   ProductModel.fromJson(Map<String, dynamic> json) {
-    images = json['images'].cast<String>();
+    images = json['images'].cast<String>()??'https://img.freepik.com/free-vector/shop-with-sign-we-are-open_52683-38687.jpg?w=2000';
     productName = json['productName'];
     productCategory = json['productCategory'];
     price = double.tryParse(json['price'].toString());

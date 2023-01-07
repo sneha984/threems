@@ -377,7 +377,9 @@ class _ImageZoomPageState extends State<ImageZoomPage> with SingleTickerProvider
   }
   addToCart(ProductModel products, String storeId) {
     cartlist.add({
-      'img': products.images![0],
+      'img': products.images!.isEmpty
+          ?'https://img.freepik.com/free-vector/shop-with-sign-we-are-open_52683-38687.jpg?w=2000'
+          : products.images![0],
       'name': products.productName,
       'price': products.price,
       'unit': products.unit,

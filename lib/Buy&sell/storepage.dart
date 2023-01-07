@@ -432,6 +432,7 @@ class _StorePageState extends State<StorePage> {
               height: 600,
               child: GridView.builder(
                 physics: const BouncingScrollPhysics(),
+                scrollDirection: Axis.vertical,
                 padding: EdgeInsets.all(10),
                 shrinkWrap: true,
                 itemCount: productsList.length,
@@ -1025,7 +1026,9 @@ class _ShopSingleProductState extends State<ShopSingleProduct> {
               onTap: () {
                  Navigator.push(context,MaterialPageRoute(builder: (context)=>
                      ImageZoomPage(
-                   image: widget.product.images![0]??'https://img.freepik.com/free-vector/shop-with-sign-we-are-open_52683-38687.jpg?w=2000',
+                   image: widget.product.images!.isEmpty
+                       ?'https://img.freepik.com/free-vector/shop-with-sign-we-are-open_52683-38687.jpg?w=2000'
+                       :widget.product.images![0],
                    pro:widget.product ,
                    storeId: widget.product.storeId!,
                    deliveryCharge: widget.deliveryCharge!,

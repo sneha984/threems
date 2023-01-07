@@ -957,7 +957,6 @@ class _CheckOutPageState extends State<CheckOutPage> {
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
                           children: [
                             // Container(
                             //     height: 50,
@@ -1062,50 +1061,105 @@ class _CheckOutPageState extends State<CheckOutPage> {
                 )
               : (shopAvailable==true&&prd==true)?InkWell(
                   onTap: () {
-                    if(loading==false){
-                      List<OrderedItems> orders1 = [];
-                      double total = 0;
+                    print(index);
+                    print(imgFiles);
+                    if(index==1){
+                      if(imgFiles!=null){
+                        if(loading==false){
+                          List<OrderedItems> orders1 = [];
+                          double total = 0;
 
-                      for (int i = 0; i < cartlist.length; i++) {
-                        total += cartlist[i]['count'] * cartlist[i]['price'];
-                        orders1.add(OrderedItems(
-                          item: cartlist[i]['name'],
-                          count: cartlist[i]['count'],
-                          amount: cartlist[i]['price'],
-                          itemImage: cartlist[i]['img'],
-                        ));
+                          for (int i = 0; i < cartlist.length; i++) {
+                            total += cartlist[i]['count'] * cartlist[i]['price'];
+                            orders1.add(OrderedItems(
+                              item: cartlist[i]['name'],
+                              count: cartlist[i]['count'],
+                              amount: cartlist[i]['price'],
+                              itemImage: cartlist[i]['img'],
+                            ));
+                          }
+                          var ordr = OrderModel(
+                              productId: cartlist[0]['productId'],
+
+                              // item: cartlist[i]['name'],
+                              // itemImage: cartlist[i]['img'],
+                              // amount: cartlist[i]['price'],
+                              time: DateTime.now(),
+                              userId: currentuserid,
+                              deliveryCharge: cartlist[0]['deliveryCharge'],
+                              status: 0,
+                              orderedItems: orders1,
+                              total: total,
+                              paymentMethod: index,
+                              paymentScreenShort: imgUrls??'',
+                              // count: cartlist[i]['count'],
+                              storeId: cartlist[0]['storeId'],
+                              address: Addresses(
+                                  phoneNumber: addressList![0].phoneNumber!,
+                                  flatNo: addressList![0].flatNo!,
+                                  pincode: addressList![0].pinCode!,
+                                  locality: addressList![0].locality!,
+                                  locationType: addressList![0].select!,
+                                  name: addressList![0].name!));
+                          orderPlacing(ordr, cartlist[0]['storeId']);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => CheckOutPage3()));
+                        }else{
+                          showSnackbar(context, " Screenshort Uploading.....");
+                        }
+                      }else{
+                        showSnackbar(context, "Please Upload payment Proof");
                       }
-                      var ordr = OrderModel(
-                          productId: cartlist[0]['productId'],
 
-                          // item: cartlist[i]['name'],
-                          // itemImage: cartlist[i]['img'],
-                          // amount: cartlist[i]['price'],
-                          time: DateTime.now(),
-                          userId: currentuserid,
-                          deliveryCharge: cartlist[0]['deliveryCharge'],
-                          status: 0,
-                          orderedItems: orders1,
-                          total: total,
-                          paymentMethod: index,
-                          paymentScreenShort: imgUrls??'',
-                          // count: cartlist[i]['count'],
-                          storeId: cartlist[0]['storeId'],
-                          address: Addresses(
-                              phoneNumber: addressList![0].phoneNumber!,
-                              flatNo: addressList![0].flatNo!,
-                              pincode: addressList![0].pinCode!,
-                              locality: addressList![0].locality!,
-                              locationType: addressList![0].select!,
-                              name: addressList![0].name!));
-                      orderPlacing(ordr, cartlist[0]['storeId']);
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => CheckOutPage3()));
                     }else{
-                      showSnackbar(context, " Screenshort Uploading.....");
+                      if(loading==false){
+                        List<OrderedItems> orders1 = [];
+                        double total = 0;
+
+                        for (int i = 0; i < cartlist.length; i++) {
+                          total += cartlist[i]['count'] * cartlist[i]['price'];
+                          orders1.add(OrderedItems(
+                            item: cartlist[i]['name'],
+                            count: cartlist[i]['count'],
+                            amount: cartlist[i]['price'],
+                            itemImage: cartlist[i]['img'],
+                          ));
+                        }
+                        var ordr = OrderModel(
+                            productId: cartlist[0]['productId'],
+
+                            // item: cartlist[i]['name'],
+                            // itemImage: cartlist[i]['img'],
+                            // amount: cartlist[i]['price'],
+                            time: DateTime.now(),
+                            userId: currentuserid,
+                            deliveryCharge: cartlist[0]['deliveryCharge'],
+                            status: 0,
+                            orderedItems: orders1,
+                            total: total,
+                            paymentMethod: index,
+                            paymentScreenShort: imgUrls??'',
+                            // count: cartlist[i]['count'],
+                            storeId: cartlist[0]['storeId'],
+                            address: Addresses(
+                                phoneNumber: addressList![0].phoneNumber!,
+                                flatNo: addressList![0].flatNo!,
+                                pincode: addressList![0].pinCode!,
+                                locality: addressList![0].locality!,
+                                locationType: addressList![0].select!,
+                                name: addressList![0].name!));
+                        orderPlacing(ordr, cartlist[0]['storeId']);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CheckOutPage3()));
+                      }else{
+                        showSnackbar(context, " Screenshort Uploading.....");
+                      }
                     }
+
                   },
                   child: Container(
                     height: 40,
