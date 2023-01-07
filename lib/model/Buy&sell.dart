@@ -7,7 +7,9 @@ class StoreDetailsModel {
   double? deliveryCharge;
   double? totalSales;
   String? storeName;
+  String? blockedReason;
   List<dynamic>? storeCategory;
+  List<dynamic>? productCategory;
   String? storeAddress;
   String? storeLocation;
   String? storeId;
@@ -16,13 +18,24 @@ class StoreDetailsModel {
   double? latitude;
   double? longitude;
   bool? online;
-
+  String? storeQR;
+  bool? storeVerification;
+  String? localBodyName;
+  String? localBodyDoc;
+  String? localBodyDocName;
   Map? position;
+
+  bool? block;
+  int? status;
+  bool? rejected;
+  String? rejectedReason;
+  String? contactNumber;
   StoreDetailsModel(
       {this.storeName,
       this.deliveryCharge,
       this.totalSales,
       this.storeCategory,
+        this.productCategory,
       this.storeAddress,
       this.storeLocation,
       this.storeId,
@@ -30,23 +43,47 @@ class StoreDetailsModel {
       this.userId,
       this.longitude,
       this.latitude,
-      this.position,this.online});
+      this.position,
+        this.online,
+        this.storeQR,
+        this.storeVerification,
+        this.localBodyName,
+        this.localBodyDoc,
+        this.localBodyDocName,
+        this.block,
+        this.status,
+        this.rejected,
+        this.rejectedReason,
+        this.contactNumber,
+      this.blockedReason});
 
   StoreDetailsModel.fromJson(Map<String, dynamic> json) {
-    deliveryCharge = json['deliveryCharge'];
+    deliveryCharge = double.tryParse(json['deliveryCharge'].toString());
     totalSales = json['totalSales'];
     storeName = json['storeName'];
     storeCategory = json['storeCategory'];
+    productCategory = json['productCategory'];
     storeAddress = json['storeAddress'];
     storeLocation = json['storeLocation'];
     storeId = json['storeId'];
     storeImage = json['storeImage'];
-    longitude = json['longitude'];
-    latitude = json['latitude'];
+    longitude = double.tryParse(json['longitude'].toString());
+    latitude = double.tryParse(json['latitude'].toString());
     position = json['position'];
     online=json['online'];
+    storeQR=json['storeQR'];
+    storeVerification=json['storeVerification'];
+    localBodyName=json['localBodyName'];
+    localBodyDoc=json['localBodyDoc'];
+    localBodyDocName=json['localBodyDocName'];
+    block=json['block'];
+    status=json['status'];
+    blockedReason=json['blockedReason'];
 
     userId = json['userId'];
+    rejected=json['rejected'];
+    rejectedReason=json['rejectedReason'];
+    contactNumber=json['contactNumber'];
   }
 
   Map<String, dynamic> toJson() {
@@ -55,6 +92,7 @@ class StoreDetailsModel {
     data['totalSales'] = this.totalSales;
     data['storeName'] = this.storeName;
     data['storeCategory'] = this.storeCategory;
+    data['productCategory'] = this.productCategory;
     data['storeAddress'] = this.storeAddress;
     data['storeLocation'] = this.storeLocation;
     data['storeId'] = this.storeId;
@@ -64,6 +102,17 @@ class StoreDetailsModel {
     data['latitude'] = this.latitude;
     data['position'] = this.position;
     data['online']=this.online;
+    data['storeQR']=this.storeQR;
+    data['localBodyName']=this.localBodyName;
+    data['localBodyDoc']=this.localBodyDoc;
+    data['storeVerification']=this.storeVerification;
+    data['localBodyDocName']=this.localBodyDocName;
+    data['block']=this.block;
+    data['blockedReason']=this.blockedReason;
+    data['status']=this.status;
+    data['rejected']=this.rejected;
+    data['rejectedReason']=this.rejectedReason;
+    data['contactNumber']=this.contactNumber;
 
     return data;
   }

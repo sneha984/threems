@@ -110,6 +110,9 @@ dependencies:
   dio: ^4.0.6
   email_validator: ^1.0.0
   pinch_zoom: ^1.0.0
+  month_picker_dialog_2: ^0.5.8
+  csv: ^5.0.1
+  image_cropper: ^3.0.1
 
 
 

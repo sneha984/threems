@@ -29,6 +29,7 @@ import '../utils/themes.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'audio_player.dart';
+import 'package:rxdart/subjects.dart';
 import 'noti.dart';
 import 'notifications.dart';
 
@@ -191,13 +192,32 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
   //   // contentController?.text=widget.notes!['content'].toString()??'';
   //   }
   // }
+
   TimeOfDay defaultTime = TimeOfDay.now();
   DateTime dateTime = DateTime.now();
   final TextEditingController _time = TextEditingController();
   final TextEditingController _date = TextEditingController();
 
+  final StreamController<String> selectNotificationStream =
+  StreamController<String>.broadcast();
+  final BehaviorSubject<String> onNotificationClick = BehaviorSubject();
+
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
+  void onDidReceiveNotificationResponse(NotificationResponse notificationResponse) async {
+    final String payload = notificationResponse.payload;
+    if (notificationResponse.payload != null) {
+      debugPrint('notification payload: $payload');
+      onNotificationClick.add(payload);
+
+    }
+
+
+    // await Navigator.push(
+    //   context,
+    //   MaterialPageRoute<void>(builder: (context) => SecondScreen(payload: '',)),
+    // );
+  }
 
   @override
   void initState() {
@@ -218,9 +238,12 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
     );
 
     flutterLocalNotificationsPlugin.initialize(
+
       initializationSettings,
-      // onSelectNotification: (dataYouNeedToUseWhenNotificationIsClicked) {},
+        onDidReceiveNotificationResponse:onDidReceiveNotificationResponse,
     );
+
+
     // print('sneha'+widget.notes['rDate'].toString());
     if (widget.notes != null) {
       for (int i = 0; i < 2; i++) {
@@ -276,6 +299,15 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
             UILocalNotificationDateInterpretation.wallClockTime,
         androidAllowWhileIdle: true,
         payload: 'Ths is the data');
+  }
+  Future selectNotification(String payload) async {
+    Navigator.push(context, MaterialPageRoute(builder: ((ctx) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text('notification clicked'),
+        ),
+      );
+    })));
   }
 
   // @override
@@ -1215,9 +1247,32 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
                                     ),
                                     IconButton(
                                         onPressed: () {
-                                          _audioUrl.remove(_audioUrl[index]);
-                                          // savedVoice.remove(savedVoice[index]);
-                                          setState(() {});
+
+                                          showDialog(
+                                            context: context,
+                                            builder: (ctx) => AlertDialog(
+                                              title: const Text("Alert Dialog Box"),
+                                              content: const Text('Do You Want To Delete This Voice'),
+                                              actions: <Widget>[
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Navigator.of(ctx).pop();
+                                                  },
+                                                  child: const Text("No"),
+                                                ),
+                                                TextButton(
+                                                  onPressed: () {
+                                                    _audioUrl.remove(_audioUrl[index]);
+                                                    // savedVoice.remove(savedVoice[index]);
+                                                    setState(() {});
+
+                                                    Navigator.of(ctx).pop();
+                                                  },
+                                                  child: const Text("Yes"),
+                                                ),
+                                              ],
+                                            ),
+                                          );
                                         },
                                         icon: Icon(Icons.delete)),
                                   ],

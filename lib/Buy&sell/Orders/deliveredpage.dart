@@ -254,6 +254,146 @@ class _DeliveredPageState extends State<DeliveredPage> {
               ),
             ),
             Padding(
+              padding: const EdgeInsets.only(right: 180, top: 14),
+              child: Text(
+                "Current Details",
+                style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
+                    fontFamily: 'Urbanist',
+                    fontWeight: FontWeight.w600),
+              ),
+            ),
+            SizedBox(
+              height: 8,
+            ),
+            Container(
+              // height: 220,
+              width: 325,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Color.fromRGBO(0, 0, 0, 0.15),
+                      spreadRadius: 1,
+                      blurRadius: 3,
+                      offset: Offset(2, 3), // changes position of shadow
+                    ),
+                  ],
+                  borderRadius: BorderRadius.circular(20)),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              widget.order.address?.name ?? '',
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: Color(0xff0E0E0E),
+                                  fontFamily: 'Urbanist',
+                                  fontWeight: FontWeight.w600),
+                            ),
+                            SizedBox(
+                              height: 8,
+                            ),
+                            Text(
+                              widget.order.address?.phoneNumber ?? '',
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  color: Color(0xff818181),
+                                  fontFamily: 'Urbanist',
+                                  fontWeight: FontWeight.w600),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          width: 30,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            Uri call = Uri.parse(
+                                'tel://${widget.order.address?.phoneNumber ?? 0}');
+
+                            launchUrl(call);
+                          },
+                          child: CircleAvatar(
+                            radius: 25,
+                            backgroundColor: Color(0xffD9D9D9),
+                            child: Container(
+                              height: 20,
+                              width: 30,
+                              child: SvgPicture.asset(
+                                  "assets/icons/Vector (11).svg"),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 210, top: 30),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Address",
+                            style: TextStyle(
+                                fontSize: 12,
+                                color: Color(0xffE54D3C),
+                                fontFamily: 'Urbanist',
+                                fontWeight: FontWeight.w600),
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            "${widget.order.address?.locationType ?? ''},${widget.order.address?.flatNo ?? ''}",
+                            style: TextStyle(
+                                fontSize: 16,
+                                color: Color(0xff0E0E0E),
+                                fontFamily: 'Urbanist',
+                                fontWeight: FontWeight.w600),
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            "City",
+                            style: TextStyle(
+                                fontSize: 12,
+                                color: Color(0xffE54D3C),
+                                fontFamily: 'Urbanist',
+                                fontWeight: FontWeight.w600),
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            "${widget.order.address?.locality ?? ''},${widget.order.address?.pincode ?? ''}",
+                            style: TextStyle(
+                                fontSize: 16,
+                                color: Color(0xff0E0E0E),
+                                fontFamily: 'Urbanist',
+                                fontWeight: FontWeight.w600),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+            Padding(
               padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
               child: Container(
                 height: 310,
@@ -620,7 +760,7 @@ class _DeliveredPageState extends State<DeliveredPage> {
                                 width: 32,
                               ),
                               Text(
-                                "Cash On Delivery",
+                                widget.order.paymentMethod==0?'Cash On Delivery':'UPI Payment',
                                 style: TextStyle(
                                     fontSize: 14,
                                     color: Color(0xffE54D3C),
@@ -636,146 +776,7 @@ class _DeliveredPageState extends State<DeliveredPage> {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(right: 180, top: 14),
-              child: Text(
-                "Current Details",
-                style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.black,
-                    fontFamily: 'Urbanist',
-                    fontWeight: FontWeight.w600),
-              ),
-            ),
-            SizedBox(
-              height: 8,
-            ),
-            Container(
-              // height: 220,
-              width: 325,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Color.fromRGBO(0, 0, 0, 0.15),
-                      spreadRadius: 1,
-                      blurRadius: 3,
-                      offset: Offset(2, 3), // changes position of shadow
-                    ),
-                  ],
-                  borderRadius: BorderRadius.circular(20)),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              widget.order.address?.name ?? '',
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  color: Color(0xff0E0E0E),
-                                  fontFamily: 'Urbanist',
-                                  fontWeight: FontWeight.w600),
-                            ),
-                            SizedBox(
-                              height: 8,
-                            ),
-                            Text(
-                              widget.order.address?.phoneNumber ?? '',
-                              style: TextStyle(
-                                  fontSize: 12,
-                                  color: Color(0xff818181),
-                                  fontFamily: 'Urbanist',
-                                  fontWeight: FontWeight.w600),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          width: 30,
-                        ),
-                        InkWell(
-                          onTap: () {
-                            Uri call = Uri.parse(
-                                'tel://${widget.order.address?.phoneNumber ?? 0}');
 
-                            launchUrl(call);
-                          },
-                          child: CircleAvatar(
-                            radius: 25,
-                            backgroundColor: Color(0xffD9D9D9),
-                            child: Container(
-                              height: 20,
-                              width: 30,
-                              child: SvgPicture.asset(
-                                  "assets/icons/Vector (11).svg"),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 210, top: 30),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Address",
-                            style: TextStyle(
-                                fontSize: 12,
-                                color: Color(0xffE54D3C),
-                                fontFamily: 'Urbanist',
-                                fontWeight: FontWeight.w600),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            "${widget.order.address?.locationType ?? ''},${widget.order.address?.flatNo ?? ''}",
-                            style: TextStyle(
-                                fontSize: 16,
-                                color: Color(0xff0E0E0E),
-                                fontFamily: 'Urbanist',
-                                fontWeight: FontWeight.w600),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            "City",
-                            style: TextStyle(
-                                fontSize: 12,
-                                color: Color(0xffE54D3C),
-                                fontFamily: 'Urbanist',
-                                fontWeight: FontWeight.w600),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            "${widget.order.address?.locality ?? ''},${widget.order.address?.pincode ?? ''}",
-                            style: TextStyle(
-                                fontSize: 16,
-                                color: Color(0xff0E0E0E),
-                                fontFamily: 'Urbanist',
-                                fontWeight: FontWeight.w600),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
 
             SizedBox(
               height: 10,

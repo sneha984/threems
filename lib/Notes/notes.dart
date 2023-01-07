@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
+import 'package:month_picker_dialog_2/month_picker_dialog_2.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+
 import 'package:threems/Authentication/root.dart';
 import 'package:threems/Notes/notesdetailspage.dart';
 import 'package:threems/layouts/screen_layout.dart';
@@ -14,6 +17,8 @@ import '../utils/themes.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 
+import 'no.dart';
+
 class NotesPage extends StatefulWidget {
   const NotesPage({Key? key}) : super(key: key);
 
@@ -23,12 +28,16 @@ class NotesPage extends StatefulWidget {
 
 class _NotesPageState extends State<NotesPage> {
   List getAllNotes = [];
+  DateTime from=DateTime(DateTime.now().year,DateTime.now().month,1,0,0,0);
+  DateTime to=DateTime(DateTime.now().year,DateTime.now().month+1,0,23,59,59);
 
   getNotes() {
     FirebaseFirestore.instance
         .collection('users')
         .doc(currentuserid)
         .collection('notes')
+        .where('date',isGreaterThanOrEqualTo: from)
+        .where('date',isLessThanOrEqualTo: to)
         .snapshots()
         .listen((event) {
       getAllNotes = [];
@@ -47,12 +56,16 @@ class _NotesPageState extends State<NotesPage> {
   }
 
   DateTime dateTime = DateTime.now();
+  DateTime? selectedDate;
+
+
 
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
   @override
   void initState() {
+
     const AndroidInitializationSettings androidInitializationSettings =
         AndroidInitializationSettings("@mipmap/launcher_icon");
 
@@ -74,7 +87,12 @@ class _NotesPageState extends State<NotesPage> {
     getNotes();
     // TODO: implement initState
     super.initState();
+
+    selectedDate = DateTime.now();
+
   }
+
+
 
   showNotification(Map notes) {
     String s = notes['remainderTime'];
@@ -218,6 +236,7 @@ class _NotesPageState extends State<NotesPage> {
               ],
             ),
           ),
+
           Expanded(
             child: ListView.builder(
                 shrinkWrap: true,
@@ -422,6 +441,41 @@ class _NotesPageState extends State<NotesPage> {
           )
         ],
       ),
+      floatingActionButton: Builder(
+        builder: (context) => FloatingActionButton(
+          onPressed: () {
+            showMonthPicker(
+              context: context,
+              firstDate: DateTime(DateTime.now().year - 100, 0),
+              lastDate: DateTime(DateTime.now().year + 100, 0),
+              initialDate: selectedDate ?? DateTime.now(),
+
+              headerColor: primarycolor,
+              headerTextColor: Colors.white,
+              selectedMonthBackgroundColor: primarycolor,
+              selectedMonthTextColor: Colors.white,
+              unselectedMonthTextColor: primarycolor,
+              confirmText: Text('Select',style: TextStyle(color: Colors.black),),
+              cancelText: Text('Cancel',style: TextStyle(color: Colors.black),),
+              roundedCornersRadius: 20,
+            ).then((date) {
+              if (date != null) {
+                setState(() {
+                  print(date);
+                  from=date;
+                  to=DateTime(date.year,date.month+1,0,23,59,59);
+                  getNotes();
+                });
+              }
+            });
+          },
+          child: Icon(Icons.calendar_today),
+          backgroundColor: primarycolor,
+        ),
+      ),
+
+
     );
   }
+
 }

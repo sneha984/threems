@@ -21,19 +21,23 @@ import 'package:intl/intl.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:threems/Authentication/root.dart';
 import 'package:threems/Buy&sell/Sales/salesPage.dart';
+import 'package:threems/Buy&sell/neareststoredetailpage.dart';
 import 'package:threems/Buy&sell/paymentpage.dart';
 import 'package:threems/Buy&sell/productaddingpage.dart';
 import 'package:threems/Buy&sell/productspage.dart';
 import 'package:threems/Buy&sell/shopheadimageslider.dart';
 import 'package:threems/Buy&sell/storedetailsfill.dart';
 import 'package:threems/Buy&sell/storedetailsfill2.dart';
+import 'package:threems/Buy&sell/storeeditpage.dart';
 import 'package:threems/Buy&sell/storepage.dart';
 import 'package:threems/Buy&sell/yourstorecreate.dart';
+import 'package:threems/kuri/createkuri.dart';
 import 'package:threems/model/Buy&sell.dart';
 
 import 'dart:ui' as ui;
 import 'package:threems/screens/splash_screen.dart';
 import 'package:threems/utils/themes.dart';
+import '../model/OrderModel.dart';
 import '../screens/charity/payment.dart';
 import '../screens/home_screen.dart';
 import '../utils/dummy.dart';
@@ -100,6 +104,28 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
   //     });
   //   }
   // }
+  getAllOrders(){
+    print(currentuserid);
+    FirebaseFirestore
+        .instance
+        .collectionGroup('orders')
+        .where('userId',isEqualTo: currentuserid)
+        .snapshots().listen((event) {
+      print(event.docs.length);
+      print('-------------------------------------------------');
+      allOrders=[];
+      for(DocumentSnapshot <Map<String,dynamic>> doc in event.docs){
+        allOrders.add(OrderModel.fromJson(doc.data()!));
+      }
+      if(mounted){
+        setState(() {
+          print('hereeeeeeeee');
+          print(allOrders.length);
+        });
+      }
+    });
+  }
+
 List cate=[];
   getSpecificCategory() {
     FirebaseFirestore.instance
@@ -187,6 +213,8 @@ List cate=[];
     FirebaseFirestore.instance
         .collection('stores')
         .where('userId', isEqualTo: currentuserid)
+        // .where('block',isEqualTo: false)
+        // .where('rejected',isEqualTo: false)
         .snapshots()
         .listen((event) {
       store = [];
@@ -201,7 +229,7 @@ List cate=[];
       print(currentuserid);
       FirebaseFirestore.instance
           .collection('stores')
-          .doc(data[0]['storeId'])
+          .doc(data![0]['storeId'])
           .collection('products')
           .where('delete',isEqualTo: false)
           .snapshots()
@@ -218,7 +246,12 @@ List cate=[];
           Future.delayed(Duration(seconds: 3)).whenComplete(() {
             print('23456789');
             status = 3;
-            setState(() {});
+            if(mounted){
+              setState(() {
+
+              });
+            }
+            // setState(() {});
           });
         }
         if (mounted) {
@@ -259,13 +292,19 @@ List cate=[];
         .listen((event) {
       nearestStores = [];
       for (var doc in event) {
-        if(doc['userId'].toString()!=currentuserid){
+        if(doc['userId'].toString()!=currentuserid
+            &&doc['storeVerification']==true
+            &&doc['block']==false
+            &&doc['rejected']==false){
         nearestStores.add(StoreDetailsModel.fromJson(doc.data()!));
       }
       }
 
       if (mounted) {
-        setState(() {});
+        setState(() {
+          print(nearestStores);
+          print("hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
+        });
       }
     });
   }
@@ -275,6 +314,7 @@ List cate=[];
   bool isShopNotCreated = false;
   @override
   void initState() {
+    getAllOrders();
     getSpecificCategory();
     getShop();
     getNearestShop();
@@ -462,6 +502,7 @@ List cate=[];
               child: TabBarView(controller: _tabController, children: [
                 SingleChildScrollView(
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
                         margin: EdgeInsets.only(
@@ -475,101 +516,7 @@ List cate=[];
                       SizedBox(
                         height: scrHeight * 0.02,
                       ),
-                      // Padding(
-                      //   padding:  EdgeInsets.only(left: scrWidth*0.025),
-                      //   child: Row(
-                      //     mainAxisAlignment: MainAxisAlignment.start,
-                      //     crossAxisAlignment: CrossAxisAlignment.start,
-                      //     children: [
-                      //       SizedBox(width: scrWidth * 0.03,),
-                      //       SvgPicture.asset("assets/icons/staricon.svg"),
-                      //       SizedBox(width: scrWidth * 0.03,),
-                      //       Text("Sponsered Product", style: TextStyle(
-                      //           fontFamily: 'Urbanist',
-                      //           fontSize: scrWidth * 0.04,
-                      //           fontWeight: FontWeight.w600
-                      //       ),)
-                      //     ],
-                      //   ),
-                      // ),
-                      // SizedBox(height: scrHeight*0.014,),
-                      // Padding(
-                      //   padding:  EdgeInsets.only(left: scrWidth*0.03,right: scrWidth*0.03),
-                      //   child: Container(
-                      //     height: scrHeight*0.16,
-                      //     child: ListView.builder(
-                      //         physics: BouncingScrollPhysics(),
-                      //         scrollDirection: Axis.horizontal,
-                      //         shrinkWrap: true,
-                      //         itemCount: sproduct.length,
-                      //         itemBuilder: (context, index) {
-                      //           return Padding(
-                      //             padding:  EdgeInsets.only(right: scrWidth*0.016),
-                      //             child: Column(
-                      //               crossAxisAlignment: CrossAxisAlignment.start,
-                      //               children: [
-                      //                 InkWell(
-                      //                   child: Padding(
-                      //                     padding:  EdgeInsets.only(
-                      //                         left: scrWidth*0.03),
-                      //                     child: Container(
-                      //                       height: scrHeight*0.09,
-                      //                       width: scrWidth*0.22,
-                      //                       decoration: BoxDecoration(
-                      //                         image: DecorationImage(image: NetworkImage(sproduct[index].productimage)),
-                      //                           color: Colors.white,
-                      //                           borderRadius: BorderRadius
-                      //                               .circular(scrWidth*0.04),
-                      //                           border: Border.all(
-                      //                               color: Color(0xffECECEC),
-                      //                               width: 1)
-                      //                       ),
-                      //                     ),
-                      //                   ),
-                      //                 ),
-                      //                 Padding(
-                      //                   padding:  EdgeInsets.only(left:scrWidth*0.08),
-                      //                   child: Column(
-                      //                     crossAxisAlignment: CrossAxisAlignment
-                      //                         .start,
-                      //                     children: [
-                      //                       SizedBox(height: scrHeight*0.009,),
-                      //                       Text(
-                      //                         sproduct[index].productname, textAlign: TextAlign.center,
-                      //                         style: TextStyle(
-                      //                             fontFamily: 'Urbanist',
-                      //                             fontSize: scrWidth*0.031,
-                      //                             fontWeight: FontWeight.w600,
-                      //                             color: Color(0xff0E0E0E)),),
-                      //                       SizedBox(height: scrHeight*0.001,),
-                      //
-                      //                       Text(
-                      //                         sproduct[index].storename, textAlign: TextAlign.center,
-                      //                         style: TextStyle(
-                      //                             fontFamily: 'Urbanist',
-                      //                             fontSize: scrWidth*0.025,
-                      //                             fontWeight: FontWeight.w600,
-                      //                             color: Color(0xff818181)),),
-                      //                       SizedBox(height: scrHeight*0.0016,),
-                      //
-                      //                       Text(
-                      //                         currencyConvert.format(sproduct[index].price).toString(), textAlign: TextAlign.center,
-                      //                         style: TextStyle(
-                      //                             fontFamily: 'Urbanist',
-                      //                             fontSize: scrWidth*0.03,
-                      //                             fontWeight: FontWeight.w700,
-                      //                             color: Color(0xffF10000)),),
-                      //
-                      //                     ],
-                      //                   ),
-                      //                 )
-                      //               ],
-                      //             ),
-                      //           );
-                      //         }
-                      //     ),
-                      //   ),
-                      // ),
+
                       SizedBox(
                         height: scrHeight * 0.01,
                       ),
@@ -615,15 +562,13 @@ List cate=[];
                         height: scrHeight * 0.015,
                       ),
 
-                      // SizedBox(
-                      //   height: 50,
-                      // ),
-                      //
-                      // Text("No Stores"),
-                      // SizedBox(
-                      //   height: 50,
-                      // ),
-                      Padding(
+
+                     nearestStores.isEmpty
+                         ?Container(
+                         height: scrHeight*0.1,
+                         child: Center(
+                           child: Text("No Stores Found"),))
+                         : Padding(
                         padding: EdgeInsets.only(
                             left: scrWidth * 0.037, right: scrWidth * 0.037),
                         child: Container(
@@ -642,94 +587,91 @@ List cate=[];
                                     await Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => StorePage(
+                                            builder: (context) => NearestStoreDetailPage(
                                                 storeDetailsModel:
                                                     nearestStores[index],
-                                                category:'')));
+                                                category:'', cate:cateoryNames,)));
 
                                     setState(() {});
                                   },
-                                  child: Padding(
-                                    padding:
-                                        EdgeInsets.only(right: scrWidth * 0.017),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        InkWell(
-                                          child: Padding(
-                                            padding: EdgeInsets.only(
-                                                left: scrWidth * 0.03),
-                                            child: Container(
-                                              height: scrHeight * 0.09,
-                                              width: scrWidth * 0.22,
-                                              decoration: BoxDecoration(
-                                                image: DecorationImage(
-                                                    image:CachedNetworkImageProvider(store?.storeImage??''),
-                                                    // NetworkImage(
-                                                    //     store?.storeImage??''),
-                                                    colorFilter:store.online!?
-                                                    ColorFilter.mode(Colors.transparent, BlendMode.saturation):
-                                                    ColorFilter.mode(Colors.grey, BlendMode.saturation),
-                                                    fit: BoxFit.fill),
-                                                color: Colors.white,
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        scrWidth * 0.03),
-                                              ),
-                                              // child: ClipRRect(
-                                              //   borderRadius: BorderRadius.circular(scrWidth * 0.02),
-                                              //   child: CachedNetworkImage(
-                                              //     fit: BoxFit.cover,
-                                              //     imageUrl:store?.storeImage??'',
-                                              //   ),
-                                              // ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+
+                                    children: [
+                                      InkWell(
+                                        child: Padding(
+                                          padding: EdgeInsets.only(
+                                              left: scrWidth * 0.03),
+                                          child: Container(
+                                            height: scrHeight * 0.09,
+                                            width: scrWidth * 0.22,
+                                            decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                  image:CachedNetworkImageProvider(store?.storeImage??''),
+                                                  // NetworkImage(
+                                                  //     store?.storeImage??''),
+                                                  colorFilter:store.online!?
+                                                  ColorFilter.mode(Colors.transparent, BlendMode.saturation):
+                                                  ColorFilter.mode(Colors.grey, BlendMode.saturation),
+                                                  fit: BoxFit.fill),
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      scrWidth * 0.03),
                                             ),
+                                            // child: ClipRRect(
+                                            //   borderRadius: BorderRadius.circular(scrWidth * 0.02),
+                                            //   child: CachedNetworkImage(
+                                            //     fit: BoxFit.cover,
+                                            //     imageUrl:store?.storeImage??'',
+                                            //   ),
+                                            // ),
                                           ),
                                         ),
-                                        Padding(
-                                          padding: EdgeInsets.only(
-                                              left: scrWidth * 0.04),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              SizedBox(
-                                                height: scrHeight * 0.002,
-                                              ),
-                                              Text(
-                                                store.storeName!,
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    fontFamily: 'Urbanist',
-                                                    fontSize: scrWidth * 0.032,
-                                                    fontWeight: FontWeight.w600,
-                                                    color: Color(0xff0E0E0E)),
-                                              ),
-                                              SizedBox(
-                                                height: scrHeight * 0.0015,
-                                              ),
-                                              Padding(
-                                                padding:  EdgeInsets.only(right: 10),
-                                                child: Container(
-                                                  width: scrWidth*0.2,
-                                                  child: Text(
-                                                    store.storeAddress!,
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      overflow: TextOverflow.ellipsis,
-                                                        fontFamily: 'Urbanist',
-                                                        fontSize: scrWidth * 0.025,
-                                                        fontWeight: FontWeight.w600,
-                                                        color: Color(0xff818181)),
-                                                  ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            left: scrWidth * 0.04),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            SizedBox(
+                                              height: scrHeight * 0.002,
+                                            ),
+                                            Text(
+                                              store.storeName!,
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontFamily: 'Urbanist',
+                                                  fontSize: scrWidth * 0.032,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: Color(0xff0E0E0E)),
+                                            ),
+                                            SizedBox(
+                                              height: scrHeight * 0.0015,
+                                            ),
+                                            Padding(
+                                              padding:  EdgeInsets.only(right: 10),
+                                              child: Container(
+                                                width: scrWidth*0.2,
+                                                child: Text(
+                                                  store.storeAddress!,
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    overflow: TextOverflow.ellipsis,
+                                                      fontFamily: 'Urbanist',
+                                                      fontSize: scrWidth * 0.025,
+                                                      fontWeight: FontWeight.w600,
+                                                      color: Color(0xff818181)),
                                                 ),
                                               ),
-                                            ],
-                                          ),
+                                            ),
+                                          ],
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
                                 );
                               }),
@@ -849,7 +791,7 @@ List cate=[];
                     ],
                   ),
                 ),
-                status == 0
+                (status == 0)
                     ? Column(
                         children: [
                           SizedBox(
@@ -953,8 +895,9 @@ List cate=[];
                                   ),
                                 ],
                               ),
-                            ),
+                            )
                           ),
+
                           SizedBox(
                             height: scrHeight * 0.03,
                           ),
@@ -1025,7 +968,27 @@ List cate=[];
                               SizedBox(
                                 height: scrHeight * 0.02,
                               ),
-                              Padding(
+                             store[0].rejected==true? Padding(
+                               padding: EdgeInsets.only(left: 10, right: 10),
+                               child: Container(
+                                 height: scrHeight * 0.3,
+                                 width: scrWidth * 0.8,
+                                 decoration: BoxDecoration(
+                                     color: Color(0xffF3F3F3),
+                                     borderRadius: BorderRadius.circular(20)),
+                                 child: Padding(
+                                   padding:
+                                   EdgeInsets.only(left: scrWidth * 0.05),
+                                   child: Column(
+                                       children: [
+                                         SizedBox(height: 30,),
+                                         // Text(store[0].rejectedReason!,)
+                                         Text("Store Rejected")
+                                       ],
+                                   )
+                                 ),
+                               ),
+                             ):Padding(
                                 padding: EdgeInsets.only(left: 10, right: 10),
                                 child: Container(
                                   height: scrHeight * 0.42,
@@ -1094,7 +1057,8 @@ List cate=[];
                               SizedBox(
                                 height: scrHeight * 0.02,
                               ),
-                              GestureDetector(
+                              store[0].storeVerification==true
+                                  ? GestureDetector(
                                 onTap: () async {
                                   print(filteredShops.length);
                                   await Navigator.push(
@@ -1135,6 +1099,37 @@ List cate=[];
                                   ),
                                 ),
                               )
+                                  :InkWell(
+                                onTap: (){
+                                  showSnackbar(context, "Please Wait for The store Verification");
+                                },
+                                    child: Container(
+                                height: scrHeight * 0.05,
+                                width: scrWidth * 0.6,
+                                decoration: BoxDecoration(
+                                      color: Color.fromRGBO(0, 128, 54, 0.33),
+                                      borderRadius: BorderRadius.circular(21.5)),
+                                child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.add,
+                                        size: scrWidth * 0.045,
+                                        color: Colors.white,
+                                      ),
+                                      Text(
+                                        "Add Product",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontFamily: 'Urbanist',
+                                            fontSize: scrWidth * 0.045,
+                                            fontWeight: FontWeight.w700,
+                                            color: Colors.white),
+                                      ),
+                                    ],
+                                ),
+                              ),
+                                  )
                             ],
                           )
                         : (status == 2)
@@ -1300,7 +1295,8 @@ List cate=[];
                                   ),
                                 ],
                               )
-                            : Padding(
+                            :(store[0].storeVerification==true)
+                    ? Padding(
                               padding:  EdgeInsets.only(left: scrWidth*0.06,right: scrWidth*0.06),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -1317,10 +1313,16 @@ List cate=[];
                                             fontWeight: FontWeight.w600),),
                                         Row(
                                           children: [
+                                            IconButton(onPressed: (){
+                                              Navigator.push(context, MaterialPageRoute(
+                                                  builder: (context)=>StoreEditPage(storemodel: store[0],
+                                                    update: true,)));
+                                            }, icon: Icon(Icons.edit)),
                                             Text(
-                                              store[0].online! ? "online" : "offline",
+                                              store[0].online! ? "(online)" : "(offline)",
                                               style: GoogleFonts.urbanist(
-                                                  fontSize: scrWidth * 0.028, fontWeight: FontWeight.w600),
+                                                  fontSize: scrWidth * 0.028,
+                                                  fontWeight: FontWeight.w600),
                                             ),
                                             Transform.scale(
                                               scale: 0.7,
@@ -1354,6 +1356,7 @@ List cate=[];
 
                                       ],
                                     ),
+
                                     SizedBox(height: 20,),
                                     Row(
                                       mainAxisAlignment:
@@ -1593,7 +1596,7 @@ List cate=[];
                                                     builder: (context) =>
                                                         ProductsPage(
                                                           storeId:
-                                                              store[0].storeId!,
+                                                              store[0].storeId!, storemodel: store[0],
                                                         )));
 
                                             setState(() {});
@@ -1709,6 +1712,431 @@ List cate=[];
                                   ],
                                 ),
                             )
+                    :InkWell(
+                  onTap: (){
+                    showSnackbar(context, "Please Wait for The store Verification ");
+                  },
+                      child: Padding(
+                  padding:  EdgeInsets.only(left: scrWidth*0.06,right: scrWidth*0.06),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        SizedBox(
+                          height: scrHeight * 0.02,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(store[0].storeName!,style: TextStyle(
+                                fontSize: scrWidth * 0.045,
+                                color: Colors.grey,
+                                fontFamily: 'Urbanist',
+                                fontWeight: FontWeight.w600),),
+                            Row(
+                              children: [
+                                IconButton(onPressed: (){
+                                  // Navigator.push(context, MaterialPageRoute(
+                                  //     builder: (context)=>StoreEditPage(storemodel: store[0],
+                                  //       update: true,)));
+                                }, icon: Icon(Icons.edit,color: Colors.grey,)),
+                                Text(
+                                  store[0].online! ? "(online)" : "(offline)",
+                                  style: GoogleFonts.urbanist(
+                                    color: Colors.grey,
+                                      fontSize: scrWidth * 0.028,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                Transform.scale(
+                                  scale: 0.7,
+                                  child: CupertinoSwitch(
+                                    thumbColor: Colors.grey,
+                                    activeColor:Colors.grey ,
+                                    trackColor: Colors.grey,
+
+                                     value: store[0].online!,
+                                    onChanged: (value) {
+                                      // print(widget.storeId);
+                                      //
+                                      // FirebaseFirestore
+                                      //     .instance
+                                      //     .collection('stores')
+                                      //     .doc(store[0].storeId)
+                                      //     .update(
+                                      //     {
+                                      //       'online':!store[0].online!,
+                                      //     }
+                                      // );
+                                      // setState(() {
+                                      //
+                                      // });
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                          ],
+                        ),
+
+                        SizedBox(height: 20,),
+                        Row(
+                          mainAxisAlignment:
+                          MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Overview",
+                              style: TextStyle(
+                                  fontSize: scrWidth * 0.04,
+                                  fontFamily: 'Urbanist',
+                                  color: Colors.grey,
+                                  fontWeight: FontWeight.w600),
+                            ),
+
+                            Text(
+                              "Today",
+                              style: TextStyle(
+                                  fontSize: scrWidth * 0.03,
+                                  color: Colors.grey,
+                                  fontFamily: 'Urbanist',
+                                  fontWeight: FontWeight.w600),
+                            )
+                          ],
+                        ),
+                        SizedBox(
+                          height: scrHeight * 0.013,
+                        ),
+                        Row(
+                          mainAxisAlignment:
+                          MainAxisAlignment.spaceAround,
+                          children: [
+                            InkWell(
+                              onTap: ()  {
+                                // await Navigator.push(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //         builder: (context) =>
+                                //             Orders(
+                                //               storeId:
+                                //               store[0].storeId!,
+                                //             )));
+                                //
+                                // setState(() {});
+                              },
+                              child: Container(
+                                height: scrHeight * 0.11,
+                                width: scrWidth * 0.4,
+                                decoration: BoxDecoration(
+                                    color: Color.fromRGBO(0, 128, 54, 0.33),
+                                    borderRadius:
+                                    BorderRadius.circular(
+                                        scrWidth * 0.06)),
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                      left: scrWidth * 0.05),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(
+                                        height: scrHeight * 0.02,
+                                      ),
+                                      Text(
+                                        "Orders",
+                                        style: TextStyle(
+                                            fontSize: scrWidth * 0.04,
+                                            color: Colors.white,
+                                            fontFamily: 'Urbanist',
+                                            fontWeight:
+                                            FontWeight.w600),
+                                      ),
+                                      SizedBox(
+                                        height: scrHeight * 0.018,
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            orders.length.toString(),
+                                            style: TextStyle(
+                                                fontSize:
+                                                scrWidth * 0.07,
+                                                color: Colors.white,
+                                                fontFamily:
+                                                'Urbanist',
+                                                fontWeight:
+                                                FontWeight.w700),
+                                          ),
+                                          SizedBox(
+                                            width: scrWidth * 0.18,
+                                          ),
+                                          SvgPicture.asset(
+                                              "assets/circlearrow.svg"),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () {
+                                // Navigator.push(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //         builder: (context) =>
+                                //             SalesPage()));
+                              },
+                              child: Container(
+                                  height: scrHeight * 0.11,
+                                  width: scrWidth * 0.4,
+                                  decoration: BoxDecoration(
+                                      color:Color.fromRGBO(0, 128, 54, 0.33),
+                                      borderRadius:
+                                      BorderRadius.circular(
+                                          scrWidth * 0.06)),
+                                  child: Padding(
+                                    padding: EdgeInsets.only(
+                                        left: scrWidth * 0.05),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      children: [
+                                        SizedBox(
+                                          height: scrHeight * 0.02,
+                                        ),
+                                        Text(
+                                          "Sale",
+                                          style: TextStyle(
+                                              fontSize:
+                                              scrWidth * 0.04,
+                                              color: Colors.white,
+                                              fontFamily: 'Urbanist',
+                                              fontWeight:
+                                              FontWeight.w600),
+                                        ),
+                                        SizedBox(
+                                          height: scrHeight * 0.018,
+                                        ),
+                                        Row(
+                                          children: [
+                                            Container(
+                                              child: Text(
+                                                store[0].totalSales ==
+                                                    null
+                                                    ? "₹${0.toStringAsFixed(2)}"
+                                                    : "₹${store[0].totalSales!.toStringAsFixed(2)}",
+                                                style: TextStyle(
+                                                    fontSize:
+                                                    scrWidth *
+                                                        0.05,
+                                                    color:
+                                                    Colors.white,
+                                                    fontFamily:
+                                                    'Urbanist',
+                                                    fontWeight:
+                                                    FontWeight
+                                                        .w700),
+                                              ),
+                                            ),
+                                            // SizedBox(
+                                            //   width: scrWidth * 0.14,
+                                            // ),
+                                            // SvgPicture.asset(
+                                            //     "assets/circlearrow.svg"),
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  )),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 20,),
+                        // Padding(
+                        //   padding: EdgeInsets.only(
+                        //       right: scrWidth * 0.46,
+                        //       top: scrHeight * 0.026),
+                        //   child: InkWell(
+                        //     onTap: () {},
+                        //     child: Container(
+                        //       height: scrHeight * 0.11,
+                        //       width: scrWidth * 0.4,
+                        //       decoration: BoxDecoration(
+                        //           color: Color(0xff02B558),
+                        //           borderRadius: BorderRadius.circular(
+                        //               scrWidth * 0.06)),
+                        //       child: Padding(
+                        //         padding: EdgeInsets.only(
+                        //             left: scrWidth * 0.05),
+                        //         child: Column(
+                        //           crossAxisAlignment:
+                        //               CrossAxisAlignment.start,
+                        //           children: [
+                        //             SizedBox(
+                        //               height: scrHeight * 0.02,
+                        //             ),
+                        //             Text(
+                        //               "Store Views",
+                        //               style: TextStyle(
+                        //                   fontSize: scrWidth * 0.04,
+                        //                   color: Colors.white,
+                        //                   fontFamily: 'Urbanist',
+                        //                   fontWeight: FontWeight.w600),
+                        //             ),
+                        //             SizedBox(
+                        //               height: scrHeight * 0.018,
+                        //             ),
+                        //             Text(
+                        //               "0",
+                        //               style: TextStyle(
+                        //                   fontSize: scrWidth * 0.07,
+                        //                   color: Colors.white,
+                        //                   fontFamily: 'Urbanist',
+                        //                   fontWeight: FontWeight.w700),
+                        //             )
+                        //           ],
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
+                        Text(
+                          "Products",
+                          style: TextStyle(
+                              fontSize: scrWidth * 0.04,
+                              fontFamily: 'Urbanist',
+                              color: Colors.grey,
+                              fontWeight: FontWeight.w600),
+                        ),
+                        SizedBox(height: 20,),
+                        Row(
+                          children: [
+
+                            InkWell(
+                              onTap: ()  {
+                                // await Navigator.push(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //         builder: (context) =>
+                                //             ProductsPage(
+                                //               storeId:
+                                //               store[0].storeId!,
+                                //             )));
+                                //
+                                // setState(() {});
+                              },
+                              child: Container(
+                                height: scrHeight * 0.1,
+                                width: scrWidth * 0.4,
+                                decoration: BoxDecoration(
+                                    color: Color.fromRGBO(0, 128, 54, 0.33),
+                                    borderRadius: BorderRadius.circular(
+                                        scrWidth * 0.06)),
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                      left: scrWidth * 0.05),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.start,
+                                    children: [
+                                      SizedBox(
+                                        height: scrHeight * 0.02,
+                                      ),
+                                      Text(
+                                        "Products",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                            fontSize: scrWidth * 0.035,
+                                            fontFamily: 'Urbanist',
+                                            fontWeight:
+                                            FontWeight.w600),
+                                      ),
+                                      SizedBox(
+                                        height: scrHeight * 0.01,
+                                      ),
+                                      Text(
+                                        products.length.toString(),
+                                        style: TextStyle(
+                                            fontSize: scrWidth * 0.06,
+                                            fontFamily: 'Urbanist',
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 18,
+                            ),
+                            // InkWell(
+                            //   onTap: () {
+                            //     Navigator.push(
+                            //         context,
+                            //         MaterialPageRoute(
+                            //             builder: (context) =>
+                            //                 CategoryPage(
+                            //                   storeId:
+                            //                       store[0].storeId!,
+                            //                 )));
+                            //   },
+                            //   child: Container(
+                            //     height: scrHeight * 0.1,
+                            //     width: scrWidth * 0.4,
+                            //     decoration: BoxDecoration(
+                            //         color: Color(0xffF3F3F3),
+                            //         borderRadius:
+                            //             BorderRadius.circular(
+                            //                 scrWidth * 0.06)),
+                            //     child: Padding(
+                            //       padding: EdgeInsets.only(
+                            //           left: scrWidth * 0.05),
+                            //       child: Column(
+                            //         crossAxisAlignment:
+                            //             CrossAxisAlignment.start,
+                            //         mainAxisAlignment:
+                            //             MainAxisAlignment.start,
+                            //         children: [
+                            //           SizedBox(
+                            //             height: scrHeight * 0.02,
+                            //           ),
+                            //           Text(
+                            //             "Categories",
+                            //             style: TextStyle(
+                            //                 fontSize:
+                            //                     scrWidth * 0.035,
+                            //                 fontFamily: 'Urbanist',
+                            //                 fontWeight:
+                            //                     FontWeight.w600),
+                            //           ),
+                            //           SizedBox(
+                            //             height: scrHeight * 0.01,
+                            //           ),
+                            //           Text(
+                            //             store[0]!
+                            //                 .storeCategory!
+                            //                 .length
+                            //                 .toString(),
+                            //             style: TextStyle(
+                            //                 fontSize:
+                            //                     scrWidth * 0.06,
+                            //                 fontFamily: 'Urbanist',
+                            //                 fontWeight:
+                            //                     FontWeight.w600),
+                            //           ),
+                            //         ],
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
+                          ],
+                        ),
+                      ],
+                  ),
+                ),
+                    )
                 // Column(
                 //    children: [
                 //      SizedBox(

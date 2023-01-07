@@ -1,6 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
+import 'package:threems/screens/Utilities/details.dart';
+
+import '../model/usermodel.dart';
+import '../screens/home_screen.dart';
+import '../screens/splash_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,10 +24,7 @@ import 'package:getwidget/types/gf_checkbox_type.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:threems/Authentication/root.dart';
 import 'package:threems/kuri/createkuri.dart';
-import 'package:threems/model/usermodel.dart';
 import 'package:threems/screens/home_screen.dart';
-import 'package:image_cropper/image_cropper.dart';
-
 
 import '../model/Buy&sell.dart';
 import '../screens/Utilities/AddYouService.dart';
@@ -31,22 +35,24 @@ import '../utils/themes.dart';
 import 'congratspage.dart';
 import 'dart:io';
 
-class StoreDetails extends StatefulWidget {
-  const StoreDetails({Key? key}) : super(key: key);
+class StoreEditPage extends StatefulWidget {
+ final  StoreDetailsModel? storemodel;
+ final  bool? update;
+ StoreEditPage({Key? key, required this.storemodel,required this.update}) : super(key: key);
 
   @override
-  State<StoreDetails> createState() => _StoreDetailsState();
+  State<StoreEditPage> createState() => _StoreEditPageState();
 }
 
-class _StoreDetailsState extends State<StoreDetails> {
+class _StoreEditPageState extends State<StoreEditPage> {
   bool finish = false;
   String serviceLocation='';
   TextEditingController? latitude;
   TextEditingController? longitude;
-   gMapPlacePicker.PickResult? result;
+  gMapPlacePicker.PickResult? result;
   bool trackedlocation = false;
   List categoryList=[];
-  List<String> selectCategory=[];
+  List<dynamic> selectCategory=[];
   List cate=[];
   List givenCategory=[];
 
@@ -65,8 +71,12 @@ class _StoreDetailsState extends State<StoreDetails> {
   Map<String,dynamic> categoryListAll={};
 
   Map<String,dynamic> categoryNames={};
-  getCategory(){
-    FirebaseFirestore.instance.collection('storeCategory').snapshots().listen((event) {
+
+  getCategory() async {
+
+    print(selectedListInt);
+
+   await FirebaseFirestore.instance.collection('storeCategory').snapshots().listen((event)  {
       categoryList=[];
       categoryNames={};
       categoryListAll={};
@@ -80,19 +90,22 @@ class _StoreDetailsState extends State<StoreDetails> {
         print('${event.docs[1]['categoryName']}');
 
         // categoryListAll.add(doc.data()!);
-        categoryNames[doc.get('categoryId')] = doc.get('categoryName');
+        // categoryNames[doc.get('categoryId')] = doc.get('categoryName');
         categoryList.add(doc.get('categoryName'));
         // categoryListAll[doc.get('categoryName')]=doc.id;
 
       }
-      givenCategory=[];
-      for(int i=0;i<cate.length; i++){
-        givenCategory.add({
-          'categoryId':cate[i]['categoryId']??"",
-          'categoryName':cate[i]['categoryName']??"",
-          'categoryImage':Image(image:NetworkImage(cate[i]['categoryImage']??'')),
-        });
-      }
+      // givenCategory=[];
+      // for(int i=0;i<cate.length; i++){
+      //   givenCategory.add({
+      //     'categoryId':cate[i]['categoryId']??"",
+      //     'categoryName':cate[i]['categoryName']??"",
+      //     'categoryImage':Image(image:NetworkImage(cate[i]['categoryImage']??'')),
+      //   });
+      // }
+      getData();
+
+
       print(categoryList);
       if(mounted){
         setState(() {
@@ -100,10 +113,68 @@ class _StoreDetailsState extends State<StoreDetails> {
         });
       }
     });
-    
-  }
-  ////////////////////////////////////////
 
+  }
+  String? imgUrls;
+  var imgFiles;
+  var uploadTasks;
+  var fileUrls;
+  Future uploadImageToFirebases(BuildContext context) async {
+    Reference firebaseStorageRef =
+    FirebaseStorage.instance.ref().child('deposits/${imgFiles.path}');
+    UploadTask uploadTask = firebaseStorageRef.putFile(imgFiles);
+    TaskSnapshot taskSnapshot = (await uploadTask);
+    String value = await taskSnapshot.ref.getDownloadURL();
+    print(value);
+
+    // if(value!=null){
+    //   imageList.add(value);
+    // }
+    setState(() {
+      loading=false;
+      imgUrls = value;
+
+    });
+  }
+  _pickImages() async {
+    loading=true;
+    final imageFile = await ImagePicker.platform.pickImage(
+        source: ImageSource.gallery);
+    setState(() {
+      imgFiles = File(imageFile!.path);
+      uploadImageToFirebases(context);
+    });
+  }
+  ////////////////////////////
+
+  String? imgUrl;
+  var imgFile;
+  var uploadTask;
+  var fileUrl;
+  Future uploadImageToFirebase(BuildContext context) async {
+    Reference firebaseStorageRef =
+    FirebaseStorage.instance.ref().child('deposits/${imgFile.path}');
+    UploadTask uploadTask = firebaseStorageRef.putFile(imgFile);
+    TaskSnapshot taskSnapshot = (await uploadTask);
+    String value = await taskSnapshot.ref.getDownloadURL();
+    print(value);
+
+    // if(value!=null){
+    //   imageList.add(value);
+    // }
+    setState(() {
+      imgUrl = value;
+
+    });
+  }
+  _pickImage() async {
+    final imageFile = await ImagePicker.platform.pickImage(
+        source: ImageSource.gallery);
+    setState(() {
+      imgFile = File(imageFile!.path);
+      uploadImageToFirebase(context);
+    });
+  }
   var pickFile;
   var fileName;
 
@@ -153,118 +224,104 @@ class _StoreDetailsState extends State<StoreDetails> {
     });
 
   }
-  ///////////////////////////////////////
-
-  String? imgUrls;
-  var imgFiles;
-  var uploadTasks;
-  var fileUrls;
-  Future uploadImageToFirebases(BuildContext context) async {
-    Reference firebaseStorageRef =
-    FirebaseStorage.instance.ref().child('deposits/${imgFiles.path}');
-    UploadTask uploadTask = firebaseStorageRef.putFile(imgFiles);
-    TaskSnapshot taskSnapshot = (await uploadTask);
-    String value = await taskSnapshot.ref.getDownloadURL();
-    print(value);
-
-    // if(value!=null){
-    //   imageList.add(value);
-    // }
-    setState(() {
-      loading=false;
-
-      imgUrls = value;
-
-    });
-  }
-  _pickImages() async {
-    loading=true;
-    final imageFile = await ImagePicker.platform.pickImage(
-        source: ImageSource.gallery);
-    setState(() {
-      imgFiles = File(imageFile!.path);
-      uploadImageToFirebases(context);
-    });
-  }
-  ////////////////////////////
-
-  String? imgUrl;
-  var imgFile;
-  var uploadTask;
-  var fileUrl;
-  Future uploadImageToFirebase(BuildContext context) async {
-    Reference firebaseStorageRef =
-    FirebaseStorage.instance.ref().child('deposits/${imgFile.path}');
-    UploadTask uploadTask = firebaseStorageRef.putFile(imgFile);
-    TaskSnapshot taskSnapshot = (await uploadTask);
-    String value = await taskSnapshot.ref.getDownloadURL();
-    print(value);
-
-    // if(value!=null){
-    //   imageList.add(value);
-    // }
-    setState(() {
-      imgUrl = value;
-
-    });
-  }
-  _pickImage() async {
-    final imageFile = await ImagePicker.platform.pickImage(
-        source: ImageSource.gallery);
-    setState(() {
-      imgFile = File(imageFile!.path);
-      // imgFile=_cropImage(imageFile: imgFile);
-      uploadImageToFirebase(context);
-    });
-  }
   set(){
     setState(() {
 
     });
   }
+
+
   String? selectedValue;
   final FocusNode storeNameFocus = FocusNode();
   final FocusNode storeAddressFocus = FocusNode();
   final FocusNode delivereyChargeFocus=FocusNode();
-  final FocusNode localBodyFocus=FocusNode();
   final TextEditingController storeNameController = TextEditingController();
   final TextEditingController storeAddressController = TextEditingController();
   final TextEditingController deliveryChargeController=TextEditingController();
-  final TextEditingController localBodyController=TextEditingController();
+  final FocusNode localBodyFocus=FocusNode();
+  final TextEditingController localBodyController = TextEditingController();
   bool loading=false;
   refreshPage() {
     setState(() {
       loading = false;
     });
   }
-//   Future<File?> _cropImage({required File imageFile}) async {
-//     CroppedFile? croppedImage=await ImageCropper().cropImage(sourcePath: imageFile.path);
-//     if(croppedImage == null) return null;
-//     return File(croppedImage.path);
-//
-// }
   // bool loading=false;
   // refreshPage() {
   //   setState(() {
   //     loading = false;
   //   });
   // }
+  List<int> selectedListInt=[];
+  getData(){
+     selectedListInt=[];
+    if(widget.update!){
+      imgUrl=widget.storemodel!.storeImage!;
+      storeNameController.text=widget.storemodel!.storeName!;
+      selectCategory=widget.storemodel!.storeCategory!;
+      deliveryChargeController.text=widget.storemodel!.deliveryCharge!.toString();
+      storeAddressController.text=widget.storemodel!.storeAddress!;
+      imgUrls=widget.storemodel!.storeQR!;
+      serviceLocation=widget.storemodel!.storeLocation!;
+      fileUrl=widget.storemodel!.localBodyDoc!;
+      localBodyController.text=widget.storemodel!.localBodyName!;
+      fileName=widget.storemodel!.localBodyDocName!;
+       // position=Position.fromMap(widget.storemodel!.position!) ;
+       // latitude!.text=widget.storemodel!.latitude!.toString() ;
+       // longitude!.text=widget.storemodel!.longitude!.toString();
+      print(widget.storemodel);
+      print(widget.storemodel!.storeCategory);
+      print(imgUrl);
+      print(imgUrls);
+      for(var i=0;i<categoryList.length;i++){
+        if(selectCategory.contains(categoryList[i])){
+          selectedListInt.add(i);
+        }
+      }
+      print('index');
+      print(selectedListInt);
+      print('index');
+
+      setState(() {
+
+      });
+
+
+    }
+    if(mounted){
+      setState(() {
+
+      });
+    }
+    setState(() {
+
+    });
+  }
   @override
   void initState() {
 
+
+
     // getShopCategory();
+
     getCategory();
-    storeNameFocus.addListener(() {
-      setState(() {});
-    });
-    storeAddressFocus.addListener(() {
-      setState(() {});
-    });
-    delivereyChargeFocus.addListener(() {
-      setState(() {});
-    });
-    latitude = TextEditingController(text:'0');
-    longitude = TextEditingController(text:'0');
+
+
+
+
+    // storeNameFocus.addListener(() {
+    //   setState(() {});
+    // });
+    // storeAddressFocus.addListener(() {
+    //   setState(() {});
+    // });
+    // delivereyChargeFocus.addListener(() {
+    //   setState(() {});
+    // });
+    latitude = TextEditingController(text:'');
+    longitude = TextEditingController(text:'');
+
+
     super.initState();
   }
 
@@ -275,10 +332,13 @@ class _StoreDetailsState extends State<StoreDetails> {
     delivereyChargeFocus.dispose();
     super.dispose();
   }
-
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
+    print(selectedListInt);
+    print("dfefehrugrhtughruthuhuyh");
+    return selectedListInt.isEmpty?
+    Center(child: CircularProgressIndicator(),)
+        : WillPopScope(
       onWillPop: () async {
         final shouldPop = await confirmQuitDialog(context);
         return shouldPop ?? false;
@@ -293,21 +353,21 @@ class _StoreDetailsState extends State<StoreDetails> {
           backgroundColor: Colors.white,
           leading: InkWell(
             onTap: () {
-      Navigator.pop(context);
-      },
-        child: Padding(
-          padding: EdgeInsets.only(
-              top: scrHeight * 0.02,
-              left: scrWidth * 0.05,
-              // bottom: scrHeight * 0.02,
-              right: scrWidth * 0.09),
-          child: Icon(
-            Icons.arrow_back,
-            color: Colors.black,
-            size: 25,
+              Navigator.pop(context);
+            },
+            child: Padding(
+              padding: EdgeInsets.only(
+                  top: scrHeight * 0.02,
+                  left: scrWidth * 0.05,
+                  // bottom: scrHeight * 0.02,
+                  right: scrWidth * 0.09),
+              child: Icon(
+                Icons.arrow_back,
+                color: Colors.black,
+                size: 25,
+              ),
+            ),
           ),
-        ),
-      ),
           title: Padding(
             padding: EdgeInsets.only(top: scrHeight * 0.02),
             child: Text(
@@ -323,7 +383,7 @@ class _StoreDetailsState extends State<StoreDetails> {
         body:loading?Center(child: CircularProgressIndicator()): SingleChildScrollView(
           child: Padding(
             padding:
-                EdgeInsets.only(left: scrWidth * 0.06, right: scrWidth * 0.06),
+            EdgeInsets.only(left: scrWidth * 0.06, right: scrWidth * 0.06),
             child: Column(
               children: [
                 Padding(
@@ -340,13 +400,18 @@ class _StoreDetailsState extends State<StoreDetails> {
                         borderRadius: BorderRadius.circular(scrWidth * 0.04),
                       ),
                       child: Center(
-                          child: imgFile==null?Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Center(
-                                  child: SvgPicture.asset(
-                                      "assets/icons/bigcamera.svg"))
-                            ],
+                          child: imgFile==null?Container(
+                            height:scrHeight*0.11,
+                            width: scrWidth*0.28,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image: NetworkImage(imgUrl??''),fit: BoxFit.fill),
+                              borderRadius: BorderRadius.circular(8),
+                              // border: Border.all(
+                              //   color: Color(0xffDADADA),
+                              // ),
+                            ),
+
                           ):Container(
                             height:scrHeight*0.11,
                             width: scrWidth*0.28,
@@ -412,7 +477,7 @@ class _StoreDetailsState extends State<StoreDetails> {
                       fillColor: textFormFieldFillColor,
                       filled: true,
                       contentPadding:
-                          EdgeInsets.only(top: 5, bottom: scrWidth * 0.033),
+                      EdgeInsets.only(top: 5, bottom: scrWidth * 0.033),
                       disabledBorder: InputBorder.none,
                       enabledBorder: InputBorder.none,
                       errorBorder: InputBorder.none,
@@ -521,18 +586,21 @@ class _StoreDetailsState extends State<StoreDetails> {
                       borderRadius: BorderRadius.circular(scrWidth * 0.026)),
                   child: GFMultiSelect(
                     items: categoryList,
-                    // initialSelectedItemsIndex: [0, 1],
+                     initialSelectedItemsIndex: selectedListInt,
                     onSelect: (value) {
+                      print(selectCategory);
+                      print(selectedListInt);
+                      print(value);
+
                       selectedValue=value.toString();
                       selectCategory=[];
                       for(int i=0;i<value.length;i++){
                         selectCategory.add(categoryList[value[i]].toString());
                       }
-                      print('selected $value ');
+                      print('selected $value');
                       print(selectCategory);
                     },
-
-                    dropdownTitleTileText: 'Store Category',
+                     dropdownTitleTileText:'Store Category',
                     // dropdownTitleTileHintText: 'Store Category',
                     // dropdownTitleTileHintTextStyle: TextStyle(
                     //  color: Color(0xffB0B0B0),
@@ -542,7 +610,7 @@ class _StoreDetailsState extends State<StoreDetails> {
                     //
                     // ),
                     dropdownTitleTileColor: textFormFieldFillColor,
-                     dropdownTitleTilePadding: EdgeInsets.only(left: 9),
+                    dropdownTitleTilePadding: EdgeInsets.only(left: 9),
                     dropdownTitleTileMargin: EdgeInsets.only(
                         top: 22, left: 18, right: 18, bottom: 14),
                     //  dropdownTitleTilePadding: EdgeInsets.all(10),
@@ -560,7 +628,6 @@ class _StoreDetailsState extends State<StoreDetails> {
                       color: Colors.black,
                     ),
                     submitButton: Text('OK'),
-
                     dropdownTitleTileTextStyle:  TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 14,
@@ -621,7 +688,7 @@ class _StoreDetailsState extends State<StoreDetails> {
                       fillColor: textFormFieldFillColor,
                       filled: true,
                       contentPadding:
-                          EdgeInsets.only(top: 5, bottom: scrWidth * 0.033),
+                      EdgeInsets.only(top: 5, bottom: scrWidth * 0.033),
                       disabledBorder: InputBorder.none,
                       enabledBorder: InputBorder.none,
                       errorBorder: InputBorder.none,
@@ -795,19 +862,24 @@ class _StoreDetailsState extends State<StoreDetails> {
                       borderRadius: BorderRadius.circular(scrWidth * 0.04),
                     ),
                     child: Center(
-                        child: imgFiles==null?Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Center(
-                                child: SvgPicture.asset(
-                                    "assets/icons/bigcamera.svg"))
-                          ],
+                        child: imgFiles==null?Container(
+                          height: scrHeight * 0.2,
+                          width: scrWidth * 0.56,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image:NetworkImage(imgUrls??''),fit: BoxFit.fill),
+                            borderRadius: BorderRadius.circular(8),
+                            // border: Border.all(
+                            //   color: Color(0xffDADADA),
+                            // ),
+                          ),
+
                         ):Container(
                           height: scrHeight * 0.2,
                           width: scrWidth * 0.56,
                           decoration: BoxDecoration(
                             image: DecorationImage(
-                                image: FileImage(imgFiles!) as ImageProvider,fit: BoxFit.fill),
+                                image: FileImage(imgFiles??'') as ImageProvider,fit: BoxFit.fill),
                             borderRadius: BorderRadius.circular(8),
                             // border: Border.all(
                             //   color: Color(0xffDADADA),
@@ -817,6 +889,9 @@ class _StoreDetailsState extends State<StoreDetails> {
                         )
                     ),
                   ),
+                ),
+                SizedBox(
+                  height: scrHeight * 0.02,
                 ),
                 SizedBox(
                   height: scrHeight * 0.02,
@@ -908,23 +983,17 @@ class _StoreDetailsState extends State<StoreDetails> {
                     ),
                     child: Padding(
                       padding:  EdgeInsets.symmetric(horizontal: scrHeight*0.03),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Upload Pdf Document",
-                            style: TextStyle(
-                              color: Color(0xff8391A1),
-                              fontWeight: FontWeight.w500,
-                              fontSize: FontSize15,
-                              fontFamily: 'Urbanist',
-                            ),
-                          ),
-                          SvgPicture.asset(
-                            'assets/icons/camera2.svg',
+                      child: Padding(
+                        padding:  EdgeInsets.only(top: 10),
+                        child: Text(
+                         fileName??'',
+                          style: TextStyle(
                             color: Color(0xff8391A1),
+                            fontWeight: FontWeight.w500,
+                            fontSize: FontSize15,
+                            fontFamily: 'Urbanist',
                           ),
-                        ],
+                        ),
                       ),
                     ),
                   ):Container(
@@ -952,10 +1021,8 @@ class _StoreDetailsState extends State<StoreDetails> {
                   ),
                 ),
                 SizedBox(
-                  height: scrHeight * 0.17,
+                  height: scrHeight * 0.2,
                 ),
-
-
 
 
               ],
@@ -982,15 +1049,19 @@ class _StoreDetailsState extends State<StoreDetails> {
         //   ),
         // )
         //     :
-        GestureDetector(
+         GestureDetector(
           onTap: () async {
+            print(longitude!.text);
+            print(latitude!.text);
+            print(widget.storemodel!.position);
+            print(latitude!.text==''&&longitude!.text=='');
             setState(() {
               loading=true;
             });
-            if(imgFile==null){
-              refreshPage();
-              return showSnackbar(context,"Must Provide  image");
-            }
+            // if(imgFile==null){
+            //   refreshPage();
+            //   return showSnackbar(context,"Must Provide  image");
+            // }
             if(storeNameController.text.isEmpty){
               refreshPage();
               return showSnackbar(context,"Must Provide StoreName");
@@ -1002,51 +1073,60 @@ class _StoreDetailsState extends State<StoreDetails> {
             if(storeAddressController.text.isEmpty){
               refreshPage();
               return showSnackbar(context,"Must Provide StoreAddress");
-            }if(localBodyController.text.isEmpty){
-              refreshPage();
-              return showSnackbar(context,"Must Provide localBody");
-            }if(pickFile==null){
-              refreshPage();
-              return showSnackbar(context,"Must Provide local Body Document");
             }else{
-              GeoFirePoint myLocation =
-              geo.point(latitude:double.tryParse(latitude!.text)??0,
+              GeoFirePoint myLocation = geo.point(latitude:double.tryParse(latitude!.text)??0,
                   longitude: double.tryParse(longitude!.text)??0);
 
+              FirebaseFirestore
+                  .instance
+                  .collection('stores')
+                  .doc(widget.storemodel!.storeId)
+                  .update({
+                'storeName':storeNameController.text,
+                'storeImage':imgUrl,
+                'storeAddress':storeAddressController.text,
+                'storeQR':imgUrls,
+                'deliveryCharge':double.tryParse(deliveryChargeController.text.toString())??0,
+                'storeCategory':selectCategory,
+                'position':(latitude!.text==''&&longitude!.text=='')?widget.storemodel!.position:myLocation.data,
+                'latitude':lat,
+                'longitude':long,
+                'storeLocation':serviceLocation,
+                'storeVerification':false,
+                'localBodyName':localBodyController.text,
+                'localBodyDoc':fileUrl,
+                'localBodyDocName':fileName,
+                'block':widget.storemodel!.block,
+                'blockedReason':widget.storemodel!.blockedReason,
+                'status': 0,
+                'contactNumber':widget.storemodel!.contactNumber,
+                'rejected': widget.storemodel!.rejected,
+                'rejectedReason':widget.storemodel!.rejectedReason,
+              }).whenComplete(() => Navigator.pop(context));
               // List<String> ids=[];
               // for(var item in selectCategory){
               //   ids.add(categoryListAll[item]);
               // }
               // print(ids);
-              final strDat = StoreDetailsModel(
-                online:false,
-                storeImage: imgUrl,
-                latitude: lat,
-                longitude:long ,
-                localBodyDoc:fileUrl,
-                productCategory: [],
-                localBodyName:localBodyController.text ,
-                deliveryCharge: double.tryParse(deliveryChargeController.text),
-                // categoryId:,
-                storeVerification: false,
-                block:false,
-                blockedReason: '',
-                status: 0,
-                contactNumber:currentuser?.phone ?? '',
-                rejected: false,
-                rejectedReason: '',
-                userId: currentuserid,
-                storeQR: imgUrls,
-                storeName: storeNameController.text,
-                storeCategory: selectCategory,
-                storeAddress: storeAddressController.text,
-                storeLocation: serviceLocation,
-                position: myLocation.data,
-                localBodyDocName: fileName,
-
-
-              );
-              await createStore(strDat);
+              //.....................................................//
+              // final strDat = StoreDetailsModel(
+              //
+              //     online:false,
+              //     storeImage: imgUrl,
+              //     latitude: lat,
+              //     longitude:long ,
+              //     deliveryCharge: double.tryParse(deliveryChargeController.text),
+              //     // categoryId:,
+              //     userId: currentuserid,
+              //     storeQR: imgUrls,
+              //     storeName: storeNameController.text,
+              //     storeCategory: selectCategory,
+              //     storeAddress: storeAddressController.text,
+              //     storeLocation: "ncsunuscns",
+              //     position: myLocation.data
+              //
+              // );
+              // await createStore(strDat);
             }
             print("---------------------------------------------------------");
             print(imgUrl);
@@ -1062,7 +1142,7 @@ class _StoreDetailsState extends State<StoreDetails> {
                 borderRadius: BorderRadius.circular(21.5)),
             child: Center(
               child: Text(
-                "Finish",
+                "Update",
                 style: TextStyle(
                     color: Colors.white,
                     fontFamily: 'Urbanist',
@@ -1074,25 +1154,5 @@ class _StoreDetailsState extends State<StoreDetails> {
         ),
       ),
     );
-  }
-
-  createStore(StoreDetailsModel strDat) async {
-    String? id;
-    FirebaseFirestore.instance
-        .collection('stores')
-        .add(strDat.toJson())
-        .then((value) {
-          // geoLocation(value.id);
-
-      value.update({'storeId': value.id});
-      id=value.id;
-    }).then((value) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => CongratsPage(
-                    id: id!, status: 0,
-                  )));
-    });
   }
 }

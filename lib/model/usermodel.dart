@@ -74,14 +74,15 @@ class Address {
   String? locality;
   String? flatNo;
   String? select;
-
+  int? selectedIndex;
   Address(
       {this.name,
       this.phoneNumber,
       this.pinCode,
       this.locality,
       this.flatNo,
-      this.select});
+      this.select,
+      this.selectedIndex});
 
   Address.fromJson(Map<String, dynamic> json) {
     name = json['name'];
@@ -90,6 +91,7 @@ class Address {
     locality = json['locality'];
     flatNo = json['flatNo'];
     select = json['select'];
+    selectedIndex=json['selectedIndex'];
   }
 
   Map<String, dynamic> toJson() {
@@ -100,6 +102,7 @@ class Address {
     data['locality'] = this.locality;
     data['flatNo'] = this.flatNo;
     data['select'] = this.select;
+    data['selectedIndex']=this.selectedIndex;
     return data;
   }
 }

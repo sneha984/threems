@@ -190,18 +190,23 @@ class AudioPlayerState extends State<AudioPlayer> {
 
     return Expanded(
       child: SizedBox(
-        child: Slider(
-          activeColor: Colors.black,
-          inactiveColor: Colors.white,
-          onChanged: (v) {
-            if (duration != null) {
-              final position = v * duration.inMilliseconds;
-              _audioPlayer.seek(Duration(milliseconds: position.round()));
-            }
-          },
-          value: canSetValue && duration != null
-              ? position.inMilliseconds / duration.inMilliseconds
-              : 0.0,
+        child: Row(
+          children: [
+            Slider(
+              activeColor: Colors.black,
+              inactiveColor: Colors.white,
+              onChanged: (v) {
+                if (duration != null) {
+                  final position = v * duration.inMilliseconds;
+                  _audioPlayer.seek(Duration(milliseconds: position.round()));
+                }
+              },
+              value: canSetValue && duration != null
+                  ? position.inMilliseconds / duration.inMilliseconds
+                  : 0.0,
+            ),
+
+          ],
         ),
       ),
     );

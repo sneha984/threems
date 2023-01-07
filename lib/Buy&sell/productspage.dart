@@ -1,10 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:csv/csv.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:threems/Authentication/root.dart';
 import 'package:threems/Buy&sell/buy_and_sell.dart';
 import 'package:threems/Buy&sell/productaddingpage.dart';
@@ -12,12 +15,15 @@ import 'package:threems/Buy&sell/storedetailsfill2.dart';
 import 'package:threems/model/Buy&sell.dart';
 import 'package:threems/products/producteditpage.dart';
 
+import '../kuri/createkuri.dart';
 import '../screens/splash_screen.dart';
+import 'dart:io';
 import '../utils/themes.dart';
 
 class ProductsPage extends StatefulWidget {
   final String storeId;
-  const ProductsPage({Key? key, required this.storeId,}) : super(key: key);
+  final StoreDetailsModel storemodel;
+  const ProductsPage({Key? key, required this.storeId, required this.storemodel,}) : super(key: key);
 
   @override
   State<ProductsPage> createState() => _ProductsPageState();
@@ -26,6 +32,30 @@ class ProductsPage extends StatefulWidget {
 class _ProductsPageState extends State<ProductsPage> {
   ProductModel? prodct;
   List getAllProducts=[];
+  List getUnit=[];
+  getDropdownValues(){
+    FirebaseFirestore
+        .instance
+        .collection('productUnit')
+
+        .snapshots()
+        .listen((event) {
+          print("dkinfcnsdn");
+          print(event.docs.length);
+      getUnit=[];
+      for(DocumentSnapshot <Map<String,dynamic>> doc in event.docs){
+        getUnit.add(doc['unit']);
+      }
+      if(mounted){
+        setState(() {
+
+        });
+      }
+
+    });
+
+
+  }
   getProductsAll(){
     FirebaseFirestore
         .instance
@@ -52,6 +82,7 @@ class _ProductsPageState extends State<ProductsPage> {
   @override
   void initState() {
     getProductsAll();
+    getDropdownValues();
     // TODO: implement initState
     super.initState();
   }
@@ -186,6 +217,9 @@ class _ProductsPageState extends State<ProductsPage> {
                         ),
                       ],
                     ),
+                    IconButton(onPressed: (){
+                      pickFile();
+                    }, icon: Icon(Icons.add,color: Colors.white,)),
                     InkWell(
                       onTap: (){
                         Navigator.push(context,
@@ -227,6 +261,8 @@ class _ProductsPageState extends State<ProductsPage> {
               child: ListView.builder(
                 itemCount:getAllProducts.length,
                   itemBuilder: (context,index){
+
+                  List imageList= getAllProducts[index]['images'];
                     return Padding(
                       padding: const EdgeInsets.only(left: 20,right: 20,top: 15),
                       child: Container(
@@ -246,7 +282,11 @@ class _ProductsPageState extends State<ProductsPage> {
                                 ),
                                 child: Padding(
                                   padding: const EdgeInsets.all(3),
-                                  child: CachedNetworkImage(imageUrl: getAllProducts[index]['images'][0]??'')),
+                                  child: CachedNetworkImage(
+                                      imageUrl:
+                                      imageList.length==0?
+                                          'https://img.freepik.com/free-vector/shop-with-sign-we-are-open_52683-38687.jpg?w=2000'
+                                  :imageList[0])),
                                 ),
                             ),
 
@@ -425,10 +465,269 @@ class _ProductsPageState extends State<ProductsPage> {
             ),
 
 
+
+
           ],
         ),
       ),
 
     );
+  }
+  // void pickFile() async {
+  //   final result = await FilePicker.platform.pickFiles(
+  //     allowMultiple: false,
+  //     withData: true,
+  //     // withReadStream: true,
+  //   );
+  //
+  //   if (result == null) return;
+  //   final file = result.files.first;
+  //   print(file.name);
+  //   _openFile(file);
+  // }
+  //
+  // List<int> pincodes = [];
+  //
+  // Future<void> _openFile(PlatformFile file) async {
+  //   print("-----------------------");
+  //   List<List<dynamic>> listData = CsvToListConverter().convert(String.fromCharCodes(file.bytes!));
+  //   print('abc');
+  //
+  //   List list = [];
+  //   int dfgh = 0;
+  //   for (dynamic a in listData) {
+  //     if (a != null && a != "") {
+  //       print('found');
+  //       String productName=a[0];
+  //       double price=a[3];
+  //       int quantity=a[4];
+  //       String storedCategory=a[1];
+  //       String productCategory=a[2];
+  //       String unit=a[5];
+  //       String storeid=widget.storeId;
+  //       String details=a[6];
+  //       await FirebaseFirestore
+  //           .instance
+  //           .collection('stores')
+  //           .doc(widget.storeId)
+  //           .collection('products')
+  //           .add({
+  //         'productName':productName,
+  //         'storedCategorys':storedCategory,
+  //         'productCategory':productCategory,
+  //         'price':price,
+  //         'quantity':quantity,
+  //         'unit':unit,
+  //         'details':details,
+  //         'storeId':storeid,
+  //         'available':true,
+  //         'delete':false
+  //       });
+  //
+  //
+  //
+  //   // var abcs=   DateTime.parse("${a[1]} 00:00:00");
+  //   //     FirebaseFirestore.instance.collection('Users')
+  //   //         .doc(id)
+  //   //   .set({
+  //   //       'uid':id,
+  //   //       'joinDate':abcs,
+  //   //       'name':a[2],
+  //   //       'mobno':a[3],
+  //   //       'address':{
+  //   //         'hname':a[6],
+  //   //         'city':a[7],
+  //   //         'district':'',
+  //   //         'pincode':a[9],
+  //   //         'state':a[8],
+  //   //       },
+  //   //       'email':a[4],
+  //   //       'password':a[5],
+  //   //       'ifscno':'',
+  //   //       'bankname':'',
+  //   //       'branch':'',
+  //   //       'googlepayno':a[3],
+  //   //       'phonepayno':a[3],
+  //   //       'upiId':'',
+  //   //       'sendhelp':0,
+  //   //       'receivehelp':0,
+  //   //       'levelincome':0,
+  //   //       'directmember':0,
+  //   //       'rebirthId':0,
+  //   //       'status':false,
+  //   //       'spnsr_Id':0,
+  //   //       'sponsoremobile':'',
+  //   //       'sponsorincome':0,
+  //   //       'mystatus':'',
+  //   //       'sno':0,
+  //   //       'firstRecCount':0,
+  //   //       'checkGenId':false,
+  //   //       'motherId':'',
+  //   //       'wallet':0,
+  //   //       'eligible':false,
+  //   //       'firstLevelJoinDate':abcs,
+  //   //       'referral':0,
+  //   //       'genId':{
+  //   //         'firstGenId':'',
+  //   //         'secondGenId':'',
+  //   //         'thirdGenId':'',
+  //   //       },
+  //   //
+  //   //
+  //   //     });
+  //     }else{
+  //       print('not found');
+  //
+  //     }
+  //
+  //     dfgh++;
+  //     print(dfgh);
+  //   }
+  //
+  //   setState(() {});
+  // }
+  List leadz = [];
+  String selectedBranch = '';
+  String filename = '';
+
+  void pickFile() async {
+    final result = await FilePicker.platform.pickFiles(allowMultiple: false,
+            withData: true
+            // withReadStream: true,
+        );
+
+    if (result == null) return;
+    final file = result.files.first;
+    _openFile(file);
+
+  }
+
+  List<List<dynamic>> rowdetail=[];
+
+  void _openFile(PlatformFile file) {
+    // print(file.name);
+    filename = file.name;
+    // print(rowdetail);
+    // print('file.bytes');
+    // print(file.bytes);
+
+    rowdetail =
+        const CsvToListConverter().convert(String.fromCharCodes(file.bytes!));
+
+    // print('EXEL EXEL EXEL EXEL EXEL EXEL ');
+
+    int i = 0;
+print("start");
+    for (dynamic a in rowdetail) {
+      if (a != null && a != '') {
+
+        // print(rowdetail);
+        // print(a);
+        // print(a[0]);
+        // print(a[1]);
+        // print(a[2]);
+        // print(a[3]);
+        // print(a[4]);
+
+        if(widget.storemodel.storeCategory!.contains(a[1])){
+          if(widget.storemodel.productCategory!.contains(a[2])) {
+            if(getUnit.contains(a[5])) {
+              FirebaseFirestore
+              .instance
+              .collection('stores')
+              .doc(widget.storeId)
+              .collection('products')
+              .add({
+            'productName':a[0],
+            'storedCategorys':a[1],
+            'productCategory':a[2],
+            'price':a[3],
+            'quantity':a[4],
+            'unit':a[5],
+            'details':a[6],
+            'images':[],
+            'storeId':widget.storeId,
+            'available':true,
+            'delete':false
+
+
+          }).then((value){
+            value.update({
+              'productId':value.id
+            });
+
+          });
+            }
+            else{
+              print("${a[5]}"+a[0].toString());
+              showSnackbar(context, "Incorrect Unit Specified  In ${a[0]}");
+              return ;
+            }
+          }else{
+            print("${a[2]}"+a[0].toString());
+            showSnackbar(context, "Incorrect Product Category Specified  In ${a[0]}");
+
+            return ;
+
+          }
+        }else{
+          // if(widget.storemodel.storeCategory!.contains(a[1])&&widget.storemodel.productCategory!.contains(a[2])
+          //     &&getUnit.contains(a[5])){
+          //
+          // }
+          print("${a[1]}"+a[0].toString());
+
+          print(a);
+          showSnackbar(context, "Incorrect Store Category Specified  In ${a[0]}");
+
+          return ;
+
+        }
+
+
+
+        // leadz.add({
+        //   'productName':a[0],
+        //           'storedCategorys':a[1],
+        //           'productCategory':a[2],
+        //           'price':a[3],
+        //           'quantity':a[4],
+        //           'unit':a[5],
+        //           'details':a[6],
+        //   'images':a[7],
+        //
+        //           // 'storeId':widget.storeId,
+        //           // 'available':true,
+        //           // 'delete':false
+        // });
+
+        // print(leadz);
+        // print('                          *********');
+
+        i++;
+      }
+    }
+    showSnackbar(context, "Bulk Product Added Successfully");
+    setState(() {
+      print(leadz);
+
+
+    });
+
+    // var bytes = file.bytes;
+    // excel.setDefaultSheet('sales');
+    // for (var table in excel.tables.keys) {
+    //   print(table);
+    //   print('^^^^^^^^^^^^^^');
+    //   print(excel.tables[table].rows);
+    //   print('TABLE TABLE TABLE');
+    //   for (var row in excel.tables[table].rows) {
+    //     print(row);
+    //     print('Row Row Row');
+    //
+    //     rowdetail.add(row);
+    //   }
+    // }
+    // print(rowdetail);
   }
 }

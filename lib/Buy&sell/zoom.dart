@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pinch_zoom/pinch_zoom.dart';
@@ -22,7 +23,7 @@ class _ZoomPageState extends State<ZoomPage> {
         }, icon: Icon(Icons.arrow_back,color: Colors.black,)),
       ),
       body:   PinchZoom(
-        child: Image.network(widget.img),
+        child: CachedNetworkImage( imageUrl: widget.img,),
         resetDuration: const Duration(minutes: 1),
         maxScale: 2.5,
         onZoomStart: (){print('Start zooming');},

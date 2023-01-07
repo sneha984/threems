@@ -3,20 +3,27 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_line/dotted_line.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:threems/Authentication/root.dart';
+import 'package:threems/Buy&sell/reportBottomsheet/qrcodebottomsheet.dart';
 import 'package:threems/Buy&sell/storepage.dart';
+import 'package:threems/kuri/createkuri.dart';
 
 import '../model/OrderModel.dart';
 import '../model/usermodel.dart';
 import '../screens/splash_screen.dart';
 import '../utils/themes.dart';
+import 'addressUpdate.dart';
 import 'checkout2.dart';
 import 'checkoutpage3.dart';
+import 'dart:io';
+
 
 class CheckOutPage extends StatefulWidget {
   // final String id;
@@ -29,6 +36,7 @@ class CheckOutPage extends StatefulWidget {
 }
 
 class _CheckOutPageState extends State<CheckOutPage> {
+
   String cartKey = 'cart';
 
   Future storeData() async {
@@ -39,6 +47,8 @@ class _CheckOutPageState extends State<CheckOutPage> {
 
   List<Address>? addressList;
   bool shopAvailable = false;
+  bool placeOrder=true;
+  String? image;
   bool prd=false;
   getAddress() {
     print('1234');
@@ -50,8 +60,11 @@ class _CheckOutPageState extends State<CheckOutPage> {
           .snapshots()
           .listen((event) {
         shopAvailable = event['online'];
+        image=event['storeQR'];
         if (mounted) {
           setState(() {
+            print(cartlist[0]['storeId']);
+            print(cartlist[0]['storeName']);
 
           });
         }
@@ -91,6 +104,42 @@ class _CheckOutPageState extends State<CheckOutPage> {
       }
     });
   }
+  bool loading=false;
+
+  String groupValue='Cash On Delivery';
+  int index=0;
+  String? imgUrls;
+  var imgFiles;
+  var uploadTasks;
+  var fileUrls;
+  Future uploadImageToFirebases(BuildContext context) async {
+    Reference firebaseStorageRef =
+    FirebaseStorage.instance.ref().child('deposits/${imgFiles.path}');
+    UploadTask uploadTask = firebaseStorageRef.putFile(imgFiles);
+    TaskSnapshot taskSnapshot = (await uploadTask);
+    String value = await taskSnapshot.ref.getDownloadURL();
+    print(value);
+
+    // if(value!=null){
+    //   imageList.add(value);
+    // }
+    setState(() {
+      loading=false;
+
+      imgUrls = value;
+
+    });
+  }
+  _pickImages() async {
+    loading=true;
+    final imageFile = await ImagePicker.platform.pickImage(
+        source: ImageSource.gallery);
+    setState(() {
+      imgFiles = File(imageFile!.path);
+      uploadImageToFirebases(context);
+    });
+  }
+
 
 
   @override
@@ -118,7 +167,8 @@ class _CheckOutPageState extends State<CheckOutPage> {
       double x = cartlist[i]['price'] * cartlist[i]['count'];
       totalprice.add(x);
       sum = sum + x;
-      grandtotal = sum + deliverycharge;
+
+      grandtotal = sum +cartlist[i]['deliveryCharge'];
     }
     return Scaffold(
       body:
@@ -587,7 +637,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                               width: 30,
                             ),
                             Text(
-                              "₹$deliverycharge",
+                              "₹${cartlist[0]['deliveryCharge']}",
                               style: TextStyle(
                                   fontSize: 14,
                                   color: Colors.black,
@@ -651,14 +701,14 @@ class _CheckOutPageState extends State<CheckOutPage> {
                             ),
                           ],
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                              left: 17, right: 17, top: 10, bottom: 10),
-                          child: DottedLine(
-                            dashColor: Colors.grey,
-                            lineThickness: 0.8,
-                          ),
-                        ),
+                        // Padding(
+                        //   padding: EdgeInsets.only(
+                        //       left: 17, right: 17, top: 10, bottom: 10),
+                        //   child: DottedLine(
+                        //     dashColor: Colors.grey,
+                        //     lineThickness: 0.8,
+                        //   ),
+                        // ),
                         // Row(
                         //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         //   children: [
@@ -694,7 +744,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                     color: Color(0xffF3F3F3),
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 15,
                   ),
                   addressList == null || addressList!.isEmpty
                       ? InkWell(
@@ -724,116 +774,269 @@ class _CheckOutPageState extends State<CheckOutPage> {
                             ),
                           ),
                         )
-                      : Container(
-                          height: 100,
-                          width: 340,
-                          decoration: BoxDecoration(
-                              // color: Colors.white,
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(
-                                  color: Color(0xffD2D2D2), width: 1)),
-                          child: Padding(
-                            padding: EdgeInsets.only(left: 15, top: 10),
-                            child: Row(
-                              children: [
-                                Container(
-                                  width: 160,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        addressList == null ||
-                                                addressList!.isEmpty
-                                            ? ''
-                                            : addressList![0].name!,
-                                        style: TextStyle(
-                                            fontFamily: 'Urbanist',
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 12,
-                                            color: Colors.black),
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      Text(
-                                        addressList == null ||
-                                                addressList!.isEmpty
-                                            ? ''
-                                            : addressList![0].phoneNumber!,
-                                        style: const TextStyle(
-                                            fontFamily: 'Urbanist',
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 12,
-                                            color: Colors.black),
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      Text(
-                                        addressList == null ||
-                                                addressList!.isEmpty
-                                            ? ''
-                                            : "Flat ${addressList![0].flatNo!},${addressList![0].locality!},"
-                                                "${addressList![0].pinCode!}",
-                                        style: TextStyle(
-                                            fontFamily: 'Urbanist',
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 12,
-                                            color: Colors.black),
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      Text(
-                                        addressList == null ||
-                                                addressList!.isEmpty
-                                            ? ''
-                                            : addressList![0].select!,
-                                        style: TextStyle(
-                                            fontFamily: 'Urbanist',
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 12,
-                                            color: Colors.black),
-                                      ),
-                                    ],
+                      : InkWell(
+                    onTap: (){
+                      // Navigator.push(context, MaterialPageRoute(
+                      //     builder: (context)=>AddressUpdate(
+                      //       update: true, address: [addressList![0]],)));
+                    },
+                        child: Container(
+                            height: 100,
+                            width: 340,
+                            decoration: BoxDecoration(
+                                // color: Colors.white,
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(
+                                    color: Color(0xffD2D2D2), width: 1)),
+                            child: Padding(
+                              padding: EdgeInsets.only(left: 15, top: 10),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 160,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          addressList == null ||
+                                                  addressList!.isEmpty
+                                              ? ''
+                                              : addressList![0].name!,
+                                          style: TextStyle(
+                                              fontFamily: 'Urbanist',
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 12,
+                                              color: Colors.black),
+                                        ),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        Text(
+                                          addressList == null ||
+                                                  addressList!.isEmpty
+                                              ? ''
+                                              : addressList![0].phoneNumber!,
+                                          style: const TextStyle(
+                                              fontFamily: 'Urbanist',
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 12,
+                                              color: Colors.black),
+                                        ),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        Text(
+                                          addressList == null ||
+                                                  addressList!.isEmpty
+                                              ? ''
+                                              : "Flat ${addressList![0].flatNo!},${addressList![0].locality!},"
+                                                  "${addressList![0].pinCode!}",
+                                          style: TextStyle(
+                                              fontFamily: 'Urbanist',
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 12,
+                                              color: Colors.black),
+                                        ),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        Text(
+                                          addressList == null ||
+                                                  addressList!.isEmpty
+                                              ? ''
+                                              : addressList![0].select!,
+                                          style: TextStyle(
+                                              fontFamily: 'Urbanist',
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 12,
+                                              color: Colors.black),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                SizedBox(
-                                  width: 100,
-                                ),
-                                IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        addressList?.removeAt(0);
-                                      });
-                                      FirebaseFirestore.instance
-                                          .collection('users')
-                                          .doc(currentuserid)
-                                          .update({
-                                        'address': FieldValue.delete()
-                                      }).whenComplete(() {
-                                        print('Field Deleted');
-                                      });
-                                    },
-                                    icon: Icon(Icons.delete))
-                                // IconButton(
-                                //   onPressed: () {
-                                //     setState(() {
-                                //       addressList?.removeAt(0);
-                                //
-                                //     });
-                                //
-                                //   },
-                                //   icon: Icon(Icons.delete),
-                                // ),
-                              ],
+                                  SizedBox(
+                                    width: 100,
+                                  ),
+                                  IconButton(
+                                      onPressed: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (ctx) => AlertDialog(
+                                            title: const Text("Alert Dialog Box"),
+                                            content: const Text("Do You Want To Delete This Address"),
+                                            actions: <Widget>[
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(ctx).pop();
+                                                },
+                                                child: const Text("No"),
+                                              ),
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(ctx).pop();
+                                                  setState(() {
+                                                    addressList?.removeAt(0);
+                                                  });
+                                                  FirebaseFirestore.instance
+                                                      .collection('users')
+                                                      .doc(currentuserid)
+                                                      .update({
+                                                    'address': FieldValue.delete()
+                                                  }).whenComplete(() {
+                                                    print('Field Deleted');
+                                                  });
+                                                },
+                                                child: const Text("Yes"),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                      icon: Icon(Icons.delete))
+                                  // IconButton(
+                                  //   onPressed: () {
+                                  //     setState(() {
+                                  //       addressList?.removeAt(0);
+                                  //
+                                  //     });
+                                  //
+                                  //   },
+                                  //   icon: Icon(Icons.delete),
+                                  // ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
+                      ),
                   SizedBox(
-                    height: 30,
+                    height: 5,
                   ),
+                  Padding(
+                    padding:  EdgeInsets.only(right: scrWidth*0.58),
+                    child: Text(
+                      "Payment Methods",
+                      style: TextStyle(
+                          fontFamily: 'Urbanist',
+                          fontWeight: FontWeight.w700,
+                          fontSize: 15,
+                          color: Colors.black),
+                    ),
+                  ),
+                  Padding(
+                    padding:  EdgeInsets.only(left: scrWidth*0.06,right: scrWidth*0.02),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            // Container(
+                            //     height: 50,
+                            //     width: 50,
+                            //     child: Image(
+                            //         image: NetworkImage(
+                            //             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQsjHTHD5T1mFOZsCqkNMfujHaX6BYxFxGkXQ&usqp=CAU"))),
+                            // SizedBox(width: 10,),
+                            Text("Cash On Delivery"),
+
+                            Radio(
+                              activeColor: primarycolor,
+                              value: "Cash On Delivery",
+                              groupValue:groupValue,
+                              onChanged:( value){
+                                setState((){
+                                  print(groupValue);
+                                  groupValue=value.toString();
+                                  index=0;
+                                });
+                              },),
+
+
+
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+                          children: [
+                            // Container(
+                            //     height: 50,
+                            //     width: 50,
+                            //     child: Image(
+                            //         image: NetworkImage(
+                            //             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3SGUreVD7pVxevpSTYkUDPhZsoFycafhxEA&usqp=CAU"))),
+                            Text("QR Code Scan"),
+                            Radio(
+                              activeColor: primarycolor,
+
+                              value: "QR Code Scan",
+                              groupValue:groupValue,
+                              onChanged:( value){
+                                setState((){
+                                  _modalBottomSheetMenu();
+
+                                  groupValue=value.toString();
+                                  index=1;
+                                  print(index);
+                                  print(groupValue);
+                                });
+                              },),
+
+
+                          ],
+                        ),
+
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: scrHeight * 0.02,
+                  ),
+                  index==1?Text("Upload ScreenShot"):SizedBox(),
+                  SizedBox(
+                    height: scrHeight * 0.005,
+                  ),
+                  index==1?InkWell(
+                    onTap: (){
+                      loading=true;
+                      _pickImages();
+                    },
+                    child: Container(
+                      height: scrHeight * 0.2,
+                      width: scrWidth * 0.9,
+                      decoration: BoxDecoration(
+                        color: textFormFieldFillColor,
+                        borderRadius: BorderRadius.circular(scrWidth * 0.04),
+                      ),
+                      child: Center(
+                          child: imgFiles==null?Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Center(
+                                  child: SvgPicture.asset(
+                                      "assets/icons/bigcamera.svg"))
+                            ],
+                          ):Container(
+                            height: scrHeight * 0.2,
+                            width: scrWidth * 0.9,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image: FileImage(imgFiles!) as ImageProvider,fit: BoxFit.fill),
+                              borderRadius: BorderRadius.circular(8),
+                              // border: Border.all(
+                              //   color: Color(0xffDADADA),
+                              // ),
+                            ),
+
+                          )
+                      ),
+                    ),
+                  ):SizedBox(),
+                  SizedBox(
+                    height: scrHeight * 0.02,
+                  ),
+
+
                 ],
               ),
             ),
@@ -859,47 +1062,50 @@ class _CheckOutPageState extends State<CheckOutPage> {
                 )
               : (shopAvailable==true&&prd==true)?InkWell(
                   onTap: () {
-                    List<OrderedItems> orders1 = [];
-                    double total = 0;
-                    for (int i = 0; i < cartlist.length; i++) {
-                      total += cartlist[i]['count'] * cartlist[i]['price'];
-                      orders1.add(OrderedItems(
-                        item: cartlist[i]['name'],
-                        count: cartlist[i]['count'],
-                        amount: cartlist[i]['price'],
-                        itemImage: cartlist[i]['img'],
-                      ));
+                    if(loading==false){
+                      List<OrderedItems> orders1 = [];
+                      double total = 0;
+
+                      for (int i = 0; i < cartlist.length; i++) {
+                        total += cartlist[i]['count'] * cartlist[i]['price'];
+                        orders1.add(OrderedItems(
+                          item: cartlist[i]['name'],
+                          count: cartlist[i]['count'],
+                          amount: cartlist[i]['price'],
+                          itemImage: cartlist[i]['img'],
+                        ));
+                      }
+                      var ordr = OrderModel(
+                          productId: cartlist[0]['productId'],
+
+                          // item: cartlist[i]['name'],
+                          // itemImage: cartlist[i]['img'],
+                          // amount: cartlist[i]['price'],
+                          time: DateTime.now(),
+                          userId: currentuserid,
+                          deliveryCharge: cartlist[0]['deliveryCharge'],
+                          status: 0,
+                          orderedItems: orders1,
+                          total: total,
+                          paymentMethod: index,
+                          paymentScreenShort: imgUrls??'',
+                          // count: cartlist[i]['count'],
+                          storeId: cartlist[0]['storeId'],
+                          address: Addresses(
+                              phoneNumber: addressList![0].phoneNumber!,
+                              flatNo: addressList![0].flatNo!,
+                              pincode: addressList![0].pinCode!,
+                              locality: addressList![0].locality!,
+                              locationType: addressList![0].select!,
+                              name: addressList![0].name!));
+                      orderPlacing(ordr, cartlist[0]['storeId']);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CheckOutPage3()));
+                    }else{
+                      showSnackbar(context, " Screenshort Uploading.....");
                     }
-                    var ordr = OrderModel(
-                      productId: cartlist[0]['productId'],
-
-                        // item: cartlist[i]['name'],
-                        // itemImage: cartlist[i]['img'],
-                        // amount: cartlist[i]['price'],
-                        time: DateTime.now(),
-                        userId: currentuserid,
-                        deliveryCharge: cartlist[0]['deliveryCharge'],
-                        status: 0,
-                        orderedItems: orders1,
-                        total: total,
-                        // count: cartlist[i]['count'],
-
-
-                        storeId: cartlist[0]['storeId'],
-                        address: Addresses(
-                            phoneNumber: addressList![0].phoneNumber!,
-                            flatNo: addressList![0].flatNo!,
-                            pincode: addressList![0].pinCode!,
-                            locality: addressList![0].locality!,
-                            locationType: addressList![0].select!,
-                            name: addressList![0].name!));
-                    orderPlacing(ordr, cartlist[0]['storeId']);
-
-
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => CheckOutPage3()));
                   },
                   child: Container(
                     height: 40,
@@ -963,6 +1169,19 @@ class _CheckOutPageState extends State<CheckOutPage> {
               //     }
               //   ]
               // )
-            }));
+      
+            })).then((value) => cartlist=[]);
+  }
+  void _modalBottomSheetMenu(){
+    showModalBottomSheet(
+        context: context,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
+        ),
+        builder: (BuildContext context) {
+          // return your layout
+          return QRBottomsheetPage(img: image??'',) ;
+        }
+    );
   }
 }

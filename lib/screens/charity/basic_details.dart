@@ -116,7 +116,6 @@ class _BasicDetailsState extends State<BasicDetails> {
         });
       }
 
-
       print(dropdownItems);
       print(dropdownValue);
 

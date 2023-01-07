@@ -85,13 +85,13 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
         body: Column(children: [
           Container(
             color: primarycolor,
-            height: 110,
+            height: scrHeight*0.15,
             child: Column(
               children: [
                 Row(
                   children: [
                     SizedBox(
-                      width: 8,
+                      width:scrWidth*0.02,
                     ),
                     InkWell(
                       onTap: () {
@@ -127,7 +127,7 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                   ],
                 ),
                 SizedBox(
-                  height: 18,
+                  height: scrHeight*0.027,
                 ),
                 Container(
                   height: 32,
@@ -250,6 +250,7 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                     )
                   : ListView.builder(
                       itemCount: pendingList.length,
+
                       itemBuilder: (context, index) {
                         final order = pendingList[index];
 

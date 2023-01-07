@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:threems/layouts/screen_layout.dart';
@@ -11,6 +12,8 @@ import 'package:threems/pagess/onboardingpage.dart';
 import 'package:threems/screens/home_screen.dart';
 import 'package:threems/screens/splash_screen.dart';
 
+import '../Notes/no.dart';
+import '../Notes/notes.dart';
 import 'checkPhoneAuth.dart';
 
 var userdata;
@@ -76,8 +79,10 @@ class _RootingpageState extends State<Rootingpage> {
     setState(() {});
   }
 
+
   @override
   void initState() {
+
     super.initState();
     // signOut(context);
     getLoginStatus();

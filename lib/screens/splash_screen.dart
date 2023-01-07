@@ -1,11 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:threems/Authentication/root.dart';
 
 import 'package:threems/layouts/screen_layout.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../Notes/no.dart';
+import '../Notes/notes.dart';
 import '../pagess/onboardingpage.dart';
 import '../utils/themes.dart';
 
@@ -20,10 +23,24 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  // final _localNotificationService= FlutterLocalNotificationsPlugin();
+  // late final LocalNotificationService service;
+
   @override
   void initState() {
+    // service=LocalNotificationService();
+    // service.intialize();
+
     super.initState();
+    // listenToNotification();
+
+
     Timer(const Duration(seconds: 3), () {
+      // service.showNotificationWithPayload(
+      //     id: 0,
+      //     title: 'Notification Title',
+      //     body: 'Some body',
+      //     payload: 'payload navigation');
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
@@ -63,4 +80,20 @@ class _SplashScreenState extends State<SplashScreen> {
       ),
     );
   }
+  // void listenToNotification() =>
+  //     service.onNotificationClick.stream.listen(onNoticationListener);
+  //
+  // void onNoticationListener(String? payload) {
+  //   print('Hereeeeee');
+  //
+  //   if (payload != null && payload.isNotEmpty) {
+  //     print('payload $payload');
+  //
+  //     Navigator.push(
+  //         context,
+  //         MaterialPageRoute(
+  //             builder: ((context) => const NotesPage())));
+  //   }
+  //}
+
 }

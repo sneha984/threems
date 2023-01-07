@@ -10,6 +10,10 @@ class OrderModel {
   double? total;
   int? status;
   String? storeId;
+  int? paymentMethod;
+  String? reason;
+  String? paymentScreenShort;
+
   List<OrderedItems>? orderedItems;
   OrderModel(
       {this.time,
@@ -22,11 +26,15 @@ class OrderModel {
       this.total,
       this.status,
       this.storeId,
-      this.orderedItems,this.productId});
+      this.orderedItems,
+        this.productId,
+        this.paymentMethod,this.reason,this.paymentScreenShort});
 
   OrderModel.fromJson(Map<String, dynamic> json) {
     time = json['time'].toDate();
     productId=json['productId'];
+    reason=json['reason'];
+    paymentScreenShort=json['paymentScreenShort'];
     acceptedDate = json['acceptedDate'] != null
         ? json['acceptedDate'].toDate()
         : DateTime.now();
@@ -48,6 +56,7 @@ class OrderModel {
     status = json['status'];
     total = double.tryParse(json['total'].toString());
     storeId = json['storeId'];
+    paymentMethod=json['paymentMethod'];
   }
 
   Map<String, dynamic> toJson() {
@@ -57,6 +66,9 @@ class OrderModel {
     data['acceptedDate'] = this.acceptedDate;
     data['deliveryDate'] = this.deliveryDate;
     data['status'] = this.status;
+    data['reason']=this.reason;
+    data['paymentScreenShort']=this.paymentScreenShort;
+    data['paymentMethod']=this.paymentMethod;
     if (this.address != null) {
       data['address'] = this.address!.toJson();
     }

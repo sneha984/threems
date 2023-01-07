@@ -11,7 +11,9 @@ import '../utils/themes.dart';
 import 'checkout.dart';
 
 class AddAddressPage extends StatefulWidget {
-  const AddAddressPage({Key? key, }) : super(key: key);
+
+
+   AddAddressPage({Key? key,}) : super(key: key);
 
   @override
   State<AddAddressPage> createState() => _AddAddressPageState();
@@ -34,6 +36,9 @@ class _AddAddressPageState extends State<AddAddressPage> {
   FocusNode localityFocusNode = FocusNode();
   String purpose = 'Home';
   int selectedIndex = 0;
+  getData(){
+
+  }
 
 
 
@@ -84,7 +89,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
               SizedBox(height:scrHeight*0.037,),
               Form(
                 key: _formkey,
-                autovalidateMode: AutovalidateMode.always,
+                // autovalidateMode: AutovalidateMode.always,
                 child: Padding(
                   padding: EdgeInsets.only(left: scrWidth*0.075,right: scrWidth*0.075),
                   child: Column(
@@ -147,7 +152,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
                         width: scrWidth,
                         height: textFormFieldHeight45,
                         padding: EdgeInsets.symmetric(
-                          horizontal: scrWidth * 0.015,
+                          horizontal: scrWidth * 0.018,
                           vertical: scrHeight*0.002,
                         ),
                         decoration: BoxDecoration(
@@ -495,6 +500,7 @@ class _AddAddressPageState extends State<AddAddressPage> {
                               'pinCode':pinCodeController.text,
                               'name':nameController.text,
                               'select':purpose,
+                              'selectedIndex':selectedIndex,
                               'flatNo':flatNoController.text,
                               'date':DateFormat.yMMMd().format(DateTime.now()),
                             }

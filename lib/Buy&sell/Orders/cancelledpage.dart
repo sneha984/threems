@@ -61,6 +61,140 @@ class _CancelledPageState extends State<CancelledPage> {
       body:Column(
         children: [
           Padding(
+            padding: const EdgeInsets.only(right: 190,top: 10),
+            child: Text(
+              "Custom Details",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.black,
+                  fontFamily: 'Urbanist'),
+            ),
+          ),
+          Container(
+            height: 220,
+            width: 325,
+            decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Color.fromRGBO(0, 0, 0, 0.15),
+                    spreadRadius: 1,
+                    blurRadius: 3,
+                    offset: Offset(2, 3), // changes position of shadow
+                  ),
+                ],
+                borderRadius: BorderRadius.circular(20)
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20,right: 20,top: 20),
+              child: Column(
+
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 5,),
+                          Text(
+                            widget.orderModels.address?.name??'',
+                            style: TextStyle(
+                                fontSize: 16,
+                                color: Color(0xff0E0E0E),
+                                fontFamily: 'Urbanist',
+                                fontWeight: FontWeight.w600),
+                          ),
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Text(
+                            widget.orderModels.address?.phoneNumber??'',
+                            style: TextStyle(
+                                fontSize: 12,
+                                color: Color(0xff818181),
+                                fontFamily: 'Urbanist',
+                                fontWeight: FontWeight.w600),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        width: 30,
+                      ),
+                      InkWell(
+                        onTap: (){
+                          Uri call = Uri.parse('tel://${widget.orderModels.address?.phoneNumber??0}');
+
+                          launchUrl(call);
+                        },
+                        child: CircleAvatar(
+                          radius: 25,
+                          backgroundColor: Color(0xffD9D9D9),
+                          child: Container(
+                            height: 20,width: 30,
+                            child: SvgPicture.asset("assets/icons/Vector (11).svg"),
+                          ),
+
+                        ),
+                      )
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 210,top: 30),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Address",
+                          style: TextStyle(
+                              fontSize: 12,
+                              color: Color(0xffE54D3C),
+                              fontFamily: 'Urbanist',
+                              fontWeight: FontWeight.w600),
+                        ),
+                        SizedBox(height: 5,),
+                        Text(
+                          "${widget.orderModels.address?.locationType??''},${widget.orderModels.address?.flatNo??''}",
+                          style: TextStyle(
+                              fontSize: 16,
+                              color: Color(0xff0E0E0E),
+                              fontFamily: 'Urbanist',
+                              fontWeight: FontWeight.w600),
+                        ),
+                        SizedBox(height: 5,),
+
+                        Text(
+                          'City',
+                          style: TextStyle(
+                              fontSize: 12,
+                              color: Color(0xffE54D3C),
+                              fontFamily: 'Urbanist',
+                              fontWeight: FontWeight.w600),
+                        ),
+                        SizedBox(height: 5,),
+
+                        Text(
+                          "${widget.orderModels.address?.locality??''},${widget.orderModels.address?.pincode??''}",
+                          style: TextStyle(
+                              fontSize: 16,
+                              color: Color(0xff0E0E0E),
+                              fontFamily: 'Urbanist',
+                              fontWeight: FontWeight.w600),
+                        ),
+                      ],
+                    ),
+                  )
+
+
+                ],
+              ),
+            ),
+          ),
+          Padding(
             padding: const EdgeInsets.only(left: 15,right: 15,top: 15),
             child: Container(
               height: 330,
@@ -362,8 +496,7 @@ class _CancelledPageState extends State<CancelledPage> {
                             SizedBox(
                               width: 32,
                             ),
-                            Text(
-                              "Cash On Delivery",
+                            Text(widget.orderModels.paymentMethod==0?'Cash On Delivery':"UPI Payment",
                               style: TextStyle(
                                   fontSize: 14,
                                   color: Color(0xffE54D3C),
@@ -382,21 +515,21 @@ class _CancelledPageState extends State<CancelledPage> {
           ),
 
           // SizedBox(height: 30,),
+
           Padding(
-            padding: const EdgeInsets.only(right: 190,top: 10),
+            padding:  EdgeInsets.only(right: scrWidth*0.7,top: 5,bottom: 5),
             child: Text(
-              "Custom Details",
-              textAlign: TextAlign.center,
+              "Reason",
               style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.black,
-                  fontFamily: 'Urbanist'),
+                  fontSize: 17,
+                  color: Color(0xff0E0E0E),
+                  fontFamily: 'Urbanist',
+                  fontWeight: FontWeight.w600),
             ),
           ),
           Container(
-            height: 220,
-            width: 325,
+            height: 100,
+            width: 350,
             decoration: BoxDecoration(
                 color: Colors.white,
                 boxShadow: [
@@ -410,112 +543,18 @@ class _CancelledPageState extends State<CancelledPage> {
                 borderRadius: BorderRadius.circular(20)
             ),
             child: Padding(
-              padding: const EdgeInsets.only(left: 20,right: 20,top: 20),
-              child: Column(
-
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: 5,),
-                          Text(
-                            widget.orderModels.address?.name??'',
-                            style: TextStyle(
-                                fontSize: 16,
-                                color: Color(0xff0E0E0E),
-                                fontFamily: 'Urbanist',
-                                fontWeight: FontWeight.w600),
-                          ),
-                          SizedBox(
-                            height: 8,
-                          ),
-                          Text(
-                            widget.orderModels.address?.phoneNumber??'',
-                            style: TextStyle(
-                                fontSize: 12,
-                                color: Color(0xff818181),
-                                fontFamily: 'Urbanist',
-                                fontWeight: FontWeight.w600),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        width: 30,
-                      ),
-                      InkWell(
-                        onTap: (){
-                          Uri call = Uri.parse('tel://${widget.orderModels.address?.phoneNumber??0}');
-
-                          launchUrl(call);
-                        },
-                        child: CircleAvatar(
-                          radius: 25,
-                          backgroundColor: Color(0xffD9D9D9),
-                          child: Container(
-                            height: 20,width: 30,
-                            child: SvgPicture.asset("assets/icons/Vector (11).svg"),
-                          ),
-
-                        ),
-                      )
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 210,top: 30),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Address",
-                          style: TextStyle(
-                              fontSize: 12,
-                              color: Color(0xffE54D3C),
-                              fontFamily: 'Urbanist',
-                              fontWeight: FontWeight.w600),
-                        ),
-                        SizedBox(height: 5,),
-                        Text(
-                          "${widget.orderModels.address?.locationType??''},${widget.orderModels.address?.flatNo??''}",
-                          style: TextStyle(
-                              fontSize: 16,
-                              color: Color(0xff0E0E0E),
-                              fontFamily: 'Urbanist',
-                              fontWeight: FontWeight.w600),
-                        ),
-                        SizedBox(height: 5,),
-
-                        Text(
-                          'City',
-                          style: TextStyle(
-                              fontSize: 12,
-                              color: Color(0xffE54D3C),
-                              fontFamily: 'Urbanist',
-                              fontWeight: FontWeight.w600),
-                        ),
-                        SizedBox(height: 5,),
-
-                        Text(
-                          "${widget.orderModels.address?.locality??''},${widget.orderModels.address?.pincode??''}",
-                          style: TextStyle(
-                              fontSize: 16,
-                              color: Color(0xff0E0E0E),
-                              fontFamily: 'Urbanist',
-                              fontWeight: FontWeight.w600),
-                        ),
-                      ],
-                    ),
-                  )
-
-
-                ],
+              padding: const EdgeInsets.only(left: 15,top: 20),
+              child: Text(
+                widget.orderModels.reason??'',
+                style: TextStyle(
+                    fontSize: 17,
+                    color: Color(0xff0E0E0E),
+                    fontFamily: 'Urbanist',
+                    fontWeight: FontWeight.w600),
               ),
             ),
-          )
+          ),
+
         ],
       ),
       // Column(

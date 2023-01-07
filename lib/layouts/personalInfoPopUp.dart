@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:badges/badges.dart';
+import 'package:threems/layouts/phonNoChange.dart';
 import '../Authentication/root.dart';
 import '../model/usermodel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -68,7 +69,6 @@ class _PersonalInfoPopUpState extends State<PersonalInfoPopUp> {
         .snapshots()
         .listen((event) {
       user = UserModel.fromJson(event.data()!);
-
       nameController.text = user.userName ?? '';
       phoneController.text = user.phone ?? '';
       emailController.text = user.userEmail ?? '';
@@ -320,6 +320,7 @@ class _PersonalInfoPopUpState extends State<PersonalInfoPopUp> {
                     borderRadius: BorderRadius.circular(scrWidth * 0.026),
                   ),
                   child: TextFormField(
+                    // readOnly: true,
                     keyboardType: TextInputType.number,
                     controller: phoneController,
                     focusNode: phoneFocus,
@@ -333,6 +334,17 @@ class _PersonalInfoPopUpState extends State<PersonalInfoPopUp> {
                       fontFamily: 'Urbanist',
                     ),
                     decoration: InputDecoration(
+                      suffixIcon: InkWell(
+                        onTap: (){
+                          // Navigator.push(context, MaterialPageRoute(
+                          //     builder: (context)=>PhoneNoChangePage(phoneNo: phoneController.text)));
+
+                        },
+                        child: Icon(
+                          Icons.edit,
+                          color: Colors.black,
+                        ),
+                      ),
                       labelText: 'Phone No',
                       labelStyle: TextStyle(
                         color: phoneFocus.hasFocus
@@ -390,7 +402,7 @@ class _PersonalInfoPopUpState extends State<PersonalInfoPopUp> {
                         .update({
                       'userName': nameController.text,
                       'userEmail': emailController.text,
-                      'phone': phoneController.text,
+                      // 'phone': phoneController.text,
                       'userImage': imgUrl,
                     });
                     Navigator.pop(context);

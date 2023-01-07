@@ -434,7 +434,7 @@ class _MyOrdersDetailsPageState extends State<MyOrdersDetailsPage> {
                                 width: 32,
                               ),
                               Text(
-                                "Cash On Delivery",
+                              widget.orderModel.paymentMethod==0?'Cash On Delivery':'UPI Payment',
                                 style: TextStyle(
                                     fontSize: 14,
                                     color: Color(0xffE54D3C),
@@ -610,9 +610,10 @@ class _MyOrdersDetailsPageState extends State<MyOrdersDetailsPage> {
             widget.orderModel.status!>0?
                 SizedBox():
             InkWell(
-              onTap: ()async{
-                await pay();
-                Navigator.pop(context);
+              onTap: (){
+                 pay();
+                // Navigator.pop(context);
+                print("hloooo");
                 },
               child: Text(
                 "Cancel Order",
@@ -632,7 +633,7 @@ class _MyOrdersDetailsPageState extends State<MyOrdersDetailsPage> {
 
     );
   }
-   pay() {
+  void pay() {
     showDialog(
       context: context,
       builder: (context) => StatefulBuilder(
@@ -717,10 +718,11 @@ class _MyOrdersDetailsPageState extends State<MyOrdersDetailsPage> {
                         .collection('orders')
                         .doc(widget.orderModel.orderId)
                         .update({
-                      'status':3
+                      'status':3,
+                      'reason':_reasonController.text??'',
                     });
 
-                    Navigator.pop(context);
+                    Navigator.of(context)..pop();
                     // _showToast(context);
                   },
                   child: Container(

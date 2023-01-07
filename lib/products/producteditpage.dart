@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -69,7 +70,7 @@ class _ProductEditPageState extends State<ProductEditPage> {
         print('${doc['unit']}');
         print('${event.docs[1]['unit']}');
         // categoryListAll.add(doc.data()!);
-        productUnit.add(doc['unit']);
+        productUnit.add(doc.get('unit'));
       }
       print(productUnit);
       if (mounted) {
@@ -266,7 +267,7 @@ class _ProductEditPageState extends State<ProductEditPage> {
                       width: scrWidth * 0.04,
                     ),
                     Text(
-                      "Add Product",
+                      "Update Product",
                       style: TextStyle(
                           fontSize: scrWidth * 0.046,
                           color: Colors.black,
@@ -289,6 +290,8 @@ class _ProductEditPageState extends State<ProductEditPage> {
                            scrollDirection: Axis.horizontal,
                           itemCount: widget.productModel!['images'].length,
                           itemBuilder: (context,index){
+
+
                             return Padding(
                               padding: EdgeInsets.only(right: 2),
                               child: InkWell(
@@ -313,8 +316,12 @@ class _ProductEditPageState extends State<ProductEditPage> {
                                         color: Color(0xffDADADA),
                                       ),
                                       image: DecorationImage(
-                                          image: NetworkImage(widget.productModel!['images'][index]),fit: BoxFit.fill)
+                                          image: CachedNetworkImageProvider(
+                                              widget.productModel!['images'].length==0?
+                                             'https://img.freepik.com/free-vector/shop-with-sign-we-are-open_52683-38687.jpg?w=2000'
+                                                 :widget.productModel!['images'][index]),fit: BoxFit.fill)
                                   ),
+
                                 ),
                               ),
                             );
@@ -345,8 +352,10 @@ class _ProductEditPageState extends State<ProductEditPage> {
                                 ),
                               ),
                               child:  Center(
-                                                              child: SvgPicture.asset(
-                                                                  "assets/icons/bigcamera.svg"))
+                                child: Image.network("https://img.freepik.com/free-vector/shop-with-sign-we-are-open_52683-38687.jpg?w=2000"),
+                                    // child: SvgPicture.asset(
+                                    //     "assets/icons/bigcamera.svg")
+                              )
                                 ),
                           ),
                         ),

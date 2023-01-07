@@ -1,61 +1,67 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:rxdart/subjects.dart';
 
-class NotificationManager {
-  var flutterLocalNotificationsPlugin;
 
-  NotificationManager() {
-    flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
-    initNotifications();
+class LocalNotificationService {
+  LocalNotificationService();
+
+  final _localNotificationService= FlutterLocalNotificationsPlugin();
+  final BehaviorSubject<String> onNotificationClick = BehaviorSubject();
+
+
+
+
+  Future<void> intialize() async {
+    const AndroidInitializationSettings androidInitializationSettings =
+    AndroidInitializationSettings("@mipmap/launcher_icon");
+
+    final InitializationSettings settings = InitializationSettings(
+      android: androidInitializationSettings,
+      iOS: null,
+    );
+
+    await  _localNotificationService.initialize(
+      settings,
+      onDidReceiveNotificationResponse: onDidReceiveNotificationResponse,
+    );
+
+  }
+  Future<NotificationDetails> _notificationDetails()async {
+    const AndroidNotificationDetails androidNotificationDetails =
+    AndroidNotificationDetails(
+      'channel_id',
+      'channel_name',
+      channelDescription: 'descriptipn',
+      importance: Importance.max,
+      priority: Priority.max,
+      playSound: true,
+    );
+    return  const NotificationDetails(
+      android: androidNotificationDetails,
+    );
   }
 
-  getNotificationInstance() {
-    return flutterLocalNotificationsPlugin;
+
+  Future<void> showNotificationWithPayload(
+      {required int id,
+        required String title,
+        required String body,
+        required String payload}) async {
+    final details = await _notificationDetails();
+    await _localNotificationService.show(id, title, body, details,
+        payload: payload);
   }
 
-  void initNotifications() {
-    // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
-    var initializationSettingsAndroid =
-    new AndroidInitializationSettings('@mipmap/launcher_icon');
-    var initializationSettingsIOS =   DarwinInitializationSettings();
 
-    var initializationSettings = InitializationSettings(
-        android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+  void onDidReceiveNotificationResponse(NotificationResponse notificationResponse) async {
+    final String? payload = notificationResponse.payload;
+    if (notificationResponse.payload != null) {
+      debugPrint('notification payload: $payload');
+      onNotificationClick.add(payload!);
 
-    flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onSelectNotification: onSelectNotification);
-  }
+    }
 
-  void showNotificationDaily(
-      int id, String title, String body, int hour, int minute) async {
-    var time = new Time(hour, minute, 0);
-    await flutterLocalNotificationsPlugin.showDailyAtTime(
-        id, title, body, time, getPlatformChannelSpecfics());
-    print('Notification Succesfully Scheduled at ${time.toString()}');
-  }
-
-  getPlatformChannelSpecfics() {
-    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        'your channel id', 'your channel name',
-        importance: Importance.max,
-        priority: Priority.high,
-        ticker: 'Medicine Reminder');
-    var platformChannelSpecifics = NotificationDetails(
-        android: androidPlatformChannelSpecifics, iOS:DarwinNotificationDetails());
-
-    return platformChannelSpecifics;
-  }
-
-  Future onSelectNotification(String payload) async {
-    print('Notification clicked');
-    return Future.value(0);
-  }
-
-  Future onDidReceiveLocalNotification(
-      int id, String title, String body, String payload) async {
-    return Future.value(1);
-  }
-
-  void removeReminder(int notificationId) {
-    flutterLocalNotificationsPlugin.cancel(notificationId);
   }
 }

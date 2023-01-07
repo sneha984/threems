@@ -1,8 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:threems/Buy&sell/storepage.dart';
 import 'package:threems/Buy&sell/zoom.dart';
+import 'package:threems/kuri/createkuri.dart';
 import 'package:threems/utils/themes.dart';
 
 import '../model/Buy&sell.dart';
@@ -28,6 +30,7 @@ class ImageZoomPage extends StatefulWidget {
 }
 
 class _ImageZoomPageState extends State<ImageZoomPage> with SingleTickerProviderStateMixin {
+
 
 
   bool isCarted = false;
@@ -75,6 +78,8 @@ class _ImageZoomPageState extends State<ImageZoomPage> with SingleTickerProvider
     }
     setState(() {});
   }
+
+ 
   // getEachProduct(){
   //   FirebaseFirestore
   //       .instance
@@ -107,6 +112,7 @@ class _ImageZoomPageState extends State<ImageZoomPage> with SingleTickerProvider
   // }
   @override
   void initState() {
+
     // TODO: implement initState
     super.initState();
     getProduct();
@@ -159,12 +165,20 @@ class _ImageZoomPageState extends State<ImageZoomPage> with SingleTickerProvider
                Navigator.push(context, MaterialPageRoute(builder: (context)=>ZoomPage(img: widget.image,)));
             },
             child: Center(
-              child:Image.network(
-                widget?.image??'',
-                width: scrWidth*1,
+              child:Container(
+                   width: scrWidth*1,
                 height: scrHeight*0.38,
-                fit: BoxFit.cover,
-              ) ,
+                child: CachedNetworkImage(
+                  fit: BoxFit.cover,
+                  imageUrl:widget.image,
+                ),
+              ),
+              // Image.network(
+              //   widget?.image??'',
+              //   width: scrWidth*1,
+              //   height: scrHeight*0.38,
+              //   fit: BoxFit.cover,
+              // ) ,
             ),
           ),
           // Center(
@@ -395,6 +409,7 @@ class _ImageZoomPageState extends State<ImageZoomPage> with SingleTickerProvider
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
+
   Future<bool?> cartAlert() => showDialog(
     context: context,
     builder: (context) => StatefulBuilder(
@@ -474,7 +489,9 @@ class _ImageZoomPageState extends State<ImageZoomPage> with SingleTickerProvider
       },
     ),
   );
-  // void resetAnimation(){
+
+
+// void resetAnimation(){
   //   animation=Matrix4Tween(
   //     begin: controller.value,
   //     end: Matrix4.identity(),
