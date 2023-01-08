@@ -197,30 +197,30 @@ class _ScreenLayoutState extends State<ScreenLayout> {
                   //   // Here you can give your route to navigate
                   // },
                 ),
-                Divider(height: 3.0),
-                ListTile(
-                  leading: Padding(
-                    padding: const EdgeInsets.only(left: 6),
-                    child: Container(
-                      height: 23,
-                      width: 24,
-                      decoration: BoxDecoration(
-                          image: DecorationImage(
-                              image: CachedNetworkImageProvider(
-                                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgDNYGs8jqizlcPof-wNOx2dLJmmoioCfEZw&usqp=CAU"),
-                              fit: BoxFit.fill)),
-                    ),
-                  ),
-                  title: Text('Phone Book', style: TextStyle(fontSize: 18)),
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => PhoneBookPage()));
-
-                    // Here you can give your route to navigate
-                  },
-                ),
+                // Divider(height: 3.0),
+                // ListTile(
+                //   leading: Padding(
+                //     padding: const EdgeInsets.only(left: 6),
+                //     child: Container(
+                //       height: 23,
+                //       width: 24,
+                //       decoration: BoxDecoration(
+                //           image: DecorationImage(
+                //               image: CachedNetworkImageProvider(
+                //                   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgDNYGs8jqizlcPof-wNOx2dLJmmoioCfEZw&usqp=CAU"),
+                //               fit: BoxFit.fill)),
+                //     ),
+                //   ),
+                //   title: Text('Phone Book', style: TextStyle(fontSize: 18)),
+                //   onTap: () {
+                //     Navigator.push(
+                //         context,
+                //         MaterialPageRoute(
+                //             builder: (context) => PhoneBookPage()));
+                //
+                //     // Here you can give your route to navigate
+                //   },
+                // ),
                 SizedBox(
                   height: scrHeight * 0.3,
                 ),
@@ -282,12 +282,40 @@ class _ScreenLayoutState extends State<ScreenLayout> {
                         child: Padding(
                           padding: EdgeInsets.only(
                               top: kToolbarHeight, right: scrWidth * 0.05),
-                          child: InkWell(
-                            onTap: () =>
-                                _scaffoldKey2.currentState!.openEndDrawer(),
-                            child: Icon(
-                              Icons.menu,
-                            ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              PhoneBookPage()));
+
+                                  // Here you can give your route to navigate
+                                },
+                                child: Container(
+                                  height: 23,
+                                  width: 24,
+                                  decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                          image: CachedNetworkImageProvider(
+                                              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgDNYGs8jqizlcPof-wNOx2dLJmmoioCfEZw&usqp=CAU"),
+                                          fit: BoxFit.fill)),
+                                ),
+                              ),
+                              SizedBox(
+                                width: scrWidth * 0.08,
+                              ),
+                              InkWell(
+                                onTap: () =>
+                                    _scaffoldKey2.currentState!.openEndDrawer(),
+                                child: Icon(
+                                  Icons.menu,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       )

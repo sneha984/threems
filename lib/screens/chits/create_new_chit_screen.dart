@@ -201,6 +201,7 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
 
   getDatas() {
     if (widget.chit.chitName != null) {
+      print('HEREEEEE');
       members = widget.chit.membersCount ?? 10;
       private = widget.chit.private ?? false;
       chitName.text = widget.chit.chitName ?? '';
@@ -225,14 +226,20 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
           'Saturday',
           'Sunday'
         ];
+
+        print(drawDate);
         drawDateValue = widget.chit.chitDate.toString() ?? '';
 
         drawDateValueInList = drawDate.elementAt(widget.chit.chitDate! - 1);
+        // print(drawDateValue);
+        print(drawDateValueInList);
+        print('WeekLYYYY');
       } else {
         for (int i = 0; i < 31; i++) {
           drawDate.add((i + 1).toString());
           drawDateValue = widget.chit.chitDate.toString() ?? '';
           drawDateValueInList = widget.chit.chitDate.toString() ?? '';
+          print('MONTHLYYYY');
         }
       }
 
@@ -289,6 +296,7 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print(drawDate);
     return WillPopScope(
       onWillPop: () async {
         final shouldPop = await confirmQuitDialog(context);
