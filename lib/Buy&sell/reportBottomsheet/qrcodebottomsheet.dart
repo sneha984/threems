@@ -101,7 +101,7 @@ class _QRBottomsheetPageState extends State<QRBottomsheetPage> {
                   SizedBox(height: 5,),
                   InkWell(
                     onTap: (){
-                      _remainder==true?Navigator.pop(context):showSnackbar(context, "Please Upload Screenshort");
+                      _remainder==true?Navigator.pop(context):showSnackbar(context, "Click to accept");
                     },
                     child: Container(
                       height: 40,

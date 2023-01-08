@@ -9,6 +9,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:threems/kuri/createkuri.dart';
 import 'package:threems/model/usermodel.dart';
+import 'package:threems/screens/charity/cropImage.dart';
 import 'package:threems/screens/charity/donatenowpage.dart';
 import 'package:threems/screens/charity/fpayment.dart';
 import '../../model/charitymodel.dart';
@@ -240,6 +241,12 @@ class _VerificationDetailsState extends State<VerificationDetails> {
                     fontWeight: FontWeight.w600,
                     color: Colors.black),
               ),
+              // actions: [
+              //   IconButton(onPressed: (){
+              //     Navigator.push(context, MaterialPageRoute(builder: (context)=>MyPage()));
+              //
+              //   }, icon: Icon(Icons.add,color: Colors.green,))
+              // ],
             ),
           ),
         ),

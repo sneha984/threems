@@ -253,14 +253,14 @@ class _CategoryStoresState extends State<CategoryStores> {
                             ),
                             SizedBox(height: scrHeight*0.002,),
 
-                            Text(
-                              "${productsList.length} products"
-                              , textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontFamily: 'Urbanist',
-                                  fontSize: scrWidth*0.025,
-                                  fontWeight: FontWeight.w600,
-                                  color: Color(0xff818181)),),
+                            // Text(
+                            //   "${productsList.length} products"
+                            //   , textAlign: TextAlign.center,
+                            //   style: TextStyle(
+                            //       fontFamily: 'Urbanist',
+                            //       fontSize: scrWidth*0.025,
+                            //       fontWeight: FontWeight.w600,
+                            //       color: Color(0xff818181)),),
 
                           ],
                         ),

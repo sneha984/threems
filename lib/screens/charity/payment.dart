@@ -670,8 +670,8 @@ class _PaymentPageState extends State<PaymentPage> {
                                     ],
                                   )
                                 : Container(
-                                    height: scrHeight * 0.16,
-                                    width: scrWidth * 1,
+                              height: scrHeight * 0.25,
+                              width: scrWidth * 1,
                                     decoration: BoxDecoration(
                                       image: DecorationImage(
                                           image: FileImage(imgFile!)
