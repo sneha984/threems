@@ -472,11 +472,13 @@ List notAvailabe=[];
                                                 onPressed: () {
                                                   Navigator.pop(context);
                                                   storeData();
+
                                                   if (cartlist[index]
                                                   ['count'] ==
                                                       1) {
                                                     cartlist.removeAt(index);
                                                     notAvailabe.removeAt(index);
+
                                                     setState(() {});
                                                   } else {
                                                     cartlist[index]
@@ -621,9 +623,9 @@ List notAvailabe=[];
                                               )),
                                         )
                                             :Padding(
-                                          padding:  EdgeInsets.only(left: 15),
+                                          padding:  EdgeInsets.only(left: scrWidth*0.06),
                                           child: Container(
-                                            height: 50,
+                                            height: 40,
                                             width: 120,
                                             decoration: BoxDecoration(
                                               color: Colors.grey,
@@ -633,9 +635,9 @@ List notAvailabe=[];
                                           ),
                                         ):
                                         Padding(
-                                          padding:  EdgeInsets.only(left: 15),
+                                          padding:  EdgeInsets.only(left: scrWidth*0.06),
                                           child: Container(
-                                            height: 50,
+                                            height: 40,
                                             width: 120,
                                             decoration: BoxDecoration(
                                               color: Colors.grey,
@@ -645,9 +647,9 @@ List notAvailabe=[];
                                           ),
                                         ):
                                         Padding(
-                                          padding:  EdgeInsets.only(left: 15),
+                                          padding:  EdgeInsets.only(left: scrWidth*0.06),
                                           child: Container(
-                                            height: 50,
+                                            height: 40,
                                             width: 120,
                                             decoration: BoxDecoration(
                                               color: Colors.grey,

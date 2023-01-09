@@ -172,224 +172,192 @@ class _ProductsPageState extends State<ProductsPage> {
       //     ),
       //   ],
       // ),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              color: Color(0xff008036),
-              width: scrWidth,
-              height: scrHeight * 0.07,
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: scrWidth * 0.055),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: Padding(
-                            padding: EdgeInsets.only(
-                                top: scrHeight * 0.0,
-                                left: scrWidth * 0.01,
-                                // bottom: scrHeight * 0.02,
-                                right: scrWidth * 0.02),
-                            child: Icon(
-                              Icons.arrow_back,
-                              color: Colors.white,
-                              size: 25,
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: scrWidth * 0.039,
-                        ),
-                        Text(
-                          "Your Products",
-                          style: GoogleFonts.urbanist(
-                              fontWeight: FontWeight.w500,
-                              fontSize: scrWidth * 0.045,
-                              color: Colors.white),
-                        ),
-                      ],
-                    ),
-                    IconButton(onPressed: (){
-                      pickFile();
-                    }, icon: Icon(Icons.cloud_download,color: Colors.white,)),
-                    InkWell(
-                      onTap: (){
-                        Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => ProductAddingPage(update: false,
-                          storeId: widget.storeId,
-                          productModel: prodct,)));
-
-                      },
-                      child: Container(
-                        width: scrWidth * 0.28,
-                        height: scrWidth * 0.1,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(scrWidth * 0.045),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.15),
-                                blurRadius: 4,
-                                offset: Offset(0, 4),
-                              ),
-                            ],
-                            color: Colors.white),
-                        child: Center(
-                          child: Text(
-                            "+ Add new",
-                            style: GoogleFonts.urbanist(
-                                fontWeight: FontWeight.w500,
-                                fontSize: scrWidth * 0.045,
-                                color: Colors.black),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            color: Color(0xff008036),
+            width: scrWidth,
+            // height: scrHeight * 0.07,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: scrWidth * 0.055),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                              top: scrHeight * 0.0,
+                              left: scrWidth * 0.01,
+                              // bottom: scrHeight * 0.02,
+                              right: scrWidth * 0.02),
+                          child: Icon(
+                            Icons.arrow_back,
+                            color: Colors.white,
+                            size: 25,
                           ),
                         ),
                       ),
-                    )
-                  ],
-                ),
+                      SizedBox(
+                        width: scrWidth * 0.039,
+                      ),
+                      Text(
+                        "Your Products",
+                        style: GoogleFonts.urbanist(
+                            fontWeight: FontWeight.w500,
+                            fontSize: scrWidth * 0.045,
+                            color: Colors.white),
+                      ),
+                    ],
+                  ),
+                  IconButton(onPressed: (){
+                    pickFile();
+                  }, icon: Icon(Icons.cloud_download,color: Colors.white,)),
+                  InkWell(
+                    onTap: (){
+                      Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => ProductAddingPage(update: false,
+                        storeId: widget.storeId,
+                        productModel: prodct,)));
+
+                    },
+                    child: Container(
+                      width: scrWidth * 0.28,
+                      height: scrWidth * 0.1,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(scrWidth * 0.045),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.15),
+                              blurRadius: 4,
+                              offset: Offset(0, 4),
+                            ),
+                          ],
+                          color: Colors.white),
+                      child: Center(
+                        child: Text(
+                          "+ Add new",
+                          style: GoogleFonts.urbanist(
+                              fontWeight: FontWeight.w500,
+                              fontSize: scrWidth * 0.045,
+                              color: Colors.black),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
               ),
             ),
-            Container(
-              height: 700,
-              child: ListView.builder(
-                itemCount:getAllProducts.length,
-                  itemBuilder: (context,index){
+          ),
+          Container(
+             height:scrHeight*0.88,
+            child: ListView.builder(
+              physics: BouncingScrollPhysics(),
+              shrinkWrap: true,
+              scrollDirection: Axis.vertical,
+              itemCount:getAllProducts.length,
+                itemBuilder: (context,index){
 
-                  List imageList= getAllProducts[index]['images'];
-                    return Padding(
-                      padding: const EdgeInsets.only(left: 20,right: 20,top: 15),
-                      child: Container(
-                        width:400,
-                        height: 100,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(top: 10,left: 10),
-                              child: Container(
-                                height: scrWidth * 0.2,
-                                width: scrWidth * 0.2,
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.pink.withOpacity(0.2)),
-                                  borderRadius: BorderRadius.circular(scrWidth * 0.025),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(3),
-                                  child: CachedNetworkImage(
-                                      imageUrl:
-                                      imageList.length==0?
-                                          'https://img.freepik.com/free-vector/shop-with-sign-we-are-open_52683-38687.jpg?w=2000'
-                                  :imageList[0])),
-                                ),
-                            ),
+                List imageList= getAllProducts[index]['images'];
+                  return Padding(
+                    padding: const EdgeInsets.only(left: 20,right: 20,top: 15),
+                    child: Container(
+                      width:400,
+                      height: 100,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 10,left: 10),
+                            child: Container(
+                              height: scrWidth * 0.2,
+                              width: scrWidth * 0.2,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.pink.withOpacity(0.2)),
+                                borderRadius: BorderRadius.circular(scrWidth * 0.025),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(3),
+                                child: CachedNetworkImage(
+                                    imageUrl:
+                                    imageList.length==0?
+                                        'https://img.freepik.com/free-vector/shop-with-sign-we-are-open_52683-38687.jpg?w=2000'
+                                :imageList[0])),
+                              ),
+                          ),
 
-                            SizedBox(
-                              width: scrWidth * 0.05,
-                            ),
-                            Container(
-                              width:200,
-                              child: Column(
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Column(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          SizedBox(height: 14,),
+                          SizedBox(
+                            width: scrWidth * 0.05,
+                          ),
+                          Container(
+                            width:200,
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        SizedBox(height: 14,),
 
-                                          Text(
-                                            getAllProducts[index]['productName'],
-                                            style: GoogleFonts.urbanist(
-                                                fontSize: scrWidth * 0.039, fontWeight: FontWeight.w600),
-                                          ),
-                                          SizedBox(height: 5,),
+                                        Text(
+                                          getAllProducts[index]['productName'],
+                                          style: GoogleFonts.urbanist(
+                                              fontSize: scrWidth * 0.039, fontWeight: FontWeight.w600),
+                                        ),
+                                        SizedBox(height: 5,),
 
-                                          Text(
-                                            "${getAllProducts[index]['quantity']} ${products[index]['unit']}",
-                                            style: GoogleFonts.urbanist(
-                                                fontSize: scrWidth * 0.03,
-                                                fontWeight: FontWeight.w600,
-                                                color: Color(0xff818181)),
-                                          )
-                                        ],
-                                      ),
+                                        Text(
+                                          "${getAllProducts[index]['quantity']} ${products[index]['unit']}",
+                                          style: GoogleFonts.urbanist(
+                                              fontSize: scrWidth * 0.03,
+                                              fontWeight: FontWeight.w600,
+                                              color: Color(0xff818181)),
+                                        )
+                                      ],
+                                    ),
 
-                                      // Container(
-                                      //   padding: const EdgeInsets.all(6),
-                                      //   width: size24,
-                                      //   height: size24,
-                                      //   child: SvgPicture.asset('assets/svg/more_ver.svg'),
-                                      // ),
-                                    SizedBox(width: 16,),
-                                      PopupMenuButton<MenuItem>(
-                                        constraints: BoxConstraints(
-                                            maxWidth: 100,
-                                            minWidth: 100,
-                                            maxHeight: 200,
-                                            minHeight: 100),
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(8)),
-                                        position: PopupMenuPosition.under,
-                                        itemBuilder: (context) => [
-                                          PopupMenuItem(
-                                            height: 30,
-                                            child: Center(
-                                              child: InkWell(
-                                                onTap: (){
-                                                  // print(prodct!.productName);
-                                                  Navigator.pop(context);
-                                                  Navigator.push(context, MaterialPageRoute
-                                                    (builder: (context)=>ProductEditPage(storeId: widget.storeId,
-                                                    productModel: getAllProducts[index],update: true,)));
-                                                },
-                                                child: Container(
-                                                  height: 50,width: 100,
-                                                  child: Center(
-                                                    child: Text(
-                                                      "Edit",
-                                                      style: TextStyle(
-                                                        color: Colors.black,
-                                                        fontSize: scrWidth * 0.035,
-                                                        fontFamily: "Urbanist",
-                                                        fontWeight: FontWeight.w500,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          PopupMenuItem(
-                                            height: 30,
+                                    // Container(
+                                    //   padding: const EdgeInsets.all(6),
+                                    //   width: size24,
+                                    //   height: size24,
+                                    //   child: SvgPicture.asset('assets/svg/more_ver.svg'),
+                                    // ),
+                                  SizedBox(width: 16,),
+                                    PopupMenuButton<MenuItem>(
+                                      constraints: BoxConstraints(
+                                          maxWidth: 100,
+                                          minWidth: 100,
+                                          maxHeight: 200,
+                                          minHeight: 100),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(8)),
+                                      position: PopupMenuPosition.under,
+                                      itemBuilder: (context) => [
+                                        PopupMenuItem(
+                                          height: 30,
+                                          child: Center(
                                             child: InkWell(
                                               onTap: (){
+                                                // print(prodct!.productName);
                                                 Navigator.pop(context);
-
-                                                FirebaseFirestore
-                                                    .instance
-                                                    .collection('stores')
-                                                    .doc(widget.storeId)
-                                                    .collection('products')
-                                                    .doc(getAllProducts[index]['productId'])
-                                                    .update({
-                                                  'delete':true,
-                                                  'available':false,
-                                                }).whenComplete(() => Navigator.pop(context));
+                                                Navigator.push(context, MaterialPageRoute
+                                                  (builder: (context)=>ProductEditPage(storeId: widget.storeId,
+                                                  productModel: getAllProducts[index],update: true,)));
                                               },
                                               child: Container(
                                                 height: 50,width: 100,
                                                 child: Center(
                                                   child: Text(
-                                                    "Delete",
+                                                    "Edit",
                                                     style: TextStyle(
                                                       color: Colors.black,
                                                       fontSize: scrWidth * 0.035,
@@ -401,75 +369,108 @@ class _ProductsPageState extends State<ProductsPage> {
                                               ),
                                             ),
                                           ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        "₹${getAllProducts[index]['price']}",
-                                        style: GoogleFonts.urbanist(
-                                            fontSize: scrWidth * 0.03,
-                                            fontWeight: FontWeight.w700,
-                                            color: Colors.red),
-                                      ),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            getAllProducts[index]!['available'] ? "(in stock)" : "(out of stock)",
-                                            style: GoogleFonts.urbanist(
-                                                fontSize: scrWidth * 0.025, fontWeight: FontWeight.w600),
-                                          ),
-                                          Transform.scale(
-                                            scale: 0.7,
-                                            child: CupertinoSwitch(
-                                              thumbColor: getAllProducts[index]['available']
-                                                  ? Color(0xff02B558)
-                                                  : Color(0xffE54D3C),
-                                              activeColor: Color(0xffD9D9D9),
-                                              trackColor: Color(0xffD9D9D9),
-                                              value: getAllProducts[index]['available'],
-                                              onChanged: (value) {
-                                                print(widget.storeId);
+                                        ),
+                                        PopupMenuItem(
+                                          height: 30,
+                                          child: InkWell(
+                                            onTap: (){
+                                              Navigator.pop(context);
 
-                                                        FirebaseFirestore
-                                                            .instance
-                                                            .collection('stores')
-                                                            .doc(widget.storeId)
-                                                            .collection('products')
-                                                            .doc(getAllProducts[index]['productId'])
-                                                            .update(
-                                                          {
-                                                          'available':!getAllProducts[index]['available']
-                                                          }
-                                                        );
-                                                        setState(() {
-
-                                                        });
-                                              },
+                                              FirebaseFirestore
+                                                  .instance
+                                                  .collection('stores')
+                                                  .doc(widget.storeId)
+                                                  .collection('products')
+                                                  .doc(getAllProducts[index]['productId'])
+                                                  .update({
+                                                'delete':true,
+                                                'available':false,
+                                              }).whenComplete(() => Navigator.pop(context));
+                                            },
+                                            child: Container(
+                                              height: 50,width: 100,
+                                              child: Center(
+                                                child: Text(
+                                                  "Delete",
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: scrWidth * 0.035,
+                                                    fontFamily: "Urbanist",
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                ),
+                                              ),
                                             ),
                                           ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "₹${getAllProducts[index]['price']}",
+                                      style: GoogleFonts.urbanist(
+                                          fontSize: scrWidth * 0.03,
+                                          fontWeight: FontWeight.w700,
+                                          color: Colors.red),
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          getAllProducts[index]!['available'] ? "(in stock)" : "(out of stock)",
+                                          style: GoogleFonts.urbanist(
+                                              fontSize: scrWidth * 0.025, fontWeight: FontWeight.w600),
+                                        ),
+                                        Transform.scale(
+                                          scale: 0.7,
+                                          child: CupertinoSwitch(
+                                            thumbColor: getAllProducts[index]['available']
+                                                ? Color(0xff02B558)
+                                                : Color(0xffE54D3C),
+                                            activeColor: Color(0xffD9D9D9),
+                                            trackColor: Color(0xffD9D9D9),
+                                            value: getAllProducts[index]['available'],
+                                            onChanged: (value) {
+                                              print(widget.storeId);
+
+                                                      FirebaseFirestore
+                                                          .instance
+                                                          .collection('stores')
+                                                          .doc(widget.storeId)
+                                                          .collection('products')
+                                                          .doc(getAllProducts[index]['productId'])
+                                                          .update(
+                                                        {
+                                                        'available':!getAllProducts[index]['available']
+                                                        }
+                                                      );
+                                                      setState(() {
+
+                                                      });
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
                       ),
-                    );
-                  }),
-            ),
+                    ),
+                  );
+                }),
+          ),
 
 
 
 
-          ],
-        ),
+        ],
       ),
 
     );
