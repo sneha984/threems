@@ -1062,17 +1062,25 @@ class _StoreEditPageState extends State<StoreEditPage> {
             //   refreshPage();
             //   return showSnackbar(context,"Must Provide  image");
             // }
-            if(storeNameController.text.isEmpty){
-              refreshPage();
-              return showSnackbar(context,"Must Provide StoreName");
-            }
-            if(selectCategory.length==''){
+            // if(storeNameController.text.isEmpty){
+            //   refreshPage();
+            //   return showSnackbar(context,"Must Provide StoreName");
+            // }
+            if(selectCategory.isEmpty){
               refreshPage();
               return showSnackbar(context,"Must select category");
-            }
-            if(storeAddressController.text.isEmpty){
-              refreshPage();
-              return showSnackbar(context,"Must Provide StoreAddress");
+            // }if(deliveryChargeController.text.isEmpty){
+            //   refreshPage();
+            //   return showSnackbar(context,"Must Provide Delivery Charge");}
+            // if(storeAddressController.text.isEmpty){
+            //   refreshPage();
+            //   return showSnackbar(context,"Must Provide StoreAddress");
+            // }if(localBodyController.text.isEmpty){
+            //   refreshPage();
+            //   return showSnackbar(context,"Must Provide localBody");
+            // }if(pickFile==null){
+            //   refreshPage();
+            //   return showSnackbar(context,"Must Provide local Body Document");
             }else{
               GeoFirePoint myLocation = geo.point(latitude:double.tryParse(latitude!.text)??0,
                   longitude: double.tryParse(longitude!.text)??0);

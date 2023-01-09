@@ -101,7 +101,7 @@ class _QRBottomsheetPageState extends State<QRBottomsheetPage> {
                   SizedBox(height: 5,),
                   InkWell(
                     onTap: (){
-                      _remainder==true?Navigator.pop(context):showSnackbar(context, "Click to accept");
+                      _remainder==true?Navigator.pop(context):showSnackbar(context, "Click to accept Terms And Conditions");
                     },
                     child: Container(
                       height: 40,

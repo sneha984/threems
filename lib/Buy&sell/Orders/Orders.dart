@@ -1335,7 +1335,7 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                                     ],
                                   ),
                                   SizedBox(
-                                    height: 30,
+                                    height: 15,
                                   ),
                                   // Expanded(
                                   //   child: ListView.builder(
