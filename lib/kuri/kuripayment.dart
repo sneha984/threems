@@ -580,12 +580,16 @@ class _KuriPaymentPageState extends State<KuriPaymentPage> {
                         .doc(currentuserid)
                         .collection('expense')
                         .add({
+
                       'amount': double.tryParse(amount!.text.toString()),
-                      "categoryIcon": serializeIcon(icons),
-                      "categoryName": categoryName.toString(),
-                      'date': DateTime.now(),
-                      'merchant': '',
-                      'income': false
+                      "categoryIcon":serializeIcon(icons),
+                      "categoryName":categoryName.toString(),
+                      'date': FieldValue.serverTimestamp(),
+                      'merchant':'',
+                      'description': '',
+                      'income': false,
+                      'paymentId':'',
+
                     });
                   }).then((value) {
                     Navigator.pop(context);

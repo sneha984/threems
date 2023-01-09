@@ -44,7 +44,7 @@ class _MyAppState extends State<MyApp> {
       GlobalKey<ScaffoldMessengerState>();
   @override
   Widget build(BuildContext context) {
-    // _authentication.signOut(context);
+    //_authentication.signOut(context);
     return MaterialApp(
       scaffoldMessengerKey: snackbarKey,
       debugShowCheckedModeBanner: false,

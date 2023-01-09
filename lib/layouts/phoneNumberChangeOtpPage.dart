@@ -7,40 +7,45 @@ import 'package:pinput/pinput.dart';
 import 'package:threems/kuri/createkuri.dart';
 import 'package:threems/screens/charity/verification_details.dart';
 
+import '../Authentication/auth.dart';
 import '../Authentication/root.dart';
 import '../layouts/screen_layout.dart';
+import '../pagess/detailspage.dart';
+import '../pagess/getotppage.dart';
 import '../screens/home_screen.dart';
 import '../screens/splash_screen.dart';
 import '../utils/themes.dart';
-import 'detailspage.dart';
-
-class OtpPage extends StatefulWidget {
+UpdateNumber(String userId, String phNo){
+  FirebaseFirestore.instance.collection('users')
+      .doc(userId)
+      .update(
+      {
+        'phone':phNo,
+      });
+}
+class PhoneChangeOtpPage extends StatefulWidget {
   final String verId;
   final String number;
 
-  const OtpPage({
+  const PhoneChangeOtpPage({
     Key? key,
     required this.verId,
     required this.number,
   }) : super(key: key);
 
   @override
-  State<OtpPage> createState() => _OtpPageState();
+  State<PhoneChangeOtpPage> createState() => _PhoneChangeOtpPageState();
 }
 
-class _OtpPageState extends State<OtpPage> {
+class _PhoneChangeOtpPageState extends State<PhoneChangeOtpPage> {
+  final Authentication _authentication = Authentication();
+
+
   final FirebaseAuth auth = FirebaseAuth.instance;
 
   TextEditingController otp = TextEditingController();
   List phList=[];
-  // getPh(){
-  //   FirebaseFirestore.instance.collection('users').snapshots().listen((event) {
-  //     for(DocumentSnapshot doc in event.docs){
-  //       phList.add(doc.get('phone'));
-  //     }
-  //
-  //   });
-  // }
+
   @override
   void initState() {
     // getPh();
@@ -130,39 +135,35 @@ class _OtpPageState extends State<OtpPage> {
               ),
               GestureDetector(
                 onTap: () async {
-
                   PhoneAuthCredential credential = PhoneAuthProvider.credential(
                       verificationId: widget.verId, smsCode: otp.text);
+
+
+                  String cUserId=currentuserid;
+                  // FirebaseFirestore.instance.collection('users')
+                  //     .doc(cUserId)
+                  //     .update(
+                  //     {
+                  //       'phone':widget.number,
+                  //     });
                   await auth.signInWithCredential(credential).then((value) async {
+                    UpdateNumber(cUserId,widget.number);
                     print(value.user!.uid);
-                    // print('successs');
-                    // if(phList.contains (widget.number)){
-                    //
-                    //   showUploadMessage(context, 'Phone number already exist');
-                    // }else{
-                    //   FirebaseFirestore.instance.collection('users')
-                    //       .doc(currentuserid)
-                    //       .update(
-                    //       {
-                    //         'phone':widget.number,
-                    //       });
-                    //   showUploadMessage(context, 'Phone number updated successfully');
-                    //
-                    //   Navigator.push(
-                    //       context,
-                    //       MaterialPageRoute(
-                    //           builder: (context) => ScreenLayout(
-                    //             // id: value.user!.uid,
-                    //             // phone: widget.number,
-                    //           )));
-                    // }
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => DetailsPage(
-                              id: value.user!.uid,
-                              phone: widget.number,
-                            )));
+
+
+                      showUploadMessage(context, 'Phone number updated successfully');
+                      Navigator.pop(context);
+                    _authentication.signOut(context);
+                    print(cUserId);
+                    Navigator.push(context, MaterialPageRoute(
+                        builder: (context)=>GetOtpPage()
+                    ));
+                    print(cUserId);
+
+
+
+
+
                     // if (currentuserid == '') {
                     //
                     // }

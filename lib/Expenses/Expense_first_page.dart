@@ -45,6 +45,7 @@ class _AddExpensesPageState extends State<AddExpensesPage> {
   //
   //   });
   // }
+
   getRecentExpenses(){
     FirebaseFirestore.instance.collection('users').doc(currentuserid).collection('expense').
     orderBy('date',descending: true).limit(5).snapshots().listen((event) {
@@ -133,6 +134,7 @@ class _AddExpensesPageState extends State<AddExpensesPage> {
     getTotalExpense();
     getRecentExpenses();
     getOneWeekandOneMonthExpense();
+
     super.initState();
   }
 

@@ -306,10 +306,10 @@ class _PersonalInfoPopUpState extends State<PersonalInfoPopUp> {
                   height: 10,
                 ),
                 InkWell(
-                  // onTap: (){
-                  //   Navigator.push(context, MaterialPageRoute(
-                  //       builder: (context)=>PhoneNoChangePage(phoneNo: phoneController.text)));
-                  // },
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(
+                        builder: (context)=>PhoneNoChangePage(phoneNo: phoneController.text)));
+                  },
                   child: Container(
                     width: scrWidth,
                     height: textFormFieldHeight45,

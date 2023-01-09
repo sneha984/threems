@@ -1,8 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:threems/Authentication/auth.dart';
+import 'package:threems/layouts/phoneNumberChangeOtpPage.dart';
+import 'package:threems/screens/charity/verification_details.dart';
 import 'package:threems/screens/splash_screen.dart';
 
 import '../kuri/createkuri.dart';
@@ -32,7 +35,7 @@ class _PhoneNoChangePageState extends State<PhoneNoChangePage> {
     await phoneAuth.verifyPhoneNumber(
       phoneNumber: '+91${phoneController.text}',
       verificationCompleted: (PhoneAuthCredential credential) async {
-        showSnackbar(context, 'OTP sent successfully.');
+        // showSnackbar(context, 'OTP sent successfully.');
       },
       verificationFailed: (FirebaseAuthException e) {
         print(e.message);
@@ -44,7 +47,7 @@ class _PhoneNoChangePageState extends State<PhoneNoChangePage> {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (context) => OtpPage(
+                builder: (context) => PhoneChangeOtpPage(
                   number: phoneController.text,
                   verId: verificationId!,
                 )));
@@ -171,10 +174,22 @@ class _PhoneNoChangePageState extends State<PhoneNoChangePage> {
             ),
             SizedBox(height: 40,),
            InkWell(
-              onTap: (){
-                if (_formkey.currentState!.validate()) {
-                  verifyPhoneNumber(context);
+              onTap: () async {
+                QuerySnapshot usrs = await FirebaseFirestore.instance
+                    .collection('users').where('phone',
+                    whereIn:[phoneController.text,
+                  "+91${phoneController.text}",
+                  "+91 ${phoneController.text}"])
+                    .get();
+                if(usrs.docs.length==0){
+                  if (_formkey.currentState!.validate()) {
+                    verifyPhoneNumber(context);
+                  }
+                }else{
+                  showUploadMessage(context, 'Phone number already exist');
                 }
+
+
 
               },
               child: Center(

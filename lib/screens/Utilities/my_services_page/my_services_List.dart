@@ -189,6 +189,12 @@ class _MyServicesListState extends State<MyServicesList> {
                         ),
                         child: InkWell(
                           onTap: (){
+                            editService=true;
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>AddMyServicePage(
+                              serviceItems:serviceItems,
+
+
+                            )));
                             // Navigator.push(
                             //     context,
                             //     MaterialPageRoute(

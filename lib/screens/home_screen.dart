@@ -61,6 +61,27 @@ class _HomeScreenState extends State<HomeScreen> {
   var imgFile;
   var uploadTask;
   var fileUrl;
+  // getdd(){
+  //   FirebaseFirestore.instance.collection('users').snapshots().listen((event) {
+  //     for(DocumentSnapshot doc in event.docs){
+  //       FirebaseFirestore.instance.collection('users').
+  //       doc(doc.id).collection('incomes').snapshots().listen((event) {
+  //         for(DocumentSnapshot abc in event.docs){
+  //           FirebaseFirestore.instance.collection('users').
+  //           doc(doc.id).collection('incomes').doc(abc.id).update({
+  //             'description':'',
+  //             'recieverId':'',
+  //
+  //           });
+  //
+  //         }
+  //       });
+  //
+  //     }
+  //
+  //   });
+  // }
+
   Future uploadImageToFirebase(BuildContext context) async {
     Reference firebaseStorageRef =
         FirebaseStorage.instance.ref().child('deposits/${imgFile.path}');
@@ -149,7 +170,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     getCurrentUserDet();
-
+    // getdd();
     getVerifiedCharity();
     getLocation();
 

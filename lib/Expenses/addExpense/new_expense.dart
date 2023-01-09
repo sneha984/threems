@@ -1477,14 +1477,14 @@ class _NewExpensePageState extends State<NewExpensePage> {
                                        .doc(selectedUserId)
                                        .collection('incomes')
                                        .add({
+
                                      'amount': double.tryParse(amount!.text.toString()),
                                      "categoryIcon": serializeIcon(xyz),
                                      "categoryName": category.toString(),
                                      'date': selectedDate,
                                      'income': true,
                                      'merchant': merchantName.toString(),
-                                     'description':
-                                     description.text.toString() ?? '',
+                                     'description': description.text.toString() ?? '',
                                      'recieverId':currentuserid,
                                    });
                                    await FirebaseFirestore.instance.collection('users').doc(selectedUserId).update({

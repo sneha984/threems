@@ -796,12 +796,14 @@ class _PaymentPageState extends State<PaymentPage> {
               .doc(currentuserid)
               .collection('expense')
               .add({
-            'amount': double.tryParse(valueAmountController.text),
-            "categoryIcon": serializeIcon(icons),
+            'amount':double.tryParse(valueAmountController.text),
+            "categoryIcon":serializeIcon(icons),
             "categoryName": categoryName.toString(),
-            'date': DateTime.now(),
-            'merchant': '',
-            'income': false
+            'date': FieldValue.serverTimestamp(),
+            'merchant':'',
+            'description': '',
+            'income': false,
+            'paymentId':'',
           });
           print(imgUrl);
           print(imgFile);

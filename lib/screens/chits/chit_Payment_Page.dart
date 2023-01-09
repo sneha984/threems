@@ -595,11 +595,14 @@ class _ChitPaymentPageState extends State<ChitPaymentPage> {
                           .collection('expense')
                           .add({
                         'amount': double.tryParse(amount!.text.toString()),
-                        "categoryIcon": serializeIcon(icons),
-                        "categoryName": categoryName.toString(),
-                        'date': DateTime.now(),
-                        'merchant': '',
+                        "categoryIcon":serializeIcon(icons),
+                        "categoryName":categoryName.toString(),
+                        'date': FieldValue.serverTimestamp(),
+                        'merchant':'',
+                        'description': '',
                         'income': false,
+                        'paymentId':'',
+
                       });
                       showSnackbar(context, 'Payment Completed Successfully');
 

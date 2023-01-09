@@ -660,13 +660,14 @@ class _ApprovePageState extends State<ApprovePage> {
                               .doc(currentuserid)
                               .collection('incomes')
                               .add({
-                            'amount': double.tryParse(
-                                activePayment!.amount!.toString()),
-                            "categoryIcon": serializeIcon(icons),
-                            "categoryName": categoryName.toString(),
-                            'date': DateTime.now(),
-                            'merchant': '',
-                            'income': true
+                          'amount':  double.tryParse(activePayment!.amount!.toString()),
+                          "categoryIcon": serializeIcon(icons),
+                          "categoryName":categoryName.toString(),
+                          'date': FieldValue.serverTimestamp(),
+                          'merchant':"",
+                          'description':'',
+                          'income': true,
+                          'recieverId':''
                           });
 
                           showSnackbar(

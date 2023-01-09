@@ -62,7 +62,6 @@ class _AddMyServicePageState extends State<AddMyServicePage>  with TickerProvide
   List<String> serviceUnit=[""];
   List<String> serviceCity=[""];
   String selectedCategory='';
-  String selectedCategory1='';
   String selectedSubCategory='';
   String selectedUnit='';
   String selectedCity='';
@@ -273,6 +272,9 @@ class _AddMyServicePageState extends State<AddMyServicePage>  with TickerProvide
     // selectedSubCategory=widget.subCategoryName??'';
     selectedUnit=serviceItems?.serviceUnit??'';
     selectedCity=serviceItems?.city??'';
+
+    selectedCategory=serviceItems?.serviceCategory??'';
+    selectedSubCategory=serviceItems?.subCategory??'';
     imgUrl=serviceItems?.image??'';
     serviceLocation=serviceItems?.serviceLocation??'';
     fileUrl=serviceItems?.documents??'';
@@ -392,7 +394,7 @@ class _AddMyServicePageState extends State<AddMyServicePage>  with TickerProvide
                     labelColor: Colors.white,
                     unselectedLabelColor: Colors.white,
                     tabs: [
-                      Text("Create your Service", style: TextStyle(
+                      Text(editService==true?'Change your detailes':"Create your Service", style: TextStyle(
                           fontFamily: 'Urbanist',
                           fontSize: scrWidth*0.03,
                           fontWeight: FontWeight.w700
@@ -1461,6 +1463,7 @@ class _AddMyServicePageState extends State<AddMyServicePage>  with TickerProvide
                                                   addService(service);
                                                   showUploadMessage(context, 'service added succesfully');
                                                   Navigator.pop(context);
+                                                  Navigator.pop(context);
                                                   name?.clear();
                                                   phoneNumber?.clear();
                                                   whatsappNumber?.clear();
@@ -1570,6 +1573,7 @@ class _AddMyServicePageState extends State<AddMyServicePage>  with TickerProvide
                                                   );
                                                   EditService(service);
                                                   showUploadMessage(context, 'service updated succesfully');
+                                                  Navigator.pop(context);
                                                   Navigator.pop(context);
                                                   name?.clear();
                                                   phoneNumber?.clear();

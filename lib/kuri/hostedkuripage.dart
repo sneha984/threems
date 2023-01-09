@@ -1113,13 +1113,15 @@ class _HostedKuriPageState extends State<HostedKuriPage> {
                               .doc(currentuserid)
                               .collection('incomes')
                               .add({
-                            'amount':
-                                double.tryParse(payment.amount!.toString()),
+
+                            'amount':  double.tryParse(payment.amount!.toString()),
                             "categoryIcon": serializeIcon(icons),
                             "categoryName": categoryName.toString(),
-                            'date': DateTime.now(),
-                            'merchant': '',
-                            'income': true
+                            'date': FieldValue.serverTimestamp(),
+                            'merchant':"",
+                            'description':'',
+                            'income': true,
+                            'recieverId':''
                           });
 
                           showSnackbar(context,

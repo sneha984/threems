@@ -264,9 +264,14 @@ class _GetOtpPageState extends State<GetOtpPage> {
                     ),
                     InkWell(
                       onTap: () async {
+
                         if (_formkey.currentState!.validate()) {
                           verifyPhoneNumber(context);
                         }
+                        loading=true;
+                        setState(() {
+
+                        });
                       },
                       child: Container(
                         height: scrHeight * 0.055,
@@ -276,7 +281,7 @@ class _GetOtpPageState extends State<GetOtpPage> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Center(
-                          child: Text(
+                          child: Text(loading==true?"Loading":
                             "GET OTP",
                             style: style,
                           ),

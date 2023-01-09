@@ -71,6 +71,7 @@ class _RecentExpensePageState extends State<RecentExpensePage> {
           children: [
             SizedBox(height: scrHeight*0.015,), // SizedBox(height: scrHeight*0.015,)
             expenseList.isEmpty?Container(
+              height :scrHeight,
                 child:Center(
                   child: Text(
                     " No Recent expences",

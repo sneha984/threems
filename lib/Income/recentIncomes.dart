@@ -72,6 +72,7 @@ class _RecentIncomePageState extends State<RecentIncomePage> {
           children: [
             SizedBox(height: scrHeight*0.015,), // SizedBox(height: scrHeight*0.015,)
             incomeList.isEmpty?Container(
+                height :scrHeight,
                 child:Center(
                   child: Text(
                     " No Recent expences",
