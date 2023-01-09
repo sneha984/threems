@@ -142,6 +142,13 @@ class _CreateCharity3State extends State<CreateCharity3> {
     return WillPopScope(
       onWillPop: () async {
         final shouldPop = await confirmQuitDialog(context);
+        if(shouldPop==true){
+          setState(() {
+
+          });
+        }
+
+
         return shouldPop ?? false;
       },
       child: Scaffold(
@@ -157,23 +164,7 @@ class _CreateCharity3State extends State<CreateCharity3> {
             child: AppBar(
               elevation: 0,
               backgroundColor: Colors.white,
-              leading: InkWell(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    // top: scrHeight * 0.09,
-                    // left: scrWidth * 0.05,
-                    // bottom: scrHeight * 0.02,
-                      right: scrWidth * 0.04),
-                  child: Icon(
-                    Icons.arrow_back,
-                    color: Colors.black,
-                    size: 25,
-                  ),
-                ),
-              ),
+              foregroundColor: Colors.black,
               title: Text(
                 "Create Charity",
                 style: TextStyle(
@@ -185,7 +176,7 @@ class _CreateCharity3State extends State<CreateCharity3> {
             ),
           ),
         ),
-        body:  loading?Center(child: CircularProgressIndicator(),):Padding(
+        body:  Padding(
           padding: EdgeInsets.only(
             left: padding15, right: padding15, top: scrWidth * 0.025,
             // vertical: scrWidth * 0.05,
@@ -596,7 +587,7 @@ class _CreateCharity3State extends State<CreateCharity3> {
                       //     ),
                       //   ),
                       // ),
-                      InkWell(
+                       loading?CircularProgressIndicator():InkWell(
                         onTap: (){
                           _pickImage();
                         },
@@ -658,10 +649,8 @@ class _CreateCharity3State extends State<CreateCharity3> {
                 ),
 
                 GestureDetector(
-                  onTap: () async{
-                    setState(() {
-                      loading=true;
-                    });
+                  onTap: () {
+
 
                     if (accountnumcontroller.text.isEmpty){
                       refreshPage();

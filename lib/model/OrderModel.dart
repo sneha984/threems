@@ -13,6 +13,10 @@ class OrderModel {
   int? paymentMethod;
   String? reason;
   String? paymentScreenShort;
+  double? subTotal;
+  double? grandTotal;
+  String? customerName;
+
 
   List<OrderedItems>? orderedItems;
   OrderModel(

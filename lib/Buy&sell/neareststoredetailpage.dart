@@ -951,7 +951,8 @@ class _NearestStoreDetailPageState extends State<NearestStoreDetailPage> {
                 itemBuilder: (BuildContext context, int index) {
                   return ExpansionTile(
                     title:  _customTileExpanded?
-                    Text(widget.storeDetailsModel.storeCategory![index],style: TextStyle(color: Colors.green),):
+                    Text(widget.storeDetailsModel.storeCategory![index],
+                      style: TextStyle(color: Colors.green),):
                     Text(widget.storeDetailsModel.storeCategory![index]),
                     // subtitle: const Text('Custom expansion arrow icon'),
                     trailing: Icon(

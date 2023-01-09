@@ -856,7 +856,7 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                         ),),
                       ),
                       SizedBox(height: scrHeight*0.02,),
-                      GestureDetector(
+                     widget.charities.youTubeLink==''?SizedBox(): GestureDetector(
                         onTap: (){
                          setState(() {
                             onclick;

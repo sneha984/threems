@@ -221,6 +221,11 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
 
   @override
   void initState() {
+    _time.text =
+    "${defaultTime.hour == 0 ? 12 : defaultTime.hour}: ${defaultTime.minute.toString().length == 1 ? '0${defaultTime.minute.toString()}' : defaultTime.minute.toString()}";
+
+    _date.text = "${dateTime.year}/${dateTime.month}/${dateTime.day}";
+
     getData();
     super.initState();
     const AndroidInitializationSettings androidInitializationSettings =
@@ -251,10 +256,8 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
       }
     }
 
-    _time.text =
-        "${defaultTime.hour == 0 ? 12 : defaultTime.hour}: ${defaultTime.minute.toString().length == 1 ? '0${defaultTime.minute.toString()}' : defaultTime.minute.toString()}";
 
-    _date.text = "${dateTime.year}/${dateTime.month}/${dateTime.day}";
+
   }
 
   showNotification() {
@@ -561,12 +564,13 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
                                   actions: <Widget>[
                                     TextButton(
                                       onPressed: () {
-                                        Navigator.pushAndRemoveUntil(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    NotesPage()),
-                                            (route) => false);
+                                        Navigator.pop(context);
+                                        // Navigator.pushAndRemoveUntil(
+                                        //     context,
+                                        //     MaterialPageRoute(
+                                        //         builder: (context) =>
+                                        //             NotesPage()),
+                                        //     (route) => false);
                                       },
                                       child: const Text("No"),
                                     ),
@@ -841,6 +845,7 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
                                   borderRadius:
                                       BorderRadius.circular(scrWidth * 0.026)),
                               child: TextFormField(
+                                readOnly: true,
                                 // keyboardType: TextInputType.number,
                                 controller: _time,
                                 cursorHeight: scrWidth * 0.055,
@@ -928,6 +933,7 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
                                   borderRadius:
                                       BorderRadius.circular(scrWidth * 0.026)),
                               child: TextFormField(
+                                readOnly: true,
                                 // keyboardType: TextInputType.number,
                                 controller: _date,
                                 cursorHeight: scrWidth * 0.055,

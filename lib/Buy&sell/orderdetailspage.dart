@@ -1242,9 +1242,10 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                       height: 10,
                     ),
                     Container(
-                      height: 50,
                       child: ListView.builder(
                           itemCount: widget.orderModel.orderedItems!.length,
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
                           itemBuilder: (context, index) {
                             return Padding(
                               padding: const EdgeInsets.only(top: 10),

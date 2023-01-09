@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:threems/Authentication/root.dart';
@@ -148,69 +149,160 @@ class _AddAddressPageState extends State<AddAddressPage> {
                       ),
                       SizedBox(height: scrHeight*0.025,),
 
+                      // Container(
+                      //   width: scrWidth,
+                      //   height: textFormFieldHeight45,
+                      //   padding: EdgeInsets.symmetric(
+                      //     horizontal: scrWidth * 0.018,
+                      //     vertical: scrHeight*0.002,
+                      //   ),
+                      //   decoration: BoxDecoration(
+                      //     color: textFormFieldFillColor,
+                      //     borderRadius: BorderRadius.circular(scrWidth * 0.026),
+                      //   ),
+                      //   child: TextFormField(
+                      //  validator: (value){
+                      //    String pattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
+                      //    RegExp regExp = new RegExp(pattern);
+                      //    if (value!.length == 0) {
+                      //      return 'Please enter mobile number';
+                      //    }
+                      //    else if (!regExp.hasMatch(value)) {
+                      //      return 'Please enter valid mobile number';
+                      //    }
+                      //    return null;
+                      //  },
+                      //
+                      //   controller: phoneController,
+                      //     keyboardType: TextInputType.number,
+                      //     focusNode: phoneFocusNode,
+                      //     cursorHeight: scrWidth * 0.055,
+                      //     cursorWidth: 1,
+                      //     cursorColor: Colors.black,
+                      //     style: TextStyle(
+                      //       color: Colors.black,
+                      //       fontWeight: FontWeight.w600,
+                      //       fontSize: FontSize15,
+                      //       fontFamily: 'Urbanist',
+                      //     ),
+                      //     decoration: InputDecoration(
+                      //       labelText: 'Phone Number',
+                      //       labelStyle: TextStyle(
+                      //         color: phoneFocusNode.hasFocus
+                      //             ? primarycolor
+                      //             : textFormUnFocusColor,
+                      //         fontWeight: FontWeight.w600,
+                      //         fontSize: FontSize15,
+                      //         fontFamily: 'Urbanist',
+                      //       ),
+                      //       fillColor: textFormFieldFillColor,
+                      //       filled: true,
+                      //       contentPadding: EdgeInsets.only(
+                      //           top: scrHeight*0.01,
+                      //           bottom: scrWidth * 0.033,
+                      //           left: scrWidth * 0.033),
+                      //       disabledBorder: InputBorder.none,
+                      //       enabledBorder: InputBorder.none,
+                      //       errorBorder: InputBorder.none,
+                      //       border: InputBorder.none,
+                      //       focusedBorder: UnderlineInputBorder(
+                      //         borderSide: BorderSide(
+                      //           color: primarycolor,
+                      //           width: 2,
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
                       Container(
-                        width: scrWidth,
                         height: textFormFieldHeight45,
-                        padding: EdgeInsets.symmetric(
-                          horizontal: scrWidth * 0.018,
-                          vertical: scrHeight*0.002,
-                        ),
+                        width: scrWidth,
                         decoration: BoxDecoration(
+                          // border: Border.all(
+                          //   color: Color(0xffDADADA),
+                          // ),
                           color: textFormFieldFillColor,
                           borderRadius: BorderRadius.circular(scrWidth * 0.026),
-                        ),
-                        child: TextFormField(
-                       validator: (value){
-                         String pattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
-                         RegExp regExp = new RegExp(pattern);
-                         if (value!.length == 0) {
-                           return 'Please enter mobile number';
-                         }
-                         else if (!regExp.hasMatch(value)) {
-                           return 'Please enter valid mobile number';
-                         }
-                         return null;
-                       },
 
-                        controller: phoneController,
-                          keyboardType: TextInputType.number,
-                          focusNode: phoneFocusNode,
-                          cursorHeight: scrWidth * 0.055,
-                          cursorWidth: 1,
-                          cursorColor: Colors.black,
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w600,
-                            fontSize: FontSize15,
-                            fontFamily: 'Urbanist',
-                          ),
-                          decoration: InputDecoration(
-                            labelText: 'Phone Number',
-                            labelStyle: TextStyle(
-                              color: phoneFocusNode.hasFocus
-                                  ? primarycolor
-                                  : textFormUnFocusColor,
-                              fontWeight: FontWeight.w600,
-                              fontSize: FontSize15,
-                              fontFamily: 'Urbanist',
+                        ),
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: scrWidth * 0.029,
                             ),
-                            fillColor: textFormFieldFillColor,
-                            filled: true,
-                            contentPadding: EdgeInsets.only(
-                                top: scrHeight*0.01,
-                                bottom: scrWidth * 0.033,
-                                left: scrWidth * 0.033),
-                            disabledBorder: InputBorder.none,
-                            enabledBorder: InputBorder.none,
-                            errorBorder: InputBorder.none,
-                            border: InputBorder.none,
-                            focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(
-                                color: primarycolor,
-                                width: 2,
+                            Container(
+                              height: 20,
+                              width: 30,
+                              decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      image: AssetImage(
+                                          "assets/icons/Flag_of_India 1.png"),
+                                      fit: BoxFit.fill)),
+                            ),
+                            SizedBox(
+                              width: scrWidth * 0.011,
+                            ),
+                            Text(
+                              "+91",
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  fontFamily: 'Outfit',
+                                  fontWeight: FontWeight.w400),
+                            ),
+                            SizedBox(
+                              width: scrWidth * 0.011,
+                            ),
+                            Container(
+                              width: scrWidth * 0.005,
+                              height: scrHeight * 0.055,
+                              color: Colors.white,
+                            ),
+                            SizedBox(
+                              width: scrWidth * 0.011,
+                            ),
+                            Container(
+                              height: 50,
+                              width: 200,
+                              child: TextFormField(
+                                validator: (value) {
+                                  String patttern =
+                                      r'(^(?:[+0]9)?[0-9]{10,12}$)';
+                                  RegExp regExp = new RegExp(patttern);
+                                  if (value!.length == 0) {
+                                    return 'Please enter mobile number';
+                                  } else if (!regExp.hasMatch(value!)) {
+                                    return 'Please enter valid mobile  number';
+                                  }
+                                  return null;
+                                },
+                                keyboardType: TextInputType.phone,
+                                inputFormatters: <TextInputFormatter>[
+                                  FilteringTextInputFormatter.allow(
+                                      RegExp(r'[0-9]')),
+                                  FilteringTextInputFormatter.digitsOnly
+                                ],
+                                autofocus: false,
+                                controller: phoneController,
+                                decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.only(
+                                      left: 11, right: 3, bottom: 5),
+                                  errorStyle:
+                                  TextStyle(fontSize: 9, height: 0.3),
+                                  border: InputBorder.none,
+                                  hintText: "XXXXXXXXXX",
+                                  hintStyle: TextStyle(
+                                    fontFamily: 'Outfit',
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 18,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                                cursorColor: Colors.black,
+                                cursorHeight: 20,
+                                cursorWidth: 0.5,
                               ),
-                            ),
-                          ),
+                            )
+                          ],
                         ),
                       ),
                       SizedBox(height: scrHeight*0.025,),

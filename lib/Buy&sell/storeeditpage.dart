@@ -1066,7 +1066,7 @@ class _StoreEditPageState extends State<StoreEditPage> {
               refreshPage();
               return showSnackbar(context,"Must Provide StoreName");
             }
-            if(selectCategory.isEmpty){
+            if(selectCategory.length==''){
               refreshPage();
               return showSnackbar(context,"Must select category");
             }

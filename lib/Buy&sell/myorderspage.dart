@@ -316,7 +316,7 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
                           width: 302,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(15),
-                              color: Color(0xff02B558)
+                              color:allOrders[index].status==3?Colors.red: Color(0xff02B558)
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,

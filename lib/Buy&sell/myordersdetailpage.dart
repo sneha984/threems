@@ -63,12 +63,12 @@ class _MyOrdersDetailsPageState extends State<MyOrdersDetailsPage> {
       ),
       body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Padding(
               padding: const EdgeInsets.only(left: 15,right: 15,top: 15),
               child: Container(
-                height: 310,
-                width: 340,
+
                 decoration: BoxDecoration(
                     color: Colors.white,
                     boxShadow: [
@@ -81,195 +81,200 @@ class _MyOrdersDetailsPageState extends State<MyOrdersDetailsPage> {
                     ],
                     borderRadius: BorderRadius.circular(20)
                 ),
-                child: Column(
-                  children: [
-                    SizedBox(height: 10,),
-                    Row(
-                      children: [
-                        SizedBox(width: 20,),
-                        Text(
-                          "Order ${widget.orderModel.orderId}",
-                          style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.black,
-                              fontFamily: 'Urbanist',
-                              fontWeight: FontWeight.w600),
-                        ),
-                        SizedBox(width: 10,),
-                        Text(
-                            widget.orderModel.time!.day ==
-                                DateTime.now().day
-                                ? widget.orderModel.time!.hour >
-                                12
-                                ? "Today ${widget.orderModel.time!.hour - 12}:${widget.orderModel.time!.minute} PM"
-                                : widget.orderModel
-                                .time!
-                                .hour ==
-                                0
-                                ? "Today 12:${widget.orderModel.time!.minute} AM"
-                                : "Today ${widget.orderModel.time!.hour}:${widget.orderModel.time!.minute} AM"
-                                :
+                child: Padding(
+                  padding:  EdgeInsets.all(scrWidth*0.03),
+                  child: Column(
+                    children: [
+                      SizedBox(height: 10,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Order ${widget.orderModel.orderId}",
+                            style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.black,
+                                fontFamily: 'Urbanist',
+                                fontWeight: FontWeight.w600),
+                          ),
+                          SizedBox(width: 10,),
+                          Text(
+                              widget.orderModel.time!.day ==
+                                  DateTime.now().day
+                                  ? widget.orderModel.time!.hour >
+                                  12
+                                  ? "Today ${widget.orderModel.time!.hour - 12}:${widget.orderModel.time!.minute} PM"
+                                  : widget.orderModel
+                                  .time!
+                                  .hour ==
+                                  0
+                                  ? "Today 12:${widget.orderModel.time!.minute} AM"
+                                  : "Today ${widget.orderModel.time!.hour}:${widget.orderModel.time!.minute} AM"
+                                  :
 
-                            //YESTERDAY DATE
-                            widget.orderModel.time!.day ==
-                                DateTime.now().day - 1
-                                ?widget.orderModel
-                                .time!
-                                .hour >
-                                12
-                                ? "Yesterday ${widget.orderModel.time!.hour - 12}:${widget.orderModel.time!.minute} PM"
-                                : widget.orderModel
-                                .time!
-                                .hour ==
-                                0
-                                ? "Yesterday 12:${widget.orderModel.time!.minute} AM"
-                                : "Yesterday ${widget.orderModel.time!.hour}:${widget.orderModel.time!.minute} AM"
-                                :
+                              //YESTERDAY DATE
+                              widget.orderModel.time!.day ==
+                                  DateTime.now().day - 1
+                                  ?widget.orderModel
+                                  .time!
+                                  .hour >
+                                  12
+                                  ? "Yesterday ${widget.orderModel.time!.hour - 12}:${widget.orderModel.time!.minute} PM"
+                                  : widget.orderModel
+                                  .time!
+                                  .hour ==
+                                  0
+                                  ? "Yesterday 12:${widget.orderModel.time!.minute} AM"
+                                  : "Yesterday ${widget.orderModel.time!.hour}:${widget.orderModel.time!.minute} AM"
+                                  :
 
-                            //OTHER DATE
-                            widget.orderModel
-                                .time!
-                                .hour >
-                                12
-                                ? "${DateFormat('dd-MMM-yyy').format(widget.orderModel.time!)} ${widget.orderModel.time!.hour - 12}:"
-                                "${widget.orderModel.time!.minute} PM"
-                                :widget.orderModel
-                                .time!
-                                .hour ==
-                                0
-                                ? "${DateFormat('dd-MMM-yyy').format(widget.orderModel.time!)} 12:${widget.orderModel.time!.minute} AM"
-                                : "${DateFormat('dd-MMM-yyy')
-                                .format(widget.orderModel.time!)}"
-                                " ${widget.orderModel.time!.hour}:${widget.orderModel.time!.minute} AM",
-                          style: TextStyle(
-                              fontSize: 12,
-                              color: Color(0xff969696),
-                              fontFamily: 'Urbanist',
-                              fontWeight: FontWeight.w600),
-                        ),
+                              //OTHER DATE
+                              widget.orderModel
+                                  .time!
+                                  .hour >
+                                  12
+                                  ? "${DateFormat('dd-MMM-yyy').format(widget.orderModel.time!)} ${widget.orderModel.time!.hour - 12}:"
+                                  "${widget.orderModel.time!.minute} PM"
+                                  :widget.orderModel
+                                  .time!
+                                  .hour ==
+                                  0
+                                  ? "${DateFormat('dd-MMM-yyy').format(widget.orderModel.time!)} 12:${widget.orderModel.time!.minute} AM"
+                                  : "${DateFormat('dd-MMM-yyy')
+                                  .format(widget.orderModel.time!)}"
+                                  " ${widget.orderModel.time!.hour}:${widget.orderModel.time!.minute} AM",
+                            style: TextStyle(
+                                fontSize: 12,
+                                color: Color(0xff969696),
+                                fontFamily: 'Urbanist',
+                                fontWeight: FontWeight.w600),
+                          ),
 
-                      ],
-                    ),
-                    SizedBox(height: 10,),
-                    Container(
-                      height: 50,
-                      child: ListView.builder(
-                          itemCount: widget.orderModel.orderedItems!.length,
-                          itemBuilder: (context,index){
-                            return Padding(
-                              padding: const EdgeInsets.only(top: 10),
-                              child: Row(
-                                children: [
-                                  SizedBox(width: 20,),
+                        ],
+                      ),
+                      SizedBox(height: 10,),
+                      Container(
+                        child: ListView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: widget.orderModel.orderedItems!.length,
+                            itemBuilder: (context,index){
+                              return Padding(
+                                padding: const EdgeInsets.only(top: 10),
+                                child: Row(
+                                  children: [
 
-                                  Container(
-                                    width: 150,
-                                    child: Text(
-                                      widget.orderModel.orderedItems![index].item!,
+                                    Expanded(
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            child: Text(
+                                              widget.orderModel.orderedItems![index].item!,
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.black,
+                                                  fontFamily: 'Urbanist',
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                          ),
+                                          Text(
+                                            "x",
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.black,
+                                                fontFamily: 'Urbanist',
+                                                fontWeight: FontWeight.w600),
+                                          ),
+                                          SizedBox(width: 5,),
+
+                                          Text(
+                                            widget.orderModel.orderedItems![index].count!.toString()
+                                            ,
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.black,
+                                                fontFamily: 'Urbanist',
+                                                fontWeight: FontWeight.w600),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    // SizedBox(width: 80,),
+
+                                   SizedBox(width: 10,),
+
+                                    Text(
+                                     " ₹${
+                                        widget.orderModel.orderedItems![index]
+                                            .amount!
+                                            .toString()
+                                      }",
                                       style: TextStyle(
                                           fontSize: 16,
-                                          color: Colors.black,
+                                          color: Color(0xffF10000),
                                           fontFamily: 'Urbanist',
                                           fontWeight: FontWeight.w600),
                                     ),
-                                  ),
-                                  // SizedBox(width: 80,),
+                                  ],
+                                ),
+                              );
+                            }),
+                      ),
 
-                                  Text(
-                                    "x",
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black,
-                                        fontFamily: 'Urbanist',
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                  SizedBox(width: 5,),
+                      // Row(
+                      //   children: [
+                      //     SizedBox(width: 20,),
+                      //
+                      //     Container(
+                      //       width: 150,
+                      //       child: Text(
+                      //         "erihfuehru",
+                      //         style: TextStyle(
+                      //             fontSize: 16,
+                      //             color: Colors.black,
+                      //             fontFamily: 'Urbanist',
+                      //             fontWeight: FontWeight.w600),
+                      //       ),
+                      //     ),
+                      //     // SizedBox(width: 80,),
+                      //
+                      //     Text(
+                      //       "x",
+                      //       style: TextStyle(
+                      //           fontSize: 16,
+                      //           color: Colors.black,
+                      //           fontFamily: 'Urbanist',
+                      //           fontWeight: FontWeight.w600),
+                      //     ),
+                      //     SizedBox(width: 5,),
+                      //
+                      //     Text(
+                      //       "1",
+                      //       style: TextStyle(
+                      //           fontSize: 16,
+                      //           color: Colors.black,
+                      //           fontFamily: 'Urbanist',
+                      //           fontWeight: FontWeight.w600),
+                      //     ),
+                      //     SizedBox(width: 92,),
+                      //
+                      //     Text(
+                      //       "435",
+                      //       style: TextStyle(
+                      //           fontSize: 16,
+                      //           color: Color(0xffF10000),
+                      //           fontFamily: 'Urbanist',
+                      //           fontWeight: FontWeight.w600),
+                      //     ),
+                      //   ],
+                      // ),
+                      SizedBox(height: 20,),
+                      Divider(
+                        thickness: 14,
+                        color: Color(0xffF3F3F3),
+                      ),
 
-                                  Text(
-                                    widget.orderModel.orderedItems![index].count!.toString()
-                                    ,
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black,
-                                        fontFamily: 'Urbanist',
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                  SizedBox(width: 73,),
-
-                                  Text(
-                                   " ₹${
-                                      widget.orderModel.orderedItems![index]
-                                          .amount!
-                                          .toString()
-                                    }",
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        color: Color(0xffF10000),
-                                        fontFamily: 'Urbanist',
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                ],
-                              ),
-                            );
-                          }),
-                    ),
-
-                    // Row(
-                    //   children: [
-                    //     SizedBox(width: 20,),
-                    //
-                    //     Container(
-                    //       width: 150,
-                    //       child: Text(
-                    //         "erihfuehru",
-                    //         style: TextStyle(
-                    //             fontSize: 16,
-                    //             color: Colors.black,
-                    //             fontFamily: 'Urbanist',
-                    //             fontWeight: FontWeight.w600),
-                    //       ),
-                    //     ),
-                    //     // SizedBox(width: 80,),
-                    //
-                    //     Text(
-                    //       "x",
-                    //       style: TextStyle(
-                    //           fontSize: 16,
-                    //           color: Colors.black,
-                    //           fontFamily: 'Urbanist',
-                    //           fontWeight: FontWeight.w600),
-                    //     ),
-                    //     SizedBox(width: 5,),
-                    //
-                    //     Text(
-                    //       "1",
-                    //       style: TextStyle(
-                    //           fontSize: 16,
-                    //           color: Colors.black,
-                    //           fontFamily: 'Urbanist',
-                    //           fontWeight: FontWeight.w600),
-                    //     ),
-                    //     SizedBox(width: 92,),
-                    //
-                    //     Text(
-                    //       "435",
-                    //       style: TextStyle(
-                    //           fontSize: 16,
-                    //           color: Color(0xffF10000),
-                    //           fontFamily: 'Urbanist',
-                    //           fontWeight: FontWeight.w600),
-                    //     ),
-                    //   ],
-                    // ),
-                    SizedBox(height: 20,),
-                    Divider(
-                      thickness: 14,
-                      color: Color(0xffF3F3F3),
-                    ),
-
-                    Padding(
-                      padding: EdgeInsets.only(left: 21, right: 21),
-                      child: Column(
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           SizedBox(
@@ -331,7 +336,7 @@ class _MyOrdersDetailsPageState extends State<MyOrdersDetailsPage> {
                           ),
                           Padding(
                             padding:
-                            EdgeInsets.only(left: 11, right: 11, top: 3, bottom: 3),
+                            EdgeInsets.only(  top: 3, bottom: 3),
                             child: DottedLine(
                               dashColor: Colors.grey,
                               lineThickness: 0.8,
@@ -386,7 +391,7 @@ class _MyOrdersDetailsPageState extends State<MyOrdersDetailsPage> {
 
                           Padding(
                             padding:
-                            EdgeInsets.only(left: 17, right: 17, top: 10, bottom: 10),
+                            EdgeInsets.only( top: 10, bottom: 10),
                             child: DottedLine(
                               dashColor: Colors.grey,
                               lineThickness: 0.8,
@@ -445,15 +450,15 @@ class _MyOrdersDetailsPageState extends State<MyOrdersDetailsPage> {
                           ),
                         ],
                       ),
-                    ),
 
-                  ],
+                    ],
+                  ),
                 ),
 
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(right: 180,top: 14),
+              padding:  EdgeInsets.only(left: scrWidth*0.04,top: scrWidth*0.03),
               child: Text(
                 "Current Status",
                 style: TextStyle(
@@ -722,6 +727,7 @@ class _MyOrdersDetailsPageState extends State<MyOrdersDetailsPage> {
                       'reason':_reasonController.text??'',
                     });
 
+                    Navigator.of(context)..pop();
                     Navigator.of(context)..pop();
                     // _showToast(context);
                   },

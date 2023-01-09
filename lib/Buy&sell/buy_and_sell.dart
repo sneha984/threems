@@ -1036,16 +1036,24 @@ List cate=[];
                                           subtitle:
                                               "Congratulations on opening your new \nonline store!",
                                         ),
-                                        StepperData(
+                                       store[0].storeVerification==true? StepperData(
                                           title: "Add Product",
                                           subtitle:
                                               "Create your first product by adding the \nproduct name and images.",
-                                        ),
-                                        StepperData(
+                                        ):StepperData(
+                                         title: "Store Verification ",
+                                         subtitle:
+                                         "Please wait for the store verification",
+                                       ),
+                                        store[0].storeVerification==true?StepperData(
                                           title: "Payment",
                                           subtitle:
                                               "Confirm Your Payment section",
-                                        ),
+                                        ):StepperData(
+                                          title: "Add Product",
+                                          subtitle:
+                                          "Create your first product by adding the \nproduct name and images.",
+                                        )
                                       ],
                                       horizontalStepperHeight: 200,
                                       stepperDirection: Axis.vertical,
@@ -1102,37 +1110,7 @@ List cate=[];
                                   ),
                                 ),
                               )
-                                  :InkWell(
-                                onTap: (){
-                                  showSnackbar(context, "Please Wait for The store Verification");
-                                },
-                                    child: Container(
-                                height: scrHeight * 0.05,
-                                width: scrWidth * 0.6,
-                                decoration: BoxDecoration(
-                                      color: Color.fromRGBO(0, 128, 54, 0.33),
-                                      borderRadius: BorderRadius.circular(21.5)),
-                                child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        Icons.add,
-                                        size: scrWidth * 0.045,
-                                        color: Colors.white,
-                                      ),
-                                      Text(
-                                        "Add Product",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            fontFamily: 'Urbanist',
-                                            fontSize: scrWidth * 0.045,
-                                            fontWeight: FontWeight.w700,
-                                            color: Colors.white),
-                                      ),
-                                    ],
-                                ),
-                              ),
-                                  )
+                                  :Container(),
                             ],
                           )
                         : (status == 2)

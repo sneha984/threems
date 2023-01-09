@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/cupertino.dart';
@@ -470,8 +471,9 @@ class _DeliveredPageState extends State<DeliveredPage> {
                       height: 10,
                     ),
                     Container(
-                      height: 50,
                       child: ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
                           itemCount: widget.order.orderedItems!.length,
                           itemBuilder: (context, index) {
                             return Padding(
@@ -776,6 +778,16 @@ class _DeliveredPageState extends State<DeliveredPage> {
                 ),
               ),
             ),
+            SizedBox(height: 10,),
+            widget.order.paymentMethod==0?SizedBox():Container(
+              height: 180,
+              width: 300,
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: CachedNetworkImageProvider(widget.order.paymentScreenShort??''),fit: BoxFit.fill)
+              ),
+            ),
+
 
 
             SizedBox(

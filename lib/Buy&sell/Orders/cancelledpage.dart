@@ -286,8 +286,9 @@ class _CancelledPageState extends State<CancelledPage> {
                   SizedBox(height: 30,),
 
       Container(
-        height: 50,
         child: ListView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
             itemCount: widget.orderModels.orderedItems!.length,
             itemBuilder: (context,index){
               return Padding(

@@ -61,6 +61,7 @@ class _VerificationDetailsState extends State<VerificationDetails> {
   var fileUrl;
   var docUrl;
   var uploadTasks;
+
   Future uploadImageToFirebase(BuildContext context) async {
     Reference firebaseStorageRef =
         FirebaseStorage.instance.ref().child('deposits/${imgFile.path}');
@@ -77,6 +78,7 @@ class _VerificationDetailsState extends State<VerificationDetails> {
   }
 
   _pickImage() async {
+    loading=true;
     final imageFile =
         await ImagePicker.platform.pickImage(source: ImageSource.gallery);
     setState(() {
@@ -110,6 +112,8 @@ class _VerificationDetailsState extends State<VerificationDetails> {
   _pickFile() async {
     print('      PICK FILE      ');
     final result = await FilePicker.platform.pickFiles(
+      allowedExtensions: ['pdf'],
+      type: FileType.custom,
       withData: true,
     );
 
@@ -152,8 +156,9 @@ class _VerificationDetailsState extends State<VerificationDetails> {
   _pickFiles() async {
     print('      PICK FILE      ');
     final result = await FilePicker.platform.pickFiles(
-      withData: true,
-    );
+      allowedExtensions: ['pdf'],
+      type: FileType.custom,
+      withData: true,    );
 
     if (result == null) return;
 
@@ -201,6 +206,14 @@ class _VerificationDetailsState extends State<VerificationDetails> {
     return WillPopScope(
       onWillPop: () async {
         final shouldPop = await confirmQuitDialog(context);
+        if(shouldPop==true){
+          setState(() {
+            loading=false;
+
+
+          });
+        }
+
         return shouldPop ?? false;
       },
       child: Scaffold(
@@ -216,23 +229,7 @@ class _VerificationDetailsState extends State<VerificationDetails> {
             child: AppBar(
               elevation: 0,
               backgroundColor: Colors.white,
-              leading: InkWell(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: Padding(
-                  padding: EdgeInsets.only(
-                      // top: scrHeight * 0.09,
-                      // left: scrWidth * 0.05,
-                      // bottom: scrHeight * 0.02,
-                      right: scrWidth * 0.04),
-                  child: Icon(
-                    Icons.arrow_back,
-                    color: Colors.black,
-                    size: 25,
-                  ),
-                ),
-              ),
+              foregroundColor: Colors.black,
               title: Text(
                 "Create Charity",
                 style: TextStyle(
@@ -765,10 +762,10 @@ class _VerificationDetailsState extends State<VerificationDetails> {
                       if (videoLinkController.text.isEmpty) {
                         refreshPage();
                         return showSnackbar(
-                            context, "Please Upload YouTube Video");
+                            context, "Please Upload  Video Link");
                       } else {
                         Map map = {
-                          "youTubeLink": youtubecontroller.text,
+                          "youTubeLink": youtubecontroller.text??'',
                           "image": imgUrl,
                           "documents": fileUrl,
                           "fileNme": fileName,

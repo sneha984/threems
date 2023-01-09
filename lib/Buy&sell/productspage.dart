@@ -219,7 +219,7 @@ class _ProductsPageState extends State<ProductsPage> {
                     ),
                     IconButton(onPressed: (){
                       pickFile();
-                    }, icon: Icon(Icons.add,color: Colors.white,)),
+                    }, icon: Icon(Icons.cloud_download,color: Colors.white,)),
                     InkWell(
                       onTap: (){
                         Navigator.push(context,
@@ -381,7 +381,8 @@ class _ProductsPageState extends State<ProductsPage> {
                                                     .collection('products')
                                                     .doc(getAllProducts[index]['productId'])
                                                     .update({
-                                                  'delete':true
+                                                  'delete':true,
+                                                  'available':false,
                                                 }).whenComplete(() => Navigator.pop(context));
                                               },
                                               child: Container(
@@ -604,9 +605,11 @@ class _ProductsPageState extends State<ProductsPage> {
 
   List<List<dynamic>> rowdetail=[];
 
-  void _openFile(PlatformFile file) {
+  Future<void> _openFile(PlatformFile file) async {
     // print(file.name);
     filename = file.name;
+    print(filename);
+    print(filename.split('.').last);
     // print(rowdetail);
     // print('file.bytes');
     // print(file.bytes);
@@ -618,96 +621,133 @@ class _ProductsPageState extends State<ProductsPage> {
 
     int i = 0;
 print("start");
-    for (dynamic a in rowdetail) {
-      if (a != null && a != '') {
+    if(filename.split('.').last=='csv'){
+      for (dynamic a in rowdetail) {
+        if (a != null && a != '') {
 
-        // print(rowdetail);
-        // print(a);
-        // print(a[0]);
-        // print(a[1]);
-        // print(a[2]);
-        // print(a[3]);
-        // print(a[4]);
+          // print(rowdetail);
+          // print(a);
+          // print(a[0]);
+          // print(a[1]);
+          // print(a[2]);
+          // print(a[3]);
+          // print(a[4]);
+          List category=[];
 
-        if(widget.storemodel.storeCategory!.contains(a[1])){
-          if(widget.storemodel.productCategory!.contains(a[2])) {
-            if(getUnit.contains(a[5])) {
-              FirebaseFirestore
+          await FirebaseFirestore
               .instance
               .collection('stores')
-              .doc(widget.storeId)
-              .collection('products')
-              .add({
-            'productName':a[0],
-            'storedCategorys':a[1],
-            'productCategory':a[2],
-            'price':a[3],
-            'quantity':a[4],
-            'unit':a[5],
-            'details':a[6],
-            'images':[],
-            'storeId':widget.storeId,
-            'available':true,
-            'delete':false
+              .doc(widget.storeId).get().then((value) {
+            category=value.data()!['productCategory'];
+          });
 
 
-          }).then((value){
-            value.update({
-              'productId':value.id
+          if(category.contains(a[2])) {
+
+            print('IFFFF');
+            print(a[2]);
+          }else{
+
+            print('ELSEEE');
+            print(a[2]);
+
+
+
+            print(category);
+
+            category.add(a[2]);
+
+            FirebaseFirestore
+                .instance
+                .collection('stores')
+                .doc(widget.storeId)
+                .update({
+              'productCategory':category
             });
 
-          });
+          }
+
+          if(widget.storemodel.storeCategory!.contains(a[1])){
+
+            if(getUnit.contains(a[5])) {
+              FirebaseFirestore
+                  .instance
+                  .collection('stores')
+                  .doc(widget.storeId)
+                  .collection('products')
+                  .add({
+                'productName':a[0],
+                'storedCategorys':a[1],
+                'productCategory':a[2],
+                'price':a[3],
+                'quantity':a[4],
+                'unit':a[5],
+                'details':a[6],
+                'images':[],
+                'storeId':widget.storeId,
+                'available':true,
+                'delete':false
+
+
+              }).then((value){
+                value.update({
+                  'productId':value.id
+                });
+
+              });
             }
             else{
               print("${a[5]}"+a[0].toString());
               showSnackbar(context, "Incorrect Unit Specified  In ${a[0]}");
               return ;
             }
+
           }else{
-            print("${a[2]}"+a[0].toString());
-            showSnackbar(context, "Incorrect Product Category Specified  In ${a[0]}");
+            // if(widget.storemodel.storeCategory!.contains(a[1])&&widget.storemodel.productCategory!.contains(a[2])
+            //     &&getUnit.contains(a[5])){
+            //
+            // }
+            print("${a[1]}"+a[0].toString());
+
+            print(a);
+            showSnackbar(context, "Incorrect Store Category Specified  In ${a[0]}");
 
             return ;
 
           }
-        }else{
-          // if(widget.storemodel.storeCategory!.contains(a[1])&&widget.storemodel.productCategory!.contains(a[2])
-          //     &&getUnit.contains(a[5])){
+
+
+
+          // leadz.add({
+          //   'productName':a[0],
+          //           'storedCategorys':a[1],
+          //           'productCategory':a[2],
+          //           'price':a[3],
+          //           'quantity':a[4],
+          //           'unit':a[5],
+          //           'details':a[6],
+          //   'images':a[7],
           //
-          // }
-          print("${a[1]}"+a[0].toString());
+          //           // 'storeId':widget.storeId,
+          //           // 'available':true,
+          //           // 'delete':false
+          // });
 
-          print(a);
-          showSnackbar(context, "Incorrect Store Category Specified  In ${a[0]}");
+          // print(leadz);
+          // print('                          *********');
 
-          return ;
-
+          i++;
         }
-
-
-
-        // leadz.add({
-        //   'productName':a[0],
-        //           'storedCategorys':a[1],
-        //           'productCategory':a[2],
-        //           'price':a[3],
-        //           'quantity':a[4],
-        //           'unit':a[5],
-        //           'details':a[6],
-        //   'images':a[7],
-        //
-        //           // 'storeId':widget.storeId,
-        //           // 'available':true,
-        //           // 'delete':false
-        // });
-
-        // print(leadz);
-        // print('                          *********');
-
-        i++;
       }
+      showSnackbar(context, "Bulk Product Added Successfully");
+
+    }else{
+      showSnackbar(context, "Please Upload csv File");
+
+
     }
-    showSnackbar(context, "Bulk Product Added Successfully");
+
+
     setState(() {
       print(leadz);
 

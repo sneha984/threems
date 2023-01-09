@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:threems/kuri/createkuri.dart';
 import 'package:threems/model/usermodel.dart';
 
 import '../../model/charitymodel.dart';
@@ -30,6 +31,7 @@ class _SeeMoreCharitiesState extends State<SeeMoreCharities>
   Map<String,dynamic> causes={};
   Map<String,dynamic> charityLengthMaps={};
   List<String> causeDetails=[];
+  bool block=false;
   getdropdowns(){
     FirebaseFirestore.instance.collection('dropdown').snapshots().listen((event) {
       causeDetails=[];
@@ -45,7 +47,9 @@ class _SeeMoreCharitiesState extends State<SeeMoreCharities>
                 .instance
                 .collection('charity')
                 .where('userId',isEqualTo: currentuser!.userId)
-                .where('cause' ,isEqualTo: doc.get('causeId')).snapshots(),
+                .where('cause' ,isEqualTo: doc.get('causeId'))
+                // .where('block',isEqualTo: true)
+                .snapshots(),
             builder: (context,snapshot){
               List<CharityModel> charityList=[];
               if(snapshot.data==null){
@@ -55,6 +59,7 @@ class _SeeMoreCharitiesState extends State<SeeMoreCharities>
                 charityList.add(CharityModel.fromJson(doc.data()!));
               }
               charityLengthMaps[doc.get('value')]=charityList.length;
+              // block=doc.get('block');
               return ListView.separated(
                 itemCount: charityList.length,
                 shrinkWrap: true,
@@ -63,11 +68,12 @@ class _SeeMoreCharitiesState extends State<SeeMoreCharities>
                 itemBuilder: (context, index) {
                   final charity=charityList[index];
                   return GestureDetector(
-                    onTap: () {
-                      Navigator.push(
+                    onTap: () {charity.block==false?Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => FundRaisingDashboard(charity: charity,)));
+                              builder: (context) => FundRaisingDashboard(charity: charity,)))
+                          :showSnackbar(context, "charity blocked");
+
                     },
                     child: Row(
                       children: [
@@ -79,17 +85,14 @@ class _SeeMoreCharitiesState extends State<SeeMoreCharities>
                           width: scrWidth * 0.285,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(30),
-                              // image: DecorationImage(
-                              //     image: NetworkImage(charity.image??''),
-                              //     fit: BoxFit.fill)
+                              image: DecorationImage(
+                                  colorFilter:charity.block==false?
+                                  ColorFilter.mode(Colors.transparent, BlendMode.saturation):
+                                  ColorFilter.mode(Colors.grey, BlendMode.saturation),
+                                  image: CachedNetworkImageProvider(charity.image??''),
+                                  fit: BoxFit.fill)
                           ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(scrWidth * 0.09),
-                            child: CachedNetworkImage(
-                              fit: BoxFit.cover,
-                              imageUrl:charity?.image??'',
-                            ),
-                          ),
+
                         ),
                         SizedBox(
                           width: scrWidth * 0.05,

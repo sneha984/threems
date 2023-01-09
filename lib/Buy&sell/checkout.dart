@@ -48,8 +48,9 @@ class _CheckOutPageState extends State<CheckOutPage> {
   List<Address>? addressList;
   bool shopAvailable = false;
   bool placeOrder=true;
+  bool delete=false;
   String? image;
-  bool prd=false;
+  bool prd=true;
   getAddress() {
     print('1234');
     print(cartlist.length);
@@ -70,21 +71,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
         }
       });
 
-      FirebaseFirestore
-          .instance
-          .collection('stores')
-          .doc(cartlist[0]['storeId'])
-          .collection('products')
-          .doc(cartlist[0]['productId'])
-          .snapshots()
-          .listen((event) {
-        prd = event['available'];
-        if (mounted) {
-          setState(() {
 
-          });
-        }
-      });
     }
 
     FirebaseFirestore.instance
@@ -140,11 +127,59 @@ class _CheckOutPageState extends State<CheckOutPage> {
     });
   }
 
+getAvailable(){
+    notAvailabe=[];
+    for(var i in cartlist){
+      FirebaseFirestore
+          .instance
+          .collection('stores')
+          .doc(cartlist[0]['storeId'])
+          .collection('products')
+          .doc(i['productId'])
+          .snapshots()
+          .listen((event) {
+        // prd = event['available'];
+        delete=event['delete'];
 
+        if(event['available']==false||event['delete']==true){
+          if(!notAvailabe.contains(i['productId'])){
+            notAvailabe.add(i['productId']);
+          }
+
+        }else{
+          if(notAvailabe.contains(i['productId'])){
+            notAvailabe.remove(i['productId']);
+          }
+        }
+        print('notAvailabe');
+        print(notAvailabe);
+        if(notAvailabe.length!=0){
+          prd=false;
+          setState(() {
+
+          });
+        }else{
+          prd=true;
+        }
+        if (mounted) {
+          setState(() {
+
+          });
+        }
+      });
+    }
+
+    if(mounted){
+      setState(() {
+
+      });
+    }
+}
 
   @override
   void initState() {
     getAddress();
+    getAvailable();
     // TODO: implement initState
     super.initState();
   }
@@ -153,12 +188,13 @@ class _CheckOutPageState extends State<CheckOutPage> {
     locale: 'HI',
     symbol: '₹ ',
   );
-
+List notAvailabe=[];
   bool isAddress = false;
   @override
   Widget build(BuildContext context) {
-    print('addressList');
-    print(addressList);
+
+    print(prd.toString()+'prd');
+    print(shopAvailable.toString()+'shop');
     double sum = 0;
     double deliverycharge = 12;
     double grandtotal = 0;
@@ -309,274 +345,324 @@ class _CheckOutPageState extends State<CheckOutPage> {
                         shrinkWrap: true,
                         itemCount: cartlist.length,
                         itemBuilder: (context, index) {
-                          return Padding(
-                            padding: EdgeInsets.only(left: 10, bottom: 18),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                InkWell(
-                                  onTap: () {
-                                    // Navigator.push(
-                                    //     context,
-                                    //     MaterialPageRoute(
-                                    //         builder: (context) => CheckOutPage(id: widget.id,)));
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(),
-                                    child: Container(
-                                      height: 80,
-                                      width: 88,
-                                      decoration: BoxDecoration(
-                                          // image: DecorationImage(
-                                          //     image: NetworkImage(
-                                          //         cartlist[index]['img'])),
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                          border: Border.all(
-                                              color: Color(0xffECECEC),
-                                              width: 1)),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(scrWidth * 0.09),
-                                        child: CachedNetworkImage(
-                                          fit: BoxFit.cover,
-                                          imageUrl:cartlist[index]['img'],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 15),
-                                  child: Container(
-                                    width: 70,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        SizedBox(
-                                          height: 5,
-                                        ),
-                                        Text(
-                                          cartlist[index]['name'],
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontFamily: 'Urbanist',
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w600,
-                                              color: Color(0xff0E0E0E)),
-                                        ),
-                                        SizedBox(
-                                          height: 3,
-                                        ),
-                                        Text(
-                                          '${cartlist[index]['quantity']} ${cartlist[index]['unit']}',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontFamily: 'Urbanist',
-                                              fontSize: 10,
-                                              fontWeight: FontWeight.w600,
-                                              color: Color(0xff818181)),
-                                        ),
-                                        SizedBox(
-                                          height: 3,
-                                        ),
-                                        Text(
-                                          currencyConvert
-                                              .format(cartlist[index]['price'])
-                                              .toString(),
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontFamily: 'Urbanist',
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w700,
-                                              color: Color(0xffF10000)),
-                                        ),
-                                        SizedBox(
-                                          height: 3,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
+                          return StreamBuilder<DocumentSnapshot>(
+                            stream:FirebaseFirestore
+                                .instance
+                                .collection('stores')
+                                .doc(cartlist[0]['storeId'])
+                                .collection('products')
+                                .doc(cartlist[index]['productId'])
+                                .snapshots(),
+                            builder: (context, snapshot) {
+                              if(!snapshot.hasData||snapshot.hasError){
+                                return Center(child: CircularProgressIndicator(),);
+                              }
+
+                              DocumentSnapshot doc=snapshot.data!;
+
+
+                              return Padding(
+                                padding: EdgeInsets.only(left: 10, bottom: 18),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    IconButton(onPressed: (){
-                                      // Navigator.pop(context);
-                                      showDialog(
-                                          context: context,
-                                          builder: (ctx) => AlertDialog(
-                                        content:
-                                        const Text("Do You Want to Delete this Item from cart?"),
-                                        actions: <Widget>[
-                                          TextButton(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                            child: const Text("No"),
-                                          ),
-                                          TextButton(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                              storeData();
-                                              if (cartlist[index]
-                                              ['count'] ==
-                                                  1) {
-                                                cartlist.removeAt(index);
-                                                setState(() {});
-                                              } else {
-                                                cartlist[index]
-                                                ['count']--;
-                                                setState(() {});
-                                              }
-                                              // setState(() {
-                                              //   if(eachstore[index].counter <2)
-                                              //   {
-                                              //     eachstore[index].ShouldVisible = !eachstore[index].ShouldVisible;
-                                              //   }else{
-                                              //     eachstore[index].counter--;
-                                              //   }
-                                              //
-                                              // });
-
-
-                                            },
-                                            child: const Text(
-                                              "Yes",
-                                              style: TextStyle(color: primarycolor),
+                                    InkWell(
+                                      onTap: () {
+                                        // Navigator.push(
+                                        //     context,
+                                        //     MaterialPageRoute(
+                                        //         builder: (context) => CheckOutPage(id: widget.id,)));
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(),
+                                        child: Container(
+                                          height: 80,
+                                          width: 88,
+                                          decoration: BoxDecoration(
+                                              // image: DecorationImage(
+                                              //     image: NetworkImage(
+                                              //         cartlist[index]['img'])),
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(15),
+                                              border: Border.all(
+                                                  color: Color(0xffECECEC),
+                                                  width: 1)),
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(scrWidth * 0.09),
+                                            child: CachedNetworkImage(
+                                              fit: BoxFit.cover,
+                                              imageUrl:cartlist[index]['img'],
                                             ),
                                           ),
-                                        ],
-                                      ));
-
-                                    }, icon: Icon(Icons.delete)),
-                                    SizedBox(height: 10,),
-                                    shopAvailable==true&&prd==true?Padding(
-                                      padding: EdgeInsets.only(left: 40),
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 15),
                                       child: Container(
-                                          width: 120,
-                                          height: 30,
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                              BorderRadius.circular(8),
-                                              color: Color(0xff02B558)),
-                                          child: Row(
-                                            children: [
-                                              Container(
-                                                height: 30,
-                                                width: 40,
-                                                decoration: BoxDecoration(
-                                                    color: Color(0xff02B558),
-                                                    borderRadius: BorderRadius.only(
-                                                        topLeft: Radius.circular(8),
-                                                        bottomLeft:
-                                                        Radius.circular(8))),
-                                                child: Padding(
-                                                  padding: const EdgeInsets.only(
-                                                      bottom: 8),
-                                                  child: InkWell(
-                                                      onTap: () {
-                                                        storeData();
-                                                        if (cartlist[index]
-                                                        ['count'] ==
-                                                            1) {
-                                                          cartlist.removeAt(index);
-                                                          setState(() {});
-                                                        } else {
-                                                          cartlist[index]
-                                                          ['count']--;
-                                                          setState(() {});
-                                                        }
-                                                        // setState(() {
-                                                        //   if(eachstore[index].counter <2)
-                                                        //   {
-                                                        //     eachstore[index].ShouldVisible = !eachstore[index].ShouldVisible;
-                                                        //   }else{
-                                                        //     eachstore[index].counter--;
-                                                        //   }
-                                                        //
-                                                        // });
-                                                      },
-                                                      child: Padding(
-                                                        padding: cartlist[index]
-                                                        ['count'] ==
-                                                            1
-                                                            ? EdgeInsets.only(
-                                                            top: 8)
-                                                            : EdgeInsets.only(),
-                                                        child: Icon(
-                                                          cartlist[index]
-                                                          ['count'] ==
-                                                              1
-                                                              ? Icons
-                                                              .delete_outline_outlined
-                                                              : Icons
-                                                              .minimize_outlined,
-                                                          size: 15,
-                                                          color: Colors.white,
-                                                        ),
-                                                      )),
-                                                ),
+                                        width: 70,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            SizedBox(
+                                              height: 5,
+                                            ),
+                                            Text(
+                                              cartlist[index]['name'],
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontFamily: 'Urbanist',
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: Color(0xff0E0E0E)),
+                                            ),
+                                            SizedBox(
+                                              height: 3,
+                                            ),
+                                            Text(
+                                              '${cartlist[index]['quantity']} ${cartlist[index]['unit']}',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontFamily: 'Urbanist',
+                                                  fontSize: 10,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: Color(0xff818181)),
+                                            ),
+                                            SizedBox(
+                                              height: 3,
+                                            ),
+                                            Text(
+                                              currencyConvert
+                                                  .format(cartlist[index]['price'])
+                                                  .toString(),
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontFamily: 'Urbanist',
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w700,
+                                                  color: Color(0xffF10000)),
+                                            ),
+                                            SizedBox(
+                                              height: 3,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                      children: [
+                                        IconButton(onPressed: (){
+                                          // Navigator.pop(context);
+                                          showDialog(
+                                              context: context,
+                                              builder: (ctx) => AlertDialog(
+                                            content:
+                                            const Text("Do You Want to Delete this Item from cart?"),
+                                            actions: <Widget>[
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                child: const Text("No"),
                                               ),
-                                              Container(
-                                                height: 30,
-                                                width: 35,
-                                                decoration: BoxDecoration(
-                                                  color: Color(0xff9FFFCD),
-                                                ),
-                                                child: Center(
-                                                    child: Text(
-                                                      // '${eachstore[index].counter}'
-                                                        cartlist[index]['count']
-                                                            .toString())),
-                                              ),
-                                              Container(
-                                                height: 26,
-                                                width: 30,
-                                                decoration: BoxDecoration(
-                                                    color: Color(0xff02B558),
-                                                    borderRadius: BorderRadius.only(
-                                                        topLeft: Radius.circular(8),
-                                                        bottomLeft:
-                                                        Radius.circular(8))),
-                                                child: InkWell(
-                                                    onTap: () {
-                                                      setState(() {
-                                                        cartlist[index]['count'] =
-                                                            cartlist[index]
-                                                            ['count'] +
-                                                                1;
-                                                      });
-                                                      storeData();
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                  storeData();
+                                                  if (cartlist[index]
+                                                  ['count'] ==
+                                                      1) {
+                                                    cartlist.removeAt(index);
+                                                    notAvailabe.removeAt(index);
+                                                    setState(() {});
+                                                  } else {
+                                                    cartlist[index]
+                                                    ['count']--;
+                                                    setState(() {});
+                                                  }
+                                                  // setState(() {
+                                                  //   if(eachstore[index].counter <2)
+                                                  //   {
+                                                  //     eachstore[index].ShouldVisible = !eachstore[index].ShouldVisible;
+                                                  //   }else{
+                                                  //     eachstore[index].counter--;
+                                                  //   }
+                                                  //
+                                                  // });
 
-                                                      // eachstore[index].counter++;
-                                                    },
-                                                    child: Icon(
-                                                      Icons.add,
-                                                      size: 15,
-                                                      color: Colors.white,
-                                                    )),
+
+                                                },
+                                                child: const Text(
+                                                  "Yes",
+                                                  style: TextStyle(color: primarycolor),
+                                                ),
                                               ),
                                             ],
-                                          )),
-                                    ):Padding(
-                                      padding:  EdgeInsets.only(left: 15),
-                                      child: Container(
-                                        height: 50,
-                                        width: 120,
-                                        decoration: BoxDecoration(
-                                          color: Colors.grey,
-                                          borderRadius: BorderRadius.circular(17),
-                                        ),
-                                        child: Center(child: Text("Not Available",style: TextStyle(color: Colors.white),)),
-                                      ),
-                                    )
+                                          ));
+
+                                        }, icon: Icon(Icons.delete)),
+                                        SizedBox(height: 10,),
+                                        shopAvailable==true
+                                            ?doc['available']==true
+                                            ?doc['delete']==false?
+                                        Padding(
+                                          padding: EdgeInsets.only(left: 40),
+                                          child: Container(
+                                              width: 120,
+                                              height: 30,
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                  BorderRadius.circular(8),
+                                                  color: Color(0xff02B558)),
+                                              child: Row(
+                                                children: [
+                                                  Container(
+                                                    height: 30,
+                                                    width: 40,
+                                                    decoration: BoxDecoration(
+                                                        color: Color(0xff02B558),
+                                                        borderRadius: BorderRadius.only(
+                                                            topLeft: Radius.circular(8),
+                                                            bottomLeft:
+                                                            Radius.circular(8))),
+                                                    child: Padding(
+                                                      padding: const EdgeInsets.only(
+                                                          bottom: 8),
+                                                      child: InkWell(
+                                                          onTap: () {
+
+                                                            storeData();
+                                                            if (cartlist[index]
+                                                            ['count'] ==
+                                                                1) {
+                                                              cartlist.removeAt(index);
+                                                              notAvailabe.removeAt(index);
+
+                                                              setState(() {});
+                                                            } else {
+                                                              cartlist[index]
+                                                              ['count']--;
+                                                              setState(() {});
+                                                            }
+                                                            // setState(() {
+                                                            //   if(eachstore[index].counter <2)
+                                                            //   {
+                                                            //     eachstore[index].ShouldVisible = !eachstore[index].ShouldVisible;
+                                                            //   }else{
+                                                            //     eachstore[index].counter--;
+                                                            //   }
+                                                            //
+                                                            // });
+                                                          },
+                                                          child: Padding(
+                                                            padding: cartlist[index]
+                                                            ['count'] ==
+                                                                1
+                                                                ? EdgeInsets.only(
+                                                                top: 8)
+                                                                : EdgeInsets.only(),
+                                                            child: Icon(
+                                                              cartlist[index]
+                                                              ['count'] ==
+                                                                  1
+                                                                  ? Icons
+                                                                  .delete_outline_outlined
+                                                                  : Icons
+                                                                  .minimize_outlined,
+                                                              size: 15,
+                                                              color: Colors.white,
+                                                            ),
+                                                          )),
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    height: 30,
+                                                    width: 35,
+                                                    decoration: BoxDecoration(
+                                                      color: Color(0xff9FFFCD),
+                                                    ),
+                                                    child: Center(
+                                                        child: Text(
+                                                          // '${eachstore[index].counter}'
+                                                            cartlist[index]['count']
+                                                                .toString())),
+                                                  ),
+                                                  Container(
+                                                    height: 26,
+                                                    width: 30,
+                                                    decoration: BoxDecoration(
+                                                        color: Color(0xff02B558),
+                                                        borderRadius: BorderRadius.only(
+                                                            topLeft: Radius.circular(8),
+                                                            bottomLeft:
+                                                            Radius.circular(8))),
+                                                    child: InkWell(
+                                                        onTap: () {
+                                                          setState(() {
+                                                            cartlist[index]['count'] =
+                                                                cartlist[index]
+                                                                ['count'] +
+                                                                    1;
+                                                          });
+                                                          storeData();
+
+                                                          // eachstore[index].counter++;
+                                                        },
+                                                        child: Icon(
+                                                          Icons.add,
+                                                          size: 15,
+                                                          color: Colors.white,
+                                                        )),
+                                                  ),
+                                                ],
+                                              )),
+                                        )
+                                            :Padding(
+                                          padding:  EdgeInsets.only(left: 15),
+                                          child: Container(
+                                            height: 50,
+                                            width: 120,
+                                            decoration: BoxDecoration(
+                                              color: Colors.grey,
+                                              borderRadius: BorderRadius.circular(17),
+                                            ),
+                                            child: Center(child: Text("Not Available",style: TextStyle(color: Colors.white),)),
+                                          ),
+                                        ):
+                                        Padding(
+                                          padding:  EdgeInsets.only(left: 15),
+                                          child: Container(
+                                            height: 50,
+                                            width: 120,
+                                            decoration: BoxDecoration(
+                                              color: Colors.grey,
+                                              borderRadius: BorderRadius.circular(17),
+                                            ),
+                                            child: Center(child: Text("Not Available",style: TextStyle(color: Colors.white),)),
+                                          ),
+                                        ):
+                                        Padding(
+                                          padding:  EdgeInsets.only(left: 15),
+                                          child: Container(
+                                            height: 50,
+                                            width: 120,
+                                            decoration: BoxDecoration(
+                                              color: Colors.grey,
+                                              borderRadius: BorderRadius.circular(17),
+                                            ),
+                                            child: Center(child: Text("Not Available",style: TextStyle(color: Colors.white),)),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+
                                   ],
                                 ),
-
-                              ],
-                            ),
+                              );
+                            }
                           );
                         }),
                   ),
@@ -1061,7 +1147,6 @@ class _CheckOutPageState extends State<CheckOutPage> {
                 )
               : (shopAvailable==true&&prd==true)?InkWell(
                   onTap: () {
-
                     print(index);
                     print(imgFiles);
                     if(index==1){
@@ -1090,6 +1175,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                               deliveryCharge: cartlist[0]['deliveryCharge'],
                               status: 0,
                               orderedItems: orders1,
+
                               total: total,
                               paymentMethod: index,
                               paymentScreenShort: imgUrls??'',
@@ -1180,7 +1266,11 @@ class _CheckOutPageState extends State<CheckOutPage> {
                       ),
                     ),
                   ),
-                ):Container(
+                ):InkWell(
+            onTap: (){
+              showSnackbar(context, "plz remove item");
+            },
+                  child: Container(
             height: 40,
             width: 310,
             decoration: BoxDecoration(
@@ -1189,15 +1279,16 @@ class _CheckOutPageState extends State<CheckOutPage> {
             ),
             child: Center(
               child: Text(
-                "Place Order",
-                style: TextStyle(
-                    fontFamily: 'Urbanist',
-                    fontWeight: FontWeight.w600,
-                    fontSize: 12,
-                    color: Colors.white),
+                  "Place Order",
+                  style: TextStyle(
+                      fontFamily: 'Urbanist',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 12,
+                      color: Colors.white),
               ),
             ),
           ),
+                ),
           SizedBox(
             height: 10,
           )

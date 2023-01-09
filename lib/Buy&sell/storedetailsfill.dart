@@ -998,7 +998,9 @@ class _StoreDetailsState extends State<StoreDetails> {
             if(selectCategory.isEmpty){
               refreshPage();
               return showSnackbar(context,"Must select category");
-            }
+            }if(deliveryChargeController.text.isEmpty){
+    refreshPage();
+    return showSnackbar(context,"Must Provide Delivery Charge");}
             if(storeAddressController.text.isEmpty){
               refreshPage();
               return showSnackbar(context,"Must Provide StoreAddress");

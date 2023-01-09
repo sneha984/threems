@@ -95,6 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
         .collection('charity')
         .where('userId', isNotEqualTo: currentuser?.userId)
         .where('status', isEqualTo: 1)
+        .where('block',isEqualTo: false)
         .snapshots()
         .listen((event) {
       verifiedcharity = [];
