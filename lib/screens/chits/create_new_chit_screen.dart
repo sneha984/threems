@@ -243,7 +243,7 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
         }
       }
 
-      drawDateValueInList = widget.chit.chitDate.toString() ?? '';
+      // drawDateValueInList = widget.chit.chitDate.toString() ?? '';
       profile = widget.chit.profile ?? '';
       fileUrl = widget.chit.document ?? '';
       selectedTime = TimeOfDay(
