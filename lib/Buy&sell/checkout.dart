@@ -160,6 +160,9 @@ getAvailable(){
           });
         }else{
           prd=true;
+          setState(() {
+
+          });
         }
         if (mounted) {
           setState(() {
@@ -361,6 +364,7 @@ List notAvailabe=[];
                               DocumentSnapshot doc=snapshot.data!;
 
 
+
                               return Padding(
                                 padding: EdgeInsets.only(left: 10, bottom: 18),
                                 child: Row(
@@ -477,7 +481,7 @@ List notAvailabe=[];
                                                   ['count'] ==
                                                       1) {
                                                     cartlist.removeAt(index);
-                                                    notAvailabe.removeAt(index);
+                                                    notAvailabe.remove(cartlist[index]['productId']);
 
                                                     setState(() {});
                                                   } else {
@@ -541,7 +545,7 @@ List notAvailabe=[];
                                                             ['count'] ==
                                                                 1) {
                                                               cartlist.removeAt(index);
-                                                              notAvailabe.removeAt(index);
+                                                              notAvailabe.removeAt(cartlist[index]['productId']);
 
                                                               setState(() {});
                                                             } else {
@@ -668,6 +672,7 @@ List notAvailabe=[];
                           );
                         }),
                   ),
+                  // shopAvailable==true&&prd==true?SizedBox():Text("Please Remove UnAvailable Products From Cart"),
                   SizedBox(
                     height: 10,
                   ),
@@ -1270,7 +1275,7 @@ List notAvailabe=[];
                   ),
                 ):InkWell(
             onTap: (){
-              showSnackbar(context, "plz remove item");
+              showSnackbar(context, "plz remove item Unavailable item");
             },
                   child: Container(
             height: 40,
