@@ -331,7 +331,7 @@ class _AddMyServicePageState extends State<AddMyServicePage>  with TickerProvide
             foregroundColor: primarycolor,
             backgroundColor: Colors.white,
             automaticallyImplyLeading: true,
-            title: Text('Add new service',
+            title: Text(editService==true?'Change your detailes':"Create your Service",
               style: GoogleFonts.urbanist(
                 color: primarycolor,
                 fontWeight: FontWeight.w600,
@@ -371,47 +371,48 @@ class _AddMyServicePageState extends State<AddMyServicePage>  with TickerProvide
           ),
           body:Column(
             children: [
-              Padding(
-                padding: EdgeInsets.only(
-                    left: scrWidth * 0.035, right: scrWidth * 0.035,top: scrWidth * 0.03),
-                child: Container(
-                  height: scrHeight * 0.05,
-                  decoration: BoxDecoration(
-                    color: primarycolor,
-                    borderRadius: BorderRadius.circular(
-                      25.0,
-                    ),
-                  ),
-                  child: TabBar(
-                    controller: _tabController,
-                    // give the indicator a decoration (color and border radius)
-                    indicator: BoxDecoration(
-                      borderRadius: BorderRadius.circular(
-                        25.0,
-                      ),
-                      color: Color(0xff02B558),
-                    ),
-                    labelColor: Colors.white,
-                    unselectedLabelColor: Colors.white,
-                    tabs: [
-                      Text(editService==true?'Change your detailes':"Create your Service", style: TextStyle(
-                          fontFamily: 'Urbanist',
-                          fontSize: scrWidth*0.03,
-                          fontWeight: FontWeight.w700
-                      ),),
-                      Text("Edit your Service", style: TextStyle(
-                          fontFamily: 'Urbanist',
-                          fontSize:scrWidth*0.03 ,
-                          fontWeight: FontWeight.w700
-                      ),),
-                    ],
-                  ),
-                ),
-              ),
+              // Padding(
+              //   padding: EdgeInsets.only(
+              //       left: scrWidth * 0.035, right: scrWidth * 0.035,top: scrWidth * 0.03),
+              //   child: Container(
+              //     height: scrHeight * 0.05,
+              //     decoration: BoxDecoration(
+              //       color: primarycolor,
+              //       borderRadius: BorderRadius.circular(
+              //         25.0,
+              //       ),
+              //     ),
+              //     child: TabBar(
+              //       controller: _tabController,
+              //       // give the indicator a decoration (color and border radius)
+              //       indicator: BoxDecoration(
+              //         borderRadius: BorderRadius.circular(
+              //           25.0,
+              //         ),
+              //         color: Color(0xff02B558),
+              //       ),
+              //       labelColor: Colors.white,
+              //       unselectedLabelColor: Colors.white,
+              //       tabs: [
+              //         Text(editService==true?'Change your detailes':"Create your Service", style: TextStyle(
+              //             fontFamily: 'Urbanist',
+              //             fontSize: scrWidth*0.03,
+              //             fontWeight: FontWeight.w700
+              //         ),),
+              //         Text("Edit your Service", style: TextStyle(
+              //             fontFamily: 'Urbanist',
+              //             fontSize:scrWidth*0.03 ,
+              //             fontWeight: FontWeight.w700
+              //         ),),
+              //       ],
+              //     ),
+              //   ),
+              // ),
               Expanded(
-                child: TabBarView(
-                    controller: _tabController,
-                    children: [
+                child:
+                // TabBarView(
+                //     controller: _tabController,
+                //     children: [
                       SingleChildScrollView(
                         child: Padding(
                           padding: const EdgeInsets.all(18.0),
@@ -1644,250 +1645,250 @@ class _AddMyServicePageState extends State<AddMyServicePage>  with TickerProvide
                         ),
 
                       ),
-                      SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            // Padding(
-                            //   padding: const EdgeInsets.all(8.0),
-                            //   child: Row(
-                            //     mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            //     children: [
-                            //       Container(
-                            //         width: scrWidth*0.45,
-                            //         height: textFormFieldHeight45,
-                            //         padding: EdgeInsets.symmetric(
-                            //           horizontal: scrWidth * 0.015,
-                            //           vertical: scrWidth*0.002,                ),
-                            //         decoration: BoxDecoration(
-                            //           border: Border.all(
-                            //             color: Color(0xffDADADA),
-                            //           ),
-                            //           color: textFormFieldFillColor,
-                            //           borderRadius: BorderRadius.circular(scrWidth * 0.026),
-                            //         ),
-                            //         child:
-                            //         CustomDropdown.search(
-                            //           hintText: selectedCategory1 == '' ?'Category ' : selectedCategory1,
-                            //           items: serviceCategory,
-                            //           controller: category2,
-                            //           excludeSelected: false,
-                            //           onChanged: (value){
-                            //             setState(() {
-                            //               selectedCategory1=value;
-                            //             });
-                            //             // print( userMap[selectedUser]);
-                            //           },
-                            //         ),
-                            //       ),
-                            //       Container(
-                            //         width: scrWidth*0.44,
-                            //         // width: scrWidth,
-                            //         height: textFormFieldHeight45,
-                            //         padding: EdgeInsets.symmetric(
-                            //           horizontal: scrWidth * 0.015,
-                            //           vertical: scrWidth*0.002,                ),
-                            //         decoration: BoxDecoration(
-                            //           border: Border.all(
-                            //             color: Color(0xffDADADA),
-                            //           ),
-                            //           color: textFormFieldFillColor,
-                            //           borderRadius: BorderRadius.circular(scrWidth * 0.026),
-                            //         ),
-                            //
-                            //         child:
-                            //         CustomDropdown.search(
-                            //           hintText: selectedCity2 == '' ?'City ' : selectedCity2,
-                            //           items: serviceCity,
-                            //           controller: city2,
-                            //           excludeSelected: false,
-                            //           onChanged: (value){
-                            //             setState(() {
-                            //               selectedCity2=value;
-                            //             });
-                            //             // print( userMap[selectedUser]);
-                            //           },
-                            //         ),
-                            //       ),
-                            //     ],
-                            //   ),
-                            // ),
-                            Container(
-                              height: MediaQuery.of(context).size.height,
-                              child:StreamBuilder<List<ServiceDetails>>(
-                                  stream: getServices(),
-                                  builder: (context, snapshot) {
-                                    if(!snapshot.hasData){
-                                      return  Container(child: Center(child: CircularProgressIndicator()));
-                                    }
-                                    var  data=snapshot.data!.toList();
-                                    return data.length==0?
-                                    Center(
-                                      child: Text('No list Found'),
-                                    ):
-                                    ListView.builder(
-                                      padding: EdgeInsets.all( MediaQuery.of(context).size.width*0.05,),
-                                      itemCount: data.length,
-                                      physics: BouncingScrollPhysics(),
-                                      itemBuilder: (context, index) {
-                                        final serviceItems=data[index];
-                                        return Padding(
-                                          padding: const EdgeInsets.only(left: 15.0,right: 15,bottom: 10,),
-                                          child: InkWell(
-                                            onTap: (){
-                                              editService=true;
-
-                                              // name!.text=serviceItems.name!;
-                                              // email!.text=serviceItems.emailId!;
-                                              // phoneNumber!.text=serviceItems.phoneNumber!;
-                                              // whatsappNumber!.text=serviceItems.whatsappNo!;
-                                              // address!.text=serviceItems.address!;
-                                              // selectedCity=serviceItems.city!;
-                                              // selectedUnit=serviceItems.serviceUnit!;
-                                              // city.text=serviceItems.city!;
-                                              // unit.text=serviceItems.serviceUnit!;
-                                              // sevicesProvided!.text=serviceItems.servicesProvided!;
-                                              // aboutService!.text=serviceItems.aboutService!;
-                                              // imgUrl=serviceItems.image!.toString();
-                                              // wage!.text=serviceItems.wage.toString();
-                                              // fileUrl=serviceItems.documents!;
-                                              // fileName=serviceItems.documents!;
-                                              // _tabController!.animateTo(0);
-                                              // if(mounted) {
-                                              //   setState(() {
-                                              //
-                                              //   });
-                                              // };
-
-                                              Navigator.push(context, MaterialPageRoute(builder: (context)=>AddMyServicePage(
-                                                  serviceItems:serviceItems,
-                                                  // subCategoryName: widget.subCategoryName,
-                                                  // Category: widget.Category
-
-                                              )));
-                                              if(mounted) {
-                                                setState(() {
-
-                                                });
-                                              };
-                                            },
-                                            onLongPress: (){
-                                              showDialog(context: context, builder:(buildcontext)
-                                              {
-                                                return AlertDialog(
-                                                  title: Text('Delete'),
-                                                  content: Text('Are you sure?'),
-                                                  actions: [
-
-                                                    TextButton(onPressed: ()  {
-
-                                                      // FirebaseFirestore.instance.collection('services').doc(data![index].id).delete();
-
-
-                                                      Navigator.pop(context);
-                                                      showUploadMessage(context, "Deleted");
-
-
-                                                    },
-
-                                                        child: Text('Delete')),
-                                                    TextButton(onPressed: () {
-
-                                                      Navigator.pop(context);
-                                                    },
-                                                        child: Text('Cancel')),
-
-                                                  ],
-                                                );
-                                              });
-                                            },
-                                            child: Material(
-                                              color: Colors.transparent,
-                                              elevation: 4,
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(10),
-                                              ),
-                                              child: Container(
-                                                width: double.infinity,
-
-                                                decoration: BoxDecoration(
-                                                  color: Color(0xFFE3F2FD),
-                                                  borderRadius: BorderRadius.circular(10),
-                                                ),
-                                                child: Row(
-                                                  children: [
-                                                    Container(
-                                                      height: 100,
-                                                      width: 100,
-
-                                                      child: ClipRRect(
-                                                          borderRadius: BorderRadius.circular(8),
-                                                          child: CachedNetworkImage(imageUrl:serviceItems.image.toString() ,fit: BoxFit.cover,)
-                                                      ),
-                                                    ),
-                                                    Padding(
-                                                      padding: const EdgeInsets.fromLTRB(10,0,0,0),
-                                                      child: Column(
-                                                        mainAxisAlignment: MainAxisAlignment.start,
-                                                        crossAxisAlignment: CrossAxisAlignment.start,
-
-                                                        children: [
-                                                          Text(
-                                                            'Name : ${serviceItems.name.toString()}',
-                                                            style:
-                                                            GoogleFonts.urbanist(
-                                                                fontSize: 14
-                                                            ),
-
-                                                          ),
-                                                          Text(
-                                                            'Phone Number : ${serviceItems.phoneNumber.toString()}',
-                                                            style:
-                                                            GoogleFonts.urbanist(
-                                                                fontSize: 14
-                                                            ),
-
-                                                          ),
-                                                          Text(
-                                                            'Email Id : ${serviceItems.emailId.toString()}',
-                                                            style:
-                                                            GoogleFonts.urbanist(
-                                                                fontSize: 14
-                                                            ),
-
-                                                          ),
-                                                          Container(
-                                                            width: scrWidth*0.50,
-                                                            child: Text(
-                                                              'Service : ${serviceItems.serviceCategory.toString()}',
-                                                              style:
-                                                              GoogleFonts.urbanist(
-                                                                  fontSize: 14
-                                                              ),
-
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        );
-
-                                      },
-                                    );
-                                  }),
-                            ),
-                          ],
-                        ),
-                      ),
+                      // SingleChildScrollView(
+                      //   child: Column(
+                      //     children: [
+                      //       // Padding(
+                      //       //   padding: const EdgeInsets.all(8.0),
+                      //       //   child: Row(
+                      //       //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      //       //     children: [
+                      //       //       Container(
+                      //       //         width: scrWidth*0.45,
+                      //       //         height: textFormFieldHeight45,
+                      //       //         padding: EdgeInsets.symmetric(
+                      //       //           horizontal: scrWidth * 0.015,
+                      //       //           vertical: scrWidth*0.002,                ),
+                      //       //         decoration: BoxDecoration(
+                      //       //           border: Border.all(
+                      //       //             color: Color(0xffDADADA),
+                      //       //           ),
+                      //       //           color: textFormFieldFillColor,
+                      //       //           borderRadius: BorderRadius.circular(scrWidth * 0.026),
+                      //       //         ),
+                      //       //         child:
+                      //       //         CustomDropdown.search(
+                      //       //           hintText: selectedCategory1 == '' ?'Category ' : selectedCategory1,
+                      //       //           items: serviceCategory,
+                      //       //           controller: category2,
+                      //       //           excludeSelected: false,
+                      //       //           onChanged: (value){
+                      //       //             setState(() {
+                      //       //               selectedCategory1=value;
+                      //       //             });
+                      //       //             // print( userMap[selectedUser]);
+                      //       //           },
+                      //       //         ),
+                      //       //       ),
+                      //       //       Container(
+                      //       //         width: scrWidth*0.44,
+                      //       //         // width: scrWidth,
+                      //       //         height: textFormFieldHeight45,
+                      //       //         padding: EdgeInsets.symmetric(
+                      //       //           horizontal: scrWidth * 0.015,
+                      //       //           vertical: scrWidth*0.002,                ),
+                      //       //         decoration: BoxDecoration(
+                      //       //           border: Border.all(
+                      //       //             color: Color(0xffDADADA),
+                      //       //           ),
+                      //       //           color: textFormFieldFillColor,
+                      //       //           borderRadius: BorderRadius.circular(scrWidth * 0.026),
+                      //       //         ),
+                      //       //
+                      //       //         child:
+                      //       //         CustomDropdown.search(
+                      //       //           hintText: selectedCity2 == '' ?'City ' : selectedCity2,
+                      //       //           items: serviceCity,
+                      //       //           controller: city2,
+                      //       //           excludeSelected: false,
+                      //       //           onChanged: (value){
+                      //       //             setState(() {
+                      //       //               selectedCity2=value;
+                      //       //             });
+                      //       //             // print( userMap[selectedUser]);
+                      //       //           },
+                      //       //         ),
+                      //       //       ),
+                      //       //     ],
+                      //       //   ),
+                      //       // ),
+                      //       Container(
+                      //         height: MediaQuery.of(context).size.height,
+                      //         child:StreamBuilder<List<ServiceDetails>>(
+                      //             stream: getServices(),
+                      //             builder: (context, snapshot) {
+                      //               if(!snapshot.hasData){
+                      //                 return  Container(child: Center(child: CircularProgressIndicator()));
+                      //               }
+                      //               var  data=snapshot.data!.toList();
+                      //               return data.length==0?
+                      //               Center(
+                      //                 child: Text('No list Found'),
+                      //               ):
+                      //               ListView.builder(
+                      //                 padding: EdgeInsets.all( MediaQuery.of(context).size.width*0.05,),
+                      //                 itemCount: data.length,
+                      //                 physics: BouncingScrollPhysics(),
+                      //                 itemBuilder: (context, index) {
+                      //                   final serviceItems=data[index];
+                      //                   return Padding(
+                      //                     padding: const EdgeInsets.only(left: 15.0,right: 15,bottom: 10,),
+                      //                     child: InkWell(
+                      //                       onTap: (){
+                      //                         editService=true;
+                      //
+                      //                         // name!.text=serviceItems.name!;
+                      //                         // email!.text=serviceItems.emailId!;
+                      //                         // phoneNumber!.text=serviceItems.phoneNumber!;
+                      //                         // whatsappNumber!.text=serviceItems.whatsappNo!;
+                      //                         // address!.text=serviceItems.address!;
+                      //                         // selectedCity=serviceItems.city!;
+                      //                         // selectedUnit=serviceItems.serviceUnit!;
+                      //                         // city.text=serviceItems.city!;
+                      //                         // unit.text=serviceItems.serviceUnit!;
+                      //                         // sevicesProvided!.text=serviceItems.servicesProvided!;
+                      //                         // aboutService!.text=serviceItems.aboutService!;
+                      //                         // imgUrl=serviceItems.image!.toString();
+                      //                         // wage!.text=serviceItems.wage.toString();
+                      //                         // fileUrl=serviceItems.documents!;
+                      //                         // fileName=serviceItems.documents!;
+                      //                         // _tabController!.animateTo(0);
+                      //                         // if(mounted) {
+                      //                         //   setState(() {
+                      //                         //
+                      //                         //   });
+                      //                         // };
+                      //
+                      //                         Navigator.push(context, MaterialPageRoute(builder: (context)=>AddMyServicePage(
+                      //                             serviceItems:serviceItems,
+                      //                             // subCategoryName: widget.subCategoryName,
+                      //                             // Category: widget.Category
+                      //
+                      //                         )));
+                      //                         if(mounted) {
+                      //                           setState(() {
+                      //
+                      //                           });
+                      //                         };
+                      //                       },
+                      //                       onLongPress: (){
+                      //                         showDialog(context: context, builder:(buildcontext)
+                      //                         {
+                      //                           return AlertDialog(
+                      //                             title: Text('Delete'),
+                      //                             content: Text('Are you sure?'),
+                      //                             actions: [
+                      //
+                      //                               TextButton(onPressed: ()  {
+                      //
+                      //                                 // FirebaseFirestore.instance.collection('services').doc(data![index].id).delete();
+                      //
+                      //
+                      //                                 Navigator.pop(context);
+                      //                                 showUploadMessage(context, "Deleted");
+                      //
+                      //
+                      //                               },
+                      //
+                      //                                   child: Text('Delete')),
+                      //                               TextButton(onPressed: () {
+                      //
+                      //                                 Navigator.pop(context);
+                      //                               },
+                      //                                   child: Text('Cancel')),
+                      //
+                      //                             ],
+                      //                           );
+                      //                         });
+                      //                       },
+                      //                       child: Material(
+                      //                         color: Colors.transparent,
+                      //                         elevation: 4,
+                      //                         shape: RoundedRectangleBorder(
+                      //                           borderRadius: BorderRadius.circular(10),
+                      //                         ),
+                      //                         child: Container(
+                      //                           width: double.infinity,
+                      //
+                      //                           decoration: BoxDecoration(
+                      //                             color: Color(0xFFE3F2FD),
+                      //                             borderRadius: BorderRadius.circular(10),
+                      //                           ),
+                      //                           child: Row(
+                      //                             children: [
+                      //                               Container(
+                      //                                 height: 100,
+                      //                                 width: 100,
+                      //
+                      //                                 child: ClipRRect(
+                      //                                     borderRadius: BorderRadius.circular(8),
+                      //                                     child: CachedNetworkImage(imageUrl:serviceItems.image.toString() ,fit: BoxFit.cover,)
+                      //                                 ),
+                      //                               ),
+                      //                               Padding(
+                      //                                 padding: const EdgeInsets.fromLTRB(10,0,0,0),
+                      //                                 child: Column(
+                      //                                   mainAxisAlignment: MainAxisAlignment.start,
+                      //                                   crossAxisAlignment: CrossAxisAlignment.start,
+                      //
+                      //                                   children: [
+                      //                                     Text(
+                      //                                       'Name : ${serviceItems.name.toString()}',
+                      //                                       style:
+                      //                                       GoogleFonts.urbanist(
+                      //                                           fontSize: 14
+                      //                                       ),
+                      //
+                      //                                     ),
+                      //                                     Text(
+                      //                                       'Phone Number : ${serviceItems.phoneNumber.toString()}',
+                      //                                       style:
+                      //                                       GoogleFonts.urbanist(
+                      //                                           fontSize: 14
+                      //                                       ),
+                      //
+                      //                                     ),
+                      //                                     Text(
+                      //                                       'Email Id : ${serviceItems.emailId.toString()}',
+                      //                                       style:
+                      //                                       GoogleFonts.urbanist(
+                      //                                           fontSize: 14
+                      //                                       ),
+                      //
+                      //                                     ),
+                      //                                     Container(
+                      //                                       width: scrWidth*0.50,
+                      //                                       child: Text(
+                      //                                         'Service : ${serviceItems.serviceCategory.toString()}',
+                      //                                         style:
+                      //                                         GoogleFonts.urbanist(
+                      //                                             fontSize: 14
+                      //                                         ),
+                      //
+                      //                                       ),
+                      //                                     ),
+                      //                                   ],
+                      //                                 ),
+                      //                               ),
+                      //                             ],
+                      //                           ),
+                      //                         ),
+                      //                       ),
+                      //                     ),
+                      //                   );
+                      //
+                      //                 },
+                      //               );
+                      //             }),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
                       // IncomeFirstPage(),
                       // AddExpensesPage(),
 
-                    ]
-                ),
+                //     ]
+                // ),
 
               )
             ],

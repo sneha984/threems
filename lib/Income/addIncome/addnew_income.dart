@@ -1092,7 +1092,212 @@ class _AddIncomePageState extends State<AddIncomePage> {
                     ),
                   ],
                 ),
+                  Padding(
+                    padding: EdgeInsets.only(bottom:scrWidth * 0.07 , right: scrWidth * 0.07),
+                    child: switchValue==false?InkWell(
+                      onTap: () {
+                        if (amount.text != '' &&
+                            (selectedIcons != null || selectedIcons != '') &&
+                            selectedDate != null &&
+                            category != '') {
+                          showDialog(
+                              context: context,
+                              builder: (buildcontext) {
+                                return AlertDialog(
+                                  title: const Text('Add income '),
+                                  content: const Text('Do you want to Add?'),
+                                  actions: [
+                                    TextButton(
+                                        onPressed: () async {
+                                          await  FirebaseFirestore.instance
+                                              .collection('users')
+                                              .doc(currentuserid)
+                                              .collection('incomes')
+                                              .add({
+                                            'amount':
+                                            double.tryParse(amount!.text.toString()),
+                                            "categoryIcon": serializeIcon(xyz),
+                                            "categoryName": category.toString(),
+                                            'date': selectedDate,
+                                            'merchant': merchantName.toString() ?? "",
+                                            'description': description.text,
+                                            'income': true,
+                                            'recieverId':''
+                                          });
+                                          await FirebaseFirestore.instance.collection('users').doc(currentuserid).update({
+                                            'totalIncome':FieldValue.increment(double.tryParse(amount!.text.toString())??0),
+                                          });
+                                          Navigator.pop(context);
+
+                                          showUploadMessage(
+                                              context, 'Income  added successfully');
+
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      IncomeSuccessPage()));
+                                          amount?.clear();
+                                          description.text = '';
+                                          category == '';
+                                          selectedDate = null;
+                                          xyz = '';
+                                          _icon = null;
+                                          merchantName = '';
+                                          setState(() {});
+
+                                          // Navigator.pushAndRemoveUntil(context, CupertinoPageRoute(builder: (context) => CharityCatogoryPage(),), (route) => false);
+                                        },
+                                        child: const Text('Yes')),
+                                    TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text('Cancel')),
+                                  ],
+                                );
+                              });
+                        } else {
+                          amount.text == ''
+                              ? showUploadMessage(context, 'Please enter amount')
+                              : category == ''
+                              ? showUploadMessage(context, 'Please choose Category')
+                              : showUploadMessage(
+                              context, 'Please enter merchant name');
+                        }
+                      },
+                      child: Container(
+                        width: scrWidth * 0.76,
+                        height: scrHeight * 0.065,
+                        decoration: BoxDecoration(
+                            color: Color(0xff008036),
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Center(
+                          child: Text(
+                            " Add income",
+                            style: TextStyle(
+                                fontSize: scrWidth * 0.046,
+                                color: Colors.white,
+                                fontFamily: 'Urbanist',
+                                fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                      ),
+                    ):
+                    InkWell(
+                      onTap: () {
+                        if (amount.text != '' &&
+                            (selectedIcons != null || selectedIcons != '') &&
+                            selectedDate != null &&
+                            category != '' && contactName!=''&& phNumber!='') {
+                          showDialog(
+                              context: context,
+                              builder: (buildcontext) {
+                                return AlertDialog(
+                                  title: const Text('Add income '),
+                                  content: const Text('Do you want to Add?'),
+                                  actions: [
+                                    TextButton(
+                                        onPressed: () async {
+                                          await getUserData();
+
+                                          await FirebaseFirestore.instance
+                                              .collection('users')
+                                              .doc(currentuserid)
+                                              .collection('incomes')
+                                              .add({
+                                            'amount': double.tryParse(amount!.text.toString()),
+                                            "categoryIcon": serializeIcon(xyz),
+                                            "categoryName": category.toString(),
+                                            'date': selectedDate,
+                                            'merchant': merchantName.toString() ?? "",
+                                            'description': description.text,
+                                            'income': true,
+                                            'recieverId':selectedUserId
+                                          });
+                                          await FirebaseFirestore.instance.collection('users').doc(currentuserid).update({
+                                            'totalIncome':FieldValue.increment(double.tryParse(amount!.text.toString())??0),
+                                          });
+                                          await FirebaseFirestore.instance
+                                              .collection('users')
+                                              .doc(selectedUserId)
+                                              .collection('expense')
+                                              .add({
+                                            'amount': double.tryParse(amount!.text.toString()),
+                                            "categoryIcon": serializeIcon(xyz),
+                                            "categoryName": category.toString(),
+                                            'date': selectedDate,
+                                            'income': false,
+                                            'merchant': merchantName.toString(),
+                                            'description':
+                                            description.text.toString() ?? '',
+                                            'paymentId':currentuserid
+                                          });
+                                          await FirebaseFirestore.instance.collection('users').doc(selectedUserId).update({
+                                            'totalExpense':FieldValue.increment(double.tryParse(amount!.text.toString())??0),
+                                          });
+
+                                          Navigator.pop(context);
+
+                                          showUploadMessage(
+                                              context, 'Income  added successfully');
+
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      IncomeSuccessPage()));
+                                          amount?.clear();
+                                          description.text = '';
+                                          category == '';
+                                          selectedDate = null;
+                                          xyz = '';
+                                          _icon = null;
+                                          merchantName = '';
+                                          setState(() {});
+
+                                          // Navigator.pushAndRemoveUntil(context, CupertinoPageRoute(builder: (context) => CharityCatogoryPage(),), (route) => false);
+                                        },
+                                        child: const Text('Yes')),
+                                    TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text('Cancel')),
+                                  ],
+                                );
+                              });
+                        } else {
+                          amount.text == ''
+                              ? showUploadMessage(context, 'Please enter amount')
+                              : category == ''
+                              ? showUploadMessage(context, 'Please select Category')
+                              : showUploadMessage(
+                              context, 'Please select user ');
+                        }
+                      },
+                      child: Container(
+                        width: scrWidth * 0.76,
+                        height: scrHeight * 0.065,
+                        decoration: BoxDecoration(
+                            color: Color(0xff008036),
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Center(
+                          child: Text(
+                            " Add income",
+                            style: TextStyle(
+                                fontSize: scrWidth * 0.046,
+                                color: Colors.white,
+                                fontFamily: 'Urbanist',
+                                fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                      ),
+                    )
+                ),
+
               ],
+
             ),
           ),
         ),
@@ -1305,209 +1510,7 @@ class _AddIncomePageState extends State<AddIncomePage> {
         //   ),
         // ),
 
-        floatingActionButton: Padding(
-          padding: EdgeInsets.only(bottom: 2, right: scrWidth * 0.07),
-          child: switchValue==false?InkWell(
-            onTap: () {
-              if (amount.text != '' &&
-                  (selectedIcons != null || selectedIcons != '') &&
-                  selectedDate != null &&
-                  category != '') {
-                showDialog(
-                    context: context,
-                    builder: (buildcontext) {
-                      return AlertDialog(
-                        title: const Text('Add income '),
-                        content: const Text('Do you want to Add?'),
-                        actions: [
-                          TextButton(
-                              onPressed: () async {
-                              await  FirebaseFirestore.instance
-                                    .collection('users')
-                                    .doc(currentuserid)
-                                    .collection('incomes')
-                                    .add({
-                                  'amount':
-                                      double.tryParse(amount!.text.toString()),
-                                  "categoryIcon": serializeIcon(xyz),
-                                  "categoryName": category.toString(),
-                                  'date': selectedDate,
-                                  'merchant': merchantName.toString() ?? "",
-                                  'description': description.text,
-                                  'income': true,
-                                  'recieverId':''
-                                });
-                                await FirebaseFirestore.instance.collection('users').doc(currentuserid).update({
-                                  'totalIncome':FieldValue.increment(double.tryParse(amount!.text.toString())??0),
-                                });
-                                Navigator.pop(context);
-
-                                showUploadMessage(
-                                    context, 'Income  added successfully');
-
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            IncomeSuccessPage()));
-                                amount?.clear();
-                                description.text = '';
-                                category == '';
-                                selectedDate = null;
-                                xyz = '';
-                                _icon = null;
-                                merchantName = '';
-                                setState(() {});
-
-                                // Navigator.pushAndRemoveUntil(context, CupertinoPageRoute(builder: (context) => CharityCatogoryPage(),), (route) => false);
-                              },
-                              child: const Text('Yes')),
-                          TextButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: const Text('Cancel')),
-                        ],
-                      );
-                    });
-              } else {
-                amount.text == ''
-                    ? showUploadMessage(context, 'Please enter amount')
-                    : category == ''
-                        ? showUploadMessage(context, 'Please choose Category')
-                        : showUploadMessage(
-                            context, 'Please enter merchant name');
-              }
-            },
-            child: Container(
-              width: scrWidth * 0.76,
-              height: scrHeight * 0.065,
-              decoration: BoxDecoration(
-                  color: Color(0xff008036),
-                  borderRadius: BorderRadius.circular(20)),
-              child: Center(
-                child: Text(
-                  " Add income",
-                  style: TextStyle(
-                      fontSize: scrWidth * 0.046,
-                      color: Colors.white,
-                      fontFamily: 'Urbanist',
-                      fontWeight: FontWeight.w600),
-                ),
-              ),
-            ),
-          ):
-          InkWell(
-            onTap: () {
-              if (amount.text != '' &&
-                  (selectedIcons != null || selectedIcons != '') &&
-                  selectedDate != null &&
-                  category != '' && contactName!=''&& phNumber!='') {
-                showDialog(
-                    context: context,
-                    builder: (buildcontext) {
-                      return AlertDialog(
-                        title: const Text('Add income '),
-                        content: const Text('Do you want to Add?'),
-                        actions: [
-                          TextButton(
-                              onPressed: () async {
-                                await getUserData();
-
-                               await FirebaseFirestore.instance
-                                    .collection('users')
-                                    .doc(currentuserid)
-                                    .collection('incomes')
-                                    .add({
-                                  'amount': double.tryParse(amount!.text.toString()),
-                                  "categoryIcon": serializeIcon(xyz),
-                                  "categoryName": category.toString(),
-                                  'date': selectedDate,
-                                  'merchant': merchantName.toString() ?? "",
-                                  'description': description.text,
-                                  'income': true,
-                                  'recieverId':selectedUserId
-                                });
-                               await FirebaseFirestore.instance.collection('users').doc(currentuserid).update({
-                                  'totalIncome':FieldValue.increment(double.tryParse(amount!.text.toString())??0),
-                                });
-                                await FirebaseFirestore.instance
-                                    .collection('users')
-                                    .doc(selectedUserId)
-                                    .collection('expense')
-                                    .add({
-                                  'amount': double.tryParse(amount!.text.toString()),
-                                  "categoryIcon": serializeIcon(xyz),
-                                  "categoryName": category.toString(),
-                                  'date': selectedDate,
-                                  'income': false,
-                                  'merchant': merchantName.toString(),
-                                  'description':
-                                  description.text.toString() ?? '',
-                                  'paymentId':currentuserid
-                                });
-                                 await FirebaseFirestore.instance.collection('users').doc(selectedUserId).update({
-                                  'totalExpense':FieldValue.increment(double.tryParse(amount!.text.toString())??0),
-                                });
-
-                                Navigator.pop(context);
-
-                                showUploadMessage(
-                                    context, 'Income  added successfully');
-
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            IncomeSuccessPage()));
-                                amount?.clear();
-                                description.text = '';
-                                category == '';
-                                selectedDate = null;
-                                xyz = '';
-                                _icon = null;
-                                merchantName = '';
-                                setState(() {});
-
-                                // Navigator.pushAndRemoveUntil(context, CupertinoPageRoute(builder: (context) => CharityCatogoryPage(),), (route) => false);
-                              },
-                              child: const Text('Yes')),
-                          TextButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: const Text('Cancel')),
-                        ],
-                      );
-                    });
-              } else {
-                amount.text == ''
-                    ? showUploadMessage(context, 'Please enter amount')
-                    : category == ''
-                    ? showUploadMessage(context, 'Please select Category')
-                    : showUploadMessage(
-                    context, 'Please select user ');
-              }
-            },
-            child: Container(
-              width: scrWidth * 0.76,
-              height: scrHeight * 0.065,
-              decoration: BoxDecoration(
-                  color: Color(0xff008036),
-                  borderRadius: BorderRadius.circular(20)),
-              child: Center(
-                child: Text(
-                  " Add income",
-                  style: TextStyle(
-                      fontSize: scrWidth * 0.046,
-                      color: Colors.white,
-                      fontFamily: 'Urbanist',
-                      fontWeight: FontWeight.w600),
-                ),
-              ),
-            ),
-          )
-        ),
+        // floatingActionButton:
       ),
     );
   }

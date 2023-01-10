@@ -160,14 +160,15 @@ class _MyServicesListState extends State<MyServicesList> {
           children: [
 
             Container(
-                height: MediaQuery.of(context).size.height,
+                height: MediaQuery.of(context).size.height*0.6,
                 child: serviceList?.length==0
                     ? Center(
                   child: Text('No list Found',style: GoogleFonts.urbanist(
                       fontSize: 15
                   ),),
                 )
-                    : serviceList.isEmpty?CircularProgressIndicator():ListView.builder(
+                    : serviceList.isEmpty?CircularProgressIndicator():
+                ListView.builder(
                   padding: EdgeInsets.all(
                     MediaQuery.of(context).size.width * 0.05,
                   ),
