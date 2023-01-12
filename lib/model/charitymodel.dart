@@ -63,7 +63,8 @@ class CharityModel {
         this.otherDocument,
         this.videoLink,
         this.docNme,
-        this.qrImage
+        this.qrImage,
+
       });
 
   CharityModel.fromJson(Map<String, dynamic> json) {

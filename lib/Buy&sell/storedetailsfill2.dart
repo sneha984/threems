@@ -120,11 +120,13 @@ List productCategoryList=[];
     print("####################################################");
 
     setState(() {
+      loading=false;
       _imgurl.add(value);
       print(_imgurl);
     });
   }
   _pickImage() async {
+    loading =true;
      imgFile = await ImagePicker.platform.pickImage(
         source: ImageSource.gallery);
     setState(() {
@@ -156,7 +158,7 @@ List productCategoryList=[];
         return shouldPop ?? false;
       },
       child: Scaffold(
-        body:SingleChildScrollView(
+        body:loading?Center(child: CircularProgressIndicator(),):SingleChildScrollView(
           child: Padding(
             padding:  EdgeInsets.only(left: scrWidth*0.05),
             child: Column(
@@ -1117,14 +1119,18 @@ List productCategoryList=[];
 
                    InkWell(
                      onTap: () {
-                       productCategoryList.add(productCategoryNameController.text);
-                       FirebaseFirestore.instance.collection('stores').doc(widget.data.storeId).update({
-                         'productCategory':FieldValue.arrayUnion(productCategoryList),
-                       });
-                       productCategoryNameController.text='';
-                       Navigator.pop(context);
-                       _showToast(context);
-                     },
+                       if(productCategoryNameController.text.isNotEmpty){
+                         productCategoryList.add(productCategoryNameController.text);
+                         FirebaseFirestore.instance.collection('stores').doc(widget.data.storeId).update({
+                           'productCategory':FieldValue.arrayUnion(productCategoryList),
+                         });
+                         productCategoryNameController.clear();
+                         Navigator.pop(context);_showToast(context);
+                       }else {
+                      showSnackbar(
+                             context, "Please Enter product category");
+
+                       }  },
                      child: Container(
                        width: scrWidth,
                        height: textFormFieldHeight45,

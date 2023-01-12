@@ -110,6 +110,7 @@ class _BuyAndSellState extends State<BuyAndSell> with TickerProviderStateMixin {
         .instance
         .collectionGroup('orders')
         .where('userId',isEqualTo: currentuserid)
+        // .where('status',is)
         .snapshots().listen((event) {
       print(event.docs.length);
       print('-------------------------------------------------');
@@ -263,6 +264,7 @@ List cate=[];
           .collection('stores')
           .doc(data[0]['storeId'])
           .collection('orders')
+          .where('status',isEqualTo: 0 )
           .snapshots()
           .listen((event) {
         orders = [];
@@ -1400,7 +1402,7 @@ List cate=[];
                                                     height: scrHeight * 0.02,
                                                   ),
                                                   Text(
-                                                    "Orders",
+                                                    "New Orders",
                                                     style: TextStyle(
                                                         fontSize: scrWidth * 0.04,
                                                         color: Colors.white,
@@ -1820,7 +1822,7 @@ List cate=[];
                 )
                     :InkWell(
                   onTap: (){
-                    showSnackbar(context, "Please Wait for The store Verification ");
+                     showSnackbar(context, "your store is under verification ");
                   },
                       child: Padding(
                   padding:  EdgeInsets.only(left: scrWidth*0.06,right: scrWidth*0.06),
@@ -1947,7 +1949,7 @@ List cate=[];
                                         height: scrHeight * 0.02,
                                       ),
                                       Text(
-                                        "Orders",
+                                        "New Orders",
                                         style: TextStyle(
                                             fontSize: scrWidth * 0.04,
                                             color: Colors.white,
@@ -2049,62 +2051,17 @@ List cate=[];
                                             // SvgPicture.asset(
                                             //     "assets/circlearrow.svg"),
                                           ],
-                                        )
+                                        ),
+
                                       ],
                                     ),
-                                  )),
+                                  ),
+                              ),
                             ),
                           ],
                         ),
                         SizedBox(height: 20,),
-                        // Padding(
-                        //   padding: EdgeInsets.only(
-                        //       right: scrWidth * 0.46,
-                        //       top: scrHeight * 0.026),
-                        //   child: InkWell(
-                        //     onTap: () {},
-                        //     child: Container(
-                        //       height: scrHeight * 0.11,
-                        //       width: scrWidth * 0.4,
-                        //       decoration: BoxDecoration(
-                        //           color: Color(0xff02B558),
-                        //           borderRadius: BorderRadius.circular(
-                        //               scrWidth * 0.06)),
-                        //       child: Padding(
-                        //         padding: EdgeInsets.only(
-                        //             left: scrWidth * 0.05),
-                        //         child: Column(
-                        //           crossAxisAlignment:
-                        //               CrossAxisAlignment.start,
-                        //           children: [
-                        //             SizedBox(
-                        //               height: scrHeight * 0.02,
-                        //             ),
-                        //             Text(
-                        //               "Store Views",
-                        //               style: TextStyle(
-                        //                   fontSize: scrWidth * 0.04,
-                        //                   color: Colors.white,
-                        //                   fontFamily: 'Urbanist',
-                        //                   fontWeight: FontWeight.w600),
-                        //             ),
-                        //             SizedBox(
-                        //               height: scrHeight * 0.018,
-                        //             ),
-                        //             Text(
-                        //               "0",
-                        //               style: TextStyle(
-                        //                   fontSize: scrWidth * 0.07,
-                        //                   color: Colors.white,
-                        //                   fontFamily: 'Urbanist',
-                        //                   fontWeight: FontWeight.w700),
-                        //             )
-                        //           ],
-                        //         ),
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
+
                         Text(
                           "Products",
                           style: TextStyle(
@@ -2177,68 +2134,28 @@ List cate=[];
                             SizedBox(
                               width: 18,
                             ),
-                            // InkWell(
-                            //   onTap: () {
-                            //     Navigator.push(
-                            //         context,
-                            //         MaterialPageRoute(
-                            //             builder: (context) =>
-                            //                 CategoryPage(
-                            //                   storeId:
-                            //                       store[0].storeId!,
-                            //                 )));
-                            //   },
-                            //   child: Container(
-                            //     height: scrHeight * 0.1,
-                            //     width: scrWidth * 0.4,
-                            //     decoration: BoxDecoration(
-                            //         color: Color(0xffF3F3F3),
-                            //         borderRadius:
-                            //             BorderRadius.circular(
-                            //                 scrWidth * 0.06)),
-                            //     child: Padding(
-                            //       padding: EdgeInsets.only(
-                            //           left: scrWidth * 0.05),
-                            //       child: Column(
-                            //         crossAxisAlignment:
-                            //             CrossAxisAlignment.start,
-                            //         mainAxisAlignment:
-                            //             MainAxisAlignment.start,
-                            //         children: [
-                            //           SizedBox(
-                            //             height: scrHeight * 0.02,
-                            //           ),
-                            //           Text(
-                            //             "Categories",
-                            //             style: TextStyle(
-                            //                 fontSize:
-                            //                     scrWidth * 0.035,
-                            //                 fontFamily: 'Urbanist',
-                            //                 fontWeight:
-                            //                     FontWeight.w600),
-                            //           ),
-                            //           SizedBox(
-                            //             height: scrHeight * 0.01,
-                            //           ),
-                            //           Text(
-                            //             store[0]!
-                            //                 .storeCategory!
-                            //                 .length
-                            //                 .toString(),
-                            //             style: TextStyle(
-                            //                 fontSize:
-                            //                     scrWidth * 0.06,
-                            //                 fontFamily: 'Urbanist',
-                            //                 fontWeight:
-                            //                     FontWeight.w600),
-                            //           ),
-                            //         ],
-                            //       ),
-                            //     ),
-                            //   ),
-                            // ),
+
                           ],
                         ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 10, right: 10,top: 10),
+                          child: Container(
+                            height: scrHeight * 0.2,
+                            width: scrWidth * 0.8,
+                            decoration: BoxDecoration(
+                                color: Color(0xffF3F3F3),
+                                borderRadius: BorderRadius.circular(20)),
+                            child: Padding(
+                                padding:
+                                EdgeInsets.only(left: scrWidth * 0.02,top: scrHeight*0.05),
+                                child: Text("Please Wait For Store Verification",textAlign: TextAlign.center,
+                                  style: TextStyle(fontSize: 21,
+                                      fontFamily: 'Urbanist',
+                                      fontWeight: FontWeight.w600),)
+                            ),
+                          ),
+                        )
+
                       ],
                   ),
                 ),

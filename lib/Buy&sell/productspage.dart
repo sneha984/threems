@@ -385,7 +385,8 @@ class _ProductsPageState extends State<ProductsPage> {
                                                   .update({
                                                 'delete':true,
                                                 'available':false,
-                                              }).whenComplete(() => Navigator.pop(context));
+                                              });
+                                              // whenComplete(() => Navigator.pop(context));
                                             },
                                             child: Container(
                                               height: 50,width: 100,

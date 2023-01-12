@@ -317,23 +317,7 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
               child: AppBar(
                 elevation: 0,
                 backgroundColor: Colors.white,
-                leading: InkWell(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                        top: scrHeight * 0.025,
-                        left: scrWidth * 0.07,
-                        bottom: scrHeight * 0.02,
-                        right: scrWidth * 0.05),
-                    child: Icon(
-                      Icons.arrow_back,
-                      color: Colors.black,
-                      size: 25,
-                    ),
-                  ),
-                ),
+                foregroundColor: Colors.black,
                 title: Text(
                   "Create New Chit",
                   style: TextStyle(
@@ -3252,121 +3236,233 @@ class _CreateNewChitScreenState extends State<CreateNewChitScreen> {
                   SizedBox(
                     height: scrWidth * 0.15,
                   ),
+                  GestureDetector(
+                    onTap: () async {
+                      print(disable);
+                      if (disable == true) {
+                        showSnackbar(context, 'Image / File is Uploading');
+                      } else {
+                        if (chitName.text != '' &&
+                            dropdownValue != null &&
+                            members > 3 &&
+                            amount.text != '' &&
+                            duration.text != '' &&
+                            subscriptionAmount.text != '' &&
+                            drawTypeValue != null &&
+                            drawDateValue != null &&
+                            selectedTime != null &&
+                            (fileUrl != null || fileUrl != '')) {
+                          final chit = ChitModel(
+                            amount: double.tryParse(amount.text),
+                            private: private,
+                            chitDate: int.parse(drawDateValue!),
+                            chitName: chitName.text,
+                            chitTime:
+                            '${selectedTime!.hour.toString()}:${selectedTime!.minute.toString()}',
+                            chitType: drawTypeValue,
+                            commission: dropdownValue,
+                            createdDate: DateTime.now(),
+                            dividendAmount: double.tryParse(dividend.text) ?? 0.0,
+                            document: url,
+                            drawn: false,
+                            duration: int.parse(duration.text),
+                            profile: profile,
+                            subscriptionAmount:
+                            double.tryParse(subscriptionAmount.text),
+                            status: widget.chit.status ?? 0,
+                            membersCount: members,
+                            phone: widget.chit.phone ?? '',
+                            userId: currentuserid,
+                            ifsc: widget.chit.ifsc ?? '',
+                            accountHolderName: widget.chit.accountHolderName ?? '',
+                            upiApps: widget.chit.upiApps,
+                            bankName: widget.chit.bankName ?? '',
+                            accountNumber: widget.chit.accountNumber ?? '',
+                            members: widget.chit.members ?? [],
+                            winners: widget.chit.winners ?? [],
+                            chitId: widget.chit.chitId ?? '',
+                            payableAmount: widget.chit.subscriptionAmount,
+                          );
+
+                          await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => PaymentDetails(
+                                    chit: chit,
+                                    size: size ?? '',
+                                    ext: ext ?? '',
+                                    bytes: bytes ?? '',
+                                    fileName: fileName ?? '',
+                                  )));
+
+                          Navigator.pop(context);
+                        } else {
+                          chitName.text == ''
+                              ? showSnackbar(context, 'Please enter name of your chit')
+                              : dropdownValue == null
+                              ? showSnackbar(context, 'Please Choose Commission')
+                              : members < 4
+                              ? showSnackbar(
+                              context, 'Members must be greater than 3')
+                              : amount.text == ''
+                              ? showSnackbar(context, 'Please enter amount')
+                              : duration.text == ''
+                              ? showSnackbar(
+                              context, 'Please enter duration')
+                              : subscriptionAmount.text == ''
+                              ? showSnackbar(context,
+                              'Please enter Subscription amount')
+                              : drawTypeValue == null
+                              ? showSnackbar(context,
+                              'Please Choose Chit type')
+                              : drawDateValue == null
+                              ? showSnackbar(context,
+                              'Please Choose Draw Date')
+                              : selectedTime == null
+                              ? showSnackbar(context,
+                              'Please Choose Draw Time')
+                              : showSnackbar(context,
+                              'Upload a authorised document');
+                        }
+                      }
+                    },
+                    child: Container(
+                        width: 285,
+                        height: 47,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(17),
+                          color: primarycolor,
+                        ),
+                        child: Center(
+                          child: Text(
+                            "Add Payment Details",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: FontSize15,
+                              fontFamily: 'Urbanist',
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        )),
+                  ),
+                  SizedBox(
+                    height: scrWidth * 0.15,
+                  ),
                 ],
               ),
             ),
           ),
-          floatingActionButton: GestureDetector(
-            onTap: () async {
-              print(disable);
-              if (disable == true) {
-                showSnackbar(context, 'Image / File is Uploading');
-              } else {
-                if (chitName.text != '' &&
-                    dropdownValue != null &&
-                    members > 3 &&
-                    amount.text != '' &&
-                    duration.text != '' &&
-                    subscriptionAmount.text != '' &&
-                    drawTypeValue != null &&
-                    drawDateValue != null &&
-                    selectedTime != null &&
-                    (fileUrl != null || fileUrl != '')) {
-                  final chit = ChitModel(
-                    amount: double.tryParse(amount.text),
-                    private: private,
-                    chitDate: int.parse(drawDateValue!),
-                    chitName: chitName.text,
-                    chitTime:
-                        '${selectedTime!.hour.toString()}:${selectedTime!.minute.toString()}',
-                    chitType: drawTypeValue,
-                    commission: dropdownValue,
-                    createdDate: DateTime.now(),
-                    dividendAmount: double.tryParse(dividend.text) ?? 0.0,
-                    document: url,
-                    drawn: false,
-                    duration: int.parse(duration.text),
-                    profile: profile,
-                    subscriptionAmount:
-                        double.tryParse(subscriptionAmount.text),
-                    status: widget.chit.status ?? 0,
-                    membersCount: members,
-                    phone: widget.chit.phone ?? '',
-                    userId: currentuserid,
-                    ifsc: widget.chit.ifsc ?? '',
-                    accountHolderName: widget.chit.accountHolderName ?? '',
-                    upiApps: widget.chit.upiApps,
-                    bankName: widget.chit.bankName ?? '',
-                    accountNumber: widget.chit.accountNumber ?? '',
-                    members: widget.chit.members ?? [],
-                    winners: widget.chit.winners ?? [],
-                    chitId: widget.chit.chitId ?? '',
-                    payableAmount: widget.chit.subscriptionAmount,
-                  );
-
-                  await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => PaymentDetails(
-                                chit: chit,
-                                size: size ?? '',
-                                ext: ext ?? '',
-                                bytes: bytes ?? '',
-                                fileName: fileName ?? '',
-                              )));
-
-                  Navigator.pop(context);
-                } else {
-                  chitName.text == ''
-                      ? showSnackbar(context, 'Please enter name of your chit')
-                      : dropdownValue == null
-                          ? showSnackbar(context, 'Please Choose Commission')
-                          : members < 4
-                              ? showSnackbar(
-                                  context, 'Members must be greater than 3')
-                              : amount.text == ''
-                                  ? showSnackbar(context, 'Please enter amount')
-                                  : duration.text == ''
-                                      ? showSnackbar(
-                                          context, 'Please enter duration')
-                                      : subscriptionAmount.text == ''
-                                          ? showSnackbar(context,
-                                              'Please enter Subscription amount')
-                                          : drawTypeValue == null
-                                              ? showSnackbar(context,
-                                                  'Please Choose Chit type')
-                                              : drawDateValue == null
-                                                  ? showSnackbar(context,
-                                                      'Please Choose Draw Date')
-                                                  : selectedTime == null
-                                                      ? showSnackbar(context,
-                                                          'Please Choose Draw Time')
-                                                      : showSnackbar(context,
-                                                          'Upload a authorised document');
-                }
-              }
-            },
-            child: Container(
-                width: 285,
-                height: 47,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(17),
-                  color: primarycolor,
-                ),
-                child: Center(
-                  child: Text(
-                    "Add Payment Details",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: FontSize15,
-                      fontFamily: 'Urbanist',
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                )),
-          ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerFloat,
+          // floatingActionButton: GestureDetector(
+          //   onTap: () async {
+          //     print(disable);
+          //     if (disable == true) {
+          //       showSnackbar(context, 'Image / File is Uploading');
+          //     } else {
+          //       if (chitName.text != '' &&
+          //           dropdownValue != null &&
+          //           members > 3 &&
+          //           amount.text != '' &&
+          //           duration.text != '' &&
+          //           subscriptionAmount.text != '' &&
+          //           drawTypeValue != null &&
+          //           drawDateValue != null &&
+          //           selectedTime != null &&
+          //           (fileUrl != null || fileUrl != '')) {
+          //         final chit = ChitModel(
+          //           amount: double.tryParse(amount.text),
+          //           private: private,
+          //           chitDate: int.parse(drawDateValue!),
+          //           chitName: chitName.text,
+          //           chitTime:
+          //               '${selectedTime!.hour.toString()}:${selectedTime!.minute.toString()}',
+          //           chitType: drawTypeValue,
+          //           commission: dropdownValue,
+          //           createdDate: DateTime.now(),
+          //           dividendAmount: double.tryParse(dividend.text) ?? 0.0,
+          //           document: url,
+          //           drawn: false,
+          //           duration: int.parse(duration.text),
+          //           profile: profile,
+          //           subscriptionAmount:
+          //               double.tryParse(subscriptionAmount.text),
+          //           status: widget.chit.status ?? 0,
+          //           membersCount: members,
+          //           phone: widget.chit.phone ?? '',
+          //           userId: currentuserid,
+          //           ifsc: widget.chit.ifsc ?? '',
+          //           accountHolderName: widget.chit.accountHolderName ?? '',
+          //           upiApps: widget.chit.upiApps,
+          //           bankName: widget.chit.bankName ?? '',
+          //           accountNumber: widget.chit.accountNumber ?? '',
+          //           members: widget.chit.members ?? [],
+          //           winners: widget.chit.winners ?? [],
+          //           chitId: widget.chit.chitId ?? '',
+          //           payableAmount: widget.chit.subscriptionAmount,
+          //         );
+          //
+          //         await Navigator.push(
+          //             context,
+          //             MaterialPageRoute(
+          //                 builder: (context) => PaymentDetails(
+          //                       chit: chit,
+          //                       size: size ?? '',
+          //                       ext: ext ?? '',
+          //                       bytes: bytes ?? '',
+          //                       fileName: fileName ?? '',
+          //                     )));
+          //
+          //         Navigator.pop(context);
+          //       } else {
+          //         chitName.text == ''
+          //             ? showSnackbar(context, 'Please enter name of your chit')
+          //             : dropdownValue == null
+          //                 ? showSnackbar(context, 'Please Choose Commission')
+          //                 : members < 4
+          //                     ? showSnackbar(
+          //                         context, 'Members must be greater than 3')
+          //                     : amount.text == ''
+          //                         ? showSnackbar(context, 'Please enter amount')
+          //                         : duration.text == ''
+          //                             ? showSnackbar(
+          //                                 context, 'Please enter duration')
+          //                             : subscriptionAmount.text == ''
+          //                                 ? showSnackbar(context,
+          //                                     'Please enter Subscription amount')
+          //                                 : drawTypeValue == null
+          //                                     ? showSnackbar(context,
+          //                                         'Please Choose Chit type')
+          //                                     : drawDateValue == null
+          //                                         ? showSnackbar(context,
+          //                                             'Please Choose Draw Date')
+          //                                         : selectedTime == null
+          //                                             ? showSnackbar(context,
+          //                                                 'Please Choose Draw Time')
+          //                                             : showSnackbar(context,
+          //                                                 'Upload a authorised document');
+          //       }
+          //     }
+          //   },
+          //   child: Container(
+          //       width: 285,
+          //       height: 47,
+          //       decoration: BoxDecoration(
+          //         borderRadius: BorderRadius.circular(17),
+          //         color: primarycolor,
+          //       ),
+          //       child: Center(
+          //         child: Text(
+          //           "Add Payment Details",
+          //           style: TextStyle(
+          //             color: Colors.white,
+          //             fontSize: FontSize15,
+          //             fontFamily: 'Urbanist',
+          //             fontWeight: FontWeight.w500,
+          //           ),
+          //         ),
+          //       )),
+          // ),
+          // floatingActionButtonLocation:
+          //     FloatingActionButtonLocation.centerFloat,
         ),
       ),
     );

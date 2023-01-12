@@ -48,6 +48,7 @@ class _SeeMoreCharitiesState extends State<SeeMoreCharities>
                 .collection('charity')
                 .where('userId',isEqualTo: currentuser!.userId)
                 .where('cause' ,isEqualTo: doc.get('causeId'))
+
                 // .where('block',isEqualTo: true)
                 .snapshots(),
             builder: (context,snapshot){
@@ -68,11 +69,11 @@ class _SeeMoreCharitiesState extends State<SeeMoreCharities>
                 itemBuilder: (context, index) {
                   final charity=charityList[index];
                   return GestureDetector(
-                    onTap: () {charity.block==false?Navigator.push(
+                    onTap: () {
+                     Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => FundRaisingDashboard(charity: charity,)))
-                          :showSnackbar(context, "charity blocked");
+                              builder: (context) => FundRaisingDashboard(charity: charity,)));
 
                     },
                     child: Row(
@@ -86,9 +87,9 @@ class _SeeMoreCharitiesState extends State<SeeMoreCharities>
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(30),
                               image: DecorationImage(
-                                  colorFilter:charity.block==false?
-                                  ColorFilter.mode(Colors.transparent, BlendMode.saturation):
-                                  ColorFilter.mode(Colors.grey, BlendMode.saturation),
+                                  // colorFilter:
+                                  // ColorFilter.mode(Colors.transparent, BlendMode.saturation):
+
                                   image: CachedNetworkImageProvider(charity.image??''),
                                   fit: BoxFit.fill)
                           ),

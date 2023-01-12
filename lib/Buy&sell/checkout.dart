@@ -154,15 +154,25 @@ getAvailable(){
         print('notAvailabe');
         print(notAvailabe);
         if(notAvailabe.length!=0){
-          prd=false;
-          setState(() {
 
-          });
+          for(var a in cartlist){
+            if(notAvailabe.contains(a['productId'])){
+              prd=false;
+              if (mounted) {
+                setState(() {
+
+                });
+              }
+            }
+          }
+
         }else{
           prd=true;
-          setState(() {
+          if (mounted) {
+            setState(() {
 
-          });
+            });
+          }
         }
         if (mounted) {
           setState(() {
@@ -195,6 +205,11 @@ List notAvailabe=[];
   bool isAddress = false;
   @override
   Widget build(BuildContext context) {
+    print('hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii');
+
+    print(cartlist);
+    print(notAvailabe);
+print('hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii');
 
     print(prd.toString()+'prd');
     print(shopAvailable.toString()+'shop');
@@ -480,10 +495,14 @@ List notAvailabe=[];
                                                   if (cartlist[index]
                                                   ['count'] ==
                                                       1) {
-                                                    cartlist.removeAt(index);
-                                                    notAvailabe.remove(cartlist[index]['productId']);
+                                                    print(notAvailabe);
 
-                                                    setState(() {});
+                                                    if(notAvailabe.contains(cartlist[index]['productId'])){
+                                                      notAvailabe.remove(cartlist[index]['productId']);
+                                                    }cartlist.removeAt(index);
+                                                    setState(() {
+                                                      getAvailable();
+                                                    });
                                                   } else {
                                                     cartlist[index]
                                                     ['count']--;
@@ -544,10 +563,13 @@ List notAvailabe=[];
                                                             if (cartlist[index]
                                                             ['count'] ==
                                                                 1) {
-                                                              cartlist.removeAt(index);
-                                                              notAvailabe.removeAt(cartlist[index]['productId']);
 
-                                                              setState(() {});
+                                                              if(notAvailabe.contains(cartlist[index]['productId'])){
+                                                                notAvailabe.remove(cartlist[index]['productId']);
+                                                              }cartlist.removeAt(index);
+                                                              setState(() {
+                                                                getAvailable();
+                                                              });
                                                             } else {
                                                               cartlist[index]
                                                               ['count']--;
@@ -1161,7 +1183,6 @@ List notAvailabe=[];
                         if(loading==false){
                           List<OrderedItems> orders1 = [];
                           double total = 0;
-
                           for (int i = 0; i < cartlist.length; i++) {
                             total += cartlist[i]['count'] * cartlist[i]['price'];
                             orders1.add(OrderedItems(
@@ -1275,7 +1296,7 @@ List notAvailabe=[];
                   ),
                 ):InkWell(
             onTap: (){
-              showSnackbar(context, "plz remove item Unavailable item");
+              showSnackbar(context, "please Remove UnAvailable Item From Cart");
             },
                   child: Container(
             height: 40,

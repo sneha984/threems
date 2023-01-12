@@ -835,6 +835,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../screens/splash_screen.dart';
 import '../utils/themes.dart';
 import 'Orders/acceptedpage.dart';
+import 'Orders/screenshortview.dart';
 import 'myorderspage.dart';
 
 class OrderDetailsPage extends StatefulWidget {
@@ -888,11 +889,15 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
       ),
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(right: 180, top: 14),
-              child: Text(
+        child: Padding(
+          padding:  EdgeInsets.only(left: scrWidth*0.04,right: scrWidth*0.04),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: 8,
+              ),
+              Text(
                 "Order Status",
                 style: TextStyle(
                     fontSize: 16,
@@ -900,278 +905,12 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                     fontFamily: 'Urbanist',
                     fontWeight: FontWeight.w600),
               ),
-            ),
-            SizedBox(
-              height: 8,
-            ),
-            Container(
-              height: 120,
-              width: 325,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Color.fromRGBO(0, 0, 0, 0.15),
-                      spreadRadius: 1,
-                      blurRadius: 3,
-                      offset: Offset(2, 3), // changes position of shadow
-                    ),
-                  ],
-                  borderRadius: BorderRadius.circular(20)),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    //ORDERED DATE
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Ordered Date",
-                          style: TextStyle(
-                              fontSize: 12,
-                              color: Color(0xffE54D3C),
-                              fontFamily: 'Urbanist',
-                              fontWeight: FontWeight.w600),
-                        ),
-                        Text(
-                          //Today Date
-                          widget.orderModel.time!.day == DateTime.now().day
-                              ? widget.orderModel.time!.hour > 12
-                              ? "Today ${widget.orderModel.time!.hour - 12}:${widget.orderModel.time!.minute} PM"
-                              : widget.orderModel.time!.hour == 0
-                              ? "Today 12:${widget.orderModel.time!.minute} AM"
-                              : "Today ${widget.orderModel.time!.hour}:${widget.orderModel.time!.minute} AM"
-                              :
-
-                          //YESTERDAY DATE
-                          widget.orderModel.time!.day ==
-                              DateTime.now().day - 1
-                              ? widget.orderModel.time!.hour > 12
-                              ? "Yesterday ${widget.orderModel.time!.hour - 12}:${widget.orderModel.time!.minute} PM"
-                              : widget.orderModel.time!.hour == 0
-                              ? "Yesterday 12:${widget.orderModel.time!.minute} AM"
-                              : "Yesterday ${widget.orderModel.time!.hour}:${widget.orderModel.time!.minute} AM"
-                              :
-
-                          //OTHER DATE
-                          widget.orderModel.time!.hour > 12
-                              ? "${DateFormat('dd-MMM-yyy').format(widget.orderModel.time!)} ${widget.orderModel.time!.hour - 12}"
-                              ":${widget.orderModel.time!.minute} PM"
-                              : widget.orderModel.time!.hour == 0
-                              ? "${DateFormat('dd-MMM-yyy').format(widget.orderModel.time!)} 12:"
-                              "${widget.orderModel.time!.minute} AM"
-                              : "${DateFormat('dd-MMM-yyy').format(widget.orderModel.time!)}"
-                              " ${widget.orderModel.time!.hour}:${widget.orderModel.time!.minute} AM",
-                          style: TextStyle(
-                              fontSize: 16,
-                              color: primarycolor,
-                              fontFamily: 'Urbanist',
-                              fontWeight: FontWeight.w600),
-                        ),
-                      ],
-                    ),
-
-                    //ACCEPTED DATE
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Accepted Date",
-                          style: TextStyle(
-                              fontSize: 12,
-                              color: Color(0xffE54D3C),
-                              fontFamily: 'Urbanist',
-                              fontWeight: FontWeight.w600),
-                        ),
-                        Text(
-                          "Pending",
-                          style: TextStyle(
-                              fontSize: 16,
-                              color: primarycolor,
-                              fontFamily: 'Urbanist',
-                              fontWeight: FontWeight.w600),
-                        ),
-                      ],
-                    ),
-
-                    //DELIVERED DATE
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Delivered Date",
-                          style: TextStyle(
-                              fontSize: 12,
-                              color: Color(0xffE54D3C),
-                              fontFamily: 'Urbanist',
-                              fontWeight: FontWeight.w600),
-                        ),
-                        Text(
-                          "Pending",
-                          style: TextStyle(
-                              fontSize: 16,
-                              color: primarycolor,
-                              fontFamily: 'Urbanist',
-                              fontWeight: FontWeight.w600),
-                        ),
-                      ],
-                    ),
-
-                    SizedBox()
-                  ],
-                ),
+              SizedBox(
+                height: 8,
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(right: 180, top: 14),
-              child: Text(
-                "Current Details",
-                style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.black,
-                    fontFamily: 'Urbanist',
-                    fontWeight: FontWeight.w600),
-              ),
-            ),
-            SizedBox(
-              height: 8,
-            ),
-            Container(
-              // height: 220,
-              width: 325,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Color.fromRGBO(0, 0, 0, 0.15),
-                      spreadRadius: 1,
-                      blurRadius: 3,
-                      offset: Offset(2, 3), // changes position of shadow
-                    ),
-                  ],
-                  borderRadius: BorderRadius.circular(20)),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              widget.orderModel.address?.name ?? '',
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  color: Color(0xff0E0E0E),
-                                  fontFamily: 'Urbanist',
-                                  fontWeight: FontWeight.w600),
-                            ),
-                            SizedBox(
-                              height: 8,
-                            ),
-                            Text(
-                              widget.orderModel.address?.phoneNumber ?? '',
-                              style: TextStyle(
-                                  fontSize: 12,
-                                  color: Color(0xff818181),
-                                  fontFamily: 'Urbanist',
-                                  fontWeight: FontWeight.w600),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          width: 30,
-                        ),
-                        InkWell(
-                          onTap: () {
-                            Uri call = Uri.parse(
-                                'tel://${widget.orderModel.address?.phoneNumber ?? 0}');
-
-                            launchUrl(call);
-                          },
-                          child: CircleAvatar(
-                            radius: 25,
-                            backgroundColor: Color(0xffD9D9D9),
-                            child: Container(
-                              height: 20,
-                              width: 30,
-                              child: SvgPicture.asset(
-                                  "assets/icons/Vector (11).svg"),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 210, top: 30),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Address",
-                            style: TextStyle(
-                                fontSize: 12,
-                                color: Color(0xffE54D3C),
-                                fontFamily: 'Urbanist',
-                                fontWeight: FontWeight.w600),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            "${widget.orderModel.address?.locationType ?? ''},${widget.orderModel.address?.flatNo ?? ''}",
-                            style: TextStyle(
-                                fontSize: 16,
-                                color: Color(0xff0E0E0E),
-                                fontFamily: 'Urbanist',
-                                fontWeight: FontWeight.w600),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            'City',
-                            style: TextStyle(
-                                fontSize: 12,
-                                color: Color(0xffE54D3C),
-                                fontFamily: 'Urbanist',
-                                fontWeight: FontWeight.w600),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            "${widget.orderModel.address?.locality ?? ''},${widget.orderModel.address?.pincode ?? ''}",
-                            style: TextStyle(
-                                fontSize: 16,
-                                color: Color(0xff0E0E0E),
-                                fontFamily: 'Urbanist',
-                                fontWeight: FontWeight.w600),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
-              child: Container(
-                height: 310,
-                width: 340,
+              Container(
+                height: scrHeight*0.15,
+                width: scrWidth*0.93,
                 decoration: BoxDecoration(
                     color: Colors.white,
                     boxShadow: [
@@ -1183,66 +922,328 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                       ),
                     ],
                     borderRadius: BorderRadius.circular(20)),
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: 20,
-                        ),
-                        Text(
-                          "Order ${widget.orderModel.orderId}",
-                          style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.black,
-                              fontFamily: 'Urbanist',
-                              fontWeight: FontWeight.w600),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          widget.orderModel.time!.day == DateTime.now().day
-                              ? widget.orderModel.time!.hour > 12
-                              ? "Today ${widget.orderModel.time!.hour - 12}:${widget.orderModel.time!.minute} PM"
-                              : widget.orderModel.time!.hour == 0
-                              ? "Today 12:${widget.orderModel.time!.minute} AM"
-                              : "Today ${widget.orderModel.time!.hour}:${widget.orderModel.time!.minute} AM"
-                              :
+                child: Padding(
+                  padding:  EdgeInsets.only(left: 20, right: 20, top: 20),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      //ORDERED DATE
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Ordered Date",
+                            style: TextStyle(
+                                fontSize: 12,
+                                color: Color(0xffE54D3C),
+                                fontFamily: 'Urbanist',
+                                fontWeight: FontWeight.w600),
+                          ),
+                          Text(
+                            //Today Date
+                            widget.orderModel.time!.day == DateTime.now().day
+                                ? widget.orderModel.time!.hour > 12
+                                ? "Today ${widget.orderModel.time!.hour - 12}:${widget.orderModel.time!.minute} PM"
+                                : widget.orderModel.time!.hour == 0
+                                ? "Today 12:${widget.orderModel.time!.minute} AM"
+                                : "Today ${widget.orderModel.time!.hour}:${widget.orderModel.time!.minute} AM"
+                                :
 
-                          //YESTERDAY DATE
-                          widget.orderModel.time!.day ==
-                              DateTime.now().day - 1
-                              ? widget.orderModel.time!.hour > 12
-                              ? "Yesterday ${widget.orderModel.time!.hour - 12}:${widget.orderModel.time!.minute} PM"
-                              : widget.orderModel.time!.hour == 0
-                              ? "Yesterday 12:${widget.orderModel.time!.minute} AM"
-                              : "Yesterday ${widget.orderModel.time!.hour}:${widget.orderModel.time!.minute} AM"
-                              :
+                            //YESTERDAY DATE
+                            widget.orderModel.time!.day ==
+                                DateTime.now().day - 1
+                                ? widget.orderModel.time!.hour > 12
+                                ? "Yesterday ${widget.orderModel.time!.hour - 12}:${widget.orderModel.time!.minute} PM"
+                                : widget.orderModel.time!.hour == 0
+                                ? "Yesterday 12:${widget.orderModel.time!.minute} AM"
+                                : "Yesterday ${widget.orderModel.time!.hour}:${widget.orderModel.time!.minute} AM"
+                                :
 
-                          //OTHER DATE
-                          widget.orderModel.time!.hour > 12
-                              ? "${DateFormat('dd-MMM-yyy').format(widget.orderModel.time!)} ${widget.orderModel.time!.hour - 12}:${widget.orderModel.time!.minute} PM"
-                              : widget.orderModel.time!.hour == 0
-                              ? "${DateFormat('dd-MMM-yyy').format(widget.orderModel.time!)} 12:${widget.orderModel.time!.minute} AM"
-                              : "${DateFormat('dd-MMM-yyy').format(widget.orderModel.time!)}"
-                              " ${widget.orderModel.time!.hour}:${widget.orderModel.time!.minute} AM",
-                          style: TextStyle(
-                              fontSize: 12,
-                              color: Color(0xff969696),
-                              fontFamily: 'Urbanist',
-                              fontWeight: FontWeight.w600),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      child: ListView.builder(
+                            //OTHER DATE
+                            widget.orderModel.time!.hour > 12
+                                ? "${DateFormat('dd-MMM-yyy').format(widget.orderModel.time!)} ${widget.orderModel.time!.hour - 12}"
+                                ":${widget.orderModel.time!.minute} PM"
+                                : widget.orderModel.time!.hour == 0
+                                ? "${DateFormat('dd-MMM-yyy').format(widget.orderModel.time!)} 12:"
+                                "${widget.orderModel.time!.minute} AM"
+                                : "${DateFormat('dd-MMM-yyy').format(widget.orderModel.time!)}"
+                                " ${widget.orderModel.time!.hour}:${widget.orderModel.time!.minute} AM",
+                            style: TextStyle(
+                                fontSize: 16,
+                                color: primarycolor,
+                                fontFamily: 'Urbanist',
+                                fontWeight: FontWeight.w600),
+                          ),
+                        ],
+                      ),
+
+                      //ACCEPTED DATE
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Accepted Date",
+                            style: TextStyle(
+                                fontSize: 12,
+                                color: Color(0xffE54D3C),
+                                fontFamily: 'Urbanist',
+                                fontWeight: FontWeight.w600),
+                          ),
+                          Text(
+                            "Pending",
+                            style: TextStyle(
+                                fontSize: 16,
+                                color: primarycolor,
+                                fontFamily: 'Urbanist',
+                                fontWeight: FontWeight.w600),
+                          ),
+                        ],
+                      ),
+
+                      //DELIVERED DATE
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Delivered Date",
+                            style: TextStyle(
+                                fontSize: 12,
+                                color: Color(0xffE54D3C),
+                                fontFamily: 'Urbanist',
+                                fontWeight: FontWeight.w600),
+                          ),
+                          Text(
+                            "Pending",
+                            style: TextStyle(
+                                fontSize: 16,
+                                color: primarycolor,
+                                fontFamily: 'Urbanist',
+                                fontWeight: FontWeight.w600),
+                          ),
+                        ],
+                      ),
+
+                      SizedBox()
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 14,
+              ),
+              Text(
+                "Current Details",
+                style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
+                    fontFamily: 'Urbanist',
+                    fontWeight: FontWeight.w600),
+              ),
+              SizedBox(
+                height: 8,
+              ),
+              Container(
+                // height: 220,
+                width: scrWidth*0.93,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Color.fromRGBO(0, 0, 0, 0.15),
+                        spreadRadius: 1,
+                        blurRadius: 3,
+                        offset: Offset(2, 3), // changes position of shadow
+                      ),
+                    ],
+                    borderRadius: BorderRadius.circular(20)),
+                child: Padding(
+                  padding:  EdgeInsets.only(left: 20, right: 20, top: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                widget.orderModel.address?.name ?? '',
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: Color(0xff0E0E0E),
+                                    fontFamily: 'Urbanist',
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              SizedBox(
+                                height: 8,
+                              ),
+                              Text(
+                                widget.orderModel.address?.phoneNumber ?? '',
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    color: Color(0xff818181),
+                                    fontFamily: 'Urbanist',
+                                    fontWeight: FontWeight.w600),
+                              ),
+                            ],
+                          ),
+                          // SizedBox(
+                          //   width: 30,
+                          // ),
+                          InkWell(
+                            onTap: () {
+                              Uri call = Uri.parse(
+                                  'tel://${widget.orderModel.address?.phoneNumber ?? 0}');
+
+                              launchUrl(call);
+                            },
+                            child: CircleAvatar(
+                              radius: 25,
+                              backgroundColor: Color(0xffD9D9D9),
+                              child: Container(
+                                height: 20,
+                                width: 30,
+                                child: SvgPicture.asset(
+                                    "assets/icons/Vector (11).svg"),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        "Address",
+                        style: TextStyle(
+                            fontSize: 12,
+                            color: Color(0xffE54D3C),
+                            fontFamily: 'Urbanist',
+                            fontWeight: FontWeight.w600),
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        "${widget.orderModel.address?.locationType ?? ''},${widget.orderModel.address?.flatNo ?? ''}",
+                        style: TextStyle(
+                            fontSize: 16,
+                            color: Color(0xff0E0E0E),
+                            fontFamily: 'Urbanist',
+                            fontWeight: FontWeight.w600),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        'City',
+                        style: TextStyle(
+                            fontSize: 12,
+                            color: Color(0xffE54D3C),
+                            fontFamily: 'Urbanist',
+                            fontWeight: FontWeight.w600),
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        "${widget.orderModel.address?.locality ?? ''},${widget.orderModel.address?.pincode ?? ''}",
+                        style: TextStyle(
+                            fontSize: 16,
+                            color: Color(0xff0E0E0E),
+                            fontFamily: 'Urbanist',
+                            fontWeight: FontWeight.w600),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 14,
+              ),
+              Container(
+                // height: 310,
+                width: scrWidth*0.93,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Color.fromRGBO(0, 0, 0, 0.15),
+                        spreadRadius: 1,
+                        blurRadius: 3,
+                        offset: Offset(2, 3), // changes position of shadow
+                      ),
+                    ],
+                    borderRadius: BorderRadius.circular(20)),
+                child: Padding(
+                  padding:  EdgeInsets.only(left: scrWidth*0.03,right: scrWidth*0.03),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+
+                          Text(
+                            "Order ${widget.orderModel.orderId}",
+                            style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.black,
+                                fontFamily: 'Urbanist',
+                                fontWeight: FontWeight.w600),
+                          ),
+
+                          Text(
+                            widget.orderModel.time!.day == DateTime.now().day
+                                ? widget.orderModel.time!.hour > 12
+                                ? "Today ${widget.orderModel.time!.hour - 12}:${widget.orderModel.time!.minute} PM"
+                                : widget.orderModel.time!.hour == 0
+                                ? "Today 12:${widget.orderModel.time!.minute} AM"
+                                : "Today ${widget.orderModel.time!.hour}:${widget.orderModel.time!.minute} AM"
+                                :
+
+                            //YESTERDAY DATE
+                            widget.orderModel.time!.day ==
+                                DateTime.now().day - 1
+                                ? widget.orderModel.time!.hour > 12
+                                ? "Yesterday ${widget.orderModel.time!.hour - 12}:${widget.orderModel.time!.minute} PM"
+                                : widget.orderModel.time!.hour == 0
+                                ? "Yesterday 12:${widget.orderModel.time!.minute} AM"
+                                : "Yesterday ${widget.orderModel.time!.hour}:${widget.orderModel.time!.minute} AM"
+                                :
+
+                            //OTHER DATE
+                            widget.orderModel.time!.hour > 12
+                                ? "${DateFormat('dd-MMM-yyy').format(widget.orderModel.time!)} ${widget.orderModel.time!.hour - 12}:${widget.orderModel.time!.minute} PM"
+                                : widget.orderModel.time!.hour == 0
+                                ? "${DateFormat('dd-MMM-yyy').format(widget.orderModel.time!)} 12:${widget.orderModel.time!.minute} AM"
+                                : "${DateFormat('dd-MMM-yyy').format(widget.orderModel.time!)}"
+                                " ${widget.orderModel.time!.hour}:${widget.orderModel.time!.minute} AM",
+                            style: TextStyle(
+                                fontSize: 12,
+                                color: Color(0xff969696),
+                                fontFamily: 'Urbanist',
+                                fontWeight: FontWeight.w600),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      ListView.builder(
                           itemCount: widget.orderModel.orderedItems!.length,
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
@@ -1250,10 +1251,9 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                             return Padding(
                               padding: const EdgeInsets.only(top: 10),
                               child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  SizedBox(
-                                    width: 20,
-                                  ),
+
 
                                   Container(
                                     width: 150,
@@ -1268,32 +1268,34 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                                     ),
                                   ),
                                   // SizedBox(width: 80,),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "x",
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.black,
+                                            fontFamily: 'Urbanist',
+                                            fontWeight: FontWeight.w600),
+                                      ),
 
-                                  Text(
-                                    "x",
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black,
-                                        fontFamily: 'Urbanist',
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                  SizedBox(
-                                    width: 5,
+
+                                      Text(
+                                        widget
+                                            .orderModel.orderedItems![index].count!
+                                            .toString(),
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.black,
+                                            fontFamily: 'Urbanist',
+                                            fontWeight: FontWeight.w600),
+                                      ),
+
+                                    ],
                                   ),
 
-                                  Text(
-                                    widget
-                                        .orderModel.orderedItems![index].count!
-                                        .toString(),
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black,
-                                        fontFamily: 'Urbanist',
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                  SizedBox(
-                                    width: 73,
-                                  ),
+
+
 
                                   Text("₹${ widget
                                       .orderModel.orderedItems![index].amount!
@@ -1309,66 +1311,63 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                               ),
                             );
                           }),
-                    ),
 
-                    // Row(
-                    //   children: [
-                    //     SizedBox(width: 20,),
-                    //
-                    //     Container(
-                    //       width: 150,
-                    //       child: Text(
-                    //         "erihfuehru",
-                    //         style: TextStyle(
-                    //             fontSize: 16,
-                    //             color: Colors.black,
-                    //             fontFamily: 'Urbanist',
-                    //             fontWeight: FontWeight.w600),
-                    //       ),
-                    //     ),
-                    //     // SizedBox(width: 80,),
-                    //
-                    //     Text(
-                    //       "x",
-                    //       style: TextStyle(
-                    //           fontSize: 16,
-                    //           color: Colors.black,
-                    //           fontFamily: 'Urbanist',
-                    //           fontWeight: FontWeight.w600),
-                    //     ),
-                    //     SizedBox(width: 5,),
-                    //
-                    //     Text(
-                    //       "1",
-                    //       style: TextStyle(
-                    //           fontSize: 16,
-                    //           color: Colors.black,
-                    //           fontFamily: 'Urbanist',
-                    //           fontWeight: FontWeight.w600),
-                    //     ),
-                    //     SizedBox(width: 92,),
-                    //
-                    //     Text(
-                    //       "435",
-                    //       style: TextStyle(
-                    //           fontSize: 16,
-                    //           color: Color(0xffF10000),
-                    //           fontFamily: 'Urbanist',
-                    //           fontWeight: FontWeight.w600),
-                    //     ),
-                    //   ],
-                    // ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Divider(
-                      thickness: 14,
-                      color: Color(0xffF3F3F3),
-                    ),
+                      // Row(
+                      //   children: [
+                      //     SizedBox(width: 20,),
+                      //
+                      //     Container(
+                      //       width: 150,
+                      //       child: Text(
+                      //         "erihfuehru",
+                      //         style: TextStyle(
+                      //             fontSize: 16,
+                      //             color: Colors.black,
+                      //             fontFamily: 'Urbanist',
+                      //             fontWeight: FontWeight.w600),
+                      //       ),
+                      //     ),
+                      //     // SizedBox(width: 80,),
+                      //
+                      //     Text(
+                      //       "x",
+                      //       style: TextStyle(
+                      //           fontSize: 16,
+                      //           color: Colors.black,
+                      //           fontFamily: 'Urbanist',
+                      //           fontWeight: FontWeight.w600),
+                      //     ),
+                      //     SizedBox(width: 5,),
+                      //
+                      //     Text(
+                      //       "1",
+                      //       style: TextStyle(
+                      //           fontSize: 16,
+                      //           color: Colors.black,
+                      //           fontFamily: 'Urbanist',
+                      //           fontWeight: FontWeight.w600),
+                      //     ),
+                      //     SizedBox(width: 92,),
+                      //
+                      //     Text(
+                      //       "435",
+                      //       style: TextStyle(
+                      //           fontSize: 16,
+                      //           color: Color(0xffF10000),
+                      //           fontFamily: 'Urbanist',
+                      //           fontWeight: FontWeight.w600),
+                      //     ),
+                      //   ],
+                      // ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Divider(
+                        thickness: 14,
+                        color: Color(0xffF3F3F3),
+                      ),
 
-                    Padding(
-                      padding: EdgeInsets.only(left: 21, right: 21),
-                      child: Column(
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           SizedBox(
@@ -1385,9 +1384,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                                     fontFamily: 'Urbanist',
                                     fontWeight: FontWeight.w600),
                               ),
-                              SizedBox(
-                                width: 30,
-                              ),
+
                               Text(
                                 "₹${widget.orderModel.total!.toStringAsFixed(2)}",
                                 style: TextStyle(
@@ -1412,9 +1409,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                                     fontFamily: 'Urbanist',
                                     fontWeight: FontWeight.w600),
                               ),
-                              SizedBox(
-                                width: 30,
-                              ),
+
                               Text(
                                 "₹${widget.orderModel.deliveryCharge}",
                                 style: TextStyle(
@@ -1430,7 +1425,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                           ),
                           Padding(
                             padding: EdgeInsets.only(
-                                left: 11, right: 11, top: 3, bottom: 3),
+                                top: 3, bottom: 3),
                             child: DottedLine(
                               dashColor: Colors.grey,
                               lineThickness: 0.8,
@@ -1470,9 +1465,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                                   ),
                                 ],
                               ),
-                              SizedBox(
-                                width: 30,
-                              ),
+
                               Text(
                                 "₹${widget.orderModel.deliveryCharge! + widget.orderModel.total!}",
                                 style: TextStyle(
@@ -1489,7 +1482,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
 
                           Padding(
                             padding: EdgeInsets.only(
-                                left: 17, right: 17, top: 10, bottom: 10),
+                                top: 10, bottom: 10),
                             child: DottedLine(
                               dashColor: Colors.grey,
                               lineThickness: 0.8,
@@ -1533,9 +1526,7 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                                     fontFamily: 'Urbanist',
                                     fontWeight: FontWeight.w600),
                               ),
-                              SizedBox(
-                                width: 32,
-                              ),
+
                               Text(
                                 widget.orderModel.paymentMethod==0?'Cash On Delivery':'UPI Payment',
                                 style: TextStyle(
@@ -1548,168 +1539,222 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                           ),
                         ],
                       ),
+                      SizedBox(height: 15,),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(height: 10,),
+              widget.orderModel.paymentMethod==0?SizedBox():InkWell(
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                      ScreenShortView(Image: widget.orderModel.paymentScreenShort??'')));
+                },
+                child: Center(
+                  child: Container(
+                    height: 180,
+                    width: 300,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: CachedNetworkImageProvider(widget.orderModel.paymentScreenShort??''),fit: BoxFit.fill)
                     ),
-                  ],
+                  ),
                 ),
               ),
-            ),
-            SizedBox(height: 10,),
-            widget.orderModel.paymentMethod==0?SizedBox():Container(
-              height: 180,
-              width: 300,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: CachedNetworkImageProvider(widget.orderModel.paymentScreenShort??''),fit: BoxFit.fill)
+
+
+              SizedBox(
+                height: 10,
               ),
-            ),
 
 
-            SizedBox(
-              height: 10,
-            ),
+              // Padding(
+              //   padding: const EdgeInsets.only(left: 15,right: 15,top: 15),
+              //   child: Container(
+              //     height:156,
+              //     width: 340,
+              //     decoration: BoxDecoration(
+              //       borderRadius: BorderRadius.circular(20),
+              //       color: Color(0xff02B558)
+              //     ),
+              //     child: Row(
+              //       children: [
+              //         SizedBox(width: 25,),
+              //         Column(
+              //           children: [
+              //             SizedBox(
+              //               height: scrHeight * 0.03,
+              //             ),
+              //             DottedBorder(
+              //               borderType: BorderType.Circle,
+              //               radius: Radius.circular(scrWidth * 0.1),
+              //               dashPattern: [5, 5],
+              //               color: Colors.white,
+              //               strokeWidth: 1.5,
+              //               child: Center(
+              //                   child: Padding(
+              //                       padding: EdgeInsets.all(scrWidth * 0.07),
+              //                       child: Container(
+              //                           height: 27,
+              //                           width: 27,
+              //                           ))),
+              //             ),
+              //             SizedBox(
+              //               height: scrHeight * 0.008,
+              //             ),
+              //             Container(
+              //               width: scrWidth * 0.15,
+              //               child: Text(
+              //                 "Order Pending",
+              //                 textAlign: TextAlign.center,
+              //                 style: TextStyle(
+              //                     fontSize: 12,
+              //                     fontWeight: FontWeight.w600,
+              //                     color: Colors.white,
+              //                     fontFamily: 'Urbanist'),
+              //               ),
+              //             )
+              //           ],
+              //         ),
+              //         SizedBox(width: 18,),
+              //         Column(
+              //           children: [
+              //             SizedBox(
+              //               height: scrHeight * 0.03,
+              //             ),
+              //             DottedBorder(
+              //               borderType: BorderType.Circle,
+              //               radius: Radius.circular(scrWidth * 0.1),
+              //               dashPattern: [5, 5],
+              //               color: Colors.white,
+              //               strokeWidth: 1.5,
+              //               child: Center(
+              //                   child: Padding(
+              //                       padding: EdgeInsets.all(scrWidth * 0.07),
+              //                       child: Container(
+              //                         height: 27,
+              //                         width: 27,
+              //                       ))),
+              //             ),
+              //             SizedBox(
+              //               height: scrHeight * 0.008,
+              //             ),
+              //             Container(
+              //               width: scrWidth * 0.15,
+              //               child: Text(
+              //                 "Order Shipped",
+              //                 textAlign: TextAlign.center,
+              //                 style: TextStyle(
+              //                     fontSize: 12,
+              //                     fontWeight: FontWeight.w600,
+              //                     color: Colors.white,
+              //                     fontFamily: 'Urbanist'),
+              //               ),
+              //             )
+              //           ],
+              //         ),
+              //         SizedBox(width: 18,),
+              //         Column(
+              //           children: [
+              //             SizedBox(
+              //               height: scrHeight * 0.03,
+              //             ),
+              //             DottedBorder(
+              //               borderType: BorderType.Circle,
+              //               radius: Radius.circular(scrWidth * 0.1),
+              //               dashPattern: [5, 5],
+              //               color: Colors.white,
+              //               strokeWidth: 1.5,
+              //               child: Center(
+              //                   child: Padding(
+              //                       padding: EdgeInsets.all(scrWidth * 0.07),
+              //                       child: Container(
+              //                         height: 27,
+              //                         width: 27,
+              //                       ))),
+              //             ),
+              //             SizedBox(
+              //               height: scrHeight * 0.008,
+              //             ),
+              //             Container(
+              //               width: scrWidth * 0.15,
+              //               child: Text(
+              //                 "Order Delivered",
+              //                 textAlign: TextAlign.center,
+              //                 style: TextStyle(
+              //                     fontSize: 12,
+              //                     fontWeight: FontWeight.w600,
+              //                     color: Colors.white,
+              //                     fontFamily: 'Urbanist'),
+              //               ),
+              //             )
+              //           ],
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+              // ),
+              SizedBox(
+                height: 20,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+
+                  InkWell(
+                    onTap: () {
+                      // Navigator.of(context).pop();
+                      showDialog(
+                        context: context,
+                        builder: (ctx) => AlertDialog(
+                          content: const Text("Do You Want to Reject this order?"),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(ctx).pop();
+                              },
+                              child: const Text("No"),
+                            ),
+                            TextButton(
+                              onPressed: () {
+
+                                FirebaseFirestore.instance
+                                    .collection('stores')
+                                    .doc(widget.orderModel.storeId)
+                                    .collection('orders')
+                                    .doc(widget.orderModel.orderId)
+                                    .update({'status': 3});
+                                Navigator.pop(ctx);
+                                Navigator.pop(context);
+                              },
+                              child: const Text(
+                                "Yes",
+                                style: TextStyle(color: primarycolor),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
 
 
-            // Padding(
-            //   padding: const EdgeInsets.only(left: 15,right: 15,top: 15),
-            //   child: Container(
-            //     height:156,
-            //     width: 340,
-            //     decoration: BoxDecoration(
-            //       borderRadius: BorderRadius.circular(20),
-            //       color: Color(0xff02B558)
-            //     ),
-            //     child: Row(
-            //       children: [
-            //         SizedBox(width: 25,),
-            //         Column(
-            //           children: [
-            //             SizedBox(
-            //               height: scrHeight * 0.03,
-            //             ),
-            //             DottedBorder(
-            //               borderType: BorderType.Circle,
-            //               radius: Radius.circular(scrWidth * 0.1),
-            //               dashPattern: [5, 5],
-            //               color: Colors.white,
-            //               strokeWidth: 1.5,
-            //               child: Center(
-            //                   child: Padding(
-            //                       padding: EdgeInsets.all(scrWidth * 0.07),
-            //                       child: Container(
-            //                           height: 27,
-            //                           width: 27,
-            //                           ))),
-            //             ),
-            //             SizedBox(
-            //               height: scrHeight * 0.008,
-            //             ),
-            //             Container(
-            //               width: scrWidth * 0.15,
-            //               child: Text(
-            //                 "Order Pending",
-            //                 textAlign: TextAlign.center,
-            //                 style: TextStyle(
-            //                     fontSize: 12,
-            //                     fontWeight: FontWeight.w600,
-            //                     color: Colors.white,
-            //                     fontFamily: 'Urbanist'),
-            //               ),
-            //             )
-            //           ],
-            //         ),
-            //         SizedBox(width: 18,),
-            //         Column(
-            //           children: [
-            //             SizedBox(
-            //               height: scrHeight * 0.03,
-            //             ),
-            //             DottedBorder(
-            //               borderType: BorderType.Circle,
-            //               radius: Radius.circular(scrWidth * 0.1),
-            //               dashPattern: [5, 5],
-            //               color: Colors.white,
-            //               strokeWidth: 1.5,
-            //               child: Center(
-            //                   child: Padding(
-            //                       padding: EdgeInsets.all(scrWidth * 0.07),
-            //                       child: Container(
-            //                         height: 27,
-            //                         width: 27,
-            //                       ))),
-            //             ),
-            //             SizedBox(
-            //               height: scrHeight * 0.008,
-            //             ),
-            //             Container(
-            //               width: scrWidth * 0.15,
-            //               child: Text(
-            //                 "Order Shipped",
-            //                 textAlign: TextAlign.center,
-            //                 style: TextStyle(
-            //                     fontSize: 12,
-            //                     fontWeight: FontWeight.w600,
-            //                     color: Colors.white,
-            //                     fontFamily: 'Urbanist'),
-            //               ),
-            //             )
-            //           ],
-            //         ),
-            //         SizedBox(width: 18,),
-            //         Column(
-            //           children: [
-            //             SizedBox(
-            //               height: scrHeight * 0.03,
-            //             ),
-            //             DottedBorder(
-            //               borderType: BorderType.Circle,
-            //               radius: Radius.circular(scrWidth * 0.1),
-            //               dashPattern: [5, 5],
-            //               color: Colors.white,
-            //               strokeWidth: 1.5,
-            //               child: Center(
-            //                   child: Padding(
-            //                       padding: EdgeInsets.all(scrWidth * 0.07),
-            //                       child: Container(
-            //                         height: 27,
-            //                         width: 27,
-            //                       ))),
-            //             ),
-            //             SizedBox(
-            //               height: scrHeight * 0.008,
-            //             ),
-            //             Container(
-            //               width: scrWidth * 0.15,
-            //               child: Text(
-            //                 "Order Delivered",
-            //                 textAlign: TextAlign.center,
-            //                 style: TextStyle(
-            //                     fontSize: 12,
-            //                     fontWeight: FontWeight.w600,
-            //                     color: Colors.white,
-            //                     fontFamily: 'Urbanist'),
-            //               ),
-            //             )
-            //           ],
-            //         ),
-            //       ],
-            //     ),
-            //   ),
-            // ),
-            SizedBox(
-              height: 20,
-            ),
-            Row(
-              children: [
-                SizedBox(
-                  width: 39,
-                ),
-                InkWell(
-                  onTap: () {
-                    // Navigator.of(context).pop();
-                    showDialog(
-                      context: context,
-                      builder: (ctx) => AlertDialog(
-                        content: const Text("Do You Want to Cancel this order?"),
+                    },
+                    child: Text(
+                      "Reject Order",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: Color(0xffE54D3C),
+                          fontFamily: 'Urbanist'),
+                    ),
+                  ),
+
+                  InkWell(
+                    onTap: () {
+                      showDialog(
+                          context: context,
+                          builder: (ctx) => AlertDialog(
+                        content: const Text("Do You Want to Accept this order?"),
                         actions: <Widget>[
                           TextButton(
                             onPressed: () {
@@ -1719,13 +1764,18 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                           ),
                           TextButton(
                             onPressed: () {
-                              Navigator.pop(context);
                               FirebaseFirestore.instance
                                   .collection('stores')
                                   .doc(widget.orderModel.storeId)
                                   .collection('orders')
                                   .doc(widget.orderModel.orderId)
-                                  .update({'status': 3});
+                                  .update({
+                                'status': 1,
+                                'acceptedDate': DateTime.now()
+                              });
+
+
+                              Navigator.pop(ctx);
                               Navigator.pop(context);
                             },
                             child: const Text(
@@ -1734,59 +1784,41 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
                             ),
                           ),
                         ],
-                      ),
-                    );
-
-
-                  },
-                  child: Text(
-                    "Reject Order",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                        color: Color(0xffE54D3C),
-                        fontFamily: 'Urbanist'),
-                  ),
-                ),
-                SizedBox(
-                  width: 70,
-                ),
-                InkWell(
-                  onTap: () {
-                    FirebaseFirestore.instance
-                        .collection('stores')
-                        .doc(widget.orderModel.storeId)
-                        .collection('orders')
-                        .doc(widget.orderModel.orderId)
-                        .update({
-                      'status': 1,
-                      'acceptedDate': DateTime.now()
-                    }).then((value) => Navigator.pop(context));
-                  },
-                  child: Container(
-                    height: 40,
-                    width: 120,
-                    child: Center(
-                        child: Text(
-                          "Accept Order",
-                          style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
-                              fontFamily: 'Urbanist'),
-                        )),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Color(0xff02B558)),
-                  ),
-                )
-              ],
-            ),
-            SizedBox(
-              height: 20,
-            ),
-          ],
+                      ));
+                      // FirebaseFirestore.instance
+                      //     .collection('stores')
+                      //     .doc(widget.orderModel.storeId)
+                      //     .collection('orders')
+                      //     .doc(widget.orderModel.orderId)
+                      //     .update({
+                      //   'status': 1,
+                      //   'acceptedDate': DateTime.now()
+                      // }).then((value) => Navigator.pop(context));
+                    },
+                    child: Container(
+                      height: 40,
+                      width: 120,
+                      child: Center(
+                          child: Text(
+                            "Accept Order",
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white,
+                                fontFamily: 'Urbanist'),
+                          )),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Color(0xff02B558)),
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(
+                height: 20,
+              ),
+            ],
+          ),
         ),
       ),
     );

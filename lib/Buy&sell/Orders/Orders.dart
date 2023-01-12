@@ -59,7 +59,7 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
         setState(() {
           print(widget.storeId);
           print("1111111111111111111111111");
-          print(pendingList[0].time!);
+          // print(pendingList[0].time!);
         });
       }
     });
@@ -250,28 +250,28 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                     )
                   : ListView.builder(
                       itemCount: pendingList.length,
-
-                      itemBuilder: (context, index) {
+                        physics: BouncingScrollPhysics(),
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
                         final order = pendingList[index];
-
                         return Column(children: [
                           Padding(
                             padding:
-                                EdgeInsets.only(left: 10, right: 10, top: 20),
+                                EdgeInsets.only(left:scrWidth*0.03, right:scrWidth*0.03, top: scrWidth*0.03,),
                             child: InkWell(
-                              onTap: () async {
-                               await Navigator.push(
+                              onTap: ()  {
+                                print('123456789');
+                               Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => OrderDetailsPage(
                                               orderModel: pendingList[index],
-                                            )));
-                               setState(() {
+                                            ))).then((value) => setState((){}));
 
-                               });
                               },
                               child: Container(
-                                height: scrHeight*0.2,
+                                height: scrHeight*0.22,
                                 width: 360,
                                 decoration: BoxDecoration(
                                     color: Color(0xffF3F3F3),
@@ -365,7 +365,7 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                                         ],
                                       ),
                                       SizedBox(
-                                        height: 15,
+                                        height: 10,
                                       ),
                                       // Expanded(
                                       //   child: ListView.builder(
@@ -448,7 +448,9 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                                       //         );
                                       //       }),
                                       // ),
-                                      Text(order.address?.name ?? ''),
+                                      Text(order.address?.name ?? '',
+                                        style: TextStyle(fontWeight: FontWeight.w600,fontFamily: 'Urbanist',fontSize: 17),),
+                                      SizedBox(height: 6,),
                                       Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
@@ -474,6 +476,8 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                                           ),
                                         ],
                                       ),
+                                      SizedBox(height: 4,),
+
                                       Row(
                                         mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -499,6 +503,8 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                                           ),
                                         ],
                                       ),
+                                      SizedBox(height: 4,),
+
                                       Row(
                                         mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -524,6 +530,8 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                                           ),
                                         ],
                                       ),
+                                      SizedBox(height: 4,),
+
                                       Row(
                                         mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -581,6 +589,9 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                     )
                   : ListView.builder(
                       itemCount: acceptedList.length,
+                      shrinkWrap: true,
+                      physics: BouncingScrollPhysics(),
+                      scrollDirection: Axis.vertical,
                       itemBuilder: (context, index) {
                          final accept=acceptedList[index];
                         return Column(children: [
@@ -588,16 +599,14 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                             padding:
                                 EdgeInsets.only(left: 10, right: 10, top: 20),
                             child: InkWell(
-                              onTap: () async {
-                                 await Navigator.push(
+                              onTap: ()  {
+                                  Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => AcceptedPage(
                                               orderMdl: acceptedList[index],
-                                            )));
-                                setState(() {
+                                            ))).then((value) => setState((){}));
 
-                                });
                               },
                               child: Container(
                                 height: scrHeight*0.2,
@@ -634,9 +643,7 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                                                 fontFamily: 'Urbanist',
                                                 fontWeight: FontWeight.w600),
                                           ),
-                                          SizedBox(
-                                            width: 10,
-                                          ),
+
                                           Text(
                                             //TODAY DATE
                                             acceptedList[index].time!.day ==
@@ -689,7 +696,7 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                                         ],
                                       ),
                                       SizedBox(
-                                        height: 15,
+                                        height: 10,
                                       ),
                                       // Expanded(
                                       //   child: ListView.builder(
@@ -773,7 +780,11 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                                       //         );
                                       //       }),
                                       // ),
-                                      Text(accept.address?.name ?? ''),
+
+                                      Text(accept.address?.name ?? '',style: TextStyle(fontWeight: FontWeight.w600,fontFamily: 'Urbanist',fontSize: 17)),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
                                       Row(
                                         mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -786,9 +797,7 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                                                 fontFamily: 'Urbanist',
                                                 fontWeight: FontWeight.w600),
                                           ),
-                                          SizedBox(
-                                            width: 40,
-                                          ),
+
                                           Text(
                                             "₹${accept.total!.toStringAsFixed(2)}",
                                             style: TextStyle(
@@ -798,6 +807,9 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                                                 fontWeight: FontWeight.w600),
                                           ),
                                         ],
+                                      ),
+                                      SizedBox(
+                                        height: 2,
                                       ),
                                       Row(
                                         mainAxisAlignment:
@@ -811,9 +823,7 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                                                 fontFamily: 'Urbanist',
                                                 fontWeight: FontWeight.w600),
                                           ),
-                                          SizedBox(
-                                            width: 40,
-                                          ),
+
                                           Text(
                                             "₹${accept.deliveryCharge!.toStringAsFixed(2)}",
                                             style: TextStyle(
@@ -823,6 +833,9 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                                                 fontWeight: FontWeight.w600),
                                           ),
                                         ],
+                                      ),
+                                      SizedBox(
+                                        height: 2,
                                       ),
                                       Row(
                                         mainAxisAlignment:
@@ -836,9 +849,7 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                                                 fontFamily: 'Urbanist',
                                                 fontWeight: FontWeight.w600),
                                           ),
-                                          SizedBox(
-                                            width: 40,
-                                          ),
+
                                           Text(
                                             "₹${accept.deliveryCharge! + accept.total!}",
                                             style: TextStyle(
@@ -848,6 +859,9 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                                                 fontWeight: FontWeight.w600),
                                           ),
                                         ],
+                                      ),
+                                      SizedBox(
+                                        height: 2,
                                       ),
                                       Row(
                                         mainAxisAlignment:
@@ -861,9 +875,7 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                                                 fontFamily: 'Urbanist',
                                                 fontWeight: FontWeight.w600),
                                           ),
-                                          SizedBox(
-                                            width: 40,
-                                          ),
+
                                           Text(
                                             accept.paymentMethod==0?'Cash On Delivery':'UPI Payment',
                                             style: TextStyle(
@@ -906,6 +918,9 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                     )
                   : ListView.builder(
                       itemCount: deliveredList.length,
+                      shrinkWrap: true,
+                      scrollDirection: Axis.vertical,
+                      physics: BouncingScrollPhysics(),
                       itemBuilder: (context, index) {
                         final delivery=deliveredList[index];
                         return Column(
@@ -914,15 +929,15 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                             padding:
                                 EdgeInsets.only(left: 10, right: 10, top: 20),
                             child: InkWell(
-                              onTap: () async {
-                               await Navigator.push(
+                              onTap: ()  {
+                                Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => DeliveredPage(
-                                            order: deliveredList[index])));
-                                setState(() {
+                                            order: deliveredList[index]))).then((value) => setState(() {
 
-                                });
+                               }) );
+
                               },
                               child: Container(
                                 height: scrHeight*0.2,
@@ -1014,7 +1029,7 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                                         ],
                                       ),
                                       SizedBox(
-                                        height: 15,
+                                        height: 10,
                                       ),
                                       // Expanded(
                                       //   child: ListView.builder(
@@ -1095,7 +1110,10 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                                       //         );
                                       //       }),
                                       // ),
-                                      Text(delivery.address?.name ?? ''),
+                                      Text(delivery.address?.name ?? '',style: TextStyle(fontWeight: FontWeight.w600,fontFamily: 'Urbanist',fontSize: 17)),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
                                       Row(
                                         mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -1108,9 +1126,7 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                                                 fontFamily: 'Urbanist',
                                                 fontWeight: FontWeight.w600),
                                           ),
-                                          SizedBox(
-                                            width: 40,
-                                          ),
+
                                           Text(
                                             "₹${delivery.total!.toStringAsFixed(2)}",
                                             style: TextStyle(
@@ -1120,6 +1136,9 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                                                 fontWeight: FontWeight.w600),
                                           ),
                                         ],
+                                      ),
+                                      SizedBox(
+                                        height: 2,
                                       ),
                                       Row(
                                         mainAxisAlignment:
@@ -1133,9 +1152,7 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                                                 fontFamily: 'Urbanist',
                                                 fontWeight: FontWeight.w600),
                                           ),
-                                          SizedBox(
-                                            width: 40,
-                                          ),
+
                                           Text(
                                             "₹${delivery.deliveryCharge!.toStringAsFixed(2)}",
                                             style: TextStyle(
@@ -1145,6 +1162,9 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                                                 fontWeight: FontWeight.w600),
                                           ),
                                         ],
+                                      ),
+                                      SizedBox(
+                                        height: 2,
                                       ),
                                       Row(
                                         mainAxisAlignment:
@@ -1158,9 +1178,7 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                                                 fontFamily: 'Urbanist',
                                                 fontWeight: FontWeight.w600),
                                           ),
-                                          SizedBox(
-                                            width: 40,
-                                          ),
+
                                           Text(
                                             "₹${delivery.deliveryCharge! + delivery.total!}",
                                             style: TextStyle(
@@ -1170,6 +1188,9 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                                                 fontWeight: FontWeight.w600),
                                           ),
                                         ],
+                                      ),
+                                      SizedBox(
+                                        height: 2,
                                       ),
                                       Row(
                                         mainAxisAlignment:
@@ -1183,9 +1204,7 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                                                 fontFamily: 'Urbanist',
                                                 fontWeight: FontWeight.w600),
                                           ),
-                                          SizedBox(
-                                            width: 40,
-                                          ),
+
                                           Text(
                                             delivery.paymentMethod==0?'Cash On Delivery':'UPI Payment',
                                             style: TextStyle(
@@ -1227,6 +1246,9 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                 ],
               )
                   : ListView.builder(
+                shrinkWrap: true,
+                  scrollDirection: Axis.vertical,
+                  physics: BouncingScrollPhysics(),
                   itemCount: cancelledList.length,
                   itemBuilder: (context, index) {
                     final cancel=cancelledList[index];
@@ -1235,15 +1257,13 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                         padding:
                         EdgeInsets.only(left: 10, right: 10, top: 20),
                         child: InkWell(
-                          onTap: () async{
-                            await Navigator.push(
+                          onTap: () {
+                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => CancelledPage(
-                                         orderModels:cancelledList[index],)));
-                            setState(() {
+                                         orderModels:cancelledList[index],))).then((value) => setState((){}));
 
-                            });
                           },
                           child: Container(
                             height: scrHeight*0.2,
@@ -1416,7 +1436,8 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                                   //         );
                                   //       }),
                                   // ),
-                                  Text(cancel.address?.name ?? ''),
+                                  Text(cancel.address?.name ?? '',
+                                      style: TextStyle(fontWeight: FontWeight.w600,fontFamily: 'Urbanist',fontSize: 17)),
                                   Row(
                                     mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -1429,9 +1450,7 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                                             fontFamily: 'Urbanist',
                                             fontWeight: FontWeight.w600),
                                       ),
-                                      SizedBox(
-                                        width: 40,
-                                      ),
+
                                       Text(
                                         "₹${cancel.total!.toStringAsFixed(2)}",
                                         style: TextStyle(
@@ -1454,9 +1473,7 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                                             fontFamily: 'Urbanist',
                                             fontWeight: FontWeight.w600),
                                       ),
-                                      SizedBox(
-                                        width: 40,
-                                      ),
+
                                       Text(
                                         "₹${cancel.deliveryCharge!.toStringAsFixed(2)}",
                                         style: TextStyle(
@@ -1479,9 +1496,7 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                                             fontFamily: 'Urbanist',
                                             fontWeight: FontWeight.w600),
                                       ),
-                                      SizedBox(
-                                        width: 40,
-                                      ),
+
                                       Text(
                                         "₹${cancel.deliveryCharge! + cancel.total!}",
                                         style: TextStyle(
@@ -1504,9 +1519,7 @@ class _OrdersState extends State<Orders> with TickerProviderStateMixin {
                                             fontFamily: 'Urbanist',
                                             fontWeight: FontWeight.w600),
                                       ),
-                                      SizedBox(
-                                        width: 40,
-                                      ),
+
                                       Text(
                                         cancel.paymentMethod==0?'Cash On Delivery':'UPI Payment',
                                         style: TextStyle(

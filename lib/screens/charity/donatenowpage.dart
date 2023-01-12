@@ -971,7 +971,7 @@ class _DonateNowPageState extends State<DonateNowPage>with TickerProviderStateMi
                             return Padding(
                               padding:  EdgeInsets.only(left: scrWidth*0.05,right: scrWidth*0.04),
                               child: Container(
-                                height: scrHeight*0.09,
+                                height: scrHeight*0.07,
                                 width: scrWidth*0.03,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(9),

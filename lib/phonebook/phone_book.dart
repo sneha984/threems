@@ -82,9 +82,10 @@ class _PhoneBookPageState extends State<PhoneBookPage> {
     print(totalContactsSearch.length);
     totalContactsSearch = [];
     for (int i = 0; i < totalContacts.length; i++) {
-      if (totalContacts[i]
-          .displayName!
-          .toLowerCase()
+
+      String name=totalContacts[i]
+          .displayName??'';
+      if (name.toLowerCase()
           .contains(txt.toLowerCase())) {
         totalContactsSearch.add(totalContacts[i]);
       }
@@ -117,43 +118,114 @@ class _PhoneBookPageState extends State<PhoneBookPage> {
     return Scaffold(
       extendBody: true,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(scrWidth * 0.2),
-        child: Padding(
-          padding: const EdgeInsets.only(top: 10),
-          child: Container(
-            decoration: BoxDecoration(boxShadow: [
-              BoxShadow(
-                  color: Colors.black.withOpacity(0.08),
-                  offset: Offset(0, 4),
-                  blurRadius: 25),
-            ]),
-            child: AppBar(
-              elevation: 0,
-              backgroundColor: Colors.white,
-              leading: InkWell(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: Padding(
-                  padding: EdgeInsets.only(
-                      // top: scrHeight * 0.09,
-                      left: scrWidth * 0.05,
-                      // bottom: scrHeight * 0.02,
-                      right: scrWidth * 0.04),
-                  child: Icon(
-                    Icons.arrow_back,
-                    color: Colors.black,
-                    size: 25,
-                  ),
+        preferredSize: Size.fromHeight(scrWidth * 0.34),
+        child: Container(
+          decoration: BoxDecoration(boxShadow: [
+            BoxShadow(
+                color: Colors.black.withOpacity(0.08),
+                offset: Offset(0, 4),
+                blurRadius: 25),
+          ]),
+          child: AppBar(
+            elevation: 0,
+            backgroundColor: Colors.white,
+            leading: InkWell(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Padding(
+                padding: EdgeInsets.only(
+                    top: scrHeight * 0.02,
+                    left: scrWidth * 0.07,
+                    right: scrWidth * 0.05),
+                child: Icon(
+                  Icons.arrow_back,
+                  size: 22,
+                  color: Colors.black,
                 ),
               ),
-              title: Text(
+            ),
+            title: Padding(
+              padding: EdgeInsets.only(top:  scrHeight * 0.02),
+              child: Text(
                 "Phone Book",
                 style: TextStyle(
-                    fontSize: FontSize17,
+                    fontSize: 16,
                     fontFamily: 'Urbanist',
                     fontWeight: FontWeight.w600,
                     color: Colors.black),
+              ),
+            ),
+            bottom: PreferredSize(
+              preferredSize: Size.fromHeight(100),
+              child: Container(
+                margin: EdgeInsets.only(
+                    top: scrWidth * 0.015,
+                    bottom: scrWidth * 0.06,
+                    left: scrWidth * 0.059,
+                    right: scrWidth * 0.059),
+                child: Container(
+                  // width: scrWidth,
+                  // height: textFormFieldHeight45,
+                  width: 324,
+                  height: 35,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: scrWidth * 0.03,
+                    vertical: 2.5,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Color(0xffE9EEF3),
+                    borderRadius: BorderRadius.circular(17),
+                  ),
+                  child: TextFormField(
+                    // cursorHeight: scrWidth * 0.055,
+                    // cursorWidth: 1,
+                    // cursorColor: Colors.black,
+                    controller: search,
+                    showCursor: false,
+                    onChanged: ((txt) {
+                      print(search.text);
+                      totalContactsSearch = [];
+                      if (search.text == '') {
+                        totalContactsSearch.addAll(totalContacts);
+                      } else {
+                        searchContacts(search.text);
+                      }
+                    }),
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                      fontSize: FontSize15,
+                      fontFamily: 'Urbanist',
+                    ),
+                    decoration: InputDecoration(
+                      prefixIcon: Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: scrWidth * 0.015,
+                          vertical: scrWidth * 0.015,
+                        ),
+                        child: SvgPicture.asset('assets/icons/search.svg',
+                            fit: BoxFit.contain, color: Color(0xff8391A1)),
+                      ),
+                      hintText: 'Search your contact',
+                      hintStyle: TextStyle(
+                        color: Color(0xff8391A1),
+                        fontWeight: FontWeight.w500,
+                        fontSize: FontSize15,
+                        fontFamily: 'Urbanist',
+                      ),
+                      fillColor: Color(0xffE9EEF3),
+                      filled: true,
+                      contentPadding: EdgeInsets.only(
+                          top: scrWidth * 0.03, bottom: scrWidth * 0.03),
+                      disabledBorder: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                      border: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                    ),
+                  ),
+                ),
               ),
             ),
           ),

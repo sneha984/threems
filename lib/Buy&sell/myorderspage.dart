@@ -103,11 +103,11 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
           ),
         ),
       ),
-      body:allOrders.isEmpty?Column(
+      body:allOrders.isEmpty
+          ?Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-
           Center(child: SvgPicture.asset("assets/icons/Group 173.svg")),
           SizedBox(
             height: 90,
@@ -120,20 +120,23 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
                 fontWeight: FontWeight.w500),
           )
         ],
-      ): ListView.builder(
+      )
+          :ListView.builder(
+        shrinkWrap: true,
+        physics: BouncingScrollPhysics(),
+        scrollDirection: Axis.vertical,
         itemCount: allOrders.length,
         itemBuilder:(context,index){
           return Column(
             children: [
               Padding(
-                padding:  EdgeInsets.only(left: 10,right: 10,top: 20),
+                padding:  EdgeInsets.only(left: scrWidth*0.03,right:scrWidth*0.03,top: scrWidth*0.05),
                 child: InkWell(
                   onTap: (){
                     Navigator.push(context, MaterialPageRoute(builder:
                         (context)=>MyOrdersDetailsPage(orderModel: allOrders[index],)));
                   },
                   child: Container(
-
                     decoration: BoxDecoration(
                         color: Color(0xffF3F3F3),
                         boxShadow: [
@@ -146,90 +149,94 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
                         ],
                         borderRadius: BorderRadius.circular(20)
                     ),
-                    child: Column(
-                      children: [
-                        SizedBox(height: 10,),
-                        Row(
-                          children: [
-                            SizedBox(width: 20,),
-                            Text(
-                              "Order ${allOrders[index].orderId}",
-                              style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.black,
-                                  fontFamily: 'Urbanist',
-                                  fontWeight: FontWeight.w600),
-                            ),
-                            SizedBox(width: 10,),
+                    child: Padding(
+                      padding:  EdgeInsets.only(left: scrWidth*0.03,right: scrWidth*0.03),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 10,),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Order ${allOrders[index].orderId}",
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.black,
+                                    fontFamily: 'Urbanist',
+                                    fontWeight: FontWeight.w600),
+                              ),
 
 
 
-                            Text(
-                                allOrders[index].time!.day ==
-                                    DateTime.now().day
-                                    ? allOrders[index].time!.hour >
-                                    12
-                                    ? "Today ${allOrders[index].time!.hour - 12}:${allOrders[index].time!.minute} PM"
-                                    : allOrders[index]
-                                    .time!
-                                    .hour ==
-                                    0
-                                    ? "Today 12:${allOrders[index].time!.minute} AM"
-                                    : "Today ${allOrders[index].time!.hour}:${allOrders[index].time!.minute} AM"
-                                    :
+                              Text(
+                                  allOrders[index].time!.day ==
+                                      DateTime.now().day
+                                      ? allOrders[index].time!.hour >
+                                      12
+                                      ? "Today ${allOrders[index].time!.hour - 12}:${allOrders[index].time!.minute} PM"
+                                      : allOrders[index]
+                                      .time!
+                                      .hour ==
+                                      0
+                                      ? "Today 12:${allOrders[index].time!.minute} AM"
+                                      : "Today ${allOrders[index].time!.hour}:${allOrders[index].time!.minute} AM"
+                                      :
 
-                                //YESTERDAY DATE
-                                allOrders[index].time!.day ==
-                                    DateTime.now().day - 1
-                                    ?allOrders[index]
-                                    .time!
-                                    .hour >
-                                    12
-                                    ? "Yesterday ${allOrders[index].time!.hour - 12}:${allOrders[index].time!.minute} PM"
-                                    : allOrders[index]
-                                    .time!
-                                    .hour ==
-                                    0
-                                    ? "Yesterday 12:${allOrders[index].time!.minute} AM"
-                                    : "Yesterday ${allOrders[index].time!.hour}:${allOrders[index].time!.minute} AM"
-                                    :
+                                  //YESTERDAY DATE
+                                  allOrders[index].time!.day ==
+                                      DateTime.now().day - 1
+                                      ?allOrders[index]
+                                      .time!
+                                      .hour >
+                                      12
+                                      ? "Yesterday ${allOrders[index].time!.hour - 12}:${allOrders[index].time!.minute} PM"
+                                      : allOrders[index]
+                                      .time!
+                                      .hour ==
+                                      0
+                                      ? "Yesterday 12:${allOrders[index].time!.minute} AM"
+                                      : "Yesterday ${allOrders[index].time!.hour}:${allOrders[index].time!.minute} AM"
+                                      :
 
-                                //OTHER DATE
-                                allOrders[index]
-                                    .time!
-                                    .hour >
-                                    12
-                                    ? "${DateFormat('dd-MMM-yyy').format(allOrders[index].time!)} ${allOrders[index].time!.hour - 12}:"
-                                    "${allOrders[index].time!.minute} PM"
-                                    :allOrders[index]
-                                    .time!
-                                    .hour ==
-                                    0
-                                    ? "${DateFormat('dd-MMM-yyy').format(allOrders[index].time!)} 12:${allOrders[index].time!.minute} AM"
-                                    : "${DateFormat('dd-MMM-yyy')
-                                    .format(allOrders[index].time!)}"
-                                    " ${allOrders[index].time!.hour}:${allOrders[index].time!.minute} AM",
-                              style: TextStyle(
-                                  fontSize: 12,
-                                  color: Color(0xff969696),
-                                  fontFamily: 'Urbanist',
-                                  fontWeight: FontWeight.w600),
-                            ),
+                                  //OTHER DATE
+                                  allOrders[index]
+                                      .time!
+                                      .hour >
+                                      12
+                                      ? "${DateFormat('dd-MMM-yyy').format(allOrders[index].time!)} ${allOrders[index].time!.hour - 12}:"
+                                      "${allOrders[index].time!.minute} PM"
+                                      :allOrders[index]
+                                      .time!
+                                      .hour ==
+                                      0
+                                      ? "${DateFormat('dd-MMM-yyy').format(allOrders[index].time!)} 12:${allOrders[index].time!.minute} AM"
+                                      : "${DateFormat('dd-MMM-yyy')
+                                      .format(allOrders[index].time!)}"
+                                      " ${allOrders[index].time!.hour}:${allOrders[index].time!.minute} AM",
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    color: Color(0xff969696),
+                                    fontFamily: 'Urbanist',
+                                    fontWeight: FontWeight.w600),
+                              ),
 
-                          ],
-                        ),
-                        SizedBox(height: 30,),
-                        Container(
-                          child: ListView.builder(
+                            ],
+                          ),
+                          SizedBox(height: 10,),
+
+                          // SizedBox(height: 30,),
+                          ListView.builder(
                               itemCount: allOrders[index].orderedItems!.length,
                               shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
                               itemBuilder: (context,index2){
                                 return Padding(
-                                  padding: const EdgeInsets.only(top: 10),
+                                  padding:  EdgeInsets.only(top: scrHeight*0.006),
                                   child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      SizedBox(width: 20,),
-
+                                      // SizedBox(width: 20,),
                                       Container(
                                         width: 150,
                                         child: Text(
@@ -243,26 +250,31 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
                                       ),
                                       // SizedBox(width: 80,),
 
-                                      Text(
-                                        "x",
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            color: Colors.black,
-                                            fontFamily: 'Urbanist',
-                                            fontWeight: FontWeight.w600),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            "x",
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.black,
+                                                fontFamily: 'Urbanist',
+                                                fontWeight: FontWeight.w600),
+                                          ),
+                                          Text(
+                                            allOrders[index].orderedItems![index2].count!.toString()
+                                            ,
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.black,
+                                                fontFamily: 'Urbanist',
+                                                fontWeight: FontWeight.w600),
+                                          ),
+                                        ],
                                       ),
                                       SizedBox(width: 5,),
 
-                                      Text(
-                                        allOrders[index].orderedItems![index2].count!.toString()
-                                        ,
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            color: Colors.black,
-                                            fontFamily: 'Urbanist',
-                                            fontWeight: FontWeight.w600),
-                                      ),
-                                      SizedBox(width: 73,),
+
+                                      // SizedBox(width: 73,),
 
                                       Text(
                                        " ₹${
@@ -281,14 +293,13 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
                                   ),
                                 );
                               }),
-                        ),
+                          SizedBox(height: 14,),
 
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(right: 90),
-                              child: Text(
+
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
                                 "Total",
                                 style: TextStyle(
                                     fontSize: 12,
@@ -296,76 +307,78 @@ class _MyOrdersPageState extends State<MyOrdersPage> {
                                     fontFamily: 'Urbanist',
                                     fontWeight: FontWeight.w600),
                               ),
-                            ),
 
-                            SizedBox(width: 40,),
+                              SizedBox(width: 40,),
 
-                            Text(
-                              "₹${allOrders[index].total}",
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  color: Color(0xff0E0E0E),
-                                  fontFamily: 'Urbanist',
-                                  fontWeight: FontWeight.w600),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 15,),
-                        Container(
-                          height: 50,
-                          width: 302,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              color:allOrders[index].status==3?Colors.red: Color(0xff02B558)
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
                               Text(
-                                "Status",
+                                "₹${allOrders[index].total}",
                                 style: TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.white,
+                                    fontSize: 16,
+                                    color: Color(0xff0E0E0E),
                                     fontFamily: 'Urbanist',
                                     fontWeight: FontWeight.w600),
                               ),
-                              SizedBox(width: 10,),
-                              allOrders[index].status==0?Text(
-                                "Pending",
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.white,
-                                    fontFamily: 'Urbanist',
-                                    fontWeight: FontWeight.w600),
-                              ):allOrders[index].status==1?
-                              Text(
-                                  "Accepted",
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.white,
-                                      fontFamily: 'Urbanist',
-                                      fontWeight: FontWeight.w600)):
-                              allOrders[index].status==2?
-                              Text(
-                                  "Delivered",
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.white,
-                                      fontFamily: 'Urbanist',
-                                      fontWeight: FontWeight.w600)): Text(
-                                  "Cancelled",
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.white,
-                                      fontFamily: 'Urbanist',
-                                      fontWeight: FontWeight.w600))
-
                             ],
                           ),
-                        ),
-                        SizedBox(height: 15,),
+                          SizedBox(height: 15,),
+                          Center(
+                            child: Container(
+                              height: 50,
+                              width: 302,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  color:allOrders[index].status==3?Colors.red: Color(0xff02B558)
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: [
+                                  Text(
+                                    "Status",
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.white,
+                                        fontFamily: 'Urbanist',
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                  SizedBox(width: 10,),
+                                  allOrders[index].status==0?Text(
+                                    "Pending",
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.white,
+                                        fontFamily: 'Urbanist',
+                                        fontWeight: FontWeight.w600),
+                                  ):allOrders[index].status==1?
+                                  Text(
+                                      "Accepted",
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.white,
+                                          fontFamily: 'Urbanist',
+                                          fontWeight: FontWeight.w600)):
+                                  allOrders[index].status==2?
+                                  Text(
+                                      "Delivered",
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.white,
+                                          fontFamily: 'Urbanist',
+                                          fontWeight: FontWeight.w600)): Text(
+                                      "Cancelled",
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.white,
+                                          fontFamily: 'Urbanist',
+                                          fontWeight: FontWeight.w600))
 
-                      ],
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 15,),
+
+                        ],
+                      ),
                     ),
 
                   ),

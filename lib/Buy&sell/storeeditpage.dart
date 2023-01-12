@@ -163,16 +163,24 @@ class _StoreEditPageState extends State<StoreEditPage> {
     //   imageList.add(value);
     // }
     setState(() {
+      loading=false;
       imgUrl = value;
 
     });
   }
   _pickImage() async {
+    loading=true;
     final imageFile = await ImagePicker.platform.pickImage(
         source: ImageSource.gallery);
     setState(() {
       imgFile = File(imageFile!.path);
       uploadImageToFirebase(context);
+    });
+  }
+  bool loading=false;
+  refreshPage() {
+    setState(() {
+      loading = false;
     });
   }
   var pickFile;
@@ -205,8 +213,9 @@ class _StoreEditPageState extends State<StoreEditPage> {
 
     print('      PICK FILE      ');
     final result = await FilePicker.platform.pickFiles(
-      withData: true,
-    );
+      allowedExtensions: ['pdf'],
+      type: FileType.custom,
+      withData: true,    );
 
     if(result==null) return;
 
@@ -235,17 +244,18 @@ class _StoreEditPageState extends State<StoreEditPage> {
   final FocusNode storeNameFocus = FocusNode();
   final FocusNode storeAddressFocus = FocusNode();
   final FocusNode delivereyChargeFocus=FocusNode();
+  final FocusNode stateFocus=FocusNode();
+  final FocusNode districtFocus=FocusNode();
+  final FocusNode wardFocus=FocusNode();
   final TextEditingController storeNameController = TextEditingController();
   final TextEditingController storeAddressController = TextEditingController();
   final TextEditingController deliveryChargeController=TextEditingController();
+  final TextEditingController stateController=TextEditingController();
+  final TextEditingController districtController=TextEditingController();
+  final TextEditingController wardController=TextEditingController();
   final FocusNode localBodyFocus=FocusNode();
   final TextEditingController localBodyController = TextEditingController();
-  bool loading=false;
-  refreshPage() {
-    setState(() {
-      loading = false;
-    });
-  }
+
   // bool loading=false;
   // refreshPage() {
   //   setState(() {
@@ -266,6 +276,10 @@ class _StoreEditPageState extends State<StoreEditPage> {
       fileUrl=widget.storemodel!.localBodyDoc!;
       localBodyController.text=widget.storemodel!.localBodyName!;
       fileName=widget.storemodel!.localBodyDocName!;
+      stateController.text=widget.storemodel!.state!;
+      districtController.text=widget.storemodel!.district!;
+      wardController.text=widget.storemodel!.ward!;
+
        // position=Position.fromMap(widget.storemodel!.position!) ;
        // latitude!.text=widget.storemodel!.latitude!.toString() ;
        // longitude!.text=widget.storemodel!.longitude!.toString();
@@ -332,6 +346,7 @@ class _StoreEditPageState extends State<StoreEditPage> {
     delivereyChargeFocus.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     print(selectedListInt);
@@ -380,7 +395,9 @@ class _StoreEditPageState extends State<StoreEditPage> {
             ),
           ),
         ),
-        body:loading?Center(child: CircularProgressIndicator()): SingleChildScrollView(
+        body:loading
+            ?Center(child: CircularProgressIndicator())
+            : SingleChildScrollView(
           child: Padding(
             padding:
             EdgeInsets.only(left: scrWidth * 0.06, right: scrWidth * 0.06),
@@ -907,6 +924,131 @@ class _StoreEditPageState extends State<StoreEditPage> {
                     borderRadius: BorderRadius.circular(scrWidth * 0.026),
                   ),
                   child: TextFormField(
+                    controller: stateController,
+                    focusNode: stateFocus,
+                    cursorHeight: scrWidth * 0.055,
+                    cursorWidth: 1,
+                    cursorColor: Colors.black,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                      fontSize: FontSize15,
+                      fontFamily: 'Urbanist',
+                    ),
+                    decoration: InputDecoration(
+                      labelText: 'State',
+                      labelStyle: TextStyle(
+                        color: stateFocus.hasFocus
+                            ? primarycolor
+                            : Color(0xffB0B0B0),
+                        fontWeight: FontWeight.w600,
+                        fontSize: FontSize15,
+                        fontFamily: 'Urbanist',
+                      ),
+                      prefixIcon: Container(
+                        height: scrWidth * 0.045,
+                        width: 10,
+                        padding: EdgeInsets.all(scrWidth * 0.033),
+                        child: SvgPicture.asset(
+                          'assets/icons/storename.svg',
+                          fit: BoxFit.contain,
+                          color: Color(0xffB0B0B0),
+                        ),
+                      ),
+                      fillColor: textFormFieldFillColor,
+                      filled: true,
+                      contentPadding:
+                      EdgeInsets.only(top: 5, bottom: scrWidth * 0.033),
+                      disabledBorder: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                      border: InputBorder.none,
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: primarycolor,
+                          width: 2,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: scrHeight * 0.02,
+                ),
+                Container(
+                  height: textFormFieldHeight45,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: scrWidth * 0.015,
+                    vertical: scrHeight * 0.002,
+                  ),
+                  decoration: BoxDecoration(
+                    color: textFormFieldFillColor,
+                    borderRadius: BorderRadius.circular(scrWidth * 0.026),
+                  ),
+                  child: TextFormField(
+                    controller: districtController,
+                    focusNode: districtFocus,
+                    cursorHeight: scrWidth * 0.055,
+                    cursorWidth: 1,
+                    cursorColor: Colors.black,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                      fontSize: FontSize15,
+                      fontFamily: 'Urbanist',
+                    ),
+                    decoration: InputDecoration(
+                      labelText: 'District',
+                      labelStyle: TextStyle(
+                        color: districtFocus.hasFocus
+                            ? primarycolor
+                            : Color(0xffB0B0B0),
+                        fontWeight: FontWeight.w600,
+                        fontSize: FontSize15,
+                        fontFamily: 'Urbanist',
+                      ),
+                      prefixIcon: Container(
+                        height: scrWidth * 0.045,
+                        width: 10,
+                        padding: EdgeInsets.all(scrWidth * 0.033),
+                        child: SvgPicture.asset(
+                          'assets/icons/storename.svg',
+                          fit: BoxFit.contain,
+                          color: Color(0xffB0B0B0),
+                        ),
+                      ),
+                      fillColor: textFormFieldFillColor,
+                      filled: true,
+                      contentPadding:
+                      EdgeInsets.only(top: 5, bottom: scrWidth * 0.033),
+                      disabledBorder: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                      border: InputBorder.none,
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: primarycolor,
+                          width: 2,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: scrHeight * 0.02,
+                ),
+
+                Container(
+                  height: textFormFieldHeight45,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: scrWidth * 0.015,
+                    vertical: scrHeight * 0.002,
+                  ),
+                  decoration: BoxDecoration(
+                    color: textFormFieldFillColor,
+                    borderRadius: BorderRadius.circular(scrWidth * 0.026),
+                  ),
+                  child: TextFormField(
                     controller: localBodyController,
                     focusNode: localBodyFocus,
                     cursorHeight: scrWidth * 0.055,
@@ -955,6 +1097,8 @@ class _StoreEditPageState extends State<StoreEditPage> {
                     ),
                   ),
                 ),
+
+
                 SizedBox(
                   height: scrHeight * 0.02,
                 ),
@@ -986,7 +1130,7 @@ class _StoreEditPageState extends State<StoreEditPage> {
                       child: Padding(
                         padding:  EdgeInsets.only(top: 10),
                         child: Text(
-                         fileName??'',
+                          fileName??'',
                           style: TextStyle(
                             color: Color(0xff8391A1),
                             fontWeight: FontWeight.w500,
@@ -1021,7 +1165,190 @@ class _StoreEditPageState extends State<StoreEditPage> {
                   ),
                 ),
                 SizedBox(
-                  height: scrHeight * 0.2,
+                  height: scrHeight * 0.02,
+                ),
+                Container(
+                  height: textFormFieldHeight45,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: scrWidth * 0.015,
+                    vertical: scrHeight * 0.002,
+                  ),
+                  decoration: BoxDecoration(
+                    color: textFormFieldFillColor,
+                    borderRadius: BorderRadius.circular(scrWidth * 0.026),
+                  ),
+                  child: TextFormField(
+                    controller: wardController,
+                    focusNode: wardFocus,
+                    cursorHeight: scrWidth * 0.055,
+                    cursorWidth: 1,
+                    cursorColor: Colors.black,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                      fontSize: FontSize15,
+                      fontFamily: 'Urbanist',
+                    ),
+                    decoration: InputDecoration(
+                      labelText: 'ward',
+                      labelStyle: TextStyle(
+                        color: wardFocus.hasFocus
+                            ? primarycolor
+                            : Color(0xffB0B0B0),
+                        fontWeight: FontWeight.w600,
+                        fontSize: FontSize15,
+                        fontFamily: 'Urbanist',
+                      ),
+                      prefixIcon: Container(
+                        height: scrWidth * 0.045,
+                        width: 10,
+                        padding: EdgeInsets.all(scrWidth * 0.033),
+                        child: SvgPicture.asset(
+                          'assets/icons/storename.svg',
+                          fit: BoxFit.contain,
+                          color: Color(0xffB0B0B0),
+                        ),
+                      ),
+                      fillColor: textFormFieldFillColor,
+                      filled: true,
+                      contentPadding:
+                      EdgeInsets.only(top: 5, bottom: scrWidth * 0.033),
+                      disabledBorder: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                      border: InputBorder.none,
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: primarycolor,
+                          width: 2,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: scrHeight * 0.02,
+                ),
+
+                SizedBox(
+                  height: scrHeight * 0.065,
+                ),
+                GestureDetector(
+                  onTap: () async {
+                    print(longitude!.text);
+                    print(latitude!.text);
+                    print(widget.storemodel!.position);
+                    print(latitude!.text==''&&longitude!.text=='');
+                    setState(() {
+                      loading=true;
+                    });
+                    // if(imgFile==null){
+                    //   refreshPage();
+                    //   return showSnackbar(context,"Must Provide  image");
+                    // }
+                    // if(storeNameController.text.isEmpty){
+                    //   refreshPage();
+                    //   return showSnackbar(context,"Must Provide StoreName");
+                    // }
+                    if(selectCategory.isEmpty){
+                      refreshPage();
+                      return showSnackbar(context,"Must select category");
+                      // }if(deliveryChargeController.text.isEmpty){
+                      //   refreshPage();
+                      //   return showSnackbar(context,"Must Provide Delivery Charge");}
+                      // if(storeAddressController.text.isEmpty){
+                      //   refreshPage();
+                      //   return showSnackbar(context,"Must Provide StoreAddress");
+                      // }if(localBodyController.text.isEmpty){
+                      //   refreshPage();
+                      //   return showSnackbar(context,"Must Provide localBody");
+                      // }if(pickFile==null){
+                      //   refreshPage();
+                      //   return showSnackbar(context,"Must Provide local Body Document");
+                    }else{
+                      GeoFirePoint myLocation = geo.point(latitude:double.tryParse(latitude!.text)??0,
+                          longitude: double.tryParse(longitude!.text)??0);
+
+                      FirebaseFirestore
+                          .instance
+                          .collection('stores')
+                          .doc(widget.storemodel!.storeId)
+                          .update({
+                        'storeName':storeNameController.text,
+                        'storeImage':imgUrl,
+                        'storeAddress':storeAddressController.text,
+                        'storeQR':imgUrls,
+                        'deliveryCharge':double.tryParse(deliveryChargeController.text.toString())??0,
+                        'storeCategory':selectCategory,
+                        'position':(latitude!.text==''&&longitude!.text=='')?widget.storemodel!.position:myLocation.data,
+                        'latitude':lat,
+                        'longitude':long,
+                        'storeLocation':serviceLocation,
+                        'storeVerification':false,
+                        'localBodyName':localBodyController.text,
+                        'localBodyDoc':fileUrl,
+                        'localBodyDocName':fileName,
+                        'block':widget.storemodel!.block,
+                        'blockedReason':widget.storemodel!.blockedReason,
+                        'status': 0,
+                        'contactNumber':widget.storemodel!.contactNumber,
+                        'rejected': false,
+                        'rejectedReason':widget.storemodel!.rejectedReason,
+                        'state':stateController.text,
+                        'ward':wardController.text,
+                        'district':districtController.text,
+                      }).whenComplete(() => Navigator.pop(context));
+                      // List<String> ids=[];
+                      // for(var item in selectCategory){
+                      //   ids.add(categoryListAll[item]);
+                      // }
+                      // print(ids);
+                      //.....................................................//
+                      // final strDat = StoreDetailsModel(
+                      //
+                      //     online:false,
+                      //     storeImage: imgUrl,
+                      //     latitude: lat,
+                      //     longitude:long ,
+                      //     deliveryCharge: double.tryParse(deliveryChargeController.text),
+                      //     // categoryId:,
+                      //     userId: currentuserid,
+                      //     storeQR: imgUrls,
+                      //     storeName: storeNameController.text,
+                      //     storeCategory: selectCategory,
+                      //     storeAddress: storeAddressController.text,
+                      //     storeLocation: "ncsunuscns",
+                      //     position: myLocation.data
+                      //
+                      // );
+                      // await createStore(strDat);
+                    }
+                    print("---------------------------------------------------------");
+                    print(imgUrl);
+                    print("---------------------------------------------------------");
+                    // print('eferjnferngirjtgurj${strDat.storeId}');
+
+                  },
+                  child: Container(
+                    height: textFormFieldHeight45,
+                    width: scrWidth*0.9,
+                    decoration: BoxDecoration(
+                        color: primarycolor,
+                        borderRadius: BorderRadius.circular(21.5)),
+                    child: Center(
+                      child: Text(
+                        "Update",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'Urbanist',
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: scrHeight * 0.1,
                 ),
 
 
@@ -1029,7 +1356,6 @@ class _StoreEditPageState extends State<StoreEditPage> {
             ),
           ),
         ),
-        floatingActionButton:
         // finish
         //     ? Container(
         //   height: textFormFieldHeight45,
@@ -1049,117 +1375,7 @@ class _StoreEditPageState extends State<StoreEditPage> {
         //   ),
         // )
         //     :
-         GestureDetector(
-          onTap: () async {
-            print(longitude!.text);
-            print(latitude!.text);
-            print(widget.storemodel!.position);
-            print(latitude!.text==''&&longitude!.text=='');
-            setState(() {
-              loading=true;
-            });
-            // if(imgFile==null){
-            //   refreshPage();
-            //   return showSnackbar(context,"Must Provide  image");
-            // }
-            // if(storeNameController.text.isEmpty){
-            //   refreshPage();
-            //   return showSnackbar(context,"Must Provide StoreName");
-            // }
-            if(selectCategory.isEmpty){
-              refreshPage();
-              return showSnackbar(context,"Must select category");
-            // }if(deliveryChargeController.text.isEmpty){
-            //   refreshPage();
-            //   return showSnackbar(context,"Must Provide Delivery Charge");}
-            // if(storeAddressController.text.isEmpty){
-            //   refreshPage();
-            //   return showSnackbar(context,"Must Provide StoreAddress");
-            // }if(localBodyController.text.isEmpty){
-            //   refreshPage();
-            //   return showSnackbar(context,"Must Provide localBody");
-            // }if(pickFile==null){
-            //   refreshPage();
-            //   return showSnackbar(context,"Must Provide local Body Document");
-            }else{
-              GeoFirePoint myLocation = geo.point(latitude:double.tryParse(latitude!.text)??0,
-                  longitude: double.tryParse(longitude!.text)??0);
 
-              FirebaseFirestore
-                  .instance
-                  .collection('stores')
-                  .doc(widget.storemodel!.storeId)
-                  .update({
-                'storeName':storeNameController.text,
-                'storeImage':imgUrl,
-                'storeAddress':storeAddressController.text,
-                'storeQR':imgUrls,
-                'deliveryCharge':double.tryParse(deliveryChargeController.text.toString())??0,
-                'storeCategory':selectCategory,
-                'position':(latitude!.text==''&&longitude!.text=='')?widget.storemodel!.position:myLocation.data,
-                'latitude':lat,
-                'longitude':long,
-                'storeLocation':serviceLocation,
-                'storeVerification':false,
-                'localBodyName':localBodyController.text,
-                'localBodyDoc':fileUrl,
-                'localBodyDocName':fileName,
-                'block':widget.storemodel!.block,
-                'blockedReason':widget.storemodel!.blockedReason,
-                'status': 0,
-                'contactNumber':widget.storemodel!.contactNumber,
-                'rejected': false,
-                'rejectedReason':widget.storemodel!.rejectedReason,
-              }).whenComplete(() => Navigator.pop(context));
-              // List<String> ids=[];
-              // for(var item in selectCategory){
-              //   ids.add(categoryListAll[item]);
-              // }
-              // print(ids);
-              //.....................................................//
-              // final strDat = StoreDetailsModel(
-              //
-              //     online:false,
-              //     storeImage: imgUrl,
-              //     latitude: lat,
-              //     longitude:long ,
-              //     deliveryCharge: double.tryParse(deliveryChargeController.text),
-              //     // categoryId:,
-              //     userId: currentuserid,
-              //     storeQR: imgUrls,
-              //     storeName: storeNameController.text,
-              //     storeCategory: selectCategory,
-              //     storeAddress: storeAddressController.text,
-              //     storeLocation: "ncsunuscns",
-              //     position: myLocation.data
-              //
-              // );
-              // await createStore(strDat);
-            }
-            print("---------------------------------------------------------");
-            print(imgUrl);
-            print("---------------------------------------------------------");
-            // print('eferjnferngirjtgurj${strDat.storeId}');
-
-          },
-          child: Container(
-            height: textFormFieldHeight45,
-            width: scrWidth*0.9,
-            decoration: BoxDecoration(
-                color: primarycolor,
-                borderRadius: BorderRadius.circular(21.5)),
-            child: Center(
-              child: Text(
-                "Update",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'Urbanist',
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700),
-              ),
-            ),
-          ),
-        ),
       ),
     );
   }

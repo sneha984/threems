@@ -24,12 +24,14 @@ class StoreDetailsModel {
   String? localBodyDoc;
   String? localBodyDocName;
   Map? position;
-
   bool? block;
   int? status;
   bool? rejected;
   String? rejectedReason;
   String? contactNumber;
+  String? state;
+  String? district;
+  String? ward;
   StoreDetailsModel(
       {this.storeName,
       this.deliveryCharge,
@@ -55,7 +57,7 @@ class StoreDetailsModel {
         this.rejected,
         this.rejectedReason,
         this.contactNumber,
-      this.blockedReason});
+      this.blockedReason,this.district,this.state,this.ward});
 
   StoreDetailsModel.fromJson(Map<String, dynamic> json) {
     deliveryCharge = double.tryParse(json['deliveryCharge'].toString());
@@ -84,6 +86,11 @@ class StoreDetailsModel {
     rejected=json['rejected'];
     rejectedReason=json['rejectedReason'];
     contactNumber=json['contactNumber'];
+    district=json['district'];
+    state=json['state'];
+    ward=json['ward'];
+
+
   }
 
   Map<String, dynamic> toJson() {
@@ -113,7 +120,9 @@ class StoreDetailsModel {
     data['rejected']=this.rejected;
     data['rejectedReason']=this.rejectedReason;
     data['contactNumber']=this.contactNumber;
-
+    data['state']=this.state;
+    data['ward']=this.ward;
+    data['district']=this.district;
     return data;
   }
 }

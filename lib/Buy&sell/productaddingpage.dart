@@ -157,12 +157,14 @@ class _ProductAddingPageState extends State<ProductAddingPage> {
     print("####################################################");
 
     setState(() {
+      loading=false;
       _imgurl.add(value);
       print('_imgurl');
       print(_imgurl);
     });
   }
   _pickImage() async {
+    loading=true;
     imgFile = await ImagePicker.platform.pickImage(
         source: ImageSource.gallery);
     imgFile = File(imgFile!.path);
@@ -195,7 +197,9 @@ class _ProductAddingPageState extends State<ProductAddingPage> {
   Widget build(BuildContext context) {
     print(_imgurl);
     return Scaffold(
-      body:SingleChildScrollView(
+      body: loading
+          ?Center(child: CircularProgressIndicator(),)
+          :SingleChildScrollView(
         child: Padding(
           padding:  EdgeInsets.only(left: scrWidth*0.05),
           child: Column(

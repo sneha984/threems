@@ -159,38 +159,27 @@ class _PaymentDetailsState extends State<PaymentDetails> {
         return shouldPop ?? false;
       },
       child: Scaffold(
-        appBar: AppBar(
-          toolbarHeight: 84,
-          shadowColor: Colors.grey,
-          centerTitle: false,
-          elevation: 0.1,
-          backgroundColor: Colors.white,
-          leading: InkWell(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: Padding(
-              padding: EdgeInsets.only(
-                  top: scrHeight * 0.04,
-                  left: scrWidth * 0.07,
-                  bottom: scrHeight * 0.02,
-                  right: scrWidth * 0.05),
-              child: Icon(
-                Icons.arrow_back,
-                color: Colors.black,
-                size: 25,
+        appBar:PreferredSize(
+          preferredSize: Size.fromHeight(kToolbarHeight),
+          child: Container(
+            decoration: BoxDecoration(boxShadow: [
+              BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  offset: Offset(0, 4),
+                  blurRadius: 25),
+            ]),
+            child: AppBar(
+              elevation: 0,
+              backgroundColor: Colors.white,
+              foregroundColor: Colors.black,
+              title: Text(
+                "Add Payment",
+                style: TextStyle(
+                    fontSize: FontSize17,
+                    fontFamily: 'Urbanist',
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black),
               ),
-            ),
-          ),
-          title: Padding(
-            padding: EdgeInsets.only(top: scrHeight * 0.02),
-            child: Text(
-              "Add Payment Details",
-              style: TextStyle(
-                  fontSize: scrWidth * 0.046,
-                  color: Colors.black,
-                  fontFamily: 'Urbanist',
-                  fontWeight: FontWeight.w700),
             ),
           ),
         ),

@@ -48,9 +48,10 @@ class _AddMembersSearchState extends State<AddMembersSearch> {
     print(totalContactsSearch.length);
     totalContactsSearch = [];
     for (int i = 0; i < totalContacts.length; i++) {
-      if (totalContacts[i]
-          .displayName!
-          .toLowerCase()
+
+      String name=totalContacts[i]
+          .displayName??'';
+      if (name.toLowerCase()
           .contains(txt.toLowerCase())) {
         totalContactsSearch.add(totalContacts[i]);
       }

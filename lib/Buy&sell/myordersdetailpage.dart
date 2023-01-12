@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
+import 'package:threems/kuri/createkuri.dart';
 import 'package:threems/model/OrderModel.dart';
 
 import '../screens/splash_screen.dart';
@@ -716,19 +717,24 @@ class _MyOrdersDetailsPageState extends State<MyOrdersDetailsPage> {
 
                 InkWell(
                   onTap: () {
-                    FirebaseFirestore
-                        .instance
-                        .collection('stores')
-                        .doc(widget.orderModel.storeId)
-                        .collection('orders')
-                        .doc(widget.orderModel.orderId)
-                        .update({
-                      'status':3,
-                      'reason':_reasonController.text??'',
-                    });
+                    if(_reasonController.text.isNotEmpty){
+                      FirebaseFirestore
+                          .instance
+                          .collection('stores')
+                          .doc(widget.orderModel.storeId)
+                          .collection('orders')
+                          .doc(widget.orderModel.orderId)
+                          .update({
+                        'status':3,
+                        'reason':_reasonController.text??'',
+                      });
+                      Navigator.of(context)..pop();
+                      Navigator.of(context)..pop();
 
-                    Navigator.of(context)..pop();
-                    Navigator.of(context)..pop();
+                    }else{
+                      showSnackbar(context, "Please Enter Reason");
+                    }
+
                     // _showToast(context);
                   },
                   child: Container(

@@ -165,6 +165,7 @@ class _ProductEditPageState extends State<ProductEditPage> {
     print("####################################################");
 
     setState(() {
+      loading=false;
       _imgurl.add(value);
       print('_imgurl');
       print(_imgurl);
@@ -172,6 +173,7 @@ class _ProductEditPageState extends State<ProductEditPage> {
   }
 
   _pickImage() async {
+    loading=true;
     imgFile = await ImagePicker.platform.pickImage(source: ImageSource.gallery);
     imgFile = File(imgFile!.path);
     _images.add(File(imgFile!.path));
@@ -234,7 +236,9 @@ class _ProductEditPageState extends State<ProductEditPage> {
         return shouldPop ?? false;
       },
       child: Scaffold(
-        body: SingleChildScrollView(
+        body: loading
+            ? Center(child: CircularProgressIndicator(),)
+            :SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.only(left: scrWidth * 0.05),
             child: Column(

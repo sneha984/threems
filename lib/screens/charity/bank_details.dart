@@ -176,7 +176,7 @@ class _CreateCharity3State extends State<CreateCharity3> {
             ),
           ),
         ),
-        body:  Padding(
+        body: loading?Center(child: CircularProgressIndicator()): Padding(
           padding: EdgeInsets.only(
             left: padding15, right: padding15, top: scrWidth * 0.025,
             // vertical: scrWidth * 0.05,
@@ -587,7 +587,7 @@ class _CreateCharity3State extends State<CreateCharity3> {
                       //     ),
                       //   ),
                       // ),
-                       loading?CircularProgressIndicator():InkWell(
+                       InkWell(
                         onTap: (){
                           _pickImage();
                         },

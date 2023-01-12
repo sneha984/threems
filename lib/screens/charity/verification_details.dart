@@ -73,6 +73,8 @@ class _VerificationDetailsState extends State<VerificationDetails> {
     //   imageList.add(value);
     // }
     setState(() {
+      loading=false;
+
       imgUrl = value;
     });
   }
@@ -105,11 +107,14 @@ class _VerificationDetailsState extends State<VerificationDetails> {
     // });
 
     setState(() {
+      loading=false;
+
       fileUrl = urlDownlod!;
     });
   }
 
   _pickFile() async {
+    loading=true;
     print('      PICK FILE      ');
     final result = await FilePicker.platform.pickFiles(
       allowedExtensions: ['pdf'],
@@ -149,11 +154,16 @@ class _VerificationDetailsState extends State<VerificationDetails> {
     // });
 
     setState(() {
+      loading=false;
+
       docUrl = urlDownlods!;
     });
   }
 
   _pickFiles() async {
+    loading=true;
+
+
     print('      PICK FILE      ');
     final result = await FilePicker.platform.pickFiles(
       allowedExtensions: ['pdf'],
@@ -247,7 +257,7 @@ class _VerificationDetailsState extends State<VerificationDetails> {
             ),
           ),
         ),
-        body: Padding(
+        body:loading?Center(child: CircularProgressIndicator(),): Padding(
           padding: EdgeInsets.only(
             left: padding15, right: padding15, top: scrWidth * 0.025,
             // vertical: scrWidth * 0.05,
@@ -766,20 +776,20 @@ class _VerificationDetailsState extends State<VerificationDetails> {
                       } else {
                         Map map = {
                           "youTubeLink": youtubecontroller.text??'',
-                          "image": imgUrl,
-                          "documents": fileUrl,
-                          "fileNme": fileName,
-                          "otherDocument": docUrl,
-                          "videoLink": videoLinkController.text,
-                          "docNme": docName
+                          "image": imgUrl??"",
+                          "documents": fileUrl??"",
+                          "fileNme": fileName??'',
+                          "otherDocument": docUrl??'',
+                          "videoLink": videoLinkController.text??'',
+                          "docNme": docName??''
                         };
                         charityDetails.insert(3, map);
                         var char = CharityModel(
-                            orgName: charityDetails[0]['orgName'],
+                            orgName: charityDetails[0]['orgName']??'',
                             charityDetailes: charityDetails[0]
-                                ['charityDetailes'],
-                            emailId: charityDetails[0]['emailId'],
-                            phoneNumber: charityDetails[0]['phoneNumber'],
+                                ['charityDetailes']??'',
+                            emailId: charityDetails[0]['emailId']??'',
+                            phoneNumber: charityDetails[0]['phoneNumber']??'',
                             cause: charityDetails[0]['cause'] ?? 0,
                             reason: charityDetails[0]['reason'] ?? '',
                             beneficiaryLocation:
@@ -791,24 +801,24 @@ class _VerificationDetailsState extends State<VerificationDetails> {
                                 charityDetails[1]['beneficiaryName'] ?? '',
                             beneficiaryPhNumber:
                                 charityDetails[1]['beneficiaryPhNumber'] ?? '',
-                            accountNumber: charityDetails[2]['accountNumber'],
+                            accountNumber: charityDetails[2]['accountNumber']??'',
                             confirmAccountNumber: charityDetails[2]
-                                ['confirmAccountNumber'],
+                                ['confirmAccountNumber']??'',
                             accountHolderName: charityDetails[2]
-                                ['accountHolderName'],
-                            bankName: charityDetails[2]['bankName'],
-                            ifscCode: charityDetails[2]['ifscCode'],
-                            qrImage: charityDetails[2]['qrImage'],
-                            youTubeLink: charityDetails[3]['youTubeLink'],
-                            image: charityDetails[3]['image'],
-                            documents: charityDetails[3]['documents'],
-                            otherDocument: charityDetails[3]['otherDocument'],
-                            fileNme: charityDetails[3]['fileNme'],
+                                ['accountHolderName']??'',
+                            bankName: charityDetails[2]['bankName']??'',
+                            ifscCode: charityDetails[2]['ifscCode']??'',
+                            qrImage: charityDetails[2]['qrImage']??'',
+                            youTubeLink: charityDetails[3]['youTubeLink']??'',
+                            image: charityDetails[3]['image']??'',
+                            documents: charityDetails[3]['documents']??'',
+                            otherDocument: charityDetails[3]['otherDocument']??'',
+                            fileNme: charityDetails[3]['fileNme'] ?? '',
                             videoLink: charityDetails[3]['videoLink'] ?? '',
-                            docNme: charityDetails[3]['docNme'],
+                            docNme: charityDetails[3]['docNme']??'',
                             payments: [],
                             status: 0,
-                            userId: currentuser?.userId,
+                            userId: currentuser?.userId??'',
                             userName: currentuser?.userName ?? '',
                             block: false,
                             totalReceived: 0);

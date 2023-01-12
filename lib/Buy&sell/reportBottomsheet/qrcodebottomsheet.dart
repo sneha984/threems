@@ -81,7 +81,9 @@ class _QRBottomsheetPageState extends State<QRBottomsheetPage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Checkbox(
-                          value: _remainder, onChanged: (bool? value) {
+                          checkColor: primarycolor,
+                          value: _remainder,
+                          onChanged: (bool? value) {
                           setState(() {
                             _remainder=value!;
                             print(_remainder);
@@ -101,7 +103,9 @@ class _QRBottomsheetPageState extends State<QRBottomsheetPage> {
                   SizedBox(height: 5,),
                   InkWell(
                     onTap: (){
-                      _remainder==true?Navigator.pop(context):showSnackbar(context, "Click to accept Terms And Conditions");
+                      _remainder==true
+                          ?Navigator.pop(context)
+                          :showSnackbar(context, "Click to accept Terms And Conditions");
                     },
                     child: Container(
                       height: 40,
