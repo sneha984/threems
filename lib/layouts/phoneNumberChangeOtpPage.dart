@@ -10,6 +10,7 @@ import 'package:threems/screens/charity/verification_details.dart';
 import '../Authentication/auth.dart';
 import '../Authentication/root.dart';
 import '../layouts/screen_layout.dart';
+import '../model/usermodel.dart';
 import '../pagess/detailspage.dart';
 import '../pagess/getotppage.dart';
 import '../screens/home_screen.dart';
@@ -140,24 +141,23 @@ class _PhoneChangeOtpPageState extends State<PhoneChangeOtpPage> {
 
 
                   String cUserId=currentuserid;
-                  // FirebaseFirestore.instance.collection('users')
-                  //     .doc(cUserId)
-                  //     .update(
-                  //     {
-                  //       'phone':widget.number,
-                  //     });
+                 await FirebaseFirestore.instance.collection('users')
+                      .doc(cUserId)
+                      .update(
+                      {
+                        'phone':widget.number,
+                      });
                   await auth.signInWithCredential(credential).then((value) async {
-                    UpdateNumber(cUserId,widget.number);
+                    // UpdateNumber(cUserId,widget.number);
                     print(value.user!.uid);
 
 
                       showUploadMessage(context, 'Phone number updated successfully');
                       Navigator.pop(context);
-                    _authentication.signOut(context);
+
                     print(cUserId);
-                    Navigator.push(context, MaterialPageRoute(
-                        builder: (context)=>GetOtpPage()
-                    ));
+                    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>Rootingpage()), (route) => false);
+
                     print(cUserId);
 
 
@@ -186,6 +186,12 @@ class _PhoneChangeOtpPageState extends State<PhoneChangeOtpPage> {
                     // }
                   }
                   ).catchError((e) {
+                    FirebaseFirestore.instance.collection('users')
+                        .doc(cUserId)
+                        .update(
+                        {
+                          'phone':currentuser?.phone,
+                        });
                     print(e);
                     showSnackbar(context, 'Wrong OTP!!');
                   });

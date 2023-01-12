@@ -35,7 +35,7 @@ class _MyAppState extends State<MyApp> {
   final Authentication _authentication = Authentication();
   @override
   void initState() {
-  // FirebaseAuth.instance.signOut();
+  //FirebaseAuth.instance.signOut();
     initDynamicLinks();
     super.initState();
   }
@@ -83,9 +83,8 @@ class _MyAppState extends State<MyApp> {
       inviteLinkId = link.split('=')[1].split('&')[0];
       inviteLinkType =
           link.split('//')[1].split('/')[1].split('?')[0].split('_')[0];
-      print('Linkkkkkkkkkkkkkkkkk');
-      print(inviteLinkId);
-      print(inviteLinkType);
+      // print(inviteLinkId);
+      // print(inviteLinkType);
     }).onError((error) {
       print('onLink error');
       print(error.message);

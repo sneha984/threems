@@ -32,6 +32,7 @@ class NewExpensePage extends StatefulWidget {
 
 class _NewExpensePageState extends State<NewExpensePage> {
   bool switchValue=false;
+  bool click=false;
   String phNumber = '';
   String contactName = '';
   String category = '';
@@ -1234,7 +1235,10 @@ class _NewExpensePageState extends State<NewExpensePage> {
                                   actions: [
                                     TextButton(
                                         onPressed: () async {
-                                          await getUserData();
+                                          if(click==false){
+                                            click=true;
+
+                                            await getUserData();
                                           FirebaseFirestore.instance.runTransaction((transaction) async {
 
                                             await  FirebaseFirestore.instance
@@ -1299,6 +1303,7 @@ class _NewExpensePageState extends State<NewExpensePage> {
                                             setState(() {});
 
                                           });
+                                          }
 
 
                                           // Navigator.pushAndRemoveUntil(context, CupertinoPageRoute(builder: (context) => CharityCatogoryPage(),), (route) => false);

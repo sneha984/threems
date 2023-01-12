@@ -4,11 +4,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:threems/Authentication/auth.dart';
+import 'package:threems/Authentication/root.dart';
 import 'package:threems/layouts/phoneNumberChangeOtpPage.dart';
 import 'package:threems/screens/charity/verification_details.dart';
 import 'package:threems/screens/splash_screen.dart';
 
 import '../kuri/createkuri.dart';
+import '../model/usermodel.dart';
 import '../pagess/otppage.dart';
 import '../utils/themes.dart';
 
@@ -175,6 +177,9 @@ class _PhoneNoChangePageState extends State<PhoneNoChangePage> {
             SizedBox(height: 40,),
            InkWell(
               onTap: () async {
+                if(phoneController.text!=''){
+
+
                 QuerySnapshot usrs = await FirebaseFirestore.instance
                     .collection('users').where('phone',
                     whereIn:[phoneController.text,
@@ -183,6 +188,14 @@ class _PhoneNoChangePageState extends State<PhoneNoChangePage> {
                     .get();
                 if(usrs.docs.length==0){
                   if (_formkey.currentState!.validate()) {
+                    // FirebaseFirestore.instance
+                    //     .collection('users').doc(currentuserid).update({
+                    //   'phone':phoneController.text
+                    //
+                    // });
+                    // // await getcurrentuser() ;
+                    // showUploadMessage(context, 'Phone number updated successfully');
+                    // Navigator.pop(context);
                     verifyPhoneNumber(context);
                   }
                 }else{
@@ -190,7 +203,9 @@ class _PhoneNoChangePageState extends State<PhoneNoChangePage> {
                 }
 
 
-
+                }else{
+                  showUploadMessage(context, 'Enter your new phone number');
+                }
               },
               child: Center(
                 child: Container(
