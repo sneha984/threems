@@ -1053,7 +1053,7 @@ class _StoreDetailsState extends State<StoreDetails> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Upload Pdf Document",
+                            "Upload  Document",
                             style: TextStyle(
                               color: Color(0xff8391A1),
                               fontWeight: FontWeight.w500,

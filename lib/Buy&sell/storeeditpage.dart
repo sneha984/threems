@@ -213,8 +213,8 @@ class _StoreEditPageState extends State<StoreEditPage> {
 
     print('      PICK FILE      ');
     final result = await FilePicker.platform.pickFiles(
-      allowedExtensions: ['pdf'],
-      type: FileType.custom,
+      // allowedExtensions: ['pdf'],
+      // type: FileType.custom,
       withData: true,    );
 
     if(result==null) return;

@@ -142,7 +142,7 @@ class _ScreenLayoutState extends State<ScreenLayout> {
                         Align(
                           alignment: Alignment.bottomLeft,
                           child: Text(
-                            'V 2.2',
+                            'V 2.3',
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,

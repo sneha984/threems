@@ -1423,12 +1423,14 @@ class _SelectUserWidgetState extends State<SelectUserWidget> {
   TextEditingController search = TextEditingController();
 
   searchContacts(String txt) {
-
+    print(totalContacts.length);
+    print(totalContactsSearch.length);
     totalContactsSearch = [];
     for (int i = 0; i < totalContacts.length; i++) {
-      if (totalContacts[i]
-          .displayName!
-          .toLowerCase()
+
+      String name=totalContacts[i]
+          .displayName??'';
+      if (name.toLowerCase()
           .contains(txt.toLowerCase())) {
         totalContactsSearch.add(totalContacts[i]);
       }
@@ -1531,7 +1533,7 @@ class _SelectUserWidgetState extends State<SelectUserWidget> {
               ),
             ),
             title: Padding(
-              padding: EdgeInsets.only(top: 30),
+              padding: EdgeInsets.only(top:scrHeight*0.02),
               child: Text(
                 "Add user",
                 style: TextStyle(
@@ -1657,8 +1659,7 @@ class _SelectUserWidgetState extends State<SelectUserWidget> {
                                 child: CircleAvatar(
                                   radius: 15,
                                   backgroundColor: Colors.grey,
-                                  backgroundImage: MemoryImage(
-                                      totalContactsSearch[index].avatar!),
+                                  backgroundImage:NetworkImage("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFzJQ6mTB2vG53lTC7SR6w9FBSdbyK6SQoOg&usqp=CAU")
                                 ),
                               ),
                               Container(

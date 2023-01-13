@@ -1038,16 +1038,17 @@ List cate=[];
                                           subtitle:
                                               "Congratulations on opening your new \nonline store!",
                                         ),
-                                       store[0].storeVerification==true? StepperData(
+                                       store[0].storeVerification==true&&store[0].block==false?
+                                       StepperData(
                                           title: "Add Product",
                                           subtitle:
                                               "Create your first product by adding the \nproduct name and images.",
                                         ):StepperData(
-                                         title: "Store Verification ",
+                                         title: store[0].block==true?"Store Blocked":"Store Verification ",
                                          subtitle:
-                                         "Please wait for the store verification",
+                                         store[0].block==true?"":"Please wait for the store verification",
                                        ),
-                                        store[0].storeVerification==true?StepperData(
+                                        store[0].storeVerification==true&&store[0].block==false?StepperData(
                                           title: "Payment",
                                           subtitle:
                                               "Confirm Your Payment section",
@@ -1070,7 +1071,7 @@ List cate=[];
                               SizedBox(
                                 height: scrHeight * 0.02,
                               ),
-                              store[0].storeVerification==true
+                              store[0].storeVerification==true&&store[0].block==false
                                   ? GestureDetector(
                                 onTap: () async {
                                   print(filteredShops.length);
