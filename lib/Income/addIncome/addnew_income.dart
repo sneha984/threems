@@ -1423,8 +1423,7 @@ class _SelectUserWidgetState extends State<SelectUserWidget> {
   TextEditingController search = TextEditingController();
 
   searchContacts(String txt) {
-    print(totalContacts.length);
-    print(totalContactsSearch.length);
+
     totalContactsSearch = [];
     for (int i = 0; i < totalContacts.length; i++) {
 
@@ -1533,7 +1532,7 @@ class _SelectUserWidgetState extends State<SelectUserWidget> {
               ),
             ),
             title: Padding(
-              padding: EdgeInsets.only(top:scrHeight*0.02),
+              padding: EdgeInsets.only(top: 30),
               child: Text(
                 "Add user",
                 style: TextStyle(
@@ -1569,7 +1568,7 @@ class _SelectUserWidgetState extends State<SelectUserWidget> {
                     // cursorWidth: 1,
                     // cursorColor: Colors.black,
                     controller: search,
-                    showCursor: false,
+                    showCursor: true,
                     onChanged: ((txt) {
                       print(search.text);
                       totalContactsSearch = [];

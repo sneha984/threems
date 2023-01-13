@@ -1401,6 +1401,7 @@ class _HomeScreenState extends State<HomeScreen> {
   askPermissions() async {
     PermissionStatus permission = await getContactPermission();
     if (permission == PermissionStatus.granted) {
+      showSnackbar(context, 'Permission granted by user');
       getContacts();
     } else {
       handleInvalidPermission(permission);
@@ -1409,9 +1410,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   handleInvalidPermission(PermissionStatus permission) {
     if (permission == PermissionStatus.denied) {
-      showSnackbar(context, 'Permission denied by user');
+      // showSnackbar(context, 'Permission denied by user');
     } else if (permission == PermissionStatus.permanentlyDenied) {
-      showSnackbar(context, 'Permission denied by user');
+      // showSnackbar(context, 'Permission denied by user');
     }
   }
 
